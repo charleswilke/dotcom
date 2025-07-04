@@ -1,0 +1,64 @@
+[
+    {
+        "date": "2025-04-11",
+        "weight": 20.1
+    },
+    {
+        "date": "2025-04-15",
+        "weight": 20.1
+    },
+    {
+        "date": "2025-04-18",
+        "weight": 19.9
+    },
+    {
+        "date": "2025-04-21",
+        "weight": 20
+    },
+    {
+        "date": "2025-04-23",
+        "weight": 19.8
+    },
+    {
+        "date": "2025-04-27",
+        "weight": 19.8
+    },
+    {
+        "date": "2025-04-30",
+        "weight": 19.7
+    },
+    {
+        "date": "2025-05-04",
+        "weight": 19.6
+    },
+    {
+        "date": "2025-05-06",
+        "weight": 19.8,
+        "notes": "Doc mukbanged bird seed."
+    },
+    {
+        "date": "2025-05-10",
+        "weight": 19.5,
+        "notes": ""
+    },
+    {
+        "date": "2025-05-12",
+        "weight": 19.5,
+        "notes": "We\u2019ll take it."
+    },
+    {
+        "date": "2025-05-14",
+        "weight": 19.2,
+        "notes": ""
+    },
+    {
+        "date": "2025-05-18",
+        "weight": 19.5,
+        "notes": "The path is winding."
+    },
+    {
+        "date": "2025-05-22",
+        "weight": 19.3,
+        "notes": ""
+    }
+]

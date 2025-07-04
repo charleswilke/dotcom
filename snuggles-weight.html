@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Snuggles Weight Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.23.0/dist/date-fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-dragdata@2.0.0"></script>
+    <style>
+        .password-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(30, 21, 80, 0.97);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .password-box {
+            background: #fff;
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+            text-align: center;
+        }
+        .password-box input[type="password"] {
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-top: 1rem;
+        }
+        .password-box button {
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            border: none;
+            background: var(--secondary);
+            color: #fff;
+            cursor: pointer;
+        }
+        .tracker-section {
+            display: none;
+            background-color: var(--accent);
+            color: var(--light);
+            position: relative;
+            overflow: hidden;
+            background-image:
+                radial-gradient(circle at 10% 30%, rgba(26, 21, 80, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 70%, var(--neon) 0%, transparent 40%),
+                linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px);
+            background-size: auto, auto, 30px 30px, 30px 30px;
+            background-blend-mode: overlay;
+        }
+        .insight { margin: 2rem 0; font-size: 1.2rem; }
+        /* Login Modal Styles */
+        .login-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(30, 21, 80, 0.85);
+            z-index: 10000;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            animation: fadeInModal 0.3s;
+            /* Blue grid background like main page */
+            background-color: #2c4f7c;
+            background-image:
+                radial-gradient(circle at 25% 25%, var(--groovy-gradient1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, var(--groovy-gradient2) 0%, transparent 50%),
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            background-blend-mode: soft-light;
+        }
+        .login-modal {
+            background: rgba(255,255,255,0.95);
+            margin-top: 8vh;
+            padding: 2rem 2.5rem 1.5rem 2.5rem;
+            border-radius: 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 0 10px rgba(0,247,194,0.3);
+            min-width: 320px;
+            max-width: 90vw;
+            animation: dropdownModal 0.4s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            border: 3px solid var(--primary);
+            background-image: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.03) 75%, rgba(0,0,0,0.05) 100%), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="1" fill="%23000" opacity="0.05"/></svg>');
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes dropdownModal {
+            from { transform: translateY(-60px) scale(0.98); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .login-modal input[type="password"]:focus {
+            outline: 2px solid var(--secondary);
+        }
+        .login-modal .email-btn {
+            margin: 0 auto 0.5rem auto;
+            width: 100%;
+            display: block;
+        }
+        .login-modal .btn-text { text-align: center; width: 100%; }
+        .login-modal .btn-glow { left: 0; right: 0; }
+        @media (max-width: 480px) {
+            .login-modal { padding: 1.2rem 0.7rem 1rem 0.7rem; min-width: 0; }
+        }
+        .form-card {
+            background: #fffbe9;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 2rem 2.5rem 1.5rem 2.5rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            transition: box-shadow 0.3s;
+            border: 2px solid #d1c7a1;
+            position: relative;
+            z-index: 2;
+            transform: rotate(-1deg);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="1" fill="%23000" opacity="0.05"/></svg>');
+        }
+        .form-card label {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .form-card input[type="date"] {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1.5px solid var(--accent);
+            font-size: 1.1rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: #f8e9d2;
+            color: var(--primary);
+            transition: border 0.2s;
+            min-width: 9.5em;
+            width: 9.5em;
+        }
+        .form-card input[type="date"]:focus,
+        .form-card input[type="number"]:focus {
+            border: 1.5px solid var(--secondary);
+            outline: none;
+        }
+        .form-card input[type="number"] {
+            padding: 0.5rem 0.5rem;
+            border-radius: 6px;
+            border: 1.5px solid var(--accent);
+            font-size: 1.1rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: #f8e9d2;
+            color: var(--primary);
+            transition: border 0.2s;
+            max-width: 5.5em;
+            width: 5.5em;
+            text-align: right;
+        }
+        .form-card button[type="submit"] {
+            margin-top: 0.5rem;
+            margin-left: 0;
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, var(--groovy-gradient1), var(--groovy-gradient2));
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid var(--groovy-gradient2);
+            box-shadow: 0 0 15px rgba(255,158,0,0.3);
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            cursor: pointer;
+            text-shadow: 0 0 5px var(--groovy-gradient2);
+        }
+        .form-card button[type="submit"]:hover {
+            /* transform: translateY(-5px) scale(1.03); */
+            box-shadow: 0 0 30px rgba(255,158,0,0.6);
+            color: #fff;
+            border-color: var(--light);
+            text-shadow: 0 0 10px var(--groovy-gradient2), 0 0 20px var(--groovy-gradient1);
+        }
+        .form-card button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,158,0,0.18), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+            z-index: 0;
+        }
+        .form-card button[type="submit"] .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+        .history-card {
+            background: #fffbe9;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(64,0,128,0.10), 0 0 0 1.5px #1a1550;
+            border: 1.5px solid #1a1550;
+            margin: 2.5rem auto 2.5rem auto;
+            padding: 2.5rem 2rem 2rem 2rem;
+            max-width: 650px;
+            position: relative;
+            z-index: 2;
+            transform: rotate(-1.5deg);
+            overflow: visible;
+            font-family: 'Space Mono', 'Orbitron', monospace, sans-serif;
+            /* Grid overlay and splotch */
+            background-image:
+                radial-gradient(circle at 80% 20%, rgba(255,51,102,0.10) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(0,247,194,0.08) 0%, transparent 60%),
+                linear-gradient(rgba(147, 64, 191, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(147, 64, 191, 0.08) 1px, transparent 1px);
+            background-size: auto, auto, 36px 36px, 36px 36px;
+            background-blend-mode: overlay;
+            color: #1a1550;
+            transition: border-color 0.25s;
+        }
+        .history-card:hover {
+            border-color: #ff5a36;
+        }
+        .history-card table {
+            background: transparent;
+            border-radius: 10px;
+            width: 100%;
+            color: #1a1550;
+        }
+        .history-card th, .history-card td {
+            color: #1a1550;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.08rem;
+            padding: 0.5em 0.3em;
+            border-bottom: 1px solid rgba(26,21,80,0.13);
+        }
+        .history-card tr:last-child td {
+            border-bottom: none;
+        }
+        .history-card canvas {
+            background: transparent;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        @media (max-width: 700px) {
+            .history-card {
+                padding: 1.2rem 0.5rem 1rem 0.5rem;
+                max-width: 98vw;
+            }
+        }
+        body::after {
+            display: none !important;
+        }
+        .weight-arrow {
+            background: transparent !important;
+            color: #ff5a36 !important;
+            border: 2.5px solid #ff5a36 !important;
+            border-radius: 50%;
+            width: 2.2em;
+            height: 2.2em;
+            font-size: 1.5em;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: none;
+            transition: border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.1em;
+            outline: none;
+        }
+        .weight-arrow:hover {
+            border-color: #ff5a36 !important;
+            color: #fff !important;
+            background: #ff5a36 !important;
+            box-shadow: 0 0 4px 0 #ff5a36 !important;
+            transform: scale(1.08);
+        }
+        .delete-entry-btn {
+            margin-left: 0.5em;
+            background: #fff;
+            color: var(--secondary);
+            border: 1.5px solid var(--secondary);
+            border-radius: 50%;
+            width: 1.4em;
+            height: 1.4em;
+            font-size: 1em;
+            font-family: 'Orbitron', 'Space Mono', monospace, sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+            outline: none;
+            vertical-align: middle;
+            box-shadow: 0 1px 4px rgba(255,90,54,0.08);
+        }
+        .delete-entry-btn:hover {
+            background: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+            box-shadow: 0 0 12px 2px rgba(255,90,54,0.18);
+            transform: scale(1.08);
+        }
+        /* Tighten up the previous entries card */
+        #tableCard.history-card {
+            padding: 1.2rem 0.7rem 1rem 0.7rem;
+            border-radius: 9px;
+            margin: 1.5rem auto 1.5rem auto;
+            max-width: 580px;
+            width: 100%;
+        }
+        #tableCard table {
+            font-size: 0.98rem;
+            table-layout: fixed;
+            width: 100%;
+        }
+        #tableCard th, #tableCard td {
+            padding: 0.32em 0.5em;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        #tableCard td:first-child {
+            width: 22%;
+            padding-right: 0.8em;
+        }
+        #tableCard td:nth-child(2) {
+            width: 16%;
+            text-align: center;
+            background-color: rgba(180, 160, 140, 0.2); /* warm grey with 20% opacity */
+            border-radius: 4px;
+            padding: 0.3em 0.6em;
+            margin-right: 0;
+        }
+        #tableCard td:nth-child(3) {
+            width: 62%;
+            padding-left: 1.5em;
+        }
+        @media (max-width: 700px) {
+            #tableCard.history-card {
+                padding: 1.2rem 0.5rem 1rem 0.5rem;
+            }
+            #tableCard td:first-child {
+                width: 25%;
+                font-size: 0.92em;
+            }
+            #tableCard td:nth-child(2) {
+                width: 15%;
+                padding: 0.25em 0.4em;
+            }
+            #tableCard td:nth-child(3) {
+                width: 60%;
+                padding-left: 1em;
+            }
+            #tableCard th:nth-child(3) {
+                padding-left: 1em;
+            }
+            .notes-cell {
+                font-size: 0.85em !important;
+            }
+        }
+        /* Update header alignment to match */
+        #tableCard th:first-child {
+            width: 22%;
+            padding-right: 0.8em;
+            text-align: left;
+        }
+        #tableCard th:nth-child(2) {
+            width: 16%;
+            text-align: center;
+            padding-left: 0.6em;
+        }
+        #tableCard th:nth-child(3) {
+            padding-left: 1.5em;
+            text-align: left;
+        }
+        @media (max-width: 480px) {
+            #tableCard th:nth-child(3) {
+                padding-left: 1em;
+            }
+        }
+        .doc-badge {
+            position: absolute;
+            top: -48px;
+            right: -48px;
+            height: 192px;
+            width: auto;
+            transform: rotate(16deg);
+            z-index: 10;
+            background: transparent;
+            border-radius: 8px;
+            padding: 0;
+            pointer-events: none;
+        }
+        @media (max-width: 600px) {
+            .doc-badge {
+                height: 96px;
+                top: -24px;
+                right: -24px;
+            }
+        }
+        .employee-month-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            margin-right: 0.5rem;
+            text-align: center;
+            width: 260px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(80, 0, 160, 0.08);
+            padding: 1.5rem 1rem;
+            position: relative;
+            transform: translateY(-20px) rotate(2deg);
+            border: 1px solid rgba(80, 0, 160, 0.15);
+            transition: all 0.3s ease;
+            z-index: 5;
+            cursor: pointer;
+        }
+        
+        .employee-month-card:hover {
+            transform: translateY(-30px) rotate(0deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(80, 0, 160, 0.12);
+        }
+        
+        .employee-month-card::before {
+            content: '';
+            position: absolute;
+            top: 0.8rem;
+            left: 1rem;
+            right: 1rem;
+            height: 0.5rem;
+            background: linear-gradient(90deg, #ff9e36, #ff5a36);
+            border-radius: 3px;
+            opacity: 0.7;
+        }
+        
+        .employee-month-card::after {
+            content: 'ID: DS-101013';
+            position: absolute;
+            bottom: 0.7rem;
+            right: 1rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: #666;
+            opacity: 0.8;
+        }
+        
+        .employee-month-img-container {
+            position: relative;
+            margin-top: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+        
+        .employee-month-img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            border: 4px solid #fff;
+            outline: 1px solid #ccc;
+            transition: all 0.3s ease;
+            position: relative;
+            background-color: #f5f5f5;
+        }
+        
+        .employee-month-img::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            width: 40px;
+            height: 16px;
+            background: linear-gradient(90deg, #ff7e36, #ff5a36);
+            z-index: 1;
+            border-radius: 0 0 8px 0;
+        }
+        
+        .employee-month-card:hover .employee-month-img {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .doc-caption {
+            text-align: center !important;
+            width: 100%;
+            font-size: 1.4rem;
+            margin-bottom: 0.3em;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .employee-month-card:hover .doc-caption {
+            color: #ff5a36;
+            text-shadow: 0 0 5px rgba(255, 90, 54, 0.2);
+        }
+        
+        .doc-stats {
+            text-align: center !important;
+            width: 100%;
+            font-family: 'Space Mono', monospace;
+            color: #444;
+            transition: all 0.3s ease;
+            margin-bottom: 0.1em;
+        }
+        
+        .doc-journey {
+            text-align: center !important;
+            width: 100%;
+            font-style: italic;
+            font-size: 0.98rem;
+            margin-top: 0.2em !important;
+            margin-bottom: 1.4em !important;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .employee-month-card:hover .doc-journey {
+            color: #333;
+        }
+        .insights-card {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            max-width: 650px;
+            margin: 2.5rem auto 2.5rem auto;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        @media (max-width: 700px) {
+            .insights-card {
+                flex-direction: column;
+                align-items: center;
+                padding: 1.5rem 1rem 0.5rem 1rem;
+                gap: 2.5rem;
+                text-align: center;
+                max-width: 420px;
+            }
+            
+            .employee-month-card {
+                margin: 0;
+                width: 85%;
+                max-width: 280px;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transform: translateY(-10px) rotate(-2deg);
+                padding: 1.2rem 0.8rem;
+            }
+            
+            .employee-month-card:hover {
+                transform: translateY(-15px) rotate(0deg);
+            }
+            
+            .employee-month-img-container {
+                margin-top: 1.2rem;
+                margin-bottom: 1rem;
+            }
+            
+            .employee-month-img {
+                width: 150px;
+                height: 150px;
+                border-width: 3px;
+            }
+            
+            .employee-month-img::after {
+                width: 35px;
+                height: 14px;
+                bottom: -3px;
+                right: -3px;
+            }
+            
+            .doc-info {
+                text-align: center !important;
+                width: 100%;
+            }
+            
+            .insights-data {
+                width: 100%;
+                text-align: center;
+                padding-left: 0;
+            }
+            
+            .insight {
+                margin-bottom: 1.2em !important;
+                text-align: center;
+            }
+            
+            .doc-caption {
+                margin-top: 0;
+                font-size: 1.25rem;
+            }
+            
+            .doc-stats, .doc-journey {
+                font-size: 0.95rem !important;
+                margin-top: 0.1em !important;
+                text-align: center !important;
+            }
+            
+            .doc-journey {
+                margin-bottom: 1.2em !important;
+            }
+            
+            .insight:last-child {
+                margin-bottom: 0 !important;
+            }
+            
+            .insight > div:first-child {
+                font-size: 1.1rem;
+            }
+            
+            .insight > div:last-child {
+                font-size: 1.2em !important;
+            }
+        }
+        .section-title-dark {
+            color: var(--primary) !important;
+            text-shadow: 0 0 5px var(--neon), 0 0 10px var(--neon);
+            animation: glitch 3s infinite alternate-reverse;
+        }
+        .section-title-dark.no-underline::after {
+            display: none !important;
+        }
+        /* Add styles for table headers */
+        #tableCard th {
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5em;
+            margin-bottom: 0.5em;
+            font-size: 1.05em;
+        }
+        @media (max-width: 480px) {
+            #tableCard th {
+                font-size: 0.95em;
+            }
+        }
+        /* Ensure date and weight format don't get broken up awkwardly */
+        #tableCard td:first-child,
+        #tableCard td:nth-child(2) {
+            white-space: nowrap;
+        }
+        /* Insights card default (desktop) styling */
+        .insights-card {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            max-width: 650px;
+            margin: 2.5rem auto 2.5rem auto;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        
+        .employee-month-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            margin-right: 0.5rem;
+            text-align: center;
+            width: 260px;
+        }
+        
+        .employee-month-img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 42%;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 0 20px rgba(255, 90, 54, 0.25);
+            border: 3px solid rgba(26, 21, 80, 0.15);
+        }
+        
+        .doc-info {
+            text-align: center !important;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .doc-caption {
+            text-align: center !important;
+            width: 100%;
+            font-size: 1.3rem;
+            margin-bottom: 0.2em;
+        }
+        
+        .doc-stats, .doc-journey {
+            text-align: center !important;
+            width: 100%;
+        }
+        
+        .insights-data {
+            flex: 1;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 1rem;
+        }
+        
+        .insight {
+            margin-bottom: 1.4em;
+            text-align: left;
+        }
+        
+        .insight:last-child {
+            margin-bottom: 0;
+        }
+        
+        @media (max-width: 700px) {
+            .insights-card {
+                flex-direction: column;
+                align-items: center;
+                padding: 1.5rem 1rem;
+                gap: 1.2rem;
+                text-align: center;
+                max-width: 420px;
+            }
+            
+            .employee-month-card {
+                margin: 0;
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .employee-month-img {
+                width: 180px;
+                height: 180px;
+                margin-bottom: 1rem;
+            }
+            
+            .doc-info {
+                text-align: center !important;
+                width: 100%;
+            }
+            
+            .insights-data {
+                width: 100%;
+                text-align: center;
+                padding-left: 0;
+            }
+            
+            .insight {
+                margin-bottom: 1.2em !important;
+                text-align: center;
+            }
+            
+            .doc-caption {
+                margin-top: 0;
+                font-size: 1.25rem;
+            }
+            
+            .doc-stats, .doc-journey {
+                font-size: 0.95rem !important;
+                margin-top: 0.1em !important;
+                text-align: center !important;
+            }
+            
+            .doc-journey {
+                margin-bottom: 1.2em !important;
+            }
+            
+            .insight:last-child {
+                margin-bottom: 0 !important;
+            }
+            
+            .insight > div:first-child {
+                font-size: 1.1rem;
+            }
+            
+            .insight > div:last-child {
+                font-size: 1.2em !important;
+            }
+        }
+        .employee-month-card:active {
+            transform: translateY(-25px) scale(0.98);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(80, 0, 160, 0.08);
+        }
+        
+        @media (max-width: 700px) {
+            .employee-month-card:active {
+                transform: translateY(-8px) scale(0.98);
+            }
+        }
+        /* Style for deletable rows */
+        .deletable-row {
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .deletable-row:hover {
+            background-color: rgba(255, 90, 54, 0.08);
+        }
+        
+        /* Style for highlighting a row that's about to be deleted */
+        .deletable-row.delete-highlight {
+            background-color: rgba(255, 90, 54, 0.15);
+            box-shadow: 0 0 0 2px #ff5a36;
+            position: relative;
+            z-index: 5;
+        }
+        
+        @media (max-width: 700px) {
+            .deletable-row.delete-highlight {
+                background-color: rgba(255, 90, 54, 0.2);
+                box-shadow: 0 0 0 3px #ff5a36;
+            }
+        }
+
+        /* Desktop styles for the chart card */
+        @media (min-width: 701px) {
+            #chartCard.history-card {
+                width: 80vw;
+                max-width: 1200px; /* Sensible upper limit for very wide screens */
+            }
+
+            .cards-row-desktop {
+                display: flex;
+                justify-content: space-around; /* Or space-between, depending on desired spacing */
+                align-items: flex-start; /* Align items to the top if they have different heights */
+                gap: 2rem; /* Adjust gap between cards */
+                margin-top: 2.5rem; /* Add some space below the chart */
+                margin-bottom: 2.5rem; /* Add space before the footer */
+            }
+
+            .cards-row-desktop > .history-card {
+                width: calc(50% - 1rem); /* Each card takes roughly half the space, minus half the gap */
+                margin: 0; /* Reset individual margins if they interfere */
+                max-width: none; /* Remove any previous max-width that might constrain them */
+                 /* Ensure cards can shrink if needed, though with 50% width they might not need to */
+                flex-shrink: 1;
+            }
+
+            /* Specific adjustments if one card is consistently taller */
+            .cards-row-desktop > #tableCard {
+                /* Example: if tableCard tends to be taller, you might not need specific adjustments */
+            }
+             .cards-row-desktop > .insights-card {
+                 /* If insights card is shorter, align-items: flex-start on parent is good */
+            }
+        }
+        #resistPoster {
+            /* Add this for 3D effect */
+            will-change: transform, box-shadow, opacity;
+        }
+        #resistPosterWrapper.dragging #resistPoster {
+            cursor: grabbing;
+            box-shadow: 0 24px 64px rgba(255,90,54,0.32);
+        }
+        #resistPosterWrapper.peeling {
+            pointer-events: none;
+        }
+        #resistPosterWrapper.snapping {
+            /* No transition here, JS will animate with spring */
+        }
+        #resistPosterWrapper.peeling {
+            transition: transform 0.7s cubic-bezier(.7,1.7,.7,1.1), opacity 0.5s;
+            opacity: 0;
+        }
+        #posterHighlight {
+            transition: opacity 0.2s;
+        }
+        #tapeResidue {
+            transition: opacity 1.2s;
+        }
+        .poster-piece {
+            position: absolute;
+            background-image: url('images/doc_resist.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            will-change: transform, box-shadow, opacity;
+            border-radius: 6px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+            transition: box-shadow 0.2s, filter 0.2s, opacity 0.2s, transform 0.2s;
+        }
+        #resistPosterWrapper.dragging .poster-piece {
+            cursor: grabbing;
+            box-shadow: 0 24px 64px rgba(255,90,54,0.32);
+        }
+    </style>
+</head>
+<body>
+    <!-- Password overlay temporarily disabled for development -->
+
+    <header>
+        <div class="header-bg"></div>
+        <div class="grid-overlay"></div>
+        <div class="header-content">
+            <a href="./index.html" style="text-decoration: none; color: inherit;">
+                <h1 class="header-title">Charles Wilke</h1>
+                <p class="header-subtitle">Dr. Snuggles Weight Tracker</p>
+            </a>
+        </div>
+    </header>
+
+    <section class="tracker-section" id="trackerSection">
+        <div class="container">
+            <!-- Login Modal -->
+            <div id="loginModal" class="login-modal-overlay" style="display:none;">
+                <div class="login-modal">
+                    <h3 class="section-title section-title-dark no-underline" style="margin-bottom:1rem; color: var(--primary); font-size: 1.5rem;">Authentication Please</h3>
+                    <input type="password" id="modalPasswordInput" placeholder="Password" style="padding:0.7rem; font-size:1.1rem; border-radius:6px; border:1px solid #ccc; width:100%; margin-bottom:1rem;">
+                    <button id="modalLoginSubmit" class="email-btn" type="button" style="width:100%; margin-bottom:0.5rem;">
+                        <span class="btn-text">Submit</span>
+                        <span class="btn-glow"></span>
+                    </button>
+                    <button id="modalLoginCancel" type="button" style="background:none; border:none; color:var(--secondary); font-size:1rem; cursor:pointer; width:100%;">Cancel</button>
+                    <div id="modalLoginError" style="color: var(--secondary); margin-top: 0.5rem; display: none; text-align:center;">Incorrect password.</div>
+                </div>
+            </div>
+            <h2 class="section-title" id="logWeighInHeader" style="display:none;">Log a New Weigh-In</h2>
+            <div class="form-card" id="formCard" style="display:none; position: relative;">
+                <button id="logoutBtn" type="button" class="logout-btn" style="display: none;">Log Out</button>
+                <form id="weighInForm" style="margin-bottom:0; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; justify-content: center;">
+                    <label style="display: flex; flex-direction: column; align-items: center; font-weight: bold; width: 100%;">
+                        Date
+                        <input type="date" id="dateInput" required style="margin-top: 0.3rem; width: 100%; max-width: 300px;">
+                    </label>
+                    <label style="display: flex; flex-direction: column; align-items: center; font-weight: bold; width: 100%;">
+                        Weight (lbs)
+                        <div style="display: flex; align-items: center; gap: 0.3rem; margin-top: 0.3rem; justify-content: center; width: 100%; max-width: 300px;">
+                            <button type="button" id="weightDown" class="weight-arrow" aria-label="Decrease weight">▼</button>
+                            <input type="number" id="weightInput" step="0.1" min="0" required style="width: 6.5em; text-align: right; font-size: 1.2em;">
+                            <button type="button" id="weightUp" class="weight-arrow" aria-label="Increase weight">▲</button>
+                        </div>
+                    </label>
+                    <label style="display: flex; flex-direction: column; align-items: center; font-weight: bold; width: 100%;">
+                        Notes (optional)
+                        <textarea id="notesInput" style="width: 100%; max-width: 300px; height: 80px; margin-top: 0.3rem; padding: 0.5rem; border-radius: 6px; border: 1.5px solid var(--accent); background: #f8e9d2; font-family: inherit; font-size: 1.05em; line-height: 1.4;"></textarea>
+                    </label>
+                    <button type="submit" class="add-btn" style="margin-top: 1.2rem; width: 100%; max-width: 300px;"><span class="btn-text">Add</span></button>
+                </form>
+            </div>
+            <!-- Chart Card -->
+            <div class="history-card" id="chartCard" style="position: relative;">
+                <img src="images/docbadge_web.png" alt="Official Doctor Weight Tracker Badge" class="doc-badge" />
+                <canvas id="weightChart" height="200"></canvas>
+                <div id="resistPosterWrapper" style="position:absolute; left:18%; top:38px; width:120px; height:160px; z-index:20; pointer-events:auto;">
+                    <div id="posterGrid" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+                    <div id="posterHighlight" style="position:absolute; left:0; top:0; width:100%; height:18px; pointer-events:none; opacity:0; background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.0) 100%); border-radius: 6px 6px 0 0;"></div>
+                </div>
+                <div id="tapeResidue" style="display:none; position:absolute; left:18%; top:38px; width:120px; height:24px; z-index:19; pointer-events:none; background: repeating-linear-gradient(135deg, #ffe7b3 0 6px, #f5e1b8 6px 12px); opacity:0.7; border-radius: 7px 7px 3px 3px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);"></div>
+            </div>
+
+            <!-- New wrapper for insights and table cards -->
+            <div class="cards-row-desktop">
+                <!-- Insights Card with Doc's photo -->
+                <div class="history-card insights-card">
+                    <div class="employee-month-card" id="docLoginBtn" tabindex="0" style="cursor:pointer; flex-shrink: 0;">
+                        <div class="employee-month-img-container">
+                            <img src="images/doc_web.png" alt="Dr. Snuggles" class="employee-month-img" />
+                        </div>
+                        <div class="doc-info">
+                            <div class="doc-caption">Dr. Snuggles</div>
+                            <div class="doc-stats">Age: <span id="docAge"></span></div>
+                            <div class="doc-journey">"It's a journey"</div>
+                        </div>
+                    </div>
+                    <div class="insights-data">
+                        <div class="insight" id="insight1">
+                            <div style="font-weight:bold;">Starting Weight:</div>
+                            <div style="font-size:1.3em; margin-top:0.2em;"><span id="startWeight"></span> lbs</div>
+                        </div>
+                        <div class="insight" id="insight2">
+                            <div style="font-weight:bold;">Lowest Weight:</div>
+                            <div style="font-size:1.3em; margin-top:0.2em;"><span id="minWeight"></span> lbs on <span id="minDate"></span></div>
+                        </div>
+                        <div class="insight" id="insight4">
+                            <div style="font-weight:bold;">Trend:</div>
+                            <div style="font-size:1.3em; margin-top:0.2em;"><span id="trend"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Table Card -->
+                <div class="history-card" id="tableCard">
+                    <table id="historyTable" style="width:100%; margin-top:1.5rem; border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Date</th>
+                                <th style="text-align: left; padding-left: 0;">Lbs</th>
+                                <th style="text-align: left; padding-left: 1em;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- End of new wrapper -->
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bg"></div>
+        <div class="footer-grid-overlay"></div>
+        <div class="container">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> Charles Wilke | Designer, Artist, and founder of Fellow Vector LLC — helping navigate the intersection of design and artificial intelligence.</p>
+        </div>
+    </footer>
+
+    <script>
+    // Password mechanic disabled: tracker always visible
+    document.getElementById('trackerSection').style.display = 'block';
+
+    // Data and chart logic
+    let weighIns = [];
+    let chart;
+    let isMobile = window.innerWidth <= 700; // Increased threshold for testing
+
+    function fetchWeighIns() {
+        fetch('snuggles_weight.php')
+            .then(res => res.json())
+            .then(data => {
+                // Keep the original array sorted chronologically (oldest to newest)
+                // This is important for chart and insights calculations
+                weighIns = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+                renderTable();
+                renderChart();
+                updateInsights();
+                if (formCard.style.display === 'block') setWeightToLatest();
+            });
+    }
+
+    function renderTable() {
+        const tbody = document.querySelector('#historyTable tbody');
+        const loggedIn = sessionStorage.getItem('snugglesLoggedIn') === 'true';
+        
+        // Check if we're on mobile (use actual window width)
+        const isMobileView = window.innerWidth <= 700;
+        
+        // Create a copy of weighIns and sort it from newest to oldest
+        const sortedWeighIns = [...weighIns].sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        tbody.innerHTML = sortedWeighIns.map(w => {
+            // Format date for mobile (MM-DD) by removing year
+            let displayDate = w.date;
+            if (isMobileView) {
+                // This will take 2025-04-11 and turn it into 04-11
+                displayDate = w.date.substring(5);
+            }
+            
+            return `<tr${loggedIn ? ' class="deletable-row"' : ''} data-date="${w.date}" data-weight="${w.weight}">
+                <td>${displayDate}</td>
+                <td>${w.weight.toFixed(1)}</td>
+                <td class="notes-cell" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; font-size: 0.9em; color: #666;">${w.notes || ''}</td>
+            </tr>`;
+        }).join('');
+        
+        if (loggedIn) {
+            document.querySelectorAll('.deletable-row').forEach(row => {
+                row.addEventListener('click', function(e) {
+                    // First, remove highlight from any previously highlighted row
+                    document.querySelectorAll('.delete-highlight').forEach(highlightedRow => {
+                        highlightedRow.classList.remove('delete-highlight');
+                    });
+                    
+                    // Add highlight to the current row
+                    this.classList.add('delete-highlight');
+                    
+                    const date = this.getAttribute('data-date');
+                    const weight = this.getAttribute('data-weight');
+                    
+                    // Store reference to current row for use in the confirm callback
+                    const currentRow = this;
+                    
+                    if (confirm('Delete this entry?')) {
+                        fetch('snuggles_weight.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ delete: true, date, weight })
+                        })
+                        .then(res => res.json())
+                        .then(() => fetchWeighIns());
+                    } else {
+                        // If user cancels, remove the highlight
+                        currentRow.classList.remove('delete-highlight');
+                    }
+                });
+            });
+        }
+    }
+
+    function renderChart() {
+        const ctx = document.getElementById('weightChart').getContext('2d');
+        if (chart) chart.destroy();
+        // Store original data for snap-back
+        const originalWeights = weighIns.map(w => w.weight);
+        // Helper to set ripple radii
+        function setRippleRadii(center, maxRadius = 12, falloff = 0.5, minRadius = 4) {
+            return weighIns.map((_, i) => {
+                const dist = Math.abs(i - center);
+                const scale = Math.max(minRadius, maxRadius * Math.pow(falloff, dist));
+                return scale;
+            });
+        }
+
+        // Ensure weighIns are sorted by date for the time scale
+        const sortedWeighIns = [...weighIns].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        let yAxisMin = null;
+        let yAxisMax = null;
+        let xAxisMin = null;
+        let xAxisMax = null;
+
+        if (sortedWeighIns.length > 0) {
+            const weights = sortedWeighIns.map(w => w.weight);
+            const minDataWeight = Math.min(...weights);
+            const maxDataWeight = Math.max(...weights);
+            yAxisMin = minDataWeight - 0.1;
+            yAxisMax = maxDataWeight + 0.1;
+
+            const dates = sortedWeighIns.map(w => new Date(w.date));
+            // const minDataDate = new Date(Math.min(...dates)); // No longer directly used for xAxisMin
+            const maxDataDate = new Date(Math.max(...dates));
+            
+            // Set xAxisMin to April 10 of the first data point's year
+            if (sortedWeighIns.length > 0) {
+                const firstDataPointYear = new Date(sortedWeighIns[0].date).getFullYear();
+                xAxisMin = new Date(firstDataPointYear, 3, 10); // Month 3 is April (0-indexed)
+            }
+            
+            // Add 2 days to maxDataDate for right margin
+            xAxisMax = new Date(maxDataDate.getTime() + (2 * 24 * 60 * 60 * 1000));
+        }
+
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                // Use actual date objects for the x-axis
+                labels: sortedWeighIns.map(w => new Date(w.date)), 
+                datasets: [{
+                    label: 'Weight (lbs)',
+                    data: sortedWeighIns.map(w => w.weight),
+                    borderColor: '#ff5a36',
+                    backgroundColor: 'rgba(255,90,54,0.1)',
+                    tension: 0.2,
+                    pointRadius: Array(sortedWeighIns.length).fill(4),
+                    pointBackgroundColor: '#1a1550',
+                    pointHitRadius: 20
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 600,
+                    easing: 'easeOutElastic',
+                    animations: {
+                        pointRadius: {
+                            type: 'number',
+                            duration: 600,
+                            easing: 'easeOutElastic',
+                            from: 12
+                        }
+                    }
+                },
+                plugins: {
+                    dragData: {
+                        round: 1,
+                        showTooltip: true,
+                        onDragStart: function(e, datasetIndex, index, value) {
+                            // Ripple effect: scale decreases with distance
+                            chart.data.datasets[datasetIndex].pointRadius = setRippleRadii(index, 12, 0.6, 4);
+                            chart.update('none');
+                        },
+                        onDrag: function(e, datasetIndex, index, value) {
+                            // No-op
+                        },
+                        onDragEnd: function(e, datasetIndex, index, value) {
+                            // Snap back to original value with ripple animation
+                            // Note: The labels are Date objects, so we need to find the original weight by index
+                            const originalWeightForPoint = originalWeights[index]; 
+                            chart.data.datasets[datasetIndex].data[index] = originalWeightForPoint;
+                            chart.data.datasets[datasetIndex].pointRadius = setRippleRadii(index, 12, 0.6, 4);
+                            chart.update();
+                            setTimeout(() => {
+                                chart.data.datasets[datasetIndex].pointRadius = Array(weighIns.length).fill(4);
+                                chart.update();
+                            }, 600);
+                        }
+                    },
+                    legend: { display: false },
+                    tooltip: { enabled: false } // Keep custom tooltip disabled if not needed
+                },
+                scales: {
+                    x: {
+                        type: 'time', // Use time scale
+                        min: xAxisMin,
+                        max: xAxisMax,
+                        time: {
+                            unit: 'day', // Display unit as day
+                            tooltipFormat: 'MMM d, yyyy', // Tooltip format
+                            displayFormats: {
+                                day: 'd' // Base format, callback will override for display
+                            }
+                        },
+                        title: { display: true, text: 'Date' },
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                const date = new Date(value);
+                                let formattedDate = '';
+
+                                if (index === 0) { // First tick on the visible axis
+                                    if (window.dateFns && typeof window.dateFns.format === 'function') {
+                                        formattedDate = window.dateFns.format(date, 'MMM d');
+                                    } else {
+                                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                        formattedDate = monthNames[date.getMonth()] + ' ' + date.getDate();
+                                    }
+                                } else if (date.getDate() === 1) { // Subsequent ticks, if it's the 1st of a month
+                                    if (window.dateFns && typeof window.dateFns.format === 'function') {
+                                        formattedDate = window.dateFns.format(date, 'MMM d');
+                                    } else {
+                                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                        formattedDate = monthNames[date.getMonth()] + ' ' + date.getDate();
+                                    }
+                                } else { // All other subsequent ticks
+                                    if (window.dateFns && typeof window.dateFns.format === 'function') {
+                                        formattedDate = window.dateFns.format(date, 'd');
+                                    } else {
+                                        formattedDate = date.getDate().toString();
+                                    }
+                                }
+                                return formattedDate;
+                            }
+                        },
+                        grid: {
+                            color: function(context) {
+                                if (context.tick) {
+                                    const date = new Date(context.tick.value);
+                                    if (date.getDate() === 1) { // Use native JS getDate() for the condition
+                                        return 'rgba(0, 0, 0, 0.25)'; // Darker for month start
+                                    }
+                                }
+                                return 'rgba(0, 0, 0, 0.1)'; // Default grid line color
+                            }
+                        }
+                    },
+                    y: {
+                        title: { display: true, text: 'Weight (lbs)' },
+                        beginAtZero: false,
+                        min: yAxisMin,
+                        max: yAxisMax
+                        // Adjust min/max dynamically or set reasonable defaults if needed
+                        // min: 19.4, 
+                        // max: 20.4
+                    }
+                },
+            }
+        });
+    }
+
+    function updateInsights() {
+        if (!weighIns.length) return;
+        // Starting Weight
+        document.getElementById('startWeight').textContent = weighIns[0].weight.toFixed(2);
+        // Min (most recent in case of tie)
+        const minWeight = Math.min(...weighIns.map(w => w.weight));
+        const minEntries = weighIns.filter(w => w.weight === minWeight);
+        // Find the most recent date among the min entries
+        const min = minEntries.reduce((a, b) => new Date(a.date) > new Date(b.date) ? a : b);
+        document.getElementById('minWeight').textContent = min.weight.toFixed(1);
+        // Format date as 'Month Day' (e.g., May 4)
+        const [year, month, day] = min.date.split('-');
+        const minDateObj = new Date(Number(year), Number(month) - 1, Number(day));
+        const minDateStr = minDateObj.toLocaleString('en-US', { month: 'long', day: 'numeric' });
+        document.getElementById('minDate').textContent = minDateStr;
+        // Trend
+        let trend = '';
+        let suffix = '';
+        if (weighIns.length > 1) {
+            const first = weighIns[0].weight, last = weighIns[weighIns.length-1].weight;
+            if (last > first) { trend = 'Increasing'; suffix = ' Oh no!'; }
+            else if (last < first) { trend = 'Decreasing'; suffix = ' Yay!'; }
+            else { trend = 'Stable'; suffix = ''; }
+        } else {
+            trend = 'N/A';
+            suffix = '';
+        }
+        document.getElementById('trend').textContent = trend + suffix;
+    }
+
+    // Reveal insights as you scroll
+    window.addEventListener('scroll', function() {
+        const reveals = [1,2,3,4];
+        reveals.forEach(i => {
+            const el = document.getElementById('insight'+i);
+            if (el && el.getBoundingClientRect().top < window.innerHeight * 0.85) {
+                el.style.opacity = 1;
+                el.style.transition = 'opacity 1s';
+            }
+        });
+    });
+
+    // Front-end login protection for weigh-in form with modal
+    const weighInForm = document.getElementById('weighInForm');
+    const formCard = document.getElementById('formCard');
+    const loginModal = document.getElementById('loginModal');
+    const modalPasswordInput = document.getElementById('modalPasswordInput');
+    const modalLoginSubmit = document.getElementById('modalLoginSubmit');
+    const modalLoginCancel = document.getElementById('modalLoginCancel');
+    const modalLoginError = document.getElementById('modalLoginError');
+    const dateInput = document.getElementById('dateInput');
+    const weightInput = document.getElementById('weightInput');
+    const docLoginBtn = document.getElementById('docLoginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Set date input to today by default
+    function setDateToToday() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+    setDateToToday();
+
+    // Set weight input to latest logged weight (if any)
+    function setWeightToLatest() {
+        if (weighIns.length > 0) {
+            weightInput.value = weighIns[weighIns.length - 1].weight;
+        } else {
+            weightInput.value = '';
+        }
+    }
+
+    function showForm() {
+        formCard.style.display = 'block';
+        setDateToToday();
+        setWeightToLatest();
+        document.getElementById('logWeighInHeader').style.display = 'block';
+        docLoginBtn.style.display = 'none';
+        logoutBtn.style.display = 'block';
+        document.getElementById('notesInput').value = ''; // Clear notes field
+    }
+    function hideForm() {
+        formCard.style.display = 'none';
+        document.getElementById('logWeighInHeader').style.display = 'none';
+        docLoginBtn.style.display = 'block';
+        logoutBtn.style.display = 'none';
+    }
+    function checkSession() {
+        if (sessionStorage.getItem('snugglesLoggedIn') === 'true') {
+            showForm();
+        } else {
+            hideForm();
+        }
+    }
+    docLoginBtn.addEventListener('click', function() {
+        loginModal.style.display = 'flex';
+        modalPasswordInput.value = '';
+        modalLoginError.style.display = 'none';
+        setTimeout(() => { modalPasswordInput.focus(); }, 100);
+    });
+    docLoginBtn.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            loginModal.style.display = 'flex';
+            modalPasswordInput.value = '';
+            modalLoginError.style.display = 'none';
+            setTimeout(() => { modalPasswordInput.focus(); }, 100);
+        }
+    });
+    modalLoginCancel.addEventListener('click', function() {
+        loginModal.style.display = 'none';
+    });
+    modalLoginSubmit.addEventListener('click', tryModalLogin);
+    function tryModalLogin() {
+        if (modalPasswordInput.value === 'tootsie') {
+            sessionStorage.setItem('snugglesLoggedIn', 'true');
+            showForm();
+            loginModal.style.display = 'none';
+        } else {
+            modalLoginError.style.display = 'block';
+        }
+    }
+    // Hide modal on overlay click (but not modal click)
+    loginModal.addEventListener('click', function(e) {
+        if (e.target === loginModal) loginModal.style.display = 'none';
+    });
+    checkSession();
+
+    // Form submission
+    document.getElementById('weighInForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const date = document.getElementById('dateInput').value;
+        const weight = parseFloat(document.getElementById('weightInput').value);
+        const notes = document.getElementById('notesInput').value;
+        if (!date || isNaN(weight)) return;
+        fetch('snuggles_weight.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date, weight, notes })
+        })
+        .then(res => res.json())
+        .then(() => {
+            document.getElementById('weighInForm').reset();
+            fetchWeighIns();
+        });
+    });
+
+    // Weight up/down arrow logic
+    document.getElementById('weightUp').addEventListener('click', function() {
+        let val = parseFloat(weightInput.value) || 0;
+        weightInput.value = (val + 0.1).toFixed(1);
+    });
+    document.getElementById('weightDown').addEventListener('click', function() {
+        let val = parseFloat(weightInput.value) || 0;
+        weightInput.value = Math.max(0, (val - 0.1)).toFixed(1);
+    });
+
+    // Dynamically calculate Doc's age
+    function getDocAge() {
+        const birth = new Date('2013-10-10');
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        return age;
+    }
+    document.getElementById('docAge').textContent = getDocAge();
+
+    // Add window resize handler to update date format
+    window.addEventListener('resize', function() {
+        // Only re-render if we cross the mobile threshold
+        const wasMobile = isMobile;
+        isMobile = window.innerWidth <= 700;
+        
+        if (wasMobile !== isMobile) {
+            renderTable();
+        }
+    });
+
+    logoutBtn.addEventListener('click', function() {
+        sessionStorage.removeItem('snugglesLoggedIn');
+        hideForm();
+        renderTable();
+    });
+
+    // Add event listener for Enter key on modalPasswordInput
+    modalPasswordInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            tryModalLogin();
+        }
+    });
+
+    // Fetch data immediately since password is disabled
+    fetchWeighIns();
+
+    // Mesh peel: poster is a grid of divs, each peels independently
+    (function() {
+        const wrapper = document.getElementById('resistPosterWrapper');
+        const grid = document.getElementById('posterGrid');
+        const highlight = document.getElementById('posterHighlight');
+        const tapeResidue = document.getElementById('tapeResidue');
+        if (!wrapper || !grid || !highlight || !tapeResidue) return;
+
+        // Grid config
+        const rows = 4, cols = 4;
+        const width = 120, height = 160;
+        // Remove any old children
+        grid.innerHTML = '';
+        // Create grid pieces
+        const pieces = [];
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const div = document.createElement('div');
+                div.className = 'poster-piece';
+                div.style.left = (c * 25) + '%';
+                div.style.top = (r * 25) + '%';
+                div.style.width = '25%';
+                div.style.height = '25%';
+                // Show only the correct portion of the image
+                div.style.backgroundSize = '400% 400%';
+                div.style.backgroundPosition = `${c * -100}% ${r * -100}%`;
+                // Only corners get border-radius
+                let radius = '';
+                if (r === 0 && c === 0) radius = '6px 0 0 0'; // top-left
+                else if (r === 0 && c === cols - 1) radius = '0 6px 0 0'; // top-right
+                else if (r === rows - 1 && c === 0) radius = '0 0 0 6px'; // bottom-left
+                else if (r === rows - 1 && c === cols - 1) radius = '0 0 6px 0'; // bottom-right
+                else radius = '0';
+                div.style.borderRadius = radius;
+                grid.appendChild(div);
+                pieces.push({div, r, c});
+            }
+        }
+
+        let startY = 0;
+        let startX = 0;
+        let dragging = false;
+        let lastDeltaY = 0;
+        let lastDeltaX = 0;
+        let rafId = null;
+        const peelThreshold = 90; // px to peel off
+        const maxRotateZ = 18; // deg, for a little twist
+        const maxRotateX = 70; // deg, for 3D peel
+        const maxTranslateX = 60; // px
+        const maxTranslateY = 120; // px
+        const minOpacity = 0.7;
+        const maxShadow = 64; // px
+        const minShadow = 24; // px
+
+        // For each piece, calculate its "stickiness" (distance from bottom left)
+        function getPiecePeelFactor(r, c) {
+            // 0 = bottom left, 1 = top right
+            const normR = 1 - r / (rows - 1);
+            const normC = c / (cols - 1);
+            // Use a weighted distance so top right peels first
+            return 0.5 * normR + 0.5 * normC;
+        }
+
+        function setTransform(deltaY, deltaX) {
+            // Nonlinear resistance: heavier at first, easier later
+            const y = Math.max(0, Math.min(Math.pow(Math.abs(deltaY), 0.92) * Math.sign(deltaY), maxTranslateY));
+            const x = Math.max(0, Math.min(deltaX, maxTranslateX)); // Only allow rightward drag for realism
+            // 3D peel: rotateX increases as you pull up/right, rotateZ adds a twist
+            const globalRotateX = maxRotateX * (y / maxTranslateY);
+            const globalRotateZ = -12 + (maxRotateZ * (x / maxTranslateX));
+            const shadow = minShadow + (maxShadow - minShadow) * (y / maxTranslateY);
+            const opacity = 1 - (1 - minOpacity) * (y / maxTranslateY);
+            wrapper.style.transform = `translate(${x}px, ${y}px)`;
+            pieces.forEach(({div, r, c}) => {
+                const peel = getPiecePeelFactor(r, c);
+                // Each piece peels a bit less if closer to bottom left
+                const pieceRotateX = globalRotateX * peel;
+                const pieceRotateZ = globalRotateZ * peel;
+                const pieceY = y * peel * 0.9;
+                const pieceX = x * peel * 0.9;
+                div.style.transform = `perspective(600px) rotateZ(${pieceRotateZ}deg) rotateX(${-pieceRotateX}deg) translate(${pieceX}px, ${pieceY}px)`;
+                div.style.boxShadow = `0 ${shadow}px ${shadow*1.5}px rgba(255,90,54,${0.18 + 0.14 * (y / maxTranslateY)})`;
+                div.style.opacity = opacity;
+            });
+            highlight.style.opacity = 0.5 * (y / maxTranslateY);
+        }
+
+        function animateSpringBack(fromY, fromX, fromGlobalRotateX, fromGlobalRotateZ, fromShadow, fromOpacity, fromHighlight) {
+            // Springy snap-back with overshoot/wobble
+            let t = 0;
+            const duration = 520;
+            const start = performance.now();
+            function animate(now) {
+                t = (now - start) / duration;
+                if (t > 1) t = 1;
+                // Damped spring: y = e^{-6t} * cos(10t) + (1 - e^{-6t})
+                const spring = Math.exp(-6*t) * Math.cos(10*t) + (1 - Math.exp(-6*t));
+                const y = fromY * (1 - spring);
+                const x = fromX * (1 - spring);
+                const globalRotateX = fromGlobalRotateX * (1 - spring);
+                const globalRotateZ = fromGlobalRotateZ * (1 - spring);
+                const shadow = fromShadow - (fromShadow - minShadow) * spring;
+                const opacity = fromOpacity + (1 - fromOpacity) * spring;
+                const highlightVal = fromHighlight * (1 - spring);
+                wrapper.style.transform = `translate(${x}px, ${y}px)`;
+                pieces.forEach(({div, r, c}) => {
+                    const peel = getPiecePeelFactor(r, c);
+                    const pieceRotateX = globalRotateX * peel;
+                    const pieceRotateZ = globalRotateZ * peel;
+                    const pieceY = y * peel * 0.9;
+                    const pieceX = x * peel * 0.9;
+                    div.style.transform = `perspective(600px) rotateZ(${pieceRotateZ}deg) rotateX(${-pieceRotateX}deg) translate(${pieceX}px, ${pieceY}px)`;
+                    div.style.boxShadow = `0 ${shadow}px ${shadow*1.5}px rgba(255,90,54,${0.18 + 0.14 * (y / maxTranslateY)})`;
+                    div.style.opacity = opacity;
+                });
+                highlight.style.opacity = highlightVal;
+                if (t < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    wrapper.classList.remove('snapping');
+                    wrapper.style.transform = '';
+                    pieces.forEach(({div}) => {
+                        div.style.transform = '';
+                        div.style.boxShadow = '0 6px 24px rgba(0,0,0,0.18)';
+                        div.style.opacity = 1;
+                    });
+                    highlight.style.opacity = 0;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function onPointerDown(e) {
+            dragging = true;
+            wrapper.classList.add('dragging');
+            wrapper.classList.remove('snapping');
+            startY = (e.touches ? e.touches[0].clientY : e.clientY);
+            startX = (e.touches ? e.touches[0].clientX : e.clientX);
+            lastDeltaY = 0;
+            lastDeltaX = 0;
+            document.addEventListener('mousemove', onPointerMove);
+            document.addEventListener('mouseup', onPointerUp);
+            document.addEventListener('touchmove', onPointerMove, {passive:false});
+            document.addEventListener('touchend', onPointerUp);
+        }
+        function onPointerMove(e) {
+            if (!dragging) return;
+            const clientY = (e.touches ? e.touches[0].clientY : e.clientY);
+            const clientX = (e.touches ? e.touches[0].clientX : e.clientX);
+            lastDeltaY = clientY - startY;
+            lastDeltaX = clientX - startX;
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => setTransform(lastDeltaY, lastDeltaX));
+            if (e.touches) e.preventDefault();
+        }
+        function onPointerUp() {
+            dragging = false;
+            wrapper.classList.remove('dragging');
+            document.removeEventListener('mousemove', onPointerMove);
+            document.removeEventListener('mouseup', onPointerUp);
+            document.removeEventListener('touchmove', onPointerMove);
+            document.removeEventListener('touchend', onPointerUp);
+            // If pulled far enough, peel off
+            if (lastDeltaY > peelThreshold) {
+                wrapper.classList.add('peeling');
+                wrapper.style.transform = `translate(${lastDeltaX+120}px, ${lastDeltaY-60}px)`;
+                pieces.forEach(({div, r, c}) => {
+                    const peel = getPiecePeelFactor(r, c);
+                    div.style.transform = `perspective(600px) rotateZ(${maxRotateZ * peel}deg) rotateX(${-maxRotateX * peel}deg) translate(${(lastDeltaX+120)*peel}px, ${(lastDeltaY-60)*peel}px)`;
+                    div.style.opacity = 0.5;
+                });
+                highlight.style.opacity = 0.7;
+                // Show tape residue
+                tapeResidue.style.display = 'block';
+                tapeResidue.style.opacity = 0.7;
+                setTimeout(() => {
+                    wrapper.remove();
+                    tapeResidue.style.opacity = 0;
+                    setTimeout(() => tapeResidue.style.display = 'none', 1200);
+                }, 700);
+            } else {
+                // Snap back with springy wobble
+                wrapper.classList.add('snapping');
+                animateSpringBack(
+                    lastDeltaY,
+                    lastDeltaX,
+                    maxRotateX * (lastDeltaY / maxTranslateY),
+                    -12 + (maxRotateZ * (lastDeltaX / maxTranslateX)),
+                    minShadow + (maxShadow - minShadow) * (lastDeltaY / maxTranslateY),
+                    1 - (1 - minOpacity) * (lastDeltaY / maxTranslateY),
+                    0.5 * (lastDeltaY / maxTranslateY)
+                );
+            }
+        }
+        wrapper.addEventListener('mousedown', onPointerDown);
+        wrapper.addEventListener('touchstart', onPointerDown, {passive:false});
+        // Keyboard accessibility: Enter/Space peels off
+        wrapper.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                wrapper.classList.add('peeling');
+                wrapper.style.transform = `translate(120px, -60px)`;
+                pieces.forEach(({div, r, c}) => {
+                    const peel = getPiecePeelFactor(r, c);
+                    div.style.transform = `perspective(600px) rotateZ(${maxRotateZ * peel}deg) rotateX(${-maxRotateX * peel}deg) translate(${120*peel}px, ${-60*peel}px)`;
+                    div.style.opacity = 0.5;
+                });
+                highlight.style.opacity = 0.7;
+                tapeResidue.style.display = 'block';
+                tapeResidue.style.opacity = 0.7;
+                setTimeout(() => {
+                    wrapper.remove();
+                    tapeResidue.style.opacity = 0;
+                    setTimeout(() => tapeResidue.style.display = 'none', 1200);
+                }, 700);
+            }
+        });
+    })();
+    </script>
+</body>
+</html> 

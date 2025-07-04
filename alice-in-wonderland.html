@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alice in Wonderland - Theater Projection Design | Charles Wilke</title>
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Alice in Wonderland - Theater Projection Design | Charles Wilke">
+    <meta property="og:description" content="Full show coverage with AI-assisted projections for UNO's production of Alice in Wonderland.">
+    <meta property="og:image" content="https://charleswilke.com/images/aiw/aiw1.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Alice in Wonderland Projection Design">
+    <meta property="og:url" content="https://charleswilke.com/alice-in-wonderland.html">
+    <meta property="og:type" content="website">
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alice in Wonderland - Theater Projection Design | Charles Wilke">
+    <meta name="twitter:description" content="Full show coverage with AI-assisted projections for UNO's production of Alice in Wonderland.">
+    <meta name="twitter:image" content="https://charleswilke.com/images/aiw/aiw1.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="gallery.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="header-bg"></div>
+        <div class="grid-overlay"></div>
+        <div class="header-content">
+            <a href="./index.html" style="text-decoration: none; color: inherit;">
+                <h1 class="header-title">Charles Wilke</h1>
+                <p class="header-subtitle">Conversational UX Product Designer &amp; Projection Artist</p>
+            </a>
+        </div>
+    </header>
+
+    <section class="production-header alice" style="position: relative; overflow: hidden; padding: 0;">
+        <div class="grid-overlay" style="z-index: 1; opacity: 0.25; position: absolute; top: -50%; left: 0; right: 0; bottom: -50%; width: 100%; height: 200%; background-image: linear-gradient(rgba(147, 64, 191, 0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(147, 64, 191, 0.25) 1px, transparent 1px); background-size: 40px 40px; transform: rotateX(45deg) scale(2); transform-origin: center center; pointer-events: none;"></div>
+        <img src="images/aiw/aiw1.png" alt="Alice in Wonderland Featured Image" class="featured-image">
+        <div class="content production-content">
+            <h1>Alice in Wonderland</h1>
+            <p>Fall down the rabbit hole into a darker take than Disney. AI-assisted illustrations in a hatched, desaturated style.</p>
+            <div class="production-details">
+                <p><strong>Venue:</strong> University of Nebraska at Omaha - UNO Theater</p>
+                <p><strong>Run Dates:</strong> April 17-27, 2025</p>
+                <p><strong>Director:</strong> Kyle Thomas</p>
+                <p><strong>Projection Design:</strong> Charles Wilke</p>
+                <p><strong>Featured:</strong> One large 12-foot circular screen, sitting atop the center of the stage.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-container">
+        <div class="container">
+            <div class="gallery-grid">
+                <!-- Gallery items will be dynamically populated based on the images -->
+                <script>
+                    // Function to load images and create gallery items
+                    async function loadGallery() {
+                        const galleryGrid = document.querySelector('.gallery-grid');
+                        const images = [
+                            { thumb: 'images/aiw/aiw_thumb_1.png', full: 'images/aiw/aiw1.png', alt: 'Alice in Wonderland Scene 1' },
+                            { thumb: 'images/aiw/aiw_thumb_2.png', full: 'images/aiw/aiw2.png', alt: 'Alice in Wonderland Scene 2' },
+                            { thumb: 'images/aiw/aiw_thumb_3.png', full: 'images/aiw/aiw3.png', alt: 'Alice in Wonderland Scene 3' },
+                            { thumb: 'images/aiw/aiw_thumb_4.png', full: 'images/aiw/aiw4.png', alt: 'Alice in Wonderland Scene 4' },
+                            { thumb: 'images/aiw/aiw_thumb_5.png', full: 'images/aiw/aiw5.png', alt: 'Alice in Wonderland Scene 5' },
+                            { thumb: 'images/aiw/aiw_thumb_6.png', full: 'images/aiw/aiw6.png', alt: 'Alice in Wonderland Scene 6' },
+                            { thumb: 'images/aiw/aiw_thumb_7.png', full: 'images/aiw/aiw7.png', alt: 'Alice in Wonderland Scene 7' },
+                            { thumb: 'images/aiw/aiw_thumb_8.png', full: 'images/aiw/aiw8.png', alt: 'Alice in Wonderland Scene 8' },
+                            { thumb: 'images/aiw/aiw_thumb_9.png', full: 'images/aiw/aiw9.png', alt: 'Alice in Wonderland Scene 9' },
+                            { thumb: 'images/aiw/aiw_thumb_10.png', full: 'images/aiw/aiw10.png', alt: 'Alice in Wonderland Scene 10' },
+                            { thumb: 'images/aiw/aiw_thumb_11.png', full: 'images/aiw/aiw11.png', alt: 'Alice in Wonderland Scene 11' },
+                            { thumb: 'images/aiw/aiw_thumb_12.png', full: 'images/aiw/aiw12.png', alt: 'Alice in Wonderland Scene 12' },
+                            { thumb: 'images/aiw/aiw_thumb_13.png', full: 'images/aiw/aiw13.png', alt: 'Alice in Wonderland Scene 13' },
+                            { thumb: 'images/aiw/aiw_thumb_14.png', full: 'images/aiw/aiw14.png', alt: 'Alice in Wonderland Scene 14' },
+                            { thumb: 'images/aiw/aiw_thumb_15.png', full: 'images/aiw/aiw15.png', alt: 'Alice in Wonderland Scene 15' },
+                            { thumb: 'images/aiw/aiw_thumb_16.png', full: 'images/aiw/aiw16.png', alt: 'Alice in Wonderland Scene 16' },
+                            { thumb: 'images/aiw/aiw_thumb_17.png', full: 'images/aiw/aiw17.png', alt: 'Alice in Wonderland Scene 17' },
+                            { thumb: 'images/aiw/aiw_thumb_18.png', full: 'images/aiw/aiw18.png', alt: 'Alice in Wonderland Scene 18' },
+                            { thumb: 'images/aiw/aiw_thumb_19.png', full: 'images/aiw/aiw19.png', alt: 'Alice in Wonderland Scene 19' },
+                            { thumb: 'images/aiw/aiw_thumb_20.png', full: 'images/aiw/aiw20.png', alt: 'Alice in Wonderland Scene 20' },
+                            { thumb: 'images/aiw/aiw_thumb_21.png', full: 'images/aiw/aiw21.png', alt: 'Alice in Wonderland Scene 21' },
+                            { thumb: 'images/aiw/aiw_thumb_22.png', full: 'images/aiw/aiw22.png', alt: 'Alice in Wonderland Scene 22' },
+                            { thumb: 'images/aiw/aiw_thumb_23.png', full: 'images/aiw/aiw23.png', alt: 'Alice in Wonderland Scene 23' },
+                            { thumb: 'images/aiw/aiw_thumb_24.png', full: 'images/aiw/aiw24.png', alt: 'Alice in Wonderland Scene 24' }
+                        ];
+
+                        // Fisher-Yates shuffle to randomize gallery order
+                        function shuffle(array) {
+                            for (let i = array.length - 1; i > 0; i--) {
+                                const j = Math.floor(Math.random() * (i + 1));
+                                [array[i], array[j]] = [array[j], array[i]];
+                            }
+                        }
+                        shuffle(images);
+
+                        // Update currentImageSet to be the full-res images in the shuffled order
+                        window.currentImageSet = images.map(img => img.full);
+
+                        images.forEach((img, index) => {
+                            const galleryItem = document.createElement('div');
+                            galleryItem.className = 'gallery-item';
+                            
+                            // Add slight random rotation for visual interest
+                            const rotation = (index % 2 === 0 ? -1 : 1);
+                            galleryItem.style.transform = `rotate(${rotation}deg)`;
+                            
+                            const image = document.createElement('img');
+                            image.src = img.thumb;
+                            image.alt = img.alt;
+                            image.loading = 'lazy';
+                            image.addEventListener('click', () => openLightbox(img.full));
+
+                            galleryItem.appendChild(image);
+                            galleryGrid.appendChild(galleryItem);
+                        });
+                    }
+
+                    // Load gallery when the page is ready
+                    document.addEventListener('DOMContentLoaded', loadGallery);
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <section class="gpts-section" style="background: linear-gradient(to bottom, #1a1a1a, #2a1f2d); position: relative; overflow: hidden; padding: 4rem 0;">
+        <div class="grid-overlay" style="z-index: 1; opacity: 0.25; position: absolute; top: -50%; left: 0; right: 0; bottom: -50%; width: 100%; height: 200%; background-image: linear-gradient(rgba(147, 64, 191, 0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(147, 64, 191, 0.25) 1px, transparent 1px); background-size: 40px 40px; transform: rotateX(45deg) scale(2); transform-origin: center center;"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <h2 class="section-title" style="color: #e6e6fa;">"Curiouser and curiouser!"</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+                <div class="video-container" style="position: relative; padding-bottom: 100%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(147, 64, 191, 0.3), 0 0 40px rgba(147, 64, 191, 0.1);">
+                    <iframe 
+                        src="https://player.vimeo.com/video/1078948856" 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                        frameborder="0" 
+                        allow="autoplay; fullscreen; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-description" style="color: #fff; padding: 2rem;">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: #c8a2c8; text-shadow: 0 0 10px rgba(147, 64, 191, 0.5);">Commercial Spot</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                        UNO Theater's production pushes boundaries with its unique vision, creating an experience that the Gateway describes as "something out of a fever dream." The desaturated, hatched art style and surreal projections prove that "there is a method to their madness," transforming the stage into a wonderland that defies expectations.
+                    </p>
+                    <p style="font-style: italic; color: #c8a2c8; text-shadow: 0 0 5px rgba(147, 64, 191, 0.3);">
+                        "Sometimes I believe in as many as six impossible things before breakfast" — Alice
+                    </p>
+                </div>
+            </div>
+
+            <div style="width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(147, 64, 191, 0.5), transparent); margin: 4rem 0;"></div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+                <div class="video-description" style="color: #fff; padding: 2rem;">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: #c8a2c8; text-shadow: 0 0 10px rgba(147, 64, 191, 0.5);">Stage Rendering</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                        A circular projection screen, 12 feet in diameter, hovers above the stage like a portal into Wonderland. This centerpiece of our design creates a focal point for the audience while allowing the cast to interact with both the physical set and the projected environments. The screen's positioning and size were carefully calculated to maintain visibility from all audience angles while integrating seamlessly with the stage design.
+                    </p>
+                    <p style="font-style: italic; color: #c8a2c8; text-shadow: 0 0 5px rgba(147, 64, 191, 0.3);">
+                        "It's no use going back to yesterday, because I was a different person then" — Alice
+                    </p>
+                </div>
+                <div class="stage-model" style="margin-bottom: 0;">
+                    <img src="images/aiw/process/StageModel.png" alt="Alice in Wonderland Stage Model" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(147, 64, 191, 0.3), 0 0 40px rgba(147, 64, 191, 0.1); cursor: pointer;" onclick="openStageModelLightbox('images/aiw/process/StageModel-large.png')">
+                </div>
+            </div>
+
+            <div style="width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(147, 64, 191, 0.5), transparent); margin: 2rem 0;"></div>
+
+            <div class="bts-section">
+                <div class="container">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: #c8a2c8; text-shadow: 0 0 10px rgba(147, 64, 191, 0.5); text-align: center;">Running the Show</h3>
+                    <p style="text-align: center; color: #888; font-size: 0.9rem; margin-bottom: 2rem;">Photos by Ryan Soderlin</p>
+                    <div class="bts-photos">
+                        <div class="bts-photo">
+                            <img src="images/aiw/process/crew1.png" alt="Behind the scenes - Crew photo 1" onclick="openBtsLightbox('images/aiw/process/crew1.png')">
+                        </div>
+                        <div class="bts-photo">
+                            <img src="images/aiw/process/crew2.png" alt="Behind the scenes - Crew photo 2" onclick="openBtsLightbox('images/aiw/process/crew2.png')">
+                        </div>
+                        <div class="bts-photo">
+                            <img src="images/aiw/process/crew3.png" alt="Behind the scenes - Crew photo 3" onclick="openBtsLightbox('images/aiw/process/crew3.png')">
+                        </div>
+                        <div class="bts-photo">
+                            <img src="images/aiw/process/crew4.png" alt="Behind the scenes - Crew photo 4" onclick="openBtsLightbox('images/aiw/process/crew4.png')">
+                        </div>
+                        <div class="bts-photo">
+                            <img src="images/aiw/process/crew5.png" alt="Behind the scenes - Crew photo 5" onclick="openBtsLightbox('images/aiw/process/crew5.png')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(147, 64, 191, 0.5), transparent); margin: 2rem 0;">
+            </div>
+
+            <h3 style="font-size: 1.8rem; margin-bottom: 2rem; color: #c8a2c8; text-shadow: 0 0 10px rgba(147, 64, 191, 0.5); text-align: center;"><a href="https://www.instagram.com/unotheatre" target="_blank" style="color: #fff; text-decoration: none; transition: color 0.3s;">@unotheatre</a> on Instagram</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div style="display: flex; flex-direction: column;">
+                    <div style="padding: 1rem; color: #fff; font-size: 0.9rem;">
+                        <p style="margin-bottom: 0.5rem;"><strong><a href="https://www.instagram.com/unotheatre" target="_blank" style="color: #fff; text-decoration: none; transition: color 0.3s;">@unotheatre</a></strong></p>
+                        <p style="margin-bottom: 0.5rem;">Raise your hand if you're excited to watch Alice in Wonderland that opens THIS Friday! ✋🏽</p>
+                        <p style="margin-bottom: 0.5rem;">Video by- <a href="https://www.instagram.com/kaydon_kdizzle" target="_blank" style="color: #fff; text-decoration: none; transition: color 0.3s;">@kaydon_kdizzle</a></p>
+                        <p style="margin-bottom: 0.5rem;">✨Join us this April 17-19 and 24-27 to journey through Wonderland here at UNO Theatre. Click on the link in our bio to buy your tickets before they sell out! This is a show you don't want to miss!✨</p>
+                        <p style="color: #c8a2c8;">#theatre #unotheatre #unomaha</p>
+                    </div>
+                    <div style="position: relative; padding-bottom: 125%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(147, 64, 191, 0.3), 0 0 40px rgba(147, 64, 191, 0.1);">
+                        <video 
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;" 
+                            controls
+                            playsinline
+                            preload="metadata"
+                            poster="images/aiw/process/insta1_thumb.png">
+                            <source src="images/aiw/process/insta1.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <div style="position: relative; padding-bottom: 177.78%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(147, 64, 191, 0.3), 0 0 40px rgba(147, 64, 191, 0.1);">
+                        <video 
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;" 
+                            controls
+                            playsinline
+                            preload="metadata"
+                            poster="images/aiw/process/insta2_thumb.png">
+                            <source src="images/aiw/process/insta2.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <!-- New full-width landscape video -->
+            <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 2rem;">
+                <div class="video-container-responsive">
+                    <video 
+                        controls
+                        playsinline
+                        preload="metadata"
+                        poster="images/aiw/process/insta3_thumb.png">
+                        <source src="images/aiw/process/insta3.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bg"></div>
+        <div class="footer-grid-overlay"></div>
+        <div class="container">
+            <a href="./index.html" style="text-decoration: none; color: inherit;">
+                <p>&copy; <script>document.write(new Date().getFullYear());</script> Charles Wilke | Designer, Artist, and founder of Fellow Vector LLC — helping navigate the intersection of design and artificial intelligence.</p>
+            </a>
+        </div>
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+        <div class="lightbox-content">
+            <img src="" alt="Lightbox Image">
+            <div class="lightbox-nav">
+                <button class="prev-btn" aria-label="Previous image">❮</button>
+                <button class="next-btn" aria-label="Next image">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lightbox functionality
+        let currentImageIndex = 0;
+        let currentImageSet = [
+            'images/aiw/aiw1.png',
+            'images/aiw/aiw2.png',
+            'images/aiw/aiw3.png',
+            'images/aiw/aiw4.png',
+            'images/aiw/aiw5.png',
+            'images/aiw/aiw6.png',
+            'images/aiw/aiw7.png',
+            'images/aiw/aiw8.png',
+            'images/aiw/aiw9.png',
+            'images/aiw/aiw10.png',
+            'images/aiw/aiw11.png',
+            'images/aiw/aiw12.png',
+            'images/aiw/aiw13.png',
+            'images/aiw/aiw14.png',
+            'images/aiw/aiw15.png',
+            'images/aiw/aiw16.png',
+            'images/aiw/aiw17.png',
+            'images/aiw/aiw18.png',
+            'images/aiw/aiw19.png',
+            'images/aiw/aiw20.png',
+            'images/aiw/aiw21.png',
+            'images/aiw/aiw22.png',
+            'images/aiw/aiw23.png',
+            'images/aiw/aiw24.png'
+        ];
+
+        // Behind the scenes image set
+        let btsImageSet = [
+            'images/aiw/process/crew1.png',
+            'images/aiw/process/crew2.png',
+            'images/aiw/process/crew3.png',
+            'images/aiw/process/crew4.png',
+            'images/aiw/process/crew5.png'
+        ];
+
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = lightbox.querySelector('img');
+            lightbox.classList.add('active');
+            lightboxImg.src = imageSrc;
+            document.body.style.overflow = 'hidden';
+            currentImageIndex = currentImageSet.indexOf(imageSrc);
+            updateLightboxNavigation();
+        }
+
+        function openBtsLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = lightbox.querySelector('img');
+            lightbox.classList.add('active');
+            lightboxImg.src = imageSrc;
+            document.body.style.overflow = 'hidden';
+            currentImageSet = btsImageSet;  // Switch to BTS image set
+            currentImageIndex = btsImageSet.indexOf(imageSrc);
+            updateLightboxNavigation();
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset to main gallery image set when closing
+            currentImageSet = [
+                'images/aiw/aiw1.png',
+                'images/aiw/aiw2.png',
+                'images/aiw/aiw3.png',
+                'images/aiw/aiw4.png',
+                'images/aiw/aiw5.png',
+                'images/aiw/aiw6.png',
+                'images/aiw/aiw7.png',
+                'images/aiw/aiw8.png',
+                'images/aiw/aiw9.png',
+                'images/aiw/aiw10.png',
+                'images/aiw/aiw11.png',
+                'images/aiw/aiw12.png',
+                'images/aiw/aiw13.png',
+                'images/aiw/aiw14.png',
+                'images/aiw/aiw15.png',
+                'images/aiw/aiw16.png',
+                'images/aiw/aiw17.png',
+                'images/aiw/aiw18.png',
+                'images/aiw/aiw19.png',
+                'images/aiw/aiw20.png',
+                'images/aiw/aiw21.png',
+                'images/aiw/aiw22.png',
+                'images/aiw/aiw23.png',
+                'images/aiw/aiw24.png'
+            ];
+        }
+
+        function navigateImage(direction) {
+            currentImageIndex = (currentImageIndex + direction + currentImageSet.length) % currentImageSet.length;
+            const lightboxImg = document.querySelector('#lightbox img');
+            lightboxImg.src = currentImageSet[currentImageIndex];
+            updateLightboxNavigation();
+        }
+
+        function updateLightboxNavigation() {
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            
+            prevBtn.style.visibility = currentImageIndex > 0 ? 'visible' : 'hidden';
+            nextBtn.style.visibility = currentImageIndex < currentImageSet.length - 1 ? 'visible' : 'hidden';
+        }
+
+        // Event Listeners
+        document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+        document.querySelector('.prev-btn').addEventListener('click', () => navigateImage(-1));
+        document.querySelector('.next-btn').addEventListener('click', () => navigateImage(1));
+
+        // Click outside to close
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            // Check if the click was directly on the lightbox background (not on its children)
+            if (e.target.classList.contains('lightbox')) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') navigateImage(-1);
+                if (e.key === 'ArrowRight') navigateImage(1);
+            }
+        });
+
+        // Touch navigation
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('lightbox').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('lightbox').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0) {
+                    navigateImage(-1); // Swipe right, go to previous
+                } else {
+                    navigateImage(1); // Swipe left, go to next
+                }
+            }
+        }
+
+        // Stage Model specific lightbox function
+        function openStageModelLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = lightbox.querySelector('img');
+            lightbox.classList.add('active');
+            lightboxImg.src = imageSrc;
+            document.body.style.overflow = 'hidden';
+            
+            // Hide navigation buttons since this is a single image
+            document.querySelector('.lightbox-nav').style.display = 'none';
+        }
+
+        // Modify close lightbox to restore nav buttons
+        const originalCloseLightbox = closeLightbox;
+        closeLightbox = function() {
+            originalCloseLightbox();
+            document.querySelector('.lightbox-nav').style.display = 'flex';
+        }
+    </script>
+</body>
+</html> 

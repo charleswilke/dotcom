@@ -176,7 +176,7 @@ header {
     font-weight: 700;
     text-transform: uppercase;
     font-size: 4.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0rem;
     /* animation: glitch 2s infinite alternate-reverse; */
     letter-spacing: 3px;
 }

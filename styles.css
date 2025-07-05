@@ -176,7 +176,7 @@ header {
     font-weight: 700;
     text-transform: uppercase;
     font-size: 4.5rem;
-    margin-bottom: 0rem;
+    margin-top: 2rem;
     /* animation: glitch 2s infinite alternate-reverse; */
     letter-spacing: 3px;
 }
@@ -265,7 +265,7 @@ header {
 }
 
 .header-subtitle {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-bottom: 2rem;
     animation: fadeIn 1.5s ease-in-out;
     letter-spacing: 2px;

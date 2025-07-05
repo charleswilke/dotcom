@@ -347,10 +347,8 @@ header {
 
 /* Remove flex centering so grid works as intended */
 .dimensional-showcase > .container {
-  display: block;
-  flex-direction: unset;
-  align-items: unset;
-  justify-content: unset;
+    padding-top: 1.2rem;
+    padding-bottom: 2.8rem;
 }
 
 /* Section Titles */
@@ -433,7 +431,6 @@ header {
     position: relative;
     z-index: 1;
     margin-top: 0.25rem;
-    margin-bottom: 2rem;
 }
 
 .showcase-item {
@@ -2603,10 +2600,10 @@ section.production-header.alice p {
 
 .recently-bg-text {
     position: absolute;
-    top: 0.4vw;
+    top: 0vw;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 2.8rem;
+    font-size: 3.2rem;
     font-family: 'Exo', 'Orbitron', 'Arial Black', Arial, sans-serif;
     font-weight: 700;
     font-style: italic;
@@ -2629,6 +2626,8 @@ section.production-header.alice p {
     white-space: nowrap;
     filter: blur(0.3px) brightness(1.03) saturate(1.01);
     transition: filter 0.3s, color 0.3s, text-shadow 0.3s;
+    margin-top: 1.0rem;
+    margin-bottom: 2.5rem;
 }
 
 .recently-bg-text .recently-letter {
@@ -2732,4 +2731,11 @@ section.production-header.alice p {
         font-size: 0.95rem;
         padding: 0.8rem 1rem;
     }
+}
+
+@media (max-width: 768px) {
+  .dimensional-showcase > .container {
+    padding-top: 0.8rem;
+    padding-bottom: 1.8rem;
+  }
 }

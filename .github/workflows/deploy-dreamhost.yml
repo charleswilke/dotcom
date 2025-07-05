@@ -20,4 +20,5 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "gh-action@charleswilke.com"
           git remote add production "ssh://dh_528u8k@iad1-shared-b8-12.dreamhost.com/~/git/charleswilke.com.git"
-          GIT_SSH_COMMAND="ssh -i key -o StrictHostKeyChecking=no" git push production main
+          GIT_SSH_COMMAND="ssh -i key -o StrictHostKeyChecking=no" git push --force production main
+

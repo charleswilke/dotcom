@@ -933,7 +933,7 @@ html {
 
 /* About Section with Retro-Futurist Style */
 .about {
-    padding: 5rem 0;
+    padding: 5rem 0 2rem 0;
     background-color: var(--accent);
     color: var(--light);
     position: relative;

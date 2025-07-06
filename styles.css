@@ -2644,13 +2644,13 @@ section.production-header.alice p {
 @media (max-width: 768px) {
   .recently-bg-text {
     font-size: 10vw;
-    top: 0.5vw;
+    top: 1.5vw;
   }
 }
 @media (max-width: 480px) {
   .recently-bg-text {
     font-size: 10vw;
-    top: 0.5vw;
+    top: 1.5vw;
   }
 }
 

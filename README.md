@@ -1,28 +1,26 @@
-# charleswilke.com
+# CharlesWilke.com
 
-Welcome to the guts of my dot com.
+Welcome to the repo behind [CharlesWilke.com](https://charleswilke.com)—my cozy digital home on the internet.  
 
-This repo houses the source files for [charleswilke.com](https://charleswilke.com) — a personal site slash living portfolio slash quiet rebellion against generic LinkedIn bios. It’s where I keep a curated archive of writing, AI experiments, theater work, and whatever else refuses to fit into a tidy professional box.
+This repository contains all the code, assets, and creative bits that power my personal website. Feel free to poke around!
 
-### What's Here
+## What You'll Find Here
 
-- Static HTML/CSS/JS — hand-rolled, artisanal, lightly neurotic.
-- Site sections include:
-  - A homepage that says hello like I mean it
-  - Links to my Substack and projects from my AI consultancy, [Fellow Vector](https://fellowvector.com)
-  - Some lovingly selected work samples
-  - Probably a dog photo or two if you poke around hard enough
+- **HTML/CSS/JS:** The nuts and bolts of my web presence.
+- **Content:** Musings, essays, and explorations on AI, creativity, capitalism, and whatever else captures my imagination.
+- **Images & Media:** Visual storytelling that's part French pop-art, part pulp-noir, and always thought-provoking.
 
-### Why?
+## Tech Stack
 
-Because I wanted something of mine to load instantly, look like *me*, and speak like a person—not a pitch deck.
+- Simple and sturdy HTML/CSS with just a dash of JavaScript.
+- Hosted lovingly via DreamHost, deploying automatically with Git magic.
 
-### Deployment
+## Why Open Source?
 
-Deployed to [DreamHost](https://dreamhost.com) via good ol’ FTP. GitHub Actions is set up to auto-deploy on `main` branch pushes, because I'm fancy like that now.
+Because sharing ideas (and code) is good karma. If you see something useful, inspiring, or questionable, drop me a line or raise an issue.
 
-### Can I Use This?
+## Want to Collaborate or Chat?
 
-Sure, poke around. If you’re here to see how someone built a site without JavaScript frameworks or a 4MB hero image, you're in the right place.
+Visit [charleswilke.com](https://charleswilke.com) to connect, explore my writing, or see what I'm up to. Coffee (or GitHub stars) are always welcome.
 
-Just don’t rip off the writing. It’s personal, and the dogs will know.
+—Charles

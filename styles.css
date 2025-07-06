@@ -265,6 +265,7 @@ header {
 }
 
 .header-subtitle {
+    font-family: 'Space Mono', monospace;
     font-size: 1.2rem;
     margin-bottom: 2rem;
     animation: fadeIn 1.5s ease-in-out;

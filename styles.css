@@ -364,7 +364,7 @@ header {
     z-index: 1;
     text-shadow: none;
     /* animation: glitch 3s infinite alternate-reverse; */
-    cursor: pointer;
+    cursor: auto;
     transition: all 0.3s ease;
     padding-bottom: 10px;
 }

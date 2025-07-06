@@ -2740,3 +2740,19 @@ section.production-header.alice p {
     padding-bottom: 1.8rem;
   }
 }
+
+.section-title.section-title-light {
+    color: var(--light) !important;
+    text-shadow:
+        2px 2px 0 var(--primary),   /* dark shadow offset */
+        0 0 0 var(--light);         /* ensures crisp cream on top */
+}
+
+.section-title.section-title-light::after {
+    filter: drop-shadow(2px 2px 0 var(--primary));
+}
+
+.rss-feed .section-title.section-title-light::after {
+    background: var(--light) !important;
+    filter: drop-shadow(2px 2px 0 var(--primary));
+}

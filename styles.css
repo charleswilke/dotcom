@@ -239,24 +239,24 @@ header {
 
 @keyframes glitch {
     0% {
-        text-shadow: 2px 0 var(--neon), -2px 0 var(--secondary);
-        transform: skew(2deg) scale(1.01);
+        text-shadow: 0.5px 0 var(--neon), -0.5px 0 var(--secondary);
+        transform: skew(0.3deg) scale(1.002);
     }
     20% {
-        text-shadow: -2px 0 var(--neon), 2px 0 var(--secondary);
-        transform: skew(-2deg) scale(0.99);
+        text-shadow: -0.5px 0 var(--neon), 0.5px 0 var(--secondary);
+        transform: skew(-0.3deg) scale(0.998);
     }
     40% {
-        text-shadow: 2px 2px var(--neon), -2px -2px var(--secondary);
-        transform: translate(2px, -2px) skew(1deg, 0.5deg);
+        text-shadow: 0.5px 0.5px var(--neon), -0.5px -0.5px var(--secondary);
+        transform: translate(0.5px, -0.5px) skew(0.2deg, 0.1deg);
     }
     60% {
-        text-shadow: -2px -2px var(--neon), 2px 2px var(--secondary);
-        transform: translate(-2px, 2px) skew(-1deg, -0.5deg);
+        text-shadow: -0.5px -0.5px var(--neon), 0.5px 0.5px var(--secondary);
+        transform: translate(-0.5px, 0.5px) skew(-0.2deg, -0.1deg);
     }
     80% {
-        text-shadow: 2px 0 var(--neon), -2px 0 var(--secondary);
-        transform: skew(2deg) scale(1.01);
+        text-shadow: 0.5px 0 var(--neon), -0.5px 0 var(--secondary);
+        transform: skew(0.3deg) scale(1.002);
     }
     100% {
         text-shadow: none;
@@ -802,20 +802,28 @@ footer p {
 
 @keyframes glitch {
     0% {
-        text-shadow: 0.05em 0 0 var(--neon), -0.05em -0.025em 0 var(--secondary);
-        transform: skew(0.5deg);
+        text-shadow: 0.5px 0 var(--neon), -0.5px 0 var(--secondary);
+        transform: skew(0.3deg) scale(1.002);
     }
-    25% {
-        text-shadow: -0.05em 0 0 var(--neon), 0.025em 0.025em 0 var(--secondary);
-        transform: skew(-0.5deg);
+    20% {
+        text-shadow: -0.5px 0 var(--neon), 0.5px 0 var(--secondary);
+        transform: skew(-0.3deg) scale(0.998);
     }
-    50% {
-        text-shadow: 0.025em 0.05em 0 var(--neon), -0.05em 0 0 var(--secondary);
-        transform: skew(0.25deg);
+    40% {
+        text-shadow: 0.5px 0.5px var(--neon), -0.5px -0.5px var(--secondary);
+        transform: translate(0.5px, -0.5px) skew(0.2deg, 0.1deg);
+    }
+    60% {
+        text-shadow: -0.5px -0.5px var(--neon), 0.5px 0.5px var(--secondary);
+        transform: translate(-0.5px, 0.5px) skew(-0.2deg, -0.1deg);
+    }
+    80% {
+        text-shadow: 0.5px 0 var(--neon), -0.5px 0 var(--secondary);
+        transform: skew(0.3deg) scale(1.002);
     }
     100% {
-        text-shadow: -0.025em -0.025em 0 var(--neon), 0.025em -0.05em 0 var(--secondary);
-        transform: skew(-0.25deg);
+        text-shadow: none;
+        transform: none;
     }
 }
 

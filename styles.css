@@ -847,6 +847,8 @@ footer p {
     .header-subtitle {
         font-size: 1.2rem;
         letter-spacing: 1px;
+        margin-left: 0.6rem;
+        margin-right: 0.6rem;
     }
     
     .section-title {
@@ -885,6 +887,8 @@ footer p {
     
     .header-subtitle {
         font-size: 1rem;
+        margin-left: 0.6rem;
+        margin-right: 0.6rem;
     }
     
     .section-title {

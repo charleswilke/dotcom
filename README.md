@@ -1,6 +1,6 @@
 # CharlesWilke.com
 
-Welcome to the repo behind [CharlesWilke.com](https://charleswilke.com) my cozy digital home on the internet.  
+Welcome to the repo behind [CharlesWilke.com](https://charleswilke.com), my cozy digital home on the internet.  
 
 This repository contains all the code, assets, and creative bits that power my personal website. Feel free to poke around!
 

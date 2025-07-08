@@ -1678,6 +1678,8 @@ html {
 
 .blurb-subtitle {
     font-family: 'Exo', 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-style: italic;
     font-size: 2rem;
     color: var(--primary);
     margin-bottom: 1.5rem;

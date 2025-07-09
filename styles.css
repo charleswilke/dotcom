@@ -2539,7 +2539,7 @@ section.production-header.alice p {
 }
 
 .pronunciation::after {
-    content: "Intl. Phonetic Alphabet: tʃɑrlz ˈwɪlki";
+    content: "Intl. Phonetic Alphabet: tʃɑrlz /ˈwɪlki/";
     position: absolute;
     left: 0;
     bottom: 120%;

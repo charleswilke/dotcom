@@ -1200,16 +1200,6 @@ html {
 }
 
 @media (max-width: 480px) {
-    .social-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.3rem;
-    }
-
-    .separator {
-        display: none;
-    }
-
     .btn-container {
         flex-direction: column;
         align-items: stretch;
@@ -2773,4 +2763,120 @@ section.production-header.alice p {
 .rss-feed .section-title.section-title-light::after {
     background: var(--light) !important;
     filter: drop-shadow(2px 2px 0 var(--primary));
+}
+
+/* Custom Audio Player - Sleeker Full Width */
+.about-audio {
+  margin-top: 1.6rem;
+  margin-bottom: 1.6rem;
+  text-align: center;
+}
+.custom-audio-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 0.4rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18), 0 0 8px var(--neon);
+  padding: 0.3rem 0.7rem;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  min-width: 0;
+  margin: 0 auto;
+}
+.audio-btn {
+  background: transparent;
+  color: var(--neon);
+  border: none;
+  border-radius: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  flex-shrink: 0;
+  margin-right: 0.7rem;
+}
+.audio-btn:hover, .audio-btn:focus {
+  color: var(--secondary);
+  box-shadow: none;
+  background: transparent;
+}
+.audio-progress-container {
+  flex: 1 1 auto;
+  min-width: 40px;
+  max-width: none;
+  height: 0.35rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.audio-progress-bar {
+  width: 100%;
+  height: 0.35rem;
+  background: linear-gradient(90deg, var(--groovy-gradient1) 0%, var(--groovy-gradient2) 100%);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 0 8px var(--neon);
+  position: relative;
+}
+.audio-progress {
+  height: 100%;
+  width: 0%;
+  background: var(--neon);
+  box-shadow: 0 0 8px var(--neon);
+  border-radius: 0.5rem 0 0 0.5rem;
+  transition: width 0.2s linear;
+}
+.audio-time {
+  font-family: 'Space Mono', monospace;
+  color: var(--neon);
+  font-size: 0.95rem;
+  min-width: 120px;
+  max-width: 120px;
+  text-shadow: 0 0 4px var(--primary);
+  flex-shrink: 0;
+  text-align: right;
+  margin-left: 0.7rem;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .custom-audio-player {
+    max-width: 98vw;
+    padding: 0.3rem 0.2rem;
+  }
+  .audio-btn {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.1rem;
+    margin-right: 0.4rem;
+  }
+  .audio-time {
+    font-size: 0.85rem;
+    min-width: 100px;
+    max-width: 100px;
+    margin-left: 0.4rem;
+    margin-right: 0.4rem;
+    white-space: nowrap;
+  }
+  .audio-progress-container {
+    min-width: 30px;
+  }
+}
+
+.glitch-link {
+    /* Only use base .social-link styles, no neon color or text-shadow */
+    font-family: 'Space Mono', monospace;
+    position: relative;
+    transition: color 0.2s, text-shadow 0.2s, opacity 0.2s;
+}
+.glitch-link.glitch {
+    color: var(--neon);
+    text-shadow: 0 0 8px var(--neon), 0 0 16px var(--neon), 0 0 2px var(--primary);
+    animation: glitch-blocky 0.28s steps(1, end) infinite alternate;
 }

@@ -71,7 +71,7 @@
                     <img class="image-after" src="images/cw2.jpg" alt="Charles Wilke">
                 </div>
                 <div class="about-name">
-                    Charles Wilke <span class="pronunciation">("Will-KEE")</span>
+                    Charles Wilke
                 </div>
             </div>
             <div class="about-content">
@@ -83,6 +83,18 @@
                 <p>As a Projection Designer for theatrical productions, I blend analog sensibilities to create distinct AI art.</p>
                 <br />
                 <p>I share my life in Omaha with my wife, Jessie, and our two dogs, <a href="snuggles-weight.html" class="doc-link">Doc</a> and Astro. We spend our evenings watching Yankees games, BBUK, or the latest season of Ru Paul's Drag Race.</p>
+                <div class="about-audio">
+                  <audio id="aboutAudio" src="CharlesWilke-AIoverview.wav" preload="metadata" style="display:none;"></audio>
+                  <div class="custom-audio-player">
+                    <button id="audioPlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
+                    <div class="audio-progress-container">
+                      <div class="audio-progress-bar">
+                        <div class="audio-progress"></div>
+                      </div>
+                    </div>
+                    <span class="audio-time"><span id="audioCurrent">0:00</span> / <span id="audioDuration">0:00</span></span>
+                  </div>
+                </div>
                 <div class="social-links">
                     <a href="https://www.linkedin.com/in/charles-wilke/" target="_blank" class="social-link">LinkedIn</a>
                     <span class="separator">|</span>
@@ -93,12 +105,8 @@
                     <a href="https://charleswilke.substack.com/" target="_blank" class="social-link">Substack</a>
                     <span class="separator">|</span>
                     <a href="faq.html" class="social-link">FAQ</a>
-                </div>
-                <div class="btn-container">
-                    <a href="mailto:cwilke.inquiry@gmail.com" class="email-btn">
-                        <span class="btn-text">Get in Touch</span>
-                        <span class="btn-glow"></span>
-                    </a>
+                    <span class="separator">|</span>
+                    <a href="mailto:cwilke.inquiry@gmail.com" class="social-link glitch-link">Email</a>
                 </div>
             </div>
         </div>
@@ -687,6 +695,21 @@
             setTimeout(triggerGlitchFooterNote, 2500 + Math.random() * 3000);
         });
 
+        // Glitch effect for the email link
+        // Also trigger on hover/focus
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailLink = document.querySelector('.glitch-link');
+            if (!emailLink) return;
+            emailLink.addEventListener('mouseenter', () => {
+                emailLink.classList.add('glitch');
+                setTimeout(() => emailLink.classList.remove('glitch'), 200 + Math.random() * 200);
+            });
+            emailLink.addEventListener('focus', () => {
+                emailLink.classList.add('glitch');
+                setTimeout(() => emailLink.classList.remove('glitch'), 200 + Math.random() * 200);
+            });
+        });
+
         function neonFlicker() {
           const letters = document.querySelectorAll('.recently-bg-text span');
           letters.forEach(letter => letter.classList.remove('flicker'));
@@ -722,6 +745,60 @@
         document.addEventListener('DOMContentLoaded', () => {
           setTimeout(triggerShimmer, 2000);
         });
+
+        // Custom Audio Player Script
+        (function() {
+          const audio = document.getElementById('aboutAudio');
+          const playPauseBtn = document.getElementById('audioPlayPause');
+          const icon = playPauseBtn.querySelector('.audio-icon');
+          const progressBar = document.querySelector('.audio-progress');
+          const progressContainer = document.querySelector('.audio-progress-bar');
+          const currentTimeEl = document.getElementById('audioCurrent');
+          const durationEl = document.getElementById('audioDuration');
+
+          function formatTime(sec) {
+            if (isNaN(sec)) return '0:00';
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return m + ':' + (s < 10 ? '0' : '') + s;
+          }
+
+          audio.addEventListener('loadedmetadata', function() {
+            durationEl.textContent = formatTime(audio.duration);
+          });
+
+          audio.addEventListener('timeupdate', function() {
+            progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+          });
+
+          playPauseBtn.addEventListener('click', function() {
+            if (audio.paused) {
+              audio.play();
+              icon.textContent = '❚❚';
+            } else {
+              audio.pause();
+              icon.textContent = '▶';
+            }
+          });
+
+          audio.addEventListener('play', function() {
+            icon.textContent = '❚❚';
+          });
+          audio.addEventListener('pause', function() {
+            icon.textContent = '▶';
+          });
+          audio.addEventListener('ended', function() {
+            icon.textContent = '▶';
+          });
+
+          progressContainer.parentElement.addEventListener('click', function(e) {
+            const rect = progressContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percent = x / rect.width;
+            audio.currentTime = percent * audio.duration;
+          });
+        })();
     </script>
 </body>
 </html>

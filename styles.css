@@ -2837,8 +2837,8 @@ section.production-header.alice p {
   font-family: 'Space Mono', monospace;
   color: var(--neon);
   font-size: 0.95rem;
-  min-width: 120px;
-  max-width: 120px;
+  min-width: 40px;
+  max-width: 40px;
   text-shadow: 0 0 4px var(--primary);
   flex-shrink: 0;
   text-align: right;
@@ -2858,8 +2858,8 @@ section.production-header.alice p {
   }
   .audio-time {
     font-size: 0.85rem;
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 40px;
+    max-width: 40px;
     margin-left: 0.4rem;
     margin-right: 0.4rem;
     white-space: nowrap;

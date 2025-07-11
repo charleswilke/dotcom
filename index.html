@@ -84,7 +84,7 @@
                 <br />
                 <p>I share my life in Omaha with my wife, Jessie, and our two dogs, <a href="snuggles-weight.html" class="doc-link">Doc</a> and Astro. We spend our evenings watching Yankees games, BBUK, or the latest season of Ru Paul's Drag Race.</p>
                 <div class="about-audio">
-                  <audio id="aboutAudio" src="CharlesWilke-AIoverview.wav" preload="metadata" style="display:none;"></audio>
+                  <audio id="aboutAudio" src="audio/CharlesWilke-AIoverview.mp3" preload="metadata" style="display:none;"></audio>
                   <div class="custom-audio-player">
                     <button id="audioPlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
                     <div class="audio-progress-container">
@@ -92,7 +92,7 @@
                         <div class="audio-progress"></div>
                       </div>
                     </div>
-                    <span class="audio-time"><span id="audioCurrent">0:00</span> / <span id="audioDuration">0:00</span></span>
+                    <span class="audio-time"><span id="audioCurrent">0:00</span></span>
                   </div>
                 </div>
                 <div class="social-links">
@@ -759,13 +759,9 @@
           function formatTime(sec) {
             if (isNaN(sec)) return '0:00';
             const m = Math.floor(sec / 60);
-            const s = Math.floor(sec % 60);
+            const s = Math.floor(sec % 10);
             return m + ':' + (s < 10 ? '0' : '') + s;
           }
-
-          audio.addEventListener('loadedmetadata', function() {
-            durationEl.textContent = formatTime(audio.duration);
-          });
 
           audio.addEventListener('timeupdate', function() {
             progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';

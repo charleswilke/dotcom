@@ -320,7 +320,7 @@ header {
 
 /* Showcase Section */
 .dimensional-showcase {
-    padding: 3rem 0;
+    padding: 1.8rem 0;
     background: linear-gradient(45deg, rgba(255, 158, 0, 0.1), rgba(247, 110, 17, 0.1));
     position: relative;
     overflow: hidden;
@@ -433,7 +433,7 @@ header {
     gap: 2rem;
     position: relative;
     z-index: 1;
-    margin-top: 0.25rem;
+    margin-top: 0;
 }
 
 .showcase-item {
@@ -869,7 +869,7 @@ footer p {
     .showcase-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
-        margin-top: 0.25rem;
+        margin-top: 0;
     }
     
     .showcase-item {
@@ -2635,8 +2635,8 @@ section.production-header.alice p {
     white-space: nowrap;
     filter: blur(0.3px) brightness(1.03) saturate(1.01);
     transition: filter 0.3s, color 0.3s, text-shadow 0.3s;
-    margin-top: 1.0rem;
-    margin-bottom: 2.5rem;
+    margin-top: 0.2rem;
+    margin-bottom: 1.2rem;
 }
 
 .recently-bg-text .recently-letter {
@@ -2652,14 +2652,18 @@ section.production-header.alice p {
 
 @media (max-width: 768px) {
   .recently-bg-text {
-    font-size: 10vw;
+    font-size: 7vw;
     top: 1.5vw;
+    margin-top: 0.4rem;
+    margin-bottom: 0.8rem;
   }
 }
 @media (max-width: 480px) {
   .recently-bg-text {
-    font-size: 10vw;
+    font-size: 7vw;
     top: 1.5vw;
+    margin-top: 0.4rem;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -2744,7 +2748,7 @@ section.production-header.alice p {
 
 @media (max-width: 768px) {
   .dimensional-showcase > .container {
-    padding-top: 0.8rem;
+    padding-top:0.1rem;
     padding-bottom: 1.8rem;
   }
 }

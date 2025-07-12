@@ -104,9 +104,9 @@
                     <span class="separator">|</span>
                     <a href="https://charleswilke.substack.com/" target="_blank" class="social-link">Substack</a>
                     <span class="separator">|</span>
-                    <a href="faq.html" class="social-link">FAQ</a>
+                    <a href="faq.html" class="social-link faq-glitch-link">FAQ</a>
                     <span class="separator">|</span>
-                    <a href="mailto:cwilke.inquiry@gmail.com" class="social-link glitch-link">Email</a>
+                    <a href="mailto:cwilke.inquiry@gmail.com" class="social-link email-glitch-link">Email</a>
                 </div>
             </div>
         </div>
@@ -695,18 +695,30 @@
             setTimeout(triggerGlitchFooterNote, 2500 + Math.random() * 3000);
         });
 
-        // Glitch effect for the email link
-        // Also trigger on hover/focus
+        // Timed glitch effect for the FAQ link
+        function triggerGlitchFAQ() {
+            const faqLink = document.querySelector('.faq-glitch-link');
+            if (!faqLink) return;
+            faqLink.classList.add('glitch-link', 'glitch');
+            setTimeout(() => {
+                faqLink.classList.remove('glitch-link', 'glitch');
+                setTimeout(triggerGlitchFAQ, 20000 + Math.random() * 5000); // 20-25s
+            }, 120 + Math.random() * 180); // short burst
+        }
         document.addEventListener('DOMContentLoaded', () => {
-            const emailLink = document.querySelector('.glitch-link');
+            setTimeout(triggerGlitchFAQ, 4000 + Math.random() * 2000); // initial delay
+        });
+        // Glitch effect for the email link (hover/focus only)
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailLink = document.querySelector('.email-glitch-link');
             if (!emailLink) return;
             emailLink.addEventListener('mouseenter', () => {
-                emailLink.classList.add('glitch');
-                setTimeout(() => emailLink.classList.remove('glitch'), 200 + Math.random() * 200);
+                emailLink.classList.add('glitch-link', 'glitch');
+                setTimeout(() => emailLink.classList.remove('glitch-link', 'glitch'), 200 + Math.random() * 200);
             });
             emailLink.addEventListener('focus', () => {
-                emailLink.classList.add('glitch');
-                setTimeout(() => emailLink.classList.remove('glitch'), 200 + Math.random() * 200);
+                emailLink.classList.add('glitch-link', 'glitch');
+                setTimeout(() => emailLink.classList.remove('glitch-link', 'glitch'), 200 + Math.random() * 200);
             });
         });
 

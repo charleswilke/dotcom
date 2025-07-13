@@ -2772,7 +2772,10 @@ section.production-header.alice p {
 }
 
 @media (max-width: 768px) {
-  .dimensional-showcase > .container {
+    .dimensional-showcase {
+        padding: 0.4rem 0 1.2rem 0;
+    }
+    .dimensional-showcase > .container {
     margin-top: 0.2rem;
     padding-bottom: 1.8rem;
   }

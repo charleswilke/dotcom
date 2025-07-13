@@ -444,7 +444,7 @@ header {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 3px solid #000;
     outline: 2px solid var(--groovy-gradient1);
-    transform: rotate(-1deg);
+    transform: rotate(-0.5deg);
     animation: pulseGlow 4s infinite alternate;
     cursor: pointer;
 }
@@ -1305,7 +1305,6 @@ html {
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    transform: rotate(-1deg);
     background-image: 
         radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.03) 75%, rgba(0,0,0,0.05) 100%),
         url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="1" fill="%23000" opacity="0.05"/></svg>');

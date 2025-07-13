@@ -320,7 +320,7 @@ header {
 
 /* Showcase Section */
 .dimensional-showcase {
-    padding: 1.8rem 0;
+    padding: 2.8rem 0 1.2rem 0;
     background: linear-gradient(45deg, rgba(255, 158, 0, 0.1), rgba(247, 110, 17, 0.1));
     position: relative;
     overflow: hidden;
@@ -1012,7 +1012,7 @@ html {
     border-radius: 8px 8px 16px 16px;
     overflow: visible;
     box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 0 2px var(--neon);
-    transform: rotate(-1deg);
+    transform: rotate(-0.5deg);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: pulseGlow 4s infinite alternate;
     cursor: pointer;
@@ -1066,7 +1066,7 @@ html {
 .about-content {
     position: relative;
     z-index: 1;
-    transform: rotate(-1deg);
+    transform: rotate(-0.5deg);
 }
 
 .about-title {
@@ -2660,7 +2660,7 @@ section.production-header.alice p {
     white-space: nowrap;
     filter: blur(0.3px) brightness(1.03) saturate(1.01);
     transition: filter 0.3s, color 0.3s, text-shadow 0.3s;
-    margin-top: 0.2rem;
+    margin-top: 0.8rem;
     margin-bottom: 1.2rem;
 }
 
@@ -2773,7 +2773,7 @@ section.production-header.alice p {
 
 @media (max-width: 768px) {
   .dimensional-showcase > .container {
-    padding-top:0.1rem;
+    margin-top: 0.2rem;
     padding-bottom: 1.8rem;
   }
 }

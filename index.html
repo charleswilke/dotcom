@@ -734,7 +734,7 @@
             letter.classList.toggle('flicker');
             flicks++;
             if (flicks < 7) {
-              setTimeout(doFlick, 80 + Math.random() * 40); // 80-120ms per flick
+              setTimeout(doFlick, 40 + Math.random() * 20); // 40-60ms per flick (twice as fast)
             } else {
               letter.classList.remove('flicker');
               setTimeout(neonFlicker, 5000 + Math.random() * 1000); // 5-6s until next flicker

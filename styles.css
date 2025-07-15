@@ -2718,6 +2718,14 @@ section.production-header.alice p {
   filter: brightness(1.2) saturate(1.2);
 }
 
+.recently-bg-text .recently-letter.flicker {
+  text-shadow:
+    0 0 8px rgba(0, 247, 194, 0.18),
+    0 0 16px rgba(0, 247, 194, 0.08),
+    0 0 2px rgba(26, 21, 80, 0.12);
+  filter: brightness(1.08) saturate(1.08);
+}
+
 @media (max-width: 768px) {
   .recently-bg-text .recently-letter:hover {
     transform: scale(1.13);

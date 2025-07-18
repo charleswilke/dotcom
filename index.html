@@ -175,6 +175,18 @@
                         <p>His style? French pop-art '70s meets philosophical noir. His dogs? Fuzzy legends. His wife? Co-pilot of life's best tangents. His mission? To help real humans do real work better, faster, and with fewer buzzwords.</p>
                         <p>Whether he's designing silhouettes of Alice tumbling through time or explaining to a skeptical SMB why generative AI isn't just smoke and mirrors, Charles brings wit, precision, and a welcome disregard for pretense.</p>
                         <p class="blurb-tldr">TL;DR: If Vonnegut taught AI consulting, it'd probably look a lot like Charles.</p>
+                        <div class="blurb-audio">
+                          <audio class="custom-audio" src="audio/CharlesWilke-AIdescribes.mp3" preload="metadata" style="display:none;"></audio>
+                          <div class="custom-audio-player blurb-audio-player">
+                            <button class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
+                            <div class="audio-progress-container">
+                              <div class="audio-progress-bar">
+                                <div class="audio-progress"></div>
+                              </div>
+                            </div>
+                            <span class="audio-time"><span class="audioCurrent">0:00</span></span>
+                          </div>
+                        </div>
                         <p class="chatgpt-link">
                             <a href="https://chatgpt.com/share/67fd1a98-6e3c-8007-9aab-af64abe670e1" target="_blank">View the ChatGPT conversation that generated this summary →</a>
                         </p>
@@ -760,51 +772,61 @@
 
         // Custom Audio Player Script
         (function() {
-          const audio = document.getElementById('aboutAudio');
-          const playPauseBtn = document.getElementById('audioPlayPause');
-          const icon = playPauseBtn.querySelector('.audio-icon');
-          const progressBar = document.querySelector('.audio-progress');
-          const progressContainer = document.querySelector('.audio-progress-bar');
-          const currentTimeEl = document.getElementById('audioCurrent');
-          const durationEl = document.getElementById('audioDuration');
-
           function formatTime(sec) {
             if (isNaN(sec)) return '0:00';
             const m = Math.floor(sec / 60);
-            const s = Math.floor(sec % 10);
+            const s = Math.floor(sec % 60);
             return m + ':' + (s < 10 ? '0' : '') + s;
           }
 
-          audio.addEventListener('timeupdate', function() {
-            progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-          });
+          // For each custom audio player on the page
+          document.querySelectorAll('.custom-audio-player').forEach(function(player) {
+            // Find the closest audio element (either by class or previous sibling)
+            let audio = player.parentElement.querySelector('audio.custom-audio') || player.parentElement.querySelector('audio');
+            if (!audio) return;
+            const playPauseBtn = player.querySelector('.audio-btn');
+            const icon = playPauseBtn.querySelector('.audio-icon');
+            const progressBar = player.querySelector('.audio-progress');
+            const progressContainer = player.querySelector('.audio-progress-bar');
+            const currentTimeEl = player.querySelector('.audioCurrent');
 
-          playPauseBtn.addEventListener('click', function() {
-            if (audio.paused) {
-              audio.play();
+            audio.addEventListener('timeupdate', function() {
+              progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+              currentTimeEl.textContent = formatTime(audio.currentTime);
+            });
+
+            playPauseBtn.addEventListener('click', function() {
+              // Pause all other audio elements
+              document.querySelectorAll('audio.custom-audio').forEach(function(otherAudio) {
+                if (otherAudio !== audio) {
+                  otherAudio.pause();
+                }
+              });
+              if (audio.paused) {
+                audio.play();
+                icon.textContent = '❚❚';
+              } else {
+                audio.pause();
+                icon.textContent = '▶';
+              }
+            });
+
+            audio.addEventListener('play', function() {
               icon.textContent = '❚❚';
-            } else {
-              audio.pause();
+            });
+            audio.addEventListener('pause', function() {
               icon.textContent = '▶';
-            }
-          });
+            });
+            audio.addEventListener('ended', function() {
+              icon.textContent = '▶';
+            });
 
-          audio.addEventListener('play', function() {
-            icon.textContent = '❚❚';
-          });
-          audio.addEventListener('pause', function() {
-            icon.textContent = '▶';
-          });
-          audio.addEventListener('ended', function() {
-            icon.textContent = '▶';
-          });
-
-          progressContainer.parentElement.addEventListener('click', function(e) {
-            const rect = progressContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const percent = x / rect.width;
-            audio.currentTime = percent * audio.duration;
+            progressContainer.parentElement.addEventListener('click', function(e) {
+              const rect = progressContainer.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const percent = x / rect.width;
+              audio.currentTime = percent * audio.duration;
+            });
           });
         })();
     </script>

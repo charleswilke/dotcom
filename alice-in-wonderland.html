@@ -104,13 +104,19 @@
                             const rotation = (index % 2 === 0 ? -1 : 1);
                             galleryItem.style.transform = `rotate(${rotation}deg)`;
                             
+                            // Create <picture> element
+                            const picture = document.createElement('picture');
+                            const source = document.createElement('source');
+                            source.media = '(max-width: 768px)';
+                            source.srcset = img.full;
                             const image = document.createElement('img');
                             image.src = img.thumb;
                             image.alt = img.alt;
                             image.loading = 'lazy';
                             image.addEventListener('click', () => openLightbox(img.full));
-
-                            galleryItem.appendChild(image);
+                            picture.appendChild(source);
+                            picture.appendChild(image);
+                            galleryItem.appendChild(picture);
                             galleryGrid.appendChild(galleryItem);
                         });
                     }

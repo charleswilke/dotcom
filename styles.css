@@ -2942,3 +2942,63 @@ section.production-header.alice p {
   .faq-short { display: inline; }
   .faq-full { display: none; }
 }
+
+/* Variant: Blurb Audio Player (AI describes me card) */
+.blurb-audio-player {
+  background: #fffbe7 !important;
+  box-shadow: 0 2px 8px rgba(255, 200, 80, 0.10);
+  border: 1.5px solid #ffd580;
+  padding: 0.12rem 0.5rem;
+  min-height: 1.7rem;
+}
+.blurb-audio-player .audio-btn {
+  color: #ffb347;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+  padding: 0;
+  position: relative;
+  top: -1px;
+}
+.blurb-audio-player .audio-btn:hover, .blurb-audio-player .audio-btn:focus {
+  color: #fffbe7;
+  background: transparent;
+  border: none;
+}
+.blurb-audio-player .audio-icon {
+  color: #ffb347;
+}
+.blurb-audio-player .audio-progress-container {
+  min-width: 30px;
+  height: 0.22rem;
+}
+.blurb-audio-player .audio-progress-bar {
+  background: linear-gradient(90deg, #ffd580 0%, #ffe29a 100%);
+  box-shadow: none;
+  height: 0.22rem;
+}
+.blurb-audio-player .audio-progress {
+  background: #ffb347;
+  box-shadow: none;
+  height: 100%;
+}
+.blurb-audio-player .audio-time, .blurb-audio-player .audioCurrent {
+  color: #b88a3d;
+  text-shadow: none;
+  font-size: 0.95rem;
+  min-width: 36px;
+  max-width: 36px;
+  margin-left: 0.5rem;
+  margin-right: 0.7rem;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .blurb-audio-player {
+    max-width: 98vw;
+    padding: 0.12rem 0.1rem;
+  }
+}

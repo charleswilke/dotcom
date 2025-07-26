@@ -2999,6 +2999,6 @@ section.production-header.alice p {
 @media (max-width: 600px) {
   .blurb-audio-player {
     max-width: 98vw;
-    padding: 0.12rem 0.1rem;
+    padding: 0.12rem 0.24rem;
   }
 }

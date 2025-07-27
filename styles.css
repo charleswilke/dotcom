@@ -1697,7 +1697,7 @@ html {
     font-style: italic;
     font-size: 2rem;
     color: var(--primary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -2949,6 +2949,7 @@ section.production-header.alice p {
   box-shadow: 0 2px 8px rgba(255, 200, 80, 0.10);
   border: 1.5px solid #ffd580;
   padding: 0.12rem 0.5rem;
+  margin-bottom: 1.2rem;
   min-height: 1.7rem;
 }
 .blurb-audio-player .audio-btn {

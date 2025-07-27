@@ -429,7 +429,7 @@ header {
 /* Showcase Grid */
 .showcase-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     position: relative;
     z-index: 1;
@@ -485,8 +485,8 @@ header {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.7) 50%, transparent);
-    padding: 1.5rem;
+    background: linear-gradient(to bottom, rgba(26,21,80,0) 0%, rgba(26,21,80,0.82) 60%, rgba(26,21,80,1) 100%);
+    padding: 1rem 1.25rem;
     color: white;
     max-height: 40%;
     display: flex;
@@ -3002,4 +3002,12 @@ section.production-header.alice p {
     max-width: 98vw;
     padding: 0.12rem 0.24rem;
   }
+}
+
+.jb-img {
+  object-position: center 20%;
+}
+
+.toastiq-img {
+  object-position: center 0%;
 }

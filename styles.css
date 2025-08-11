@@ -356,7 +356,7 @@ header {
 .section-title {
     text-align: center;
     font-family: 'Exo', 'Orbitron', 'Arial Black', Arial, sans-serif;
-    font-weight: 400;
+    font-weight: 700;
     font-style: italic;
     font-size: 3.2rem;
     margin-bottom: 2.25rem;
@@ -1071,7 +1071,7 @@ html {
 
 .about-title {
     font-family: 'Exo', 'Orbitron', 'Arial Black', Arial, sans-serif;
-    font-weight: 400;
+    font-weight: 700;
     font-style: italic;
     font-size: 3.2rem;
     margin-bottom: 1.2rem;

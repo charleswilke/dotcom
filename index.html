@@ -89,7 +89,7 @@
                 <br />
                 <p>As a Projection Designer for theatrical productions, I blend analog sensibilities to create distinct AI art.</p>
                 <br />
-                <p>I share my life in Omaha with my wife, Jessie, and our two dogs, <a href="#" class="doc-link" id="docLightboxLink">Doc</a> and Astro. We spend our evenings watching Yankees games, BBUK, or the latest season of Ru Paul's Drag Race.</p>
+                <p>I share my life in Omaha with my wife, Jessie, and our two dogs, <a href="#" class="doc-link" id="docLightboxLink">Doc</a> and <a href="#" class="doc-link" id="astroLightboxLink">Astro</a>. We spend our evenings watching Yankees games, BBUK, or the latest season of Ru Paul's Drag Race.</p>
                 <div class="about-audio">
                   <audio id="aboutAudio" src="audio/CharlesWilke-AIoverview.mp3" preload="metadata" style="display:none;"></audio>
                   <div class="custom-audio-player">
@@ -441,7 +441,7 @@
                 'images/aiw/aiw16.png'
             ],
             'fv': ['images/fv1.jpg'],
-            'doc': ['images/doc_resist.png']
+            'dogs': ['images/doc_resist.png', 'images/astro-justhappy2behere.png']
         };
 
         function openLightbox(imageSrc) {
@@ -454,8 +454,8 @@
                 setKey = 'jb';
             } else if (imageSrc.includes('aiw/')) {
                 setKey = 'aiw';
-            } else if (imageSrc.includes('doc_resist.png')) {
-                setKey = 'doc';
+            } else if (imageSrc.includes('doc_resist.png') || imageSrc.includes('astro-justhappy2behere.png')) {
+                setKey = 'dogs';
             } else {
                 setKey = 'fv';
             }
@@ -843,10 +843,17 @@
         // Add event listener for Doc lightbox link
         document.addEventListener('DOMContentLoaded', () => {
             const docLink = document.getElementById('docLightboxLink');
+            const astroLink = document.getElementById('astroLightboxLink');
             if (docLink) {
                 docLink.addEventListener('click', function(e) {
                     e.preventDefault();
                     openLightbox('images/doc_resist.png');
+                });
+            }
+            if (astroLink) {
+                astroLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openLightbox('images/astro-justhappy2behere.png');
                 });
             }
         });

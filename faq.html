@@ -4,7 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ | Charles  Wilke</title>
+    <!-- SEO -->
+    <meta name="description" content="Frequently asked questions about Charles Wilke, AI deployment consulting, projection design, and the exploring l.ai.bor project.">
+    <link rel="canonical" href="https://charleswilke.com/faq.html">
     <link rel="stylesheet" href="styles.css">
+    <!-- Favicons / Fonts -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/gif" href="/favicon.gif">
+    <meta name="theme-color" content="#1a1550" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -12,7 +22,7 @@
         <div class="grid-overlay"></div>
         <div class="header-content">
             <a href="./index.html" style="text-decoration: none; color: inherit;">
-                <h1 class="header-title">Charles <phoneme alphabet="ipa" ph="wɪlki">Wilke</phoneme></h1>
+                <h1 class="header-title">Charles <span aria-label="pronounced Wil-Kee">Wilke</span></h1>
                 <p class="header-subtitle">conversational ux product designer<br />ai deployment consultant &amp; projection artist</p>
             </a>
         </div>
@@ -212,6 +222,16 @@
             <span class="footer-note">intention defines probability</span>
         </div>
     </footer>
+    <script>
+      (function(){
+        Array.from(document.querySelectorAll('a[target="_blank"]')).forEach(a=>{
+          const rel = (a.getAttribute('rel')||'');
+          if(!/noopener/i.test(rel) || !/noreferrer/i.test(rel)){
+            a.setAttribute('rel', (rel + ' noopener noreferrer').trim());
+          }
+        });
+      })();
+    </script>
     <script>
     function triggerGlitchFooterNote() {
         const note = document.querySelector('.footer-note');

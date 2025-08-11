@@ -15,9 +15,11 @@ This repository contains all the code, assets, and creative bits that power my p
 - Simple and sturdy HTML/CSS with just a dash of JavaScript.
 - Hosted lovingly via DreamHost, deploying automatically with Git magic.
 
+
+
 ## Why Open Source?
 
-Because sharing ideas (and code) is good karma. If you see something useful, inspiring, or questionable, drop me a line or raise an issue.
+Because sharing ideas (and code) is good practice. If you see something useful, inspiring, or questionable, drop me a line or raise an issue.
 
 ## Want to Collaborate or Chat?
 

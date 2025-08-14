@@ -34,6 +34,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Charles Wilke",
+      "url": "https://charleswilke.com",
+      "jobTitle": "AI Designer & Deployment Consultant",
+      "image": "https://charleswilke.com/images/cw3.jpg",
+      "sameAs": [
+        "https://www.linkedin.com/in/charles-wilke/",
+        "https://instagram.com/tootsieonions",
+        "https://vimeo.com/absurdalchemy",
+        "https://charleswilke.substack.com/"
+      ]
+    }
+    </script>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="header-bg"></div>
         <div class="grid-overlay"></div>
@@ -43,6 +60,7 @@
         </div>
     </header>
     
+    <main id="main" tabindex="-1">
     <section id="portfolio" class="dimensional-showcase">
         <div class="container">
             <div style="height: 2.4rem;"></div>
@@ -138,6 +156,9 @@
                 <div id="feed-content" class="feed-grid">
                     <!-- Feed items will be dynamically inserted here -->
                 </div>
+                 <div class="load-more-container">
+                     <button id="loadMore" class="load-more-btn">Load more</button>
+                 </div>
                 <div class="archive-btn-container">
                     <a href="https://charleswilke.substack.com/archive?sort=new" target="_blank" rel="noopener noreferrer" class="archive-btn">
                         <span>Full Archive &rarr;</span>
@@ -248,6 +269,7 @@
             </div>
         </div>
     </section>
+    </main>
     
     <footer>
         <div class="footer-bg"></div>
@@ -306,42 +328,59 @@
         let currentItems = 0;
         let allItems = [];
         let isLoading = false;
-        const ITEMS_PER_PAGE = 9;
+        const ITEMS_PER_PAGE = 10;
         
         async function fetchRSSFeed() {
             if (isLoading) return;
             isLoading = true;
-            
+            const urls = [];
+            // Use PHP endpoint only when served over http/https
+            if (location.protocol === 'http:' || location.protocol === 'https:') {
+                urls.push('substack_feed.php?limit=100');
+            }
+            // Then try rss2json extended and default
+            urls.push(
+                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=100',
+                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed')
+            );
+            let success = false;
             try {
-                const feedUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed');
-                console.log('Fetching RSS feed from:', feedUrl);
-                const response = await fetch(feedUrl);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                for (const feedUrl of urls) {
+                    try {
+                        console.log('Fetching RSS feed from:', feedUrl);
+                        const response = await fetch(feedUrl);
+                        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                        const data = await response.json();
+                        if (!(data && data.status === 'ok' && data.items)) throw new Error('Invalid data');
+                        allItems = data.items;
+                        currentItems = 0;
+                        displayItems(ITEMS_PER_PAGE);
+                        const loadMoreBtn = document.getElementById('loadMore');
+                        // Always show the button; disable it when exhausted
+                        if (loadMoreBtn) loadMoreBtn.style.display = 'inline-block';
+                        success = true;
+                        break;
+                    } catch(inner) {
+                        console.warn('Feed attempt failed, trying next option:', inner);
+                    }
                 }
-                
-                const data = await response.json();
-                console.log('RSS Feed data received:', data);
-                console.log('Total items in feed:', data.items ? data.items.length : 0);
-                
-                if (data.status === 'ok' && data.items) {
-                    allItems = data.items;
-                    currentItems = 0;
-                    displayItems(allItems.length);
-                } else {
-                    throw new Error('Invalid feed data');
-                }
-                
+                if (!success) throw new Error('All feed attempts failed');
             } catch (error) {
                 console.error('Error fetching RSS feed:', error);
-                const feedContent = document.getElementById('feed-content');
-                feedContent.innerHTML = `
-                    <div class="feed-item">
-                        <h3>Unable to load feed</h3>
-                        <p>Please visit <a href="https://charleswilke.substack.com" target="_blank">exploring l.ai.bor</a> directly to read the latest posts.</p>
-                    </div>
-                `;
+                // Try XML fallback via AllOrigins
+                try {
+                    const xmlItems = await fetchRssXmlFallback();
+                    allItems = xmlItems;
+                    currentItems = 0;
+                    displayItems(ITEMS_PER_PAGE);
+                    const loadMoreBtn = document.getElementById('loadMore');
+                    loadMoreBtn.style.display = allItems.length > ITEMS_PER_PAGE ? 'inline-block' : 'none';
+                } catch (xmlErr) {
+                    console.error('Fallback RSS XML failed:', xmlErr);
+                    const feedContent = document.getElementById('feed-content');
+                    feedContent.innerHTML = `
+                        <div class=\"feed-item\">\n                            <h3>Unable to load feed</h3>\n                            <p>Please visit <a href=\"https://charleswilke.substack.com\" target=\"_blank\" rel=\"noopener noreferrer\">exploring l.ai.bor</a> directly to read the latest posts.</p>\n                        </div>\n                    `;
+                }
             } finally {
                 isLoading = false;
             }
@@ -423,6 +462,41 @@
             }
             
             currentItems += newItems;
+            // Hide Load More button if we've reached the end
+            const loadMoreBtn = document.getElementById('loadMore');
+            if (currentItems >= allItems.length && loadMoreBtn) {
+                loadMoreBtn.disabled = true;
+                loadMoreBtn.textContent = 'No more posts';
+            } else if (loadMoreBtn) {
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.textContent = 'Load more';
+            }
+        }
+        
+        // Fallback: parse RSS XML manually (via AllOrigins proxy) if rss2json fails
+        async function fetchRssXmlFallback() {
+            const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://charleswilke.substack.com/feed');
+            const res = await fetch(proxyUrl);
+            if (!res.ok) throw new Error('AllOrigins error ' + res.status);
+            const json = await res.json();
+            const xmlString = json.contents;
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(xmlString, 'text/xml');
+            const items = Array.from(xml.querySelectorAll('item')).map(node => {
+                const get = sel => (node.querySelector(sel) ? node.querySelector(sel).textContent : '');
+                const title = get('title');
+                const link = get('link');
+                const descriptionHtml = get('description');
+                const contentEncoded = get('content\\:encoded');
+                const description = contentEncoded || descriptionHtml || '';
+                const pubDate = get('pubDate');
+                // Try to find first image URL in content/description
+                let thumbnail = '';
+                const imgMatch = description.match(/<img[^>]+src=\"([^\">]+)\"/i);
+                if (imgMatch) thumbnail = imgMatch[1];
+                return { title, link, description, pubDate, thumbnail, content: description };
+            });
+            return items;
         }
         
         document.addEventListener('DOMContentLoaded', fetchRSSFeed);
@@ -639,6 +713,12 @@
                 startAutoRotate();
             });
         });
+
+        // Load more feed items on button click
+        const loadMoreBtn = document.getElementById('loadMore');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => displayItems(ITEMS_PER_PAGE));
+        }
 
         // Pause on hover
         carousel.addEventListener('mouseenter', () => {

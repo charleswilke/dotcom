@@ -20,8 +20,9 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 // Email settings
 $to = "your-email@example.com"; // Replace with your email address
 $subject = "New Contact Form Submission from $name";
-$headers = "From: $email\r\n";
-$headers .= "Reply-To: $email\r\n";
+$fromDomain = 'no-reply@charleswilke.com';
+$headers = "From: $fromDomain\r\n"; // Use domain sender to avoid spoofing
+$headers .= "Reply-To: $email\r\n"; // Keep user's email for replies
 $headers .= "X-Mailer: PHP/" . phpversion();
 
 // Format message

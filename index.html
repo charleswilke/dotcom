@@ -157,7 +157,7 @@
                     <!-- Feed items will be dynamically inserted here -->
                 </div>
                  <div class="load-more-container">
-                     <button id="loadMore" class="load-more-btn">Load more</button>
+                     <button id="loadMore" class="load-more-btn" style="display:none;">Load more</button>
                  </div>
                 <div class="archive-btn-container">
                     <a href="https://charleswilke.substack.com/archive?sort=new" target="_blank" rel="noopener noreferrer" class="archive-btn">
@@ -464,12 +464,12 @@
             currentItems += newItems;
             // Hide Load More button if we've reached the end
             const loadMoreBtn = document.getElementById('loadMore');
-            if (currentItems >= allItems.length && loadMoreBtn) {
-                loadMoreBtn.disabled = true;
-                loadMoreBtn.textContent = 'No more posts';
-            } else if (loadMoreBtn) {
-                loadMoreBtn.disabled = false;
-                loadMoreBtn.textContent = 'Load more';
+            if (loadMoreBtn) {
+                if (currentItems >= allItems.length) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'inline-block';
+                }
             }
         }
         

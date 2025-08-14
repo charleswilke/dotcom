@@ -7,9 +7,10 @@ $archiveApiBase = 'https://charleswilke.substack.com/api/v1/archive';
 $limit = isset($_GET['limit']) ? max(1, min(200, intval($_GET['limit']))) : 100;
 $cacheFile = __DIR__ . '/cache_substack_feed.json';
 $cacheTtl = 1800; // 30 minutes
+$noCache = isset($_GET['nocache']);
 
-// Serve from cache if fresh
-if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTtl)) {
+// Serve from cache if fresh (unless nocache query present)
+if (!$noCache && file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTtl)) {
     $cached = file_get_contents($cacheFile);
     if ($cached !== false) {
         echo $cached;

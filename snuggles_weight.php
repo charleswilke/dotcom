@@ -2,6 +2,14 @@
 header('Content-Type: application/json');
 $data_file = 'snuggles_weight_data.json';
 
+// Optional simple auth via header token. Set SNUGGLES_TOKEN in env to enable.
+$requiredToken = getenv('SNUGGLES_TOKEN');
+if ($requiredToken && ($_SERVER['HTTP_X_SNUGGLES_TOKEN'] ?? '') !== $requiredToken) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Forbidden']);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
     // Delete entry

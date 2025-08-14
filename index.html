@@ -157,13 +157,8 @@
                     <!-- Feed items will be dynamically inserted here -->
                 </div>
                  <div class="load-more-container">
-                     <button id="loadMore" class="load-more-btn" style="display:none;">Load more</button>
+                     <button id="dynamicButton" class="load-more-btn">Load more</button>
                  </div>
-                <div class="archive-btn-container">
-                    <a href="https://charleswilke.substack.com/archive?sort=new" target="_blank" rel="noopener noreferrer" class="archive-btn">
-                        <span>Full Archive &rarr;</span>
-                    </a>
-                </div>
             </div>
         </div>
     </section>
@@ -329,6 +324,7 @@
         let allItems = [];
         let isLoading = false;
         const ITEMS_PER_PAGE = 10;
+        let isArchiveMode = false;
         
         async function fetchRSSFeed() {
             if (isLoading) return;
@@ -354,10 +350,9 @@
                         if (!(data && data.status === 'ok' && data.items)) throw new Error('Invalid data');
                         allItems = data.items;
                         currentItems = 0;
+                        isArchiveMode = false;
                         displayItems(ITEMS_PER_PAGE);
-                        const loadMoreBtn = document.getElementById('loadMore');
-                        // Always show the button; disable it when exhausted
-                        if (loadMoreBtn) loadMoreBtn.style.display = 'inline-block';
+                        updateDynamicButton();
                         success = true;
                         break;
                     } catch(inner) {
@@ -372,9 +367,9 @@
                     const xmlItems = await fetchRssXmlFallback();
                     allItems = xmlItems;
                     currentItems = 0;
+                    isArchiveMode = false;
                     displayItems(ITEMS_PER_PAGE);
-                    const loadMoreBtn = document.getElementById('loadMore');
-                    loadMoreBtn.style.display = allItems.length > ITEMS_PER_PAGE ? 'inline-block' : 'none';
+                    updateDynamicButton();
                 } catch (xmlErr) {
                     console.error('Fallback RSS XML failed:', xmlErr);
                     const feedContent = document.getElementById('feed-content');
@@ -462,14 +457,30 @@
             }
             
             currentItems += newItems;
-            // Hide Load More button if we've reached the end
-            const loadMoreBtn = document.getElementById('loadMore');
-            if (loadMoreBtn) {
-                if (currentItems >= allItems.length) {
-                    loadMoreBtn.style.display = 'none';
-                } else {
-                    loadMoreBtn.style.display = 'inline-block';
-                }
+            // Update button state based on whether we've reached the end
+            if (currentItems >= allItems.length) {
+                isArchiveMode = true;
+            }
+            updateDynamicButton();
+        }
+        
+        // Function to update the dynamic button state
+        function updateDynamicButton() {
+            const dynamicBtn = document.getElementById('dynamicButton');
+            if (!dynamicBtn) return;
+            
+            if (isArchiveMode || currentItems >= allItems.length) {
+                // Switch to archive mode
+                dynamicBtn.textContent = 'Full Archive →';
+                dynamicBtn.className = 'archive-btn';
+                dynamicBtn.onclick = () => {
+                    window.open('https://charleswilke.substack.com/archive?sort=new', '_blank', 'noopener,noreferrer');
+                };
+            } else {
+                // Switch to load more mode
+                dynamicBtn.textContent = 'Load more';
+                dynamicBtn.className = 'load-more-btn';
+                dynamicBtn.onclick = () => displayItems(ITEMS_PER_PAGE);
             }
         }
         
@@ -714,11 +725,13 @@
             });
         });
 
-        // Load more feed items on button click
-        const loadMoreBtn = document.getElementById('loadMore');
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', () => displayItems(ITEMS_PER_PAGE));
-        }
+        // Initialize the dynamic button
+        document.addEventListener('DOMContentLoaded', () => {
+            const dynamicBtn = document.getElementById('dynamicButton');
+            if (dynamicBtn) {
+                dynamicBtn.onclick = () => displayItems(ITEMS_PER_PAGE);
+            }
+        });
 
         // Pause on hover
         carousel.addEventListener('mouseenter', () => {

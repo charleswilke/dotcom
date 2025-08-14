@@ -1423,6 +1423,7 @@ html {
     animation: pulseWarm 3s infinite;
     transform: rotate(-1deg);
     border-radius: 4px;
+    text-decoration: none;
 }
 
 .load-more-btn:hover {
@@ -2789,12 +2790,13 @@ section.production-header.alice p {
     border: 3px solid var(--neon);
     box-shadow: 0 0 18px 2px var(--neon), 0 0 2px 0.5px var(--primary);
     border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
     margin: 0 auto;
     text-align: center;
     outline: none;
+    cursor: pointer;
 }
 .archive-btn:hover, .archive-btn:focus {
     background: linear-gradient(45deg, var(--accent), var(--primary));

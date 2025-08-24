@@ -430,18 +430,22 @@ section.production-header.spotlight-production {
 section.production-header.spotlight-production::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
     background-image: 
-        linear-gradient(rgba(26, 21, 80, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(26, 21, 80, 0.08) 1px, transparent 1px);
-    background-size: 30px 30px;
-    background-position: 5px 5px;
+        linear-gradient(rgba(0, 247, 194, 0.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.25) 1px, transparent 1px),
+        linear-gradient(rgba(26, 21, 80, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 21, 80, 0.15) 1px, transparent 1px);
+    background-size: 30px 30px, 30px 30px, 10px 10px, 10px 10px;
+    background-position: 5px 5px, 5px 5px, 0px 0px, 0px 0px;
+    transform: rotate(1deg);
     z-index: 1;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.9;
+    animation: gridPulse 80s ease-in-out infinite alternate;
 }
 
 /* Content layering */
@@ -1031,6 +1035,21 @@ footer p {
 @keyframes gridMove {
     0% { transform: rotateX(45deg) translateY(0); }
     100% { transform: rotateX(45deg) translateY(40px); }
+}
+
+@keyframes gridPulse {
+    0% {
+        opacity: 0.7;
+        background-size: 30px 30px, 30px 30px, 10px 10px, 10px 10px;
+    }
+    50% {
+        opacity: 1;
+        background-size: 32px 32px, 32px 32px, 12px 12px, 12px 12px;
+    }
+    100% {
+        opacity: 0.85;
+        background-size: 28px 28px, 28px 28px, 8px 8px, 8px 8px;
+    }
 }
 
 @keyframes shimmer {
@@ -3041,6 +3060,7 @@ section.production-header.alice p {
 /* Blue section utility for cream underline on blue backgrounds */
 .blue-section {
     /* No background here! Only used for underline utility */
+    position: relative;
 }
 .blue-section .section-title::after {
     background: var(--light) !important; /* Cream underline for blue backgrounds */

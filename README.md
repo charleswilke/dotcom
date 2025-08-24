@@ -18,7 +18,7 @@
 
 ## 🌐 Why Open Source?
 
-Because the internet works best when people share. If you find something useful, questionable, or just weird enough to spark joy, steal it (politely).
+Because the internet works best when people share.<br>If you find something useful, questionable, or just weird enough to spark joy, steal it (politely).
 
 ## 🤝 Want to Collaborate?
 

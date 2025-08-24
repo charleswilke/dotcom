@@ -5,7 +5,7 @@
 ## 📦 What's in the Box?
 
 - **HTML/CSS/JS**: The duct tape and chewing gum holding the internet together
-- **Content**: Essays, rants, and explorations on AI, creativity, and capitalism—with occasional detours into theater projections and digital nostalgia
+- **Content**: Essays, rants, and explorations on AI, creativity, and capitalism. ...with occasional detours into theater projections and digital nostalgia
 - **Visuals**: French pop-art meets pulp-noir. Think moody ink sketches and retro-future vibes
 
 *What's in the box? No pretty little heads here.*

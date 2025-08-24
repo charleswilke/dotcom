@@ -1055,11 +1055,102 @@
             const icon = playPauseBtn.querySelector('.audio-icon');
             const progressBar = player.querySelector('.audio-progress');
             const progressContainer = player.querySelector('.audio-progress-bar');
-            const currentTimeEl = player.querySelector('.audioCurrent');
+            const currentTimeEl = player.querySelector('.audioCurrent') || player.querySelector('#audioCurrent');
+
+            // Ensure metadata is loaded
+            audio.addEventListener('loadedmetadata', function() {
+              // Audio metadata loaded
+            });
+
+            // Try to load metadata if not already loaded
+            if (audio.readyState < 1) {
+              audio.load();
+            }
 
             audio.addEventListener('timeupdate', function() {
               progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
               currentTimeEl.textContent = formatTime(audio.currentTime);
+            });
+
+            // Add scrubbing functionality
+            progressContainer.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              const rect = progressContainer.getBoundingClientRect();
+              const clickX = e.clientX - rect.left;
+              const width = rect.width;
+              const clickPercent = Math.max(0, Math.min(1, clickX / width));
+              const newTime = clickPercent * audio.duration;
+              
+              if (!isNaN(newTime) && audio.duration && newTime >= 0) {
+                const wasPlaying = !audio.paused;
+                
+                // Pause the audio first to ensure clean seeking
+                if (!audio.paused) {
+                  audio.pause();
+                }
+                
+                // Wait a tiny bit, then seek
+                setTimeout(() => {
+                  audio.currentTime = newTime;
+                  
+                  // If it was playing, resume playback
+                  if (wasPlaying) {
+                    setTimeout(() => {
+                      audio.play().catch(e => console.error('Failed to resume playback:', e));
+                    }, 50);
+                  }
+                }, 10);
+              }
+            });
+
+            // Add drag scrubbing functionality
+            progressContainer.addEventListener('mousedown', function(e) {
+              e.preventDefault();
+              
+              const wasPlaying = !audio.paused;
+              let isDragging = true;
+              
+              // Pause audio during drag
+              if (!audio.paused) {
+                audio.pause();
+              }
+              
+              const scrub = function(e) {
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                const clickPercent = Math.max(0, Math.min(1, clickX / width));
+                const newTime = clickPercent * audio.duration;
+                if (!isNaN(newTime) && audio.duration && newTime >= 0) {
+                  audio.currentTime = newTime;
+                }
+              };
+              
+              scrub(e);
+              
+              const handleMouseMove = function(e) {
+                if (isDragging) {
+                  scrub(e);
+                }
+              };
+              
+              const handleMouseUp = function() {
+                isDragging = false;
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+                
+                // Resume playback if it was playing before drag
+                if (wasPlaying) {
+                  setTimeout(() => {
+                    audio.play().catch(e => console.error('Failed to resume playback after drag:', e));
+                  }, 50);
+                }
+              };
+              
+              document.addEventListener('mousemove', handleMouseMove);
+              document.addEventListener('mouseup', handleMouseUp);
             });
 
             playPauseBtn.addEventListener('click', function() {
@@ -1088,12 +1179,7 @@
               icon.textContent = '▶';
             });
 
-            progressContainer.parentElement.addEventListener('click', function(e) {
-              const rect = progressContainer.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const percent = x / rect.width;
-              audio.currentTime = percent * audio.duration;
-            });
+
           });
         })();
 

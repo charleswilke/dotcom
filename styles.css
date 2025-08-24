@@ -409,15 +409,7 @@ header {
 
 /* Redesigned spotlight card with production header aesthetic */
 section.production-header.spotlight-production {
-    background: 
-        conic-gradient(from 135deg at 30% 70%, 
-            rgba(248, 233, 210, 0.95) 0deg,     /* cream base */
-            rgba(255, 255, 255, 0.98) 60deg,    /* white */
-            rgba(240, 240, 245, 0.96) 120deg,   /* light blue-gray */
-            rgba(248, 233, 210, 0.95) 180deg,   /* back to cream */
-            rgba(255, 255, 255, 0.98) 240deg,   /* white */
-            rgba(248, 233, 210, 0.95) 360deg    /* cream */
-        ) !important;
+    background: linear-gradient(135deg, var(--accent), var(--primary)) !important;
     color: var(--text) !important;
     text-align: left !important;
     justify-content: flex-start !important;
@@ -426,7 +418,7 @@ section.production-header.spotlight-production {
     box-shadow: 
         0 15px 30px rgba(0,0,0,0.12), 
         0 0 20px rgba(0,247,194,0.3),
-        inset 0 0 40px rgba(248, 233, 210, 0.4) !important;
+        inset 0 0 40px rgba(44, 79, 124, 0.4) !important;
     position: relative;
     overflow: hidden;
     min-height: 420px;
@@ -469,27 +461,91 @@ section.production-header.spotlight-production .featured-image {
     height: 100%;
     object-fit: cover;
     z-index: 1;
-    mix-blend-mode: multiply;
-    opacity: 0.85;
+    mix-blend-mode: normal;
+    opacity: 1;
     mask-image: linear-gradient(to right, black 80%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
 }
 
+/* Latest badge styling */
+.latest-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--neon);
+    background: rgba(0, 247, 194, 0.15);
+    border: 1px solid var(--neon);
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 3px;
+    text-shadow: 0 0 8px var(--neon);
+    box-shadow: 0 0 8px rgba(0, 247, 194, 0.3);
+    animation: neon-ripple 8s ease-out infinite;
+    position: relative;
+    overflow: visible;
+}
+
+@keyframes neon-ripple {
+    0% {
+        box-shadow: 
+            0 0 8px rgba(0, 247, 194, 0.3),
+            0 0 20px rgba(0, 247, 194, 0.1);
+        text-shadow: 0 0 8px var(--neon);
+    }
+    20% {
+        box-shadow: 
+            0 0 10px rgba(0, 247, 194, 0.4),
+            0 0 30px rgba(0, 247, 194, 0.08);
+        text-shadow: 0 0 10px var(--neon);
+    }
+    40% {
+        box-shadow: 
+            0 0 12px rgba(0, 247, 194, 0.5),
+            0 0 40px rgba(0, 247, 194, 0.06);
+        text-shadow: 0 0 12px var(--neon);
+    }
+    60% {
+        box-shadow: 
+            0 0 10px rgba(0, 247, 194, 0.4),
+            0 0 50px rgba(0, 247, 194, 0.04);
+        text-shadow: 0 0 10px var(--neon);
+    }
+    80% {
+        box-shadow: 
+            0 0 9px rgba(0, 247, 194, 0.35),
+            0 0 60px rgba(0, 247, 194, 0.02);
+        text-shadow: 0 0 9px var(--neon);
+    }
+    100% {
+        box-shadow: 
+            0 0 8px rgba(0, 247, 194, 0.3),
+            0 0 70px rgba(0, 247, 194, 0);
+        text-shadow: 0 0 8px var(--neon);
+    }
+}
+
+
+
 section.production-header.spotlight-production h1 {
-    color: var(--primary) !important;
+    color: var(--light) !important;
     text-shadow: 
-        0 2px 8px rgba(0,0,0,0.15),
-        0 0 20px rgba(248, 233, 210, 0.8) !important;
+        0 2px 8px rgba(0,0,0,0.4),
+        0 0 10px rgba(0,247,194,0.3) !important;
     font-weight: 700;
     margin-bottom: 0.75rem;
     font-size: 2.2rem;
     line-height: 1.2;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(0, 247, 194, 0.3);
 }
 
 section.production-header.spotlight-production p {
-    color: var(--text) !important;
-    opacity: 0.85 !important;
-    text-shadow: 0 1px 3px rgba(248, 233, 210, 0.8);
+    color: var(--light) !important;
+    opacity: 0.9 !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     line-height: 1.4;
     margin-bottom: 1rem;
     font-size: 1rem;
@@ -502,7 +558,7 @@ section.production-header.spotlight-production p {
     align-items: center;
     margin: 0.25rem 0;
     padding: 0.2rem 0;
-    border-bottom: 1px solid rgba(26, 21, 80, 0.12);
+    border-bottom: 1px solid rgba(0, 247, 194, 0.2);
 }
 
 .spotlight-metadata:last-child {
@@ -514,7 +570,7 @@ section.production-header.spotlight-production p {
     font-family: 'Space Mono', monospace;
     font-weight: 700;
     font-size: 0.8rem;
-    color: var(--primary);
+    color: var(--neon);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -524,8 +580,8 @@ section.production-header.spotlight-production p {
     font-family: 'Exo', sans-serif;
     font-weight: 400;
     font-size: 0.85rem;
-    color: var(--text);
-    opacity: 0.8;
+    color: var(--light);
+    opacity: 0.9;
 }
 
 .spotlight-tags {
@@ -1818,14 +1874,17 @@ html {
     text-shadow: 0 0 10px var(--neon);
 }
 
-/* Mobile spotlight card normalization */
+/* Mobile spotlight card with blue styling */
 @media (max-width: 768px) {
-    /* Make spotlight look like regular feed items on mobile */
+    /* Use the same blue background styling on mobile */
     section.production-header.spotlight-production {
-        background: rgba(255, 255, 255, 0.98) !important;
+        background: linear-gradient(135deg, var(--accent), var(--primary)) !important;
         border: 3px solid var(--primary) !important;
         outline: 2px solid var(--groovy-gradient1) !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        box-shadow: 
+            0 15px 30px rgba(0,0,0,0.12), 
+            0 0 20px rgba(0,247,194,0.3),
+            inset 0 0 40px rgba(44, 79, 124, 0.4) !important;
         min-height: auto !important;
         max-height: none !important;
         height: auto !important;

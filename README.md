@@ -14,7 +14,7 @@
 
 - **Frontend**: Barebones HTML/CSS with just enough JavaScript to keep things spicy
 - **Hosting**: DreamHost because robots deserve a cozy home too
-- **Deployment**: Git magic for auto-deploys—because hitting "upload" manually is for the birds
+- **Deployment**: Git magic for auto-deploys, because hitting "upload" manually is for the birds
 
 ## 🌐 Why Open Source?
 

@@ -18,21 +18,41 @@ if (!$noCache && file_exists($cacheFile) && (time() - filemtime($cacheFile) < $c
     }
 }
 
-// Fetch URL helper
+// Fetch URL helper - fallback to file_get_contents if cURL not available
 function fetch_url($url) {
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_TIMEOUT => 10,
-        CURLOPT_USERAGENT => 'SubstackFeedFetcher/1.0 (+charleswilke.com)'
+    // Try cURL first if available
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_USERAGENT => 'SubstackFeedFetcher/1.0 (+charleswilke.com)'
+        ]);
+        $res = curl_exec($ch);
+        $err = curl_error($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($res === false || $code >= 400) {
+            throw new Exception('Fetch error: ' . ($err ?: ('HTTP ' . $code)));
+        }
+        return $res;
+    }
+    
+    // Fallback to file_get_contents with stream context
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'timeout' => 10,
+            'user_agent' => 'SubstackFeedFetcher/1.0 (+charleswilke.com)',
+            'follow_location' => 1,
+            'max_redirects' => 5
+        ]
     ]);
-    $res = curl_exec($ch);
-    $err = curl_error($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if ($res === false || $code >= 400) {
-        throw new Exception('Fetch error: ' . ($err ?: ('HTTP ' . $code)));
+    
+    $res = @file_get_contents($url, false, $context);
+    if ($res === false) {
+        throw new Exception('Fetch error: Unable to retrieve URL');
     }
     return $res;
 }

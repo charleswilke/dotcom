@@ -152,6 +152,28 @@
     <section class="rss-feed">
         <div class="container">
             <h2 class="section-title section-title-light">exploring l.ai.bor</h2>
+            
+            <!-- Latest Article Spotlight -->
+            <div id="latest-article-spotlight" class="latest-article-spotlight" style="display: none;">
+                <section class="production-header spotlight-production" style="position: relative; overflow: hidden; padding: 0; margin-bottom: 1.5rem;">
+                    <img src="" alt="Latest Article" class="featured-image spotlight-featured-image">
+                    <div class="content production-content spotlight-content">
+                        <h1 class="spotlight-title">Latest Article</h1>
+                        <p class="spotlight-description">Loading latest article...</p>
+                        <div class="production-details">
+                            <div class="spotlight-metadata">
+                                <span class="spotlight-label">Published:</span>
+                                <span class="spotlight-date"></span>
+                            </div>
+                            <div class="spotlight-metadata spotlight-tags-container" style="display: none;">
+                                <span class="spotlight-label">Tags:</span>
+                                <span class="spotlight-tags"></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
             <div class="feed-container">
                 <div id="feed-content" class="feed-grid">
                     <!-- Feed items will be dynamically inserted here -->
@@ -323,7 +345,7 @@
         let currentItems = 0;
         let allItems = [];
         let isLoading = false;
-        const ITEMS_PER_PAGE = 10;
+        const ITEMS_PER_PAGE = 11;
         let isArchiveMode = false;
         
         async function fetchRSSFeed() {
@@ -351,6 +373,7 @@
                         allItems = data.items;
                         currentItems = 0;
                         isArchiveMode = false;
+                        populateLatestArticleSpotlight();
                         displayItems(ITEMS_PER_PAGE);
                         updateDynamicButton();
                         success = true;
@@ -368,6 +391,7 @@
                     allItems = xmlItems;
                     currentItems = 0;
                     isArchiveMode = false;
+                    populateLatestArticleSpotlight();
                     displayItems(ITEMS_PER_PAGE);
                     updateDynamicButton();
                 } catch (xmlErr) {
@@ -381,12 +405,124 @@
             }
         }
         
+        function populateLatestArticleSpotlight() {
+            if (!allItems || allItems.length === 0) return;
+            
+            const latestItem = allItems[0]; // First item is the latest
+            const spotlight = document.getElementById('latest-article-spotlight');
+            const spotlightSection = spotlight.querySelector('.spotlight-production');
+            const spotlightImg = spotlight.querySelector('.spotlight-featured-image');
+            const spotlightTitle = spotlight.querySelector('.spotlight-title');
+            const spotlightDescription = spotlight.querySelector('.spotlight-description');
+            const spotlightDate = spotlight.querySelector('.spotlight-date');
+            const spotlightTagsContainer = spotlight.querySelector('.spotlight-tags-container');
+            const spotlightTags = spotlight.querySelector('.spotlight-tags');
+            
+            // Make the entire section clickable
+            spotlight.style.cursor = 'pointer';
+            spotlight.addEventListener('click', () => {
+                window.open(latestItem.link, '_blank', 'noopener,noreferrer');
+            });
+            
+            // Set the image and handle sizing
+            let imageUrl = '';
+            if (latestItem.thumbnail) {
+                imageUrl = latestItem.thumbnail;
+            } else if (latestItem.content) {
+                const imgMatch = latestItem.content.match(/<img[^>]+src="([^">]+)"/);
+                if (imgMatch) {
+                    imageUrl = imgMatch[1];
+                }
+            }
+            
+            if (!imageUrl) {
+                imageUrl = 'data:image/svg+xml;base64,' + btoa(`
+                    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+                        <defs>
+                            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2c4f7c;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1a1550;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <rect width="800" height="400" fill="url(#grad)"/>
+                        <g fill="#00f7c2" filter="url(#glow)">
+                            <path d="M100,200 L200,100 L300,200 L400,100 L500,200 L600,100 L700,200" stroke="#00f7c2" stroke-width="4" fill="none"/>
+                            <circle cx="400" cy="200" r="50"/>
+                            <text x="400" y="200" font-family="monospace" font-size="24" text-anchor="middle" dominant-baseline="middle">l.ai.bor</text>
+                        </g>
+                    </svg>
+                `);
+            }
+            
+            spotlightImg.src = imageUrl;
+            spotlightImg.alt = latestItem.title;
+            
+            // Adjust card height based on image aspect ratio
+            spotlightImg.onload = function() {
+                const aspectRatio = this.naturalWidth / this.naturalHeight;
+                // More generous height calculation to prevent cropping - increased range for taller card
+                const baseHeight = Math.max(420, Math.min(580, 480 / aspectRatio));
+                spotlightSection.style.height = baseHeight + 'px';
+            };
+            
+            // Set the title
+            spotlightTitle.textContent = latestItem.title;
+            
+            // Set the description (shorter for compact design)
+            const cleanDescription = latestItem.description
+                .replace(/<[^>]*>/g, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'")
+                .trim();
+            
+            spotlightDescription.textContent = cleanDescription.substring(0, 150) + (cleanDescription.length > 150 ? '...' : '');
+            
+            // Set the date
+            const pubDate = new Date(latestItem.pubDate);
+            spotlightDate.textContent = pubDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Handle tags if available
+            let tags = [];
+            if (latestItem.categories && Array.isArray(latestItem.categories)) {
+                tags = latestItem.categories;
+            } else if (latestItem.category) {
+                tags = [latestItem.category];
+            }
+            
+            if (tags.length > 0) {
+                spotlightTags.textContent = tags.slice(0, 3).join(', '); // Show max 3 tags
+                spotlightTagsContainer.style.display = 'block';
+            } else {
+                spotlightTagsContainer.style.display = 'none';
+            }
+            
+            // Show the spotlight
+            spotlight.style.display = 'block';
+        }
+        
         function displayItems(count) {
             const feedContent = document.getElementById('feed-content');
             
-            const newItems = Math.min(count, allItems.length - currentItems);
+            // Start from index 1 since index 0 is in the spotlight
+            const startIndex = currentItems === 0 ? 1 : currentItems;
+            const newItems = Math.min(count, allItems.length - startIndex);
             
-            for (let i = currentItems; i < currentItems + newItems; i++) {
+            for (let i = startIndex; i < startIndex + newItems; i++) {
                 const item = allItems[i];
                 const title = item.title;
                 const link = item.link;
@@ -458,7 +594,9 @@
             
             currentItems += newItems;
             // Update button state based on whether we've reached the end
-            if (currentItems >= allItems.length) {
+            // Account for the spotlight item (index 0) being displayed separately
+            // With 11 items per page, we need to check if we've loaded enough to fill the 2x2 grid
+            if (currentItems >= allItems.length - 1) {
                 isArchiveMode = true;
             }
             updateDynamicButton();
@@ -469,7 +607,8 @@
             const dynamicBtn = document.getElementById('dynamicButton');
             if (!dynamicBtn) return;
             
-            if (isArchiveMode || currentItems >= allItems.length) {
+            // Account for the spotlight item (index 0) being displayed separately
+            if (isArchiveMode || currentItems >= allItems.length - 1) {
                 // Switch to archive mode
                 dynamicBtn.textContent = 'Full Archive →';
                 dynamicBtn.className = 'archive-btn';

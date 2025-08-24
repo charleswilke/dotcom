@@ -84,13 +84,24 @@ try {
                 if (!empty($post['cover_image'])) { $thumb = (string)$post['cover_image']; }
                 elseif (!empty($post['social_image'])) { $thumb = (string)$post['social_image']; }
 
+                // Extract categories/tags if available from API
+                $categories = [];
+                if (!empty($post['tags'])) {
+                    $categories = is_array($post['tags']) ? $post['tags'] : [$post['tags']];
+                } elseif (!empty($post['category'])) {
+                    $categories = is_array($post['category']) ? $post['category'] : [$post['category']];
+                } elseif (!empty($post['categories'])) {
+                    $categories = is_array($post['categories']) ? $post['categories'] : [$post['categories']];
+                }
+
                 $items[] = [
                     'title' => $title,
                     'link' => $link,
                     'pubDate' => $pubDate,
                     'description' => $desc,
                     'content' => $desc,
-                    'thumbnail' => $thumb
+                    'thumbnail' => $thumb,
+                    'categories' => $categories
                 ];
                 if (count($items) >= $limit) break 2;
             }
@@ -128,13 +139,22 @@ try {
             } elseif (preg_match('/<img[^>]+src="([^"]+)"/i', $description, $m2)) {
                 $thumb = $m2[1];
             }
+            // Extract categories from RSS feed
+            $categories = [];
+            if (isset($node->category)) {
+                foreach ($node->category as $cat) {
+                    $categories[] = (string)$cat;
+                }
+            }
+
             $items[] = [
                 'title' => $title,
                 'link' => $link,
                 'pubDate' => $pubDate,
                 'description' => $description,
                 'content' => $content,
-                'thumbnail' => $thumb
+                'thumbnail' => $thumb,
+                'categories' => $categories
             ];
             if (count($items) >= $limit) break;
         }

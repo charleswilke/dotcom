@@ -646,7 +646,17 @@
                 let thumbnail = '';
                 const imgMatch = description.match(/<img[^>]+src=\"([^\">]+)\"/i);
                 if (imgMatch) thumbnail = imgMatch[1];
-                return { title, link, description, pubDate, thumbnail, content: description };
+                
+                // Extract categories from RSS
+                const categories = [];
+                const categoryNodes = node.querySelectorAll('category');
+                categoryNodes.forEach(catNode => {
+                    if (catNode.textContent.trim()) {
+                        categories.push(catNode.textContent.trim());
+                    }
+                });
+                
+                return { title, link, description, pubDate, thumbnail, content: description, categories };
             });
             return items;
         }

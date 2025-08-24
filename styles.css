@@ -445,7 +445,7 @@ section.production-header.spotlight-production::before {
     z-index: 1;
     pointer-events: none;
     opacity: 0.9;
-    animation: gridPulse 80s ease-in-out infinite alternate;
+    animation: gridPulse 42s ease-in-out infinite alternate;
 }
 
 /* Content layering */

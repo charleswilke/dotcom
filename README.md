@@ -1,6 +1,6 @@
 # CharlesWilke.com
 
-> Welcome to the chaotic brain-lab otherwise known as **CharlesWilke.com**<br>home to code experiments, AI musings, and whatever weird idea refuses to leave my head until I ship it.
+> Welcome to the chaotic brain-lab otherwise known as **CharlesWilke.com**<br>Home to code experiments, AI musings, and whatever weird idea refuses to leave my head until I ship it.
 
 ## 📦 What's in the Box?
 

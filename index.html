@@ -520,7 +520,8 @@
             const feedContent = document.getElementById('feed-content');
             
             // Start from index 1 since index 0 is in the spotlight
-            const startIndex = currentItems === 0 ? 1 : currentItems;
+            // For subsequent loads, add 1 to currentItems to account for the skipped spotlight item
+            const startIndex = currentItems === 0 ? 1 : currentItems + 1;
             const newItems = Math.min(count, allItems.length - startIndex);
             
             for (let i = startIndex; i < startIndex + newItems; i++) {

@@ -445,7 +445,7 @@ section.production-header.spotlight-production::before {
     z-index: 1;
     pointer-events: none;
     opacity: 0.9;
-    animation: gridPulse 42s ease-in-out infinite alternate;
+    animation: gridFlow 20s linear infinite;
 }
 
 /* Content layering */
@@ -558,11 +558,26 @@ section.production-header.spotlight-production p {
 /* Spotlight metadata styling */
 .spotlight-metadata {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin: 0.25rem 0;
     padding: 0.2rem 0;
     border-bottom: 1px solid rgba(0, 247, 194, 0.2);
+    flex-wrap: nowrap;
+}
+
+.spotlight-metadata .spotlight-date,
+.spotlight-metadata .spotlight-tags {
+    flex: 1;
+    text-align: right !important;
+    white-space: nowrap;
+}
+
+/* Extra specificity for tags */
+.spotlight-metadata .spotlight-tags {
+    display: block !important;
+    text-align: right !important;
+    width: 100% !important;
 }
 
 .spotlight-metadata:last-child {
@@ -586,6 +601,7 @@ section.production-header.spotlight-production p {
     font-size: 0.85rem;
     color: var(--light);
     opacity: 0.9;
+    text-align: right;
 }
 
 .spotlight-tags {
@@ -1037,18 +1053,12 @@ footer p {
     100% { transform: rotateX(45deg) translateY(40px); }
 }
 
-@keyframes gridPulse {
+@keyframes gridFlow {
     0% {
-        opacity: 0.7;
-        background-size: 30px 30px, 30px 30px, 10px 10px, 10px 10px;
-    }
-    50% {
-        opacity: 1;
-        background-size: 32px 32px, 32px 32px, 12px 12px, 12px 12px;
+        background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px;
     }
     100% {
-        opacity: 0.85;
-        background-size: 28px 28px, 28px 28px, 8px 8px, 8px 8px;
+        background-position: 30px 30px, 30px 30px, 10px 10px, 10px 10px;
     }
 }
 
@@ -1762,6 +1772,7 @@ html {
     opacity: 0.9;
     font-size: 1rem;
     font-weight: bold;
+    text-align: right;
 }
 
 .spotlight-grid-overlay {
@@ -1956,6 +1967,13 @@ html {
     .spotlight-date,
     .spotlight-tags {
         font-size: 0.8rem !important;
+    }
+    
+    .spotlight-metadata .spotlight-date,
+    .spotlight-metadata .spotlight-tags {
+        flex: 1 !important;
+        text-align: right !important;
+        white-space: nowrap !important;
     }
     
     /* Grid adjustments */

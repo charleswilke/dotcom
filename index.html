@@ -372,6 +372,7 @@
                         const data = await response.json();
                         if (!(data && data.status === 'ok' && data.items)) throw new Error('Invalid data');
                         allItems = data.items;
+                        console.log(`Successfully loaded ${allItems.length} articles from: ${feedUrl}`);
                         currentItems = 0;
                         isArchiveMode = false;
                         populateLatestArticleSpotlight();
@@ -390,6 +391,7 @@
                 try {
                     const xmlItems = await fetchRssXmlFallback();
                     allItems = xmlItems;
+                    console.log(`XML fallback loaded ${allItems.length} articles`);
                     currentItems = 0;
                     isArchiveMode = false;
                     populateLatestArticleSpotlight();
@@ -604,7 +606,11 @@
             if (!dynamicBtn) return;
             
             // Account for the spotlight item (index 0) being displayed separately
-            if (isArchiveMode || currentItems >= allItems.length - 1) {
+            // Only switch to archive mode if we've truly loaded all available items
+            const remainingItems = allItems.length - (currentItems + 1); // +1 for spotlight
+            console.log(`Current items: ${currentItems}, Total items: ${allItems.length}, Remaining: ${remainingItems}`);
+            
+            if (isArchiveMode || remainingItems <= 0) {
                 // Switch to archive mode
                 dynamicBtn.textContent = 'Full Archive →';
                 dynamicBtn.className = 'archive-btn';
@@ -613,7 +619,7 @@
                 };
             } else {
                 // Switch to load more mode
-                dynamicBtn.textContent = 'Load more';
+                dynamicBtn.textContent = `Load more (${remainingItems} left)`;
                 dynamicBtn.className = 'load-more-btn';
                 dynamicBtn.onclick = () => displayItems(ITEMS_PER_PAGE);
             }

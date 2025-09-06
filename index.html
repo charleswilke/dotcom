@@ -507,7 +507,14 @@
             // Start from index 1 since index 0 is in the spotlight
             // For subsequent loads, add 1 to currentItems to account for the skipped spotlight item
             const startIndex = currentItems === 0 ? 1 : currentItems + 1;
-            const newItems = Math.min(count, allItems.length - startIndex);
+            let newItems = Math.min(count, allItems.length - startIndex);
+            
+            // Ensure we always have an even number of items in the grid for better layout
+            const totalItemsAfterLoad = currentItems + newItems;
+            if (totalItemsAfterLoad % 2 === 1 && newItems > 1) {
+                // If the total would be odd and we have more than 1 item to load, load one less
+                newItems--;
+            }
             
             for (let i = startIndex; i < startIndex + newItems; i++) {
                 const item = allItems[i];

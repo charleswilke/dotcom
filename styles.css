@@ -560,7 +560,7 @@ section.production-header.spotlight-production p {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin: 0.25rem 0;
+    margin: 2.8rem 0;
     padding: 0.2rem 0;
     border-bottom: 1px solid rgba(0, 247, 194, 0.2);
     flex-wrap: nowrap;

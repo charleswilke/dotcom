@@ -355,7 +355,7 @@
             const urls = [];
             // Use PHP endpoint only when served over http/https
             if (location.protocol === 'http:' || location.protocol === 'https:') {
-                urls.push('substack_feed.php?limit=100');
+                urls.push('substack_feed.php?limit=200');
             }
             // Then try rss2json extended and default
             urls.push(
@@ -509,10 +509,12 @@
             const startIndex = currentItems === 0 ? 1 : currentItems + 1;
             let newItems = Math.min(count, allItems.length - startIndex);
             
-            // Ensure we always have an even number of items in the grid for better layout
+            // Only adjust for even numbers if we're at the very end of available articles
+            // and we have more than 1 item to load
             const totalItemsAfterLoad = currentItems + newItems;
-            if (totalItemsAfterLoad % 2 === 1 && newItems > 1) {
-                // If the total would be odd and we have more than 1 item to load, load one less
+            const isAtEnd = startIndex + newItems >= allItems.length;
+            if (isAtEnd && totalItemsAfterLoad % 2 === 1 && newItems > 1) {
+                // If we're truly at the end and the total would be odd, load one less
                 newItems--;
             }
             

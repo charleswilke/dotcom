@@ -4,6 +4,7 @@ header('Content-Type: application/json');
 // Config
 $feedUrl = 'https://charleswilke.substack.com/feed';
 $archiveApiBase = 'https://charleswilke.substack.com/api/v1/archive';
+$altFeedUrl = 'https://rss.app/feeds/v1.1/_UNUSED.xml'; // Alternative if main RSS is limited
 $limit = isset($_GET['limit']) ? max(1, min(200, intval($_GET['limit']))) : 100;
 $cacheFile = __DIR__ . '/cache_substack_feed.json';
 $cacheTtl = 1800; // 30 minutes
@@ -66,9 +67,12 @@ try {
         $perPage = min(100, $limit);
         while (count($items) < $limit) {
             $apiUrl = $archiveApiBase . '?sort=new&offset=' . $offset . '&limit=' . $perPage;
+            error_log("Attempting to fetch: " . $apiUrl);
             $jsonStr = fetch_url($apiUrl);
             $data = json_decode($jsonStr, true);
+            error_log("Archive API response: " . substr($jsonStr, 0, 200) . "...");
             if (!is_array($data) || empty($data)) {
+                error_log("Archive API returned empty/invalid data, falling back to RSS");
                 break; // fall back to RSS
             }
             foreach ($data as $post) {
@@ -109,11 +113,13 @@ try {
             $offset += $perPage;
         }
     } catch (Exception $e) {
+        error_log("Archive API failed: " . $e->getMessage());
         // ignore and fall back to RSS
     }
 
     // 2) Fallback to RSS (usually exposes only ~20)
     if (count($items) === 0) {
+        error_log("Using RSS fallback, expecting ~20 items max");
         $xmlString = fetch_url($feedUrl);
         libxml_use_internal_errors(true);
         $xml = simplexml_load_string($xmlString);

@@ -61,63 +61,68 @@ function fetch_url($url) {
 try {
     $items = [];
 
-    // 1) Try Substack archive API for deep history (server-side, no CORS issues)
-    try {
-        $offset = 0;
-        $perPage = min(100, $limit);
-        while (count($items) < $limit) {
-            $apiUrl = $archiveApiBase . '?sort=new&offset=' . $offset . '&limit=' . $perPage;
-            error_log("Attempting to fetch: " . $apiUrl);
-            $jsonStr = fetch_url($apiUrl);
-            $data = json_decode($jsonStr, true);
-            error_log("Archive API response: " . substr($jsonStr, 0, 200) . "...");
-            if (!is_array($data) || empty($data)) {
-                error_log("Archive API returned empty/invalid data, falling back to RSS");
-                break; // fall back to RSS
-            }
-            foreach ($data as $post) {
-                $title = isset($post['title']) ? (string)$post['title'] : '';
-                $link = isset($post['canonical_url']) ? (string)$post['canonical_url'] : (isset($post['url']) ? (string)$post['url'] : '');
-                $pubDate = '';
-                if (!empty($post['post_date'])) {
-                    $ts = strtotime($post['post_date']);
-                    if ($ts) $pubDate = date(DATE_RSS, $ts);
-                }
-                $desc = isset($post['subtitle']) ? (string)$post['subtitle'] : '';
-                $thumb = '';
-                if (!empty($post['cover_image'])) { $thumb = (string)$post['cover_image']; }
-                elseif (!empty($post['social_image'])) { $thumb = (string)$post['social_image']; }
+    // Focus on RSS feed since we know Substack APIs are limited
+    // Will get ~20 articles which we'll load all at once
 
-                // Extract categories/tags if available from API
-                $categories = [];
-                if (!empty($post['tags'])) {
-                    $categories = is_array($post['tags']) ? $post['tags'] : [$post['tags']];
-                } elseif (!empty($post['category'])) {
-                    $categories = is_array($post['category']) ? $post['category'] : [$post['category']];
-                } elseif (!empty($post['categories'])) {
-                    $categories = is_array($post['categories']) ? $post['categories'] : [$post['categories']];
+    // 1) Try the original archive API (likely to fail, but worth trying)
+    if (count($items) === 0) {
+        try {
+            $offset = 0;
+            $perPage = min(100, $limit);
+            while (count($items) < $limit) {
+                $apiUrl = $archiveApiBase . '?sort=new&offset=' . $offset . '&limit=' . $perPage;
+                error_log("Attempting to fetch: " . $apiUrl);
+                $jsonStr = fetch_url($apiUrl);
+                $data = json_decode($jsonStr, true);
+                error_log("Archive API response: " . substr($jsonStr, 0, 200) . "...");
+                if (!is_array($data) || empty($data)) {
+                    error_log("Archive API returned empty/invalid data, falling back to RSS");
+                    break; // fall back to RSS
                 }
+                foreach ($data as $post) {
+                    $title = isset($post['title']) ? (string)$post['title'] : '';
+                    $link = isset($post['canonical_url']) ? (string)$post['canonical_url'] : (isset($post['url']) ? (string)$post['url'] : '');
+                    $pubDate = '';
+                    if (!empty($post['post_date'])) {
+                        $ts = strtotime($post['post_date']);
+                        if ($ts) $pubDate = date(DATE_RSS, $ts);
+                    }
+                    $desc = isset($post['subtitle']) ? (string)$post['subtitle'] : '';
+                    $thumb = '';
+                    if (!empty($post['cover_image'])) { $thumb = (string)$post['cover_image']; }
+                    elseif (!empty($post['social_image'])) { $thumb = (string)$post['social_image']; }
 
-                $items[] = [
-                    'title' => $title,
-                    'link' => $link,
-                    'pubDate' => $pubDate,
-                    'description' => $desc,
-                    'content' => $desc,
-                    'thumbnail' => $thumb,
-                    'categories' => $categories
-                ];
-                if (count($items) >= $limit) break 2;
+                    // Extract categories/tags if available from API
+                    $categories = [];
+                    if (!empty($post['tags'])) {
+                        $categories = is_array($post['tags']) ? $post['tags'] : [$post['tags']];
+                    } elseif (!empty($post['category'])) {
+                        $categories = is_array($post['category']) ? $post['category'] : [$post['categories']];
+                    } elseif (!empty($post['categories'])) {
+                        $categories = is_array($post['categories']) ? $post['categories'] : [$post['categories']];
+                    }
+
+                    $items[] = [
+                        'title' => $title,
+                        'link' => $link,
+                        'pubDate' => $pubDate,
+                        'description' => $desc,
+                        'content' => $desc,
+                        'thumbnail' => $thumb,
+                        'categories' => $categories
+                    ];
+                    if (count($items) >= $limit) break 2;
+                }
+                if (count($data) < $perPage) break;
+                $offset += $perPage;
             }
-            if (count($data) < $perPage) break;
-            $offset += $perPage;
+        } catch (Exception $e) {
+            error_log("Archive API failed: " . $e->getMessage());
+            // ignore and fall back to RSS
         }
-    } catch (Exception $e) {
-        error_log("Archive API failed: " . $e->getMessage());
-        // ignore and fall back to RSS
     }
 
-    // 2) Fallback to RSS (usually exposes only ~20)
+    // 2) Main approach: direct RSS parsing (~20 articles)
     if (count($items) === 0) {
         error_log("Using RSS fallback, expecting ~20 items max");
         $xmlString = fetch_url($feedUrl);

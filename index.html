@@ -377,7 +377,7 @@
                         currentItems = 0;
                         isArchiveMode = false;
                         populateLatestArticleSpotlight();
-                        displayItems(ITEMS_PER_PAGE);
+                        displayItems(allItems.length - 1); // Load all except spotlight (item 0)
                         updateDynamicButton();
                         success = true;
                         break;
@@ -396,7 +396,7 @@
                     currentItems = 0;
                     isArchiveMode = false;
                     populateLatestArticleSpotlight();
-                    displayItems(ITEMS_PER_PAGE);
+                    displayItems(allItems.length - 1); // Load all except spotlight (item 0)
                     updateDynamicButton();
                 } catch (xmlErr) {
                     console.error('Fallback RSS XML failed:', xmlErr);
@@ -606,24 +606,15 @@
             const dynamicBtn = document.getElementById('dynamicButton');
             if (!dynamicBtn) return;
             
-            // Account for the spotlight item (index 0) being displayed separately
-            // Only switch to archive mode if we've truly loaded all available items
-            const remainingItems = allItems.length - (currentItems + 1); // +1 for spotlight
-            console.log(`Current items: ${currentItems}, Total items: ${allItems.length}, Remaining: ${remainingItems}`);
+            // Since we're loading all articles at once, always show Full Archive button
+            console.log(`Loaded ${currentItems} articles from RSS feed (+ 1 in spotlight)`);
             
-            if (isArchiveMode || remainingItems <= 0) {
-                // Switch to archive mode
-                dynamicBtn.textContent = 'Full Archive →';
-                dynamicBtn.className = 'archive-btn';
-                dynamicBtn.onclick = () => {
-                    window.open('https://charleswilke.substack.com/archive?sort=new', '_blank', 'noopener,noreferrer');
-                };
-            } else {
-                // Switch to load more mode
-                dynamicBtn.textContent = `Load more (${remainingItems} left)`;
-                dynamicBtn.className = 'load-more-btn';
-                dynamicBtn.onclick = () => displayItems(ITEMS_PER_PAGE);
-            }
+            // Always show archive mode since we load everything at once
+            dynamicBtn.textContent = 'Full Archive →';
+            dynamicBtn.className = 'archive-btn';
+            dynamicBtn.onclick = () => {
+                window.open('https://charleswilke.substack.com/archive?sort=new', '_blank', 'noopener,noreferrer');
+            };
         }
         
         // Fallback: parse RSS XML manually (via AllOrigins proxy) if rss2json fails
@@ -877,13 +868,7 @@
             });
         });
 
-        // Initialize the dynamic button
-        document.addEventListener('DOMContentLoaded', () => {
-            const dynamicBtn = document.getElementById('dynamicButton');
-            if (dynamicBtn) {
-                dynamicBtn.onclick = () => displayItems(ITEMS_PER_PAGE);
-            }
-        });
+        // Button is now initialized by updateDynamicButton() after feed loads
 
         // Pause on hover
         carousel.addEventListener('mouseenter', () => {

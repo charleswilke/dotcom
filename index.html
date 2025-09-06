@@ -497,34 +497,6 @@
                 day: 'numeric' 
             });
             
-            // Handle tags if available
-            console.log('Latest item data:', latestItem); // Debug: show full item data
-            let tags = [];
-            
-            // Try to get tags from feed first
-            if (latestItem.categories && Array.isArray(latestItem.categories) && latestItem.categories.length > 0) {
-                tags = latestItem.categories;
-                console.log('Found categories from feed:', tags);
-            } else if (latestItem.category && latestItem.category.trim()) {
-                tags = [latestItem.category];
-                console.log('Found single category from feed:', tags);
-            } else {
-                // Substack RSS feeds don't include tags, so let's try to extract from content or use manual mapping
-                tags = extractTagsFromContent(latestItem);
-                console.log('Extracted tags from content/manual mapping:', tags);
-            }
-            
-            console.log('Final tags for display:', tags); // Debug: show final tags
-            
-            if (tags.length > 0) {
-                spotlightTags.textContent = tags.slice(0, 3).join(', '); // Show max 3 tags
-                spotlightTagsContainer.style.display = 'block';
-                console.log('Tags displayed:', tags.slice(0, 3).join(', '));
-            } else {
-                spotlightTagsContainer.style.display = 'none';
-                console.log('No tags found - hiding tags container');
-            }
-            
             // Show the spotlight
             spotlight.style.display = 'block';
         }
@@ -674,41 +646,6 @@
             return items;
         }
         
-        // Function to extract tags from article content or use manual mapping
-        function extractTagsFromContent(item) {
-            // Manual tag mapping for specific articles (you can customize this)
-            const manualTagMapping = {
-                'Compounding Fuzziness': ['career advice', 'humanity'],
-                // Add more mappings as needed: 'Article Title': ['tag1', 'tag2']
-            };
-            
-            // Check manual mapping first
-            if (manualTagMapping[item.title]) {
-                return manualTagMapping[item.title];
-            }
-            
-            // Try to extract from content/description using keyword matching
-            const content = (item.content || item.description || '').toLowerCase();
-            const tags = [];
-            
-            // AI/Technology related keywords
-            if (content.includes('technology') || content.includes('tech ') || content.includes('software') || content.includes('programming')) {
-                tags.push('Technology');
-            }
-            if (content.includes('business') || content.includes('startup') || content.includes('entrepreneur')) {
-                tags.push('Business');
-            }
-            if (content.includes('design') || content.includes('ux') || content.includes('ui')) {
-                tags.push('Design');
-            }
-            if (content.includes('productivity') || content.includes('workflow') || content.includes('optimization')) {
-                tags.push('Productivity');
-            }
-            
-            // Remove duplicates and return
-            return [...new Set(tags)];
-        }
-
         document.addEventListener('DOMContentLoaded', fetchRSSFeed);
 
         // Lightbox functionality

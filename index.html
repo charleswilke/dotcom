@@ -355,10 +355,11 @@
             const urls = [];
             // Use PHP endpoint only when served over http/https
             if (location.protocol === 'http:' || location.protocol === 'https:') {
-                urls.push('substack_feed.php?limit=200');
+                urls.push('substack_feed.php?limit=200&nocache=1');
             }
             // Then try rss2json extended and default
             urls.push(
+                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=200',
                 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=100',
                 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed')
             );

@@ -783,7 +783,7 @@ section.production-header.spotlight-production p {
     min-height: unset;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .faq-section-header-area {
     padding: 20px 0;
   }
@@ -926,7 +926,7 @@ section.production-header.spotlight-production p {
     opacity: 1;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .collapse-handle {
         height: 32px;
     }
@@ -961,7 +961,7 @@ section.production-header.spotlight-production p {
     transform: translateY(-1px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .collapse-handle {
         height: 32px;
     }
@@ -983,7 +983,7 @@ section.production-header.spotlight-production p {
     transform: translateY(-2px) rotate(0deg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .collapse-handle {
         height: 32px;
     }
@@ -1125,7 +1125,58 @@ footer p {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+/* iPad Mini and tablet specific styles */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .header-title {
+        font-size: 3.5rem;
+        letter-spacing: 2.5px;
+    }
+    
+    .dimensional-showcase > .container {
+        margin-top: 0.6rem;
+        padding-top: 1.2rem;
+        padding-bottom: 2.8rem;
+    }
+    
+    /* Spotlight RSS card improvements */
+    .spotlight-title {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+    
+    .spotlight-description {
+        font-size: 1.25rem;
+        margin-bottom: 1.8rem;
+        line-height: 1.5;
+    }
+    
+    .spotlight-metadata {
+        margin: 0.8rem 0;
+        padding: 0.6rem 0;
+        font-size: 0.95rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .spotlight-metadata .spotlight-date,
+    .spotlight-metadata .spotlight-tags {
+        text-align: left !important;
+        margin-top: 0.3rem;
+    }
+    
+    /* Increase spotlight card height for better spacing */
+    section.production-header.spotlight-production {
+        min-height: 480px;
+        padding-top: 1rem;
+    }
+    
+    section.production-header.spotlight-production .content {
+        padding: 2rem 2rem 1.5rem 2rem;
+    }
+}
+
+@media (max-width: 767px) {
     .header-title {
         font-size: 2.5rem;
         letter-spacing: 2px;
@@ -1440,7 +1491,7 @@ html {
 }
 
 /* Responsive Styles for About Section */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .about-container {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -1678,7 +1729,7 @@ html {
     border-color: var(--light);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .load-more-btn {
         font-size: 1rem;
         padding: 1rem 1.5rem;
@@ -1793,7 +1844,7 @@ html {
     pointer-events: none !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .spotlight-title {
         font-size: 2rem;
     }
@@ -1905,7 +1956,7 @@ html {
 }
 
 /* Mobile spotlight card with blue styling */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     /* Use the same blue background styling on mobile */
     section.production-header.spotlight-production {
         background: linear-gradient(135deg, var(--accent), var(--primary)) !important;
@@ -2176,7 +2227,7 @@ html {
 }
 
 /* Responsive adjustments for ChatGPT Blurb */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .blurb-card {
         padding: 2rem;
         margin: 0 1rem;
@@ -2294,7 +2345,7 @@ html {
     background: rgba(255, 255, 255, 0.3);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .lightbox-content {
         padding: 10px;
     }
@@ -2405,7 +2456,7 @@ section.production-header.alice p {
 }
 
 /* Update responsive styles */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .production-header {
         flex-direction: column;
         text-align: center;
@@ -2555,7 +2606,7 @@ section.production-header.alice p {
     font-size: 0.8rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .testimonial {
         margin-bottom: 1.5rem;
     }
@@ -2571,7 +2622,7 @@ section.production-header.alice p {
 }
 
 /* Mobile styles for video section */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .gpts-section .container > div {
         grid-template-columns: 1fr !important;
     }
@@ -2624,7 +2675,7 @@ section.production-header.alice p {
     background: #18121a;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .video-container-responsive {
         position: relative !important;
         padding-bottom: 0 !important;
@@ -2764,7 +2815,7 @@ section.production-header.alice p {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .bts-photo {
         position: relative !important;
         width: 100% !important;
@@ -3127,7 +3178,7 @@ section.production-header.alice p {
   pointer-events: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .recently-bg-text {
     font-size: 7vw;
     top: 1.5vw;
@@ -3178,7 +3229,7 @@ section.production-header.alice p {
   filter: brightness(1.08) saturate(1.08);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .recently-bg-text .recently-letter:hover {
     transform: scale(1.13);
   }
@@ -3219,7 +3270,7 @@ section.production-header.alice p {
     text-shadow: 0 0 10px var(--neon);
     border-color: var(--light);
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .archive-btn {
         font-size: 1rem;
         padding: 1rem 1.5rem;
@@ -3232,7 +3283,7 @@ section.production-header.alice p {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .dimensional-showcase {
         padding: 0.4rem 0 1.2rem 0;
     }
@@ -3391,7 +3442,7 @@ section.production-header.alice p {
 .faq-short { display: none; }
 .faq-full { display: inline; }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .faq-short { display: inline; }
   .faq-full { display: none; }
 }

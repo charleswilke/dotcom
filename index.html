@@ -1296,12 +1296,15 @@
 
             audio.addEventListener('play', function() {
               icon.textContent = '❚❚';
+              player.classList.add('playing');
             });
             audio.addEventListener('pause', function() {
               icon.textContent = '▶';
+              player.classList.remove('playing');
             });
             audio.addEventListener('ended', function() {
               icon.textContent = '▶';
+              player.classList.remove('playing');
             });
 
 

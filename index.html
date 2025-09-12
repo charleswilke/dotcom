@@ -153,6 +153,51 @@
         <div class="container">
             <h2 class="section-title section-title-light">exploring l.ai.bor</h2>
             
+            <!-- Audio Summary Section -->
+            <div class="audio-summary-container">
+                <div class="audio-summary-toggle">
+                    <button class="summary-toggle-btn" aria-label="Toggle Audio Summary">
+                        <span class="toggle-text">🎧 Audio Recap</span>
+                        <span class="toggle-arrow">▼</span>
+                    </button>
+                </div>
+                <div class="audio-summary-card collapsed">
+                    <div class="audio-summary-content">
+                        <div class="audio-summary-layout">
+                            <div class="audio-summary-left">
+                                <div class="audio-summary-header">
+                                    <h4 class="audio-summary-title">Recently on exploring l.ai.bor</h4>
+                                    <p class="audio-summary-description">A podcast recap of recent posts from Aug-Sept 2025</p>
+                                </div>
+                            </div>
+                            <div class="audio-summary-right">
+                                <div class="audio-summary-player">
+                                    <audio class="custom-audio" src="audio/aug-sept-substack-summary.mp4" preload="metadata" style="display:none;"></audio>
+                                    <div class="custom-audio-player">
+                                        <button class="audio-btn audio-summary-btn" aria-label="Play/Pause Audio Summary">
+                                            <span class="audio-icon">▶</span>
+                                        </button>
+                                        <div class="audio-progress-container">
+                                            <div class="audio-progress-bar">
+                                                <div class="audio-progress"></div>
+                                            </div>
+                                        </div>
+                                        <span class="audio-time">
+                                            <span class="audioCurrent">0:00</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="audio-summary-meta">
+                                    <span class="summary-coverage">Covers 5 recent articles</span>
+                                    <span class="summary-separator">•</span>
+                                    <span class="summary-date">Aug-Sept 2025</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Latest Article Spotlight -->
             <div id="latest-article-spotlight" class="latest-article-spotlight" style="display: none;">
                 <section class="production-header spotlight-production" style="position: relative; overflow: hidden; padding: 0; margin-bottom: 1.5rem;">
@@ -654,6 +699,91 @@
         }
         
         document.addEventListener('DOMContentLoaded', fetchRSSFeed);
+
+        // Audio Summary Toggle Functionality with Enhanced Animations (Tablet/Mobile Only)
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.querySelector('.summary-toggle-btn');
+            const summaryCard = document.querySelector('.audio-summary-card');
+            let hasExpandedBefore = false;
+            
+            if (toggleBtn && summaryCard) {
+                toggleBtn.addEventListener('click', function() {
+                    const isExpanded = summaryCard.classList.contains('expanded');
+                    
+                    if (isExpanded) {
+                        // Collapse with animation reset
+                        summaryCard.classList.remove('expanded', 'first-expand');
+                        summaryCard.classList.add('collapsed');
+                        toggleBtn.classList.remove('expanded');
+                        
+                        // Reset content animations for next expand
+                        setTimeout(() => {
+                            const left = summaryCard.querySelector('.audio-summary-left');
+                            const right = summaryCard.querySelector('.audio-summary-right');
+                            const meta = summaryCard.querySelector('.audio-summary-meta');
+                            
+                            if (left) left.style.animation = 'none';
+                            if (right) right.style.animation = 'none';
+                            if (meta) meta.style.animation = 'none';
+                        }, 100);
+                        
+                    } else {
+                        // Expand with special first-time effect
+                        summaryCard.classList.remove('collapsed');
+                        summaryCard.classList.add('expanded');
+                        toggleBtn.classList.add('expanded');
+                        
+                        // Add first expand effect only on first open
+                        if (!hasExpandedBefore) {
+                            summaryCard.classList.add('first-expand');
+                            hasExpandedBefore = true;
+                            
+                            // Remove first-expand class after animation
+                            setTimeout(() => {
+                                summaryCard.classList.remove('first-expand');
+                            }, 800);
+                        }
+                        
+                        // Trigger content animations
+                        setTimeout(() => {
+                            const left = summaryCard.querySelector('.audio-summary-left');
+                            const right = summaryCard.querySelector('.audio-summary-right');
+                            const meta = summaryCard.querySelector('.audio-summary-meta');
+                            
+                            // Force reflow to restart animations
+                            if (left) {
+                                left.style.animation = 'none';
+                                left.offsetHeight; // trigger reflow
+                                left.style.animation = '';
+                            }
+                            if (right) {
+                                right.style.animation = 'none';
+                                right.offsetHeight; // trigger reflow
+                                right.style.animation = '';
+                            }
+                            if (meta) {
+                                meta.style.animation = 'none';
+                                meta.offsetHeight; // trigger reflow
+                                meta.style.animation = '';
+                            }
+                        }, 50);
+                    }
+                });
+                
+                // Add subtle hover effects for expanded state
+                toggleBtn.addEventListener('mouseenter', function() {
+                    if (summaryCard.classList.contains('expanded')) {
+                        summaryCard.style.transform = 'scaleY(1.01) perspective(1000px) rotateX(1deg)';
+                    }
+                });
+                
+                toggleBtn.addEventListener('mouseleave', function() {
+                    if (summaryCard.classList.contains('expanded')) {
+                        summaryCard.style.transform = 'scaleY(1) perspective(1000px) rotateX(0deg)';
+                    }
+                });
+            }
+        });
 
         // Lightbox functionality
         let currentImageIndex = 0;

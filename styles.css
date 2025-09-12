@@ -2108,13 +2108,32 @@ html {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 0.4rem;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.18), 0 0 8px var(--neon);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1), 0 0 4px rgba(255, 255, 255, 0.1);
     padding: 0.3rem 0.7rem;
     position: relative;
     width: 100%;
     min-width: 0;
+    transition: all 0.3s ease;
+}
+
+.audio-summary-player .custom-audio-player:hover,
+.audio-summary-player .custom-audio-player.playing {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    border: 1px solid var(--primary);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18), 0 0 8px var(--neon);
+}
+
+.audio-summary-player .custom-audio-player:hover .audio-summary-btn,
+.audio-summary-player .custom-audio-player.playing .audio-summary-btn,
+.audio-summary-player .custom-audio-player:hover .audio-progress-container,
+.audio-summary-player .custom-audio-player.playing .audio-progress-container,
+.audio-summary-player .custom-audio-player:hover .audio-time,
+.audio-summary-player .custom-audio-player.playing .audio-time {
+    opacity: 1;
 }
 
 .audio-summary-btn {
@@ -2130,9 +2149,10 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s;
+    transition: color 0.2s, opacity 0.3s ease;
     flex-shrink: 0;
     margin-right: 0.7rem;
+    opacity: 0.4;
 }
 
 .audio-summary-btn:hover {
@@ -2155,6 +2175,8 @@ html {
     display: flex;
     align-items: center;
     cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
 }
 
 .audio-summary-player .audio-progress-bar {
@@ -2187,6 +2209,8 @@ html {
     text-align: right;
     margin-left: 0.7rem;
     white-space: nowrap;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
 }
 
 .audio-summary-meta {

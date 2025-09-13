@@ -1879,7 +1879,7 @@ html {
     left: 100%;
 }
 
-/* Desktop - Always visible */
+/* Desktop - Always visible with side-by-side layout */
 @media (min-width: 1025px) {
     .audio-summary-toggle {
         display: none;
@@ -1888,6 +1888,29 @@ html {
     .audio-summary-card {
         opacity: 1;
         max-height: none;
+    }
+    
+    .audio-summary-layout {
+        flex-direction: row;
+        gap: .4rem;
+        align-items: flex-start;
+    }
+    
+    .audio-summary-left {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .audio-summary-right {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    
+    .audio-summary-player {
+        width: 100%;
+        max-width: 600px;
     }
 }
 
@@ -2004,6 +2027,18 @@ html {
         display: block;
     }
     
+    .audio-summary-player {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .audio-summary-player .custom-audio-player {
+        width: 100% !important;
+        max-width: 800px !important;
+        min-width: 400px;
+    }
+    
     .audio-summary-card.collapsed {
         max-height: 0;
         opacity: 0;
@@ -2025,11 +2060,73 @@ html {
     }
 }
 
-/* Mobile responsive adjustments */
-@media (max-width: 600px) {
+/* iPad Mini and larger tablets - Side-by-side layout */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .audio-summary-layout {
+        flex-direction: row;
+        gap: .4rem;
+        align-items: center;
+        text-align: left;
+    }
+    
+    .audio-summary-left {
+        flex: 1 1 auto;
+        text-align: left;
+        min-width: 0;
+        flex-shrink: 1;
+        overflow: hidden;
+    }
+    
+    .audio-summary-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .audio-summary-right {
+        flex: 1;
+        text-align: left;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        min-width: 0;
+    }
+    
+    .audio-summary-meta {
+        justify-content: flex-start;
+        text-align: left;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+    
+    .audio-summary-player {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        min-width: 0;
+    }
+    
+    .audio-summary-player .custom-audio-player {
+        max-width: 820px !important;
+        min-width: 320px !important;
+    }
+}
+
+/* Mobile responsive adjustments - Phone only */
+@media (max-width: 767px) {
+    .audio-summary-container {
+        text-align: center;
+        width: 100%;
+    }
+    
     .audio-summary-toggle {
         margin-top: 1.5rem;
         margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: center;
     }
     
     .summary-toggle-btn {
@@ -2040,19 +2137,34 @@ html {
     .audio-summary-layout {
         flex-direction: column;
         gap: 1rem;
+        align-items: center;
+        text-align: center;
     }
     
     .audio-summary-left,
     .audio-summary-right {
         flex: none;
+        text-align: center;
+        width: 100%;
     }
     
     .audio-summary-content {
         padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .audio-summary-player {
+        display: flex;
+        justify-content: center;
+        width: 100%;
     }
     
     .audio-summary-player .custom-audio-player {
         padding: 0.3rem 0.2rem;
+        width: 100% !important;
+        max-width: 320px !important;
+        min-width: 280px;
     }
     
     .audio-summary-btn {
@@ -2075,6 +2187,15 @@ html {
         min-width: 30px;
     }
     
+    .audio-summary-meta {
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100%;
+    }
+    
+    .summary-coverage, .summary-date, .summary-separator {
+        text-align: center !important;
+    }
 }
 
 
@@ -2252,6 +2373,7 @@ html {
     color: var(--light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-align: left;
 }
 
 .summary-separator {
@@ -2273,7 +2395,7 @@ html {
     }
     
     .audio-summary-content {
-        padding: 1.2rem;
+        padding: .4rem;
     }
     
     .audio-summary-title {

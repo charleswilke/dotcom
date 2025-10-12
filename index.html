@@ -399,20 +399,24 @@
             const urls = [];
             // Use PHP endpoint only when served over http/https
             if (location.protocol === 'http:' || location.protocol === 'https:') {
-                urls.push('substack_feed.php?limit=200&nocache=1');
+                urls.push('substack_feed.php?limit=200');
             }
-            // Then try rss2json extended and default
+            // Simplified fallback chain - only one rss2json attempt
             urls.push(
-                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=200',
-                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=100',
-                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed')
+                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=100'
             );
             let success = false;
             try {
                 for (const feedUrl of urls) {
                     try {
                         console.log('Fetching RSS feed from:', feedUrl);
-                        const response = await fetch(feedUrl);
+                        const response = await fetch(feedUrl, {
+                            cache: 'default', // Use browser cache when available
+                            headers: {
+                                'Accept': 'application/json',
+                                'Accept-Encoding': 'gzip, deflate'
+                            }
+                        });
                         if (!response.ok) throw new Error(`HTTP error ${response.status}`);
                         const data = await response.json();
                         if (!(data && data.status === 'ok' && data.items)) throw new Error('Invalid data');
@@ -432,7 +436,7 @@
                 if (!success) throw new Error('All feed attempts failed');
             } catch (error) {
                 console.error('Error fetching RSS feed:', error);
-                // Try XML fallback via AllOrigins
+                // Try XML fallback via AllOrigins as last resort
                 try {
                     const xmlItems = await fetchRssXmlFallback();
                     allItems = xmlItems;

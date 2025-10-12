@@ -1,5 +1,8 @@
 <?php
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET');
+header('Access-Control-Allow-Headers: Content-Type');
 
 // Config
 $feedUrl = 'https://charleswilke.substack.com/feed';
@@ -7,19 +10,40 @@ $archiveApiBase = 'https://charleswilke.substack.com/api/v1/archive';
 $altFeedUrl = 'https://rss.app/feeds/v1.1/_UNUSED.xml'; // Alternative if main RSS is limited
 $limit = isset($_GET['limit']) ? max(1, min(200, intval($_GET['limit']))) : 100;
 $cacheFile = __DIR__ . '/cache_substack_feed.json';
-$cacheTtl = 1800; // 30 minutes
+$cacheTtl = 3600; // 1 hour (increased from 30 minutes)
 $noCache = isset($_GET['nocache']);
+
+// Add proper HTTP caching headers
+$cacheAge = 1800; // 30 minutes browser cache
+header("Cache-Control: public, max-age={$cacheAge}, stale-while-revalidate=3600");
+header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cacheAge) . ' GMT');
 
 // Serve from cache if fresh (unless nocache query present)
 if (!$noCache && file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTtl)) {
     $cached = file_get_contents($cacheFile);
     if ($cached !== false) {
-        echo $cached;
+        // Add ETag for better caching
+        $etag = '"' . md5($cached . filemtime($cacheFile)) . '"';
+        header("ETag: $etag");
+        
+        // Check if client has cached version
+        if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] === $etag) {
+            http_response_code(304);
+            exit;
+        }
+        
+        // Add compression if supported
+        if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
+            header('Content-Encoding: gzip');
+            echo gzencode($cached, 6);
+        } else {
+            echo $cached;
+        }
         exit;
     }
 }
 
-// Fetch URL helper - fallback to file_get_contents if cURL not available
+// Fetch URL helper - optimized for performance
 function fetch_url($url) {
     // Try cURL first if available
     if (function_exists('curl_init')) {
@@ -27,8 +51,13 @@ function fetch_url($url) {
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_USERAGENT => 'SubstackFeedFetcher/1.0 (+charleswilke.com)'
+            CURLOPT_TIMEOUT => 15, // Increased timeout for reliability
+            CURLOPT_CONNECTTIMEOUT => 5, // Connection timeout
+            CURLOPT_USERAGENT => 'SubstackFeedFetcher/1.0 (+charleswilke.com)',
+            CURLOPT_SSL_VERIFYPEER => false, // Disable SSL verification for local development
+            CURLOPT_SSL_VERIFYHOST => 0, // Disable hostname verification for local development
+            CURLOPT_ENCODING => '', // Enable all supported compression
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0, // Use HTTP/2 if available
         ]);
         $res = curl_exec($ch);
         $err = curl_error($ch);
@@ -171,10 +200,22 @@ try {
         }
     }
 
-    $payload = json_encode(['status' => 'ok', 'items' => $items]);
-    // Cache
-    @file_put_contents($cacheFile, $payload);
-    echo $payload;
+    $payload = json_encode(['status' => 'ok', 'items' => $items], JSON_UNESCAPED_SLASHES);
+    
+    // Cache the result
+    @file_put_contents($cacheFile, $payload, LOCK_EX);
+    
+    // Add ETag for the new content
+    $etag = '"' . md5($payload . time()) . '"';
+    header("ETag: $etag");
+    
+    // Serve compressed if supported
+    if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
+        header('Content-Encoding: gzip');
+        echo gzencode($payload, 6);
+    } else {
+        echo $payload;
+    }
 } catch (Exception $e) {
     http_response_code(502);
     echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);

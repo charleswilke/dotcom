@@ -54,8 +54,8 @@ function fetch_url($url) {
             CURLOPT_TIMEOUT => 15, // Increased timeout for reliability
             CURLOPT_CONNECTTIMEOUT => 5, // Connection timeout
             CURLOPT_USERAGENT => 'SubstackFeedFetcher/1.0 (+charleswilke.com)',
-            CURLOPT_SSL_VERIFYPEER => false, // Disable SSL verification for local development
-            CURLOPT_SSL_VERIFYHOST => 0, // Disable hostname verification for local development
+            CURLOPT_SSL_VERIFYPEER => true, // Enable SSL verification for production
+            CURLOPT_SSL_VERIFYHOST => 2, // Enable hostname verification for production
             CURLOPT_ENCODING => '', // Enable all supported compression
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0, // Use HTTP/2 if available
         ]);

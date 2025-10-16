@@ -432,7 +432,12 @@
                                 currentItems = 0;
                                 isArchiveMode = false;
                                 
-                                // Clear loading state and populate content
+                                // Clear loading state immediately
+                                if (feedContent) {
+                                    feedContent.innerHTML = '';
+                                }
+                                
+                                // Populate content
                                 populateLatestArticleSpotlight();
                                 displayItems(allItems.length - 1);
                                 updateDynamicButton();
@@ -465,6 +470,12 @@
                                 console.log(`✓ Fallback loaded ${allItems.length} articles`);
                                 currentItems = 0;
                                 isArchiveMode = false;
+                                
+                                // Clear loading state immediately
+                                if (feedContent) {
+                                    feedContent.innerHTML = '';
+                                }
+                                
                                 populateLatestArticleSpotlight();
                                 displayItems(allItems.length - 1);
                                 updateDynamicButton();
@@ -485,6 +496,12 @@
                         console.log(`✓ XML fallback loaded ${allItems.length} articles`);
                         currentItems = 0;
                         isArchiveMode = false;
+                        
+                        // Clear loading state immediately
+                        if (feedContent) {
+                            feedContent.innerHTML = '';
+                        }
+                        
                         populateLatestArticleSpotlight();
                         displayItems(allItems.length - 1);
                         updateDynamicButton();
@@ -513,12 +530,6 @@
         
         function populateLatestArticleSpotlight() {
             if (!allItems || allItems.length === 0) return;
-            
-            // Ensure loading placeholder is cleared when we start populating content
-            const feedContent = document.getElementById('feed-content');
-            if (feedContent && feedContent.innerHTML.includes('loading-placeholder')) {
-                feedContent.innerHTML = '';
-            }
             
             const latestItem = allItems[0]; // First item is the latest
             const spotlight = document.getElementById('latest-article-spotlight');
@@ -614,11 +625,6 @@
         
         function displayItems(count) {
             const feedContent = document.getElementById('feed-content');
-            
-            // Clear any loading placeholder first
-            if (feedContent && feedContent.innerHTML.includes('loading-placeholder')) {
-                feedContent.innerHTML = '';
-            }
             
             // Start from index 1 since index 0 is in the spotlight
             // For subsequent loads, add 1 to currentItems to account for the skipped spotlight item

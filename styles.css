@@ -1719,6 +1719,54 @@ html {
     transform: translateX(5px);
 }
 
+/* Loading and Error States for RSS Feed */
+.feed-item.loading-placeholder {
+    background: linear-gradient(90deg, rgba(255,255,255,0.9) 25%, rgba(0,247,194,0.1) 50%, rgba(255,255,255,0.9) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    border: 3px solid var(--primary);
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.feed-item.loading-placeholder h3 {
+    color: var(--primary);
+    margin: 0;
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.feed-item.error-state {
+    background: rgba(255, 255, 255, 0.95);
+    border: 3px solid #ff6b6b;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.feed-item.error-state h3 {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+}
+
+.feed-item.error-state p {
+    color: var(--text);
+    margin: 0;
+}
+
+.feed-item.error-state a {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
 .load-more-container {
     text-align: center;
     position: relative;

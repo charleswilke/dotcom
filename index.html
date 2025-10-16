@@ -32,6 +32,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- RSS Feed Performance Optimization -->
+    <link rel="preload" href="substack_feed.php?limit=200" as="fetch" crossorigin="anonymous">
+    <link rel="preconnect" href="https://api.rss2json.com">
+    <link rel="dns-prefetch" href="https://charleswilke.substack.com">
 </head>
 <body>
     <script type="application/ld+json">
@@ -396,69 +401,124 @@
         async function fetchRSSFeed() {
             if (isLoading) return;
             isLoading = true;
-            const urls = [];
-            // Use PHP endpoint only when served over http/https
-            if (location.protocol === 'http:' || location.protocol === 'https:') {
-                urls.push('substack_feed.php?limit=200');
+            
+            // Show loading indicator immediately
+            const feedContent = document.getElementById('feed-content');
+            if (feedContent) {
+                feedContent.innerHTML = '<div class="feed-item loading-placeholder"><h3>Loading latest articles...</h3></div>';
             }
-            // Simplified fallback chain - only one rss2json attempt
-            urls.push(
-                'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=100'
-            );
+            
             let success = false;
+            
             try {
-                for (const feedUrl of urls) {
+                // Primary endpoint: optimized PHP cache with high priority
+                if (location.protocol === 'http:' || location.protocol === 'https:') {
                     try {
-                        console.log('Fetching RSS feed from:', feedUrl);
-                        const response = await fetch(feedUrl, {
-                            cache: 'default', // Use browser cache when available
+                        console.log('Fetching RSS feed from optimized cache...');
+                        const response = await fetch('substack_feed.php?limit=200', {
+                            cache: 'force-cache', // Prioritize cached responses
+                            priority: 'high', // High priority fetch
                             headers: {
                                 'Accept': 'application/json',
-                                'Accept-Encoding': 'gzip, deflate'
+                                'Accept-Encoding': 'gzip, deflate, br'
                             }
                         });
-                        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-                        const data = await response.json();
-                        if (!(data && data.status === 'ok' && data.items)) throw new Error('Invalid data');
-                        allItems = data.items;
-                        console.log(`Successfully loaded ${allItems.length} articles from: ${feedUrl}`);
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data && data.status === 'ok' && data.items && data.items.length > 0) {
+                                allItems = data.items;
+                                console.log(`✓ Successfully loaded ${allItems.length} articles from cache`);
+                                currentItems = 0;
+                                isArchiveMode = false;
+                                
+                                // Clear loading state and populate content
+                                populateLatestArticleSpotlight();
+                                displayItems(allItems.length - 1);
+                                updateDynamicButton();
+                                success = true;
+                            } else {
+                                console.warn('Cache returned invalid data structure');
+                            }
+                        }
+                    } catch(cacheErr) {
+                        console.warn('Cache endpoint failed:', cacheErr);
+                    }
+                }
+                
+                // Fallback: Direct RSS2JSON (only if cache failed)
+                if (!success) {
+                    try {
+                        console.log('Trying RSS2JSON fallback...');
+                        const fallbackUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + 
+                            encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=50';
+                        
+                        const response = await fetch(fallbackUrl, {
+                            cache: 'default',
+                            headers: { 'Accept': 'application/json' }
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data && data.status === 'ok' && data.items && data.items.length > 0) {
+                                allItems = data.items;
+                                console.log(`✓ Fallback loaded ${allItems.length} articles`);
+                                currentItems = 0;
+                                isArchiveMode = false;
+                                populateLatestArticleSpotlight();
+                                displayItems(allItems.length - 1);
+                                updateDynamicButton();
+                                success = true;
+                            }
+                        }
+                    } catch(fallbackErr) {
+                        console.warn('RSS2JSON fallback failed:', fallbackErr);
+                    }
+                }
+                
+                // Last resort: XML parsing
+                if (!success) {
+                    console.log('Trying XML fallback as last resort...');
+                    const xmlItems = await fetchRssXmlFallback();
+                    if (xmlItems && xmlItems.length > 0) {
+                        allItems = xmlItems;
+                        console.log(`✓ XML fallback loaded ${allItems.length} articles`);
                         currentItems = 0;
                         isArchiveMode = false;
                         populateLatestArticleSpotlight();
-                        displayItems(allItems.length - 1); // Load all except spotlight (item 0)
+                        displayItems(allItems.length - 1);
                         updateDynamicButton();
                         success = true;
-                        break;
-                    } catch(inner) {
-                        console.warn('Feed attempt failed, trying next option:', inner);
                     }
                 }
-                if (!success) throw new Error('All feed attempts failed');
+                
             } catch (error) {
-                console.error('Error fetching RSS feed:', error);
-                // Try XML fallback via AllOrigins as last resort
-                try {
-                    const xmlItems = await fetchRssXmlFallback();
-                    allItems = xmlItems;
-                    console.log(`XML fallback loaded ${allItems.length} articles`);
-                    currentItems = 0;
-                    isArchiveMode = false;
-                    populateLatestArticleSpotlight();
-                    displayItems(allItems.length - 1); // Load all except spotlight (item 0)
-                    updateDynamicButton();
-                } catch (xmlErr) {
-                    console.error('Fallback RSS XML failed:', xmlErr);
-                    const feedContent = document.getElementById('feed-content');
-                    feedContent.innerHTML = `
-                        <div class=\"feed-item\">\n                            <h3>Unable to load feed</h3>\n                            <p>Please visit <a href=\"https://charleswilke.substack.com\" target=\"_blank\" rel=\"noopener noreferrer\">exploring l.ai.bor</a> directly to read the latest posts.</p>\n                        </div>\n                    `;
-                }
-            } finally {
-                isLoading = false;
+                console.error('All RSS feed attempts failed:', error);
             }
+            
+            // Handle complete failure
+            if (!success) {
+                if (feedContent) {
+                    feedContent.innerHTML = `
+                        <div class="feed-item error-state">
+                            <h3>Unable to load articles</h3>
+                            <p>Please visit <a href="https://charleswilke.substack.com" target="_blank" rel="noopener noreferrer">exploring l.ai.bor</a> directly to read the latest posts.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            isLoading = false;
         }
         
         function populateLatestArticleSpotlight() {
             if (!allItems || allItems.length === 0) return;
+            
+            // Ensure loading placeholder is cleared when we start populating content
+            const feedContent = document.getElementById('feed-content');
+            if (feedContent && feedContent.innerHTML.includes('loading-placeholder')) {
+                feedContent.innerHTML = '';
+            }
             
             const latestItem = allItems[0]; // First item is the latest
             const spotlight = document.getElementById('latest-article-spotlight');
@@ -554,6 +614,11 @@
         
         function displayItems(count) {
             const feedContent = document.getElementById('feed-content');
+            
+            // Clear any loading placeholder first
+            if (feedContent && feedContent.innerHTML.includes('loading-placeholder')) {
+                feedContent.innerHTML = '';
+            }
             
             // Start from index 1 since index 0 is in the spotlight
             // For subsequent loads, add 1 to currentItems to account for the skipped spotlight item
@@ -701,7 +766,22 @@
             return items;
         }
         
-        document.addEventListener('DOMContentLoaded', fetchRSSFeed);
+        // Start RSS feed loading immediately, don't wait for DOMContentLoaded
+        if (document.readyState === 'loading') {
+            // If document is still loading, start RSS fetch in parallel
+            fetchRSSFeed();
+        } else {
+            // If document is already loaded, fetch immediately
+            fetchRSSFeed();
+        }
+        
+        // Also set up DOMContentLoaded as fallback in case the above doesn't trigger
+        document.addEventListener('DOMContentLoaded', function() {
+            // Only fetch if we haven't already started loading
+            if (!isLoading && allItems.length === 0) {
+                fetchRSSFeed();
+            }
+        });
 
         // Audio Summary Toggle Functionality with Enhanced Animations (Tablet/Mobile Only)
         document.addEventListener('DOMContentLoaded', function() {

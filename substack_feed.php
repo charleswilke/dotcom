@@ -10,13 +10,14 @@ $archiveApiBase = 'https://charleswilke.substack.com/api/v1/archive';
 $altFeedUrl = 'https://rss.app/feeds/v1.1/_UNUSED.xml'; // Alternative if main RSS is limited
 $limit = isset($_GET['limit']) ? max(1, min(200, intval($_GET['limit']))) : 100;
 $cacheFile = __DIR__ . '/cache_substack_feed.json';
-$cacheTtl = 3600; // 1 hour (increased from 30 minutes)
+$cacheTtl = 1800; // 30 minutes (optimized for freshness vs performance)
 $noCache = isset($_GET['nocache']);
 
-// Add proper HTTP caching headers
-$cacheAge = 1800; // 30 minutes browser cache
-header("Cache-Control: public, max-age={$cacheAge}, stale-while-revalidate=3600");
+// Add proper HTTP caching headers for maximum performance
+$cacheAge = 900; // 15 minutes browser cache (shorter for better freshness)
+header("Cache-Control: public, max-age={$cacheAge}, stale-while-revalidate=1800, stale-if-error=3600");
 header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $cacheAge) . ' GMT');
+header('Vary: Accept-Encoding'); // Important for compression
 
 // Serve from cache if fresh (unless nocache query present)
 if (!$noCache && file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTtl)) {

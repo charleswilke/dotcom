@@ -402,25 +402,11 @@
             if (isLoading) return;
             isLoading = true;
             
-            // Show loading indicator immediately (with timeout fallback)
+            // Show loading indicator immediately
             const feedContent = document.getElementById('feed-content');
             if (feedContent) {
                 feedContent.innerHTML = '<div class="feed-item loading-placeholder"><h3>Loading latest articles...</h3></div>';
             }
-            
-            // Set a timeout to fall back to error state if loading takes too long
-            const loadingTimeout = setTimeout(() => {
-                if (isLoading && allItems.length === 0 && feedContent) {
-                    console.warn('RSS feed loading timeout after 15 seconds');
-                    feedContent.innerHTML = `
-                        <div class="feed-item error-state">
-                            <h3>Loading is taking longer than expected</h3>
-                            <p>Please visit <a href="https://charleswilke.substack.com" target="_blank" rel="noopener noreferrer">exploring l.ai.bor</a> directly to read the latest posts.</p>
-                        </div>
-                    `;
-                    isLoading = false;
-                }
-            }, 15000); // 15 second timeout
             
             let success = false;
             
@@ -447,7 +433,6 @@
                                 isArchiveMode = false;
                                 
                                 // Clear loading state and populate content
-                                clearTimeout(loadingTimeout); // Clear timeout on success
                                 populateLatestArticleSpotlight();
                                 displayItems(allItems.length - 1);
                                 updateDynamicButton();
@@ -480,7 +465,6 @@
                                 console.log(`✓ Fallback loaded ${allItems.length} articles`);
                                 currentItems = 0;
                                 isArchiveMode = false;
-                                clearTimeout(loadingTimeout); // Clear timeout on success
                                 populateLatestArticleSpotlight();
                                 displayItems(allItems.length - 1);
                                 updateDynamicButton();
@@ -501,7 +485,6 @@
                         console.log(`✓ XML fallback loaded ${allItems.length} articles`);
                         currentItems = 0;
                         isArchiveMode = false;
-                        clearTimeout(loadingTimeout); // Clear timeout on success
                         populateLatestArticleSpotlight();
                         displayItems(allItems.length - 1);
                         updateDynamicButton();
@@ -515,7 +498,6 @@
             
             // Handle complete failure
             if (!success) {
-                clearTimeout(loadingTimeout); // Clear timeout
                 if (feedContent) {
                     feedContent.innerHTML = `
                         <div class="feed-item error-state">

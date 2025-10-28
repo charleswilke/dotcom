@@ -158,7 +158,7 @@
         <div class="container">
             <h2 class="section-title section-title-light">exploring l.ai.bor</h2>
             
-            <!-- Audio Summary Section -->
+            <!-- Audio Summary Section with Time Dial -->
             <div class="audio-summary-container">
                 <div class="audio-summary-toggle">
                     <button class="summary-toggle-btn" aria-label="Toggle Audio Summary">
@@ -173,15 +173,55 @@
                                 <div class="audio-summary-header">
                                     <h4 class="audio-summary-title">Recently on Exploring L.ai.bor</h4>
                                 </div>
-                                <div class="audio-summary-meta">
-                                    <span class="summary-coverage">Podcast summary of recent articles</span>
-                                    <span class="summary-separator">•</span>
-                                    <span class="summary-date">Aug-Sept 2025</span>
+                                
+                                <!-- Time Dial Control -->
+                                <div class="time-dial-container">
+                                    <div class="time-dial-layout">
+                                        <!-- Radio Dial Knob (Left Side) -->
+                                        <div class="time-dial-knob-section">
+                                            <div class="time-dial-wrapper">
+                                                <!-- Rotating knob image (with needle baked in) -->
+                                                <img src="images/radioknob.png" alt="Radio Dial" class="radio-knob-rotating" id="rotating-knob" draggable="false">
+                                                
+                                                <!-- Fixed station markers (don't rotate) -->
+                                                <svg class="station-markers-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                                    <!-- October 2024 at 45° (upper right) -->
+                                                    <line x1="141.4" y1="58.6" x2="132.2" y2="67.8" stroke="#00f7c2" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+                                                    <circle cx="145.7" cy="54.3" r="3.5" fill="#00f7c2" opacity="0.9"/>
+                                                    
+                                                    <!-- Aug-Sept 2024 at 135° (lower right) -->
+                                                    <line x1="141.4" y1="141.4" x2="132.2" y2="132.2" stroke="#00f7c2" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+                                                    <circle cx="145.7" cy="145.7" r="3" fill="#00f7c2" opacity="0.5"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Radio Tuner Display (Right Side) -->
+                                        <div class="radio-tuner-display">
+                                            <div class="tuner-glass">
+                                                <div class="tuner-indicator" id="tuner-indicator"></div>
+                                                <div class="tuner-scale">
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="Aug-Sep '25" data-station="0"><span class="marker-label">AUG-SEP '25</span></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="Oct '25" data-station="1"><span class="marker-label">OCT '25</span></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                </div>
+                                                <div class="tuner-reflection"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="audio-summary-right">
+                                <div class="audio-summary-meta">
+                                    <span class="summary-coverage">Recap Podcast</span>
+                                    <span class="summary-separator">•</span>
+                                    <span class="summary-date" id="current-recap-date">Aug-Sept 2025</span>
+                                </div>
                                 <div class="audio-summary-player">
-                                    <audio class="custom-audio" src="audio/aug-sept-substack-summary.mp3" preload="metadata" style="display:none;"></audio>
+                                    <audio id="recap-audio" class="custom-audio" src="audio/aug-sept-substack-summary.mp3" preload="metadata" style="display:none;"></audio>
                                     <div class="custom-audio-player">
                                         <button class="audio-btn audio-summary-btn" aria-label="Play/Pause Audio Summary">
                                             <span class="audio-icon">▶</span>
@@ -787,6 +827,330 @@
             if (!isLoading && allItems.length === 0) {
                 fetchRSSFeed();
             }
+        });
+
+        // Time Dial Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const recapStations = [
+                {
+                    angle: 45,
+                    date: 'Aug-Sept 2025',
+                    file: 'audio/aug-sept-substack-summary.mp3',
+                    label: 'AUG-SEP \'25'
+                },
+                {
+                    angle: 135,
+                    date: 'October 2025',
+                    file: 'audio/oct-substack-recap.mp3',
+                    label: 'OCT \'25'
+                }
+            ];
+            
+            // Radio tuning sound effects
+            const tuningSounds = [
+                'audio/radio_tuning1.mp3',
+                'audio/radio_tuning2.mp3',
+                'audio/radio_tuning3.mp3'
+            ];
+            
+            let currentStation = 0;
+            const rotatingKnob = document.getElementById('rotating-knob');
+            const dialWrapper = document.querySelector('.time-dial-wrapper');
+            const dateDisplay = document.getElementById('current-recap-date');
+            const recapAudio = document.getElementById('recap-audio');
+            let isDragging = false;
+            let startAngle = 0;
+            let currentAngle = 0;
+            
+            // Create audio element for tuning sounds
+            const tuningAudio = new Audio();
+            tuningAudio.volume = 0.4; // Set volume to 40% so it's not too loud
+            
+            function playRandomTuningSound() {
+                const randomIndex = Math.floor(Math.random() * tuningSounds.length);
+                tuningAudio.src = tuningSounds[randomIndex];
+                tuningAudio.currentTime = 0;
+                tuningAudio.play().catch(e => console.log('Tuning sound play prevented:', e));
+            }
+            
+            function updateStation(stationIndex) {
+                if (stationIndex === currentStation) return;
+                
+                const station = recapStations[stationIndex];
+                currentStation = stationIndex;
+                
+                // Play random tuning sound effect
+                playRandomTuningSound();
+                
+                // Update data attribute for label highlighting
+                dialWrapper.setAttribute('data-current-station', stationIndex);
+                
+                // Rotate the entire knob image
+                rotatingKnob.style.transform = `translate(-50%, -50%) rotate(${station.angle}deg)`;
+                currentAngle = station.angle;
+                
+                // Update tuner indicator position
+                updateTunerIndicator(stationIndex);
+                
+                // Update date display with glitch effect
+                dateDisplay.style.opacity = '0';
+                dateDisplay.style.transform = 'translateY(-5px)';
+                
+                setTimeout(() => {
+                    dateDisplay.textContent = station.date;
+                    dateDisplay.style.opacity = '1';
+                    dateDisplay.style.transform = 'translateY(0)';
+                }, 150);
+                
+                // Pause current audio and switch source
+                if (recapAudio) {
+                    const wasPlaying = !recapAudio.paused;
+                    recapAudio.pause();
+                    recapAudio.src = station.file;
+                    recapAudio.load();
+                    
+                    // If it was playing, resume after a brief moment
+                    if (wasPlaying) {
+                        setTimeout(() => {
+                            recapAudio.play().catch(e => console.log('Autoplay prevented'));
+                        }, 200);
+                    }
+                }
+                
+                // Add brief glow effect to dial
+                dialWrapper.style.filter = 'drop-shadow(0 0 25px rgba(0, 247, 194, 0.9))';
+                setTimeout(() => {
+                    dialWrapper.style.filter = 'drop-shadow(0 0 15px rgba(0, 247, 194, 0.4))';
+                }, 300);
+            }
+            
+            function updateTunerIndicator(stationIndex) {
+                const tunerIndicator = document.getElementById('tuner-indicator');
+                const scaleMarkers = document.querySelectorAll('.scale-marker.scale-major');
+                const tunerGlass = document.querySelector('.tuner-glass');
+                
+                if (!tunerIndicator || !tunerGlass) return;
+                
+                // Remove active class from all markers
+                scaleMarkers.forEach(marker => marker.classList.remove('active'));
+                
+                // Calculate indicator position
+                // With 6 markers total, stations are at positions 1 and 4 (0-indexed)
+                // This places them closer to center
+                const tunerWidth = tunerGlass.offsetWidth;
+                const padding = 20;
+                const availableWidth = tunerWidth - (2 * padding);
+                const markerSpacing = availableWidth / 5; // 5 gaps between 6 markers
+                
+                // Station 0 at position 1, Station 1 at position 4
+                const markerPositions = [1, 4];
+                const leftPosition = padding + (markerSpacing * markerPositions[stationIndex]);
+                
+                tunerIndicator.style.left = leftPosition + 'px';
+                
+                // Add active class to current station marker
+                if (scaleMarkers[stationIndex]) {
+                    scaleMarkers[stationIndex].classList.add('active');
+                }
+            }
+            
+            function getAngleFromEvent(e, centerX, centerY) {
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                const dx = clientX - centerX;
+                const dy = clientY - centerY;
+                let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+                if (angle < 0) angle += 360;
+                return angle;
+            }
+            
+            function findNearestStation(angle) {
+                let nearest = 0;
+                let minDiff = Math.abs(angle - recapStations[0].angle);
+                
+                for (let i = 1; i < recapStations.length; i++) {
+                    const diff = Math.abs(angle - recapStations[i].angle);
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        nearest = i;
+                    }
+                }
+                
+                return nearest;
+            }
+            
+            // Mouse/Touch drag handlers
+            function startDrag(e) {
+                e.preventDefault();
+                isDragging = true;
+                rotatingKnob.style.transition = 'none';
+                
+                const rect = dialWrapper.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                startAngle = getAngleFromEvent(e, centerX, centerY);
+            }
+            
+            function onDrag(e) {
+                if (!isDragging) return;
+                
+                const rect = dialWrapper.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                let angle = getAngleFromEvent(e, centerX, centerY);
+                
+                // Find nearest station and check if we're close enough to feel the "magnetic pull"
+                const nearestStation = findNearestStation(angle);
+                const nearestStationAngle = recapStations[nearestStation].angle;
+                const distanceToNearest = Math.abs(angle - nearestStationAngle);
+                const snapThreshold = 15; // degrees - within this range, station starts to "pull"
+                
+                // Highlight indicators based on proximity
+                updateIndicatorGlow(nearestStation, distanceToNearest, snapThreshold);
+                
+                // Apply subtle magnetic pull when close to a station
+                if (distanceToNearest < snapThreshold) {
+                    // Ease the angle toward the station (subtle magnetic effect)
+                    const pullStrength = 1 - (distanceToNearest / snapThreshold);
+                    const pullAmount = (nearestStationAngle - angle) * pullStrength * 0.3;
+                    angle += pullAmount;
+                }
+                
+                // Update knob rotation in real-time (no transition during drag)
+                rotatingKnob.style.transition = 'none';
+                rotatingKnob.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+                currentAngle = angle;
+            }
+            
+            function updateIndicatorGlow(nearestStation, distance, threshold) {
+                const stationMarkers = document.querySelectorAll('.station-markers-svg line, .station-markers-svg circle');
+                const dialLabels = document.querySelectorAll('.dial-label');
+                
+                // Calculate glow intensity based on proximity (0 = far, 1 = at station)
+                const glowIntensity = Math.max(0, 1 - (distance / threshold));
+                
+                // Update marker glow
+                stationMarkers.forEach((marker, index) => {
+                    const markerStation = Math.floor(index / 2); // 2 elements per station (line + circle)
+                    
+                    if (markerStation === nearestStation && glowIntensity > 0) {
+                        // Glow the nearby station
+                        marker.style.filter = `drop-shadow(0 0 ${8 * glowIntensity}px rgba(0, 247, 194, ${glowIntensity}))`;
+                        marker.style.opacity = 0.5 + (0.5 * glowIntensity);
+                    } else {
+                        // Reset other stations
+                        marker.style.filter = 'none';
+                        marker.style.opacity = markerStation === 0 ? '0.9' : '0.5';
+                    }
+                });
+                
+                // Update label glow
+                dialLabels.forEach((label, index) => {
+                    if (index === nearestStation && glowIntensity > 0) {
+                        // Brighten and glow the nearby label
+                        label.style.textShadow = `0 0 ${12 * glowIntensity}px rgba(0, 247, 194, ${glowIntensity}), 0 0 ${5 * glowIntensity}px rgba(0, 247, 194, 1)`;
+                        label.style.opacity = 0.6 + (0.4 * glowIntensity);
+                    } else {
+                        // Reset label
+                        label.style.textShadow = '0 0 8px rgba(0, 247, 194, 0.8), 0 0 3px rgba(0, 247, 194, 1)';
+                        label.style.opacity = index === 0 ? '1' : '0.6';
+                    }
+                });
+            }
+            
+            function endDrag() {
+                if (!isDragging) return;
+                isDragging = false;
+                
+                // Re-enable transition for smooth snap
+                rotatingKnob.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                
+                // Snap to nearest station
+                const nearestStation = findNearestStation(currentAngle);
+                
+                // Subtle haptic feedback on mobile devices
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(20); // 20ms vibration
+                }
+                
+                updateStation(nearestStation);
+                
+                // After snapping, set the final glow state for the selected station
+                setTimeout(() => {
+                    updateIndicatorGlow(nearestStation, 0, 15); // 0 distance = full glow
+                }, 100);
+            }
+            
+            // Click to cycle through stations
+            dialWrapper.addEventListener('click', function(e) {
+                // Small threshold to distinguish click from drag
+                const clickThreshold = 5; // pixels
+                
+                if (!isDragging) {
+                    const nextStation = (currentStation + 1) % recapStations.length;
+                    updateStation(nextStation);
+                    
+                    // Update glow for the new station
+                    setTimeout(() => {
+                        updateIndicatorGlow(nextStation, 0, 15);
+                    }, 100);
+                    
+                    // Haptic feedback for click too
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(20);
+                    }
+                }
+            });
+            
+            // Desktop drag
+            dialWrapper.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', endDrag);
+            
+            // Mobile touch
+            dialWrapper.addEventListener('touchstart', startDrag, { passive: false });
+            document.addEventListener('touchmove', onDrag, { passive: false });
+            document.addEventListener('touchend', endDrag);
+            
+            // Initialize date display transition and current station
+            dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            dialWrapper.setAttribute('data-current-station', '0'); // Start at station 0
+            
+            // Initialize tuner indicator position
+            setTimeout(() => {
+                updateTunerIndicator(0);
+            }, 100);
+            
+            // Add click handlers to clickable scale markers
+            const clickableMarkers = document.querySelectorAll('.scale-marker.scale-clickable');
+            clickableMarkers.forEach(marker => {
+                marker.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const stationIndex = parseInt(this.getAttribute('data-station'));
+                    if (!isNaN(stationIndex) && stationIndex !== currentStation) {
+                        updateStation(stationIndex);
+                        
+                        // Update glow for the new station
+                        setTimeout(() => {
+                            updateIndicatorGlow(stationIndex, 0, 15);
+                        }, 100);
+                        
+                        // Haptic feedback
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(20);
+                        }
+                    }
+                });
+                
+                // Add hover effect for touch devices
+                marker.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(1.05)';
+                }, { passive: true });
+                
+                marker.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                }, { passive: true });
+            });
         });
 
         // Audio Summary Toggle Functionality with Enhanced Animations (Tablet/Mobile Only)

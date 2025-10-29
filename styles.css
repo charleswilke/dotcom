@@ -1973,29 +1973,15 @@ html {
     z-index: 2;
 }
 
-/* Staggered content animations for tablets/mobile */
+/* Simplified content animations for tablets/mobile */
 @media (max-width: 1024px) {
     .audio-summary-content {
-        transform: translateY(20px);
         opacity: 0;
-        transition: all 0.5s ease 0.2s;
+        transition: opacity 0.3s ease;
     }
     
     .audio-summary-card.expanded .audio-summary-content {
-        transform: translateY(0);
         opacity: 1;
-    }
-    
-    .audio-summary-card.expanded .audio-summary-left {
-        animation: slideInFromLeft 0.6s ease 0.3s both;
-    }
-    
-    .audio-summary-card.expanded .audio-summary-right {
-        animation: slideInFromRight 0.6s ease 0.5s both;
-    }
-    
-    .audio-summary-card.expanded .audio-summary-meta {
-        animation: fadeInUp 0.6s ease 0.7s both;
     }
 }
 
@@ -2098,18 +2084,16 @@ html {
         border-color: transparent;
         margin-top: -0.5rem;
         overflow: hidden;
-        transform: scaleY(0) perspective(1000px) rotateX(-90deg);
-        filter: blur(2px);
-        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
     }
     
     .audio-summary-card.expanded {
         max-height: 300px;
         opacity: 1;
         margin-top: 0;
-        transform: scaleY(1) perspective(1000px) rotateX(0deg);
-        filter: blur(0px);
-        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        transform: translateY(0);
+        transition: all 0.3s ease;
     }
 }
 

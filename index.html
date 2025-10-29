@@ -185,13 +185,17 @@
                                                 
                                                 <!-- Fixed station markers (don't rotate) -->
                                                 <svg class="station-markers-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                                    <!-- October 2024 at 45° (upper right) -->
+                                                    <!-- October 2025 at 45° (upper right) -->
                                                     <line x1="141.4" y1="58.6" x2="132.2" y2="67.8" stroke="#00f7c2" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
                                                     <circle cx="145.7" cy="54.3" r="3.5" fill="#00f7c2" opacity="0.9"/>
                                                     
-                                                    <!-- Aug-Sept 2024 at 135° (lower right) -->
+                                                    <!-- Aug-Sept 2025 at 135° (lower right) -->
                                                     <line x1="141.4" y1="141.4" x2="132.2" y2="132.2" stroke="#00f7c2" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
                                                     <circle cx="145.7" cy="145.7" r="3" fill="#00f7c2" opacity="0.5"/>
+                                                    
+                                                    <!-- H2 2024 at 225° (lower left) -->
+                                                    <line x1="58.6" y1="141.4" x2="67.8" y2="132.2" stroke="#00f7c2" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+                                                    <circle cx="54.3" cy="145.7" r="2.5" fill="#00f7c2" opacity="0.3"/>
                                                 </svg>
                                             </div>
                                         </div>
@@ -202,8 +206,9 @@
                                                 <div class="tuner-indicator" id="tuner-indicator"></div>
                                                 <div class="tuner-scale">
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable" data-period="Aug-Sep '25" data-station="0"><span class="marker-label">AUG-SEP '25</span></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="H2 '24" data-station="2"><span class="marker-label">H2 '24</span></div>
                                                     <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="Aug-Sep '25" data-station="0"><span class="marker-label">AUG-SEP '25</span></div>
                                                     <div class="scale-marker scale-minor"></div>
                                                     <div class="scale-marker scale-major scale-clickable" data-period="Oct '25" data-station="1"><span class="marker-label">OCT '25</span></div>
                                                     <div class="scale-marker scale-minor"></div>
@@ -218,10 +223,10 @@
                                 <div class="audio-summary-meta">
                                     <span class="summary-coverage">Recap Podcast</span>
                                     <span class="summary-separator">•</span>
-                                    <span class="summary-date" id="current-recap-date">Aug-Sept 2025</span>
+                                    <span class="summary-date" id="current-recap-date">October 2025</span>
                                 </div>
                                 <div class="audio-summary-player">
-                                    <audio id="recap-audio" class="custom-audio" src="audio/aug-sept-substack-summary.mp3" preload="metadata" style="display:none;"></audio>
+                                    <audio id="recap-audio" class="custom-audio" src="audio/oct-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
                                     <div class="custom-audio-player">
                                         <button class="audio-btn audio-summary-btn" aria-label="Play/Pause Audio Summary">
                                             <span class="audio-icon">▶</span>
@@ -843,6 +848,12 @@
                     date: 'October 2025',
                     file: 'audio/oct-substack-recap.mp3',
                     label: 'OCT \'25'
+                },
+                {
+                    angle: 225,
+                    date: 'H2 2024',
+                    file: 'audio/h2-2024-substack-recap.mp3',
+                    label: 'H2 \'24'
                 }
             ];
             
@@ -850,17 +861,23 @@
             const tuningSounds = [
                 'audio/radio_tuning1.mp3',
                 'audio/radio_tuning2.mp3',
-                'audio/radio_tuning3.mp3'
+                'audio/radio_tuning3.mp3',
+                'audio/radio_tuning4.mp3',
+                'audio/radio_tuning5.mp3',
+                'audio/radio_tuning6.mp3',
+                'audio/radio_tuning7.mp3',
+                'audio/radio_tuning8.mp3',
+                'audio/radio_tuning9.mp3'
             ];
             
-            let currentStation = 0;
+            let currentStation = 1; // Start at station 1 (Oct '25)
             const rotatingKnob = document.getElementById('rotating-knob');
             const dialWrapper = document.querySelector('.time-dial-wrapper');
             const dateDisplay = document.getElementById('current-recap-date');
             const recapAudio = document.getElementById('recap-audio');
             let isDragging = false;
             let startAngle = 0;
-            let currentAngle = 0;
+            let currentAngle = 135; // Oct '25 is at 135°
             
             // Create audio element for tuning sounds
             const tuningAudio = new Audio();
@@ -938,22 +955,24 @@
                 scaleMarkers.forEach(marker => marker.classList.remove('active'));
                 
                 // Calculate indicator position
-                // With 6 markers total, stations are at positions 1 and 4 (0-indexed)
-                // This places them closer to center
+                // With 7 markers total (3 major, 4 minor), stations are at positions 1, 3, and 5
                 const tunerWidth = tunerGlass.offsetWidth;
                 const padding = 20;
                 const availableWidth = tunerWidth - (2 * padding);
-                const markerSpacing = availableWidth / 5; // 5 gaps between 6 markers
+                const markerSpacing = availableWidth / 6; // 6 gaps between 7 markers
                 
-                // Station 0 at position 1, Station 1 at position 4
-                const markerPositions = [1, 4];
+                // Station 0 (Aug-Sep) at position 3, Station 1 (Oct) at position 5, Station 2 (H2) at position 1
+                const markerPositions = [3, 5, 1];
                 const leftPosition = padding + (markerSpacing * markerPositions[stationIndex]);
                 
                 tunerIndicator.style.left = leftPosition + 'px';
                 
                 // Add active class to current station marker
-                if (scaleMarkers[stationIndex]) {
-                    scaleMarkers[stationIndex].classList.add('active');
+                // scaleMarkers is a NodeList of only .scale-major elements
+                // They appear in DOM order: H2 '24 (station 2), Aug-Sep '25 (station 0), Oct '25 (station 1)
+                const markerIndexMap = [1, 2, 0]; // Maps stationIndex to scaleMarkers index
+                if (scaleMarkers[markerIndexMap[stationIndex]]) {
+                    scaleMarkers[markerIndexMap[stationIndex]].classList.add('active');
                 }
             }
             
@@ -1032,18 +1051,23 @@
                 // Calculate glow intensity based on proximity (0 = far, 1 = at station)
                 const glowIntensity = Math.max(0, 1 - (distance / threshold));
                 
+                // SVG marker order: Oct '25 (station 1), Aug-Sep '25 (station 0), H2 '24 (station 2)
+                // Maps SVG marker index to station number
+                const svgMarkerToStation = [1, 1, 0, 0, 2, 2]; // Each station has 2 SVG elements (line + circle)
+                const defaultOpacities = [0.9, 0.9, 0.5, 0.5, 0.3, 0.3]; // Default opacity for each SVG element
+                
                 // Update marker glow
                 stationMarkers.forEach((marker, index) => {
-                    const markerStation = Math.floor(index / 2); // 2 elements per station (line + circle)
+                    const markerStation = svgMarkerToStation[index];
                     
                     if (markerStation === nearestStation && glowIntensity > 0) {
                         // Glow the nearby station
                         marker.style.filter = `drop-shadow(0 0 ${8 * glowIntensity}px rgba(0, 247, 194, ${glowIntensity}))`;
                         marker.style.opacity = 0.5 + (0.5 * glowIntensity);
                     } else {
-                        // Reset other stations
+                        // Reset other stations to their default opacity
                         marker.style.filter = 'none';
-                        marker.style.opacity = markerStation === 0 ? '0.9' : '0.5';
+                        marker.style.opacity = defaultOpacities[index];
                     }
                 });
                 
@@ -1117,11 +1141,14 @@
             
             // Initialize date display transition and current station
             dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            dialWrapper.setAttribute('data-current-station', '0'); // Start at station 0
+            dialWrapper.setAttribute('data-current-station', '1'); // Start at station 1 (Oct '25)
+            
+            // Initialize knob rotation to Oct '25 position
+            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(135deg)';
             
             // Initialize tuner indicator position
             setTimeout(() => {
-                updateTunerIndicator(0);
+                updateTunerIndicator(1);
             }, 100);
             
             // Add click handlers to clickable scale markers

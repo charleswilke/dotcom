@@ -885,6 +885,9 @@
                 // Update data attribute for label highlighting
                 dialWrapper.setAttribute('data-current-station', stationIndex);
                 
+                // Enable bouncy transition for station changes
+                rotatingKnob.style.transition = 'transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
+                
                 // Rotate the entire knob image
                 rotatingKnob.style.transform = `translate(-50%, -50%) rotate(${station.angle}deg)`;
                 currentAngle = station.angle;
@@ -1062,8 +1065,8 @@
                 if (!isDragging) return;
                 isDragging = false;
                 
-                // Re-enable transition for smooth snap
-                rotatingKnob.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                // Re-enable transition for smooth snap with overshoot
+                rotatingKnob.style.transition = 'transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
                 
                 // Snap to nearest station
                 const nearestStation = findNearestStation(currentAngle);

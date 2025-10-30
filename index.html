@@ -185,21 +185,21 @@
                                                 
                                                 <!-- Fixed station markers (don't rotate) -->
                                                 <svg class="station-markers-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                                    <!-- October 2025 at 45° (upper right) -->
-                                                    <line x1="141.4" y1="58.6" x2="132.2" y2="67.8" stroke="#00f7c2" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
-                                                    <circle cx="145.7" cy="54.3" r="3.5" fill="#00f7c2" opacity="0.9"/>
+                                                    <!-- H1 2024 at 45° (upper right) - oldest -->
+                                                    <line x1="141.4" y1="58.6" x2="132.2" y2="67.8" stroke="#00f7c2" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+                                                    <circle cx="145.7" cy="54.3" r="2" fill="#00f7c2" opacity="0.2"/>
                                                     
-                                                    <!-- Q3 2025 at 135° (lower right) -->
-                                                    <line x1="141.4" y1="141.4" x2="132.2" y2="132.2" stroke="#00f7c2" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
-                                                    <circle cx="145.7" cy="145.7" r="3" fill="#00f7c2" opacity="0.5"/>
+                                                    <!-- H2 2024 at 135° (lower right) -->
+                                                    <line x1="141.4" y1="141.4" x2="132.2" y2="132.2" stroke="#00f7c2" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+                                                    <circle cx="145.7" cy="145.7" r="2.5" fill="#00f7c2" opacity="0.3"/>
                                                     
-                                                    <!-- H2 2024 at 225° (lower left) -->
-                                                    <line x1="58.6" y1="141.4" x2="67.8" y2="132.2" stroke="#00f7c2" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
-                                                    <circle cx="54.3" cy="145.7" r="2.5" fill="#00f7c2" opacity="0.3"/>
+                                                    <!-- Q3 2025 at 225° (lower left) -->
+                                                    <line x1="58.6" y1="141.4" x2="67.8" y2="132.2" stroke="#00f7c2" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+                                                    <circle cx="54.3" cy="145.7" r="3" fill="#00f7c2" opacity="0.5"/>
                                                     
-                                                    <!-- H1 2024 at 315° (upper left) -->
-                                                    <line x1="58.6" y1="58.6" x2="67.8" y2="67.8" stroke="#00f7c2" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
-                                                    <circle cx="54.3" cy="54.3" r="2" fill="#00f7c2" opacity="0.2"/>
+                                                    <!-- October 2025 at 315° (upper left) - newest -->
+                                                    <line x1="58.6" y1="58.6" x2="67.8" y2="67.8" stroke="#00f7c2" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+                                                    <circle cx="54.3" cy="54.3" r="3.5" fill="#00f7c2" opacity="0.9"/>
                                                 </svg>
                                             </div>
                                         </div>
@@ -844,25 +844,25 @@
         document.addEventListener('DOMContentLoaded', function() {
             const recapStations = [
                 {
-                    angle: 45,
+                    angle: 225,
                     date: 'Q3 2025',
                     file: 'audio/aug-sept-substack-summary.mp3',
                     label: 'Q3 \'25'
                 },
                 {
-                    angle: 135,
+                    angle: 315,
                     date: 'October 2025',
                     file: 'audio/oct-substack-recap.mp3',
                     label: 'OCT \'25'
                 },
                 {
-                    angle: 225,
+                    angle: 135,
                     date: 'H2 2024',
                     file: 'audio/h2-2024-substack-recap.mp3',
                     label: 'H2 \'24'
                 },
                 {
-                    angle: 315,
+                    angle: 45,
                     date: 'H1 2024',
                     file: 'audio/h1-2024-substack-recap.mp3',
                     label: 'H1 \'24'
@@ -889,7 +889,7 @@
             const recapAudio = document.getElementById('recap-audio');
             let isDragging = false;
             let startAngle = 0;
-            let currentAngle = 135; // Oct '25 is at 135°
+            let currentAngle = 315; // Oct '25 is at 315°
             
             // Create audio element for tuning sounds
             const tuningAudio = new Audio();
@@ -988,6 +988,52 @@
                 }
             }
             
+            function updateTunerIndicatorByAngle(angle) {
+                const tunerIndicator = document.getElementById('tuner-indicator');
+                const tunerGlass = document.querySelector('.tuner-glass');
+                
+                if (!tunerIndicator || !tunerGlass) return;
+                
+                // Map the knob angle to the tuner display (left to right)
+                // Station angles: H1'24=45°, H2'24=135°, Q3'25=225°, Oct'25=315°
+                // Tuner wraps around: 315°-360° and 0°-45° both map to the full scale
+                
+                const tunerWidth = tunerGlass.offsetWidth;
+                const padding = 20;
+                const availableWidth = tunerWidth - (2 * padding);
+                
+                // Normalize angle to 0-360 range
+                let normalizedAngle = angle % 360;
+                if (normalizedAngle < 0) normalizedAngle += 360;
+                
+                // Map angle to progress (0-1) across the tuner scale
+                // The tuner shows a continuous range wrapping around the full 360°
+                // We want the full tuner width to represent the full rotation
+                let progress;
+                
+                if (normalizedAngle >= 45 && normalizedAngle <= 315) {
+                    // Main range: 45° to 315° maps to left-to-right across tuner
+                    progress = (normalizedAngle - 45) / 270;
+                } else if (normalizedAngle > 315) {
+                    // Between 315° and 360°: wraps back toward left side
+                    // Map 315-360 (45° range) to continue past 1.0 and wrap to 0
+                    const degreesOver = normalizedAngle - 315;
+                    const wrapProgress = degreesOver / 90; // 90° total wrap zone (315-360 + 0-45)
+                    progress = 1 + (wrapProgress * 0.167); // Go slightly past 1.0, then wrap
+                    if (progress > 1.167) progress -= 1.167; // Wrap around
+                } else {
+                    // Between 0° and 45°: continuation from the wrap
+                    const degreesIn = normalizedAngle;
+                    progress = (degreesIn / 90) * 0.167; // Maps 0-45° to start of scale
+                }
+                
+                // Clamp progress between 0 and 1 to stay within tuner bounds
+                progress = Math.max(0, Math.min(1, progress));
+                
+                const leftPosition = padding + (availableWidth * progress);
+                tunerIndicator.style.left = leftPosition + 'px';
+            }
+            
             function getAngleFromEvent(e, centerX, centerY) {
                 const clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 const clientY = e.clientY || (e.touches && e.touches[0].clientY);
@@ -1054,6 +1100,9 @@
                 rotatingKnob.style.transition = 'none';
                 rotatingKnob.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
                 currentAngle = angle;
+                
+                // Update tuner needle position in real-time as knob is dragged
+                updateTunerIndicatorByAngle(angle);
             }
             
             function updateIndicatorGlow(nearestStation, distance, threshold) {
@@ -1063,10 +1112,10 @@
                 // Calculate glow intensity based on proximity (0 = far, 1 = at station)
                 const glowIntensity = Math.max(0, 1 - (distance / threshold));
                 
-                // SVG marker order: Oct '25 (station 1), Q3 '25 (station 0), H2 '24 (station 2), H1 '24 (station 3)
+                // SVG marker order: H1 '24 (station 3), H2 '24 (station 2), Q3 '25 (station 0), Oct '25 (station 1)
                 // Maps SVG marker index to station number
-                const svgMarkerToStation = [1, 1, 0, 0, 2, 2, 3, 3]; // Each station has 2 SVG elements (line + circle)
-                const defaultOpacities = [0.9, 0.9, 0.5, 0.5, 0.3, 0.3, 0.2, 0.2]; // Default opacity for each SVG element
+                const svgMarkerToStation = [3, 3, 2, 2, 0, 0, 1, 1]; // Each station has 2 SVG elements (line + circle)
+                const defaultOpacities = [0.2, 0.2, 0.3, 0.3, 0.5, 0.5, 0.9, 0.9]; // Default opacity for each SVG element
                 
                 // Update marker glow
                 stationMarkers.forEach((marker, index) => {
@@ -1120,13 +1169,18 @@
                 }, 100);
             }
             
-            // Click to cycle through stations
+            // Click to cycle through stations chronologically
             dialWrapper.addEventListener('click', function(e) {
                 // Small threshold to distinguish click from drag
                 const clickThreshold = 5; // pixels
                 
                 if (!isDragging) {
-                    const nextStation = (currentStation + 1) % recapStations.length;
+                    // Chronological order: Oct '25 (1) → H1 '24 (3) → H2 '24 (2) → Q3 '25 (0) → Oct '25 (1)
+                    const chronologicalOrder = [1, 3, 2, 0]; // Station indices in chronological order
+                    const currentIndexInOrder = chronologicalOrder.indexOf(currentStation);
+                    const nextIndexInOrder = (currentIndexInOrder + 1) % chronologicalOrder.length;
+                    const nextStation = chronologicalOrder[nextIndexInOrder];
+                    
                     updateStation(nextStation);
                     
                     // Update glow for the new station
@@ -1156,7 +1210,7 @@
             dialWrapper.setAttribute('data-current-station', '1'); // Start at station 1 (Oct '25)
             
             // Initialize knob rotation to Oct '25 position
-            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(135deg)';
+            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(315deg)';
             
             // Initialize tuner indicator position
             setTimeout(() => {

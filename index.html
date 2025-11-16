@@ -171,7 +171,9 @@
                         <div class="audio-summary-layout">
                             <div class="audio-summary-left">
                                 <div class="audio-summary-header">
-                                    <h4 class="audio-summary-title">Recently on Exploring L.ai.bor</h4>
+                                    <h4 class="audio-summary-title">
+                                        <span class="wood-letter">R</span><span class="wood-letter">e</span><span class="wood-letter">c</span><span class="wood-letter">e</span><span class="wood-letter">n</span><span class="wood-letter">t</span><span class="wood-letter">l</span><span class="wood-letter">y</span><span class="wood-letter">&nbsp;</span><span class="wood-letter">o</span><span class="wood-letter">n</span>&nbsp;<span class="wood-letter">E</span><span class="wood-letter">x</span><span class="wood-letter">p</span><span class="wood-letter">l</span><span class="wood-letter">o</span><span class="wood-letter">r</span><span class="wood-letter">i</span><span class="wood-letter">n</span><span class="wood-letter">g</span><span class="wood-letter">&nbsp;</span><span class="wood-letter">L</span><span class="wood-letter">.</span><span class="wood-letter">a</span><span class="wood-letter">i</span><span class="wood-letter">.</span><span class="wood-letter">b</span><span class="wood-letter">o</span><span class="wood-letter">r</span>
+                                    </h4>
                                 </div>
                                 
                                 <!-- Time Dial Control -->
@@ -912,6 +914,7 @@
             const dateDisplay = document.getElementById('current-recap-date');
             const recapAudio = document.getElementById('recap-audio');
             let isDragging = false;
+            let hasDragged = false;
             let startAngle = 0;
             let currentAngle = 300; // Oct '25 is at 300°
             
@@ -1086,6 +1089,7 @@
             function startDrag(e) {
                 e.preventDefault();
                 isDragging = true;
+                hasDragged = false; // Reset on start
                 rotatingKnob.style.transition = 'none';
                 
                 const rect = dialWrapper.getBoundingClientRect();
@@ -1096,6 +1100,8 @@
             
             function onDrag(e) {
                 if (!isDragging) return;
+                
+                hasDragged = true; // Mark that actual dragging occurred
                 
                 const rect = dialWrapper.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
@@ -1192,12 +1198,10 @@
                 }, 100);
             }
             
-            // Click to cycle through stations chronologically
+            // Click/Tap to cycle through stations chronologically
             dialWrapper.addEventListener('click', function(e) {
-                // Small threshold to distinguish click from drag
-                const clickThreshold = 5; // pixels
-                
-                if (!isDragging) {
+                // Only advance station if user didn't drag (just tapped/clicked)
+                if (!hasDragged) {
                     // Chronological order: Q3 '23 (0) → Q4 '23 (1) → H1 '24 (2) → H2 '24 (3) → Q3 '25 (4) → Oct '25 (5) → Q3 '23 (0)
                     const chronologicalOrder = [0, 1, 2, 3, 4, 5]; // Station indices in chronological order
                     const currentIndexInOrder = chronologicalOrder.indexOf(currentStation);
@@ -1211,11 +1215,14 @@
                         updateIndicatorGlow(nextStation, 0, 15);
                     }, 100);
                     
-                    // Haptic feedback for click too
+                    // Haptic feedback for click/tap
                     if ('vibrate' in navigator) {
                         navigator.vibrate(20);
                     }
                 }
+                
+                // Reset hasDragged flag after handling click
+                hasDragged = false;
             });
             
             // Desktop drag

@@ -2537,6 +2537,12 @@ html {
     pointer-events: none;
 }
 
+/* Staggered label positioning - alternating top and bottom */
+.scale-marker.label-top .marker-label {
+    bottom: auto;
+    top: 6px;
+}
+
 .scale-marker.scale-major.active .marker-label {
     color: rgba(0, 247, 194, 1);
     text-shadow: 0 0 8px rgba(0, 247, 194, 0.8), 0 0 3px rgba(0, 247, 194, 1);

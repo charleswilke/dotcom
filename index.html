@@ -185,21 +185,29 @@
                                                 
                                                 <!-- Fixed station markers (don't rotate) -->
                                                 <svg class="station-markers-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                                                    <!-- H1 2024 at 45° (upper right) - oldest -->
-                                                    <line x1="141.4" y1="58.6" x2="132.2" y2="67.8" stroke="#00f7c2" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
-                                                    <circle cx="145.7" cy="54.3" r="2" fill="#00f7c2" opacity="0.2"/>
+                                                    <!-- Q3 2023 at 0° (top) - oldest - OUTER -->
+                                                    <line x1="100" y1="30" x2="100" y2="20" stroke="#00f7c2" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+                                                    <circle cx="100" cy="16" r="2" fill="#00f7c2" opacity="0.2"/>
                                                     
-                                                    <!-- H2 2024 at 135° (lower right) -->
-                                                    <line x1="141.4" y1="141.4" x2="132.2" y2="132.2" stroke="#00f7c2" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
-                                                    <circle cx="145.7" cy="145.7" r="2.5" fill="#00f7c2" opacity="0.3"/>
+                                                    <!-- Q4 2023 at 60° (upper right) - INNER -->
+                                                    <line x1="149.3" y1="75" x2="143.3" y2="81" stroke="#00f7c2" stroke-width="2.2" stroke-linecap="round" opacity="0.3"/>
+                                                    <circle cx="139.9" cy="84.3" r="2.2" fill="#00f7c2" opacity="0.3"/>
                                                     
-                                                    <!-- Q3 2025 at 225° (lower left) -->
-                                                    <line x1="58.6" y1="141.4" x2="67.8" y2="132.2" stroke="#00f7c2" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
-                                                    <circle cx="54.3" cy="145.7" r="3" fill="#00f7c2" opacity="0.5"/>
+                                                    <!-- H1 2024 at 120° (lower right) - OUTER -->
+                                                    <line x1="149.3" y1="125" x2="159.3" y2="131" stroke="#00f7c2" stroke-width="2.4" stroke-linecap="round" opacity="0.4"/>
+                                                    <circle cx="162.6" cy="133.7" r="2.4" fill="#00f7c2" opacity="0.4"/>
                                                     
-                                                    <!-- October 2025 at 315° (upper left) - newest -->
-                                                    <line x1="58.6" y1="58.6" x2="67.8" y2="67.8" stroke="#00f7c2" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
-                                                    <circle cx="54.3" cy="54.3" r="3.5" fill="#00f7c2" opacity="0.9"/>
+                                                    <!-- H2 2024 at 180° (bottom) - INNER -->
+                                                    <line x1="100" y1="170" x2="100" y2="160" stroke="#00f7c2" stroke-width="2.6" stroke-linecap="round" opacity="0.5"/>
+                                                    <circle cx="100" cy="156" r="2.6" fill="#00f7c2" opacity="0.5"/>
+                                                    
+                                                    <!-- Q3 2025 at 240° (lower left) - OUTER -->
+                                                    <line x1="50.7" y1="125" x2="40.7" y2="131" stroke="#00f7c2" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+                                                    <circle cx="37.4" cy="133.7" r="3" fill="#00f7c2" opacity="0.7"/>
+                                                    
+                                                    <!-- October 2025 at 300° (upper left) - newest - INNER -->
+                                                    <line x1="50.7" y1="75" x2="56.7" y2="81" stroke="#00f7c2" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+                                                    <circle cx="60.1" cy="84.3" r="3.5" fill="#00f7c2" opacity="0.9"/>
                                                 </svg>
                                             </div>
                                         </div>
@@ -210,13 +218,17 @@
                                                 <div class="tuner-indicator" id="tuner-indicator"></div>
                                                 <div class="tuner-scale">
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable" data-period="H1 '24" data-station="3"><span class="marker-label">H1 '24</span></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="Q3 '23" data-station="0"><span class="marker-label">Q3 '23</span></div>
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable" data-period="H2 '24" data-station="2"><span class="marker-label">H2 '24</span></div>
+                                                    <div class="scale-marker scale-major scale-clickable label-top" data-period="Q4 '23" data-station="1"><span class="marker-label">Q4 '23</span></div>
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable" data-period="Q3 '25" data-station="0"><span class="marker-label">Q3 '25</span></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="H1 '24" data-station="2"><span class="marker-label">H1 '24</span></div>
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable" data-period="Oct '25" data-station="1"><span class="marker-label">OCT '25</span></div>
+                                                    <div class="scale-marker scale-major scale-clickable label-top" data-period="H2 '24" data-station="3"><span class="marker-label">H2 '24</span></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="Q3 '25" data-station="4"><span class="marker-label">Q3 '25</span></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable label-top" data-period="Oct '25" data-station="5"><span class="marker-label">OCT '25</span></div>
                                                     <div class="scale-marker scale-minor"></div>
                                                 </div>
                                                 <div class="tuner-reflection"></div>
@@ -844,28 +856,40 @@
         document.addEventListener('DOMContentLoaded', function() {
             const recapStations = [
                 {
-                    angle: 225,
-                    date: 'Q3 2025',
-                    file: 'audio/aug-sept-substack-summary.mp3',
-                    label: 'Q3 \'25'
+                    angle: 0,
+                    date: 'Q3 2023',
+                    file: 'audio/q3-2023-substack-recap.mp3',
+                    label: 'Q3 \'23'
                 },
                 {
-                    angle: 315,
-                    date: 'October 2025',
-                    file: 'audio/oct-substack-recap.mp3',
-                    label: 'OCT \'25'
+                    angle: 60,
+                    date: 'Q4 2023',
+                    file: 'audio/q4-2023-substack-recap.mp3',
+                    label: 'Q4 \'23'
                 },
                 {
-                    angle: 135,
+                    angle: 120,
+                    date: 'H1 2024',
+                    file: 'audio/h1-2024-substack-recap.mp3',
+                    label: 'H1 \'24'
+                },
+                {
+                    angle: 180,
                     date: 'H2 2024',
                     file: 'audio/h2-2024-substack-recap.mp3',
                     label: 'H2 \'24'
                 },
                 {
-                    angle: 45,
-                    date: 'H1 2024',
-                    file: 'audio/h1-2024-substack-recap.mp3',
-                    label: 'H1 \'24'
+                    angle: 240,
+                    date: 'Q3 2025',
+                    file: 'audio/aug-sept-substack-summary.mp3',
+                    label: 'Q3 \'25'
+                },
+                {
+                    angle: 300,
+                    date: 'October 2025',
+                    file: 'audio/oct-substack-recap.mp3',
+                    label: 'OCT \'25'
                 }
             ];
             
@@ -882,14 +906,14 @@
                 'audio/radio_tuning9.mp3'
             ];
             
-            let currentStation = 1; // Start at station 1 (Oct '25)
+            let currentStation = 5; // Start at station 5 (Oct '25)
             const rotatingKnob = document.getElementById('rotating-knob');
             const dialWrapper = document.querySelector('.time-dial-wrapper');
             const dateDisplay = document.getElementById('current-recap-date');
             const recapAudio = document.getElementById('recap-audio');
             let isDragging = false;
             let startAngle = 0;
-            let currentAngle = 315; // Oct '25 is at 315°
+            let currentAngle = 300; // Oct '25 is at 300°
             
             // Create audio element for tuning sounds
             const tuningAudio = new Audio();
@@ -967,24 +991,23 @@
                 scaleMarkers.forEach(marker => marker.classList.remove('active'));
                 
                 // Calculate indicator position
-                // With 9 markers total (4 major, 5 minor), stations are at positions 1, 3, 5, and 7
+                // With 13 markers total (6 major, 7 minor), stations are at positions 1, 3, 5, 7, 9, and 11
                 const tunerWidth = tunerGlass.offsetWidth;
                 const padding = 20;
                 const availableWidth = tunerWidth - (2 * padding);
-                const markerSpacing = availableWidth / 8; // 8 gaps between 9 markers
+                const markerSpacing = availableWidth / 12; // 12 gaps between 13 markers
                 
-                // Station 0 (Q3 '25) at position 5, Station 1 (Oct '25) at position 7, Station 2 (H2 '24) at position 3, Station 3 (H1 '24) at position 1
-                const markerPositions = [5, 7, 3, 1];
+                // Station 0 (Q3 '23) at position 1, Station 1 (Q4 '23) at position 3, Station 2 (H1 '24) at position 5, Station 3 (H2 '24) at position 7, Station 4 (Q3 '25) at position 9, Station 5 (Oct '25) at position 11
+                const markerPositions = [1, 3, 5, 7, 9, 11];
                 const leftPosition = padding + (markerSpacing * markerPositions[stationIndex]);
                 
                 tunerIndicator.style.left = leftPosition + 'px';
                 
                 // Add active class to current station marker
                 // scaleMarkers is a NodeList of only .scale-major elements
-                // They appear in DOM order: H1 '24 (station 3), H2 '24 (station 2), Q3 '25 (station 0), Oct '25 (station 1)
-                const markerIndexMap = [2, 3, 1, 0]; // Maps stationIndex to scaleMarkers index
-                if (scaleMarkers[markerIndexMap[stationIndex]]) {
-                    scaleMarkers[markerIndexMap[stationIndex]].classList.add('active');
+                // They appear in DOM order: Q3 '23 (station 0), Q4 '23 (station 1), H1 '24 (station 2), H2 '24 (station 3), Q3 '25 (station 4), Oct '25 (station 5)
+                if (scaleMarkers[stationIndex]) {
+                    scaleMarkers[stationIndex].classList.add('active');
                 }
             }
             
@@ -1175,8 +1198,8 @@
                 const clickThreshold = 5; // pixels
                 
                 if (!isDragging) {
-                    // Chronological order: Oct '25 (1) → H1 '24 (3) → H2 '24 (2) → Q3 '25 (0) → Oct '25 (1)
-                    const chronologicalOrder = [1, 3, 2, 0]; // Station indices in chronological order
+                    // Chronological order: Q3 '23 (0) → Q4 '23 (1) → H1 '24 (2) → H2 '24 (3) → Q3 '25 (4) → Oct '25 (5) → Q3 '23 (0)
+                    const chronologicalOrder = [0, 1, 2, 3, 4, 5]; // Station indices in chronological order
                     const currentIndexInOrder = chronologicalOrder.indexOf(currentStation);
                     const nextIndexInOrder = (currentIndexInOrder + 1) % chronologicalOrder.length;
                     const nextStation = chronologicalOrder[nextIndexInOrder];
@@ -1207,14 +1230,14 @@
             
             // Initialize date display transition and current station
             dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            dialWrapper.setAttribute('data-current-station', '1'); // Start at station 1 (Oct '25)
+            dialWrapper.setAttribute('data-current-station', '5'); // Start at station 5 (Oct '25)
             
             // Initialize knob rotation to Oct '25 position
-            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(315deg)';
+            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(300deg)';
             
             // Initialize tuner indicator position
             setTimeout(() => {
-                updateTunerIndicator(1);
+                updateTunerIndicator(5);
             }, 100);
             
             // Add click handlers to clickable scale markers

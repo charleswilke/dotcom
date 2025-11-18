@@ -2317,9 +2317,11 @@ html {
     border: 2px solid rgba(0, 247, 194, 0.3);
     border-radius: 8px;
     box-shadow: 
+        inset 3px 3px 8px rgba(0, 0, 0, 0.8),
+        inset -2px -2px 6px rgba(139, 90, 43, 0.3),
         inset 0 2px 8px rgba(0, 0, 0, 0.6),
         inset 0 -1px 4px rgba(0, 247, 194, 0.1),
-        0 4px 20px rgba(0, 247, 194, 0.2);
+        0 2px 8px rgba(0, 0, 0, 0.4);
     padding: 0.45rem 0.9rem;
     position: relative;
     width: 100%;
@@ -2330,9 +2332,12 @@ html {
 .audio-summary-player .custom-audio-player:hover {
     border-color: rgba(0, 247, 194, 0.5);
     box-shadow: 
+        inset 3px 3px 8px rgba(0, 0, 0, 0.8),
+        inset -2px -2px 6px rgba(139, 90, 43, 0.3),
         inset 0 2px 8px rgba(0, 0, 0, 0.6),
         inset 0 -1px 4px rgba(0, 247, 194, 0.15),
-        0 4px 25px rgba(0, 247, 194, 0.3);
+        0 2px 8px rgba(0, 0, 0, 0.5),
+        0 0 15px rgba(0, 247, 194, 0.2);
 }
 
 .audio-summary-player .custom-audio-player .audio-summary-btn,
@@ -2575,9 +2580,11 @@ html {
     border: 2px solid rgba(0, 247, 194, 0.3);
     border-radius: 8px;
     box-shadow: 
+        inset 3px 3px 8px rgba(0, 0, 0, 0.8),
+        inset -2px -2px 6px rgba(139, 90, 43, 0.3),
         inset 0 2px 8px rgba(0, 0, 0, 0.6),
         inset 0 -1px 4px rgba(0, 247, 194, 0.1),
-        0 4px 20px rgba(0, 247, 194, 0.2);
+        0 2px 8px rgba(0, 0, 0, 0.4);
     overflow: hidden;
 }
 
@@ -2727,24 +2734,32 @@ html {
     cursor: pointer;
     user-select: none;
     filter: 
-        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))
-        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))
-        drop-shadow(0 0 15px rgba(0, 247, 194, 0.4));
+        drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8))
+        drop-shadow(-1px -1px 2px rgba(139, 90, 43, 0.3));
     transition: filter 0.3s ease;
+    border-radius: 50%;
+    box-shadow: 
+        inset 2px 2px 6px rgba(0, 0, 0, 0.7),
+        inset -1px -1px 4px rgba(139, 90, 43, 0.25);
 }
 
 .time-dial-wrapper:hover {
     filter: 
-        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))
-        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))
-        drop-shadow(0 0 20px rgba(0, 247, 194, 0.6));
+        drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8))
+        drop-shadow(-1px -1px 2px rgba(139, 90, 43, 0.3))
+        drop-shadow(0 0 8px rgba(0, 247, 194, 0.4));
+    box-shadow: 
+        inset 2px 2px 6px rgba(0, 0, 0, 0.7),
+        inset -1px -1px 4px rgba(139, 90, 43, 0.25);
 }
 
 .time-dial-wrapper:active {
     filter: 
-        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))
-        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))
-        drop-shadow(0 0 25px rgba(0, 247, 194, 0.9));
+        drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.9))
+        drop-shadow(-1px -1px 2px rgba(139, 90, 43, 0.2));
+    box-shadow: 
+        inset 3px 3px 8px rgba(0, 0, 0, 0.8),
+        inset -1px -1px 3px rgba(139, 90, 43, 0.2);
 }
 
 /* Radio knob rotating image (with needle baked in) */

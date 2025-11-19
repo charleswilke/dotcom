@@ -621,9 +621,9 @@ section.production-header.spotlight-production p {
 }
 
 .section-title:hover {
-    text-shadow: none;
-    transform: scale(1.02);
-    animation: glitch-blocky 0.28s steps(1, end);
+    text-shadow: none !important;
+    transform: none !important;
+    animation: none !important;
 }
 
 .section-title::after {
@@ -4695,9 +4695,9 @@ section.production-header.alice p {
 }
 
 .faq-section .section-title:hover {
-    text-shadow: none !important;
-    transform: none !important;
-    animation: none !important;
+    text-shadow: none;
+    transform: scale(1.02);
+    animation: glitch-blocky 0.28s steps(1, end);
 }
 
 /* FAQ heading mobile/desktop toggle */

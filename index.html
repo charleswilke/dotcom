@@ -94,13 +94,13 @@
                         <p>Full show coverage with AI-assisted projections for UNO</p>
                     </div>
                 </a> 
-                <a href="https://fellowvector.com" target="_blank" rel="noopener noreferrer" class="showcase-item">
-                    <img src="images/fv1_web.jpg" alt="AI Design">
+                <div class="showcase-item" id="mixtapeTile">
+                    <img src="audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg" alt="Exploring L.A.I.bor Mixtape">
                     <div class="showcase-caption">
-                        <h3>AI Deployment Services</h3>
-                        <p>Integrating AI into business processes and products</p>
+                        <h3>Exploring L.AI.bor Mixtape</h3>
+                        <p>Six tracks inspired by the Substack series</p>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     </section>
@@ -419,6 +419,46 @@
             <div class="lightbox-nav">
                 <button class="prev-btn" aria-label="Previous image">❮</button>
                 <button class="next-btn" aria-label="Next image">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mixtape Lightbox -->
+    <div class="lightbox mixtape-lightbox" id="mixtapeLightbox">
+        <span class="lightbox-close" id="mixtapeClose">&times;</span>
+        <div class="mixtape-content">
+            <div class="mixtape-left-section">
+                <div class="mixtape-cover-container">
+                    <img src="audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg" alt="Mixtape Cover" class="mixtape-cover">
+                </div>
+                <div class="mixtape-player-container">
+                    <div class="mixtape-track-visualizer">
+                        <canvas id="mixtapeVisualizer" class="audio-visualizer"></canvas>
+                        <div class="mixtape-current-track">Select a track...</div>
+                    </div>
+                    
+                    <div class="custom-audio-player mixtape-audio-controls">
+                        <button id="mixtapePrev" class="mixtape-nav-btn" aria-label="Previous Track">⏮</button>
+                        <button id="mixtapePlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
+                        <button id="mixtapeNext" class="mixtape-nav-btn" aria-label="Next Track">⏭</button>
+                        <div class="audio-progress-container" id="mixtapeProgressContainer">
+                            <div class="audio-progress-bar">
+                                <div class="audio-progress" id="mixtapeProgressBar"></div>
+                            </div>
+                        </div>
+                        <span class="audio-time"><span id="mixtapeTime">0:00</span></span>
+                    </div>
+                    <audio id="mixtapeAudio" class="custom-audio" preload="metadata"></audio>
+                </div>
+            </div>
+            
+            <div class="mixtape-right-section">
+                <h2 class="mixtape-title">Exploring L.AI.bor Mixtape</h2>
+                <div class="mixtape-playlist">
+                    <ul id="mixtapeTrackList">
+                        <!-- Tracks will be populated by JS -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -1753,6 +1793,9 @@
 
           // For each custom audio player on the page
           document.querySelectorAll('.custom-audio-player').forEach(function(player) {
+            // Skip the mixtape player - it has its own dedicated handler
+            if (player.classList.contains('mixtape-audio-controls')) return;
+            
             // Find the closest audio element (either by class or previous sibling)
             let audio = player.parentElement.querySelector('audio.custom-audio') || player.parentElement.querySelector('audio');
             if (!audio) return;
@@ -1905,6 +1948,424 @@
                 astroLink.addEventListener('click', function(e) {
                     e.preventDefault();
                     openLightbox('images/astro-justhappy2behere.png');
+                });
+            }
+        });
+
+        // Mixtape Lightbox Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const tracks = [
+                { title: 'Future In Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3' },
+                { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3' },
+                { title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3' },
+                { title: 'Hypnotic Crimes', file: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp3' },
+                { title: 'Rubicon\'d', file: 'audio/exploring-laibor-mixtape/rubicon-d.mp3' },
+                { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3' }
+            ];
+
+            const lightbox = document.getElementById('mixtapeLightbox');
+            const tile = document.getElementById('mixtapeTile');
+            const closeBtn = document.getElementById('mixtapeClose');
+            const audio = document.getElementById('mixtapeAudio');
+            const trackList = document.getElementById('mixtapeTrackList');
+            const trackDisplay = document.querySelector('.mixtape-current-track');
+            const prevBtn = document.getElementById('mixtapePrev');
+            const nextBtn = document.getElementById('mixtapeNext');
+            const playPauseBtn = document.getElementById('mixtapePlayPause');
+            const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
+            const progressBar = document.getElementById('mixtapeProgressBar');
+            const progressContainer = document.getElementById('mixtapeProgressContainer');
+            const timeDisplay = document.getElementById('mixtapeTime');
+            const visualizerCanvas = document.getElementById('mixtapeVisualizer');
+            
+            let currentIndex = 0;
+            
+            // Audio Visualizer Setup
+            // Uses Web Audio API when served from localhost/server, simulated when running from file://
+            let animationId = null;
+            let isPlaying = false;
+            let audioContext = null;
+            let analyser = null;
+            let dataArray = null;
+            let useRealAnalyser = false;
+            let barHeights = new Array(12).fill(0);
+            const isLocalFile = window.location.protocol === 'file:';
+            
+            function initAudioContext() {
+                if (audioContext || isLocalFile) return; // Skip for file:// URLs
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    analyser = audioContext.createAnalyser();
+                    analyser.fftSize = 128;
+                    analyser.smoothingTimeConstant = 0.7;
+                    dataArray = new Uint8Array(analyser.frequencyBinCount);
+                    
+                    const source = audioContext.createMediaElementSource(audio);
+                    source.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    useRealAnalyser = true;
+                    console.log('Audio visualizer: using real frequency analysis');
+                } catch (e) {
+                    console.warn('Audio visualizer: falling back to simulation', e);
+                    useRealAnalyser = false;
+                }
+            }
+            
+            function drawVisualizer() {
+                if (!visualizerCanvas) return;
+                
+                const ctx = visualizerCanvas.getContext('2d');
+                const width = visualizerCanvas.width;
+                const height = visualizerCanvas.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                const barCount = 12;
+                const barWidth = 3;
+                const barGap = 2;
+                const maxBarHeight = height * 0.8;
+                const centerY = height / 2;
+                
+                const titleWidth = trackDisplay ? trackDisplay.offsetWidth : 150;
+                const centerX = width / 2;
+                const startOffset = titleWidth / 2 + 12;
+                
+                // Get frequency data if using real analyser
+                if (useRealAnalyser && analyser && isPlaying) {
+                    analyser.getByteFrequencyData(dataArray);
+                }
+                
+                for (let i = 0; i < barCount; i++) {
+                    let targetHeight;
+                    
+                    if (useRealAnalyser && dataArray && isPlaying) {
+                        // Real audio: map to frequency bins (focus on bass and mids)
+                        const binIndex = Math.floor((i / barCount) * (dataArray.length * 0.6));
+                        const value = dataArray[binIndex] || 0;
+                        targetHeight = (value / 255);
+                    } else if (isPlaying) {
+                        // Simulated: organic-feeling random animation
+                        if (Math.random() < 0.12) {
+                            targetHeight = Math.random() * 0.7 + 0.15;
+                        } else {
+                            targetHeight = barHeights[i] + (Math.random() - 0.5) * 0.1;
+                        }
+                        targetHeight = Math.max(0.05, Math.min(0.85, targetHeight));
+                    } else {
+                        targetHeight = 0;
+                    }
+                    
+                    // Smooth interpolation
+                    const smoothing = useRealAnalyser ? 0.35 : 0.18;
+                    barHeights[i] += (targetHeight - barHeights[i]) * smoothing;
+                    
+                    const barHeight = barHeights[i] * maxBarHeight;
+                    
+                    // Colors - teal gradient with intensity
+                    const hue = 168 - (i / barCount) * 25;
+                    const intensity = barHeights[i];
+                    const saturation = 75 + intensity * 25;
+                    const lightness = 40 + intensity * 20;
+                    
+                    ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`;
+                    ctx.shadowColor = `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`;
+                    ctx.shadowBlur = 6 + intensity * 4;
+                    
+                    // Left side bars (mirrored)
+                    const leftX = centerX - startOffset - (i * (barWidth + barGap)) - barWidth;
+                    ctx.fillRect(leftX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+                    
+                    // Right side bars
+                    const rightX = centerX + startOffset + (i * (barWidth + barGap));
+                    ctx.fillRect(rightX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+                }
+                
+                ctx.shadowBlur = 0;
+                animationId = requestAnimationFrame(drawVisualizer);
+            }
+            
+            function startVisualizer() {
+                isPlaying = true;
+                
+                // Only try Web Audio API if not running from file://
+                if (!audioContext && !isLocalFile) {
+                    initAudioContext();
+                }
+                if (audioContext && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
+                if (!animationId) {
+                    drawVisualizer();
+                }
+            }
+            
+            function stopVisualizer() {
+                isPlaying = false;
+                setTimeout(() => {
+                    if (!isPlaying && animationId) {
+                        cancelAnimationFrame(animationId);
+                        animationId = null;
+                        if (visualizerCanvas) {
+                            const ctx = visualizerCanvas.getContext('2d');
+                            ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+                        }
+                    }
+                }, 500);
+            }
+
+            // Format time helper
+            function formatTime(sec) {
+                if (isNaN(sec)) return '0:00';
+                const m = Math.floor(sec / 60);
+                const s = Math.floor(sec % 60);
+                return m + ':' + (s < 10 ? '0' : '') + s;
+            }
+
+            // Populate Playlist
+            if (trackList && tracks.length > 0) {
+                tracks.forEach((track, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'mixtape-track-item';
+                    li.innerHTML = `<span class="track-number">${index + 1}</span> ${track.title}`;
+                    li.addEventListener('click', () => {
+                        loadTrack(index);
+                        playTrack();
+                    });
+                    trackList.appendChild(li);
+                });
+            }
+
+            function loadTrack(index) {
+                currentIndex = index;
+                if (audio) {
+                    audio.src = tracks[index].file;
+                    audio.load();
+                }
+                if (trackDisplay) {
+                    trackDisplay.textContent = tracks[index].title;
+                }
+                
+                // Reset progress bar and time
+                if (progressBar) {
+                    progressBar.style.width = '0%';
+                }
+                if (timeDisplay) {
+                    timeDisplay.textContent = '0:00';
+                }
+                
+                // Update Active State
+                if (trackList) {
+                    const items = trackList.querySelectorAll('.mixtape-track-item');
+                    items.forEach((item, i) => {
+                        if (i === index) item.classList.add('active');
+                        else item.classList.remove('active');
+                    });
+                }
+            }
+
+            function playTrack() {
+                if (audio) {
+                    audio.play().catch(e => console.error("Play error:", e));
+                }
+            }
+
+            // Set canvas dimensions
+            function resizeCanvas() {
+                if (visualizerCanvas) {
+                    const container = visualizerCanvas.parentElement;
+                    if (container) {
+                        visualizerCanvas.width = container.offsetWidth;
+                        visualizerCanvas.height = 40;
+                    }
+                }
+            }
+            
+            // Event Listeners
+            if (tile) {
+                tile.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (lightbox) {
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                        // Load first track if empty
+                        if (audio && !audio.src) {
+                            loadTrack(0);
+                        }
+                        // Size the visualizer canvas
+                        setTimeout(resizeCanvas, 50);
+                    }
+                });
+            }
+            
+            // Resize canvas on window resize
+            window.addEventListener('resize', resizeCanvas);
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    if (lightbox) lightbox.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    if (audio) audio.pause();
+                });
+            }
+            
+            if (lightbox) {
+                lightbox.addEventListener('click', (e) => {
+                    if (e.target === lightbox) {
+                        lightbox.classList.remove('active');
+                        document.body.style.overflow = 'auto';
+                        if (audio) audio.pause();
+                    }
+                });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    let newIndex = currentIndex - 1;
+                    if (newIndex < 0) newIndex = tracks.length - 1;
+                    loadTrack(newIndex);
+                    playTrack();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    let newIndex = (currentIndex + 1) % tracks.length;
+                    loadTrack(newIndex);
+                    playTrack();
+                });
+            }
+
+            if (audio) {
+                // Update progress bar and time on timeupdate
+                audio.addEventListener('timeupdate', function() {
+                    if (progressBar && audio.duration) {
+                        const progress = (audio.currentTime / audio.duration) * 100;
+                        progressBar.style.width = progress + '%';
+                    }
+                    if (timeDisplay) {
+                        timeDisplay.textContent = formatTime(audio.currentTime);
+                    }
+                });
+
+                // Update play/pause icon and visualizer
+                audio.addEventListener('play', function() {
+                    if (playPauseIcon) {
+                        playPauseIcon.textContent = '❚❚';
+                    }
+                    startVisualizer();
+                });
+
+                audio.addEventListener('pause', function() {
+                    if (playPauseIcon) {
+                        playPauseIcon.textContent = '▶';
+                    }
+                    stopVisualizer();
+                });
+
+                audio.addEventListener('ended', () => {
+                    // Only advance to next track if not at the end
+                    if (currentIndex < tracks.length - 1) {
+                        loadTrack(currentIndex + 1);
+                        playTrack();
+                    }
+                    // Otherwise, just stop (don't loop back to first track)
+                });
+            }
+
+            // Play/Pause button
+            if (playPauseBtn && audio) {
+                playPauseBtn.addEventListener('click', function() {
+                    // Pause all other audio elements
+                    document.querySelectorAll('audio.custom-audio').forEach(function(otherAudio) {
+                        if (otherAudio !== audio) {
+                            otherAudio.pause();
+                        }
+                    });
+                    
+                    if (audio.paused) {
+                        audio.play().catch(e => console.error("Play error:", e));
+                    } else {
+                        audio.pause();
+                    }
+                });
+            }
+
+            // Progress bar scrubbing
+            if (progressContainer && audio) {
+                progressContainer.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const rect = progressContainer.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const width = rect.width;
+                    const clickPercent = Math.max(0, Math.min(1, clickX / width));
+                    const newTime = clickPercent * audio.duration;
+                    
+                    if (!isNaN(newTime) && audio.duration && newTime >= 0) {
+                        const wasPlaying = !audio.paused;
+                        
+                        if (!audio.paused) {
+                            audio.pause();
+                        }
+                        
+                        setTimeout(() => {
+                            audio.currentTime = newTime;
+                            
+                            if (wasPlaying) {
+                                setTimeout(() => {
+                                    audio.play().catch(e => console.error('Failed to resume playback:', e));
+                                }, 50);
+                            }
+                        }, 10);
+                    }
+                });
+
+                // Drag scrubbing
+                progressContainer.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    
+                    const wasPlaying = !audio.paused;
+                    let isDragging = true;
+                    
+                    if (!audio.paused) {
+                        audio.pause();
+                    }
+                    
+                    const scrub = function(e) {
+                        const rect = progressContainer.getBoundingClientRect();
+                        const clickX = e.clientX - rect.left;
+                        const width = rect.width;
+                        const clickPercent = Math.max(0, Math.min(1, clickX / width));
+                        const newTime = clickPercent * audio.duration;
+                        if (!isNaN(newTime) && audio.duration && newTime >= 0) {
+                            audio.currentTime = newTime;
+                        }
+                    };
+                    
+                    scrub(e);
+                    
+                    const handleMouseMove = function(e) {
+                        if (isDragging) {
+                            scrub(e);
+                        }
+                    };
+                    
+                    const handleMouseUp = function() {
+                        isDragging = false;
+                        document.removeEventListener('mousemove', handleMouseMove);
+                        document.removeEventListener('mouseup', handleMouseUp);
+                        
+                        if (wasPlaying) {
+                            setTimeout(() => {
+                                audio.play().catch(e => console.error('Failed to resume playback after drag:', e));
+                            }, 50);
+                        }
+                    };
+                    
+                    document.addEventListener('mousemove', handleMouseMove);
+                    document.addEventListener('mouseup', handleMouseUp);
                 });
             }
         });

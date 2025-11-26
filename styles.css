@@ -5049,6 +5049,51 @@ section.production-header.alice p {
         rgba(0, 247, 194, 0.25) 100%);
 }
 
+/* Custom Track Skip Icons - |◀ and ▶| style */
+.track-skip {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.track-skip::before,
+.track-skip::after {
+    content: '';
+    display: block;
+}
+
+/* The bar (|) */
+.track-skip::before {
+    width: 3px;
+    height: 12px;
+    background: currentColor;
+    border-radius: 1px;
+}
+
+/* The triangle (◀ or ▶) */
+.track-skip::after {
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+}
+
+/* Previous: |◀ */
+.track-skip.prev {
+    flex-direction: row-reverse;
+}
+
+.track-skip.prev::after {
+    border-right: 8px solid currentColor;
+    border-left: none;
+}
+
+/* Next: ▶| */
+.track-skip.next::after {
+    border-left: 8px solid currentColor;
+    border-right: none;
+}
+
 .mixtape-audio-controls .audio-btn:active,
 .mixtape-nav-btn:active {
     transform: scale(0.95);

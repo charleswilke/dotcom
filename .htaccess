@@ -1,0 +1,4 @@
+# Redirect /mixtape to /#mixtape for deep linking to the mixtape lightbox
+RewriteEngine On
+RewriteRule ^mixtape/?$ /#mixtape [R=302,NE,L]
+

@@ -2181,20 +2181,41 @@
                 }
             }
             
+            // Open/Close Mixtape functions (also handles URL hash)
+            function openMixtape() {
+                if (lightbox) {
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    // Load first track if empty
+                    if (audio && !audio.src) {
+                        loadTrack(0);
+                    }
+                    // Size the visualizer canvas
+                    setTimeout(resizeCanvas, 50);
+                    // Update URL hash (without triggering scroll)
+                    if (window.location.hash !== '#mixtape') {
+                        history.pushState(null, '', '#mixtape');
+                    }
+                }
+            }
+            
+            function closeMixtape() {
+                if (lightbox) {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    if (audio) audio.pause();
+                    // Remove hash from URL
+                    if (window.location.hash === '#mixtape') {
+                        history.pushState(null, '', window.location.pathname);
+                    }
+                }
+            }
+            
             // Event Listeners
             if (tile) {
                 tile.addEventListener('click', (e) => {
                     e.preventDefault();
-                    if (lightbox) {
-                        lightbox.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                        // Load first track if empty
-                        if (audio && !audio.src) {
-                            loadTrack(0);
-                        }
-                        // Size the visualizer canvas
-                        setTimeout(resizeCanvas, 50);
-                    }
+                    openMixtape();
                 });
             }
             
@@ -2202,22 +2223,35 @@
             window.addEventListener('resize', resizeCanvas);
 
             if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    if (lightbox) lightbox.classList.remove('active');
-                    document.body.style.overflow = 'auto';
-                    if (audio) audio.pause();
-                });
+                closeBtn.addEventListener('click', closeMixtape);
             }
             
             if (lightbox) {
                 lightbox.addEventListener('click', (e) => {
                     if (e.target === lightbox) {
+                        closeMixtape();
+                    }
+                });
+            }
+            
+            // Handle direct link to #mixtape
+            if (window.location.hash === '#mixtape') {
+                // Small delay to ensure DOM is ready
+                setTimeout(openMixtape, 100);
+            }
+            
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', () => {
+                if (window.location.hash === '#mixtape') {
+                    openMixtape();
+                } else {
+                    if (lightbox && lightbox.classList.contains('active')) {
                         lightbox.classList.remove('active');
                         document.body.style.overflow = 'auto';
                         if (audio) audio.pause();
                     }
-                });
-            }
+                }
+            });
 
             if (prevBtn) {
                 prevBtn.addEventListener('click', () => {

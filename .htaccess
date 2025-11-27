@@ -1,6 +1,7 @@
-# Redirect /mixtape to /#mixtape for deep linking to the mixtape lightbox
+# Serve mixtape.html for /mixtape URL (for OG meta tags / rich snippets)
+# The page then redirects to /#mixtape for the actual lightbox
 RewriteEngine On
-RewriteRule ^mixtape/?$ /#mixtape [R=302,NE,L]
+RewriteRule ^mixtape/?$ /mixtape.html [L]
 
 
 

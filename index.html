@@ -449,6 +449,12 @@
                         <span class="audio-time"><span id="mixtapeTime">0:00</span></span>
                     </div>
                     <audio id="mixtapeAudio" class="custom-audio" preload="metadata"></audio>
+                    
+                    <!-- Lyric Video Display -->
+                    <div class="mixtape-lyrics-video-container" id="lyricsVideoContainer">
+                        <video id="lyricsVideo" class="lyrics-video" muted playsinline></video>
+                        <div class="lyrics-video-overlay"></div>
+                    </div>
                 </div>
             </div>
             
@@ -1955,16 +1961,16 @@
         // Mixtape Lightbox Logic
         document.addEventListener('DOMContentLoaded', () => {
             const tracks = [
-                { title: 'Future In Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3' },
-                { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3' },
-                { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3' },
-                { title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3' },
-                { title: 'Conjured Impunity', file: 'audio/exploring-laibor-mixtape/conjured-impunity.mp3' },
-                { title: 'Hypnotic Crimes', file: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp3' },
-                { title: 'Rubicon\'d', file: 'audio/exploring-laibor-mixtape/rubicon-d.mp3' },
-                { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3' },
-                { title: 'Certainty\'s Whimpering End', file: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp3' },
-                { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3' }
+                { title: 'Future In Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3', video: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp4' },
+                { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', video: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp4' },
+                { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', video: 'audio/exploring-laibor-mixtape/data-dignity.mp4' },
+                { title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3', video: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp4' },
+                { title: 'Conjured Impunity', file: 'audio/exploring-laibor-mixtape/conjured-impunity.mp3', video: 'audio/exploring-laibor-mixtape/conjured-impunity.mp4' },
+                { title: 'Hypnotic Crimes', file: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp3', video: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp4' },
+                { title: 'Rubicon\'d', file: 'audio/exploring-laibor-mixtape/rubicon-d.mp3', video: 'audio/exploring-laibor-mixtape/rubicon-d.mp4' },
+                { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3', video: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp4' },
+                { title: 'Certainty\'s Whimpering End', file: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp3', video: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp4' },
+                { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4' }
             ];
 
             const lightbox = document.getElementById('mixtapeLightbox');
@@ -1981,6 +1987,8 @@
             const progressContainer = document.getElementById('mixtapeProgressContainer');
             const timeDisplay = document.getElementById('mixtapeTime');
             const visualizerCanvas = document.getElementById('mixtapeVisualizer');
+            const lyricsVideo = document.getElementById('lyricsVideo');
+            const lyricsVideoContainer = document.getElementById('lyricsVideoContainer');
             
             let currentIndex = 0;
             
@@ -2158,6 +2166,19 @@
                     timeDisplay.textContent = '0:00';
                 }
                 
+                // Load lyric video if available
+                if (lyricsVideo && lyricsVideoContainer) {
+                    if (tracks[index].video) {
+                        lyricsVideo.src = tracks[index].video;
+                        lyricsVideo.load();
+                        lyricsVideo.currentTime = 0;
+                        lyricsVideoContainer.classList.add('has-video');
+                    } else {
+                        lyricsVideo.src = '';
+                        lyricsVideoContainer.classList.remove('has-video');
+                    }
+                }
+                
                 // Update Active State
                 if (trackList) {
                     const items = trackList.querySelectorAll('.mixtape-track-item');
@@ -2172,6 +2193,52 @@
                 if (audio) {
                     audio.play().catch(e => console.error("Play error:", e));
                 }
+                // Sync video playback
+                if (lyricsVideo && tracks[currentIndex].video) {
+                    lyricsVideo.currentTime = audio.currentTime;
+                    lyricsVideo.play().catch(e => console.log("Video play:", e));
+                }
+            }
+            
+            function pauseTrack() {
+                if (audio) {
+                    audio.pause();
+                }
+                if (lyricsVideo) {
+                    lyricsVideo.pause();
+                }
+            }
+            
+            // Keep video synced with audio
+            if (audio) {
+                audio.addEventListener('play', () => {
+                    if (lyricsVideo && tracks[currentIndex].video) {
+                        lyricsVideo.currentTime = audio.currentTime;
+                        lyricsVideo.play().catch(e => {});
+                    }
+                });
+                
+                audio.addEventListener('pause', () => {
+                    if (lyricsVideo) {
+                        lyricsVideo.pause();
+                    }
+                });
+                
+                audio.addEventListener('seeked', () => {
+                    if (lyricsVideo && tracks[currentIndex].video) {
+                        lyricsVideo.currentTime = audio.currentTime;
+                    }
+                });
+                
+                // Periodic sync to prevent drift
+                audio.addEventListener('timeupdate', () => {
+                    if (lyricsVideo && tracks[currentIndex].video && !audio.paused) {
+                        const drift = Math.abs(audio.currentTime - lyricsVideo.currentTime);
+                        if (drift > 0.3) {
+                            lyricsVideo.currentTime = audio.currentTime;
+                        }
+                    }
+                });
             }
 
             // Set canvas dimensions
@@ -2208,6 +2275,7 @@
                     lightbox.classList.remove('active');
                     document.body.style.overflow = 'auto';
                     if (audio) audio.pause();
+                    if (lyricsVideo) lyricsVideo.pause();
                     // Remove hash from URL
                     if (window.location.hash === '#mixtape') {
                         history.pushState(null, '', window.location.pathname);

@@ -5223,6 +5223,62 @@ section.production-header.alice p {
     transform: rotate(90deg);
 }
 
+/* Lyrics Video Display */
+.mixtape-lyrics-video-container {
+    display: none;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
+    background: rgba(10, 5, 20, 0.8);
+    border: 1px solid rgba(0, 247, 194, 0.2);
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(0, 247, 194, 0.1);
+}
+
+.mixtape-lyrics-video-container.has-video {
+    display: block;
+    height: 80px;
+    margin-top: 0.4rem;
+}
+
+.lyrics-video {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Scale up to crop - shows center portion where lyrics appear */
+    min-height: 300%;
+    min-width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.lyrics-video-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Fade edges for smooth blend */
+    background: linear-gradient(180deg,
+        rgba(15, 10, 30, 0.6) 0%,
+        transparent 25%,
+        transparent 75%,
+        rgba(15, 10, 30, 0.6) 100%
+    );
+    box-shadow: inset 0 0 20px rgba(0, 247, 194, 0.1);
+}
+
+/* Desktop - slightly taller video strip */
+@media (min-width: 768px) {
+    .mixtape-lyrics-video-container.has-video {
+        height: 100px;
+    }
+}
+
 /* Mobile Responsiveness for Mixtape */
 @media (max-width: 768px) {
     .mixtape-lightbox .mixtape-content {

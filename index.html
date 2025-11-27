@@ -2000,7 +2000,7 @@
             let analyser = null;
             let dataArray = null;
             let useRealAnalyser = false;
-            let barHeights = new Array(12).fill(0);
+            let barHeights = new Array(8).fill(0);
             const isLocalFile = window.location.protocol === 'file:';
             
             function initAudioContext() {
@@ -2032,15 +2032,13 @@
                 
                 ctx.clearRect(0, 0, width, height);
                 
-                const barCount = 12;
+                const barCount = 8;
                 const barWidth = 3;
-                const barGap = 2;
+                const barGap = 3;
                 const maxBarHeight = height * 0.8;
                 const centerY = height / 2;
                 
-                const titleWidth = trackDisplay ? trackDisplay.offsetWidth : 150;
-                const centerX = width / 2;
-                const startOffset = titleWidth / 2 + 12;
+                const edgePadding = 10; // Distance from edge of canvas
                 
                 // Get frequency data if using real analyser
                 if (useRealAnalyser && analyser && isPlaying) {
@@ -2073,8 +2071,8 @@
                     
                     const barHeight = barHeights[i] * maxBarHeight;
                     
-                    // Colors - teal gradient with intensity
-                    const hue = 168 - (i / barCount) * 25;
+                    // Colors - teal gradient with intensity (outer bars more intense)
+                    const hue = 168 - ((barCount - 1 - i) / barCount) * 25;
                     const intensity = barHeights[i];
                     const saturation = 75 + intensity * 25;
                     const lightness = 40 + intensity * 20;
@@ -2083,12 +2081,12 @@
                     ctx.shadowColor = `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`;
                     ctx.shadowBlur = 6 + intensity * 4;
                     
-                    // Left side bars (mirrored)
-                    const leftX = centerX - startOffset - (i * (barWidth + barGap)) - barWidth;
+                    // Left side bars - anchored to left edge, growing inward
+                    const leftX = edgePadding + (i * (barWidth + barGap));
                     ctx.fillRect(leftX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
                     
-                    // Right side bars
-                    const rightX = centerX + startOffset + (i * (barWidth + barGap));
+                    // Right side bars - anchored to right edge, growing inward
+                    const rightX = width - edgePadding - barWidth - (i * (barWidth + barGap));
                     ctx.fillRect(rightX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
                 }
                 

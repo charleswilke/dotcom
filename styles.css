@@ -5381,6 +5381,7 @@ section.production-header.alice p {
     
     .mixtape-track-visualizer {
         margin-bottom: 0.5rem;
+        min-height: 40px;
     }
     
     .mixtape-current-track {

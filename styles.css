@@ -4949,7 +4949,7 @@ section.production-header.alice p {
 .mixtape-track-visualizer {
     position: relative;
     width: 100%;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4994,7 +4994,7 @@ section.production-header.alice p {
 }
 
 .mixtape-audio-controls {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.8rem;
     /* Retro radio player style */
     background: linear-gradient(180deg, 
         rgba(15, 10, 30, 0.8) 0%, 

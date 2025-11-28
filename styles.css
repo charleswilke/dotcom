@@ -4810,7 +4810,7 @@ section.production-header.alice p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: .5rem;
     width: 100%;
 }
 
@@ -4890,6 +4890,16 @@ section.production-header.alice p {
     border-radius: 0.5rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     border: 1px solid rgba(255,255,255,0.1);
+}
+
+.mixtape-credits {
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.05em;
+    margin: 1rem 0 0rem 0;
+    line-height: 1.4;
 }
 
 .mixtape-player-container {
@@ -5395,7 +5405,7 @@ section.production-header.alice p {
     
     .mixtape-left-section {
         flex-shrink: 0; /* Don't shrink the cover/player */
-        gap: 1rem;
+        gap: .5rem;
     }
     
     .mixtape-cover-container {

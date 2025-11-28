@@ -98,7 +98,7 @@
                     <img src="audio/exploring-laibor-mixtape/mixtape-recently-card.jpg" alt="Exploring L.A.I.bor Mixtape">
                     <div class="showcase-caption">
                         <h3>Exploring L.ai.bor Mixtape</h3>
-                        <p>11 tracks inspired by the Substack series</p>
+                        <p>13 tracks inspired by the Substack series</p>
                     </div>
                 </div>
             </div>
@@ -1938,7 +1938,6 @@
         // Mixtape Lightbox Logic
         document.addEventListener('DOMContentLoaded', () => {
             const tracks = [
-                { title: 'Future In Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3', video: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp4' },
                 { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', video: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp4' },
                 { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', video: 'audio/exploring-laibor-mixtape/data-dignity.mp4' },
                 { title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3', video: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp4' },
@@ -1948,7 +1947,10 @@
                 { title: 'Certainty\'s Whimpering End', file: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp3', video: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp4' },
                 { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3', video: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp4' },
                 { title: 'Treasure in the Mess', file: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp3', video: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp4' },
-                { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4' }
+                { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4' },
+                { title: 'Future In Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3', video: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp4', bonus: true },
+                { title: 'Agency Without Agenda', file: 'audio/exploring-laibor-mixtape/agency-without-agenda.mp3', video: 'audio/exploring-laibor-mixtape/agency-without-agenda.mp4', bonus: true },
+                { title: 'Rubicon\'d (Demo)', file: 'audio/exploring-laibor-mixtape/rubicon-d-demo.mp3', video: 'audio/exploring-laibor-mixtape/rubicon-d-demo.mp4', bonus: true }
             ];
 
             const lightbox = document.getElementById('mixtapeLightbox');
@@ -2112,10 +2114,31 @@
 
             // Populate Playlist
             if (trackList && tracks.length > 0) {
+                let trackNumber = 1;
+                let bonusSeparatorAdded = false;
                 tracks.forEach((track, index) => {
                     const li = document.createElement('li');
                     li.className = 'mixtape-track-item';
-                    li.innerHTML = `<span class="track-number">${index + 1}</span> ${track.title}`;
+                    if (track.bonus) {
+                        li.classList.add('bonus-track');
+                        // Add separator and section header before first bonus track only
+                        if (!bonusSeparatorAdded) {
+                            const separator = document.createElement('li');
+                            separator.className = 'bonus-track-separator';
+                            trackList.appendChild(separator);
+                            
+                            const header = document.createElement('li');
+                            header.className = 'bonus-section-header';
+                            header.textContent = 'BONUS TRACKS';
+                            trackList.appendChild(header);
+                            
+                            bonusSeparatorAdded = true;
+                        }
+                        li.innerHTML = track.title;
+                    } else {
+                        li.innerHTML = `<span class="track-number">${trackNumber}</span> ${track.title}`;
+                        trackNumber++;
+                    }
                     li.addEventListener('click', () => {
                         loadTrack(index);
                         playTrack();

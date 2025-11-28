@@ -5211,6 +5211,61 @@ section.production-header.alice p {
     color: #ff6b35;
 }
 
+/* Bonus Track Styling */
+.bonus-track-separator {
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 247, 194, 0.2) 20%, 
+        rgba(0, 247, 194, 0.2) 80%, 
+        transparent 100%);
+    margin: 1.5rem 0.5rem 0.8rem 0.5rem;
+    border: none;
+    padding: 0;
+    cursor: default;
+    pointer-events: none;
+}
+
+.bonus-section-header {
+    padding: 0.6rem 1.2rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Exo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ff6b35;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    text-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+    cursor: default;
+    pointer-events: none;
+    border-left: 2px solid rgba(255, 107, 53, 0.3);
+    padding-left: 1.5rem;
+}
+
+.mixtape-track-item.bonus-track {
+    margin-top: 0.25rem;
+    padding-left: 1.2rem;
+    opacity: 0.8;
+    border: 1px solid rgba(255, 107, 53, 0.15);
+    background: rgba(255, 107, 53, 0.03);
+}
+
+.mixtape-track-item.bonus-track:hover {
+    opacity: 1;
+    background: rgba(255, 107, 53, 0.08);
+    border-color: rgba(255, 107, 53, 0.3);
+    padding-left: 1.5rem;
+}
+
+.mixtape-track-item.bonus-track.active {
+    background: linear-gradient(90deg, 
+        rgba(255, 107, 53, 0.15) 0%, 
+        transparent 100%);
+    border-left: 3px solid #ff6b35;
+    opacity: 1;
+}
+
 /* Close button override */
 .mixtape-lightbox .lightbox-close {
     color: rgba(0, 247, 194, 0.6);

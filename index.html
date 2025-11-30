@@ -1939,16 +1939,16 @@
         // Mixtape Lightbox Logic
         document.addEventListener('DOMContentLoaded', () => {
             const tracks = [
-                { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', video: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp4' },
-                { title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3', video: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp4' },
-                { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', video: 'audio/exploring-laibor-mixtape/data-dignity.mp4' },
-                { title: 'Conjured Impunity', file: 'audio/exploring-laibor-mixtape/conjured-impunity.mp3', video: 'audio/exploring-laibor-mixtape/conjured-impunity.mp4' },
-                { title: 'Hypnotic Crimes', file: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp3', video: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp4' },
-                { title: 'Rubicon\'d', file: 'audio/exploring-laibor-mixtape/rubicon-d.mp3', video: 'audio/exploring-laibor-mixtape/rubicon-d.mp4' },
-                { title: 'Certainty\'s Whimpering End', file: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp3', video: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp4' },
-                { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3', video: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp4' },
-                { title: 'Treasure in the Mess', file: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp3', video: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp4' },
-                { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4' },
+                { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', video: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp4', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
+                { title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3', video: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp4', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+                { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', video: 'audio/exploring-laibor-mixtape/data-dignity.mp4', article: 'https://charleswilke.substack.com/p/the-quest-for-data-dignity' },
+                { title: 'Conjured Impunity', file: 'audio/exploring-laibor-mixtape/conjured-impunity.mp3', video: 'audio/exploring-laibor-mixtape/conjured-impunity.mp4', article: 'https://charleswilke.substack.com/p/imagined-impunity' },
+                { title: 'Hypnotic Crimes', file: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp3', video: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp4', article: 'https://charleswilke.substack.com/p/hypnotic-crimes' },
+                { title: 'Rubicon\'d', file: 'audio/exploring-laibor-mixtape/rubicon-d.mp3', video: 'audio/exploring-laibor-mixtape/rubicon-d.mp4', article: 'https://charleswilke.substack.com/p/rubicond' },
+                { title: 'Certainty\'s Whimpering End', file: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp3', video: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp4', article: 'https://charleswilke.substack.com/p/certaintys-whimpering-end' },
+                { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3', video: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp4', article: 'https://charleswilke.substack.com/p/terminal-uniqueness' },
+                { title: 'Treasure in the Mess', file: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp3', video: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp4', article: 'https://charleswilke.substack.com/p/treasure-in-the-mess' },
+                { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4', article: 'https://charleswilke.substack.com/p/gave-it-away' },
                 //{ title: 'Future In Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3', video: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp4', bonus: true },
                 //{ title: 'Agency Without Agenda', file: 'audio/exploring-laibor-mixtape/agency-without-agenda.mp3', video: 'audio/exploring-laibor-mixtape/agency-without-agenda.mp4', bonus: true }
             ];
@@ -2119,6 +2119,18 @@
                 tracks.forEach((track, index) => {
                     const li = document.createElement('li');
                     li.className = 'mixtape-track-item';
+                    
+                    // Create article link button if article URL exists
+                    const articleBtn = track.article ? 
+                        `<a href="${track.article}" target="_blank" rel="noopener noreferrer" class="track-article-link" title="Read the article that inspired this song" onclick="event.stopPropagation();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                            <span class="track-article-label">spark</span>
+                        </a>` : '';
+                    
                     if (track.bonus) {
                         li.classList.add('bonus-track');
                         // Add separator and section header before first bonus track only
@@ -2134,9 +2146,9 @@
                             
                             bonusSeparatorAdded = true;
                         }
-                        li.innerHTML = track.title;
+                        li.innerHTML = `<span class="track-title-text">${track.title}</span>${articleBtn}`;
                     } else {
-                        li.innerHTML = `<span class="track-number">${trackNumber}</span> ${track.title}`;
+                        li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
                         trackNumber++;
                     }
                     li.addEventListener('click', () => {

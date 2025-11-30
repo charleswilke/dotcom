@@ -181,6 +181,10 @@
                                     <div class="time-dial-layout">
                                         <!-- Radio Dial Knob (Left Side) -->
                                         <div class="time-dial-knob-section">
+                                            <!-- Red Button - Opens Mixtape -->
+                                            <div class="red-button-wrapper" id="redButtonWrapper" title="Press for a surprise...">
+                                                <img src="images/littleredbutton.png" alt="Red Button" class="red-button-img" id="redButtonImg">
+                                            </div>
                                             <div class="time-dial-wrapper">
                                                 <!-- Rotating knob image (with needle baked in) -->
                                                 <img src="images/radioknob.png" alt="Radio Dial" class="radio-knob-rotating" id="rotating-knob" draggable="false">
@@ -2299,6 +2303,22 @@
                 tile.addEventListener('click', (e) => {
                     e.preventDefault();
                     openMixtape();
+                });
+            }
+            
+            // Red Button - Mixtape Trigger
+            const redButtonWrapper = document.getElementById('redButtonWrapper');
+            
+            if (redButtonWrapper) {
+                redButtonWrapper.addEventListener('click', () => {
+                    // Add pressed class for glow animation
+                    redButtonWrapper.classList.add('pressed');
+                    
+                    // Open mixtape after brief delay for the press animation
+                    setTimeout(() => {
+                        redButtonWrapper.classList.remove('pressed');
+                        openMixtape();
+                    }, 400);
                 });
             }
             

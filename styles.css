@@ -198,10 +198,314 @@ header {
     letter-spacing: 3px;
 }
 
-.header-title.glitch {
-    animation: glitch-blocky 0.28s steps(1, end);
+/* ===== ADVANCED CRT GLITCH EFFECT ===== */
+.header-title {
+    position: relative;
 }
 
+/* RGB Channel pseudo-elements for chromatic aberration */
+.header-title::before,
+.header-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.header-title::before {
+    color: #ff0040;
+    z-index: -1;
+}
+
+.header-title::after {
+    color: #00f7c2;
+    z-index: -1;
+}
+
+/* Active glitch state */
+.header-title.glitch {
+    animation: crt-glitch-main 0.4s steps(2, end);
+}
+
+.header-title.glitch::before {
+    opacity: 0.8;
+    animation: crt-glitch-red 0.4s steps(3, end);
+}
+
+.header-title.glitch::after {
+    opacity: 0.8;
+    animation: crt-glitch-cyan 0.4s steps(3, end);
+}
+
+/* Scanline overlay during glitch */
+.header-title.glitch-scanlines::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10%;
+    width: 120%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+    animation: scanline-scroll 0.1s linear infinite;
+}
+
+/* Main text glitch animation */
+@keyframes crt-glitch-main {
+    0% {
+        text-shadow: 0 0 0 transparent;
+        transform: none;
+        filter: none;
+    }
+    5% {
+        text-shadow: 
+            3px 0 var(--secondary),
+            -3px 0 var(--neon),
+            0 0 8px rgba(255, 255, 255, 0.5);
+        transform: skewX(2deg) translateX(2px);
+        filter: brightness(1.3) contrast(1.2);
+    }
+    10% {
+        text-shadow: 
+            -4px 0 var(--neon),
+            4px 0 var(--secondary),
+            0 0 15px rgba(0, 247, 194, 0.6);
+        transform: skewX(-3deg) translateX(-3px);
+        filter: brightness(0.8) contrast(1.5);
+    }
+    15% {
+        clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        transform: translateX(5px);
+    }
+    20% {
+        clip-path: polygon(0 35%, 100% 35%, 100% 70%, 0 70%);
+        transform: translateX(-8px) skewX(5deg);
+        text-shadow: 
+            6px 0 var(--secondary),
+            -6px 0 #ff0040,
+            0 0 20px rgba(255, 90, 54, 0.8);
+        filter: brightness(1.4) saturate(1.5);
+    }
+    25% {
+        clip-path: polygon(0 70%, 100% 70%, 100% 100%, 0 100%);
+        transform: translateX(3px);
+    }
+    30% {
+        clip-path: none;
+        text-shadow: 
+            2px 2px var(--neon),
+            -2px -2px var(--secondary),
+            0 0 10px white;
+        transform: scale(1.02, 0.98) skewX(-2deg);
+        filter: brightness(1.1);
+    }
+    40% {
+        text-shadow: 
+            -5px 0 var(--secondary),
+            5px 0 var(--neon);
+        transform: translateY(-2px) skewX(4deg);
+        filter: blur(1px) brightness(1.2);
+    }
+    50% {
+        clip-path: inset(30% 0 40% 0);
+        transform: translateX(-10px);
+        text-shadow: 
+            8px 0 #ff0040,
+            -8px 0 #00f7c2,
+            0 0 25px rgba(255, 255, 255, 0.9);
+        filter: brightness(1.5) contrast(2);
+    }
+    55% {
+        clip-path: inset(60% 0 10% 0);
+        transform: translateX(8px) skewX(-6deg);
+    }
+    60% {
+        clip-path: none;
+        text-shadow: 
+            4px 0 var(--neon),
+            -4px 0 var(--secondary);
+        transform: scale(0.98, 1.02);
+        filter: brightness(0.9);
+    }
+    70% {
+        text-shadow: 
+            -3px 0 var(--secondary),
+            3px 0 var(--neon),
+            0 0 12px rgba(0, 247, 194, 0.7);
+        transform: skewX(3deg) translateX(-2px);
+        filter: brightness(1.15);
+    }
+    80% {
+        text-shadow: 
+            2px 0 var(--neon),
+            -2px 0 var(--secondary);
+        transform: translateX(1px);
+        filter: brightness(1.05);
+    }
+    90% {
+        text-shadow: 
+            1px 0 var(--neon),
+            -1px 0 var(--secondary);
+        transform: none;
+        filter: brightness(1.02);
+    }
+    100% {
+        text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
+        transform: none;
+        filter: none;
+        clip-path: none;
+    }
+}
+
+/* Red channel offset animation */
+@keyframes crt-glitch-red {
+    0%, 100% {
+        transform: none;
+        opacity: 0;
+    }
+    10% {
+        transform: translateX(-4px) translateY(1px);
+        opacity: 0.7;
+    }
+    20% {
+        transform: translateX(6px) translateY(-2px);
+        opacity: 0.9;
+    }
+    30% {
+        transform: translateX(-8px) translateY(1px) skewX(2deg);
+        opacity: 0.6;
+    }
+    40% {
+        transform: translateX(3px);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateX(-5px) translateY(-1px);
+        opacity: 0.7;
+    }
+    60% {
+        transform: translateX(7px) skewX(-3deg);
+        opacity: 0.85;
+    }
+    70% {
+        transform: translateX(-3px) translateY(2px);
+        opacity: 0.6;
+    }
+    80% {
+        transform: translateX(2px);
+        opacity: 0.4;
+    }
+    90% {
+        transform: translateX(-1px);
+        opacity: 0.2;
+    }
+}
+
+/* Cyan channel offset animation */
+@keyframes crt-glitch-cyan {
+    0%, 100% {
+        transform: none;
+        opacity: 0;
+    }
+    10% {
+        transform: translateX(4px) translateY(-1px);
+        opacity: 0.7;
+    }
+    20% {
+        transform: translateX(-6px) translateY(2px);
+        opacity: 0.9;
+    }
+    30% {
+        transform: translateX(8px) translateY(-1px) skewX(-2deg);
+        opacity: 0.6;
+    }
+    40% {
+        transform: translateX(-3px);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateX(5px) translateY(1px);
+        opacity: 0.7;
+    }
+    60% {
+        transform: translateX(-7px) skewX(3deg);
+        opacity: 0.85;
+    }
+    70% {
+        transform: translateX(3px) translateY(-2px);
+        opacity: 0.6;
+    }
+    80% {
+        transform: translateX(-2px);
+        opacity: 0.4;
+    }
+    90% {
+        transform: translateX(1px);
+        opacity: 0.2;
+    }
+}
+
+/* Scanline scroll animation */
+@keyframes scanline-scroll {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 0 4px;
+    }
+}
+
+/* Static noise filter - applied during glitch */
+.header-title.glitch-static {
+    animation: static-noise 0.15s steps(5, end) infinite;
+}
+
+@keyframes static-noise {
+    0% {
+        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
+    }
+    25% {
+        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' seed='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
+    }
+    50% {
+        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='1' seed='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
+    }
+    75% {
+        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='1' seed='8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
+    }
+    100% {
+        filter: none;
+    }
+}
+
+/* Horizontal glitch bar effect */
+.header-title.glitch-bars {
+    animation: glitch-horizontal-bars 0.3s steps(1, end);
+}
+
+@keyframes glitch-horizontal-bars {
+    0% { clip-path: inset(0 0 0 0); }
+    10% { clip-path: inset(10% 0 85% 0); transform: translateX(10px); }
+    15% { clip-path: inset(85% 0 10% 0); transform: translateX(-15px); }
+    20% { clip-path: inset(45% 0 45% 0); transform: translateX(8px); }
+    25% { clip-path: inset(20% 0 70% 0); transform: translateX(-12px); }
+    30% { clip-path: inset(70% 0 20% 0); transform: translateX(6px); }
+    35% { clip-path: inset(0 0 0 0); transform: none; }
+    100% { clip-path: inset(0 0 0 0); transform: none; }
+}
+
+/* Legacy glitch-blocky for backwards compatibility */
 @keyframes glitch-blocky {
     0% {
         opacity: 1;
@@ -624,6 +928,96 @@ section.production-header.spotlight-production p {
     text-shadow: none !important;
     transform: none !important;
     animation: none !important;
+}
+
+/* ===== CRT HOVER EFFECT FOR SECTION TITLES ===== */
+.section-title.crt-hover {
+    cursor: pointer;
+}
+
+/* Inner span holds the text and chromatic aberration pseudo-elements */
+.section-title.crt-hover .crt-text {
+    position: relative;
+    display: inline-block;
+}
+
+.section-title.crt-hover .crt-text::before,
+.section-title.crt-hover .crt-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.section-title.crt-hover .crt-text::before {
+    color: #ff5a36;
+    z-index: -1;
+}
+
+.section-title.crt-hover .crt-text::after {
+    color: #00f7c2;
+    z-index: -1;
+}
+
+/* Override the generic section-title:hover for crt-hover elements */
+.section-title.crt-hover:hover {
+    text-shadow: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+.section-title.crt-hover:hover .crt-text {
+    text-shadow: 
+        2px 2px 0 var(--primary),
+        0 0 12px var(--light),
+        0 0 25px rgba(248, 233, 210, 0.4);
+    animation: crt-hover-flicker-light 0.25s ease-out forwards;
+}
+
+.section-title.crt-hover:hover .crt-text::before {
+    opacity: 0.6;
+    transform: translateX(-4px) translateY(1px);
+    transition: opacity 0.1s, transform 0.1s;
+}
+
+.section-title.crt-hover:hover .crt-text::after {
+    opacity: 0.6;
+    transform: translateX(4px) translateY(-1px);
+    transition: opacity 0.1s, transform 0.1s;
+}
+
+/* Light-colored text version of the hover flicker */
+@keyframes crt-hover-flicker-light {
+    0% {
+        text-shadow: 
+            2px 2px 0 var(--primary),
+            0 0 0 var(--light);
+    }
+    20% {
+        text-shadow: 
+            2px 2px 0 var(--primary),
+            4px 0 var(--secondary),
+            -4px 0 var(--neon),
+            0 0 15px var(--light);
+    }
+    40% {
+        text-shadow: 
+            2px 2px 0 var(--primary),
+            -3px 0 var(--neon),
+            3px 0 var(--secondary),
+            0 0 20px var(--light);
+    }
+    100% {
+        text-shadow: 
+            2px 2px 0 var(--primary),
+            0 0 15px var(--light),
+            0 0 30px rgba(248, 233, 210, 0.5),
+            0 0 45px rgba(0, 247, 194, 0.2);
+    }
 }
 
 .section-title::after {
@@ -4542,7 +4936,44 @@ section.production-header.alice p {
 }
 
 .header-title:hover {
-    animation: glitch-blocky 0.28s steps(1, end);
+    animation: crt-hover-flicker 0.25s ease-out forwards;
+}
+
+.header-title:hover::before {
+    opacity: 0.7;
+    transform: translateX(-3px);
+    transition: opacity 0.1s, transform 0.1s;
+}
+
+.header-title:hover::after {
+    opacity: 0.7;
+    transform: translateX(3px);
+    transition: opacity 0.1s, transform 0.1s;
+}
+
+/* Simpler hover-specific animation that won't cause re-triggers */
+@keyframes crt-hover-flicker {
+    0% {
+        text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
+    }
+    20% {
+        text-shadow: 
+            3px 0 var(--secondary),
+            -3px 0 var(--neon),
+            0 0 15px var(--neon);
+    }
+    40% {
+        text-shadow: 
+            -2px 0 var(--neon),
+            2px 0 var(--secondary),
+            0 0 20px var(--neon);
+    }
+    100% {
+        text-shadow: 
+            0 0 12px var(--neon), 
+            0 0 25px var(--neon),
+            0 0 40px rgba(0, 247, 194, 0.3);
+    }
 }
 
 .recently-bg-text .recently-letter:hover {

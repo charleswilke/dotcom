@@ -60,7 +60,7 @@
         <div class="header-bg"></div>
         <div class="grid-overlay"></div>
         <div class="header-content">
-            <h1 class="header-title">Charles Wilke</h1>
+            <h1 class="header-title" data-text="Charles Wilke">Charles Wilke</h1>
             <p class="header-subtitle">conversational ux product designer<br />ai deployment consultant &amp; theatrical projection artist</p>
         </div>
     </header>
@@ -156,7 +156,7 @@
     
     <section class="rss-feed">
         <div class="container">
-            <h2 class="section-title section-title-light">exploring l.ai.bor</h2>
+            <h2 class="section-title section-title-light crt-hover"><span class="crt-text" data-text="exploring l.ai.bor">exploring l.ai.bor</span></h2>
             
             <!-- Audio Summary Section with Time Dial -->
             <div class="audio-summary-container">
@@ -1697,14 +1697,59 @@
         function triggerGlitch() {
             const header = document.querySelector('.header-title');
             if (!header) return;
-            header.classList.add('glitch');
+            
+            // Randomly select glitch intensity
+            const intensity = Math.random();
+            const glitchClasses = ['glitch'];
+            
+            // 40% chance for extra scanlines effect
+            if (intensity > 0.6) {
+                glitchClasses.push('glitch-scanlines');
+            }
+            
+            // 25% chance for horizontal bar glitch (more dramatic)
+            if (intensity > 0.75) {
+                glitchClasses.push('glitch-bars');
+            }
+            
+            // Apply all selected effects
+            glitchClasses.forEach(cls => header.classList.add(cls));
+            
+            // Variable duration based on intensity (longer for more intense glitches)
+            const duration = intensity > 0.75 ? 400 + Math.random() * 200 : 250 + Math.random() * 150;
+            
             setTimeout(() => {
-                header.classList.remove('glitch');
-                setTimeout(triggerGlitch, 2000 + Math.random() * 5000);
-            }, 100 + Math.random() * 150);
+                // Remove all glitch classes
+                header.classList.remove('glitch', 'glitch-scanlines', 'glitch-bars', 'glitch-static');
+                
+                // Variable interval - occasional "bad signal" with rapid repeated glitches
+                const isBadSignal = Math.random() > 0.85;
+                if (isBadSignal) {
+                    // Rapid double/triple glitch
+                    setTimeout(() => {
+                        header.classList.add('glitch');
+                        setTimeout(() => {
+                            header.classList.remove('glitch');
+                            if (Math.random() > 0.5) {
+                                setTimeout(() => {
+                                    header.classList.add('glitch', 'glitch-bars');
+                                    setTimeout(() => {
+                                        header.classList.remove('glitch', 'glitch-bars');
+                                        setTimeout(triggerGlitch, 3000 + Math.random() * 4000);
+                                    }, 150);
+                                }, 80 + Math.random() * 50);
+                            } else {
+                                setTimeout(triggerGlitch, 3000 + Math.random() * 4000);
+                            }
+                        }, 120 + Math.random() * 80);
+                    }, 100 + Math.random() * 100);
+                } else {
+                    setTimeout(triggerGlitch, 2500 + Math.random() * 5000);
+                }
+            }, duration);
         }
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(triggerGlitch, 2000 + Math.random() * 3000);
+            setTimeout(triggerGlitch, 1500 + Math.random() * 2000);
         });
 
         // Timed glitch effect for the FAQ link

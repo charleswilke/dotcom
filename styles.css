@@ -3178,6 +3178,287 @@ html {
     text-shadow: 0 0 4px rgba(0, 247, 194, 0.3);
 }
 
+/* ===== CRT TUNER ENHANCEMENTS ===== */
+
+/* 1. Scanlines Overlay */
+.tuner-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.6;
+}
+
+/* 2. Static Noise Overlay (visible during tuning) */
+.tuner-glass::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+    mix-blend-mode: overlay;
+    transition: opacity 0.15s ease;
+}
+
+.tuner-glass.tuning::after {
+    opacity: 0.4;
+    animation: static-flicker 0.1s steps(3) infinite;
+}
+
+@keyframes static-flicker {
+    0% { opacity: 0.3; transform: translateX(0); }
+    33% { opacity: 0.5; transform: translateX(-1px); }
+    66% { opacity: 0.35; transform: translateX(1px); }
+    100% { opacity: 0.45; transform: translateX(0); }
+}
+
+/* 3. Phosphor Glow & Decay on Markers */
+.scale-marker.scale-major::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 40px;
+    background: radial-gradient(ellipse at center, 
+        rgba(0, 247, 194, 0) 0%,
+        rgba(0, 247, 194, 0) 100%);
+    pointer-events: none;
+    transition: all 0.5s ease;
+    opacity: 0;
+    z-index: 0;
+}
+
+/* Phosphor decay - fading glow on previously active markers */
+.scale-marker.scale-major.phosphor-decay::after {
+    background: radial-gradient(ellipse at center, 
+        rgba(0, 247, 194, 0.4) 0%,
+        rgba(0, 247, 194, 0.1) 50%,
+        rgba(0, 247, 194, 0) 100%);
+    opacity: 1;
+    animation: phosphor-fade 1.2s ease-out forwards;
+}
+
+@keyframes phosphor-fade {
+    0% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1);
+        filter: blur(2px);
+    }
+    100% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(1.5);
+        filter: blur(6px);
+    }
+}
+
+/* 4. Signal Lock Pulsing Indicator */
+.scale-marker.scale-major.active::after {
+    background: radial-gradient(ellipse at center, 
+        rgba(0, 247, 194, 0.6) 0%,
+        rgba(0, 247, 194, 0.2) 40%,
+        rgba(0, 247, 194, 0) 70%);
+    opacity: 1;
+    animation: signal-lock-pulse 2s ease-in-out infinite;
+}
+
+@keyframes signal-lock-pulse {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 1;
+    }
+}
+
+/* Signal lock flicker on initial tune-in */
+.scale-marker.scale-major.signal-locking::before {
+    animation: signal-lock-flicker 0.4s steps(2) forwards;
+}
+
+@keyframes signal-lock-flicker {
+    0% { opacity: 0.3; }
+    20% { opacity: 1; }
+    40% { opacity: 0.5; }
+    60% { opacity: 0.9; }
+    80% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+/* 5. VU Meter Breathing Animation */
+.scale-marker.scale-major::before {
+    animation: vu-breathe 3s ease-in-out infinite;
+    animation-delay: calc(var(--marker-index, 0) * 0.3s);
+}
+
+@keyframes vu-breathe {
+    0%, 100% { 
+        height: 28px;
+        opacity: 0.7;
+    }
+    50% { 
+        height: 34px;
+        opacity: 0.85;
+    }
+}
+
+/* Active marker has more pronounced breathing */
+.scale-marker.scale-major.active::before {
+    animation: vu-breathe-active 1.5s ease-in-out infinite;
+    height: 38px;
+}
+
+@keyframes vu-breathe-active {
+    0%, 100% { 
+        height: 36px;
+        box-shadow: 0 0 12px rgba(0, 247, 194, 0.8), 0 0 20px rgba(0, 247, 194, 0.4);
+    }
+    50% { 
+        height: 42px;
+        box-shadow: 0 0 18px rgba(0, 247, 194, 1), 0 0 30px rgba(0, 247, 194, 0.6);
+    }
+}
+
+/* Minor markers subtle pulse */
+.scale-marker.scale-minor::before {
+    animation: vu-minor-pulse 4s ease-in-out infinite;
+}
+
+@keyframes vu-minor-pulse {
+    0%, 100% { height: 18px; opacity: 0.3; }
+    50% { height: 22px; opacity: 0.45; }
+}
+
+/* 6. Vacuum Tube Warmup Glow */
+.scale-marker.scale-major.warming-up::before {
+    animation: tube-warmup 0.6s ease-out forwards;
+}
+
+.scale-marker.scale-major.warming-up::after {
+    animation: tube-warmup-glow 0.6s ease-out forwards;
+}
+
+@keyframes tube-warmup {
+    0% {
+        background: linear-gradient(180deg, 
+            transparent 0%, 
+            rgba(255, 140, 50, 0.3) 50%, 
+            transparent 100%);
+        box-shadow: 0 0 5px rgba(255, 140, 50, 0.4);
+        height: 25px;
+    }
+    30% {
+        background: linear-gradient(180deg, 
+            transparent 0%, 
+            rgba(255, 100, 30, 0.6) 50%, 
+            transparent 100%);
+        box-shadow: 0 0 15px rgba(255, 100, 30, 0.8);
+        height: 32px;
+    }
+    60% {
+        background: linear-gradient(180deg, 
+            transparent 0%, 
+            rgba(200, 247, 220, 0.8) 50%, 
+            transparent 100%);
+        box-shadow: 0 0 12px rgba(100, 247, 194, 0.7);
+    }
+    100% {
+        background: linear-gradient(180deg, 
+            transparent 0%, 
+            rgba(0, 247, 194, 1) 50%, 
+            transparent 100%);
+        box-shadow: 0 0 10px rgba(0, 247, 194, 0.8);
+        height: 38px;
+    }
+}
+
+@keyframes tube-warmup-glow {
+    0% {
+        background: radial-gradient(ellipse at center, 
+            rgba(255, 140, 50, 0.5) 0%,
+            rgba(255, 100, 30, 0.2) 50%,
+            transparent 70%);
+        opacity: 1;
+    }
+    50% {
+        background: radial-gradient(ellipse at center, 
+            rgba(255, 200, 100, 0.6) 0%,
+            rgba(200, 247, 194, 0.3) 50%,
+            transparent 70%);
+        opacity: 1;
+    }
+    100% {
+        background: radial-gradient(ellipse at center, 
+            rgba(0, 247, 194, 0.6) 0%,
+            rgba(0, 247, 194, 0.2) 40%,
+            rgba(0, 247, 194, 0) 70%);
+        opacity: 1;
+    }
+}
+
+/* Tuner indicator enhanced glow during tuning */
+.tuner-indicator.tuning {
+    animation: indicator-tune 0.3s ease-in-out;
+}
+
+@keyframes indicator-tune {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(255, 69, 0, 0.8), 0 0 5px rgba(255, 69, 0, 1);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(255, 69, 0, 1), 0 0 10px rgba(255, 69, 0, 1), 0 0 35px rgba(255, 140, 50, 0.6);
+    }
+}
+
+/* CRT screen flicker on the whole tuner (subtle) */
+.tuner-glass {
+    animation: crt-screen-flicker 8s ease-in-out infinite;
+}
+
+@keyframes crt-screen-flicker {
+    0%, 100% { filter: brightness(1); }
+    92% { filter: brightness(1); }
+    93% { filter: brightness(1.1); }
+    94% { filter: brightness(0.95); }
+    95% { filter: brightness(1.05); }
+    96% { filter: brightness(1); }
+}
+
+/* Set marker index for staggered animations */
+.tuner-scale .scale-marker:nth-child(1) { --marker-index: 0; }
+.tuner-scale .scale-marker:nth-child(2) { --marker-index: 1; }
+.tuner-scale .scale-marker:nth-child(3) { --marker-index: 2; }
+.tuner-scale .scale-marker:nth-child(4) { --marker-index: 3; }
+.tuner-scale .scale-marker:nth-child(5) { --marker-index: 4; }
+.tuner-scale .scale-marker:nth-child(6) { --marker-index: 5; }
+.tuner-scale .scale-marker:nth-child(7) { --marker-index: 6; }
+.tuner-scale .scale-marker:nth-child(8) { --marker-index: 7; }
+.tuner-scale .scale-marker:nth-child(9) { --marker-index: 8; }
+.tuner-scale .scale-marker:nth-child(10) { --marker-index: 9; }
+.tuner-scale .scale-marker:nth-child(11) { --marker-index: 10; }
+.tuner-scale .scale-marker:nth-child(12) { --marker-index: 11; }
+.tuner-scale .scale-marker:nth-child(13) { --marker-index: 12; }
+.tuner-scale .scale-marker:nth-child(14) { --marker-index: 13; }
+
 .time-dial-wrapper {
     position: relative;
     width: 60px;

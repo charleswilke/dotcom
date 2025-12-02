@@ -2959,58 +2959,6 @@ html {
     gap: 12px;
 }
 
-/* Red Button - Mixtape Trigger */
-.red-button-wrapper {
-    position: relative;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    user-select: none;
-    filter: 
-        drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8))
-        drop-shadow(-1px -1px 2px rgba(139, 90, 43, 0.3));
-    transition: filter 0.3s ease, transform 0.15s ease;
-    border-radius: 50%;
-}
-
-.red-button-wrapper:hover {
-    filter: 
-        drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8))
-        drop-shadow(-1px -1px 2px rgba(139, 90, 43, 0.3))
-        drop-shadow(0 0 15px rgba(255, 60, 60, 0.7))
-        drop-shadow(0 0 30px rgba(255, 40, 40, 0.4));
-    transform: scale(1.05);
-}
-
-.red-button-wrapper:active,
-.red-button-wrapper.pressed {
-    filter: 
-        drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.9))
-        drop-shadow(0 0 25px rgba(255, 80, 80, 0.9))
-        drop-shadow(0 0 50px rgba(255, 50, 50, 0.6))
-        drop-shadow(0 0 80px rgba(255, 30, 30, 0.4));
-    transform: scale(0.92);
-}
-
-.red-button-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: filter 0.2s ease;
-}
-
-.red-button-wrapper:hover .red-button-img {
-    filter: brightness(1.1) saturate(1.2);
-}
-
-.red-button-wrapper:active .red-button-img,
-.red-button-wrapper.pressed .red-button-img {
-    filter: brightness(1.3) saturate(1.4);
-}
-
 /* Radio Tuner Display */
 .radio-tuner-display {
     width: 280px;
@@ -3176,6 +3124,269 @@ html {
     text-transform: uppercase;
     letter-spacing: 2px;
     text-shadow: 0 0 4px rgba(0, 247, 194, 0.3);
+}
+
+/* Bonus LED Button - Opens Mixtape */
+.tuner-led {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, 
+        #ff6b6b 0%, 
+        #e63946 40%, 
+        #9d0208 100%);
+    box-shadow: 
+        0 0 4px rgba(230, 57, 70, 0.6),
+        0 0 8px rgba(230, 57, 70, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+    animation: led-pulse 3s ease-in-out infinite;
+}
+
+.tuner-led:hover {
+    transform: scale(1.2);
+    box-shadow: 
+        0 0 8px rgba(230, 57, 70, 0.9),
+        0 0 16px rgba(230, 57, 70, 0.6),
+        0 0 24px rgba(230, 57, 70, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    animation: none;
+}
+
+.tuner-led:active {
+    transform: scale(0.95);
+    background: radial-gradient(circle at 30% 30%, 
+        #ff8a8a 0%, 
+        #ff6b6b 40%, 
+        #e63946 100%);
+}
+
+@keyframes led-pulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 4px rgba(230, 57, 70, 0.6),
+            0 0 8px rgba(230, 57, 70, 0.3),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+            inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 0 6px rgba(230, 57, 70, 0.8),
+            0 0 12px rgba(230, 57, 70, 0.5),
+            0 0 18px rgba(230, 57, 70, 0.2),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+            inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* ===== LED ACTIVATION EFFECTS ===== */
+
+/* LED Pressed/Activated State */
+.tuner-led.pressed {
+    animation: led-burst 0.4s ease-out forwards;
+    background: radial-gradient(circle at 30% 30%, 
+        #ffffff 0%, 
+        #ff6b6b 30%, 
+        #e63946 60%, 
+        #9d0208 100%);
+}
+
+@keyframes led-burst {
+    0% {
+        transform: scale(1);
+        box-shadow: 
+            0 0 8px rgba(255, 255, 255, 0.9),
+            0 0 16px rgba(230, 57, 70, 0.9),
+            0 0 32px rgba(230, 57, 70, 0.6);
+    }
+    30% {
+        transform: scale(1.5);
+        box-shadow: 
+            0 0 15px rgba(255, 255, 255, 1),
+            0 0 30px rgba(230, 57, 70, 1),
+            0 0 60px rgba(230, 57, 70, 0.8),
+            0 0 100px rgba(230, 57, 70, 0.4);
+    }
+    100% {
+        transform: scale(1.2);
+        box-shadow: 
+            0 0 10px rgba(255, 255, 255, 0.8),
+            0 0 20px rgba(230, 57, 70, 0.8),
+            0 0 40px rgba(230, 57, 70, 0.5);
+    }
+}
+
+/* Shockwave Ripple Effect */
+.led-shockwave {
+    position: fixed;
+    border-radius: 50%;
+    border: 2px solid rgba(230, 57, 70, 0.8);
+    pointer-events: none;
+    z-index: 9998;
+    animation: shockwave-expand 0.6s ease-out forwards;
+}
+
+@keyframes shockwave-expand {
+    0% {
+        width: 10px;
+        height: 10px;
+        opacity: 1;
+        border-width: 3px;
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+/* Full-page CRT Static Flash Overlay */
+.crt-static-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 2px,
+            rgba(0, 0, 0, 0.1) 4px
+        );
+}
+
+.crt-static-overlay.active {
+    animation: crt-static-flash 0.4s steps(4) forwards;
+}
+
+@keyframes crt-static-flash {
+    0% {
+        opacity: 0;
+        background: 
+            repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px),
+            url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    25% {
+        opacity: 0.6;
+        filter: brightness(1.3);
+    }
+    50% {
+        opacity: 0.3;
+        filter: brightness(0.8);
+    }
+    75% {
+        opacity: 0.5;
+        filter: brightness(1.2);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Screen Flicker Effect */
+.screen-flicker {
+    animation: screen-flicker-anim 0.3s steps(2) forwards;
+}
+
+@keyframes screen-flicker-anim {
+    0% { filter: brightness(1); }
+    20% { filter: brightness(1.5) contrast(1.2); }
+    40% { filter: brightness(0.7); }
+    60% { filter: brightness(1.3) saturate(1.3); }
+    80% { filter: brightness(0.9); }
+    100% { filter: brightness(1); }
+}
+
+/* CRT Power-On Effect for Lightbox */
+.mixtape-lightbox.crt-power-on {
+    animation: crt-turn-on 0.5s ease-out forwards;
+}
+
+.mixtape-lightbox.crt-power-on .mixtape-content {
+    animation: crt-content-reveal 0.5s ease-out forwards;
+}
+
+@keyframes crt-turn-on {
+    0% {
+        background: rgba(0, 0, 0, 1);
+    }
+    30% {
+        background: rgba(0, 0, 0, 0.98);
+    }
+    100% {
+        background: rgba(0, 0, 0, 0.95);
+    }
+}
+
+@keyframes crt-content-reveal {
+    0% {
+        opacity: 0;
+        transform: scaleY(0.01) scaleX(0.5);
+        filter: brightness(3) blur(10px);
+    }
+    30% {
+        opacity: 1;
+        transform: scaleY(0.01) scaleX(0.8);
+        filter: brightness(2) blur(5px);
+    }
+    50% {
+        transform: scaleY(0.5) scaleX(1);
+        filter: brightness(1.5) blur(2px);
+    }
+    70% {
+        transform: scaleY(0.9) scaleX(1);
+        filter: brightness(1.2) blur(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: scaleY(1) scaleX(1);
+        filter: brightness(1) blur(0);
+    }
+}
+
+/* Scanline sweep during power on */
+.mixtape-lightbox.crt-power-on::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(255, 255, 255, 0.03) 2px,
+        rgba(255, 255, 255, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline-sweep 0.5s ease-out forwards;
+}
+
+@keyframes scanline-sweep {
+    0% {
+        opacity: 1;
+        background-position: 0 -100vh;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.3;
+        background-position: 0 0;
+    }
 }
 
 /* ===== CRT TUNER ENHANCEMENTS ===== */
@@ -3590,10 +3801,6 @@ html {
         gap: 8px;
     }
     
-    .red-button-wrapper {
-        width: 38px;
-        height: 38px;
-    }
     
     .radio-tuner-display {
         width: 240px;
@@ -3634,10 +3841,6 @@ html {
         height: 50px;
     }
     
-    .red-button-wrapper {
-        width: 35px;
-        height: 35px;
-    }
     
     .dial-label {
         font-size: 0.6rem;
@@ -3686,11 +3889,6 @@ html {
     .time-dial-wrapper {
         width: 55px;
         height: 55px;
-    }
-    
-    .red-button-wrapper {
-        width: 40px;
-        height: 40px;
     }
     
     .dial-label-top {

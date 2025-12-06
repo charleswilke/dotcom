@@ -2971,19 +2971,20 @@ html {
 .tuner-glass {
     position: relative;
     width: 100%;
-    height: 60px;
-    background: linear-gradient(180deg, 
-        rgba(15, 10, 30, 0.95) 0%, 
-        rgba(20, 15, 40, 0.9) 50%, 
-        rgba(15, 10, 30, 0.95) 100%);
-    border: 2px solid rgba(0, 247, 194, 0.3);
-    border-radius: 8px;
+    height: 80px;
+    background: 
+        radial-gradient(ellipse at top right, rgba(20, 30, 60, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom left, rgba(15, 25, 50, 0.3) 0%, transparent 50%),
+        linear-gradient(180deg, 
+            rgba(5, 5, 10, 0.98) 0%, 
+            rgba(8, 8, 15, 0.95) 50%, 
+            rgba(5, 5, 10, 0.98) 100%);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
     box-shadow: 
-        inset 3px 3px 8px rgba(0, 0, 0, 0.8),
-        inset -2px -2px 6px rgba(139, 90, 43, 0.3),
-        inset 0 2px 8px rgba(0, 0, 0, 0.6),
-        inset 0 -1px 4px rgba(0, 247, 194, 0.1),
-        0 2px 8px rgba(0, 0, 0, 0.4);
+        inset 0 0 20px rgba(0, 0, 0, 0.9),
+        inset 0 2px 4px rgba(0, 0, 0, 0.8),
+        0 1px 2px rgba(0, 0, 0, 0.6);
     overflow: hidden;
 }
 
@@ -2996,8 +2997,20 @@ html {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 12px 0 24px;
     z-index: 1;
+}
+
+.tuner-scale::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 24px;
+    right: 12px;
+    height: 1px;
+    background: rgba(0, 255, 100, 0.3);
+    transform: translateY(-50%);
+    z-index: 0;
 }
 
 .scale-marker {
@@ -3016,58 +3029,55 @@ html {
 }
 
 .scale-marker.scale-clickable:hover::before {
-    background: linear-gradient(180deg, 
-        transparent 0%, 
-        rgba(0, 247, 194, 0.9) 50%, 
-        transparent 100%);
-    box-shadow: 0 0 8px rgba(0, 247, 194, 0.6);
+    background: rgba(0, 255, 100, 0.8);
+    box-shadow: 0 0 8px rgba(0, 255, 100, 0.6);
 }
 
 .scale-marker.scale-clickable:hover .marker-label {
-    color: rgba(0, 247, 194, 0.9);
-    text-shadow: 0 0 6px rgba(0, 247, 194, 0.6), 0 0 3px rgba(0, 247, 194, 1);
+    color: #00ff64;
+    text-shadow: 
+        0 0 8px rgba(0, 255, 100, 0.9),
+        0 0 14px rgba(0, 255, 100, 0.5),
+        0 0 3px rgba(0, 255, 100, 1);
     transform: scale(1.05);
 }
 
 .scale-marker::before {
     content: '';
-    width: 2px;
-    height: 20px;
-    background: linear-gradient(180deg, 
-        transparent 0%, 
-        rgba(0, 247, 194, 0.4) 50%, 
-        transparent 100%);
+    width: 1px;
+    height: 12px;
+    background: rgba(0, 255, 100, 0.4);
     transition: all 0.3s ease;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .scale-marker.scale-major::before {
-    height: 30px;
-    width: 3px;
-    background: linear-gradient(180deg, 
-        transparent 0%, 
-        rgba(0, 247, 194, 0.7) 50%, 
-        transparent 100%);
+    height: 20px;
+    width: 2px;
+    background: rgba(0, 255, 100, 0.6);
 }
 
 .scale-marker.scale-major.active::before {
-    background: linear-gradient(180deg, 
-        transparent 0%, 
-        rgba(0, 247, 194, 1) 50%, 
-        transparent 100%);
-    box-shadow: 0 0 10px rgba(0, 247, 194, 0.8);
+    background: rgba(0, 255, 100, 0.9);
+    box-shadow: 0 0 8px rgba(0, 255, 100, 0.6);
 }
 
 .marker-label {
     font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
+    font-size: 0.65rem;
     font-weight: 700;
-    color: rgba(0, 247, 194, 0.5);
+    color: #00ff64;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     position: absolute;
-    bottom: 6px;
+    bottom: 8px;
     white-space: nowrap;
-    text-shadow: 0 0 4px rgba(0, 247, 194, 0.3);
+    text-shadow: 
+        0 0 6px rgba(0, 255, 100, 0.8),
+        0 0 12px rgba(0, 255, 100, 0.4),
+        0 0 2px rgba(0, 255, 100, 1);
     transition: all 0.3s ease;
     pointer-events: none;
 }
@@ -3075,32 +3085,38 @@ html {
 /* Staggered label positioning - alternating top and bottom */
 .scale-marker.label-top .marker-label {
     bottom: auto;
-    top: 6px;
+    top: 8px;
 }
 
 .scale-marker.scale-major.active .marker-label {
-    color: rgba(0, 247, 194, 1);
-    text-shadow: 0 0 8px rgba(0, 247, 194, 0.8), 0 0 3px rgba(0, 247, 194, 1);
+    color: #00ff64;
+    text-shadow: 
+        0 0 8px rgba(0, 255, 100, 1),
+        0 0 16px rgba(0, 255, 100, 0.6),
+        0 0 3px rgba(0, 255, 100, 1);
 }
 
 .tuner-indicator {
     position: absolute;
-    top: 50%;
-    left: 20px;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 45px;
+    top: 0;
+    left: 24px;
+    width: 4px;
+    height: 100%;
     background: linear-gradient(180deg, 
-        rgba(255, 69, 0, 0) 0%, 
-        rgba(255, 69, 0, 0.9) 20%,
-        rgba(255, 69, 0, 1) 50%,
-        rgba(255, 69, 0, 0.9) 80%,
-        rgba(255, 69, 0, 0) 100%);
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.8),
-                0 0 5px rgba(255, 69, 0, 1);
+        rgba(255, 0, 0, 0.3) 0%, 
+        rgba(255, 0, 0, 0.9) 10%,
+        rgba(255, 0, 0, 1) 20%,
+        rgba(255, 0, 0, 1) 80%,
+        rgba(255, 0, 0, 0.9) 90%,
+        rgba(255, 0, 0, 0.3) 100%);
+    box-shadow: 
+        0 0 12px rgba(255, 0, 0, 0.9),
+        0 0 6px rgba(255, 0, 0, 0.7),
+        inset 0 0 4px rgba(255, 255, 255, 0.2);
     z-index: 3;
     transition: left 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     pointer-events: none;
+    border-radius: 1px;
 }
 
 .tuner-reflection {
@@ -3807,15 +3823,15 @@ html {
     }
     
     .tuner-glass {
-        height: 50px;
+        height: 70px;
     }
     
     .tuner-indicator {
-        height: 38px;
+        height: 100%;
     }
     
     .tuner-scale {
-        padding: 0 15px;
+        padding: 0 10px 0 20px;
     }
     
     .scale-marker::before {
@@ -3875,11 +3891,11 @@ html {
     }
     
     .tuner-glass {
-        height: 55px;
+        height: 75px;
     }
     
     .tuner-indicator {
-        height: 42px;
+        height: 100%;
     }
     
     .marker-label {

@@ -6174,8 +6174,8 @@ section.production-header.alice p {
 }
 
 .mixtape-track-item {
-    padding: 1rem 1.2rem;
-    margin-bottom: 4px;
+    padding: 0.67rem 1.2rem;
+    margin-bottom: 2px;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -6489,7 +6489,7 @@ section.production-header.alice p {
     }
     
     .mixtape-track-item {
-        padding: 0.65rem 0.9rem;
+        padding: 0.5rem 0.9rem;
         font-size: 0.85rem;
     }
     

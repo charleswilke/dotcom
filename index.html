@@ -451,6 +451,15 @@
     
     <script src="common.js"></script>
     <script>
+        // Function to properly decode all HTML entities
+        function decodeHtmlEntities(text) {
+            if (!text) return '';
+            // Create a temporary DOM element to decode HTML entities
+            const div = document.createElement('div');
+            div.innerHTML = text;
+            return div.textContent || div.innerText || '';
+        }
+        
         // Add smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -680,14 +689,9 @@
             spotlightTitle.textContent = latestItem.title;
             
             // Set the description (shorter for compact design)
-            const cleanDescription = latestItem.description
+            // First decode HTML entities properly, then strip HTML tags
+            const cleanDescription = decodeHtmlEntities(latestItem.description)
                 .replace(/<[^>]*>/g, '')
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&amp;/g, '&')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&quot;/g, '"')
-                .replace(/&#39;/g, "'")
                 .trim();
             
             spotlightDescription.textContent = cleanDescription.substring(0, 150) + (cleanDescription.length > 150 ? '...' : '');
@@ -764,14 +768,9 @@
                     `);
                 }
                 
-                const cleanDescription = description
+                // First decode HTML entities properly, then strip HTML tags
+                const cleanDescription = decodeHtmlEntities(description)
                     .replace(/<[^>]*>/g, '')
-                    .replace(/&nbsp;/g, ' ')
-                    .replace(/&amp;/g, '&')
-                    .replace(/&lt;/g, '<')
-                    .replace(/&gt;/g, '>')
-                    .replace(/&quot;/g, '"')
-                    .replace(/&#39;/g, "'")
                     .trim();
                 
                 const feedItem = document.createElement('a');

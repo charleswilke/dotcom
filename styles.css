@@ -2374,12 +2374,8 @@ html {
 /* Simplified content animations for tablets/mobile */
 @media (max-width: 1024px) {
     .audio-summary-content {
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .audio-summary-card.expanded .audio-summary-content {
         opacity: 1;
+        transition: opacity 0.3s ease;
     }
 }
 
@@ -2458,10 +2454,10 @@ html {
 }
 
 
-/* Tablet and Mobile - Show toggle button and collapsible behavior */
+/* Tablet and Mobile - Always visible, no toggle button */
 @media (max-width: 1024px) {
     .audio-summary-toggle {
-        display: block;
+        display: none;
     }
     
     .audio-summary-player {
@@ -2476,22 +2472,19 @@ html {
         min-width: 400px;
     }
     
-    .audio-summary-card.collapsed {
-        max-height: 0;
-        opacity: 0;
-        border-color: transparent;
-        margin-top: -0.5rem;
-        overflow: hidden;
-        transform: translateY(-10px);
-        transition: all 0.3s ease;
+    .audio-summary-card {
+        opacity: 1;
+        max-height: none;
+        margin-top: 0;
+        transform: translateY(0);
+        overflow: visible;
     }
     
     .audio-summary-card.expanded {
-        max-height: 300px;
         opacity: 1;
+        max-height: none;
         margin-top: 0;
         transform: translateY(0);
-        transition: all 0.3s ease;
     }
 }
 

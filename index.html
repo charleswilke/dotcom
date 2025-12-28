@@ -199,7 +199,9 @@
                                                     <div class="scale-marker scale-minor"></div>
                                                     <div class="scale-marker scale-major scale-clickable label-top" data-period="Oct '25" data-station="5"><span class="marker-label">OCT '25</span></div>
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable active" data-period="Nov '25" data-station="6"><span class="marker-label">NOV '25</span></div>
+                                                    <div class="scale-marker scale-major scale-clickable" data-period="Nov '25" data-station="6"><span class="marker-label">NOV '25</span></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable label-top active" data-period="Dec '25" data-station="7"><span class="marker-label">DEC '25</span></div>
                                                     <!-- Bonus LED - Opens Mixtape -->
                                                     <div class="tuner-led" id="redButtonWrapper" title="Something extra..."></div>
                                                 </div>
@@ -213,10 +215,10 @@
                                 <div class="audio-summary-meta">
                                     <span class="summary-coverage">Recap Podcast</span>
                                     <span class="summary-separator">•</span>
-                                    <span class="summary-date" id="current-recap-date">November 2025</span>
+                                    <span class="summary-date" id="current-recap-date">December 2025</span>
                                 </div>
                                 <div class="audio-summary-player">
-                                    <audio id="recap-audio" class="custom-audio" src="audio/nov-2025-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
+                                    <audio id="recap-audio" class="custom-audio" src="audio/dec-2025-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
                                     <div class="custom-audio-player">
                                         <button class="audio-btn audio-summary-btn" aria-label="Play/Pause Audio Summary">
                                             <span class="audio-icon">▶</span>
@@ -867,46 +869,52 @@
         document.addEventListener('DOMContentLoaded', function() {
             const recapStations = [
                 {
-                    angle: 0,
+                    angle: 45,
                     date: 'Q3 2023',
                     file: 'audio/q3-2023-substack-recap.mp3',
                     label: 'Q3 \'23'
                 },
                 {
-                    angle: 51,
+                    angle: 90,
                     date: 'Q4 2023',
                     file: 'audio/q4-2023-substack-recap.mp3',
                     label: 'Q4 \'23'
                 },
                 {
-                    angle: 103,
+                    angle: 135,
                     date: 'H1 2024',
                     file: 'audio/h1-2024-substack-recap.mp3',
                     label: 'H1 \'24'
                 },
                 {
-                    angle: 154,
+                    angle: 180,
                     date: 'H2 2024',
                     file: 'audio/h2-2024-substack-recap.mp3',
                     label: 'H2 \'24'
                 },
                 {
-                    angle: 206,
+                    angle: 225,
                     date: 'Q3 2025',
                     file: 'audio/aug-sept-substack-summary.mp3',
                     label: 'Q3 \'25'
                 },
                 {
-                    angle: 257,
+                    angle: 270,
                     date: 'October 2025',
                     file: 'audio/oct-substack-recap.mp3',
                     label: 'OCT \'25'
                 },
                 {
-                    angle: 309,
+                    angle: 315,
                     date: 'November 2025',
                     file: 'audio/nov-2025-substack-recap.mp3',
                     label: 'NOV \'25'
+                },
+                {
+                    angle: 0,
+                    date: 'December 2025',
+                    file: 'audio/dec-2025-substack-recap.mp3',
+                    label: 'DEC \'25'
                 }
             ];
             
@@ -923,7 +931,7 @@
                 'audio/radio_tuning9.mp3'
             ];
             
-            let currentStation = 6; // Start at station 6 (Nov '25)
+            let currentStation = 7; // Start at station 7 (Dec '25)
             const rotatingKnob = document.getElementById('rotating-knob');
             const dialWrapper = document.querySelector('.time-dial-wrapper');
             const dateDisplay = document.getElementById('current-recap-date');
@@ -931,7 +939,7 @@
             let isDragging = false;
             let hasDragged = false;
             let startAngle = 0;
-            let currentAngle = 309; // Nov '25 is at 309°
+            let currentAngle = 0; // Dec '25 is at 0°
             
             // Create audio element for tuning sounds
             const tuningAudio = new Audio();
@@ -1112,12 +1120,19 @@
             
             function findNearestStation(angle) {
                 let nearest = 0;
-                let minDiff = Math.abs(angle - recapStations[0].angle);
+                // Calculate distance considering wrap-around (0° and 360° are the same)
+                let diff0 = Math.abs(angle - recapStations[0].angle);
+                let diff0Wrap = Math.abs(angle - (recapStations[0].angle + 360));
+                let minDiff = Math.min(diff0, diff0Wrap, Math.abs(angle - (recapStations[0].angle - 360)));
                 
                 for (let i = 1; i < recapStations.length; i++) {
                     const diff = Math.abs(angle - recapStations[i].angle);
-                    if (diff < minDiff) {
-                        minDiff = diff;
+                    const diffWrap = Math.abs(angle - (recapStations[i].angle + 360));
+                    const diffWrapNeg = Math.abs(angle - (recapStations[i].angle - 360));
+                    const minStationDiff = Math.min(diff, diffWrap, diffWrapNeg);
+                    
+                    if (minStationDiff < minDiff) {
+                        minDiff = minStationDiff;
                         nearest = i;
                     }
                 }
@@ -1205,8 +1220,8 @@
             dialWrapper.addEventListener('click', function(e) {
                 // Only advance station if user didn't drag (just tapped/clicked)
                 if (!hasDragged) {
-                    // Chronological order: Q3 '23 (0) → Q4 '23 (1) → H1 '24 (2) → H2 '24 (3) → Q3 '25 (4) → Oct '25 (5) → Nov '25 (6) → Q3 '23 (0)
-                    const chronologicalOrder = [0, 1, 2, 3, 4, 5, 6]; // Station indices in chronological order
+                    // Chronological order: Q3 '23 (0) → Q4 '23 (1) → H1 '24 (2) → H2 '24 (3) → Q3 '25 (4) → Oct '25 (5) → Nov '25 (6) → Dec '25 (7) → Q3 '23 (0)
+                    const chronologicalOrder = [0, 1, 2, 3, 4, 5, 6, 7]; // Station indices in chronological order
                     const currentIndexInOrder = chronologicalOrder.indexOf(currentStation);
                     const nextIndexInOrder = (currentIndexInOrder + 1) % chronologicalOrder.length;
                     const nextStation = chronologicalOrder[nextIndexInOrder];
@@ -1240,14 +1255,17 @@
             
             // Initialize date display transition and current station
             dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            dialWrapper.setAttribute('data-current-station', '6'); // Start at station 6 (Nov '25)
+            dialWrapper.setAttribute('data-current-station', '7'); // Start at station 7 (Dec '25)
             
-            // Initialize knob rotation to Nov '25 position
-            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(309deg)';
+            // Initialize knob rotation to Dec '25 position
+            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+            
+            // Initialize station (date display, audio source, etc.)
+            updateStation(7);
             
             // Initialize tuner indicator position
             setTimeout(() => {
-                updateTunerIndicator(6);
+                updateTunerIndicator(7);
             }, 100);
             
             // Add click handlers to clickable scale markers

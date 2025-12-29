@@ -6374,7 +6374,7 @@ section.production-header.alice p {
 .mixtape-lyrics-video-container.has-video {
     display: block;
     flex: 1;
-    min-height: 115px;
+    min-height: 113px;
     margin-top: 0.4rem;
 }
 
@@ -6410,7 +6410,7 @@ section.production-header.alice p {
 /* Desktop - grow to match track list height */
 @media (min-width: 768px) {
     .mixtape-lyrics-video-container.has-video {
-        min-height: 165px;
+        min-height: 162px;
     }
 }
 

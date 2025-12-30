@@ -404,9 +404,20 @@
         <div class="mixtape-content">
             <div class="mixtape-left-section">
                 <div class="mixtape-cover-container">
-                    <img src="audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg" alt="Mixtape Cover" class="mixtape-cover">
+                    <img src="audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg" alt="Mixtape Cover" class="mixtape-cover" id="mixtapeCoverImg">
                 </div>
-                <div class="mixtape-credits">All Songs Produced by Charles Wilke x GPT 5.1/5.2 x Suno v5 x Claude 4.5 Opus x Flux.1</div>
+                <div class="mixtape-side-toggle-container">
+                    <div class="mixtape-credits">All Songs Produced by Charles Wilke x GPT 5.1/5.2 x Suno v5 x Claude 4.5 Opus</div>
+                    <div class="mixtape-side-toggle">
+                        <span class="side-label side-a-label active">A</span>
+                        <button class="side-toggle-switch" id="sideToggleSwitch" aria-label="Toggle between A-side and B-side">
+                            <span class="toggle-track">
+                                <span class="toggle-knob"></span>
+                            </span>
+                        </button>
+                        <span class="side-label side-b-label">B</span>
+                    </div>
+                </div>
                 <div class="mixtape-player-container">
                     <div class="mixtape-track-visualizer">
                         <canvas id="mixtapeVisualizer" class="audio-visualizer"></canvas>
@@ -1883,7 +1894,7 @@
 
         // Mixtape Lightbox Logic
         document.addEventListener('DOMContentLoaded', () => {
-            const tracks = [
+            const aSideTracks = [
                 { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', video: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp4', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
                 { title: 'Protect the Hollow', file: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp3', video: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp4', article: 'https://charleswilke.substack.com/p/protect-the-hollow' },
                 { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', video: 'audio/exploring-laibor-mixtape/data-dignity.mp4', article: 'https://charleswilke.substack.com/p/the-quest-for-data-dignity' },
@@ -1894,11 +1905,24 @@
                 { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3', video: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp4', article: 'https://charleswilke.substack.com/p/terminal-uniqueness' },
                 { title: 'Treasure in the Mess', file: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp3', video: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp4', article: 'https://charleswilke.substack.com/p/treasure-in-the-mess' },
                 { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4', article: 'https://charleswilke.substack.com/p/gave-it-away' },
-                { title: 'Value is Myth', file: 'audio/exploring-laibor-mixtape/value-is-myth.mp3', video: 'audio/exploring-laibor-mixtape/value-is-myth.mp4', article: 'https://charleswilke.substack.com/p/value-is-myth' },
-                //{ title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3', video: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp4', article: 'https://charleswilke.substack.com/p/respect-the-exhale', bonus: true },
-                //{ title: 'Future In Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3', video: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp4', bonus: true },
-                //{ title: 'Agency Without Agenda', file: 'audio/exploring-laibor-mixtape/agency-without-agenda.mp3', video: 'audio/exploring-laibor-mixtape/agency-without-agenda.mp4', bonus: true }
+                { title: 'Value is Myth', file: 'audio/exploring-laibor-mixtape/value-is-myth.mp3', video: 'audio/exploring-laibor-mixtape/value-is-myth.mp4', article: 'https://charleswilke.substack.com/p/value-is-myth' }
             ];
+            
+            const bSideTracks = [
+                { title: 'Future in Our Eyes', file: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp3', video: 'audio/exploring-laibor-mixtape/future-in-our-eyes.mp4' },
+                { title: 'Respect the Exhale', file: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp3', video: 'audio/exploring-laibor-mixtape/respect-the-exhale.mp4', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+                { title: 'Slow the Clock', file: 'audio/exploring-laibor-mixtape/slow-the-clock.mp3', video: 'audio/exploring-laibor-mixtape/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+                { title: 'Luxury of Indifference', file: 'audio/exploring-laibor-mixtape/luxury-of-indifference.mp3', video: 'audio/exploring-laibor-mixtape/luxury-of-indifference.mp4', article: 'https://charleswilke.substack.com/p/agency-wo-agenda' },
+                { title: 'Theater\'s Last Stand', file: 'audio/exploring-laibor-mixtape/theaters-last-stand.mp3', video: 'audio/exploring-laibor-mixtape/theaters-last-stand.mp4', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
+                { title: 'Love at Machine Speed', file: 'audio/exploring-laibor-mixtape/love-at-machine-speed.mp3', video: 'audio/exploring-laibor-mixtape/love-at-machine-speed.mp4', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
+                { title: 'What Passes Through Us', file: 'audio/exploring-laibor-mixtape/what-passes-through-us.mp3', video: 'audio/exploring-laibor-mixtape/what-passes-through-us.mp4', article: 'https://charleswilke.substack.com/p/what-passes-through-us' }
+            ];
+            
+            const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg';
+            const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-b-sides-cover.png';
+            
+            let tracks = aSideTracks;
+            let isBSide = false;
 
             const lightbox = document.getElementById('mixtapeLightbox');
             const tile = document.getElementById('mixtapeTile');
@@ -1916,6 +1940,11 @@
             const visualizerCanvas = document.getElementById('mixtapeVisualizer');
             const lyricsVideo = document.getElementById('lyricsVideo');
             const lyricsVideoContainer = document.getElementById('lyricsVideoContainer');
+            const sideToggle = document.getElementById('sideToggleSwitch');
+            const sideALabel = document.querySelector('.side-a-label');
+            const sideBLabel = document.querySelector('.side-b-label');
+            const coverImg = document.getElementById('mixtapeCoverImg');
+            const subtitleSpan = document.querySelector('.mixtape-subtitle');
             
             let currentIndex = 0;
             
@@ -1998,8 +2027,11 @@
                     
                     const barHeight = barHeights[i] * maxBarHeight;
                     
-                    // Colors - teal gradient with intensity (outer bars more intense)
-                    const hue = 168 - ((barCount - 1 - i) / barCount) * 25;
+                    // Colors - gradient with intensity (outer bars more intense)
+                    // A-side: teal (hue ~168), B-side: amber (hue ~38)
+                    const baseHue = isBSide ? 38 : 168;
+                    const hueVariance = isBSide ? 15 : 25;
+                    const hue = baseHue - ((barCount - 1 - i) / barCount) * hueVariance;
                     const intensity = barHeights[i];
                     const saturation = 75 + intensity * 25;
                     const lightness = 40 + intensity * 20;
@@ -2059,10 +2091,12 @@
                 return m + ':' + (s < 10 ? '0' : '') + s;
             }
 
-            // Populate Playlist
-            if (trackList && tracks.length > 0) {
+            // Populate Playlist function
+            function populatePlaylist() {
+                if (!trackList) return;
+                trackList.innerHTML = '';
                 let trackNumber = 1;
-                let bonusSeparatorAdded = false;
+                
                 tracks.forEach((track, index) => {
                     const li = document.createElement('li');
                     li.className = 'mixtape-track-item';
@@ -2078,26 +2112,9 @@
                             <span class="track-article-label">spark</span>
                         </a>` : '';
                     
-                    if (track.bonus) {
-                        li.classList.add('bonus-track');
-                        // Add separator and section header before first bonus track only
-                        if (!bonusSeparatorAdded) {
-                            const separator = document.createElement('li');
-                            separator.className = 'bonus-track-separator';
-                            trackList.appendChild(separator);
-                            
-                            const header = document.createElement('li');
-                            header.className = 'bonus-section-header';
-                            header.textContent = 'BONUS TRACKS';
-                            trackList.appendChild(header);
-                            
-                            bonusSeparatorAdded = true;
-                        }
-                        li.innerHTML = `<span class="track-title-text">${track.title}</span>${articleBtn}`;
-                    } else {
-                        li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
-                        trackNumber++;
-                    }
+                    li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
+                    trackNumber++;
+                    
                     li.addEventListener('click', () => {
                         loadTrack(index);
                         playTrack();
@@ -2105,6 +2122,74 @@
                     trackList.appendChild(li);
                 });
             }
+            
+            // Toggle sound effect
+            const toggleSound = new Audio('audio/mixtape-found.mp3');
+            toggleSound.volume = 0.5;
+            
+            // Toggle between A-side and B-side
+            function toggleSide() {
+                isBSide = !isBSide;
+                
+                // Play toggle sound
+                toggleSound.currentTime = 0;
+                toggleSound.play().catch(e => console.log("Toggle sound:", e));
+                
+                // Stop current playback
+                if (audio) {
+                    audio.pause();
+                    audio.src = '';
+                }
+                if (lyricsVideo) {
+                    lyricsVideo.pause();
+                    lyricsVideo.src = '';
+                    lyricsVideoContainer.classList.remove('has-video');
+                }
+                
+                // Update play button
+                if (playPauseIcon) {
+                    playPauseIcon.textContent = '▶';
+                }
+                stopVisualizer();
+                
+                // Switch tracks and cover
+                if (isBSide) {
+                    tracks = bSideTracks;
+                    lightbox.classList.add('b-side-active');
+                    if (coverImg) coverImg.src = bSideCover;
+                    if (subtitleSpan) subtitleSpan.textContent = 'B-Sides';
+                    if (sideALabel) sideALabel.classList.remove('active');
+                    if (sideBLabel) sideBLabel.classList.add('active');
+                } else {
+                    tracks = aSideTracks;
+                    lightbox.classList.remove('b-side-active');
+                    if (coverImg) coverImg.src = aSideCover;
+                    if (subtitleSpan) subtitleSpan.textContent = 'Mixtape';
+                    if (sideALabel) sideALabel.classList.add('active');
+                    if (sideBLabel) sideBLabel.classList.remove('active');
+                }
+                
+                // Reset and repopulate
+                currentIndex = 0;
+                populatePlaylist();
+                
+                // Load first track (without playing) to maintain layout
+                loadTrack(0);
+                
+                // Update URL hash to match current side
+                const targetHash = isBSide ? '#bsides' : '#mixtape';
+                if (window.location.hash !== targetHash) {
+                    history.replaceState(null, '', targetHash);
+                }
+            }
+            
+            // Side toggle event listener
+            if (sideToggle) {
+                sideToggle.addEventListener('click', toggleSide);
+            }
+            
+            // Initial playlist population
+            populatePlaylist();
 
             function loadTrack(index) {
                 currentIndex = index;
@@ -2211,10 +2296,19 @@
             }
             
             // Open/Close Mixtape functions (also handles URL hash)
-            function openMixtape() {
+            function openMixtape(openBSide = false) {
                 if (lightbox) {
                     lightbox.classList.add('active');
                     document.body.style.overflow = 'hidden';
+                    
+                    // Switch to B-side if requested and not already there
+                    if (openBSide && !isBSide) {
+                        toggleSide();
+                    } else if (!openBSide && isBSide) {
+                        // Switch back to A-side if opening A-side
+                        toggleSide();
+                    }
+                    
                     // Load first track if empty
                     if (audio && !audio.src) {
                         loadTrack(0);
@@ -2222,8 +2316,9 @@
                     // Size the visualizer canvas
                     setTimeout(resizeCanvas, 50);
                     // Update URL hash (without triggering scroll)
-                    if (window.location.hash !== '#mixtape') {
-                        history.pushState(null, '', '#mixtape');
+                    const targetHash = isBSide ? '#bsides' : '#mixtape';
+                    if (window.location.hash !== targetHash) {
+                        history.pushState(null, '', targetHash);
                     }
                 }
             }
@@ -2235,7 +2330,7 @@
                     if (audio) audio.pause();
                     if (lyricsVideo) lyricsVideo.pause();
                     // Remove hash from URL
-                    if (window.location.hash === '#mixtape') {
+                    if (window.location.hash === '#mixtape' || window.location.hash === '#bsides') {
                         history.pushState(null, '', window.location.pathname);
                     }
                 }
@@ -2306,16 +2401,21 @@
                 });
             }
             
-            // Handle direct link to #mixtape
+            // Handle direct link to #mixtape or #bsides
             if (window.location.hash === '#mixtape') {
                 // Small delay to ensure DOM is ready
-                setTimeout(openMixtape, 100);
+                setTimeout(() => openMixtape(false), 100);
+            } else if (window.location.hash === '#bsides') {
+                // Small delay to ensure DOM is ready, open B-side
+                setTimeout(() => openMixtape(true), 100);
             }
             
             // Handle browser back/forward buttons
             window.addEventListener('popstate', () => {
                 if (window.location.hash === '#mixtape') {
-                    openMixtape();
+                    openMixtape(false);
+                } else if (window.location.hash === '#bsides') {
+                    openMixtape(true);
                 } else {
                     if (lightbox && lightbox.classList.contains('active')) {
                         lightbox.classList.remove('active');

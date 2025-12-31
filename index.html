@@ -173,18 +173,21 @@
                                 <!-- Time Dial Control -->
                                 <div class="time-dial-container">
                                     <div class="time-dial-layout">
-                                        <!-- Radio Dial Knob (Left Side) -->
-                                        <div class="time-dial-knob-section">
-                                            <div class="time-dial-wrapper">
-                                                <!-- Rotating knob image (with needle baked in) -->
-                                                <img src="images/radioknob.png" alt="Radio Dial" class="radio-knob-rotating" id="rotating-knob" draggable="false">
-                                                
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Radio Tuner Display (Right Side) -->
+                                        <!-- Radio Tuner Display with embedded lights -->
                                         <div class="radio-tuner-display">
                                             <div class="tuner-glass">
+                                                <!-- Station Lights Ring (embedded in display) -->
+                                                <div class="station-lights-ring" id="station-lights">
+                                                    <span class="station-light" data-station="0" style="--angle: 225deg"></span>
+                                                    <span class="station-light" data-station="1" style="--angle: 270deg"></span>
+                                                    <span class="station-light" data-station="2" style="--angle: 315deg"></span>
+                                                    <span class="station-light" data-station="3" style="--angle: 0deg"></span>
+                                                    <span class="station-light" data-station="4" style="--angle: 45deg"></span>
+                                                    <span class="station-light" data-station="5" style="--angle: 90deg"></span>
+                                                    <span class="station-light" data-station="6" style="--angle: 135deg"></span>
+                                                    <span class="station-light active" data-station="7" style="--angle: 180deg"></span>
+                                                </div>
+                                                
                                                 <div class="tuner-indicator" id="tuner-indicator"></div>
                                                 <div class="tuner-scale">
                                                     <div class="scale-marker scale-major scale-clickable" data-period="Q3 '23" data-station="0"><span class="marker-label">Q3<br>2023</span></div>
@@ -943,14 +946,12 @@
             ];
             
             let currentStation = 7; // Start at station 7 (Dec '25)
-            const rotatingKnob = document.getElementById('rotating-knob');
-            const dialWrapper = document.querySelector('.time-dial-wrapper');
+            const stationLightsContainer = document.getElementById('station-lights');
+            const stationLights = document.querySelectorAll('.station-light');
             const dateDisplay = document.getElementById('current-recap-date');
             const recapAudio = document.getElementById('recap-audio');
-            let isDragging = false;
-            let hasDragged = false;
-            let startAngle = 0;
-            let currentAngle = 0; // Dec '25 is at 0°
+            let scrollAccumulator = 0; // Accumulate scroll for stepping
+            const SCROLL_THRESHOLD = 50; // Pixels of scroll needed to change station
             
             // Create audio element for tuning sounds
             const tuningAudio = new Audio();
@@ -1007,15 +1008,20 @@
                 }
                 // ===== END CRT EFFECTS =====
                 
+                // Update station lights
+                stationLights.forEach((light, i) => {
+                    light.classList.remove('active', 'nearby');
+                    if (i === stationIndex) {
+                        light.classList.add('active');
+                    } else if (Math.abs(i - stationIndex) === 1) {
+                        light.classList.add('nearby');
+                    }
+                });
+                
                 // Update data attribute for label highlighting
-                dialWrapper.setAttribute('data-current-station', stationIndex);
-                
-                // Enable bouncy transition for station changes
-                rotatingKnob.style.transition = 'transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
-                
-                // Rotate the entire knob image
-                rotatingKnob.style.transform = `translate(-50%, -50%) rotate(${station.angle}deg)`;
-                currentAngle = station.angle;
+                if (stationLightsContainer) {
+                    stationLightsContainer.setAttribute('data-current-station', stationIndex);
+                }
                 
                 // Update tuner indicator position
                 updateTunerIndicator(stationIndex);
@@ -1119,157 +1125,102 @@
                 tunerIndicator.style.left = leftPosition + 'px';
             }
             
-            function getAngleFromEvent(e, centerX, centerY) {
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-                const dx = clientX - centerX;
-                const dy = clientY - centerY;
-                let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
-                if (angle < 0) angle += 360;
-                return angle;
-            }
-            
-            function findNearestStation(angle) {
-                let nearest = 0;
-                // Calculate distance considering wrap-around (0° and 360° are the same)
-                let diff0 = Math.abs(angle - recapStations[0].angle);
-                let diff0Wrap = Math.abs(angle - (recapStations[0].angle + 360));
-                let minDiff = Math.min(diff0, diff0Wrap, Math.abs(angle - (recapStations[0].angle - 360)));
-                
-                for (let i = 1; i < recapStations.length; i++) {
-                    const diff = Math.abs(angle - recapStations[i].angle);
-                    const diffWrap = Math.abs(angle - (recapStations[i].angle + 360));
-                    const diffWrapNeg = Math.abs(angle - (recapStations[i].angle - 360));
-                    const minStationDiff = Math.min(diff, diffWrap, diffWrapNeg);
-                    
-                    if (minStationDiff < minDiff) {
-                        minDiff = minStationDiff;
-                        nearest = i;
-                    }
-                }
-                
-                return nearest;
-            }
-            
-            // Mouse/Touch drag handlers
-            function startDrag(e) {
+            // Handle scroll/wheel events
+            function handleScroll(e) {
                 e.preventDefault();
-                isDragging = true;
-                hasDragged = false; // Reset on start
-                rotatingKnob.style.transition = 'none';
                 
-                const rect = dialWrapper.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                startAngle = getAngleFromEvent(e, centerX, centerY);
-            }
-            
-            function onDrag(e) {
-                if (!isDragging) return;
+                // Get scroll delta (normalize across browsers)
+                const delta = e.deltaY || e.detail || -e.wheelDelta;
                 
-                hasDragged = true; // Mark that actual dragging occurred
+                // Accumulate scroll
+                scrollAccumulator += delta;
                 
-                const rect = dialWrapper.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                let angle = getAngleFromEvent(e, centerX, centerY);
-                
-                // Find nearest station and check if we're close enough to feel the "magnetic pull"
-                const nearestStation = findNearestStation(angle);
-                const nearestStationAngle = recapStations[nearestStation].angle;
-                const distanceToNearest = Math.abs(angle - nearestStationAngle);
-                const snapThreshold = 15; // degrees - within this range, station starts to "pull"
-                
-                // Highlight indicators based on proximity
-                updateIndicatorGlow(nearestStation, distanceToNearest, snapThreshold);
-                
-                // Apply subtle magnetic pull when close to a station
-                if (distanceToNearest < snapThreshold) {
-                    // Ease the angle toward the station (subtle magnetic effect)
-                    const pullStrength = 1 - (distanceToNearest / snapThreshold);
-                    const pullAmount = (nearestStationAngle - angle) * pullStrength * 0.3;
-                    angle += pullAmount;
+                // Check if we've scrolled enough to change station
+                if (Math.abs(scrollAccumulator) >= SCROLL_THRESHOLD) {
+                    const direction = scrollAccumulator > 0 ? 1 : -1; // Down = forward, Up = backward
+                    
+                    // Calculate new station (wrapping around)
+                    let newStation = currentStation + direction;
+                    if (newStation < 0) newStation = recapStations.length - 1;
+                    if (newStation >= recapStations.length) newStation = 0;
+                    
+                    // Update station
+                    updateStation(newStation);
+                    
+                    // Haptic feedback
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(15);
+                    }
+                    
+                    // Reset accumulator (keep remainder for smooth feel)
+                    scrollAccumulator = scrollAccumulator % SCROLL_THRESHOLD;
                 }
-                
-                // Update knob rotation in real-time (no transition during drag)
-                rotatingKnob.style.transition = 'none';
-                rotatingKnob.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-                currentAngle = angle;
-                
-                // Update tuner needle position in real-time as knob is dragged
-                updateTunerIndicatorByAngle(angle);
             }
             
             function updateIndicatorGlow(nearestStation, distance, threshold) {
-                // Knob markers removed - function kept for compatibility with existing calls
+                // Legacy function - kept for compatibility
             }
             
-            function endDrag() {
-                if (!isDragging) return;
-                isDragging = false;
+            // Set up station lights interactions
+            if (stationLightsContainer) {
+                // Scroll wheel events on the container
+                stationLightsContainer.addEventListener('wheel', handleScroll, { passive: false });
                 
-                // Re-enable transition for smooth snap with overshoot
-                rotatingKnob.style.transition = 'transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
+                // Touch swipe support for mobile
+                let touchStartY = 0;
+                let touchAccumulator = 0;
                 
-                // Snap to nearest station
-                const nearestStation = findNearestStation(currentAngle);
+                stationLightsContainer.addEventListener('touchstart', function(e) {
+                    touchStartY = e.touches[0].clientY;
+                    touchAccumulator = 0;
+                }, { passive: true });
                 
-                // Subtle haptic feedback on mobile devices
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(20); // 20ms vibration
-                }
-                
-                updateStation(nearestStation);
-                
-                // After snapping, set the final glow state for the selected station
-                setTimeout(() => {
-                    updateIndicatorGlow(nearestStation, 0, 15); // 0 distance = full glow
-                }, 100);
-            }
-            
-            // Click/Tap to cycle through stations chronologically
-            dialWrapper.addEventListener('click', function(e) {
-                // Only advance station if user didn't drag (just tapped/clicked)
-                if (!hasDragged) {
-                    // Chronological order: Q3 '23 (0) → Q4 '23 (1) → H1 '24 (2) → H2 '24 (3) → Q3 '25 (4) → Oct '25 (5) → Nov '25 (6) → Dec '25 (7) → Q3 '23 (0)
-                    const chronologicalOrder = [0, 1, 2, 3, 4, 5, 6, 7]; // Station indices in chronological order
-                    const currentIndexInOrder = chronologicalOrder.indexOf(currentStation);
-                    const nextIndexInOrder = (currentIndexInOrder + 1) % chronologicalOrder.length;
-                    const nextStation = chronologicalOrder[nextIndexInOrder];
+                stationLightsContainer.addEventListener('touchmove', function(e) {
+                    e.preventDefault();
+                    const touchY = e.touches[0].clientY;
+                    const delta = touchStartY - touchY;
+                    touchStartY = touchY;
                     
-                    updateStation(nextStation);
+                    // Accumulate for station change
+                    touchAccumulator += delta;
                     
-                    // Update glow for the new station
-                    setTimeout(() => {
-                        updateIndicatorGlow(nextStation, 0, 15);
-                    }, 100);
-                    
-                    // Haptic feedback for click/tap
-                    if ('vibrate' in navigator) {
-                        navigator.vibrate(20);
+                    if (Math.abs(touchAccumulator) >= SCROLL_THRESHOLD) {
+                        const direction = touchAccumulator > 0 ? 1 : -1;
+                        let newStation = currentStation + direction;
+                        if (newStation < 0) newStation = recapStations.length - 1;
+                        if (newStation >= recapStations.length) newStation = 0;
+                        
+                        updateStation(newStation);
+                        
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(15);
+                        }
+                        
+                        touchAccumulator = touchAccumulator % SCROLL_THRESHOLD;
                     }
-                }
-                
-                // Reset hasDragged flag after handling click
-                hasDragged = false;
+                }, { passive: false });
+            }
+            
+            // Click on individual lights to go directly to that station
+            stationLights.forEach(light => {
+                light.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const stationIndex = parseInt(this.getAttribute('data-station'));
+                    if (!isNaN(stationIndex) && stationIndex !== currentStation) {
+                        updateStation(stationIndex);
+                        
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(20);
+                        }
+                    }
+                });
             });
-            
-            // Desktop drag
-            dialWrapper.addEventListener('mousedown', startDrag);
-            document.addEventListener('mousemove', onDrag);
-            document.addEventListener('mouseup', endDrag);
-            
-            // Mobile touch
-            dialWrapper.addEventListener('touchstart', startDrag, { passive: false });
-            document.addEventListener('touchmove', onDrag, { passive: false });
-            document.addEventListener('touchend', endDrag);
             
             // Initialize date display transition and current station
             dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            dialWrapper.setAttribute('data-current-station', '7'); // Start at station 7 (Dec '25)
-            
-            // Initialize knob rotation to Dec '25 position
-            rotatingKnob.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+            if (stationLightsContainer) {
+                stationLightsContainer.setAttribute('data-current-station', '7');
+            }
             
             // Initialize station (date display, audio source, etc.)
             updateStation(7);

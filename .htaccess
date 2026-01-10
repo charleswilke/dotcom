@@ -3,5 +3,9 @@
 RewriteEngine On
 RewriteRule ^mixtape/?$ /mixtape.html [L]
 
+# Serve bsides.html for /bsides URL (for OG meta tags / rich snippets)
+# The page then redirects to /#bsides for the actual lightbox
+RewriteRule ^bsides/?$ /bsides.html [L]
+
 
 

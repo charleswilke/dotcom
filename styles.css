@@ -1126,7 +1126,7 @@ section.production-header.spotlight-production p {
     left: 0;
     right: 0;
     background: linear-gradient(to bottom, rgba(26,21,80,0) 0%, rgba(26,21,80,0.82) 60%, rgba(26,21,80,1) 100%);
-    padding: 1rem 1.25rem;
+    padding: 1rem 1.25rem 0.5rem 1.25rem;
     color: white;
     max-height: 40%;
     display: flex;
@@ -1137,12 +1137,60 @@ section.production-header.spotlight-production p {
 .showcase-caption h3 {
     margin-bottom: 0.5rem;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1.2;
 }
 
 .showcase-caption p {
     font-size: 0.9rem;
     line-height: 1.4;
     opacity: 0.95;
+    margin-bottom: 0;
+    margin-top: 0.25rem;
+}
+
+/* Toast IQ subtitle styling - grey text */
+.toast-iq-title + p {
+    color: #cccccc;
+    opacity: 0.9;
+}
+
+/* Toast IQ title styling */
+.toast-iq-title {
+    font-size: 2rem !important;
+}
+
+.toast-word {
+    color: #ff8c00;
+}
+
+.iq-word {
+    color: #ff69b4;
+}
+
+/* Mixtape title styling */
+.mixtape-title {
+    font-size: 1.6rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+}
+
+.mixtape-subtitle {
+    font-size: 1.2rem;
+    display: block;
+    text-align: center;
+    margin-top: 0.2rem;
+}
+
+/* Date styling */
+.showcase-date {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    opacity: 0.9;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 /* FAQ Section */

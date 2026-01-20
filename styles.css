@@ -6411,7 +6411,8 @@ section.production-header.alice p {
         transparent 70%);
 }
 
-.mixtape-lightbox.b-side-active .audio-btn:hover {
+.mixtape-lightbox.b-side-active .audio-btn:hover,
+.mixtape-lightbox.b-side-active .audio-btn:focus {
     border-color: rgba(247, 168, 0, 0.6);
     color: rgba(247, 168, 0, 1);
     box-shadow: 
@@ -6422,6 +6423,8 @@ section.production-header.alice p {
         rgba(247, 168, 0, 0.25) 0%, 
         rgba(247, 168, 0, 0.15) 50%, 
         rgba(247, 168, 0, 0.25) 100%);
+    outline: 2px solid rgba(247, 168, 0, 0.6);
+    outline-offset: 2px;
 }
 
 .mixtape-lightbox.b-side-active .audio-icon {

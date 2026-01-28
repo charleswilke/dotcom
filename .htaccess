@@ -7,5 +7,13 @@ RewriteRule ^mixtape/?$ /mixtape.html [L]
 # The page then redirects to /#bsides for the actual lightbox
 RewriteRule ^bsides/?$ /bsides.html [L]
 
+# Serve side-two.html for /side-two URL (for OG meta tags / rich snippets)
+# The page then redirects to /#bsides for the actual lightbox
+RewriteRule ^side-two/?$ /side-two.html [L]
+
+# Serve mixtape-side-two.html for /mixtape-side-two URL (for OG meta tags / rich snippets)
+# The page then redirects to /#mixtape-side-two for the actual lightbox
+RewriteRule ^mixtape-side-two/?$ /mixtape-side-two.html [L]
+
 
 

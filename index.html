@@ -411,7 +411,7 @@
                     <div class="mixtape-credits">All Songs Written & Produced by Charles Wilke x GPT 5.1/5.2 x Suno v5</div>
                     <div class="mixtape-side-toggle">
                         <span class="side-label side-a-label active">A</span>
-                        <button class="side-toggle-switch" id="sideToggleSwitch" aria-label="Toggle between A-side and B-side">
+                        <button class="side-toggle-switch" id="sideToggleSwitch" aria-label="Toggle between Side One and Side Two">
                             <span class="toggle-track">
                                 <span class="toggle-knob"></span>
                             </span>
@@ -1872,7 +1872,7 @@
             ];
             
             const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg';
-            const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-b-sides-cover.png';
+            const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover.jpg';
             
             let tracks = aSideTracks;
             let isBSide = false;
@@ -2110,7 +2110,7 @@
                     tracks = bSideTracks;
                     lightbox.classList.add('b-side-active');
                     if (coverImg) coverImg.src = bSideCover;
-                    if (subtitleSpan) subtitleSpan.textContent = 'B-Side';
+                    if (subtitleSpan) subtitleSpan.textContent = 'Side Two';
                     if (sideALabel) sideALabel.classList.remove('active');
                     if (sideBLabel) sideBLabel.classList.add('active');
                 } else {
@@ -2130,7 +2130,8 @@
                 loadTrack(0);
                 
                 // Update URL hash to match current side
-                const targetHash = isBSide ? '#bsides' : '#mixtape';
+                // Use #mixtape-side-two for Side Two (canonical), but also accept #bsides for backward compatibility
+                const targetHash = isBSide ? '#mixtape-side-two' : '#mixtape';
                 if (window.location.hash !== targetHash) {
                     history.replaceState(null, '', targetHash);
                 }
@@ -2269,7 +2270,8 @@
                     // Size the visualizer canvas
                     setTimeout(resizeCanvas, 50);
                     // Update URL hash (without triggering scroll)
-                    const targetHash = isBSide ? '#bsides' : '#mixtape';
+                    // Use #mixtape-side-two for Side Two (canonical), but also accept #bsides for backward compatibility
+                    const targetHash = isBSide ? '#mixtape-side-two' : '#mixtape';
                     if (window.location.hash !== targetHash) {
                         history.pushState(null, '', targetHash);
                     }
@@ -2283,7 +2285,7 @@
                     if (audio) audio.pause();
                     if (lyricsVideo) lyricsVideo.pause();
                     // Remove hash from URL
-                    if (window.location.hash === '#mixtape' || window.location.hash === '#bsides') {
+                    if (window.location.hash === '#mixtape' || window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
                         history.pushState(null, '', window.location.pathname);
                     }
                 }
@@ -2354,12 +2356,12 @@
                 });
             }
             
-            // Handle direct link to #mixtape or #bsides
+            // Handle direct link to #mixtape, #bsides, or #mixtape-side-two
             if (window.location.hash === '#mixtape') {
                 // Small delay to ensure DOM is ready
                 setTimeout(() => openMixtape(false), 100);
-            } else if (window.location.hash === '#bsides') {
-                // Small delay to ensure DOM is ready, open B-side
+            } else if (window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
+                // Small delay to ensure DOM is ready, open Side Two
                 setTimeout(() => openMixtape(true), 100);
             }
             
@@ -2367,7 +2369,7 @@
             window.addEventListener('popstate', () => {
                 if (window.location.hash === '#mixtape') {
                     openMixtape(false);
-                } else if (window.location.hash === '#bsides') {
+                } else if (window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
                     openMixtape(true);
                 } else {
                     if (lightbox && lightbox.classList.contains('active')) {

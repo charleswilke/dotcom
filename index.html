@@ -176,14 +176,15 @@
                                             <div class="tuner-glass">
                                                 <!-- Station Lights Ring (embedded in display) -->
                                                 <div class="station-lights-ring" id="station-lights">
-                                                    <span class="station-light" data-station="0" style="--angle: 225deg"></span>
-                                                    <span class="station-light" data-station="1" style="--angle: 270deg"></span>
-                                                    <span class="station-light" data-station="2" style="--angle: 315deg"></span>
-                                                    <span class="station-light" data-station="3" style="--angle: 0deg"></span>
-                                                    <span class="station-light" data-station="4" style="--angle: 45deg"></span>
-                                                    <span class="station-light" data-station="5" style="--angle: 90deg"></span>
-                                                    <span class="station-light" data-station="6" style="--angle: 135deg"></span>
-                                                    <span class="station-light active" data-station="7" style="--angle: 180deg"></span>
+                                                    <span class="station-light" data-station="0" style="--angle: 220deg"></span>
+                                                    <span class="station-light" data-station="1" style="--angle: 260deg"></span>
+                                                    <span class="station-light" data-station="2" style="--angle: 300deg"></span>
+                                                    <span class="station-light" data-station="3" style="--angle: 340deg"></span>
+                                                    <span class="station-light" data-station="4" style="--angle: 20deg"></span>
+                                                    <span class="station-light" data-station="5" style="--angle: 60deg"></span>
+                                                    <span class="station-light" data-station="6" style="--angle: 100deg"></span>
+                                                    <span class="station-light" data-station="7" style="--angle: 140deg"></span>
+                                                    <span class="station-light active" data-station="8" style="--angle: 180deg"></span>
                                                 </div>
                                                 
                                                 <div class="tuner-indicator" id="tuner-indicator"></div>
@@ -202,7 +203,9 @@
                                                     <div class="scale-marker scale-minor"></div>
                                                     <div class="scale-marker scale-major scale-clickable" data-period="Nov '25" data-station="6"><span class="marker-label">NOV<br>2025</span></div>
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable label-top active" data-period="Dec '25" data-station="7"><span class="marker-label">DEC<br>2025</span></div>
+                                                    <div class="scale-marker scale-major scale-clickable label-top" data-period="Dec '25" data-station="7"><span class="marker-label">DEC<br>2025</span></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable active" data-period="Jan '26" data-station="8"><span class="marker-label">JAN<br>2026</span></div>
                                                     <!-- Bonus LED - Opens Mixtape -->
                                                     <div class="tuner-led" id="redButtonWrapper" title="Something extra..."></div>
                                                 </div>
@@ -216,10 +219,10 @@
                                 <div class="audio-summary-meta">
                                     <span class="summary-coverage">Recap Podcast</span>
                                     <span class="summary-separator">•</span>
-                                    <span class="summary-date" id="current-recap-date">December 2025</span>
+                                    <span class="summary-date" id="current-recap-date">January 2026</span>
                                 </div>
                                 <div class="audio-summary-player">
-                                    <audio id="recap-audio" class="custom-audio" src="audio/dec-2025-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
+                                    <audio id="recap-audio" class="custom-audio" src="audio/jan-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
                                     <div class="custom-audio-player">
                                         <button class="audio-btn audio-summary-btn" aria-label="Play/Pause Audio Summary">
                                             <span class="audio-icon">▶</span>
@@ -881,52 +884,58 @@
         document.addEventListener('DOMContentLoaded', function() {
             const recapStations = [
                 {
-                    angle: 45,
+                    angle: 40,
                     date: 'Q3 2023',
                     file: 'audio/q3-2023-substack-recap.mp3',
                     label: 'Q3 \'23'
                 },
                 {
-                    angle: 90,
+                    angle: 80,
                     date: 'Q4 2023',
                     file: 'audio/q4-2023-substack-recap.mp3',
                     label: 'Q4 \'23'
                 },
                 {
-                    angle: 135,
+                    angle: 120,
                     date: 'H1 2024',
                     file: 'audio/h1-2024-substack-recap.mp3',
                     label: 'H1 \'24'
                 },
                 {
-                    angle: 180,
+                    angle: 160,
                     date: 'H2 2024',
                     file: 'audio/h2-2024-substack-recap.mp3',
                     label: 'H2 \'24'
                 },
                 {
-                    angle: 225,
+                    angle: 200,
                     date: 'Q3 2025',
                     file: 'audio/aug-sept-substack-summary.mp3',
                     label: 'Q3 \'25'
                 },
                 {
-                    angle: 270,
+                    angle: 240,
                     date: 'October 2025',
                     file: 'audio/oct-substack-recap.mp3',
                     label: 'OCT \'25'
                 },
                 {
-                    angle: 315,
+                    angle: 280,
                     date: 'November 2025',
                     file: 'audio/nov-2025-substack-recap.mp3',
                     label: 'NOV \'25'
                 },
                 {
-                    angle: 0,
+                    angle: 320,
                     date: 'December 2025',
                     file: 'audio/dec-2025-substack-recap.mp3',
                     label: 'DEC \'25'
+                },
+                {
+                    angle: 0,
+                    date: 'January 2026',
+                    file: 'audio/jan-2026-substack-recap.mp3',
+                    label: 'JAN \'26'
                 }
             ];
             
@@ -943,7 +952,7 @@
                 'audio/radio_tuning9.mp3'
             ];
             
-            let currentStation = 7; // Start at station 7 (Dec '25)
+            let currentStation = 8; // Start at station 8 (Jan '26)
             const stationLightsContainer = document.getElementById('station-lights');
             const stationLights = document.querySelectorAll('.station-light');
             const dateDisplay = document.getElementById('current-recap-date');
@@ -1221,11 +1230,11 @@
             }
             
             // Initialize station (date display, audio source, etc.)
-            updateStation(7);
+            updateStation(8);
             
             // Initialize tuner indicator position
             setTimeout(() => {
-                updateTunerIndicator(7);
+                updateTunerIndicator(8);
             }, 100);
             
             // Add click handlers to clickable scale markers

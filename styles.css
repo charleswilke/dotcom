@@ -3086,7 +3086,7 @@ html {
 
 /* Radio Tuner Display */
 .radio-tuner-display {
-    width: 360px;
+    width: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3812,6 +3812,9 @@ html {
 .tuner-scale .scale-marker:nth-child(12) { --marker-index: 11; }
 .tuner-scale .scale-marker:nth-child(13) { --marker-index: 12; }
 .tuner-scale .scale-marker:nth-child(14) { --marker-index: 13; }
+.tuner-scale .scale-marker:nth-child(15) { --marker-index: 14; }
+.tuner-scale .scale-marker:nth-child(16) { --marker-index: 15; }
+.tuner-scale .scale-marker:nth-child(17) { --marker-index: 16; }
 
 /* Station Lights Ring (embedded in tuner display) */
 .station-lights-ring {
@@ -4038,7 +4041,7 @@ html {
     
     
     .radio-tuner-display {
-        width: 300px;
+        width: 340px;
     }
 
     .tuner-glass {
@@ -4130,7 +4133,7 @@ html {
     }
 
     .radio-tuner-display {
-        width: 320px;
+        width: 360px;
     }
 
     .tuner-glass {

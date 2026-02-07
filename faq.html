@@ -233,7 +233,7 @@
         <div class="footer-bg"></div>
         <div class="footer-grid-overlay"></div>
         <div class="container">
-            <p>&copy; <script>document.write(new Date().getFullYear());</script> Charles Wilke | Human-focused design meets artificial intelligence.</p>
+            <p>&copy; <span class="current-year">2026</span> Charles Wilke | Human-focused design meets artificial intelligence.</p>
             <span class="footer-note">intention defines probability</span>
         </div>
     </footer>
@@ -317,16 +317,16 @@
             });
         });
         
-        // Add animation on scroll
-        window.addEventListener('scroll', function() {
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
-                const sectionTop = section.getBoundingClientRect().top;
-                if (sectionTop < window.innerHeight * 0.75) {
-                    section.classList.add('fade-in');
+        // Fade-in sections on scroll using IntersectionObserver (performant)
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    sectionObserver.unobserve(entry.target); // Stop observing once visible
                 }
             });
-        });
+        }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
+        document.querySelectorAll('section').forEach(section => sectionObserver.observe(section));
     </script>
 </body>
 </html> 

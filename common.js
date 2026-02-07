@@ -24,6 +24,11 @@ function triggerGlitchFooterNote() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Update copyright year dynamically (fallback for hardcoded value)
+    document.querySelectorAll('.current-year').forEach(el => {
+        el.textContent = new Date().getFullYear();
+    });
+
     setTimeout(triggerGlitchFooterNote, 2500 + Math.random() * 3000);
 });
 

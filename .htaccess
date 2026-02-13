@@ -23,6 +23,11 @@ RewriteRule ^mixtape-side-two/?$ /mixtape-side-two.html [L]
     AddOutputFilterByType DEFLATE application/javascript application/json application/xml
     AddOutputFilterByType DEFLATE image/svg+xml
 </IfModule>
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/plain text/xml
+    AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json application/xml
+    AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+</IfModule>
 
 # ===== Browser Caching =====
 <IfModule mod_expires.c>
@@ -46,5 +51,15 @@ RewriteRule ^mixtape-side-two/?$ /mixtape-side-two.html [L]
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header append Vary Accept-Encoding
+    
+    # Immutable cache hints for hashed/static assets
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|svg|ico|mp3|mp4|webp|avif)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    
+    # Keep HTML and JSON dynamic responses fresh
+    <FilesMatch "\.(html|php|json)$">
+        Header set Cache-Control "public, max-age=0, must-revalidate"
+    </FilesMatch>
 </IfModule>
-

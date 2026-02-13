@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Charles Wilke | AI Designer & Deployment Consultant</title>
     <!-- SEO: concise page description for SERP snippet -->
-    <meta name="description" content="Conversational UX Product Designer & Projection Artist. AI deployment consulting and theatrical projection design." />
+    <meta name="description" content="Conversational UX Product Designer & Projection Artist. AI deployment consulting and theatrical projection design." />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="author" content="Charles Wilke" />
     <!-- Canonical: avoid duplicate URL variants -->
     <link rel="canonical" href="https://charleswilke.com/" />
     <!-- Open Graph Meta Tags -->
@@ -16,12 +18,15 @@
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Charles Wilke - Professional Portrait">
     <meta property="og:url" content="https://charleswilke.com">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Charles Wilke">
+    <meta property="og:locale" content="en_US">
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Charles Wilke | AI Designer & Deployment Consultant">
     <meta name="twitter:description" content="Conversational UX Product Designer & Projection Artist specializing in AI integration and theatrical projection design.">
-    <meta name="twitter:image" content="https://charleswilke.com/images/cw3.jpg">
+    <meta name="twitter:image" content="https://charleswilke.com/images/cw3.jpg">
+    <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
     <link rel="stylesheet" href="styles.css">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -31,7 +36,8 @@
     <!-- Fonts: prefer link+preconnect over CSS @import for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="images/ToastIQ.png" fetchpriority="high">
     
     <!-- RSS Feed Performance Optimization -->
     <link rel="preload" href="substack_feed.php?limit=200" as="fetch" crossorigin="anonymous">
@@ -74,26 +80,26 @@
             </div>
             <div class="showcase-grid">
                 <a href="https://pos.toasttab.com/news/toast-expands-toast-iq-smart-ai-assistant" target="_blank" rel="noopener noreferrer" class="showcase-item">
-                    <img src="images/ToastIQ.png" alt="Toast IQ AI Restaurant Assistant" class="toastiq-img" width="1200" height="675">
+                    <img src="images/ToastIQ.png" alt="Toast IQ AI Restaurant Assistant" class="toastiq-img" width="1200" height="675" fetchpriority="high" decoding="async">
                     <div class="showcase-caption">
                         <p>Run your business at the speed of conversation</p>
                     </div>
                 </a>
                 <div class="showcase-item" id="mixtapeTile">
-                    <img src="audio/exploring-laibor-mixtape/mixtape-recently-card.jpg" alt="Exploring L.A.I.bor Mixtape" width="2368" height="1760">
+                    <img src="audio/exploring-laibor-mixtape/mixtape-recently-card.jpg" alt="Exploring L.A.I.bor Mixtape" width="2368" height="1760" loading="lazy" decoding="async">
                     <div class="showcase-caption">
                         <p>22 tracks inspired by the Substack series</p>
                     </div>
                 </div>
                 <a href="jersey-boys.html" class="showcase-item">
-                    <img src="images/jb/jb1.png" alt="Jersey Boys Projection" class="jb-img" width="1280" height="960">
+                    <img src="images/jb/jb1_thumb.png" alt="Jersey Boys Projection" class="jb-img" width="300" height="225" loading="lazy" decoding="async">
                     <div class="showcase-caption">
                         <p>Omaha Community Playhouse - 
                         <span class="showcase-date">2024</span></p>
                     </div>
                 </a>
                 <a href="alice-in-wonderland.html" class="showcase-item">
-                    <img src="images/aiw/aiw1.png" alt="Alice in Wonderland" width="600" height="800">
+                    <img src="images/aiw/aiw_thumb_1.png" alt="Alice in Wonderland" width="225" height="300" loading="lazy" decoding="async">
                     <div class="showcase-caption">
                         <p>UNO University of Nebraska Omaha - 
                         <span class="showcase-date">2024-2025</span></p>
@@ -107,8 +113,8 @@
         <div class="container about-container">
             <div class="image-compare">
                 <div class="image-wrapper">
-                    <img class="image-before" src="images/cw3.jpg" alt="Charles Wilke" width="808" height="1200">
-                    <img class="image-after" src="images/cw2.jpg" alt="Charles Wilke" loading="lazy" width="800" height="800">
+                    <img class="image-before" src="images/cw3.jpg" alt="Charles Wilke" width="808" height="1200" loading="lazy" decoding="async">
+                    <img class="image-after" src="images/cw2.jpg" alt="Charles Wilke" loading="lazy" decoding="async" width="800" height="800">
                 </div>
                 <div class="about-name">
                     Charles <span aria-label="pronounced Wil-Kee">Wilke</span>
@@ -282,21 +288,21 @@
             <div class="gpts-grid">
                 <a href="https://chatgpt.com/g/g-BKpbrGET5-resume-muse" target="_blank" rel="noopener noreferrer" class="gpt-link">
                     <div class="gpt-item">
-                        <img src="images/gpts/resumemuse.png" alt="Resume Muse" loading="lazy" width="365" height="365">
+                        <img src="images/gpts/resumemuse.png" alt="Resume Muse" loading="lazy" decoding="async" width="365" height="365">
                         <h3>Resume Muse</h3>
                         <p>Compares resumes to job descriptions, highlights alignment and opportunities.</p>
                     </div>
                 </a>
                 <a href="https://chatgpt.com/g/g-dak4HxXSP-product-muse" target="_blank" rel="noopener noreferrer" class="gpt-link">
                     <div class="gpt-item">
-                        <img src="images/gpts/productmuse.png" alt="Product Muse" loading="lazy" width="365" height="365">
+                        <img src="images/gpts/productmuse.png" alt="Product Muse" loading="lazy" decoding="async" width="365" height="365">
                         <h3>Product Muse</h3>
                         <p>Small business product development using enterprise ingenuity.</p>
                     </div>
                 </a>
                 <a href="https://chatgpt.com/g/g-GL6v61N77-prompt-muse" target="_blank" rel="noopener noreferrer" class="gpt-link">
                     <div class="gpt-item">
-                        <img src="images/gpts/promptmuse.png" alt="Prompt Muse" loading="lazy" width="365" height="365">
+                        <img src="images/gpts/promptmuse.png" alt="Prompt Muse" loading="lazy" decoding="async" width="365" height="365">
                         <h3>Prompt Muse</h3>
                         <p>Extend the utility of prompt libraries by creating a personalized prompt prefix.</p>
                     </div>
@@ -408,7 +414,7 @@
         <div class="mixtape-content">
             <div class="mixtape-left-section">
                 <div class="mixtape-cover-container">
-                    <img src="audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg" alt="Mixtape Cover" class="mixtape-cover" id="mixtapeCoverImg" width="800" height="800">
+                    <img src="audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg" alt="Mixtape Cover" class="mixtape-cover" id="mixtapeCoverImg" width="800" height="800" loading="lazy" decoding="async">
                 </div>
                 <div class="mixtape-side-toggle-container">
                     <div class="mixtape-credits">All Songs Written & Produced by Charles Wilke x GPT 5.1/5.2 x Suno v5</div>
@@ -460,7 +466,7 @@
         </div>
     </div>
     
-    <script src="common.js"></script>
-    <script src="main.js"></script>
+    <script src="common.js" defer></script>
+    <script src="main.js" defer></script>
 </body>
 </html>

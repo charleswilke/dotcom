@@ -201,6 +201,13 @@ try {
         }
     }
 
+    // Always sort newest-first so spotlight logic is deterministic across sources.
+    usort($items, function($a, $b) {
+        $aTime = isset($a['pubDate']) ? strtotime($a['pubDate']) : 0;
+        $bTime = isset($b['pubDate']) ? strtotime($b['pubDate']) : 0;
+        return $bTime <=> $aTime;
+    });
+
     $payload = json_encode(['status' => 'ok', 'items' => $items], JSON_UNESCAPED_SLASHES);
     
     // Cache the result

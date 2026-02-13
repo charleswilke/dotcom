@@ -41,6 +41,15 @@ let isLoading = false;
 const ITEMS_PER_PAGE = 12;
 let isArchiveMode = false;
 
+function sortItemsByNewest(items) {
+    if (!Array.isArray(items)) return [];
+    return [...items].sort((a, b) => {
+        const aTime = a && a.pubDate ? Date.parse(a.pubDate) : 0;
+        const bTime = b && b.pubDate ? Date.parse(b.pubDate) : 0;
+        return (isNaN(bTime) ? 0 : bTime) - (isNaN(aTime) ? 0 : aTime);
+    });
+}
+
 async function fetchRSSFeed() {
     if (isLoading) return;
     isLoading = true;
@@ -58,7 +67,7 @@ async function fetchRSSFeed() {
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
                 console.log('Fetching RSS feed from optimized cache...');
-                const response = await fetch('substack_feed.php?limit=200', {
+                const response = await fetch('substack_feed.php?limit=200&nocache=1', {
                     cache: 'no-cache', // Always fetch fresh from server
                     priority: 'high', // High priority fetch
                     headers: {
@@ -70,7 +79,7 @@ async function fetchRSSFeed() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        allItems = data.items;
+                        allItems = sortItemsByNewest(data.items);
                         console.log(`✓ Successfully loaded ${allItems.length} articles from cache`);
                         currentItems = 0;
                         isArchiveMode = false;
@@ -109,7 +118,7 @@ async function fetchRSSFeed() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        allItems = data.items;
+                        allItems = sortItemsByNewest(data.items);
                         console.log(`✓ Fallback loaded ${allItems.length} articles`);
                         currentItems = 0;
                         isArchiveMode = false;
@@ -135,7 +144,7 @@ async function fetchRSSFeed() {
             console.log('Trying XML fallback as last resort...');
             const xmlItems = await fetchRssXmlFallback();
             if (xmlItems && xmlItems.length > 0) {
-                allItems = xmlItems;
+                allItems = sortItemsByNewest(xmlItems);
                 console.log(`✓ XML fallback loaded ${allItems.length} articles`);
                 currentItems = 0;
                 isArchiveMode = false;

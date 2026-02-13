@@ -6,6 +6,8 @@
     <title>Alice in Wonderland - Theater Projection Design | Charles Wilke</title>
     <!-- SEO -->
     <meta name="description" content="Full show coverage with AI-assisted projections for UNO's production of Alice in Wonderland by Charles Wilke.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta name="author" content="Charles Wilke">
     <link rel="canonical" href="https://charleswilke.com/alice-in-wonderland.html">
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Alice in Wonderland - Theater Projection Design | Charles Wilke">
@@ -16,11 +18,14 @@
     <meta property="og:image:alt" content="Alice in Wonderland Projection Design">
     <meta property="og:url" content="https://charleswilke.com/alice-in-wonderland.html">
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Charles Wilke">
+    <meta property="og:locale" content="en_US">
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Alice in Wonderland - Theater Projection Design | Charles Wilke">
     <meta name="twitter:description" content="Full show coverage with AI-assisted projections for UNO's production of Alice in Wonderland.">
     <meta name="twitter:image" content="https://charleswilke.com/images/aiw/aiw1.png">
+    <meta name="twitter:image:alt" content="Alice in Wonderland Projection Design">
     <link rel="stylesheet" href="styles.css">
     <!-- Favicons / Fonts -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -41,10 +46,11 @@
             </a>
         </div>
     </header>
+    <main id="main">
 
     <section class="production-header alice" style="position: relative; overflow: hidden; padding: 0;">
         <div class="grid-overlay" style="z-index: 1; opacity: 0.25; position: absolute; top: -50%; left: 0; right: 0; bottom: -50%; width: 100%; height: 200%; background-image: linear-gradient(rgba(147, 64, 191, 0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(147, 64, 191, 0.25) 1px, transparent 1px); background-size: 40px 40px; transform: rotateX(45deg) scale(2); transform-origin: center center; pointer-events: none;"></div>
-        <img src="images/aiw/aiw1.png" alt="Alice in Wonderland Featured Image" class="featured-image">
+        <img src="images/aiw/aiw1.png" alt="Alice in Wonderland Featured Image" class="featured-image" width="600" height="800" fetchpriority="high" decoding="async">
         <div class="content production-content">
             <h1>Alice in Wonderland</h1>
             <p>Fall down the rabbit hole into a darker take than Disney. AI-assisted illustrations in a hatched, desaturated style.</p>
@@ -117,11 +123,14 @@
                             const picture = document.createElement('picture');
                             const source = document.createElement('source');
                             source.media = '(max-width: 768px)';
-                            source.srcset = img.full;
+                            source.srcset = img.thumb;
                             const image = document.createElement('img');
                             image.src = img.thumb;
                             image.alt = img.alt;
                             image.loading = 'lazy';
+                            image.decoding = 'async';
+                            image.width = 225;
+                            image.height = 300;
                             image.addEventListener('click', () => openLightbox(img.full));
                             picture.appendChild(source);
                             picture.appendChild(image);
@@ -144,7 +153,8 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
                 <div class="video-container" style="position: relative; padding-bottom: 100%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(147, 64, 191, 0.3), 0 0 40px rgba(147, 64, 191, 0.1);">
                     <iframe 
-                        src="https://player.vimeo.com/video/1078948856" 
+                        src="https://player.vimeo.com/video/1078948856?dnt=1" 
+                        title="Alice in Wonderland commercial spot"
                         loading="lazy"
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
                         frameborder="0" 
@@ -176,7 +186,7 @@
                     </p>
                 </div>
                 <div class="stage-model" style="margin-bottom: 0;">
-                    <img src="images/aiw/process/StageModel.png" alt="Alice in Wonderland Stage Model" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(147, 64, 191, 0.3), 0 0 40px rgba(147, 64, 191, 0.1); cursor: pointer;" onclick="openStageModelLightbox('images/aiw/process/StageModel-large.png')">
+                    <img src="images/aiw/process/StageModel.png" alt="Alice in Wonderland Stage Model" width="1280" height="921" loading="lazy" decoding="async" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(147, 64, 191, 0.3), 0 0 40px rgba(147, 64, 191, 0.1); cursor: pointer;" onclick="openStageModelLightbox('images/aiw/process/StageModel-large.png')">
                 </div>
             </div>
 
@@ -188,19 +198,19 @@
                     <p style="text-align: center; color: #888; font-size: 0.9rem; margin-bottom: 2rem;">Photos by Ryan Soderlin</p>
                     <div class="bts-photos">
                         <div class="bts-photo">
-                            <img src="images/aiw/process/crew1.png" alt="Behind the scenes - Crew photo 1" onclick="openBtsLightbox('images/aiw/process/crew1.png')">
+                            <img src="images/aiw/process/crew1.png" alt="Behind the scenes - Crew photo 1" width="1024" height="683" loading="lazy" decoding="async" onclick="openBtsLightbox('images/aiw/process/crew1.png')">
                         </div>
                         <div class="bts-photo">
-                            <img src="images/aiw/process/crew2.png" alt="Behind the scenes - Crew photo 2" onclick="openBtsLightbox('images/aiw/process/crew2.png')">
+                            <img src="images/aiw/process/crew2.png" alt="Behind the scenes - Crew photo 2" width="1024" height="683" loading="lazy" decoding="async" onclick="openBtsLightbox('images/aiw/process/crew2.png')">
                         </div>
                         <div class="bts-photo">
-                            <img src="images/aiw/process/crew3.png" alt="Behind the scenes - Crew photo 3" onclick="openBtsLightbox('images/aiw/process/crew3.png')">
+                            <img src="images/aiw/process/crew3.png" alt="Behind the scenes - Crew photo 3" width="1024" height="683" loading="lazy" decoding="async" onclick="openBtsLightbox('images/aiw/process/crew3.png')">
                         </div>
                         <div class="bts-photo">
-                            <img src="images/aiw/process/crew4.png" alt="Behind the scenes - Crew photo 4" onclick="openBtsLightbox('images/aiw/process/crew4.png')">
+                            <img src="images/aiw/process/crew4.png" alt="Behind the scenes - Crew photo 4" width="1024" height="683" loading="lazy" decoding="async" onclick="openBtsLightbox('images/aiw/process/crew4.png')">
                         </div>
                         <div class="bts-photo">
-                            <img src="images/aiw/process/crew5.png" alt="Behind the scenes - Crew photo 5" onclick="openBtsLightbox('images/aiw/process/crew5.png')">
+                            <img src="images/aiw/process/crew5.png" alt="Behind the scenes - Crew photo 5" width="1024" height="683" loading="lazy" decoding="async" onclick="openBtsLightbox('images/aiw/process/crew5.png')">
                         </div>
                     </div>
                 </div>
@@ -262,6 +272,7 @@
         </div>
     </section>
 
+    </main>
     <footer>
         <div class="footer-bg"></div>
         <div class="footer-grid-overlay"></div>
@@ -270,7 +281,7 @@
             <span class="footer-note">intention defines probability</span>
         </div>
     </footer>
-    <script src="common.js"></script>
+    <script src="common.js" defer></script>
 
     <div class="lightbox" id="lightbox">
         <button class="lightbox-close" aria-label="Close lightbox">&times;</button>

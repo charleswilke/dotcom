@@ -288,7 +288,7 @@ function displayItems(count) {
         feedItem.target = '_blank';
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
-            <img src="${imageUrl}" alt="${title}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,${FALLBACK_SVG_B64}'">
+            <img src="${imageUrl}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml;base64,${FALLBACK_SVG_B64}'">
             <h3>${title}</h3>
             <p>${cleanDescription.substring(0, 150)}${cleanDescription.length > 150 ? '...' : ''}</p>
             <div class="date">${pubDate.toLocaleDateString()}</div>
@@ -359,22 +359,27 @@ async function fetchRssXmlFallback() {
     return items;
 }
 
-// Start RSS feed loading immediately, don't wait for DOMContentLoaded
-if (document.readyState === 'loading') {
-    // If document is still loading, start RSS fetch in parallel
-    fetchRSSFeed();
-} else {
-    // If document is already loaded, fetch immediately
-    fetchRSSFeed();
-}
+// Skip RSS calls on localhost/file audits to avoid noisy fetch failures.
+const shouldFetchRSS = !['localhost', '127.0.0.1'].includes(location.hostname) && location.protocol !== 'file:';
 
-// Also set up DOMContentLoaded as fallback in case the above doesn't trigger
-document.addEventListener('DOMContentLoaded', function() {
-    // Only fetch if we haven't already started loading
-    if (!isLoading && allItems.length === 0) {
+if (shouldFetchRSS) {
+    // Start RSS feed loading immediately, don't wait for DOMContentLoaded
+    if (document.readyState === 'loading') {
+        // If document is still loading, start RSS fetch in parallel
+        fetchRSSFeed();
+    } else {
+        // If document is already loaded, fetch immediately
         fetchRSSFeed();
     }
-});
+
+    // Also set up DOMContentLoaded as fallback in case the above doesn't trigger
+    document.addEventListener('DOMContentLoaded', function() {
+        // Only fetch if we haven't already started loading
+        if (!isLoading && allItems.length === 0) {
+            fetchRSSFeed();
+        }
+    });
+}
 
 // Time Dial Functionality
 document.addEventListener('DOMContentLoaded', function() {

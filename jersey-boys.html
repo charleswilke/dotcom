@@ -6,6 +6,8 @@
     <title>Jersey Boys - Theater Projection Design | Charles Wilke</title>
     <!-- SEO -->
     <meta name="description" content="170 AI-assisted projections for Omaha Community Playhouse's production of Jersey Boys by Charles Wilke.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta name="author" content="Charles Wilke">
     <link rel="canonical" href="https://charleswilke.com/jersey-boys.html">
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Jersey Boys - Theater Projection Design | Charles Wilke">
@@ -16,11 +18,14 @@
     <meta property="og:image:alt" content="Jersey Boys Projection Design">
     <meta property="og:url" content="https://charleswilke.com/jersey-boys.html">
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Charles Wilke">
+    <meta property="og:locale" content="en_US">
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Jersey Boys - Theater Projection Design | Charles Wilke">
     <meta name="twitter:description" content="170 AI-assisted projections for Omaha Community Playhouse's production of Jersey Boys.">
     <meta name="twitter:image" content="https://charleswilke.com/images/jb/jb1.png">
+    <meta name="twitter:image:alt" content="Jersey Boys Projection Design">
     <link rel="stylesheet" href="styles.css">
     <!-- Favicons / Fonts -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -41,10 +46,11 @@
             </a>
         </div>
     </header>
+    <main id="main">
 
     <section class="production-header" style="position: relative; overflow: hidden; padding: 0;">
         <div class="grid-overlay" style="z-index: 1; opacity: 0.25; position: absolute; top: -50%; left: 0; right: 0; bottom: -50%; width: 100%; height: 200%; background-image: linear-gradient(rgba(0, 247, 194, 0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 247, 194, 0.25) 1px, transparent 1px); background-size: 40px 40px; transform: rotateX(45deg) scale(2); transform-origin: center center; pointer-events: none;"></div>
-        <img src="images/jb/jb1.png" alt="Jersey Boys Featured Image" class="featured-image" width="1280" height="960">
+        <img src="images/jb/jb1.png" alt="Jersey Boys Featured Image" class="featured-image" width="1280" height="960" fetchpriority="high" decoding="async">
         <div class="content production-content">
             <h1>Jersey Boys</h1>
             <p>170 AI-assisted projections that bring the streets of New Jersey, the Rock and Roll Hall of Fame and Altlantic City to life on stage.</p>
@@ -73,7 +79,8 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
                 <div class="video-container" style="position: relative; padding-bottom: 100%; height: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
                     <iframe 
-                        src="https://player.vimeo.com/video/1078728411" 
+                        src="https://player.vimeo.com/video/1078728411?dnt=1" 
+                        title="Jersey Boys pre-show welcome message"
                         loading="lazy"
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
                         frameborder="0" 
@@ -100,7 +107,8 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
                 <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
                     <iframe 
-                        src="https://player.vimeo.com/video/1013847068" 
+                        src="https://player.vimeo.com/video/1013847068?dnt=1" 
+                        title="Jersey Boys local commercial spot"
                         loading="lazy"
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
                         frameborder="0" 
@@ -123,6 +131,7 @@
         </div>
     </section>
 
+    </main>
     <footer>
         <div class="footer-bg"></div>
         <div class="footer-grid-overlay"></div>
@@ -131,7 +140,7 @@
             <span class="footer-note">intention defines probability</span>
         </div>
     </footer>
-    <script src="common.js"></script>
+    <script src="common.js" defer></script>
 
     <div class="lightbox" id="lightbox">
         <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
@@ -188,11 +197,14 @@
                 const picture = document.createElement('picture');
                 const source = document.createElement('source');
                 source.media = '(max-width: 768px)';
-                source.srcset = img.full;
+                source.srcset = img.thumb;
                 const image = document.createElement('img');
                 image.src = img.thumb;
                 image.alt = img.alt;
                 image.loading = 'lazy';
+                image.decoding = 'async';
+                image.width = 300;
+                image.height = 225;
                 image.addEventListener('click', () => openLightbox(img.full));
                 picture.appendChild(source);
                 picture.appendChild(image);

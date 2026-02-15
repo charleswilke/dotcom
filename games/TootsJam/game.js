@@ -90,6 +90,7 @@ let nextPlaneStartAt = performance.now() + planeIntervalMs;
 const level2ScoreThreshold = 20;
 const level3ScoreThreshold = 40;
 const level4ScoreThreshold = 60;
+const level5ScoreThreshold = 80;
 const levelDurationMs = 120000;
 let levelTimeRemainingMs = levelDurationMs;
 let lastTimerTickAt = performance.now();
@@ -127,6 +128,20 @@ const balloons = [
   { x: W * 0.59125, y: floorY - 306, baseX: W * 0.59125, baseY: floorY - 306, swayAmp: 12, swaySpeed: 0.00138, bobAmp: 20, bobSpeed: 0.00128, phase: 2.0, rx: 32, ry: 34, cooldown: 0 },
   { x: W * 0.77125, y: floorY - 353, baseX: W * 0.77125, baseY: floorY - 353, swayAmp: 12, swaySpeed: 0.00174, bobAmp: 14, bobSpeed: 0.00108, phase: 4.0, rx: 33, ry: 35, cooldown: 0 }
 ];
+const spaceUfos = {
+  left: { x: W * 0.28, y: 244, wobblePhase: 0.8 },
+  center: { x: W * 0.5, y: 106, wobblePhase: 2.1 },
+  right: { x: W * 0.72, y: 244, wobblePhase: 3.6 }
+};
+const spaceBeam = {
+  radius: 108,
+  minPhaseMs: 1200,
+  maxPhaseMs: 1600,
+  minVisualIntensity: 0.16
+};
+let spaceBeamMode = Math.random() < 0.5 ? "lift" : "press";
+let spaceBeamPhaseStartedAt = performance.now();
+let spaceBeamPhaseDurationMs = spaceBeam.minPhaseMs + Math.random() * (spaceBeam.maxPhaseMs - spaceBeam.minPhaseMs);
 
 const sfx = {
   rim: ["sounds/rim1.mp3", "sounds/rim2.mp3"],
@@ -197,11 +212,11 @@ const sfx = {
     "sounds/squawk/squawk6.mp3"
   ],
   start: [
-    "sounds/start/letsplay.mp3",
     "sounds/start/start1.mp3",
     "sounds/start/start2.mp3",
     "sounds/start/start3.mp3",
-    "sounds/start/start4.mp3"
+    "sounds/start/start4.mp3",
+    "sounds/start/splash.mp3"
   ],
   silence: [
     "sounds/charge6.mp3",
@@ -211,18 +226,23 @@ const sfx = {
     "sounds/charge10.mp3"
   ],
   unmute: [
-    "sounds/island.mp3",
-    "sounds/podcast.mp3",
-    "sounds/uh-well.mp3"
+    "sounds/chirp/island.mp3",
+    "sounds/chirp/podcast.mp3",
+    "sounds/chirp/actually.mp3"
   ],
-  muteFirst: ["sounds/fine.mp3"],
-  muteAgain: ["sounds/okay.mp3"]
+  mute: [
+    "sounds/chirp/fine.mp3",
+    "sounds/chirp/but.mp3",
+    "sounds/chirp/uh-well.mp3",
+    "sounds/chirp/okay.mp3"
+  ]
 };
 sfx.brickUnlocked = [...sfx.brick, ...sfx.brickStreak];
 let gameStarted = false;
 let splashReady = false;
 
 function getLevelForScore(currentScore) {
+  if (currentScore >= level5ScoreThreshold) return 5;
   if (currentScore >= level4ScoreThreshold) return 4;
   if (currentScore >= level3ScoreThreshold) return 3;
   if (currentScore >= level2ScoreThreshold) return 2;
@@ -230,6 +250,7 @@ function getLevelForScore(currentScore) {
 }
 
 function getLevelLabel(value) {
+  if (value === 5) return "Level 5: Space";
   if (value === 4) return "Level 4: Golden Hour";
   if (value === 3) return "Level 3: Afternoon City";
   if (value === 2) return "Level 2: Morning City";
@@ -240,6 +261,7 @@ function getNextLevelTarget(currentLevel) {
   if (currentLevel <= 1) return level2ScoreThreshold;
   if (currentLevel === 2) return level3ScoreThreshold;
   if (currentLevel === 3) return level4ScoreThreshold;
+  if (currentLevel === 4) return level5ScoreThreshold;
   return null;
 }
 
@@ -269,13 +291,18 @@ function updateHud() {
   comboEl.textContent = `Combo: x${getComboMultiplier(comboStreak)}`;
   if (timerEl) timerEl.textContent = `Time: ${formatLevelTime(levelTimeRemainingMs)}`;
   if (nextLevelEl) {
-    const target = getNextLevelTarget(level);
-    if (target == null) {
-      nextLevelEl.textContent = "Next: Max Level";
+    if (level === 5) {
+      const phase = getSpaceBeamState(performance.now());
+      nextLevelEl.textContent = `Beam: ${phase.mode.toUpperCase()} ${Math.round(phase.intensity * 100)}%`;
     } else {
-      const needed = Math.max(0, target - score);
-      const nextLabel = level + 1;
-      nextLevelEl.textContent = `Next: L${nextLabel} in ${needed}`;
+      const target = getNextLevelTarget(level);
+      if (target == null) {
+        nextLevelEl.textContent = "Next: Max Level";
+      } else {
+        const needed = Math.max(0, target - score);
+        const nextLabel = level + 1;
+        nextLevelEl.textContent = `Next: L${nextLabel} in ${needed}`;
+      }
     }
   }
   if (comboStreak > lastComboShown) {
@@ -347,7 +374,7 @@ function stopChargeSfx() {
 
 function playChargeSfx() {
   const key = muteChargeSfx ? "silence" : "charge";
-  const volume = muteChargeSfx ? 0.2 : 0.62;
+  const volume = muteChargeSfx ? 0.16 : 0.33;
   const choices = sfx[key];
   if (!choices || choices.length === 0) return;
   stopChargeSfx();
@@ -375,6 +402,16 @@ function playUnmuteSequenceSfx() {
     gotTheIckArmed = true;
   }
   unmutePlayCount += 1;
+}
+
+function playMuteSequenceSfx() {
+  const sequence = sfx.mute;
+  if (!sequence || sequence.length === 0) return;
+  const clipIndex = Math.min(muteActivationCount, sequence.length - 1);
+  const audio = new Audio(sequence[clipIndex]);
+  audio.volume = 0.84;
+  audio.play().catch(() => {});
+  muteActivationCount += 1;
 }
 
 function resetSessionRunState() {
@@ -628,6 +665,72 @@ function updateBalloons(now) {
     b.y = b.baseY + Math.sin(now * b.bobSpeed + b.phase * 1.7) * b.bobAmp;
     if (b.cooldown > 0) b.cooldown -= 1;
   }
+}
+
+function getSpaceUfoPose(now, ufoName) {
+  const ufo = spaceUfos[ufoName];
+  if (!ufo) return { x: 0, y: 0 };
+  const edgeShip = ufoName === "left" || ufoName === "right";
+  const swayAmpX = edgeShip ? 26 : 8;
+  const swaySpeedX = edgeShip ? 0.00145 : 0.00195;
+  const bobAmpY = edgeShip ? 4 : 3;
+  const bobSpeedY = edgeShip ? 0.0026 : 0.0034;
+  return {
+    x: ufo.x + Math.sin(now * swaySpeedX + ufo.wobblePhase) * swayAmpX,
+    y: ufo.y + Math.cos(now * bobSpeedY + ufo.wobblePhase * 1.4) * bobAmpY
+  };
+}
+
+function getSpaceBeamState(now) {
+  let guard = 0;
+  while (now - spaceBeamPhaseStartedAt >= spaceBeamPhaseDurationMs && guard < 256) {
+    spaceBeamPhaseStartedAt += spaceBeamPhaseDurationMs;
+    spaceBeamMode = spaceBeamMode === "lift" ? "press" : "lift";
+    spaceBeamPhaseDurationMs = spaceBeam.minPhaseMs + Math.random() * (spaceBeam.maxPhaseMs - spaceBeam.minPhaseMs);
+    guard += 1;
+  }
+  if (guard >= 256) {
+    spaceBeamPhaseStartedAt = now;
+  }
+  const progress = clamp((now - spaceBeamPhaseStartedAt) / Math.max(1, spaceBeamPhaseDurationMs), 0, 1);
+  const intensity = Math.sin(progress * Math.PI);
+  const wave = (spaceBeamMode === "lift" ? -1 : 1) * intensity;
+  return {
+    mode: spaceBeamMode,
+    progress,
+    intensity,
+    wave
+  };
+}
+
+function isPointInSpaceBeam(x, y, now) {
+  if (level !== 5) return false;
+  const centerPose = getSpaceUfoPose(now, "center");
+  const beamTop = centerPose.y + 16;
+  if (y < beamTop || y > floorY) return false;
+  return Math.abs(x - centerPose.x) <= spaceBeam.radius;
+}
+
+function getSpaceBeamGravityMultiplierAt(x, y, now) {
+  if (!isPointInSpaceBeam(x, y, now)) return 1;
+  const state = getSpaceBeamState(now);
+  if (state.wave < 0) {
+    // Lift phase: 100% -> 30% gravity.
+    return 1 - 0.7 * Math.abs(state.wave);
+  }
+  // Press phase: +50% -> +100% gravity (1.5x -> 2.0x).
+  return 1.5 + 0.5 * state.wave;
+}
+
+function getBallBeamGlow(now) {
+  if (level !== 5) return null;
+  if (!isPointInSpaceBeam(ball.x, ball.y, now)) return null;
+  const state = getSpaceBeamState(now);
+  const intensity = Math.max(0.12, state.intensity);
+  const isPress = state.mode === "press";
+  const color = isPress ? "255, 56, 176" : "126, 234, 255";
+  const boost = isPress ? 1.9 : 1;
+  return { color, intensity, boost };
 }
 
 function getBalloonHullPoints(b) {
@@ -907,6 +1010,137 @@ function drawSkyPlane(now) {
   ctx.fillText("to do right now?", bannerX + 4, bannerY);
 }
 
+function drawSpaceUfo(pose, scale, alpha) {
+  const x = pose.x;
+  const y = pose.y;
+  const bodyRx = 34 * scale;
+  const bodyRy = 11 * scale;
+  const domeRy = 15 * scale;
+
+  const bodyGrad = ctx.createLinearGradient(x, y - bodyRy, x, y + bodyRy);
+  bodyGrad.addColorStop(0, `rgba(166, 206, 255, ${0.95 * alpha})`);
+  bodyGrad.addColorStop(1, `rgba(82, 128, 196, ${0.94 * alpha})`);
+  ctx.fillStyle = bodyGrad;
+  ctx.beginPath();
+  ctx.ellipse(x, y, bodyRx, bodyRy, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = `rgba(196, 244, 255, ${0.66 * alpha})`;
+  ctx.beginPath();
+  ctx.ellipse(x, y - 8 * scale, 14 * scale, domeRy, 0, Math.PI, 0, true);
+  ctx.fill();
+
+  ctx.strokeStyle = `rgba(26, 44, 80, ${0.9 * alpha})`;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.fillStyle = `rgba(129, 255, 242, ${0.75 * alpha})`;
+  for (let i = -2; i <= 2; i++) {
+    ctx.beginPath();
+    ctx.arc(x + i * 11 * scale, y + 1.5 * scale, 1.8 * scale, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawAmbientSpaceBeam(now, pose, beamRadius, state, phaseShift) {
+  const beamX = pose.x;
+  const beamTop = pose.y + 16;
+  const beamApexY = pose.y + 9;
+  const beamBottom = floorY;
+  const beamColor = state.mode === "lift" ? "162, 246, 255" : "255, 155, 132";
+  const intensity = Math.max(spaceBeam.minVisualIntensity, state.intensity);
+  const pulse = 0.5 + 0.5 * Math.sin(now * 0.012 + phaseShift);
+  const sway = Math.sin(now * 0.004 + phaseShift * 1.7) * 8;
+
+  const beamGrad = ctx.createLinearGradient(beamX, beamTop, beamX, beamBottom);
+  beamGrad.addColorStop(0, `rgba(${beamColor}, ${(0.12 + pulse * 0.07) * intensity})`);
+  beamGrad.addColorStop(0.62, `rgba(${beamColor}, ${(0.05 + pulse * 0.04) * intensity})`);
+  beamGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = beamGrad;
+  ctx.beginPath();
+  ctx.moveTo(beamX, beamApexY);
+  ctx.quadraticCurveTo(beamX + beamRadius * 0.08, beamTop + 24, beamX + beamRadius * 0.82, beamBottom);
+  ctx.lineTo(beamX - beamRadius * 0.82, beamBottom);
+  ctx.quadraticCurveTo(beamX - beamRadius * 0.08, beamTop + 24, beamX, beamApexY);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle = `rgba(${beamColor}, ${(0.24 + pulse * 0.2) * intensity})`;
+  ctx.lineWidth = 1.3 + intensity * 0.8;
+  const ringCount = 5;
+  const ringTravel = state.mode === "lift" ? (1 - state.progress) : state.progress;
+  for (let i = 0; i < ringCount; i++) {
+    const t = (i / ringCount + ringTravel + phaseShift * 0.05) % 1;
+    const y = beamApexY + 10 + t * (beamBottom - beamApexY - 10);
+    const rx = 8 + t * (beamRadius - 8);
+    ctx.beginPath();
+    ctx.ellipse(beamX + sway * (1 - t), y, rx, 4.2 + t * 2, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+}
+
+function drawSpaceBeam(now, centerPose, state = getSpaceBeamState(now)) {
+  if (level !== 5) return;
+
+  const beamX = centerPose.x;
+  const beamTop = centerPose.y + 17;
+  const beamApexY = centerPose.y + 10;
+  const beamBottom = floorY;
+  const beamColor = state.mode === "lift" ? "126, 234, 255" : "255, 138, 118";
+  const intensity = Math.max(spaceBeam.minVisualIntensity, state.intensity);
+  const ringDrift = state.mode === "lift" ? -1 : 1;
+  const pulse = 0.5 + 0.5 * Math.sin(now * 0.017);
+
+  const beamGrad = ctx.createLinearGradient(beamX, beamTop, beamX, beamBottom);
+  beamGrad.addColorStop(0, `rgba(${beamColor}, ${(0.2 + pulse * 0.1) * intensity})`);
+  beamGrad.addColorStop(0.55, `rgba(${beamColor}, ${(0.08 + pulse * 0.06) * intensity})`);
+  beamGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = beamGrad;
+  ctx.beginPath();
+  ctx.moveTo(beamX, beamApexY);
+  ctx.quadraticCurveTo(beamX + spaceBeam.radius * 0.12, beamTop + 28, beamX + spaceBeam.radius, beamBottom);
+  ctx.lineTo(beamX - spaceBeam.radius, beamBottom);
+  ctx.quadraticCurveTo(beamX - spaceBeam.radius * 0.12, beamTop + 28, beamX, beamApexY);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle = `rgba(${beamColor}, ${(0.44 + pulse * 0.2) * intensity})`;
+  ctx.lineWidth = 1.5 + intensity * 0.9;
+  const ringCount = 7;
+  const ringTravel = state.mode === "lift" ? (1 - state.progress) : state.progress;
+  for (let i = 0; i < ringCount; i++) {
+    const base = (i / ringCount + ringTravel) % 1;
+    const y = beamApexY + 12 + base * (beamBottom - beamApexY - 12);
+    const rx = 10 + base * (spaceBeam.radius - 10);
+    const ry = 5 + base * 2.2;
+    ctx.beginPath();
+    ctx.ellipse(beamX, y + ringDrift * Math.sin(now * 0.006 + i) * 2, rx, ry, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+}
+
+function drawSpaceUfos(now) {
+  if (level !== 5) return;
+  const leftPose = getSpaceUfoPose(now, "left");
+  const centerPose = getSpaceUfoPose(now, "center");
+  const rightPose = getSpaceUfoPose(now, "right");
+  const centerState = getSpaceBeamState(now);
+  const sideState = {
+    mode: centerState.mode === "lift" ? "press" : "lift",
+    progress: centerState.progress,
+    intensity: centerState.intensity,
+    wave: -centerState.wave
+  };
+
+  drawAmbientSpaceBeam(now, leftPose, 72, sideState, 0.9);
+  drawAmbientSpaceBeam(now, rightPose, 72, sideState, 2.2);
+  drawSpaceBeam(now, centerPose, centerState);
+
+  drawSpaceUfo(leftPose, 0.95, 0.86);
+  drawSpaceUfo(rightPose, 0.95, 0.86);
+  drawSpaceUfo(centerPose, 1.08, 0.95);
+}
+
 function triggerBrickStamp() {
   if (!brickStampedThisShot) {
     if (gotTheIckArmed) {
@@ -1024,7 +1258,8 @@ function physicsStep() {
   const prevX = ball.x;
   const prevY = ball.y;
 
-  ball.vy += gravity;
+  const gravityMultiplier = getSpaceBeamGravityMultiplierAt(ball.x, ball.y, now);
+  ball.vy += gravity * gravityMultiplier;
   ball.vx *= airDrag;
   ball.vy *= airDrag;
   ball.x += ball.vx;
@@ -1194,6 +1429,7 @@ function drawCourt() {
   const isSunrise = level === 2;
   const isAfternoon = level === 3;
   const isGolden = level === 4;
+  const isSpace = level === 5;
   const sky = ctx.createLinearGradient(0, 0, 0, floorY);
   if (isSunrise) {
     sky.addColorStop(0, "#5b3f8e");
@@ -1207,6 +1443,10 @@ function drawCourt() {
     sky.addColorStop(0, "#5964a0");
     sky.addColorStop(0.46, "#e08b62");
     sky.addColorStop(1, "#f0c176");
+  } else if (isSpace) {
+    sky.addColorStop(0, "#060918");
+    sky.addColorStop(0.48, "#101a3d");
+    sky.addColorStop(1, "#1b2856");
   } else {
     sky.addColorStop(0, "#2a1f66");
     sky.addColorStop(0.45, "#203a7e");
@@ -1228,6 +1468,22 @@ function drawCourt() {
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(sunX, sunY, isAfternoon ? 42 : (isGolden ? 46 : 38), 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (isSpace) {
+    const planetX = W * 0.77;
+    const planetY = 98;
+    const planetGrad = ctx.createRadialGradient(planetX - 12, planetY - 10, 6, planetX, planetY, 42);
+    planetGrad.addColorStop(0, "rgba(170, 224, 255, 0.95)");
+    planetGrad.addColorStop(0.62, "rgba(93, 163, 243, 0.9)");
+    planetGrad.addColorStop(1, "rgba(59, 102, 190, 0.88)");
+    ctx.fillStyle = planetGrad;
+    ctx.beginPath();
+    ctx.arc(planetX, planetY, 36, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(163, 221, 255, 0.52)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(planetX, planetY, 54, 11, -0.25, 0, Math.PI * 2);
     ctx.stroke();
   } else {
     const moonX = W * 0.74;
@@ -1261,10 +1517,21 @@ function drawCourt() {
     ctx.fill();
   }
 
-  const cloudTime = performance.now() * 0.00003;
-  drawCloud(W * 0.2 + Math.sin(cloudTime * 1.2) * 36, 118, 1.05, isSunrise ? 0.22 : (isAfternoon ? 0.24 : (isGolden ? 0.23 : 0.13)));
-  drawCloud(W * 0.56 + Math.sin(cloudTime * 0.9 + 1.7) * 30, 146, 0.95, isSunrise ? 0.2 : (isAfternoon ? 0.22 : (isGolden ? 0.22 : 0.11)));
-  drawCloud(W * 0.86 + Math.sin(cloudTime * 1.05 + 3.1) * 40, 128, 1.1, isSunrise ? 0.24 : (isAfternoon ? 0.26 : (isGolden ? 0.25 : 0.14)));
+  if (!isSpace) {
+    const cloudTime = performance.now() * 0.00003;
+    drawCloud(W * 0.2 + Math.sin(cloudTime * 1.2) * 36, 118, 1.05, isSunrise ? 0.22 : (isAfternoon ? 0.24 : (isGolden ? 0.23 : 0.13)));
+    drawCloud(W * 0.56 + Math.sin(cloudTime * 0.9 + 1.7) * 30, 146, 0.95, isSunrise ? 0.2 : (isAfternoon ? 0.22 : (isGolden ? 0.22 : 0.11)));
+    drawCloud(W * 0.86 + Math.sin(cloudTime * 1.05 + 3.1) * 40, 128, 1.1, isSunrise ? 0.24 : (isAfternoon ? 0.26 : (isGolden ? 0.25 : 0.14)));
+  } else {
+    for (let i = 0; i < 120; i++) {
+      const sx = (i * 83) % W;
+      const sy = (i * 47) % (floorY - 40);
+      const twinkle = 0.45 + 0.55 * Math.sin(performance.now() * 0.002 + i * 0.9);
+      ctx.fillStyle = `rgba(225, 237, 255, ${0.18 + twinkle * 0.45})`;
+      const size = i % 4 === 0 ? 2 : 1;
+      ctx.fillRect(sx, sy, size, size);
+    }
+  }
 
   if (level === 2) {
     drawGulls(performance.now());
@@ -1272,15 +1539,19 @@ function drawCourt() {
     drawHelicopter(performance.now());
   } else if (level === 4) {
     drawBalloons(performance.now());
+  } else if (level === 5) {
+    drawSpaceUfos(performance.now());
   } else {
     drawSkyPlane(performance.now());
   }
 
-  ctx.fillStyle = isSunrise ? "#8a79a7" : (isAfternoon ? "#8da4b8" : (isGolden ? "#9a7f76" : "#141b42"));
-  for (let i = 0; i < 20; i++) {
-    const x = i * 52 + ((i % 2) * 7);
-    const h = 48 + ((i * 13) % 64);
-    ctx.fillRect(x, floorY - h - 26, 40, h);
+  if (!isSpace) {
+    ctx.fillStyle = isSunrise ? "#8a79a7" : (isAfternoon ? "#8da4b8" : (isGolden ? "#9a7f76" : "#141b42"));
+    for (let i = 0; i < 20; i++) {
+      const x = i * 52 + ((i % 2) * 7);
+      const h = 48 + ((i * 13) % 64);
+      ctx.fillRect(x, floorY - h - 26, 40, h);
+    }
   }
 
   const courtGrad = ctx.createLinearGradient(0, floorY, 0, H);
@@ -1296,6 +1567,10 @@ function drawCourt() {
     courtGrad.addColorStop(0, "#5a4a4a");
     courtGrad.addColorStop(0.55, "#4a3d3f");
     courtGrad.addColorStop(1, "#3a3032");
+  } else if (isSpace) {
+    courtGrad.addColorStop(0, "#29335f");
+    courtGrad.addColorStop(0.55, "#202a4e");
+    courtGrad.addColorStop(1, "#171f3d");
   } else {
     courtGrad.addColorStop(0, "#35383f");
     courtGrad.addColorStop(0.55, "#2b2d33");
@@ -1318,17 +1593,19 @@ function drawCourt() {
     }
   }
 
-  ctx.strokeStyle = isSunrise ? "#ffe6b3" : (isAfternoon ? "#f3fbff" : (isGolden ? "#ffe1a7" : "#93f0ff"));
+  ctx.strokeStyle = isSunrise ? "#ffe6b3" : (isAfternoon ? "#f3fbff" : (isGolden ? "#ffe1a7" : (isSpace ? "#94e4ff" : "#93f0ff")));
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(0, floorY);
   ctx.lineTo(W, floorY);
   ctx.stroke();
 
-  const paint = isSunrise ? "#ffe8bf" : (isAfternoon ? "#f4fcff" : (isGolden ? "#ffe2b4" : "#b5f7ff"));
+  const paint = isSunrise ? "#ffe8bf" : (isAfternoon ? "#f4fcff" : (isGolden ? "#ffe2b4" : (isSpace ? "#bee9ff" : "#b5f7ff")));
   const paintShade = isSunrise
     ? "rgba(58, 35, 58, 0.28)"
-    : (isAfternoon ? "rgba(17, 27, 44, 0.26)" : (isGolden ? "rgba(68, 41, 36, 0.26)" : "rgba(12, 18, 33, 0.35)"));
+    : (isAfternoon
+      ? "rgba(17, 27, 44, 0.26)"
+      : (isGolden ? "rgba(68, 41, 36, 0.26)" : (isSpace ? "rgba(8, 18, 48, 0.4)" : "rgba(12, 18, 33, 0.35)")));
   const depth = H - floorY;
   const visibleDepth = floorY + depth * 0.56;
 
@@ -1589,6 +1866,7 @@ function drawBankShotSticker() {
 
 function drawTrajectory() {
   if (!charging || ball.inFlight) return;
+  const now = performance.now();
   const { angle, speed } = getShotParams(charge);
   let tx = ball.x;
   let ty = ball.y;
@@ -1600,7 +1878,8 @@ function drawTrajectory() {
   ctx.setLineDash([5, 6]);
   const points = [{ x: tx, y: ty }];
   for (let i = 0; i < 90; i++) {
-    tvy += gravity;
+    const gravityMultiplier = getSpaceBeamGravityMultiplierAt(tx, ty, now);
+    tvy += gravity * gravityMultiplier;
     tvx *= airDrag;
     tvy *= airDrag;
     tx += tvx;
@@ -1727,6 +2006,36 @@ function drawPlayer() {
 }
 
 function drawBall() {
+  const now = performance.now();
+  const beamGlow = getBallBeamGlow(now);
+  if (beamGlow) {
+    const spill = ctx.createRadialGradient(
+      ball.x,
+      ball.y,
+      ball.r * 0.84,
+      ball.x,
+      ball.y,
+      ball.r * (1.45 + beamGlow.intensity * 0.28)
+    );
+    spill.addColorStop(0, `rgba(${beamGlow.color}, ${(0.12 + beamGlow.intensity * 0.16) * beamGlow.boost})`);
+    spill.addColorStop(0.62, `rgba(${beamGlow.color}, ${(0.05 + beamGlow.intensity * 0.1) * beamGlow.boost})`);
+    spill.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = spill;
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r * (1.95 + beamGlow.intensity * 0.35), 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.shadowBlur = 11 + beamGlow.intensity * 8 + (beamGlow.boost - 1) * 5;
+    ctx.shadowColor = `rgba(${beamGlow.color}, ${(0.72 + beamGlow.intensity * 0.28) * beamGlow.boost})`;
+    ctx.strokeStyle = `rgba(${beamGlow.color}, ${(0.58 + beamGlow.intensity * 0.24) * beamGlow.boost})`;
+    ctx.lineWidth = 1.8 + beamGlow.intensity * 1.2;
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r + 0.8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   const ballGrad = ctx.createRadialGradient(
     ball.x - ball.r * 0.35,
     ball.y - ball.r * 0.35,
@@ -1847,8 +2156,7 @@ if (muteChargeBtn) {
     if (wasMuted && !muteChargeSfx) {
       playUnmuteSequenceSfx();
     } else if (!wasMuted && muteChargeSfx) {
-      muteActivationCount += 1;
-      playSfx(muteActivationCount === 1 ? "muteFirst" : "muteAgain", 0.84);
+      playMuteSequenceSfx();
     }
     updateMuteButton();
   });
@@ -1860,15 +2168,25 @@ function startGame() {
   if (!splashReady || gameStarted) return;
   resetSessionRunState();
   const selectedLevel = Number(startLevelEl?.value || "1");
-  level = selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1));
-  score = level === 4
-    ? level4ScoreThreshold
-    : (level === 3 ? level3ScoreThreshold : (level === 2 ? level2ScoreThreshold : 0));
+  level = selectedLevel === 5
+    ? 5
+    : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1)));
+  score = level === 5
+    ? level5ScoreThreshold
+    : (level === 4
+      ? level4ScoreThreshold
+      : (level === 3 ? level3ScoreThreshold : (level === 2 ? level2ScoreThreshold : 0)));
   level = getLevelForScore(score);
   resetLevelTimer();
   comboStreak = 0;
   lastComboShown = 0;
-  playSfx("start", 0.86);
+  const startChoices = sfx.start;
+  if (startChoices && startChoices.length > 0) {
+    const clip = chooseRandom(startChoices);
+    const audio = new Audio(clip);
+    audio.volume = 0.33;
+    audio.play().catch(() => {});
+  }
   nextPlaneStartAt = performance.now() + planeIntervalMs;
   skyPlane.active = false;
   gameStarted = true;
@@ -1894,7 +2212,12 @@ if (sessionResetBtn) {
   sessionResetBtn.addEventListener("click", resetToSplash);
 }
 if (splashEl) {
-  if (splashTitleEl) splashTitleEl.classList.add("stinger");
+  if (splashTitleEl) {
+    splashTitleEl.classList.remove("stinger");
+    // Force a reflow so the stinger animation restarts on page load.
+    void splashTitleEl.offsetWidth;
+    splashTitleEl.classList.add("stinger");
+  }
   setTimeout(() => {
     splashReady = true;
     if (startBtn) startBtn.disabled = false;

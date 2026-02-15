@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toots Jam - Free Throw</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="frame">
+    <div id="splash" class="splash">
+      <div class="splash-card">
+        <div class="splash-kicker">Welcome To</div>
+        <h1 id="splashTitle">Toots Jam</h1>
+        <p id="splashYear">2026</p>
+        <p>Created by Charles Wilke</p>
+        <div class="splash-actions">
+          <label class="level-label" for="startLevel">Level</label>
+          <select id="startLevel" class="level-select" disabled>
+            <option value="1">1 - Night City</option>
+            <option value="2">2 - Sunrise City</option>
+            <option value="3">3 - Afternoon City</option>
+            <option value="4">4 - Golden Hour City</option>
+          </select>
+          <button id="startBtn" class="toggle-btn splash-start" type="button" disabled>Press Start</button>
+        </div>
+      </div>
+    </div>
+    <div class="hud">
+      <div id="score">Score: 0</div>
+      <div id="combo">Combo: x0</div>
+      <div id="timer">Time: 2:00</div>
+      <div id="nextLevel">Next: L2 in 20</div>
+      <div id="state">Hold to Shoot</div>
+    </div>
+    <canvas id="game" width="960" height="720"></canvas>
+    <div class="controls">
+      <button id="muteChargeBtn" class="toggle-btn" type="button">Silence that White Man</button>
+    </div>
+    <div class="controls controls-right">
+      <button id="sessionResetBtn" class="toggle-btn" type="button">Reset Game</button>
+    </div>
+    <div class="help">Left click or space: charge shot. Release to throw. Right click: dribble. R: reset ball.</div>
+  </div>
+  <script src="game.js" defer></script>
+</body>
+</html>

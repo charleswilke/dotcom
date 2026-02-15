@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Signal Lost | Charles Wilke</title>
+    <meta name="description" content="This page doesn't exist — but the future still looks bright." />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/gif" href="/favicon.gif">
+    <meta name="theme-color" content="#1a1550" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1550;
+            --secondary: #ff5a36;
+            --light: #f8e9d2;
+            --accent: #2c4f7c;
+            --neon: #00f7c2;
+            --grid: rgba(0, 247, 194, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--primary);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Perspective grid floor */
+        .grid-floor {
+            position: fixed;
+            bottom: 0;
+            left: -50%;
+            width: 200%;
+            height: 60%;
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(400px) rotateX(60deg);
+            transform-origin: center top;
+            animation: gridScroll 8s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 0 60px, 0 60px; }
+        }
+
+        /* Scanline overlay */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Ambient glow */
+        .ambient {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 40%, rgba(0, 247, 194, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 70%, rgba(75, 29, 138, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 90, 54, 0.06) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Main content */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 700px;
+        }
+
+        /* 404 number display */
+        .error-code {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: clamp(6rem, 18vw, 14rem);
+            line-height: 1;
+            letter-spacing: 0.05em;
+            position: relative;
+            color: var(--light);
+            text-shadow:
+                0 0 20px var(--neon),
+                0 0 40px var(--neon),
+                0 0 80px rgba(0, 247, 194, 0.4);
+            animation: flicker 4s ease-in-out infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-code::before,
+        .error-code::after {
+            content: '404';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        .error-code::before {
+            color: var(--secondary);
+            z-index: -1;
+            animation: glitchRed 3s steps(2) infinite;
+        }
+
+        .error-code::after {
+            color: var(--neon);
+            z-index: -1;
+            animation: glitchCyan 3s steps(2) infinite;
+        }
+
+        @keyframes flicker {
+            0%, 95%, 100% { opacity: 1; }
+            96% { opacity: 0.85; }
+            97% { opacity: 1; }
+            98% { opacity: 0.9; }
+        }
+
+        @keyframes glitchRed {
+            0%, 85% { opacity: 0; transform: none; }
+            86% { opacity: 0.7; transform: translate(4px, -2px); }
+            88% { opacity: 0; transform: none; }
+            92% { opacity: 0.5; transform: translate(-3px, 1px) skewX(2deg); }
+            94% { opacity: 0; transform: none; }
+        }
+
+        @keyframes glitchCyan {
+            0%, 87% { opacity: 0; transform: none; }
+            88% { opacity: 0.6; transform: translate(-4px, 2px); }
+            90% { opacity: 0; transform: none; }
+            93% { opacity: 0.4; transform: translate(3px, -1px) skewX(-2deg); }
+            95% { opacity: 0; transform: none; }
+        }
+
+        /* Status line */
+        .status-line {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.7rem, 2vw, 0.95rem);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--neon);
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+
+        .status-line .blink {
+            animation: blink 1.2s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Message */
+        .message {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            line-height: 1.8;
+            color: var(--light);
+            opacity: 0.85;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 0 5px rgba(0, 247, 194, 0.2);
+        }
+
+        .message em {
+            color: var(--neon);
+            font-style: normal;
+            text-shadow: 0 0 8px rgba(0, 247, 194, 0.5);
+        }
+
+        /* Home button */
+        .home-link {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--primary);
+            background: var(--neon);
+            padding: 0.9rem 2.5rem;
+            border: none;
+            border-radius: 0;
+            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow:
+                0 0 15px rgba(0, 247, 194, 0.4),
+                0 0 30px rgba(0, 247, 194, 0.15);
+        }
+
+        .home-link:hover {
+            background: var(--light);
+            color: var(--primary);
+            box-shadow:
+                0 0 25px rgba(0, 247, 194, 0.6),
+                0 0 50px rgba(0, 247, 194, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .home-link:active {
+            transform: translateY(0);
+        }
+
+        /* Floating signal dots */
+        .signal-dots {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .dot {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--neon);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up linear infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.5);
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(1.2);
+            }
+        }
+
+        /* Tagline at bottom */
+        .tagline {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            color: var(--light);
+            opacity: 0.35;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .content {
+                padding: 1.5rem;
+            }
+
+            .home-link {
+                padding: 0.8rem 2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-floor"></div>
+    <div class="ambient"></div>
+    <div class="scanlines"></div>
+
+    <div class="signal-dots" id="signalDots"></div>
+
+    <main class="content">
+        <div class="error-code" aria-label="404 error">404</div>
+        <div class="status-line">signal lost<span class="blink"> _</span></div>
+        <p class="message">
+            This frequency doesn't carry a signal yet.<br>
+            But every lost path is just <em>an unbuilt one</em>.
+        </p>
+        <a href="/" class="home-link">Return to Base</a>
+    </main>
+
+    <div class="tagline">intention defines probability</div>
+
+    <script>
+        // Generate floating signal particles
+        (function () {
+            const container = document.getElementById('signalDots');
+            const count = 25;
+            for (let i = 0; i < count; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                dot.style.left = Math.random() * 100 + '%';
+                dot.style.bottom = '-5px';
+                dot.style.animationDuration = (6 + Math.random() * 10) + 's';
+                dot.style.animationDelay = (Math.random() * 8) + 's';
+                dot.style.width = dot.style.height = (2 + Math.random() * 3) + 'px';
+                container.appendChild(dot);
+            }
+        })();
+
+        // Periodic deeper glitch on the 404
+        (function () {
+            const code = document.querySelector('.error-code');
+            function triggerGlitch() {
+                code.style.textShadow =
+                    '4px 0 var(--secondary), -4px 0 var(--neon), 0 0 40px rgba(0,247,194,0.6)';
+                code.style.transform = 'skewX(' + (Math.random() * 4 - 2) + 'deg)';
+
+                setTimeout(function () {
+                    code.style.textShadow =
+                        '0 0 20px var(--neon), 0 0 40px var(--neon), 0 0 80px rgba(0,247,194,0.4)';
+                    code.style.transform = 'none';
+                }, 120 + Math.random() * 100);
+
+                setTimeout(triggerGlitch, 3000 + Math.random() * 5000);
+            }
+            setTimeout(triggerGlitch, 2000);
+        })();
+    </script>
+</body>
+</html>

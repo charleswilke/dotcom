@@ -229,6 +229,18 @@ body {
   letter-spacing: 0.6px;
 }
 
+.splash-subtitle {
+  margin: 0 0 10px;
+  color: #d7f6ff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-shadow:
+    0 0 5px rgba(215, 246, 255, 0.7),
+    0 0 12px rgba(101, 235, 255, 0.5),
+    0 0 22px rgba(56, 198, 255, 0.35);
+}
+
 .splash-start {
   margin-top: 0;
 }

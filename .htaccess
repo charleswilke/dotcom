@@ -17,6 +17,10 @@ RewriteRule ^side-two/?$ /side-two.html [L]
 # The page then redirects to /#mixtape-side-two for the actual lightbox
 RewriteRule ^mixtape-side-two/?$ /mixtape-side-two.html [L]
 
+# Map /tootsjam to games/TootsJam (game) — serve tootsjam.html for bare URL
+RewriteRule ^tootsjam/?$ games/TootsJam/tootsjam.html [L]
+RewriteRule ^tootsjam/(.*)$ games/TootsJam/$1 [L]
+
 # ===== Gzip Compression =====
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml

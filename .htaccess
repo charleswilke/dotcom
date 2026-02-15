@@ -17,7 +17,8 @@ RewriteRule ^side-two/?$ /side-two.html [L]
 # The page then redirects to /#mixtape-side-two for the actual lightbox
 RewriteRule ^mixtape-side-two/?$ /mixtape-side-two.html [L]
 
-# Map /tootsjam to games/TootsJam (game) — serve tootsjam.html for bare URL
+# Map /tootsjam to games/TootsJam (game) — redirect bare /tootsjam to /tootsjam/ so relative URLs resolve
+RewriteRule ^tootsjam$ /tootsjam/ [R=301,L]
 RewriteRule ^tootsjam/?$ games/TootsJam/tootsjam.html [L]
 RewriteRule ^tootsjam/(.*)$ games/TootsJam/$1 [L]
 

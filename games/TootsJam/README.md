@@ -39,6 +39,23 @@ Server-side validation:
 2. Keep relative paths unchanged so audio loads correctly.
 3. Host files under the same folder (or preserve equivalent relative structure).
 
+## External API Base (Static Hosting)
+If your site host does not run `server.js`, point the frontend to an external leaderboard API:
+
+1. In `tootsjam.html`, set:
+
+```html
+<meta name="tootsjam-api-base" content="https://your-api.example.com">
+```
+
+2. Keep it empty for same-origin/local Node server behavior.
+
+Optional runtime override (takes precedence over meta tag):
+
+```html
+<script>window.TOOTSJAM_API_BASE = "https://your-api.example.com";</script>
+```
+
 ## Controls
 - Left click or `Space`: hold to charge, release to shoot
 - Right click: dribble

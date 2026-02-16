@@ -1,1 +1,3 @@
 data/scores.json
+cloudflare-api/node_modules/
+cloudflare-api/.wrangler/

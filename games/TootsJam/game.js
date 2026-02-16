@@ -115,9 +115,8 @@ const tootsFeverModeStreak = 5;
 const comboLadder = [
   { streak: 2, key: "nice", sfxKey: "nice", label: "NICE!" },
   { streak: 3, key: "groovy", sfxKey: "groovy", label: "GROOVY!" },
-  { streak: 4, key: "smooth", sfxKey: "smooth", label: "SMOOTH!" },
-  { streak: 5, key: "onfire", sfxKey: "onfire", label: "ON FIRE!" },
-  { streak: 6, key: "tootsfever", sfxKey: "tootsFever", label: "TOOTS FEVER!" }
+  { streak: 4, key: "onfire", sfxKey: "onfire", label: "ON FIRE!" },
+  { streak: 5, key: "tootsfever", sfxKey: "tootsFever", label: "TOOTS FEVER!" }
 ];
 let levelTimeRemainingMs = levelDurationMs;
 let lastTimerTickAt = performance.now();
@@ -306,6 +305,17 @@ const sfx = {
   ]
 };
 sfx.brickUnlocked = [...sfx.brick, ...sfx.brickStreak];
+const extraPreloadAudio = [
+  "sounds/tootsfever.mp3"
+];
+const preloadableAudioSrcs = Array.from(
+  new Set([
+    ...Object.values(sfx).flat(),
+    ...extraPreloadAudio
+  ])
+);
+const preloadedAudioTemplates = new Map();
+let audioPreloadStarted = false;
 let gameStarted = false;
 let splashReady = false;
 let freeThrowMode = false;
@@ -489,6 +499,40 @@ function chooseRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+function createAudioElement(src) {
+  const template = preloadedAudioTemplates.get(src);
+  if (template) {
+    return template.cloneNode(false);
+  }
+  const audio = new Audio(src);
+  audio.preload = "auto";
+  return audio;
+}
+
+function preloadOneAudioClip(src) {
+  if (!src || preloadedAudioTemplates.has(src)) return;
+  const audio = new Audio();
+  audio.preload = "auto";
+  audio.src = src;
+  audio.load();
+  preloadedAudioTemplates.set(src, audio);
+}
+
+function startAudioPreload() {
+  if (audioPreloadStarted) return;
+  audioPreloadStarted = true;
+
+  let index = 0;
+  function step() {
+    if (index >= preloadableAudioSrcs.length) return;
+    preloadOneAudioClip(preloadableAudioSrcs[index]);
+    index += 1;
+    setTimeout(step, 120);
+  }
+
+  step();
+}
+
 function playSfx(key, volume = 0.8) {
   if (muteAllAudio) return;
   const choices = sfx[key];
@@ -498,7 +542,7 @@ function playSfx(key, volume = 0.8) {
     clipIndex = (clipIndex + 1 + Math.floor(Math.random() * (choices.length - 1))) % choices.length;
   }
   sfxLastChoiceByKey[key] = clipIndex;
-  const audio = new Audio(choices[clipIndex]);
+  const audio = createAudioElement(choices[clipIndex]);
   audio.volume = clamp(volume, 0, 1);
   audio.play().catch(() => {});
 }
@@ -524,7 +568,7 @@ function stopTootsFeverSfx() {
 function playTootsFeverSfx() {
   if (muteAllAudio) return;
   if (activeTootsFeverAudio && !activeTootsFeverAudio.paused) return;
-  const audio = new Audio("sounds/tootsfever.mp3");
+  const audio = createAudioElement("sounds/tootsfever.mp3");
   audio.volume = 0.88;
   audio.addEventListener("ended", () => {
     if (activeTootsFeverAudio === audio) {
@@ -546,7 +590,7 @@ function playChargeSfx() {
   const choices = sfx[key];
   if (!choices || choices.length === 0) return;
   stopChargeSfx();
-  const audio = new Audio(chooseRandom(choices));
+  const audio = createAudioElement(chooseRandom(choices));
   audio.volume = clamp(volume, 0, 1);
   activeChargeAudio = audio;
   audio.play().catch(() => {});
@@ -727,7 +771,7 @@ function playUnmuteSequenceSfx() {
   if (!sequence || sequence.length === 0) return;
   if (unmutePlayCount >= sequence.length) return;
   const clipIndex = unmutePlayCount;
-  const audio = new Audio(sequence[clipIndex]);
+  const audio = createAudioElement(sequence[clipIndex]);
   audio.volume = 0.84;
   audio.play().catch(() => {});
   if (clipIndex === 0) {
@@ -741,7 +785,7 @@ function playMuteSequenceSfx() {
   const sequence = sfx.mute;
   if (!sequence || sequence.length === 0) return;
   const clipIndex = Math.min(muteActivationCount, sequence.length - 1);
-  const audio = new Audio(sequence[clipIndex]);
+  const audio = createAudioElement(sequence[clipIndex]);
   audio.volume = 0.84;
   audio.play().catch(() => {});
   muteActivationCount += 1;
@@ -2862,6 +2906,7 @@ function frame() {
 }
 
 window.addEventListener("keydown", (e) => {
+  startAudioPreload();
   if (e.code === "KeyM") {
     const target = e.target;
     const tagName = target && typeof target.tagName === "string" ? target.tagName.toUpperCase() : "";
@@ -2889,6 +2934,7 @@ window.addEventListener("keydown", (e) => {
   }
   if (e.key.toLowerCase() === "r") resetBall();
 });
+window.addEventListener("pointerdown", startAudioPreload, { once: true });
 window.addEventListener("keyup", (e) => {
   if (!gameStarted) return;
   if (e.code !== "Space") return;
@@ -2960,7 +3006,7 @@ function startGame() {
   const startChoices = sfx.start;
   if (!muteAllAudio && startChoices && startChoices.length > 0) {
     const clip = chooseRandom(startChoices);
-    const audio = new Audio(clip);
+    const audio = createAudioElement(clip);
     const isNumberedStartClip = /\/start\d+\.mp3$/i.test(clip) || /\\start\d+\.mp3$/i.test(clip);
     audio.volume = isNumberedStartClip ? 0.10 : 0.33;
     audio.play().catch(() => {});
@@ -3052,6 +3098,7 @@ if (splashEl) {
   }
   setTimeout(() => {
     splashReady = true;
+    startAudioPreload();
     if (startBtn) startBtn.disabled = false;
     if (freeThrowModeBtn) freeThrowModeBtn.disabled = false;
     updateFreeThrowModeButton();

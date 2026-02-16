@@ -89,9 +89,7 @@ let comboCalloutTimer = 0;
 let comboCalloutKey = "";
 let tootsFeverFlashTimer = 0;
 let brickStampedThisShot = false;
-let brickStreak = 0;
 let gotTheIckArmed = false;
-let brickAltUnlocked = false;
 let rimSoundCooldown = 0;
 let floorSoundCooldown = 0;
 let dribbleSoundCooldown = 0;
@@ -758,9 +756,7 @@ function resetSessionRunState() {
   tootsFeverFlashTimer = 0;
   stopTootsFeverSfx();
   resetLevelTimer();
-  brickStreak = 0;
   gotTheIckArmed = false;
-  brickAltUnlocked = false;
   muteActivationCount = 0;
   unmutePlayCount = 0;
 }
@@ -1694,7 +1690,7 @@ function triggerBrickStamp() {
       playSfx("brickIck", 0.82);
       gotTheIckArmed = false;
     } else {
-      playSfx(brickAltUnlocked ? "brickUnlocked" : "brick", 0.74);
+      playSfx("brickUnlocked", 0.74);
     }
   }
   brickStampTimer = 44;
@@ -1883,10 +1879,6 @@ function physicsStep() {
         } else if (touchedRim && !brickStampedThisShot) {
           triggerBrickStamp();
         }
-        brickStreak += 1;
-        if (brickStreak >= 3) {
-          brickAltUnlocked = true;
-        }
         comboStreak = 0;
         comboCalloutTimer = 0;
         comboCalloutKey = "";
@@ -1897,7 +1889,6 @@ function physicsStep() {
         queueReset(isAirball ? "Airball" : "Brick");
         return;
       }
-      brickStreak = 0;
       queueReset(comboStreak > 1 ? `Combo x${getComboMultiplier(comboStreak)}` : "Made Shot");
       return;
     }
@@ -1921,7 +1912,7 @@ function physicsStep() {
   const madeOnEntry = crossedRimPlane && withinRimGap && throughCylinder;
   const madeOnDrop = crossedScorePlane && withinScoreWindow;
   if (!ball.scoredOnThisShot && ball.vy > 0 && (madeOnEntry || madeOnDrop)) {
-    const swish = !touchedRim;
+    const swish = !touchedRim && !touchedBackboard;
     const trickShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot || touchedLaserThisShot || touchedAlienUfoThisShot;
     ball.scoredOnThisShot = true;
     lastMadeShot = true;

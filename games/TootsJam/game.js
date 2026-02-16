@@ -2961,7 +2961,8 @@ function startGame() {
   if (!muteAllAudio && startChoices && startChoices.length > 0) {
     const clip = chooseRandom(startChoices);
     const audio = new Audio(clip);
-    audio.volume = 0.33;
+    const isNumberedStartClip = /\/start\d+\.mp3$/i.test(clip) || /\\start\d+\.mp3$/i.test(clip);
+    audio.volume = isNumberedStartClip ? 0.10 : 0.33;
     audio.play().catch(() => {});
   }
   nextPlaneStartAt = performance.now() + planeIntervalMs;

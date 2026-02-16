@@ -1,5 +1,9 @@
 const MAX_STORED_SCORES = 2000;
 
+function getDb(env) {
+  return env?.DB || env?.tootsjam_scores || null;
+}
+
 function json(status, payload, origin = "*") {
   return new Response(JSON.stringify(payload), {
     status,
@@ -31,6 +35,11 @@ function getAllowedOrigin(request, env) {
 }
 
 async function handleGetScores(request, env) {
+  const db = getDb(env);
+  if (!db) {
+    return json(500, { error: "D1 binding missing. Expected DB (or tootsjam_scores)." }, getAllowedOrigin(request, env));
+  }
+
   const url = new URL(request.url);
   const limit = clampInt(url.searchParams.get("limit"), 10, 50);
   const modeFilter = url.searchParams.get("mode");
@@ -52,13 +61,16 @@ async function handleGetScores(request, env) {
   query += " ORDER BY score DESC, createdAt ASC LIMIT ? ";
   binds.push(limit);
 
-  const result = await env.DB.prepare(query).bind(...binds).all();
+  const result = await db.prepare(query).bind(...binds).all();
   const scores = Array.isArray(result.results) ? result.results : [];
   return json(200, { scores }, getAllowedOrigin(request, env));
 }
 
 async function pruneOldScores(env) {
-  await env.DB.prepare(
+  const db = getDb(env);
+  if (!db) return;
+
+  await db.prepare(
     `
       DELETE FROM scores
       WHERE id IN (
@@ -72,6 +84,11 @@ async function pruneOldScores(env) {
 }
 
 async function handlePostScore(request, env) {
+  const db = getDb(env);
+  if (!db) {
+    return json(500, { error: "D1 binding missing. Expected DB (or tootsjam_scores)." }, getAllowedOrigin(request, env));
+  }
+
   let parsed;
   try {
     parsed = await request.json();
@@ -100,7 +117,7 @@ async function handlePostScore(request, env) {
     createdAt: new Date().toISOString()
   };
 
-  await env.DB.prepare(
+  await db.prepare(
     `
       INSERT INTO scores (id, initials, score, mode, startLevel, createdAt)
       VALUES (?, ?, ?, ?, ?, ?)

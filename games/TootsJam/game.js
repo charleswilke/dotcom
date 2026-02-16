@@ -324,6 +324,17 @@ comboCalloutImages.smooth.src = "images/smooth.png";
 comboCalloutImages.onfire.src = "images/onfire.png";
 comboCalloutImages.tootsfever.src = "images/tootsfever.png";
 const sfxLastChoiceByKey = {};
+const apiBaseMetaEl = document.querySelector('meta[name="tootsjam-api-base"]');
+const rawApiBase = typeof window.TOOTSJAM_API_BASE === "string" && window.TOOTSJAM_API_BASE.trim()
+  ? window.TOOTSJAM_API_BASE.trim()
+  : (apiBaseMetaEl?.content?.trim() || "");
+const apiBase = rawApiBase.replace(/\/+$/, "");
+
+function getApiUrl(pathname) {
+  if (!apiBase) return pathname;
+  if (pathname.startsWith("/")) return `${apiBase}${pathname}`;
+  return `${apiBase}/${pathname}`;
+}
 
 function getLevelForScore(currentScore) {
   if (currentScore >= level6ScoreThreshold) return 6;
@@ -613,7 +624,7 @@ async function getApiErrorMessage(response, fallback = "Request failed.") {
 async function fetchLeaderboard() {
   if (leaderboardStatusEl) leaderboardStatusEl.textContent = "Loading...";
   try {
-    const response = await fetch(`/api/scores?limit=${leaderboardLimit * 8}`, { cache: "no-store" });
+    const response = await fetch(`${getApiUrl("/api/scores")}?limit=${leaderboardLimit * 8}`, { cache: "no-store" });
     if (!response.ok) {
       const message = await getApiErrorMessage(response, `Leaderboard request failed (HTTP ${response.status}).`);
       throw new Error(message);
@@ -660,7 +671,7 @@ async function submitPendingScore(initials) {
   if (submitScoreBtnEl) submitScoreBtnEl.disabled = true;
   setScoreSubmitStatus("Posting...");
   try {
-    const response = await fetch("/api/scores", {
+    const response = await fetch(getApiUrl("/api/scores"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)

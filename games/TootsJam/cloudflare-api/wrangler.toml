@@ -1,0 +1,13 @@
+name = "tootsjam-scores-api"
+main = "src/index.js"
+compatibility_date = "2026-02-16"
+
+[vars]
+# Optional: set to your game origin, for example:
+# ALLOWED_ORIGIN = "https://charleswilke.com"
+ALLOWED_ORIGIN = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tootsjam-scores"
+database_id = "a868a537-0ceb-42a1-990c-3ccd62d20bf3"

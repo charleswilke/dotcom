@@ -40,6 +40,7 @@ body {
 }
 
 .hud {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto auto auto auto 1fr;
   align-items: center;
@@ -84,21 +85,31 @@ body {
 }
 
 #muteAllBtn {
-  justify-self: end;
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  z-index: 6;
 }
 
 .hud-audio-btn {
   border: 2px solid #ffd56a;
   background: linear-gradient(180deg, #5c4a14 0%, #3d2f0d 100%);
   color: #ffefbf;
-  font-family: "Courier New", "Lucida Console", monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  padding: 6px 10px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(255, 205, 102, 0.22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+}
+
+.hud-audio-btn::before {
+  content: "\1F50A";
+  font-size: 18px;
+  line-height: 1;
 }
 
 .hud-audio-btn.is-muted {
@@ -106,6 +117,10 @@ body {
   background: linear-gradient(180deg, #6c1f2a 0%, #42151d 100%);
   color: #ffd6d6;
   box-shadow: 0 0 10px rgba(255, 120, 120, 0.22);
+}
+
+.hud-audio-btn.is-muted::before {
+  content: "\1F507";
 }
 
 #state {
@@ -161,16 +176,63 @@ body {
   animation: combo-spark-right 520ms ease-out;
 }
 
-.controls {
+.mobile-controls-row {
   position: absolute;
   left: 18px;
+  right: 18px;
   bottom: 48px;
   z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.controls {
+  display: flex;
+  pointer-events: auto;
 }
 
 .controls-right {
-  left: auto;
-  right: 18px;
+  justify-content: flex-end;
+}
+
+.controls-stack {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.charge-btn {
+  display: none;
+  width: 82px;
+  height: 82px;
+  border-radius: 8px;
+  border-color: #ff8b8b;
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 187, 187, 0.44) 0%, rgba(255, 187, 187, 0) 62%),
+    linear-gradient(180deg, #9f2424 0%, #6d1717 100%);
+  color: #ffe8e8;
+  box-shadow:
+    0 0 0 2px rgba(255, 116, 116, 0.2),
+    0 0 16px rgba(255, 82, 82, 0.36);
+  animation: charge-radiate 1.4s ease-out infinite;
+  touch-action: none;
+  padding: 8px;
+  white-space: normal;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.charge-btn.is-charging {
+  border-color: #ffd56a;
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 236, 173, 0.46) 0%, rgba(255, 236, 173, 0) 62%),
+    linear-gradient(180deg, #5c4a14 0%, #3d2f0d 100%);
+  color: #ffefbf;
+  box-shadow:
+    0 0 0 2px rgba(255, 205, 102, 0.22),
+    0 0 18px rgba(255, 205, 102, 0.36);
 }
 
 .toggle-btn {
@@ -505,30 +567,54 @@ canvas {
     min-width: 160px;
   }
 
-  .help {
-    order: 2;
+  .mobile-controls-row {
+    position: static;
+    order: 3;
+    width: 100%;
+    margin: 10px 0 12px;
+    padding: 0 12px;
+    align-items: flex-end;
+    pointer-events: auto;
   }
 
-  .controls,
-  .controls-right {
-    position: static;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 1;
+  .help {
+    display: none;
   }
 
   .controls {
-    order: 3;
-    margin: 10px 0 0;
+    z-index: 1;
+  }
+
+  #state {
+    display: none;
   }
 
   .controls-right {
-    order: 4;
-    margin: 8px 0 12px;
+    align-items: flex-end;
+  }
+
+  .charge-btn {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.6px;
+  }
+}
+
+@keyframes charge-radiate {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(255, 120, 120, 0.3),
+      0 0 16px rgba(255, 82, 82, 0.36);
+  }
+  70% {
+    box-shadow:
+      0 0 0 11px rgba(255, 120, 120, 0),
+      0 0 22px rgba(255, 120, 120, 0.46);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(255, 120, 120, 0),
+      0 0 16px rgba(255, 82, 82, 0.36);
   }
 }
 

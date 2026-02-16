@@ -8,6 +8,7 @@ const nextLevelEl = document.getElementById("nextLevel");
 const muteAllBtn = document.getElementById("muteAllBtn");
 const muteChargeBtn = document.getElementById("muteChargeBtn");
 const sessionResetBtn = document.getElementById("sessionResetBtn");
+const chargeBtn = document.getElementById("chargeBtn");
 const splashEl = document.getElementById("splash");
 const splashYearEl = document.getElementById("splashYear");
 const startBtn = document.getElementById("startBtn");
@@ -471,6 +472,7 @@ function resetBall() {
   tootsFeverFlashTimer = 0;
   stateEl.textContent = "Hold to Shoot";
   resetCountdown = -1;
+  updateChargeButtonState();
   updateHud();
 }
 
@@ -606,7 +608,14 @@ function updateMuteAllButton() {
   if (!muteAllBtn) return;
   muteAllBtn.classList.toggle("is-muted", muteAllAudio);
   muteAllBtn.setAttribute("aria-pressed", muteAllAudio ? "true" : "false");
-  muteAllBtn.textContent = muteAllAudio ? "Sound: Off" : "Sound: On";
+  const label = muteAllAudio ? "Sound off" : "Sound on";
+  muteAllBtn.setAttribute("aria-label", label);
+  muteAllBtn.setAttribute("title", label);
+}
+
+function updateChargeButtonState() {
+  if (!chargeBtn) return;
+  chargeBtn.classList.toggle("is-charging", charging && gameStarted && !ball.inFlight);
 }
 
 function toggleMuteAllAudio() {
@@ -820,6 +829,7 @@ function beginCharge() {
     chargeSoundCooldown = 18;
   }
   stateEl.textContent = "Charging";
+  updateChargeButtonState();
 }
 
 function releaseShot() {
@@ -846,6 +856,7 @@ function releaseShot() {
   ball.vy = Math.sin(angle) * speed;
   ball.spin = 0.23 + charge * 0.18;
   stateEl.textContent = "Ball in Flight";
+  updateChargeButtonState();
 }
 
 function queueReset(message) {
@@ -859,6 +870,7 @@ function queueReset(message) {
   chargeDir = 1;
   stateEl.textContent = message;
   resetCountdown = resetDelayFrames;
+  updateChargeButtonState();
   updateHud();
 }
 
@@ -3088,6 +3100,21 @@ if (leaderboardFreeThrowBtnEl) {
 }
 if (sessionResetBtn) {
   sessionResetBtn.addEventListener("click", resetToSplash);
+}
+if (chargeBtn) {
+  const onChargePress = (e) => {
+    if (e) e.preventDefault();
+    beginCharge();
+  };
+  const onChargeRelease = (e) => {
+    if (e) e.preventDefault();
+    releaseShot();
+  };
+
+  chargeBtn.addEventListener("pointerdown", onChargePress);
+  chargeBtn.addEventListener("pointerup", onChargeRelease);
+  chargeBtn.addEventListener("pointercancel", onChargeRelease);
+  chargeBtn.addEventListener("pointerleave", onChargeRelease);
 }
 if (splashEl) {
   if (splashTitleEl) {

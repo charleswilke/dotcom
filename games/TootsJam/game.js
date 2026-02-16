@@ -5,6 +5,7 @@ const comboEl = document.getElementById("combo");
 const stateEl = document.getElementById("state");
 const timerEl = document.getElementById("timer");
 const nextLevelEl = document.getElementById("nextLevel");
+const muteAllBtn = document.getElementById("muteAllBtn");
 const muteChargeBtn = document.getElementById("muteChargeBtn");
 const sessionResetBtn = document.getElementById("sessionResetBtn");
 const splashEl = document.getElementById("splash");
@@ -82,6 +83,7 @@ const particles = [];
 const floatTexts = [];
 let brickStampTimer = 0;
 let airballStampTimer = 0;
+let swishStampTimer = 0;
 let tootsBounceStickerTimer = 0;
 let comboCalloutTimer = 0;
 let comboCalloutKey = "";
@@ -94,6 +96,7 @@ let rimSoundCooldown = 0;
 let floorSoundCooldown = 0;
 let dribbleSoundCooldown = 0;
 let chargeSoundCooldown = 0;
+let muteAllAudio = false;
 let muteChargeSfx = false;
 let muteActivationCount = 0;
 let unmutePlayCount = 0;
@@ -234,6 +237,12 @@ const sfx = {
   smooth: ["sounds/swish/smooth.mp3", "sounds/swish/smooth2.mp3", "sounds/swish/smooth3.mp3"],
   onfire: ["sounds/swish/onfire.mp3", "sounds/swish/onfire2.mp3"],
   tootsFever: ["sounds/swish/tootsfever.mp3", "sounds/swish/tootsfever2.mp3", "sounds/swish/tootsfever3.mp3"],
+  swish: [
+    "sounds/swish/swish.mp3",
+    "sounds/swish/swish2.mp3",
+    "sounds/swish/swish3.mp3",
+    "sounds/swish/swish4.mp3"
+  ],
   net: [
     "sounds/net/net1.mp3",
     "sounds/net/net2.mp3",
@@ -309,6 +318,8 @@ const brickStampImage = new Image();
 brickStampImage.src = "images/brick.png";
 const airballStampImage = new Image();
 airballStampImage.src = "images/airball.png";
+const swishStampImage = new Image();
+swishStampImage.src = "images/swish.png";
 const tootsBounceStickerImage = new Image();
 tootsBounceStickerImage.src = "images/tootsbounce.png";
 const comboCalloutImages = {
@@ -445,6 +456,7 @@ function resetBall() {
   touchedAlienUfoThisShot = false;
   brickStampedThisShot = false;
   airballStampTimer = 0;
+  swishStampTimer = 0;
   tootsBounceStickerTimer = 0;
   comboCalloutTimer = 0;
   comboCalloutKey = "";
@@ -480,6 +492,7 @@ function chooseRandom(list) {
 }
 
 function playSfx(key, volume = 0.8) {
+  if (muteAllAudio) return;
   const choices = sfx[key];
   if (!choices || choices.length === 0) return;
   let clipIndex = Math.floor(Math.random() * choices.length);
@@ -511,6 +524,7 @@ function stopTootsFeverSfx() {
 }
 
 function playTootsFeverSfx() {
+  if (muteAllAudio) return;
   if (activeTootsFeverAudio && !activeTootsFeverAudio.paused) return;
   const audio = new Audio("sounds/tootsfever.mp3");
   audio.volume = 0.88;
@@ -528,6 +542,7 @@ function playTootsFeverSfx() {
 }
 
 function playChargeSfx() {
+  if (muteAllAudio) return;
   const key = muteChargeSfx ? "silence" : "charge";
   const volume = muteChargeSfx ? 0.16 : 0.10;
   const choices = sfx[key];
@@ -543,6 +558,22 @@ function updateMuteButton() {
   if (!muteChargeBtn) return;
   muteChargeBtn.classList.toggle("is-muted", muteChargeSfx);
   muteChargeBtn.setAttribute("aria-pressed", muteChargeSfx ? "true" : "false");
+}
+
+function updateMuteAllButton() {
+  if (!muteAllBtn) return;
+  muteAllBtn.classList.toggle("is-muted", muteAllAudio);
+  muteAllBtn.setAttribute("aria-pressed", muteAllAudio ? "true" : "false");
+  muteAllBtn.textContent = muteAllAudio ? "Sound: Off" : "Sound: On";
+}
+
+function toggleMuteAllAudio() {
+  muteAllAudio = !muteAllAudio;
+  if (muteAllAudio) {
+    stopChargeSfx();
+    stopTootsFeverSfx();
+  }
+  updateMuteAllButton();
 }
 
 function updateFreeThrowModeButton() {
@@ -693,6 +724,7 @@ async function submitPendingScore(initials) {
 }
 
 function playUnmuteSequenceSfx() {
+  if (muteAllAudio) return;
   const sequence = sfx.unmute;
   if (!sequence || sequence.length === 0) return;
   if (unmutePlayCount >= sequence.length) return;
@@ -707,6 +739,7 @@ function playUnmuteSequenceSfx() {
 }
 
 function playMuteSequenceSfx() {
+  if (muteAllAudio) return;
   const sequence = sfx.mute;
   if (!sequence || sequence.length === 0) return;
   const clipIndex = Math.min(muteActivationCount, sequence.length - 1);
@@ -920,6 +953,9 @@ function updateEffects() {
   }
   if (airballStampTimer > 0) {
     airballStampTimer -= 1;
+  }
+  if (swishStampTimer > 0) {
+    swishStampTimer -= 1;
   }
   if (tootsBounceStickerTimer > 0) {
     tootsBounceStickerTimer -= 1;
@@ -1885,28 +1921,32 @@ function physicsStep() {
   const madeOnEntry = crossedRimPlane && withinRimGap && throughCylinder;
   const madeOnDrop = crossedScorePlane && withinScoreWindow;
   if (!ball.scoredOnThisShot && ball.vy > 0 && (madeOnEntry || madeOnDrop)) {
-    const swish = !touchedRim && !touchedBackboard;
+    const swish = !touchedRim;
     const trickShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot || touchedLaserThisShot || touchedAlienUfoThisShot;
     ball.scoredOnThisShot = true;
     lastMadeShot = true;
     lastShotWasSwish = swish;
     comboStreak += 1;
+    const comboTier = getComboTierForStreak(comboStreak);
     brickStampTimer = 0;
     brickStampedThisShot = false;
     netJiggle = 1;
     netJigglePhase = 0;
     playSfx("net", 0.78);
+    if (swish && !comboTier) {
+      playSfx("swish", 0.8);
+      swishStampTimer = 52;
+    }
     if (trickShot) {
       playSfx("tootsBounce", 0.84);
     }
-    const comboTier = getComboTierForStreak(comboStreak);
     if (comboTier) {
       playSfx(comboTier.sfxKey, 0.84);
       triggerComboCallout(comboTier.key);
       if (comboStreak === tootsFeverModeStreak) {
         tootsFeverFlashTimer = 96;
       }
-    } else if (!trickShot && comboStreak <= 1) {
+    } else if (!trickShot && comboStreak <= 1 && !swish) {
       playSfx("made", 0.75);
     }
     if (comboStreak >= tootsFeverModeStreak) {
@@ -2415,6 +2455,39 @@ function drawAirballStamp() {
   ctx.restore();
 }
 
+function drawSwishStamp() {
+  if (swishStampTimer <= 0) return;
+  const life = swishStampTimer / 52;
+  const fade = Math.min(1, swishStampTimer / 10) * Math.max(0, life);
+  const pulse = 1 + Math.sin(performance.now() * 0.03) * 0.02;
+  if (swishStampImage.complete && swishStampImage.naturalWidth > 0) {
+    const width = 320 * pulse;
+    const height = width * (swishStampImage.naturalHeight / swishStampImage.naturalWidth);
+    ctx.save();
+    ctx.globalAlpha = 0.97 * fade;
+    ctx.translate(W * 0.5, H * 0.29);
+    ctx.rotate(-0.05);
+    ctx.drawImage(swishStampImage, -width * 0.5, -height * 0.5, width, height);
+    ctx.restore();
+    return;
+  }
+
+  ctx.save();
+  ctx.translate(W * 0.5, H * 0.29);
+  ctx.rotate(-0.05);
+  ctx.strokeStyle = `rgba(120, 245, 255, ${0.82 * fade})`;
+  ctx.lineWidth = 5;
+  ctx.strokeRect(-152, -50, 304, 100);
+  ctx.fillStyle = `rgba(10, 57, 74, ${0.24 * fade})`;
+  ctx.fillRect(-152, -50, 304, 100);
+  ctx.font = "bold 54px 'Courier New', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = `rgba(212, 250, 255, ${0.95 * fade})`;
+  ctx.fillText("SWISH", 0, 2);
+  ctx.restore();
+}
+
 function drawTootsBounceSticker() {
   if (tootsBounceStickerTimer <= 0) return;
   const life = tootsBounceStickerTimer / 54;
@@ -2789,6 +2862,7 @@ function frame() {
   drawFloatingPoints();
   drawBrickStamp();
   drawAirballStamp();
+  drawSwishStamp();
   drawTootsBounceSticker();
   drawComboCallout();
   drawCrtOverlay();
@@ -2797,6 +2871,17 @@ function frame() {
 }
 
 window.addEventListener("keydown", (e) => {
+  if (e.code === "KeyM") {
+    const target = e.target;
+    const tagName = target && typeof target.tagName === "string" ? target.tagName.toUpperCase() : "";
+    const isTypingTarget = tagName === "INPUT" || tagName === "TEXTAREA" || tagName === "SELECT" || Boolean(target?.isContentEditable);
+    if (!isTypingTarget) {
+      e.preventDefault();
+      toggleMuteAllAudio();
+    }
+    return;
+  }
+
   if (!gameStarted) {
     if (splashReady && (e.code === "Enter" || e.code === "Space")) {
       e.preventDefault();
@@ -2840,6 +2925,11 @@ if (muteChargeBtn) {
     updateMuteButton();
   });
 }
+if (muteAllBtn) {
+  muteAllBtn.addEventListener("click", () => {
+    toggleMuteAllAudio();
+  });
+}
 if (splashYearEl) {
   splashYearEl.textContent = String(new Date().getFullYear());
 }
@@ -2877,7 +2967,7 @@ function startGame() {
   comboStreak = 0;
   lastComboShown = 0;
   const startChoices = sfx.start;
-  if (startChoices && startChoices.length > 0) {
+  if (!muteAllAudio && startChoices && startChoices.length > 0) {
     const clip = chooseRandom(startChoices);
     const audio = new Audio(clip);
     audio.volume = 0.33;
@@ -3039,4 +3129,5 @@ canvas.addEventListener(
 
 resetBall();
 updateMuteButton();
+updateMuteAllButton();
 frame();

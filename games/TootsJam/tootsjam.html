@@ -24,8 +24,7 @@
       <div class="splash-card">
         <h1 id="splashTitle"><img class="splash-title-image" src="images/tootsjam.png" alt="Toots Jam" /></h1>
         <p class="splash-subtitle">Trick Shot City Hoops</p>
-        <p id="splashYear">2026</p>
-        <p>Created by Charles Wilke</p>
+        <p>Created by Charles Wilke - <span id="splashYear">2026</span></p>
         <div class="splash-actions">
           <label class="level-label" for="startLevel">Level</label>
           <select id="startLevel" class="level-select" disabled>
@@ -62,6 +61,7 @@
       <div id="combo">Combo: x0</div>
       <div id="timer">Time: 2:00</div>
       <div id="nextLevel">Next: L2 in 20</div>
+      <button id="muteAllBtn" class="hud-audio-btn" type="button" aria-pressed="false">Sound: On</button>
       <div id="state">Hold to Shoot</div>
     </div>
     <canvas id="game" width="960" height="720"></canvas>
@@ -71,7 +71,7 @@
     <div class="controls controls-right">
       <button id="sessionResetBtn" class="toggle-btn" type="button">Reset Game</button>
     </div>
-    <div class="help">Left click or space: charge shot. Release to throw. Right click: dribble. R: reset ball.</div>
+    <div class="help">Left click or space: charge shot. Release to throw. Right click: dribble. R: reset ball. M: mute all.</div>
   </div>
   <script src="game.js" defer></script>
 </body>

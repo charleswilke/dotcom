@@ -12,6 +12,17 @@ const splashYearEl = document.getElementById("splashYear");
 const startBtn = document.getElementById("startBtn");
 const splashTitleEl = document.getElementById("splashTitle");
 const startLevelEl = document.getElementById("startLevel");
+const freeThrowModeBtn = document.getElementById("freeThrowModeBtn");
+const runSummaryEl = document.getElementById("runSummary");
+const scoreSubmitFormEl = document.getElementById("scoreSubmitForm");
+const scoreInitialsEl = document.getElementById("scoreInitials");
+const submitScoreBtnEl = document.getElementById("submitScoreBtn");
+const scoreSubmitStatusEl = document.getElementById("scoreSubmitStatus");
+const leaderboardListEl = document.getElementById("leaderboardList");
+const leaderboardStatusEl = document.getElementById("leaderboardStatus");
+const leaderboardTitleEl = document.getElementById("leaderboardTitle");
+const leaderboardNormalBtnEl = document.getElementById("leaderboardNormalBtn");
+const leaderboardFreeThrowBtnEl = document.getElementById("leaderboardFreeThrowBtn");
 
 const W = canvas.width;
 const H = canvas.height;
@@ -70,7 +81,11 @@ let netJigglePhase = 0;
 const particles = [];
 const floatTexts = [];
 let brickStampTimer = 0;
-let bankShotStickerTimer = 0;
+let airballStampTimer = 0;
+let tootsBounceStickerTimer = 0;
+let comboCalloutTimer = 0;
+let comboCalloutKey = "";
+let tootsFeverFlashTimer = 0;
 let brickStampedThisShot = false;
 let brickStreak = 0;
 let gotTheIckArmed = false;
@@ -83,6 +98,7 @@ let muteChargeSfx = false;
 let muteActivationCount = 0;
 let unmutePlayCount = 0;
 let activeChargeAudio = null;
+let activeTootsFeverAudio = null;
 const resetDelayFrames = 42;
 const maxCharge = 1.28;
 const planeIntervalMs = 120000;
@@ -92,6 +108,15 @@ const level3ScoreThreshold = 40;
 const level4ScoreThreshold = 60;
 const level5ScoreThreshold = 80;
 const levelDurationMs = 120000;
+const comboCalloutDurationFrames = 54;
+const tootsFeverModeStreak = 5;
+const comboLadder = [
+  { streak: 2, key: "nice", sfxKey: "nice", label: "NICE!" },
+  { streak: 3, key: "groovy", sfxKey: "groovy", label: "GROOVY!" },
+  { streak: 4, key: "smooth", sfxKey: "smooth", label: "SMOOTH!" },
+  { streak: 5, key: "onfire", sfxKey: "onfire", label: "ON FIRE!" },
+  { streak: 6, key: "tootsfever", sfxKey: "tootsFever", label: "TOOTS FEVER!" }
+];
 let levelTimeRemainingMs = levelDurationMs;
 let lastTimerTickAt = performance.now();
 let level = 1;
@@ -177,12 +202,11 @@ const sfx = {
     "sounds/charging4.mp3",
     "sounds/charging5.mp3"
   ],
-  swish: [
-    "sounds/swish/bingo.mp3",
-    "sounds/swish/groovy.mp3",
-    "sounds/swish/groovy2.mp3",
-    "sounds/swish/nice.mp3"
-  ],
+  nice: ["sounds/swish/nice.mp3"],
+  groovy: ["sounds/swish/groovy.mp3", "sounds/swish/groovy2.mp3"],
+  smooth: ["sounds/swish/smooth.mp3", "sounds/swish/smooth2.mp3", "sounds/swish/smooth3.mp3"],
+  onfire: ["sounds/swish/onfire.mp3", "sounds/swish/onfire2.mp3"],
+  tootsFever: ["sounds/swish/tootsfever.mp3", "sounds/swish/tootsfever2.mp3", "sounds/swish/tootsfever3.mp3"],
   net: [
     "sounds/net/net1.mp3",
     "sounds/net/net2.mp3",
@@ -191,7 +215,7 @@ const sfx = {
     "sounds/net/net5.mp3",
     "sounds/net/net6.mp3"
   ],
-  bankShot: [
+  tootsBounce: [
     "sounds/bank/bank1.mp3",
     "sounds/bank/bank2.mp3",
     "sounds/bank/bank3.mp3",
@@ -240,6 +264,29 @@ const sfx = {
 sfx.brickUnlocked = [...sfx.brick, ...sfx.brickStreak];
 let gameStarted = false;
 let splashReady = false;
+let freeThrowMode = false;
+let pendingScoreForSubmission = null;
+const leaderboardLimit = 10;
+let leaderboardModeFilter = "normal";
+const brickStampImage = new Image();
+brickStampImage.src = "images/brick.png";
+const airballStampImage = new Image();
+airballStampImage.src = "images/airball.png";
+const tootsBounceStickerImage = new Image();
+tootsBounceStickerImage.src = "images/tootsbounce.png";
+const comboCalloutImages = {
+  nice: new Image(),
+  groovy: new Image(),
+  smooth: new Image(),
+  onfire: new Image(),
+  tootsfever: new Image()
+};
+comboCalloutImages.nice.src = "images/nice.png";
+comboCalloutImages.groovy.src = "images/groovy.png";
+comboCalloutImages.smooth.src = "images/smooth.png";
+comboCalloutImages.onfire.src = "images/onfire.png";
+comboCalloutImages.tootsfever.src = "images/tootsfever.png";
+const sfxLastChoiceByKey = {};
 
 function getLevelForScore(currentScore) {
   if (currentScore >= level5ScoreThreshold) return 5;
@@ -278,6 +325,9 @@ function resetLevelTimer(now = performance.now()) {
 }
 
 function applyLevelProgression() {
+  if (freeThrowMode) {
+    return false;
+  }
   const nextLevel = getLevelForScore(score);
   if (nextLevel <= level) return false;
   level = nextLevel;
@@ -289,9 +339,11 @@ function applyLevelProgression() {
 function updateHud() {
   scoreEl.textContent = `Score: ${score}`;
   comboEl.textContent = `Combo: x${getComboMultiplier(comboStreak)}`;
-  if (timerEl) timerEl.textContent = `Time: ${formatLevelTime(levelTimeRemainingMs)}`;
+  if (timerEl) timerEl.textContent = freeThrowMode ? "Time: Free" : `Time: ${formatLevelTime(levelTimeRemainingMs)}`;
   if (nextLevelEl) {
-    if (level === 5) {
+    if (freeThrowMode) {
+      nextLevelEl.textContent = "Mode: Free Throw";
+    } else if (level === 5) {
       const phase = getSpaceBeamState(performance.now());
       nextLevelEl.textContent = `Beam: ${phase.mode.toUpperCase()} ${Math.round(phase.intensity * 100)}%`;
     } else {
@@ -336,7 +388,11 @@ function resetBall() {
   touchedHeliThisShot = false;
   touchedBalloonThisShot = false;
   brickStampedThisShot = false;
-  bankShotStickerTimer = 0;
+  airballStampTimer = 0;
+  tootsBounceStickerTimer = 0;
+  comboCalloutTimer = 0;
+  comboCalloutKey = "";
+  tootsFeverFlashTimer = 0;
   stateEl.textContent = "Hold to Shoot";
   resetCountdown = -1;
   updateHud();
@@ -351,6 +407,18 @@ function getComboMultiplier(streak) {
   return 2 ** streak;
 }
 
+function getComboTierForStreak(streak) {
+  for (let i = 0; i < comboLadder.length; i++) {
+    if (comboLadder[i].streak === streak) return comboLadder[i];
+  }
+  return null;
+}
+
+function triggerComboCallout(key) {
+  comboCalloutKey = key;
+  comboCalloutTimer = comboCalloutDurationFrames;
+}
+
 function chooseRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
@@ -358,7 +426,12 @@ function chooseRandom(list) {
 function playSfx(key, volume = 0.8) {
   const choices = sfx[key];
   if (!choices || choices.length === 0) return;
-  const audio = new Audio(chooseRandom(choices));
+  let clipIndex = Math.floor(Math.random() * choices.length);
+  if (choices.length > 1 && sfxLastChoiceByKey[key] === clipIndex) {
+    clipIndex = (clipIndex + 1 + Math.floor(Math.random() * (choices.length - 1))) % choices.length;
+  }
+  sfxLastChoiceByKey[key] = clipIndex;
+  const audio = new Audio(choices[clipIndex]);
   audio.volume = clamp(volume, 0, 1);
   audio.play().catch(() => {});
 }
@@ -372,9 +445,35 @@ function stopChargeSfx() {
   activeChargeAudio = null;
 }
 
+function stopTootsFeverSfx() {
+  if (!activeTootsFeverAudio) return;
+  try {
+    activeTootsFeverAudio.pause();
+    activeTootsFeverAudio.currentTime = 0;
+  } catch {}
+  activeTootsFeverAudio = null;
+}
+
+function playTootsFeverSfx() {
+  if (activeTootsFeverAudio && !activeTootsFeverAudio.paused) return;
+  const audio = new Audio("sounds/tootsfever.mp3");
+  audio.volume = 0.88;
+  audio.addEventListener("ended", () => {
+    if (activeTootsFeverAudio === audio) {
+      activeTootsFeverAudio = null;
+    }
+  });
+  activeTootsFeverAudio = audio;
+  audio.play().catch(() => {
+    if (activeTootsFeverAudio === audio) {
+      activeTootsFeverAudio = null;
+    }
+  });
+}
+
 function playChargeSfx() {
   const key = muteChargeSfx ? "silence" : "charge";
-  const volume = muteChargeSfx ? 0.16 : 0.33;
+  const volume = muteChargeSfx ? 0.16 : 0.10;
   const choices = sfx[key];
   if (!choices || choices.length === 0) return;
   stopChargeSfx();
@@ -388,6 +487,135 @@ function updateMuteButton() {
   if (!muteChargeBtn) return;
   muteChargeBtn.classList.toggle("is-muted", muteChargeSfx);
   muteChargeBtn.setAttribute("aria-pressed", muteChargeSfx ? "true" : "false");
+}
+
+function updateFreeThrowModeButton() {
+  if (!freeThrowModeBtn) return;
+  freeThrowModeBtn.classList.toggle("is-active", freeThrowMode);
+  freeThrowModeBtn.setAttribute("aria-pressed", freeThrowMode ? "true" : "false");
+  freeThrowModeBtn.textContent = freeThrowMode ? "Free Throw: On" : "Free Throw: Off";
+  if (startLevelEl) startLevelEl.disabled = !splashReady;
+}
+
+function sanitizeInitials(value) {
+  return (value || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
+}
+
+function setScoreSubmitStatus(message, isError = false) {
+  if (!scoreSubmitStatusEl) return;
+  if (!message) {
+    scoreSubmitStatusEl.textContent = "";
+    scoreSubmitStatusEl.classList.add("hidden");
+    scoreSubmitStatusEl.classList.remove("error");
+    return;
+  }
+  scoreSubmitStatusEl.textContent = message;
+  scoreSubmitStatusEl.classList.remove("hidden");
+  scoreSubmitStatusEl.classList.toggle("error", isError);
+}
+
+function renderLeaderboard(entries) {
+  if (!leaderboardListEl) return;
+  leaderboardListEl.innerHTML = "";
+  const filteredEntries = (entries || []).filter((entry) => {
+    const mode = entry?.mode === "free_throw" ? "free_throw" : "normal";
+    return mode === leaderboardModeFilter;
+  });
+  if (filteredEntries.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = "No scores yet.";
+    leaderboardListEl.appendChild(li);
+    return;
+  }
+
+  for (let i = 0; i < filteredEntries.length && i < leaderboardLimit; i++) {
+    const entry = filteredEntries[i];
+    const li = document.createElement("li");
+    const levelTag = leaderboardModeFilter === "free_throw" ? ` (L${entry.startLevel || 1})` : "";
+    li.textContent = `${entry.initials}  ${entry.score}${levelTag}`;
+    leaderboardListEl.appendChild(li);
+  }
+}
+
+function updateLeaderboardFilterUi() {
+  if (leaderboardNormalBtnEl) {
+    const active = leaderboardModeFilter === "normal";
+    leaderboardNormalBtnEl.classList.toggle("is-active", active);
+    leaderboardNormalBtnEl.setAttribute("aria-pressed", active ? "true" : "false");
+  }
+  if (leaderboardFreeThrowBtnEl) {
+    const active = leaderboardModeFilter === "free_throw";
+    leaderboardFreeThrowBtnEl.classList.toggle("is-active", active);
+    leaderboardFreeThrowBtnEl.setAttribute("aria-pressed", active ? "true" : "false");
+  }
+  if (leaderboardTitleEl) {
+    leaderboardTitleEl.textContent = leaderboardModeFilter === "free_throw"
+      ? "Top Scores - Free Throw"
+      : "Top Scores - Normal";
+  }
+}
+
+async function fetchLeaderboard() {
+  if (leaderboardStatusEl) leaderboardStatusEl.textContent = "Loading...";
+  try {
+    const response = await fetch(`/api/scores?limit=${leaderboardLimit * 8}`, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    const scores = Array.isArray(payload?.scores)
+      ? payload.scores.slice().sort((a, b) => (Number(b?.score) || 0) - (Number(a?.score) || 0))
+      : [];
+    renderLeaderboard(scores);
+    if (leaderboardStatusEl) leaderboardStatusEl.textContent = "";
+  } catch {
+    renderLeaderboard([]);
+    if (leaderboardStatusEl) leaderboardStatusEl.textContent = "Leaderboard unavailable.";
+  }
+}
+
+function updateScoreSubmissionUi() {
+  if (!runSummaryEl || !scoreSubmitFormEl) return;
+  if (!pendingScoreForSubmission) {
+    runSummaryEl.classList.add("hidden");
+    scoreSubmitFormEl.classList.add("hidden");
+    setScoreSubmitStatus("");
+    return;
+  }
+  const modeLabel = pendingScoreForSubmission.mode === "free_throw"
+    ? `Free Throw L${pendingScoreForSubmission.startLevel}`
+    : "Normal";
+  runSummaryEl.textContent = `Last Run: ${pendingScoreForSubmission.score} (${modeLabel})`;
+  runSummaryEl.classList.remove("hidden");
+  scoreSubmitFormEl.classList.remove("hidden");
+  setScoreSubmitStatus("");
+}
+
+async function submitPendingScore(initials) {
+  if (!pendingScoreForSubmission) return;
+  const payload = {
+    initials,
+    score: pendingScoreForSubmission.score,
+    mode: pendingScoreForSubmission.mode,
+    startLevel: pendingScoreForSubmission.startLevel
+  };
+  if (submitScoreBtnEl) submitScoreBtnEl.disabled = true;
+  setScoreSubmitStatus("Posting...");
+  try {
+    const response = await fetch("/api/scores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    pendingScoreForSubmission = null;
+    updateScoreSubmissionUi();
+    setScoreSubmitStatus("Score posted.");
+    if (scoreInitialsEl) scoreInitialsEl.value = "";
+    await fetchLeaderboard();
+  } catch {
+    setScoreSubmitStatus("Could not post score. Try again.", true);
+  } finally {
+    if (submitScoreBtnEl) submitScoreBtnEl.disabled = false;
+  }
 }
 
 function playUnmuteSequenceSfx() {
@@ -418,6 +646,10 @@ function resetSessionRunState() {
   score = 0;
   comboStreak = 0;
   lastComboShown = 0;
+  comboCalloutTimer = 0;
+  comboCalloutKey = "";
+  tootsFeverFlashTimer = 0;
+  stopTootsFeverSfx();
   resetLevelTimer();
   brickStreak = 0;
   gotTheIckArmed = false;
@@ -610,8 +842,17 @@ function updateEffects() {
   if (brickStampTimer > 0) {
     brickStampTimer -= 1;
   }
-  if (bankShotStickerTimer > 0) {
-    bankShotStickerTimer -= 1;
+  if (airballStampTimer > 0) {
+    airballStampTimer -= 1;
+  }
+  if (tootsBounceStickerTimer > 0) {
+    tootsBounceStickerTimer -= 1;
+  }
+  if (comboCalloutTimer > 0) {
+    comboCalloutTimer -= 1;
+  }
+  if (tootsFeverFlashTimer > 0) {
+    tootsFeverFlashTimer -= 1;
   }
 }
 
@@ -1183,10 +1424,12 @@ function physicsStep() {
   const now = performance.now();
   const elapsed = Math.max(0, now - lastTimerTickAt);
   lastTimerTickAt = now;
-  levelTimeRemainingMs = Math.max(0, levelTimeRemainingMs - elapsed);
-  if (levelTimeRemainingMs <= 0) {
-    resetToSplash();
-    return;
+  if (!freeThrowMode) {
+    levelTimeRemainingMs = Math.max(0, levelTimeRemainingMs - elapsed);
+    if (levelTimeRemainingMs <= 0) {
+      resetToSplash("timeout");
+      return;
+    }
   }
 
   updateEffects();
@@ -1326,6 +1569,7 @@ function physicsStep() {
         const isAirball = !touchedRim && !touchedBackboard && !touchedObstacleThisShot;
         if (isAirball) {
           playSfx("airball", 0.82);
+          airballStampTimer = 52;
         } else if (touchedRim && !brickStampedThisShot) {
           triggerBrickStamp();
         }
@@ -1334,6 +1578,10 @@ function physicsStep() {
           brickAltUnlocked = true;
         }
         comboStreak = 0;
+        comboCalloutTimer = 0;
+        comboCalloutKey = "";
+        tootsFeverFlashTimer = 0;
+        stopTootsFeverSfx();
         lastMadeShot = false;
         lastShotWasSwish = false;
         queueReset(isAirball ? "Airball" : "Brick");
@@ -1375,14 +1623,27 @@ function physicsStep() {
     netJigglePhase = 0;
     playSfx("net", 0.78);
     if (trickShot) {
-      playSfx("bankShot", 0.84);
+      playSfx("tootsBounce", 0.84);
+    }
+    const comboTier = getComboTierForStreak(comboStreak);
+    if (comboTier) {
+      playSfx(comboTier.sfxKey, 0.84);
+      triggerComboCallout(comboTier.key);
+      if (comboStreak === tootsFeverModeStreak) {
+        tootsFeverFlashTimer = 96;
+      }
+    } else if (!trickShot && comboStreak <= 1) {
+      playSfx("made", 0.75);
+    }
+    if (comboStreak >= tootsFeverModeStreak) {
+      playTootsFeverSfx();
     } else {
-      playSfx(comboStreak > 1 ? "swish" : "made", comboStreak > 1 ? 0.82 : 0.75);
+      stopTootsFeverSfx();
     }
     spawnScoreEffects(hoop.x + hoop.rimGap * 0.5, hoop.y + 22, swish);
     if (trickShot) {
       spawnTrickShotEffects(hoop.x + hoop.rimGap * 0.5, hoop.y + 22);
-      bankShotStickerTimer = 54;
+      tootsBounceStickerTimer = 54;
     }
 
     if (swish) {
@@ -1407,6 +1668,9 @@ function physicsStep() {
       if (trickShot) {
         stateEl.textContent = `${stateEl.textContent} Trick Shot!`;
       }
+    }
+    if (comboTier) {
+      stateEl.textContent = `${comboTier.label} ${stateEl.textContent}`;
     }
     applyLevelProgression();
     updateHud();
@@ -1782,6 +2046,18 @@ function drawFloatingPoints() {
 function drawBrickStamp() {
   if (brickStampTimer <= 0) return;
   const alpha = Math.min(1, brickStampTimer / 10) * Math.max(0, brickStampTimer / 44);
+  if (brickStampImage.complete && brickStampImage.naturalWidth > 0) {
+    const pulse = 1 + Math.sin(performance.now() * 0.03) * 0.02;
+    const width = 280 * pulse;
+    const height = width * (brickStampImage.naturalHeight / brickStampImage.naturalWidth);
+    ctx.save();
+    ctx.globalAlpha = 0.96 * alpha;
+    ctx.translate(W * 0.52, H * 0.36);
+    ctx.rotate(-0.16);
+    ctx.drawImage(brickStampImage, -width * 0.5, -height * 0.5, width, height);
+    ctx.restore();
+    return;
+  }
   ctx.save();
   ctx.translate(W * 0.52, H * 0.36);
   ctx.rotate(-0.16);
@@ -1805,12 +2081,56 @@ function drawBrickStamp() {
   ctx.restore();
 }
 
-function drawBankShotSticker() {
-  if (bankShotStickerTimer <= 0) return;
-  const life = bankShotStickerTimer / 54;
-  const fade = Math.min(1, bankShotStickerTimer / 10) * Math.max(0, life);
+function drawAirballStamp() {
+  if (airballStampTimer <= 0) return;
+  const life = airballStampTimer / 52;
+  const fade = Math.min(1, airballStampTimer / 10) * Math.max(0, life);
+  const pulse = 1 + Math.sin(performance.now() * 0.032) * 0.018;
+  if (airballStampImage.complete && airballStampImage.naturalWidth > 0) {
+    const width = 310 * pulse;
+    const height = width * (airballStampImage.naturalHeight / airballStampImage.naturalWidth);
+    ctx.save();
+    ctx.globalAlpha = 0.97 * fade;
+    ctx.translate(W * 0.5, H * 0.33);
+    ctx.rotate(0.09);
+    ctx.drawImage(airballStampImage, -width * 0.5, -height * 0.5, width, height);
+    ctx.restore();
+    return;
+  }
+
+  ctx.save();
+  ctx.translate(W * 0.5, H * 0.33);
+  ctx.rotate(0.09);
+  ctx.strokeStyle = `rgba(172, 230, 255, ${0.8 * fade})`;
+  ctx.lineWidth = 5;
+  ctx.strokeRect(-148, -48, 296, 96);
+  ctx.fillStyle = `rgba(18, 46, 78, ${0.26 * fade})`;
+  ctx.fillRect(-148, -48, 296, 96);
+  ctx.font = "bold 52px 'Courier New', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = `rgba(196, 236, 255, ${0.95 * fade})`;
+  ctx.fillText("AIRBALL", 0, 2);
+  ctx.restore();
+}
+
+function drawTootsBounceSticker() {
+  if (tootsBounceStickerTimer <= 0) return;
+  const life = tootsBounceStickerTimer / 54;
+  const fade = Math.min(1, tootsBounceStickerTimer / 10) * Math.max(0, life);
   const pulse = 0.5 + 0.5 * Math.sin(performance.now() * 0.05);
   const flash = 0.72 + pulse * 0.28;
+  if (tootsBounceStickerImage.complete && tootsBounceStickerImage.naturalWidth > 0) {
+    const width = 420 * (1 + pulse * 0.03);
+    const height = width * (tootsBounceStickerImage.naturalHeight / tootsBounceStickerImage.naturalWidth);
+    ctx.save();
+    ctx.globalAlpha = 0.98 * fade;
+    ctx.translate(W * 0.48, H * 0.25);
+    ctx.rotate(-0.12);
+    ctx.drawImage(tootsBounceStickerImage, -width * 0.5, -height * 0.5, width, height);
+    ctx.restore();
+    return;
+  }
 
   ctx.save();
   ctx.translate(W * 0.48, H * 0.25);
@@ -1855,12 +2175,67 @@ function drawBankShotSticker() {
   ctx.textBaseline = "middle";
   ctx.font = "bold 56px 'Courier New', monospace";
   ctx.fillStyle = `rgba(255, 255, 255, ${0.95 * fade})`;
-  ctx.fillText("BANK SHOT!", 0, -2);
+  ctx.fillText("TOOTS BOUNCE!", 0, -2);
 
   ctx.shadowBlur = 0;
   ctx.lineWidth = 1.8;
   ctx.strokeStyle = `rgba(24, 34, 72, ${0.9 * fade})`;
-  ctx.strokeText("BANK SHOT!", 0, -2);
+  ctx.strokeText("TOOTS BOUNCE!", 0, -2);
+  ctx.restore();
+}
+
+function drawComboCallout() {
+  if (comboCalloutTimer <= 0 || !comboCalloutKey) return;
+  const life = comboCalloutTimer / comboCalloutDurationFrames;
+  const fade = Math.min(1, comboCalloutTimer / 10) * Math.max(0, life);
+  const pulse = 0.5 + 0.5 * Math.sin(performance.now() * 0.05);
+  const image = comboCalloutImages[comboCalloutKey];
+  if (image && image.complete && image.naturalWidth > 0) {
+    const width = 410 * (1 + pulse * 0.03);
+    const height = width * (image.naturalHeight / image.naturalWidth);
+    ctx.save();
+    ctx.globalAlpha = 0.98 * fade;
+    ctx.translate(W * 0.5, H * 0.2);
+    ctx.rotate(-0.06);
+    ctx.drawImage(image, -width * 0.5, -height * 0.5, width, height);
+    ctx.restore();
+    return;
+  }
+
+  const tier = comboLadder.find((entry) => entry.key === comboCalloutKey);
+  if (!tier) return;
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "bold 56px 'Courier New', monospace";
+  ctx.fillStyle = `rgba(255, 255, 255, ${0.94 * fade})`;
+  ctx.strokeStyle = `rgba(18, 28, 56, ${0.9 * fade})`;
+  ctx.lineWidth = 2;
+  ctx.fillText(tier.label, W * 0.5, H * 0.2);
+  ctx.strokeText(tier.label, W * 0.5, H * 0.2);
+  ctx.restore();
+}
+
+function drawTootsFeverBorder() {
+  const feverActive = comboStreak >= tootsFeverModeStreak;
+  if (!feverActive && tootsFeverFlashTimer <= 0) return;
+  const pulse = 0.5 + 0.5 * Math.sin(performance.now() * 0.011);
+  const flash = tootsFeverFlashTimer > 0 ? tootsFeverFlashTimer / 96 : 0;
+  const base = feverActive ? 1 : flash;
+  const alpha = 0.26 + base * 0.26 + pulse * 0.12 + flash * 0.24;
+
+  ctx.save();
+  ctx.shadowBlur = 18 + pulse * 16 + flash * 10;
+  ctx.shadowColor = `rgba(255, 97, 22, ${0.45 + flash * 0.35})`;
+  ctx.strokeStyle = `rgba(255, 188, 58, ${alpha})`;
+  ctx.lineWidth = 7;
+  ctx.strokeRect(6, 6, W - 12, H - 12);
+
+  ctx.shadowBlur = 12 + pulse * 10;
+  ctx.shadowColor = `rgba(255, 52, 20, ${0.4 + flash * 0.3})`;
+  ctx.strokeStyle = `rgba(255, 97, 22, ${Math.min(0.95, alpha + 0.14)})`;
+  ctx.lineWidth = 3;
+  ctx.strokeRect(14, 14, W - 28, H - 28);
   ctx.restore();
 }
 
@@ -2112,8 +2487,11 @@ function frame() {
   drawParticles();
   drawFloatingPoints();
   drawBrickStamp();
-  drawBankShotSticker();
+  drawAirballStamp();
+  drawTootsBounceSticker();
+  drawComboCallout();
   drawCrtOverlay();
+  drawTootsFeverBorder();
   requestAnimationFrame(frame);
 }
 
@@ -2166,17 +2544,25 @@ if (splashYearEl) {
 }
 function startGame() {
   if (!splashReady || gameStarted) return;
+  setScoreSubmitStatus("");
   resetSessionRunState();
   const selectedLevel = Number(startLevelEl?.value || "1");
-  level = selectedLevel === 5
-    ? 5
-    : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1)));
-  score = level === 5
-    ? level5ScoreThreshold
-    : (level === 4
-      ? level4ScoreThreshold
-      : (level === 3 ? level3ScoreThreshold : (level === 2 ? level2ScoreThreshold : 0)));
-  level = getLevelForScore(score);
+  if (freeThrowMode) {
+    level = selectedLevel === 5
+      ? 5
+      : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1)));
+    score = 0;
+  } else {
+    level = selectedLevel === 5
+      ? 5
+      : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1)));
+    score = level === 5
+      ? level5ScoreThreshold
+      : (level === 4
+        ? level4ScoreThreshold
+        : (level === 3 ? level3ScoreThreshold : (level === 2 ? level2ScoreThreshold : 0)));
+    level = getLevelForScore(score);
+  }
   resetLevelTimer();
   comboStreak = 0;
   lastComboShown = 0;
@@ -2194,7 +2580,14 @@ function startGame() {
   resetBall();
 }
 
-function resetToSplash() {
+function resetToSplash(reason = "manual") {
+  const completedRun = score > 0
+    ? {
+      score,
+      mode: freeThrowMode ? "free_throw" : "normal",
+      startLevel: Math.max(1, Math.min(5, level))
+    }
+    : null;
   const currentLevel = String(level);
   spaceHeld = false;
   stopChargeSfx();
@@ -2202,11 +2595,58 @@ function resetToSplash() {
   gameStarted = false;
   if (splashEl) splashEl.classList.remove("hidden");
   if (startLevelEl) startLevelEl.value = currentLevel;
+  updateFreeThrowModeButton();
+  pendingScoreForSubmission = completedRun;
+  updateScoreSubmissionUi();
+  if (reason !== "startup") {
+    fetchLeaderboard();
+  }
   resetBall();
 }
 
 if (startBtn) {
   startBtn.addEventListener("click", startGame);
+}
+if (freeThrowModeBtn) {
+  freeThrowModeBtn.addEventListener("click", () => {
+    if (!splashReady) return;
+    freeThrowMode = !freeThrowMode;
+    updateFreeThrowModeButton();
+  });
+}
+if (scoreInitialsEl) {
+  scoreInitialsEl.addEventListener("input", () => {
+    const clean = sanitizeInitials(scoreInitialsEl.value);
+    if (scoreInitialsEl.value !== clean) scoreInitialsEl.value = clean;
+  });
+}
+if (scoreSubmitFormEl) {
+  scoreSubmitFormEl.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!pendingScoreForSubmission) return;
+    const initials = sanitizeInitials(scoreInitialsEl?.value || "");
+    if (initials.length !== 3) {
+      setScoreSubmitStatus("Enter exactly 3 letters.", true);
+      return;
+    }
+    await submitPendingScore(initials);
+  });
+}
+if (leaderboardNormalBtnEl) {
+  leaderboardNormalBtnEl.addEventListener("click", () => {
+    if (leaderboardModeFilter === "normal") return;
+    leaderboardModeFilter = "normal";
+    updateLeaderboardFilterUi();
+    fetchLeaderboard();
+  });
+}
+if (leaderboardFreeThrowBtnEl) {
+  leaderboardFreeThrowBtnEl.addEventListener("click", () => {
+    if (leaderboardModeFilter === "free_throw") return;
+    leaderboardModeFilter = "free_throw";
+    updateLeaderboardFilterUi();
+    fetchLeaderboard();
+  });
 }
 if (sessionResetBtn) {
   sessionResetBtn.addEventListener("click", resetToSplash);
@@ -2221,7 +2661,11 @@ if (splashEl) {
   setTimeout(() => {
     splashReady = true;
     if (startBtn) startBtn.disabled = false;
-    if (startLevelEl) startLevelEl.disabled = false;
+    if (freeThrowModeBtn) freeThrowModeBtn.disabled = false;
+    updateFreeThrowModeButton();
+    updateLeaderboardFilterUi();
+    updateScoreSubmissionUi();
+    fetchLeaderboard();
   }, 1200);
 }
 if (startBtn) {

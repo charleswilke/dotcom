@@ -167,6 +167,17 @@ body {
   color: #ffd6d6;
 }
 
+.toggle-btn.is-active {
+  border-color: #ffd790;
+  background: linear-gradient(180deg, #714716 0%, #4c2e0f 100%);
+  color: #ffe8c4;
+  box-shadow: 0 0 12px rgba(255, 200, 100, 0.28);
+}
+
+.hidden {
+  display: none !important;
+}
+
 .splash {
   position: absolute;
   inset: 0;
@@ -293,6 +304,105 @@ body {
   opacity: 0.5;
   cursor: default;
   box-shadow: none;
+}
+
+.run-summary {
+  margin: 12px 0 6px;
+  color: #ffe4b0;
+  font-size: 12px;
+  letter-spacing: 0.8px;
+}
+
+.score-submit {
+  margin: 6px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.initials-input {
+  width: 74px;
+  border: 2px solid #88efff;
+  background: linear-gradient(180deg, #16356a 0%, #0f244a 100%);
+  color: #fff2cc;
+  font-family: "Courier New", "Lucida Console", monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 4px 6px;
+  outline: none;
+}
+
+.initials-input:focus {
+  border-color: #ffd790;
+  box-shadow: 0 0 12px rgba(255, 200, 100, 0.32);
+}
+
+.score-submit-status {
+  margin: 8px 0 0;
+  min-height: 16px;
+  color: #bdeeff;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+}
+
+.score-submit-status.error {
+  color: #ffc6c6;
+}
+
+.leaderboard-wrap {
+  margin-top: 12px;
+  border: 2px solid #6bd7ff;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02) 0,
+      rgba(255, 255, 255, 0.02) 2px,
+      rgba(0, 0, 0, 0.06) 2px,
+      rgba(0, 0, 0, 0.06) 4px
+    ),
+    rgba(9, 22, 55, 0.9);
+  padding: 10px 12px;
+}
+
+.leaderboard-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.leaderboard-tab {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+.leaderboard-title {
+  color: #ffe0a2;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.leaderboard-list {
+  margin: 0;
+  padding: 0 0 0 20px;
+  color: #d6f8ff;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 108px;
+}
+
+.leaderboard-status {
+  margin: 6px 0 0;
+  color: #9bdff6;
+  font-size: 11px;
+  letter-spacing: 0.6px;
 }
 
 @keyframes splash-stinger {

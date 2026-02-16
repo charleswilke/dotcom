@@ -37,7 +37,10 @@ async function ensureDataFile() {
 function sendJson(res, status, payload) {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store"
+    "Cache-Control": "no-store",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
   });
   res.end(JSON.stringify(payload));
 }
@@ -120,6 +123,17 @@ async function readBody(req, maxBytes = 8 * 1024) {
 async function handleApi(req, res, urlObj) {
   if (urlObj.pathname !== "/api/scores") return false;
 
+  if (req.method === "OPTIONS") {
+    res.writeHead(204, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Cache-Control": "no-store"
+    });
+    res.end();
+    return true;
+  }
+
   if (req.method === "GET") {
     const limit = clampInt(urlObj.searchParams.get("limit"), 10, 50);
     const modeFilter = urlObj.searchParams.get("mode");
@@ -152,7 +166,7 @@ async function handleApi(req, res, urlObj) {
     const initials = sanitizeInitials(parsed.initials);
     const score = Number(parsed.score);
     const mode = parsed.mode === "free_throw" ? "free_throw" : "normal";
-    const startLevel = clampInt(parsed.startLevel, 1, 5);
+    const startLevel = clampInt(parsed.startLevel, 1, 6);
 
     if (!/^[A-Z]{3}$/.test(initials)) {
       sendJson(res, 400, { error: "Initials must be exactly 3 letters." });

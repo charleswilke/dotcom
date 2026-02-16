@@ -223,14 +223,18 @@ body {
 
 .splash h1 {
   margin: 0 0 8px;
-  font-size: clamp(38px, 6vw, 64px);
-  color: #ffb468;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(255, 164, 93, 0.45);
+  line-height: 0;
 }
 
 .splash h1.stinger {
   animation: splash-stinger 1150ms ease-out;
+}
+
+.splash-title-image {
+  display: block;
+  width: min(440px, 92%);
+  height: auto;
+  margin: 0 auto;
 }
 
 .splash p {
@@ -454,6 +458,12 @@ canvas {
 }
 
 @media (max-width: 760px) {
+  .frame {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
   .hud {
     grid-template-columns: 1fr;
     justify-items: center;
@@ -468,6 +478,32 @@ canvas {
 
   #combo {
     min-width: 160px;
+  }
+
+  .help {
+    order: 2;
+  }
+
+  .controls,
+  .controls-right {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .controls {
+    order: 3;
+    margin: 10px 0 0;
+  }
+
+  .controls-right {
+    order: 4;
+    margin: 8px 0 12px;
   }
 }
 

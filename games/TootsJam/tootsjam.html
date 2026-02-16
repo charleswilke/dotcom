@@ -61,15 +61,18 @@
       <div id="combo">Combo: x0</div>
       <div id="timer">Time: 2:00</div>
       <div id="nextLevel">Next: L2 in 20</div>
-      <button id="muteAllBtn" class="hud-audio-btn" type="button" aria-pressed="false">Sound: On</button>
+      <button id="muteAllBtn" class="hud-audio-btn" type="button" aria-pressed="false" aria-label="Sound on" title="Sound on"></button>
       <div id="state">Hold to Shoot</div>
     </div>
     <canvas id="game" width="960" height="720"></canvas>
-    <div class="controls">
-      <button id="muteChargeBtn" class="toggle-btn" type="button">Silence that man</button>
-    </div>
-    <div class="controls controls-right">
-      <button id="sessionResetBtn" class="toggle-btn" type="button">Reset Game</button>
+    <div class="mobile-controls-row">
+      <div class="controls controls-left">
+        <button id="chargeBtn" class="toggle-btn charge-btn" type="button">Charge Shot</button>
+      </div>
+      <div class="controls controls-right controls-stack">
+        <button id="muteChargeBtn" class="toggle-btn" type="button">Silence that man</button>
+        <button id="sessionResetBtn" class="toggle-btn" type="button">Reset Game</button>
+      </div>
     </div>
     <div class="help">Left click or space: charge shot. Release to throw. Right click: dribble. R: reset ball. M: mute all.</div>
   </div>

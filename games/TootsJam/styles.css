@@ -218,6 +218,9 @@ body {
     0 0 16px rgba(255, 82, 82, 0.36);
   animation: charge-radiate 1.4s ease-out infinite;
   touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
   padding: 8px;
   white-space: normal;
   line-height: 1.1;

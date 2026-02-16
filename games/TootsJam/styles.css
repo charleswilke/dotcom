@@ -41,7 +41,7 @@ body {
 
 .hud {
   display: grid;
-  grid-template-columns: 1fr auto auto auto 1fr;
+  grid-template-columns: 1fr auto auto auto auto 1fr;
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
@@ -81,6 +81,31 @@ body {
   min-width: 130px;
   text-align: center;
   color: #ffe2a0;
+}
+
+#muteAllBtn {
+  justify-self: end;
+}
+
+.hud-audio-btn {
+  border: 2px solid #ffd56a;
+  background: linear-gradient(180deg, #5c4a14 0%, #3d2f0d 100%);
+  color: #ffefbf;
+  font-family: "Courier New", "Lucida Console", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 205, 102, 0.22);
+}
+
+.hud-audio-btn.is-muted {
+  border-color: #ff8d8d;
+  background: linear-gradient(180deg, #6c1f2a 0%, #42151d 100%);
+  color: #ffd6d6;
+  box-shadow: 0 0 10px rgba(255, 120, 120, 0.22);
 }
 
 #state {

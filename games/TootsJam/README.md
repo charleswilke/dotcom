@@ -3,17 +3,36 @@
 Retro arcade free-throw game built with plain HTML/CSS/JS.
 
 ## Run Locally
-Use any static server from the project root (`D:\TootsJam`).
+Run the bundled Node server from the project root. It serves the game and leaderboard API.
 
 PowerShell example:
 
 ```powershell
-python -m http.server 8080
+npm start
 ```
 
 Then open:
 
 `http://localhost:8080/tootsjam.html`
+
+## Leaderboard API
+- `GET /api/scores?limit=10` returns top scores (highest first).
+- `GET /api/scores?limit=10&mode=normal` filters by mode (`normal` or `free_throw`).
+- `POST /api/scores` accepts:
+
+```json
+{
+  "initials": "ABC",
+  "score": 123,
+  "mode": "normal",
+  "startLevel": 1
+}
+```
+
+Server-side validation:
+- Initials must be exactly 3 letters (`A-Z`)
+- Score must be a non-negative integer
+- Basic per-IP rate limit is applied to score posts
 
 ## Embed / Drop-In
 1. Copy `tootsjam.html`, `styles.css`, `game.js`, and the `sounds/` folder together.

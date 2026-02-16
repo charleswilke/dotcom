@@ -107,6 +107,7 @@ const level2ScoreThreshold = 20;
 const level3ScoreThreshold = 40;
 const level4ScoreThreshold = 60;
 const level5ScoreThreshold = 80;
+const level6ScoreThreshold = 100;
 const levelDurationMs = 120000;
 const comboCalloutDurationFrames = 54;
 const tootsFeverModeStreak = 5;
@@ -148,6 +149,8 @@ const helicopter = {
 let touchedGullThisShot = false;
 let touchedHeliThisShot = false;
 let touchedBalloonThisShot = false;
+let touchedLaserThisShot = false;
+let touchedAlienUfoThisShot = false;
 const balloons = [
   { x: W * 0.41, y: floorY - 270, baseX: W * 0.41, baseY: floorY - 270, swayAmp: 16, swaySpeed: 0.00162, bobAmp: 24, bobSpeed: 0.00096, phase: 0.15, rx: 34, ry: 36, cooldown: 0 },
   { x: W * 0.59125, y: floorY - 306, baseX: W * 0.59125, baseY: floorY - 306, swayAmp: 12, swaySpeed: 0.00138, bobAmp: 20, bobSpeed: 0.00128, phase: 2.0, rx: 32, ry: 34, cooldown: 0 },
@@ -158,6 +161,30 @@ const spaceUfos = {
   center: { x: W * 0.5, y: 106, wobblePhase: 2.1 },
   right: { x: W * 0.72, y: 244, wobblePhase: 3.6 }
 };
+const alienBaseUfos = [
+  { x: W * 0.88, y: floorY - 500, wobblePhase: 0.7, scale: 0.84, cooldown: 0 },
+  { x: W * 0.93, y: floorY - 452, wobblePhase: 1.8, scale: 0.8, cooldown: 0 },
+  { x: W * 0.9, y: floorY - 404, wobblePhase: 2.6, scale: 0.86, cooldown: 0 },
+  { x: W * 0.95, y: floorY - 356, wobblePhase: 3.5, scale: 0.78, cooldown: 0 }
+];
+const alienLaserField = {
+  minIntervalMs: 300,
+  maxIntervalMs: 520,
+  speed: 6.7,
+  minLength: 86,
+  maxLength: 150,
+  thickness: 4.8
+};
+const alienLaserRhythm = {
+  shotsPerPhraseMin: 4,
+  shotsPerPhraseMax: 6,
+  restMinMs: 860,
+  restMaxMs: 1180
+};
+const alienLasers = [];
+let nextAlienLaserSpawnAt = performance.now() + 380;
+let alienLaserShotsInPhrase = 0;
+let alienLaserPhraseTarget = 5;
 const spaceBeam = {
   radius: 108,
   minPhaseMs: 1200,
@@ -227,6 +254,16 @@ const sfx = {
     "sounds/heli/heli3.mp3",
     "sounds/heli/heli4.mp3"
   ],
+  laser: [
+    "sounds/laser/laser.mp3",
+    "sounds/laser/laser2.mp3",
+    "sounds/laser/laser3.mp3",
+    "sounds/laser/laser4.mp3",
+    "sounds/laser/laser5.mp3",
+    "sounds/laser/laser6.mp3",
+    "sounds/laser/laser7.mp3",
+    "sounds/laser/laser8.mp3"
+  ],
   squawk: [
     "sounds/squawk/squawk1.mp3",
     "sounds/squawk/squawk2.mp3",
@@ -289,6 +326,7 @@ comboCalloutImages.tootsfever.src = "images/tootsfever.png";
 const sfxLastChoiceByKey = {};
 
 function getLevelForScore(currentScore) {
+  if (currentScore >= level6ScoreThreshold) return 6;
   if (currentScore >= level5ScoreThreshold) return 5;
   if (currentScore >= level4ScoreThreshold) return 4;
   if (currentScore >= level3ScoreThreshold) return 3;
@@ -297,6 +335,7 @@ function getLevelForScore(currentScore) {
 }
 
 function getLevelLabel(value) {
+  if (value === 6) return "Level 6: Alien Base";
   if (value === 5) return "Level 5: Space";
   if (value === 4) return "Level 4: Golden Hour";
   if (value === 3) return "Level 3: Afternoon City";
@@ -309,6 +348,7 @@ function getNextLevelTarget(currentLevel) {
   if (currentLevel === 2) return level3ScoreThreshold;
   if (currentLevel === 3) return level4ScoreThreshold;
   if (currentLevel === 4) return level5ScoreThreshold;
+  if (currentLevel === 5) return level6ScoreThreshold;
   return null;
 }
 
@@ -331,6 +371,9 @@ function applyLevelProgression() {
   const nextLevel = getLevelForScore(score);
   if (nextLevel <= level) return false;
   level = nextLevel;
+  if (level === 6) {
+    resetAlienLasers();
+  }
   resetLevelTimer();
   stateEl.textContent = getLevelLabel(level);
   return true;
@@ -387,6 +430,8 @@ function resetBall() {
   touchedGullThisShot = false;
   touchedHeliThisShot = false;
   touchedBalloonThisShot = false;
+  touchedLaserThisShot = false;
+  touchedAlienUfoThisShot = false;
   brickStampedThisShot = false;
   airballStampTimer = 0;
   tootsBounceStickerTimer = 0;
@@ -555,20 +600,35 @@ function updateLeaderboardFilterUi() {
   }
 }
 
+async function getApiErrorMessage(response, fallback = "Request failed.") {
+  try {
+    const payload = await response.json();
+    const detail = typeof payload?.error === "string" ? payload.error : "";
+    return detail ? `${fallback} ${detail}` : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 async function fetchLeaderboard() {
   if (leaderboardStatusEl) leaderboardStatusEl.textContent = "Loading...";
   try {
     const response = await fetch(`/api/scores?limit=${leaderboardLimit * 8}`, { cache: "no-store" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      const message = await getApiErrorMessage(response, `Leaderboard request failed (HTTP ${response.status}).`);
+      throw new Error(message);
+    }
     const payload = await response.json();
     const scores = Array.isArray(payload?.scores)
       ? payload.scores.slice().sort((a, b) => (Number(b?.score) || 0) - (Number(a?.score) || 0))
       : [];
     renderLeaderboard(scores);
     if (leaderboardStatusEl) leaderboardStatusEl.textContent = "";
-  } catch {
+  } catch (err) {
     renderLeaderboard([]);
-    if (leaderboardStatusEl) leaderboardStatusEl.textContent = "Leaderboard unavailable.";
+    if (leaderboardStatusEl) {
+      leaderboardStatusEl.textContent = err?.message || "Leaderboard unavailable.";
+    }
   }
 }
 
@@ -605,14 +665,17 @@ async function submitPendingScore(initials) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      const message = await getApiErrorMessage(response, `Could not post score (HTTP ${response.status}).`);
+      throw new Error(message);
+    }
     pendingScoreForSubmission = null;
     updateScoreSubmissionUi();
     setScoreSubmitStatus("Score posted.");
     if (scoreInitialsEl) scoreInitialsEl.value = "";
     await fetchLeaderboard();
-  } catch {
-    setScoreSubmitStatus("Could not post score. Try again.", true);
+  } catch (err) {
+    setScoreSubmitStatus(err?.message || "Could not post score. Try again.", true);
   } finally {
     if (submitScoreBtnEl) submitScoreBtnEl.disabled = false;
   }
@@ -688,6 +751,8 @@ function releaseShot() {
   touchedGullThisShot = false;
   touchedHeliThisShot = false;
   touchedBalloonThisShot = false;
+  touchedLaserThisShot = false;
+  touchedAlienUfoThisShot = false;
   brickStampedThisShot = false;
   lastMadeShot = false;
   lastShotWasSwish = false;
@@ -920,6 +985,155 @@ function getSpaceUfoPose(now, ufoName) {
     x: ufo.x + Math.sin(now * swaySpeedX + ufo.wobblePhase) * swayAmpX,
     y: ufo.y + Math.cos(now * bobSpeedY + ufo.wobblePhase * 1.4) * bobAmpY
   };
+}
+
+function getAlienBaseUfoPose(now, index) {
+  const ufo = alienBaseUfos[index];
+  if (!ufo) return { x: 0, y: 0, scale: 0.8 };
+  return {
+    x: ufo.x + Math.sin(now * 0.0018 + ufo.wobblePhase) * 9,
+    y: ufo.y + Math.cos(now * 0.0028 + ufo.wobblePhase * 1.3) * 5,
+    scale: ufo.scale
+  };
+}
+
+function getNextAlienLaserIntervalMs() {
+  return alienLaserField.minIntervalMs + Math.random() * (alienLaserField.maxIntervalMs - alienLaserField.minIntervalMs);
+}
+
+function getNextAlienLaserPhraseTarget() {
+  const min = alienLaserRhythm.shotsPerPhraseMin;
+  const max = alienLaserRhythm.shotsPerPhraseMax;
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function getAlienLaserPhraseRestMs() {
+  return alienLaserRhythm.restMinMs + Math.random() * (alienLaserRhythm.restMaxMs - alienLaserRhythm.restMinMs);
+}
+
+function resetAlienLasers(now = performance.now()) {
+  alienLasers.length = 0;
+  for (let i = 0; i < alienBaseUfos.length; i++) {
+    alienBaseUfos[i].cooldown = 0;
+  }
+  alienLaserShotsInPhrase = 0;
+  alienLaserPhraseTarget = getNextAlienLaserPhraseTarget();
+  nextAlienLaserSpawnAt = now + getNextAlienLaserIntervalMs();
+}
+
+function spawnAlienLaser(now) {
+  if (alienBaseUfos.length === 0) return;
+  const ufoIndex = Math.floor(Math.random() * alienBaseUfos.length);
+  const pose = getAlienBaseUfoPose(now, ufoIndex);
+  const y = clamp(pose.y + (Math.random() - 0.5) * 10, floorY - 520, backboard.y - 12);
+  alienLasers.push({
+    x: pose.x - 26,
+    y,
+    length: alienLaserField.minLength + Math.random() * (alienLaserField.maxLength - alienLaserField.minLength),
+    speed: alienLaserField.speed + Math.random() * 0.8,
+    thickness: alienLaserField.thickness + Math.random() * 0.7,
+    pulsePhase: Math.random() * Math.PI * 2,
+    cooldown: 0
+  });
+}
+
+function updateAlienLasers(now) {
+  if (level !== 6) return;
+  let guard = 0;
+  while (now >= nextAlienLaserSpawnAt && guard < 32) {
+    spawnAlienLaser(now);
+    alienLaserShotsInPhrase += 1;
+    nextAlienLaserSpawnAt += getNextAlienLaserIntervalMs();
+    if (alienLaserShotsInPhrase >= alienLaserPhraseTarget) {
+      nextAlienLaserSpawnAt += getAlienLaserPhraseRestMs();
+      alienLaserShotsInPhrase = 0;
+      alienLaserPhraseTarget = getNextAlienLaserPhraseTarget();
+    }
+    guard += 1;
+  }
+  for (let i = alienLasers.length - 1; i >= 0; i--) {
+    const laser = alienLasers[i];
+    laser.x -= laser.speed;
+    if (laser.cooldown > 0) laser.cooldown -= 1;
+    if (laser.x + laser.length < -36) {
+      alienLasers.splice(i, 1);
+    }
+  }
+}
+
+function resolveAlienLaserCollision() {
+  if (level !== 6) return false;
+  for (let i = 0; i < alienLasers.length; i++) {
+    const laser = alienLasers[i];
+    if (laser.cooldown > 0) continue;
+    const left = laser.x;
+    const right = laser.x + laser.length;
+    const hitY = Math.abs(ball.y - laser.y) <= ball.r + laser.thickness;
+    const hitX = ball.x + ball.r > left && ball.x - ball.r < right;
+    if (!hitX || !hitY) continue;
+
+    const above = ball.y < laser.y;
+    ball.y = above
+      ? (laser.y - ball.r - laser.thickness - 0.2)
+      : (laser.y + ball.r + laser.thickness + 0.2);
+    ball.vy = above
+      ? -Math.max(1.7, Math.abs(ball.vy) * 0.78)
+      : Math.max(1.1, Math.abs(ball.vy) * 0.6);
+    ball.vx -= 0.65 + Math.random() * 0.35;
+    ball.spin += (above ? -1 : 1) * 0.05;
+    playSfx("laser", 0.54);
+    touchedLaserThisShot = true;
+    laser.cooldown = 8;
+    return true;
+  }
+  return false;
+}
+
+function resolveAlienUfoCollisions(now) {
+  if (level !== 6) return false;
+  for (let i = 0; i < alienBaseUfos.length; i++) {
+    const ufo = alienBaseUfos[i];
+    if (ufo.cooldown > 0) {
+      ufo.cooldown -= 1;
+      continue;
+    }
+
+    const pose = getAlienBaseUfoPose(now, i);
+    const rx = 30 * pose.scale + ball.r;
+    const ry = 12 * pose.scale + ball.r;
+    const dx = ball.x - pose.x;
+    const dy = ball.y - pose.y;
+    const ellipseN = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry);
+    if (ellipseN > 1) continue;
+
+    const safeN = Math.max(0.0001, ellipseN);
+    const t = 1 / Math.sqrt(safeN);
+    ball.x = pose.x + dx * t;
+    ball.y = pose.y + dy * t;
+
+    let nx = (ball.x - pose.x) / (rx * rx);
+    let ny = (ball.y - pose.y) / (ry * ry);
+    const nLen = Math.hypot(nx, ny);
+    if (nLen > 0.0001) {
+      nx /= nLen;
+      ny /= nLen;
+    } else {
+      nx = dx >= 0 ? 1 : -1;
+      ny = 0;
+    }
+
+    const dot = ball.vx * nx + ball.vy * ny;
+    const bounce = 0.84;
+    ball.vx -= (1 + bounce) * dot * nx;
+    ball.vy -= (1 + bounce) * dot * ny;
+    ball.vx -= 0.15;
+    ball.vy -= 0.12;
+    touchedAlienUfoThisShot = true;
+    playSfx("laser", 0.46);
+    ufo.cooldown = 8;
+    return true;
+  }
+  return false;
 }
 
 function getSpaceBeamState(now) {
@@ -1382,6 +1596,51 @@ function drawSpaceUfos(now) {
   drawSpaceUfo(centerPose, 1.08, 0.95);
 }
 
+function drawAlienLasers(now) {
+  if (level !== 6) return;
+  for (let i = 0; i < alienLasers.length; i++) {
+    const laser = alienLasers[i];
+    const left = laser.x;
+    const right = laser.x + laser.length;
+    const pulse = 0.5 + 0.5 * Math.sin(now * 0.02 + laser.pulsePhase);
+    const glowAlpha = 0.2 + pulse * 0.26;
+    const beamGrad = ctx.createLinearGradient(left, laser.y, right, laser.y);
+    beamGrad.addColorStop(0, `rgba(255, 116, 90, ${0.72 + pulse * 0.2})`);
+    beamGrad.addColorStop(0.38, `rgba(255, 225, 140, ${0.58 + pulse * 0.2})`);
+    beamGrad.addColorStop(1, `rgba(255, 92, 148, ${0.8 + pulse * 0.16})`);
+
+    ctx.strokeStyle = `rgba(255, 124, 110, ${glowAlpha})`;
+    ctx.lineWidth = laser.thickness * 3.2;
+    ctx.beginPath();
+    ctx.moveTo(left, laser.y);
+    ctx.lineTo(right, laser.y);
+    ctx.stroke();
+
+    ctx.strokeStyle = beamGrad;
+    ctx.lineWidth = laser.thickness;
+    ctx.beginPath();
+    ctx.moveTo(left, laser.y);
+    ctx.lineTo(right, laser.y);
+    ctx.stroke();
+  }
+}
+
+function drawAlienBaseUfos(now) {
+  if (level !== 6) return;
+  drawAlienLasers(now);
+  for (let i = 0; i < alienBaseUfos.length; i++) {
+    const pose = getAlienBaseUfoPose(now, i);
+    const aura = ctx.createRadialGradient(pose.x - 8, pose.y + 2, 3, pose.x, pose.y + 2, 34 * pose.scale);
+    aura.addColorStop(0, "rgba(136, 255, 210, 0.32)");
+    aura.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = aura;
+    ctx.beginPath();
+    ctx.arc(pose.x, pose.y + 2, 34 * pose.scale, 0, Math.PI * 2);
+    ctx.fill();
+    drawSpaceUfo(pose, pose.scale, 0.9);
+  }
+}
+
 function triggerBrickStamp() {
   if (!brickStampedThisShot) {
     if (gotTheIckArmed) {
@@ -1436,6 +1695,7 @@ function physicsStep() {
   updateGulls(now);
   updateHelicopter(now);
   updateBalloons(now);
+  updateAlienLasers(now);
   if (rimSoundCooldown > 0) rimSoundCooldown -= 1;
   if (floorSoundCooldown > 0) floorSoundCooldown -= 1;
   if (dribbleSoundCooldown > 0) dribbleSoundCooldown -= 1;
@@ -1518,6 +1778,9 @@ function physicsStep() {
     for (let i = 0; i < balloons.length; i++) {
       resolveBalloonCollision(balloons[i]);
     }
+  } else if (level === 6) {
+    resolveAlienUfoCollisions(now);
+    resolveAlienLaserCollision();
   }
 
   const leftRimX = hoop.x;
@@ -1565,7 +1828,7 @@ function physicsStep() {
 
     if (Math.abs(ball.vx) < 0.2 && Math.abs(ball.vy) < 0.2) {
       if (!ball.scoredOnThisShot) {
-        const touchedObstacleThisShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot;
+        const touchedObstacleThisShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot || touchedLaserThisShot || touchedAlienUfoThisShot;
         const isAirball = !touchedRim && !touchedBackboard && !touchedObstacleThisShot;
         if (isAirball) {
           playSfx("airball", 0.82);
@@ -1612,7 +1875,7 @@ function physicsStep() {
   const madeOnDrop = crossedScorePlane && withinScoreWindow;
   if (!ball.scoredOnThisShot && ball.vy > 0 && (madeOnEntry || madeOnDrop)) {
     const swish = !touchedRim && !touchedBackboard;
-    const trickShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot;
+    const trickShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot || touchedLaserThisShot || touchedAlienUfoThisShot;
     ball.scoredOnThisShot = true;
     lastMadeShot = true;
     lastShotWasSwish = swish;
@@ -1694,6 +1957,7 @@ function drawCourt() {
   const isAfternoon = level === 3;
   const isGolden = level === 4;
   const isSpace = level === 5;
+  const isAlienBase = level === 6;
   const sky = ctx.createLinearGradient(0, 0, 0, floorY);
   if (isSunrise) {
     sky.addColorStop(0, "#5b3f8e");
@@ -1711,6 +1975,10 @@ function drawCourt() {
     sky.addColorStop(0, "#060918");
     sky.addColorStop(0.48, "#101a3d");
     sky.addColorStop(1, "#1b2856");
+  } else if (isAlienBase) {
+    sky.addColorStop(0, "#07040d");
+    sky.addColorStop(0.46, "#22123a");
+    sky.addColorStop(1, "#3d2455");
   } else {
     sky.addColorStop(0, "#2a1f66");
     sky.addColorStop(0.45, "#203a7e");
@@ -1749,6 +2017,22 @@ function drawCourt() {
     ctx.beginPath();
     ctx.ellipse(planetX, planetY, 54, 11, -0.25, 0, Math.PI * 2);
     ctx.stroke();
+  } else if (isAlienBase) {
+    const moonX = W * 0.78;
+    const moonY = 100;
+    const moonGrad = ctx.createRadialGradient(moonX - 10, moonY - 10, 6, moonX, moonY, 46);
+    moonGrad.addColorStop(0, "rgba(222, 255, 164, 0.96)");
+    moonGrad.addColorStop(0.68, "rgba(152, 255, 154, 0.84)");
+    moonGrad.addColorStop(1, "rgba(64, 164, 108, 0.84)");
+    ctx.fillStyle = moonGrad;
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, 34, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(180, 255, 194, 0.48)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(moonX, moonY, 52, 10, 0.18, 0, Math.PI * 2);
+    ctx.stroke();
   } else {
     const moonX = W * 0.74;
     const moonY = 104;
@@ -1781,7 +2065,7 @@ function drawCourt() {
     ctx.fill();
   }
 
-  if (!isSpace) {
+  if (!isSpace && !isAlienBase) {
     const cloudTime = performance.now() * 0.00003;
     drawCloud(W * 0.2 + Math.sin(cloudTime * 1.2) * 36, 118, 1.05, isSunrise ? 0.22 : (isAfternoon ? 0.24 : (isGolden ? 0.23 : 0.13)));
     drawCloud(W * 0.56 + Math.sin(cloudTime * 0.9 + 1.7) * 30, 146, 0.95, isSunrise ? 0.2 : (isAfternoon ? 0.22 : (isGolden ? 0.22 : 0.11)));
@@ -1805,11 +2089,13 @@ function drawCourt() {
     drawBalloons(performance.now());
   } else if (level === 5) {
     drawSpaceUfos(performance.now());
+  } else if (level === 6) {
+    drawAlienBaseUfos(performance.now());
   } else {
     drawSkyPlane(performance.now());
   }
 
-  if (!isSpace) {
+  if (!isSpace && !isAlienBase) {
     ctx.fillStyle = isSunrise ? "#8a79a7" : (isAfternoon ? "#8da4b8" : (isGolden ? "#9a7f76" : "#141b42"));
     for (let i = 0; i < 20; i++) {
       const x = i * 52 + ((i % 2) * 7);
@@ -1835,6 +2121,10 @@ function drawCourt() {
     courtGrad.addColorStop(0, "#29335f");
     courtGrad.addColorStop(0.55, "#202a4e");
     courtGrad.addColorStop(1, "#171f3d");
+  } else if (isAlienBase) {
+    courtGrad.addColorStop(0, "#3c2650");
+    courtGrad.addColorStop(0.55, "#301f43");
+    courtGrad.addColorStop(1, "#241736");
   } else {
     courtGrad.addColorStop(0, "#35383f");
     courtGrad.addColorStop(0.55, "#2b2d33");
@@ -1857,19 +2147,19 @@ function drawCourt() {
     }
   }
 
-  ctx.strokeStyle = isSunrise ? "#ffe6b3" : (isAfternoon ? "#f3fbff" : (isGolden ? "#ffe1a7" : (isSpace ? "#94e4ff" : "#93f0ff")));
+  ctx.strokeStyle = isSunrise ? "#ffe6b3" : (isAfternoon ? "#f3fbff" : (isGolden ? "#ffe1a7" : (isSpace ? "#94e4ff" : (isAlienBase ? "#f2baff" : "#93f0ff"))));
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(0, floorY);
   ctx.lineTo(W, floorY);
   ctx.stroke();
 
-  const paint = isSunrise ? "#ffe8bf" : (isAfternoon ? "#f4fcff" : (isGolden ? "#ffe2b4" : (isSpace ? "#bee9ff" : "#b5f7ff")));
+  const paint = isSunrise ? "#ffe8bf" : (isAfternoon ? "#f4fcff" : (isGolden ? "#ffe2b4" : (isSpace ? "#bee9ff" : (isAlienBase ? "#f3ccff" : "#b5f7ff"))));
   const paintShade = isSunrise
     ? "rgba(58, 35, 58, 0.28)"
     : (isAfternoon
       ? "rgba(17, 27, 44, 0.26)"
-      : (isGolden ? "rgba(68, 41, 36, 0.26)" : (isSpace ? "rgba(8, 18, 48, 0.4)" : "rgba(12, 18, 33, 0.35)")));
+      : (isGolden ? "rgba(68, 41, 36, 0.26)" : (isSpace ? "rgba(8, 18, 48, 0.4)" : (isAlienBase ? "rgba(44, 20, 58, 0.4)" : "rgba(12, 18, 33, 0.35)"))));
   const depth = H - floorY;
   const visibleDepth = floorY + depth * 0.56;
 
@@ -2548,20 +2838,29 @@ function startGame() {
   resetSessionRunState();
   const selectedLevel = Number(startLevelEl?.value || "1");
   if (freeThrowMode) {
-    level = selectedLevel === 5
-      ? 5
-      : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1)));
+    level = selectedLevel === 6
+      ? 6
+      : (selectedLevel === 5
+        ? 5
+        : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1))));
     score = 0;
   } else {
-    level = selectedLevel === 5
-      ? 5
-      : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1)));
-    score = level === 5
-      ? level5ScoreThreshold
-      : (level === 4
-        ? level4ScoreThreshold
-        : (level === 3 ? level3ScoreThreshold : (level === 2 ? level2ScoreThreshold : 0)));
+    level = selectedLevel === 6
+      ? 6
+      : (selectedLevel === 5
+        ? 5
+        : (selectedLevel === 4 ? 4 : (selectedLevel === 3 ? 3 : (selectedLevel === 2 ? 2 : 1))));
+    score = level === 6
+      ? level6ScoreThreshold
+      : (level === 5
+        ? level5ScoreThreshold
+        : (level === 4
+          ? level4ScoreThreshold
+          : (level === 3 ? level3ScoreThreshold : (level === 2 ? level2ScoreThreshold : 0))));
     level = getLevelForScore(score);
+  }
+  if (level === 6) {
+    resetAlienLasers();
   }
   resetLevelTimer();
   comboStreak = 0;
@@ -2585,7 +2884,7 @@ function resetToSplash(reason = "manual") {
     ? {
       score,
       mode: freeThrowMode ? "free_throw" : "normal",
-      startLevel: Math.max(1, Math.min(5, level))
+      startLevel: Math.max(1, Math.min(6, level))
     }
     : null;
   const currentLevel = String(level);

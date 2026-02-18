@@ -418,7 +418,13 @@ function applyLevelProgression() {
 }
 
 function updateHud() {
-  scoreEl.textContent = `Score: ${score}`;
+  if (freeThrowMode) {
+    scoreEl.textContent = `Score: ${score}`;
+  } else {
+    const nextTarget = getNextLevelTarget(level);
+    const displayTarget = nextTarget == null ? level6ScoreThreshold : nextTarget;
+    scoreEl.textContent = `Score: ${score}/${displayTarget}`;
+  }
   const comboLabel = `Combo: x${getComboMultiplier(comboStreak)}`;
   if (comboTextEl) {
     comboTextEl.textContent = comboLabel;
@@ -432,24 +438,8 @@ function updateHud() {
     }
     comboEl.classList.toggle("is-fever", comboStreak >= tootsFeverModeStreak);
   }
-  if (timerEl) timerEl.textContent = freeThrowMode ? "Time: Free" : `Time: ${formatLevelTime(levelTimeRemainingMs)}`;
-  if (nextLevelEl) {
-    if (freeThrowMode) {
-      nextLevelEl.textContent = "Mode: Free Throw";
-    } else if (level === 5) {
-      const phase = getSpaceBeamState(performance.now());
-      nextLevelEl.textContent = `Beam: ${phase.mode.toUpperCase()} ${Math.round(phase.intensity * 100)}%`;
-    } else {
-      const target = getNextLevelTarget(level);
-      if (target == null) {
-        nextLevelEl.textContent = "Next: Max Level";
-      } else {
-        const needed = Math.max(0, target - score);
-        const nextLabel = level + 1;
-        nextLevelEl.textContent = `Next: L${nextLabel} in ${needed}`;
-      }
-    }
-  }
+  if (timerEl) timerEl.textContent = freeThrowMode ? "Free throw mode" : `Time: ${formatLevelTime(levelTimeRemainingMs)}`;
+  if (nextLevelEl) nextLevelEl.textContent = "";
   if (comboStreak > lastComboShown) {
     comboEl.classList.remove("combo-up");
     void comboEl.offsetWidth;
@@ -627,7 +617,7 @@ function updateMuteAllButton() {
   if (!muteAllBtn) return;
   muteAllBtn.classList.toggle("is-muted", muteAllAudio);
   muteAllBtn.setAttribute("aria-pressed", muteAllAudio ? "true" : "false");
-  const label = muteAllAudio ? "Sound off" : "Sound on";
+  const label = muteAllAudio ? "Sound muted" : "Sound on";
   muteAllBtn.setAttribute("aria-label", label);
   muteAllBtn.setAttribute("title", label);
 }

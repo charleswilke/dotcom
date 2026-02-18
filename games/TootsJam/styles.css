@@ -166,80 +166,83 @@ body {
 .combo-progress {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 1px;
   position: relative;
   z-index: 1;
 }
 
 .combo-step {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
+  width: 20px;
+  height: 16px;
+  border-radius: 2px;
   position: relative;
-  border: 1px solid #5d2f21;
+  border: 1px solid #244e58;
   background:
-    radial-gradient(circle at 30% 26%, rgba(255, 217, 158, 0.26) 0%, rgba(140, 67, 44, 0.44) 56%, rgba(56, 25, 16, 0.95) 100%);
+    linear-gradient(180deg, rgba(16, 40, 48, 0.95) 0%, rgba(9, 24, 30, 0.98) 100%);
   box-shadow:
-    inset 0 -1px 2px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1px rgba(255, 255, 255, 0.14),
-    0 1px 2px rgba(0, 0, 0, 0.45);
-  transition: background-color 170ms ease, box-shadow 170ms ease, border-color 170ms ease, transform 170ms ease, filter 170ms ease;
+    inset 0 0 0 1px rgba(34, 90, 103, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.58),
+    0 0 4px rgba(0, 0, 0, 0.48);
+  transition: background-color 170ms ease, box-shadow 170ms ease, border-color 170ms ease, transform 170ms ease, filter 170ms ease, opacity 170ms ease;
+  opacity: 0.84;
 }
 
 .combo-step::before {
   content: "";
   position: absolute;
+  left: 3px;
+  right: 3px;
   top: 2px;
-  left: 2px;
-  width: 4px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(255, 236, 206, 0.45);
-  filter: blur(0.2px);
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(196, 247, 255, 0.26);
 }
 
 .combo-step::after {
   content: "";
   position: absolute;
-  inset: -2px;
-  border-radius: 999px;
+  inset: -5px -4px;
+  border-radius: 5px;
   opacity: 0;
-  background: radial-gradient(circle, rgba(255, 173, 88, 0.55) 0%, rgba(255, 120, 48, 0.06) 70%, rgba(255, 120, 48, 0) 100%);
+  background: radial-gradient(ellipse at center, rgba(106, 242, 255, 0.42) 0%, rgba(37, 196, 230, 0.08) 65%, rgba(37, 196, 230, 0) 100%);
   transition: opacity 170ms ease;
 }
 
 .combo-step.is-active {
-  border-color: #ffcc80;
+  border-color: #7bfbff;
   background:
-    radial-gradient(circle at 32% 28%, rgba(255, 253, 219, 0.92) 0%, rgba(255, 194, 92, 0.95) 42%, rgba(221, 89, 39, 0.98) 78%, rgba(128, 41, 20, 0.98) 100%);
+    linear-gradient(180deg, rgba(229, 254, 255, 0.98) 0%, rgba(80, 239, 255, 0.95) 45%, rgba(0, 205, 242, 0.92) 100%);
   box-shadow:
-    inset 0 -1px 2px rgba(100, 20, 0, 0.42),
-    inset 0 1px 2px rgba(255, 255, 255, 0.35),
-    0 0 6px rgba(255, 170, 70, 0.75),
-    0 0 12px rgba(255, 120, 34, 0.54);
+    inset 0 0 0 1px rgba(205, 255, 255, 0.7),
+    inset 0 -1px 1px rgba(2, 81, 96, 0.45),
+    0 0 10px rgba(89, 246, 255, 0.92),
+    0 0 20px rgba(52, 225, 255, 0.78),
+    0 0 30px rgba(26, 188, 245, 0.58);
   transform: translateY(-1px);
-  animation: combo-bulb-glow 1.35s ease-in-out infinite;
-  filter: saturate(1.08);
-}
-
-.combo-step.is-active::after {
+  animation: combo-segment-glow 1.3s ease-in-out infinite, combo-segment-glitch 2s steps(1, end) infinite;
+  filter: saturate(1.15);
   opacity: 1;
 }
 
+.combo-step.is-active::after {
+  opacity: 0.95;
+}
+
 #combo.is-fever .combo-step {
-  border-color: #ff9ea1;
+  border-color: #ff7fbd;
   background:
-    radial-gradient(circle at 32% 28%, rgba(255, 226, 215, 0.96) 0%, rgba(255, 132, 88, 0.95) 44%, rgba(226, 47, 88, 0.96) 78%, rgba(122, 21, 53, 0.98) 100%);
+    linear-gradient(180deg, rgba(255, 223, 246, 0.98) 0%, rgba(255, 116, 192, 0.95) 46%, rgba(233, 42, 136, 0.94) 100%);
   box-shadow:
-    inset 0 -1px 2px rgba(79, 10, 32, 0.48),
-    inset 0 1px 2px rgba(255, 228, 228, 0.32),
-    0 0 7px rgba(255, 112, 126, 0.8),
-    0 0 14px rgba(255, 63, 107, 0.58);
-  animation-duration: 1.05s;
+    inset 0 0 0 1px rgba(255, 221, 245, 0.62),
+    inset 0 -1px 1px rgba(112, 16, 66, 0.48),
+    0 0 11px rgba(255, 109, 179, 0.88),
+    0 0 22px rgba(255, 67, 150, 0.78),
+    0 0 32px rgba(224, 28, 132, 0.62);
+  animation-duration: 1.05s, 1.85s;
 }
 
 #combo.is-fever .combo-step::after {
-  background: radial-gradient(circle, rgba(255, 120, 128, 0.58) 0%, rgba(255, 63, 107, 0.08) 70%, rgba(255, 63, 107, 0) 100%);
+  background: radial-gradient(ellipse at center, rgba(255, 126, 199, 0.52) 0%, rgba(255, 63, 153, 0.1) 66%, rgba(255, 63, 153, 0) 100%);
 }
 
 .combo-step.is-active:nth-child(2n) {
@@ -760,26 +763,48 @@ canvas {
   100% { opacity: 0; transform: translate(11px, 10px) scale(0.75); }
 }
 
-@keyframes combo-bulb-glow {
+@keyframes combo-segment-glow {
   0% {
     box-shadow:
-      inset 0 -1px 2px rgba(100, 20, 0, 0.42),
-      inset 0 1px 2px rgba(255, 255, 255, 0.35),
-      0 0 5px rgba(255, 170, 70, 0.66),
-      0 0 9px rgba(255, 120, 34, 0.45);
+      inset 0 0 0 1px rgba(205, 255, 255, 0.62),
+      inset 0 -1px 1px rgba(2, 81, 96, 0.45),
+      0 0 9px rgba(89, 246, 255, 0.82),
+      0 0 18px rgba(52, 225, 255, 0.66),
+      0 0 26px rgba(26, 188, 245, 0.5);
   }
   55% {
     box-shadow:
-      inset 0 -1px 2px rgba(100, 20, 0, 0.42),
-      inset 0 1px 2px rgba(255, 255, 255, 0.42),
-      0 0 8px rgba(255, 190, 94, 0.88),
-      0 0 16px rgba(255, 124, 40, 0.67);
+      inset 0 0 0 1px rgba(225, 255, 255, 0.74),
+      inset 0 -1px 1px rgba(2, 81, 96, 0.52),
+      0 0 13px rgba(118, 250, 255, 0.98),
+      0 0 26px rgba(68, 231, 255, 0.84),
+      0 0 38px rgba(29, 193, 250, 0.66);
   }
   100% {
     box-shadow:
-      inset 0 -1px 2px rgba(100, 20, 0, 0.42),
-      inset 0 1px 2px rgba(255, 255, 255, 0.35),
-      0 0 5px rgba(255, 170, 70, 0.66),
-      0 0 9px rgba(255, 120, 34, 0.45);
+      inset 0 0 0 1px rgba(205, 255, 255, 0.62),
+      inset 0 -1px 1px rgba(2, 81, 96, 0.45),
+      0 0 9px rgba(89, 246, 255, 0.82),
+      0 0 18px rgba(52, 225, 255, 0.66),
+      0 0 26px rgba(26, 188, 245, 0.5);
+  }
+}
+
+@keyframes combo-segment-glitch {
+  0%, 84%, 100% {
+    transform: translateY(-1px) scaleX(1);
+    filter: saturate(1.15) brightness(1);
+  }
+  85% {
+    transform: translateY(-1px) translateX(1px) scaleX(1.04);
+    filter: saturate(1.2) brightness(1.06);
+  }
+  87% {
+    transform: translateY(-1px) translateX(-1px) scaleX(0.97);
+    filter: saturate(1.05) brightness(0.95);
+  }
+  90% {
+    transform: translateY(-1px) scaleX(1.02);
+    filter: saturate(1.22) brightness(1.08);
   }
 }

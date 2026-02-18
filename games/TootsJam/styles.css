@@ -42,7 +42,7 @@ body {
 .hud {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr auto auto auto auto 1fr;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
@@ -67,18 +67,27 @@ body {
   white-space: nowrap;
 }
 
-#score {
+.hud-left {
   justify-self: start;
 }
 
+.hud-right {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#score {
+  text-align: left;
+}
+
 #timer {
-  justify-self: center;
   min-width: 94px;
   text-align: center;
 }
 
 #nextLevel {
-  justify-self: center;
   min-width: 130px;
   text-align: center;
   color: #ffe2a0;
@@ -124,12 +133,12 @@ body {
 }
 
 #state {
-  justify-self: end;
+  display: none;
 }
 
 #combo {
   justify-self: center;
-  min-width: 180px;
+  min-width: 210px;
   text-align: center;
   padding: 6px 12px;
   border: 2px solid #a9f5ff;
@@ -143,6 +152,102 @@ body {
   letter-spacing: 1.3px;
   position: relative;
   overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+#comboText {
+  position: relative;
+  z-index: 1;
+}
+
+.combo-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.combo-step {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  position: relative;
+  border: 1px solid #5d2f21;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 217, 158, 0.26) 0%, rgba(140, 67, 44, 0.44) 56%, rgba(56, 25, 16, 0.95) 100%);
+  box-shadow:
+    inset 0 -1px 2px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.14),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+  transition: background-color 170ms ease, box-shadow 170ms ease, border-color 170ms ease, transform 170ms ease, filter 170ms ease;
+}
+
+.combo-step::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 4px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 236, 206, 0.45);
+  filter: blur(0.2px);
+}
+
+.combo-step::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(255, 173, 88, 0.55) 0%, rgba(255, 120, 48, 0.06) 70%, rgba(255, 120, 48, 0) 100%);
+  transition: opacity 170ms ease;
+}
+
+.combo-step.is-active {
+  border-color: #ffcc80;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 253, 219, 0.92) 0%, rgba(255, 194, 92, 0.95) 42%, rgba(221, 89, 39, 0.98) 78%, rgba(128, 41, 20, 0.98) 100%);
+  box-shadow:
+    inset 0 -1px 2px rgba(100, 20, 0, 0.42),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35),
+    0 0 6px rgba(255, 170, 70, 0.75),
+    0 0 12px rgba(255, 120, 34, 0.54);
+  transform: translateY(-1px);
+  animation: combo-bulb-glow 1.35s ease-in-out infinite;
+  filter: saturate(1.08);
+}
+
+.combo-step.is-active::after {
+  opacity: 1;
+}
+
+#combo.is-fever .combo-step {
+  border-color: #ff9ea1;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 226, 215, 0.96) 0%, rgba(255, 132, 88, 0.95) 44%, rgba(226, 47, 88, 0.96) 78%, rgba(122, 21, 53, 0.98) 100%);
+  box-shadow:
+    inset 0 -1px 2px rgba(79, 10, 32, 0.48),
+    inset 0 1px 2px rgba(255, 228, 228, 0.32),
+    0 0 7px rgba(255, 112, 126, 0.8),
+    0 0 14px rgba(255, 63, 107, 0.58);
+  animation-duration: 1.05s;
+}
+
+#combo.is-fever .combo-step::after {
+  background: radial-gradient(circle, rgba(255, 120, 128, 0.58) 0%, rgba(255, 63, 107, 0.08) 70%, rgba(255, 63, 107, 0) 100%);
+}
+
+.combo-step.is-active:nth-child(2n) {
+  animation-delay: 0.2s;
+}
+
+.combo-step.is-active:nth-child(3n) {
+  animation-delay: 0.38s;
 }
 
 #combo::before,
@@ -561,13 +666,17 @@ canvas {
     font-size: 12px;
   }
 
-  #score,
-  #state {
+  .hud-left,
+  .hud-right {
     justify-self: center;
   }
 
   #combo {
-    min-width: 160px;
+    min-width: 190px;
+  }
+
+  .hud-right {
+    gap: 8px;
   }
 
   .mobile-controls-row {
@@ -649,4 +758,28 @@ canvas {
   0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
   40% { opacity: 1; transform: translate(6px, 5px) scale(1.05); }
   100% { opacity: 0; transform: translate(11px, 10px) scale(0.75); }
+}
+
+@keyframes combo-bulb-glow {
+  0% {
+    box-shadow:
+      inset 0 -1px 2px rgba(100, 20, 0, 0.42),
+      inset 0 1px 2px rgba(255, 255, 255, 0.35),
+      0 0 5px rgba(255, 170, 70, 0.66),
+      0 0 9px rgba(255, 120, 34, 0.45);
+  }
+  55% {
+    box-shadow:
+      inset 0 -1px 2px rgba(100, 20, 0, 0.42),
+      inset 0 1px 2px rgba(255, 255, 255, 0.42),
+      0 0 8px rgba(255, 190, 94, 0.88),
+      0 0 16px rgba(255, 124, 40, 0.67);
+  }
+  100% {
+    box-shadow:
+      inset 0 -1px 2px rgba(100, 20, 0, 0.42),
+      inset 0 1px 2px rgba(255, 255, 255, 0.35),
+      0 0 5px rgba(255, 170, 70, 0.66),
+      0 0 9px rgba(255, 120, 34, 0.45);
+  }
 }

@@ -2,6 +2,8 @@ const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const scoreEl = document.getElementById("score");
 const comboEl = document.getElementById("combo");
+const comboTextEl = document.getElementById("comboText");
+const comboStepEls = comboEl ? Array.from(comboEl.querySelectorAll(".combo-step")) : [];
 const stateEl = document.getElementById("state");
 const timerEl = document.getElementById("timer");
 const nextLevelEl = document.getElementById("nextLevel");
@@ -412,7 +414,19 @@ function applyLevelProgression() {
 
 function updateHud() {
   scoreEl.textContent = `Score: ${score}`;
-  comboEl.textContent = `Combo: x${getComboMultiplier(comboStreak)}`;
+  const comboLabel = `Combo: x${getComboMultiplier(comboStreak)}`;
+  if (comboTextEl) {
+    comboTextEl.textContent = comboLabel;
+  } else {
+    comboEl.textContent = comboLabel;
+  }
+  if (comboStepEls.length > 0) {
+    const litSteps = Math.min(tootsFeverModeStreak, Math.max(0, comboStreak));
+    for (let i = 0; i < comboStepEls.length; i++) {
+      comboStepEls[i].classList.toggle("is-active", i < litSteps);
+    }
+    comboEl.classList.toggle("is-fever", comboStreak >= tootsFeverModeStreak);
+  }
   if (timerEl) timerEl.textContent = freeThrowMode ? "Time: Free" : `Time: ${formatLevelTime(levelTimeRemainingMs)}`;
   if (nextLevelEl) {
     if (freeThrowMode) {

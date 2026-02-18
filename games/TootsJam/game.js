@@ -134,7 +134,10 @@ const skyPlane = {
 const gulls = [
   { x: W * 0.36, y: 205, baseX: W * 0.36, baseY: 209, orbitX: 42, orbitY: 24, speed: 0.0019, phase: 0.2, r: 11, cooldown: 0 },
   { x: W * 0.56, y: 232, baseX: W * 0.56, baseY: 232, orbitX: 36, orbitY: 21, speed: 0.0022, phase: 2.0, r: 11, cooldown: 0 },
-  { x: W * 0.76, y: 214, baseX: W * 0.76, baseY: 216, orbitX: 40, orbitY: 26, speed: 0.002, phase: 4.1, r: 11, cooldown: 0 }
+  { x: W * 0.76, y: 214, baseX: W * 0.76, baseY: 216, orbitX: 40, orbitY: 26, speed: 0.002, phase: 4.1, r: 11, cooldown: 0 },
+  { x: (W * 0.66 + player.x) * 0.5, y: hoop.y - 12, baseX: (W * 0.66 + player.x) * 0.5, baseY: hoop.y - 12, orbitX: 28, orbitY: 16, speed: 0.0021, phase: 1.3, r: 12, cooldown: 0 },
+  { x: (((W * 0.66 + player.x) * 0.5) + (((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7)) * 0.5, y: hoop.y + 2, baseX: (((W * 0.66 + player.x) * 0.5) + (((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7)) * 0.5, baseY: hoop.y + 2, orbitX: 26, orbitY: 15, speed: 0.00195, phase: 2.6, r: 12, cooldown: 0 },
+  { x: ((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7, y: hoop.y + 22, baseX: ((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7, baseY: hoop.y + 22, orbitX: 24, orbitY: 14, speed: 0.0018, phase: 3.8, r: 12, cooldown: 0 }
 ];
 const helicopter = {
   x: W * 0.62,

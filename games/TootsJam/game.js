@@ -338,13 +338,15 @@ const comboCalloutImages = {
   groovy: new Image(),
   smooth: new Image(),
   onfire: new Image(),
-  tootsfever: new Image()
+  tootsfever: new Image(),
+  tootsbounce: new Image()
 };
 comboCalloutImages.nice.src = "images/nice.png";
 comboCalloutImages.groovy.src = "images/groovy.png";
 comboCalloutImages.smooth.src = "images/smooth.png";
 comboCalloutImages.onfire.src = "images/onfire.png";
 comboCalloutImages.tootsfever.src = "images/tootsfever.png";
+comboCalloutImages.tootsbounce.src = "images/tootsbounce.png";
 const sfxLastChoiceByKey = {};
 const apiBaseMetaEl = document.querySelector('meta[name="tootsjam-api-base"]');
 const rawApiBase = typeof window.TOOTSJAM_API_BASE === "string" && window.TOOTSJAM_API_BASE.trim()
@@ -1998,10 +2000,16 @@ function physicsStep() {
       playSfx("swish", 0.8);
       swishStampTimer = 52;
     }
-    if (trickShot) {
+    if (comboTier && trickShot) {
+      playSfx("tootsBounce", 0.84);
+      triggerComboCallout("tootsbounce");
+      if (comboStreak === tootsFeverModeStreak) {
+        tootsFeverFlashTimer = 96;
+      }
+    } else if (trickShot) {
       playSfx("tootsBounce", 0.84);
     }
-    if (comboTier) {
+    if (comboTier && !trickShot) {
       playSfx(comboTier.sfxKey, 0.84);
       triggerComboCallout(comboTier.key);
       if (comboStreak === tootsFeverModeStreak) {

@@ -69,6 +69,17 @@ body {
 
 .hud-left {
   justify-self: start;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.hud-center {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .hud-right {
@@ -83,53 +94,28 @@ body {
 }
 
 #timer {
-  min-width: 94px;
-  text-align: center;
-}
-
-#nextLevel {
-  min-width: 130px;
-  text-align: center;
-  color: #ffe2a0;
+  min-width: 0;
+  text-align: left;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  box-shadow: none;
 }
 
 #muteAllBtn {
   position: absolute;
-  top: 10px;
-  right: 14px;
+  top: 2px;
+  right: 8px;
   z-index: 6;
 }
 
 .hud-audio-btn {
-  border: 2px solid #ffd56a;
-  background: linear-gradient(180deg, #5c4a14 0%, #3d2f0d 100%);
-  color: #ffefbf;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(255, 205, 102, 0.22);
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0;
-}
-
-.hud-audio-btn::before {
-  content: "\1F50A";
-  font-size: 18px;
-  line-height: 1;
 }
 
 .hud-audio-btn.is-muted {
-  border-color: #ff8d8d;
-  background: linear-gradient(180deg, #6c1f2a 0%, #42151d 100%);
-  color: #ffd6d6;
-  box-shadow: 0 0 10px rgba(255, 120, 120, 0.22);
-}
-
-.hud-audio-btn.is-muted::before {
-  content: "\1F507";
+  background-image: url("images/speakermute.png");
 }
 
 #state {
@@ -370,6 +356,35 @@ body {
   background: linear-gradient(180deg, #714716 0%, #4c2e0f 100%);
   color: #ffe8c4;
   box-shadow: 0 0 12px rgba(255, 200, 100, 0.28);
+}
+
+.audio-icon-btn {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  background-image: url("images/speaker.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 44px 44px;
+  box-shadow: none;
+  cursor: pointer;
+  font-size: 0;
+  line-height: 0;
+}
+
+.audio-icon-btn.is-muted {
+  background-image: url("images/speakermute.png");
+}
+
+.audio-icon-btn:hover {
+  filter: brightness(1.08);
+}
+
+.audio-icon-btn:focus-visible {
+  outline: 2px solid rgba(146, 222, 255, 0.92);
+  outline-offset: 2px;
 }
 
 .hidden {

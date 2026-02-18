@@ -59,22 +59,21 @@
     <div class="hud">
       <div class="hud-left">
         <div id="score">Score: 0</div>
-      </div>
-      <div id="combo">
-        <span id="comboText">Combo: x1</span>
-        <span id="comboProgress" class="combo-progress" aria-hidden="true">
-          <span class="combo-step"></span>
-          <span class="combo-step"></span>
-          <span class="combo-step"></span>
-          <span class="combo-step"></span>
-          <span class="combo-step"></span>
-        </span>
-      </div>
-      <div class="hud-right">
         <div id="timer">Time: 2:00</div>
-        <div id="nextLevel">Next: L2 in 20</div>
       </div>
-      <button id="muteAllBtn" class="hud-audio-btn" type="button" aria-pressed="false" aria-label="Sound on" title="Sound on"></button>
+      <div class="hud-center">
+        <div id="combo">
+          <span id="comboText">Combo: x1</span>
+          <span id="comboProgress" class="combo-progress" aria-hidden="true">
+            <span class="combo-step"></span>
+            <span class="combo-step"></span>
+            <span class="combo-step"></span>
+            <span class="combo-step"></span>
+            <span class="combo-step"></span>
+          </span>
+        </div>
+      </div>
+      <button id="muteAllBtn" class="hud-audio-btn audio-icon-btn" type="button" aria-pressed="false" aria-label="Sound on" title="Sound on"></button>
       <div id="state">Hold to Shoot</div>
     </div>
     <canvas id="game" width="960" height="720"></canvas>

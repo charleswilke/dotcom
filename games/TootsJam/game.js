@@ -289,7 +289,8 @@ const sfx = {
     "sounds/start/start2.mp3",
     "sounds/start/start3.mp3",
     "sounds/start/start4.mp3",
-    "sounds/start/splash.mp3"
+    "sounds/start/splash.mp3",
+    "sounds/start/splash2.mp3"
   ],
   silence: [
     "sounds/charge6.mp3",

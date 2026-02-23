@@ -40,9 +40,15 @@
         </div>
         <p id="runSummary" class="run-summary hidden"></p>
         <form id="scoreSubmitForm" class="score-submit hidden" novalidate>
-          <label class="level-label" for="scoreInitials">Initials</label>
-          <input id="scoreInitials" class="initials-input" type="text" inputmode="latin" autocomplete="off" maxlength="3" placeholder="AAA" aria-label="Initials (3 letters)" />
-          <button id="submitScoreBtn" class="toggle-btn" type="submit">Post Score</button>
+          <div id="scoreSubmitHeadline" class="score-submit-headline">New High Score</div>
+          <div class="initials-label">Enter Your Initials</div>
+          <div class="initials-slots" role="group" aria-label="Initials (3 letters)">
+            <input id="scoreInitials0" class="initials-slot" type="text" inputmode="latin" autocomplete="off" maxlength="1" aria-label="First initial" />
+            <input id="scoreInitials1" class="initials-slot" type="text" inputmode="latin" autocomplete="off" maxlength="1" aria-label="Second initial" />
+            <input id="scoreInitials2" class="initials-slot" type="text" inputmode="latin" autocomplete="off" maxlength="1" aria-label="Third initial" />
+          </div>
+          <input id="scoreInitials" class="initials-input hidden" type="text" inputmode="latin" autocomplete="off" maxlength="3" placeholder="AAA" aria-hidden="true" tabindex="-1" />
+          <button id="submitScoreBtn" class="toggle-btn submit-score-btn" type="submit">Lock It In</button>
         </form>
         <p id="scoreSubmitStatus" class="score-submit-status hidden"></p>
         <div class="leaderboard-wrap">

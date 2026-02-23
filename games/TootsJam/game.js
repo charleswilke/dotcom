@@ -19,7 +19,9 @@ const startLevelEl = document.getElementById("startLevel");
 const freeThrowModeBtn = document.getElementById("freeThrowModeBtn");
 const runSummaryEl = document.getElementById("runSummary");
 const scoreSubmitFormEl = document.getElementById("scoreSubmitForm");
+const scoreSubmitHeadlineEl = document.getElementById("scoreSubmitHeadline");
 const scoreInitialsEl = document.getElementById("scoreInitials");
+const scoreInitialSlotEls = Array.from(document.querySelectorAll(".initials-slot"));
 const submitScoreBtnEl = document.getElementById("submitScoreBtn");
 const scoreSubmitStatusEl = document.getElementById("scoreSubmitStatus");
 const leaderboardListEl = document.getElementById("leaderboardList");
@@ -329,6 +331,8 @@ let freeThrowMode = false;
 let pendingScoreForSubmission = null;
 const leaderboardLimit = 10;
 let leaderboardModeFilter = "normal";
+let latestLeaderboardScores = [];
+let newScoreSpotlight = null;
 const brickStampImage = new Image();
 brickStampImage.src = "images/brick.png";
 const airballStampImage = new Image();
@@ -649,17 +653,82 @@ function sanitizeInitials(value) {
   return (value || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
 }
 
-function setScoreSubmitStatus(message, isError = false) {
+function getInitialsFromSlots() {
+  if (scoreInitialSlotEls.length !== 3) {
+    return sanitizeInitials(scoreInitialsEl?.value || "");
+  }
+  return sanitizeInitials(scoreInitialSlotEls.map((slot) => slot.value || "").join(""));
+}
+
+function setInitialsSlots(value) {
+  const clean = sanitizeInitials(value);
+  if (scoreInitialsEl) scoreInitialsEl.value = clean;
+  if (scoreInitialSlotEls.length !== 3) return;
+  for (let i = 0; i < scoreInitialSlotEls.length; i++) {
+    scoreInitialSlotEls[i].value = clean[i] || "";
+  }
+}
+
+function getPendingScoreRank() {
+  if (!pendingScoreForSubmission) return null;
+  const mode = pendingScoreForSubmission.mode === "free_throw" ? "free_throw" : "normal";
+  const pendingScore = Number(pendingScoreForSubmission.score) || 0;
+  const modeScores = latestLeaderboardScores
+    .filter((entry) => (entry?.mode === "free_throw" ? "free_throw" : "normal") === mode)
+    .sort((a, b) => (Number(b?.score) || 0) - (Number(a?.score) || 0));
+  let rank = 1;
+  for (let i = 0; i < modeScores.length; i++) {
+    if ((Number(modeScores[i]?.score) || 0) >= pendingScore) rank += 1;
+    else break;
+  }
+  return rank;
+}
+
+function getRankTierClass(rank) {
+  if (!rank || rank > leaderboardLimit) return "rank-out";
+  if (rank === 1) return "rank-1";
+  if (rank <= 5) return "rank-top5";
+  return "rank-top10";
+}
+
+function getScoreRankForMode(target) {
+  if (!target) return null;
+  const targetMode = target.mode === "free_throw" ? "free_throw" : "normal";
+  const targetScore = Number(target.score) || 0;
+  const targetInitials = sanitizeInitials(target.initials || "");
+  const targetLevel = Number(target.startLevel) || 1;
+  const modeScores = latestLeaderboardScores
+    .filter((entry) => (entry?.mode === "free_throw" ? "free_throw" : "normal") === targetMode)
+    .sort((a, b) => (Number(b?.score) || 0) - (Number(a?.score) || 0));
+  for (let i = 0; i < modeScores.length; i++) {
+    const entry = modeScores[i];
+    const entryInitials = sanitizeInitials(entry?.initials || "");
+    const entryScore = Number(entry?.score) || 0;
+    const entryLevel = Number(entry?.startLevel) || 1;
+    if (entryScore !== targetScore) continue;
+    if (entryInitials !== targetInitials) continue;
+    if (targetMode === "free_throw" && entryLevel !== targetLevel) continue;
+    return i + 1;
+  }
+  return null;
+}
+
+function setScoreSubmitStatus(message, tone = "info") {
   if (!scoreSubmitStatusEl) return;
+  const normalizedTone = typeof tone === "boolean"
+    ? (tone ? "error" : "info")
+    : (tone || "info");
   if (!message) {
     scoreSubmitStatusEl.textContent = "";
     scoreSubmitStatusEl.classList.add("hidden");
-    scoreSubmitStatusEl.classList.remove("error");
+    scoreSubmitStatusEl.classList.remove("error", "pending", "success");
     return;
   }
   scoreSubmitStatusEl.textContent = message;
   scoreSubmitStatusEl.classList.remove("hidden");
-  scoreSubmitStatusEl.classList.toggle("error", isError);
+  scoreSubmitStatusEl.classList.toggle("error", normalizedTone === "error");
+  scoreSubmitStatusEl.classList.toggle("pending", normalizedTone === "pending");
+  scoreSubmitStatusEl.classList.toggle("success", normalizedTone === "success");
 }
 
 function renderLeaderboard(entries) {
@@ -671,6 +740,7 @@ function renderLeaderboard(entries) {
   });
   if (filteredEntries.length === 0) {
     const li = document.createElement("li");
+    li.classList.add("lb-empty");
     li.textContent = "No scores yet.";
     leaderboardListEl.appendChild(li);
     return;
@@ -679,8 +749,54 @@ function renderLeaderboard(entries) {
   for (let i = 0; i < filteredEntries.length && i < leaderboardLimit; i++) {
     const entry = filteredEntries[i];
     const li = document.createElement("li");
-    const levelTag = leaderboardModeFilter === "free_throw" ? ` (L${entry.startLevel || 1})` : "";
-    li.textContent = `${entry.initials}  ${entry.score}${levelTag}`;
+    const rank = i + 1;
+    const score = Number(entry?.score) || 0;
+    const initials = (entry?.initials || "???").toString().slice(0, 3).toUpperCase();
+    const meta = leaderboardModeFilter === "free_throw" ? `LEVEL ${entry?.startLevel || 1}` : "";
+    li.classList.add("lb-entry", `rank-${Math.min(rank, 10)}`);
+
+    const rankEl = document.createElement("span");
+    rankEl.className = "lb-rank";
+    rankEl.textContent = `#${rank}`;
+
+    const nameEl = document.createElement("span");
+    nameEl.className = "lb-name";
+    nameEl.textContent = initials;
+
+    const scoreEl = document.createElement("span");
+    scoreEl.className = "lb-score";
+    scoreEl.textContent = score.toLocaleString("en-US");
+
+    const metaEl = document.createElement("span");
+    metaEl.className = "lb-meta";
+    metaEl.textContent = meta;
+    if (meta) li.classList.add("has-meta");
+    if (newScoreSpotlight) {
+      const spotlightMode = newScoreSpotlight.mode === "free_throw" ? "free_throw" : "normal";
+      const spotlightInitials = sanitizeInitials(newScoreSpotlight.initials || "");
+      const spotlightScore = Number(newScoreSpotlight.score) || 0;
+      const spotlightLevel = Number(newScoreSpotlight.startLevel) || 1;
+      const entryInitials = sanitizeInitials(entry?.initials || "");
+      const entryScore = Number(entry?.score) || 0;
+      const entryLevel = Number(entry?.startLevel) || 1;
+      const isMatch = spotlightMode === leaderboardModeFilter
+        && entryInitials === spotlightInitials
+        && entryScore === spotlightScore
+        && (spotlightMode !== "free_throw" || entryLevel === spotlightLevel);
+      if (isMatch) {
+        li.classList.add("is-new-score");
+        li.setAttribute("aria-label", `New high score at rank ${rank}`);
+        setTimeout(() => {
+          li.classList.remove("is-new-score");
+        }, 2100);
+        newScoreSpotlight = null;
+      }
+    }
+
+    li.appendChild(rankEl);
+    li.appendChild(nameEl);
+    li.appendChild(scoreEl);
+    if (meta) li.appendChild(metaEl);
     leaderboardListEl.appendChild(li);
   }
 }
@@ -725,10 +841,14 @@ async function fetchLeaderboard() {
     const scores = Array.isArray(payload?.scores)
       ? payload.scores.slice().sort((a, b) => (Number(b?.score) || 0) - (Number(a?.score) || 0))
       : [];
+    latestLeaderboardScores = scores.slice();
     renderLeaderboard(scores);
+    updateScoreSubmissionUi();
     if (leaderboardStatusEl) leaderboardStatusEl.textContent = "";
   } catch (err) {
+    latestLeaderboardScores = [];
     renderLeaderboard([]);
+    updateScoreSubmissionUi();
     if (leaderboardStatusEl) {
       leaderboardStatusEl.textContent = err?.message || "Leaderboard unavailable.";
     }
@@ -737,19 +857,35 @@ async function fetchLeaderboard() {
 
 function updateScoreSubmissionUi() {
   if (!runSummaryEl || !scoreSubmitFormEl) return;
+  scoreSubmitFormEl.classList.remove("rank-1", "rank-top5", "rank-top10", "rank-out");
   if (!pendingScoreForSubmission) {
     runSummaryEl.classList.add("hidden");
     scoreSubmitFormEl.classList.add("hidden");
+    if (scoreSubmitHeadlineEl) scoreSubmitHeadlineEl.textContent = "New High Score";
+    setInitialsSlots("");
     setScoreSubmitStatus("");
     return;
   }
   const modeLabel = pendingScoreForSubmission.mode === "free_throw"
     ? `Free Throw L${pendingScoreForSubmission.startLevel}`
     : "Normal";
-  runSummaryEl.textContent = `Last Run: ${pendingScoreForSubmission.score} (${modeLabel})`;
+  const rank = getPendingScoreRank();
+  const rankTier = getRankTierClass(rank);
+  scoreSubmitFormEl.classList.add(rankTier);
+  const scoreLabel = Number(pendingScoreForSubmission.score || 0).toLocaleString("en-US");
+  const rankLabel = !rank || rank > leaderboardLimit ? "OUTSIDE TOP 10" : `PROJECTED #${rank}`;
+  runSummaryEl.textContent = `${rankLabel}  |  ${scoreLabel} PTS  |  ${modeLabel.toUpperCase()}`;
+  if (scoreSubmitHeadlineEl) {
+    scoreSubmitHeadlineEl.textContent = rank === 1
+      ? "New Champion Score"
+      : "New High Score";
+  }
+  setInitialsSlots(getInitialsFromSlots());
   runSummaryEl.classList.remove("hidden");
   scoreSubmitFormEl.classList.remove("hidden");
-  setScoreSubmitStatus("");
+  if (submitScoreBtnEl) submitScoreBtnEl.textContent = "Lock It In";
+  setScoreSubmitStatus("READY TO POST", "info");
+  if (scoreInitialSlotEls[0] && !getInitialsFromSlots()) scoreInitialSlotEls[0].focus();
 }
 
 async function submitPendingScore(initials) {
@@ -761,7 +897,8 @@ async function submitPendingScore(initials) {
     startLevel: pendingScoreForSubmission.startLevel
   };
   if (submitScoreBtnEl) submitScoreBtnEl.disabled = true;
-  setScoreSubmitStatus("Posting...");
+  if (submitScoreBtnEl) submitScoreBtnEl.textContent = "Transmitting...";
+  setScoreSubmitStatus("TRANSMITTING...", "pending");
   try {
     const response = await fetch(getApiUrl("/api/scores"), {
       method: "POST",
@@ -772,13 +909,30 @@ async function submitPendingScore(initials) {
       const message = await getApiErrorMessage(response, `Could not post score (HTTP ${response.status}).`);
       throw new Error(message);
     }
+    newScoreSpotlight = {
+      initials: payload.initials,
+      score: payload.score,
+      mode: payload.mode,
+      startLevel: payload.startLevel
+    };
+    leaderboardModeFilter = payload.mode === "free_throw" ? "free_throw" : "normal";
+    updateLeaderboardFilterUi();
     pendingScoreForSubmission = null;
+    setInitialsSlots("");
+    if (submitScoreBtnEl) submitScoreBtnEl.textContent = "Lock It In";
     updateScoreSubmissionUi();
-    setScoreSubmitStatus("Score posted.");
-    if (scoreInitialsEl) scoreInitialsEl.value = "";
     await fetchLeaderboard();
+    const postedRank = getScoreRankForMode(payload);
+    if (postedRank && postedRank <= leaderboardLimit) {
+      setScoreSubmitStatus(`SCORE LOCKED IN  |  NEW #${postedRank}`, "success");
+    } else {
+      setScoreSubmitStatus("SCORE LOCKED IN", "success");
+    }
+    newScoreSpotlight = null;
   } catch (err) {
-    setScoreSubmitStatus(err?.message || "Could not post score. Try again.", true);
+    if (submitScoreBtnEl) submitScoreBtnEl.textContent = "Retry Post";
+    setScoreSubmitStatus(err?.message || "LINK DOWN / RETRY", "error");
+    newScoreSpotlight = null;
   } finally {
     if (submitScoreBtnEl) submitScoreBtnEl.disabled = false;
   }
@@ -3080,19 +3234,52 @@ if (freeThrowModeBtn) {
     updateFreeThrowModeButton();
   });
 }
-if (scoreInitialsEl) {
-  scoreInitialsEl.addEventListener("input", () => {
-    const clean = sanitizeInitials(scoreInitialsEl.value);
-    if (scoreInitialsEl.value !== clean) scoreInitialsEl.value = clean;
+if (scoreInitialSlotEls.length === 3) {
+  scoreInitialSlotEls.forEach((slot, index) => {
+    slot.addEventListener("focus", () => {
+      slot.select();
+    });
+    slot.addEventListener("input", () => {
+      const clean = sanitizeInitials(slot.value);
+      slot.value = clean ? clean[0] : "";
+      const current = getInitialsFromSlots();
+      if (scoreInitialsEl) scoreInitialsEl.value = current;
+      if (slot.value && index < 2) scoreInitialSlotEls[index + 1].focus();
+      if (submitScoreBtnEl) submitScoreBtnEl.textContent = "Lock It In";
+      setScoreSubmitStatus("READY TO POST", "info");
+    });
+    slot.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !slot.value && index > 0) {
+        scoreInitialSlotEls[index - 1].focus();
+      }
+      if (e.key === "ArrowLeft" && index > 0) {
+        e.preventDefault();
+        scoreInitialSlotEls[index - 1].focus();
+      }
+      if (e.key === "ArrowRight" && index < 2) {
+        e.preventDefault();
+        scoreInitialSlotEls[index + 1].focus();
+      }
+    });
+    slot.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const raw = e.clipboardData?.getData("text") || "";
+      const clean = sanitizeInitials(raw);
+      setInitialsSlots(clean);
+      if (clean.length < 3) scoreInitialSlotEls[Math.min(2, clean.length)].focus();
+      else scoreInitialSlotEls[2].focus();
+      if (submitScoreBtnEl) submitScoreBtnEl.textContent = "Lock It In";
+      setScoreSubmitStatus("READY TO POST", "info");
+    });
   });
 }
 if (scoreSubmitFormEl) {
   scoreSubmitFormEl.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!pendingScoreForSubmission) return;
-    const initials = sanitizeInitials(scoreInitialsEl?.value || "");
+    const initials = getInitialsFromSlots();
     if (initials.length !== 3) {
-      setScoreSubmitStatus("Enter exactly 3 letters.", true);
+      setScoreSubmitStatus("ENTER EXACTLY 3 LETTERS", "error");
       return;
     }
     await submitPendingScore(initials);

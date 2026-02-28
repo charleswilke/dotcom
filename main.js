@@ -3,6 +3,7 @@
 // Pre-computed SVG fallback placeholder (used when article images fail to load)
 const FALLBACK_SVG_B64 = btoa('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#2c4f7c;stop-opacity:1" /><stop offset="100%" style="stop-color:#1a1550;stop-opacity:1" /></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="800" height="400" fill="url(#grad)"/><g fill="#00f7c2" filter="url(#glow)"><path d="M100,200 L200,100 L300,200 L400,100 L500,200 L600,100 L700,200" stroke="#00f7c2" stroke-width="4" fill="none"/><circle cx="400" cy="200" r="50"/><text x="400" y="200" font-family="monospace" font-size="24" text-anchor="middle" dominant-baseline="middle">l.ai.bor</text></g></svg>');
 const FALLBACK_SVG = 'data:image/svg+xml;base64,' + FALLBACK_SVG_B64;
+const TOTAL_RSS_ITEMS = 19; // 1 spotlight + 18 grid cards for an even 2-column ending
 
 // Function to properly decode all HTML entities
 function decodeHtmlEntities(text) {
@@ -76,7 +77,7 @@ async function fetchRSSFeed() {
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
                 console.log('Fetching RSS feed from optimized cache...');
-                const response = await fetch('substack_feed.php?limit=200', {
+                const response = await fetch(`substack_feed.php?limit=${TOTAL_RSS_ITEMS}`, {
                     cache: 'default',
                     priority: 'high', // High priority fetch
                     headers: {
@@ -88,7 +89,7 @@ async function fetchRSSFeed() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        allItems = sortItemsByNewest(data.items);
+                        allItems = sortItemsByNewest(data.items).slice(0, TOTAL_RSS_ITEMS);
                         console.log(`✓ Successfully loaded ${allItems.length} articles from cache`);
                         currentItems = 0;
                         isArchiveMode = false;
@@ -116,7 +117,7 @@ async function fetchRSSFeed() {
             try {
                 console.log('Trying RSS2JSON fallback...');
                 const fallbackUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + 
-                    encodeURIComponent('https://charleswilke.substack.com/feed') + '&count=50';
+                    encodeURIComponent('https://charleswilke.substack.com/feed') + `&count=${TOTAL_RSS_ITEMS}`;
                 
                 const response = await fetch(fallbackUrl, {
                     cache: 'default',
@@ -126,7 +127,7 @@ async function fetchRSSFeed() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        allItems = sortItemsByNewest(data.items);
+                        allItems = sortItemsByNewest(data.items).slice(0, TOTAL_RSS_ITEMS);
                         console.log(`✓ Fallback loaded ${allItems.length} articles`);
                         currentItems = 0;
                         isArchiveMode = false;
@@ -151,7 +152,7 @@ async function fetchRSSFeed() {
             console.log('Trying XML fallback as last resort...');
             const xmlItems = await fetchRssXmlFallback();
             if (xmlItems && xmlItems.length > 0) {
-                allItems = sortItemsByNewest(xmlItems);
+                allItems = sortItemsByNewest(xmlItems).slice(0, TOTAL_RSS_ITEMS);
                 console.log(`✓ XML fallback loaded ${allItems.length} articles`);
                 currentItems = 0;
                 isArchiveMode = false;

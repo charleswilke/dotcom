@@ -77,8 +77,8 @@ async function fetchRSSFeed() {
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
                 console.log('Fetching RSS feed from optimized cache...');
-                const response = await fetch(`substack_feed.php?limit=${TOTAL_RSS_ITEMS}`, {
-                    cache: 'default',
+                const response = await fetch(`substack_feed.php?limit=${TOTAL_RSS_ITEMS}&nocache=1`, {
+                    cache: 'no-cache',
                     priority: 'high', // High priority fetch
                     headers: {
                         'Accept': 'application/json',

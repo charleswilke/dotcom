@@ -3807,6 +3807,8 @@ html {
 .tuner-scale .scale-marker:nth-child(15) { --marker-index: 14; }
 .tuner-scale .scale-marker:nth-child(16) { --marker-index: 15; }
 .tuner-scale .scale-marker:nth-child(17) { --marker-index: 16; }
+.tuner-scale .scale-marker:nth-child(18) { --marker-index: 17; }
+.tuner-scale .scale-marker:nth-child(19) { --marker-index: 18; }
 
 /* Station Lights Ring (embedded in tuner display) */
 .station-lights-ring {
@@ -7166,4 +7168,3 @@ section.production-header.alice p {
         margin-bottom: 0;
     }
 }
-

@@ -13,6 +13,15 @@ function decodeHtmlEntities(text) {
     return div.textContent || div.innerText || '';
 }
 
+// Centralized DOM-ready queue to avoid many independent DOMContentLoaded listeners.
+const readyCallbacks = [];
+function onReady(callback) {
+    readyCallbacks.push(callback);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    readyCallbacks.forEach(callback => callback());
+});
+
 // Add smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -67,8 +76,8 @@ async function fetchRSSFeed() {
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
                 console.log('Fetching RSS feed from optimized cache...');
-                const response = await fetch('substack_feed.php?limit=200&nocache=1', {
-                    cache: 'no-cache', // Always fetch fresh from server
+                const response = await fetch('substack_feed.php?limit=200', {
+                    cache: 'default',
                     priority: 'high', // High priority fetch
                     headers: {
                         'Accept': 'application/json',
@@ -91,8 +100,7 @@ async function fetchRSSFeed() {
                         
                         // Populate content
                         populateLatestArticleSpotlight();
-                        displayItems(allItems.length - 1);
-                        updateDynamicButton();
+                        displayItems(ITEMS_PER_PAGE);
                         success = true;
                     } else {
                         console.warn('Cache returned invalid data structure');
@@ -129,8 +137,7 @@ async function fetchRSSFeed() {
                         }
                         
                         populateLatestArticleSpotlight();
-                        displayItems(allItems.length - 1);
-                        updateDynamicButton();
+                        displayItems(ITEMS_PER_PAGE);
                         success = true;
                     }
                 }
@@ -155,8 +162,7 @@ async function fetchRSSFeed() {
                 }
                 
                 populateLatestArticleSpotlight();
-                displayItems(allItems.length - 1);
-                updateDynamicButton();
+                displayItems(ITEMS_PER_PAGE);
                 success = true;
             }
         }
@@ -250,22 +256,20 @@ function populateLatestArticleSpotlight() {
 
 function displayItems(count) {
     const feedContent = document.getElementById('feed-content');
-    
-    // Start from index 1 since index 0 is in the spotlight
-    // For subsequent loads, add 1 to currentItems to account for the skipped spotlight item
-    const startIndex = currentItems === 0 ? 1 : currentItems + 1;
-    let newItems = Math.min(count, allItems.length - startIndex);
-    
-    // Only adjust for even numbers if we're at the very end of available articles
-    // and we have more than 1 item to load
-    const totalItemsAfterLoad = currentItems + newItems;
-    const isAtEnd = startIndex + newItems >= allItems.length;
-    if (isAtEnd && totalItemsAfterLoad % 2 === 1 && newItems > 1) {
-        // If we're truly at the end and the total would be odd, load one less
-        newItems--;
+    if (!feedContent || !allItems.length) return;
+
+    // Index 0 is reserved for the spotlight card.
+    const startIndex = currentItems + 1;
+    const endIndex = Math.min(startIndex + count, allItems.length);
+    if (startIndex >= endIndex) {
+        isArchiveMode = true;
+        updateDynamicButton();
+        return;
     }
-    
-    for (let i = startIndex; i < startIndex + newItems; i++) {
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = startIndex; i < endIndex; i++) {
         const item = allItems[i];
         const title = item.title;
         const link = item.link;
@@ -302,17 +306,13 @@ function displayItems(count) {
             <p>${cleanDescription.substring(0, 150)}${cleanDescription.length > 150 ? '...' : ''}</p>
             <div class="date">${pubDate.toLocaleDateString()}</div>
         `;
-        
-        feedContent.appendChild(feedItem);
+
+        fragment.appendChild(feedItem);
     }
-    
-    currentItems += newItems;
-    // Update button state based on whether we've reached the end
-    // Account for the spotlight item (index 0) being displayed separately
-    // With 11 items per page, we need to check if we've loaded enough to fill the 2x2 grid
-    if (currentItems >= allItems.length - 1) {
-        isArchiveMode = true;
-    }
+
+    feedContent.appendChild(fragment);
+    currentItems += (endIndex - startIndex);
+    isArchiveMode = currentItems >= (allItems.length - 1);
     updateDynamicButton();
 }
 
@@ -320,12 +320,15 @@ function displayItems(count) {
 function updateDynamicButton() {
     const dynamicBtn = document.getElementById('dynamicButton');
     if (!dynamicBtn) return;
-    
-    // Since we're loading all articles at once, always show Full Archive button
-    console.log(`Loaded ${currentItems} articles from RSS feed (+ 1 in spotlight)`);
-    
-    // Always show archive mode since we load everything at once
-    dynamicBtn.textContent = 'Full Archive →';
+
+    if (currentItems < allItems.length - 1) {
+        dynamicBtn.textContent = 'Load more';
+        dynamicBtn.className = 'load-more-btn';
+        dynamicBtn.onclick = () => displayItems(ITEMS_PER_PAGE);
+        return;
+    }
+
+    dynamicBtn.textContent = 'Full Archive ->';
     dynamicBtn.className = 'archive-btn';
     dynamicBtn.onclick = () => {
         window.open('https://charleswilke.substack.com/archive?sort=new', '_blank', 'noopener,noreferrer');
@@ -382,16 +385,19 @@ if (shouldFetchRSS) {
     }
 
     // Also set up DOMContentLoaded as fallback in case the above doesn't trigger
-    document.addEventListener('DOMContentLoaded', function() {
-        // Only fetch if we haven't already started loading
-        if (!isLoading && allItems.length === 0) {
-            fetchRSSFeed();
-        }
-    });
+    // (registered via initRSSFallbackFetch below)
+}
+
+function initRSSFallbackFetch() {
+    if (!shouldFetchRSS) return;
+    // Only fetch if we haven't already started loading
+    if (!isLoading && allItems.length === 0) {
+        fetchRSSFeed();
+    }
 }
 
 // Time Dial Functionality
-document.addEventListener('DOMContentLoaded', function() {
+function initTimeDial() {
     const recapStations = [
         {
             angle: 40,
@@ -446,6 +452,12 @@ document.addEventListener('DOMContentLoaded', function() {
             date: 'January 2026',
             file: 'audio/jan-2026-substack-recap.mp3',
             label: 'JAN \'26'
+        },
+        {
+            angle: 20,
+            date: 'February 2026',
+            file: 'audio/feb-2026-substack-recap.mp3',
+            label: 'FEB \'26'
         }
     ];
     
@@ -462,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'audio/radio_tuning9.mp3'
     ];
     
-    let currentStation = 8; // Start at station 8 (Jan '26)
+    let currentStation = 9; // Start at station 9 (Feb '26)
     const stationLightsContainer = document.getElementById('station-lights');
     const stationLights = document.querySelectorAll('.station-light');
     const dateDisplay = document.getElementById('current-recap-date');
@@ -736,15 +748,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize date display transition and current station
     dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
     if (stationLightsContainer) {
-        stationLightsContainer.setAttribute('data-current-station', '7');
+        stationLightsContainer.setAttribute('data-current-station', '9');
     }
     
     // Initialize station (date display, audio source, etc.)
-    updateStation(8);
+    updateStation(9);
     
     // Initialize tuner indicator position
     setTimeout(() => {
-        updateTunerIndicator(8);
+        updateTunerIndicator(9);
     }, 100);
     
     // Add click handlers to clickable scale markers
@@ -777,7 +789,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.transform = 'scale(1)';
         }, { passive: true });
     });
-});
+}
 
 
 // Lightbox functionality
@@ -1123,9 +1135,9 @@ function triggerGlitch() {
         }
     }, duration);
 }
-document.addEventListener('DOMContentLoaded', () => {
+function initHeaderGlitchEffects() {
     setTimeout(triggerGlitch, 1500 + Math.random() * 2000);
-});
+}
 
 // Timed glitch effect for the FAQ link
 function triggerGlitchFAQ() {
@@ -1137,11 +1149,11 @@ function triggerGlitchFAQ() {
         setTimeout(triggerGlitchFAQ, 20000 + Math.random() * 5000); // 20-25s
     }, 120 + Math.random() * 180); // short burst
 }
-document.addEventListener('DOMContentLoaded', () => {
+function initFaqGlitchTimer() {
     setTimeout(triggerGlitchFAQ, 4000 + Math.random() * 2000); // initial delay
-});
+}
 // Glitch effect for the email link (hover/focus only)
-document.addEventListener('DOMContentLoaded', () => {
+function initEmailGlitchEffects() {
     const emailLink = document.querySelector('.email-glitch-link');
     if (!emailLink) return;
     emailLink.addEventListener('mouseenter', () => {
@@ -1152,7 +1164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         emailLink.classList.add('glitch-link', 'glitch');
         setTimeout(() => emailLink.classList.remove('glitch-link', 'glitch'), 200 + Math.random() * 200);
     });
-});
+}
 
 function neonFlicker() {
   const letters = document.querySelectorAll('.recently-bg-text span');
@@ -1174,9 +1186,9 @@ function neonFlicker() {
   }
   doFlick();
 }
-document.addEventListener('DOMContentLoaded', () => {
+function initNeonFlicker() {
   setTimeout(neonFlicker, 2000); // initial delay
-});
+}
 
 function triggerShimmer() {
   const shimmer = document.querySelector('.recently-bg-text');
@@ -1186,12 +1198,12 @@ function triggerShimmer() {
     setTimeout(triggerShimmer, 4000 + Math.random() * 2000); // 4-6s between shimmers
   }, 1200); // match animation duration
 }
-document.addEventListener('DOMContentLoaded', () => {
+function initShimmerEffect() {
   setTimeout(triggerShimmer, 2000);
-});
+}
 
 // Custom Audio Player Script
-(function() {
+function initCustomAudioPlayers() {
   function formatTime(sec) {
     if (isNaN(sec)) return '0:00';
     const m = Math.floor(sec / 60);
@@ -1340,10 +1352,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   });
-})();
+}
 
 // Add event listener for Doc lightbox link
-document.addEventListener('DOMContentLoaded', () => {
+function initPetLightboxLinks() {
     const docLink = document.getElementById('docLightboxLink');
     const astroLink = document.getElementById('astroLightboxLink');
     if (docLink) {
@@ -1358,10 +1370,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openLightbox('images/astro-justhappy2behere.png');
         });
     }
-});
+}
 
 // Mixtape Lightbox Logic
-document.addEventListener('DOMContentLoaded', () => {
+function initMixtapeLightbox() {
     const aSideTracks = [
         { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', video: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp4', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
         { title: 'Protect the Hollow', file: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp3', video: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp4', article: 'https://charleswilke.substack.com/p/protect-the-hollow' },
@@ -2048,4 +2060,18 @@ document.addEventListener('DOMContentLoaded', () => {
             document.addEventListener('mouseup', handleMouseUp);
         });
     }
+}
+
+onReady(() => {
+    initRSSFallbackFetch();
+    initTimeDial();
+    initHeaderGlitchEffects();
+    initFaqGlitchTimer();
+    initEmailGlitchEffects();
+    initNeonFlicker();
+    initShimmerEffect();
+    initCustomAudioPlayers();
+    initPetLightboxLinks();
+    initMixtapeLightbox();
 });
+

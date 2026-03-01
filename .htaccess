@@ -20,6 +20,14 @@ RewriteRule ^side-two/?$ /side-two.html [L]
 # The page then redirects to /#mixtape-side-two for the actual lightbox
 RewriteRule ^mixtape-side-two/?$ /mixtape-side-two.html [L]
 
+# Serve gwor.html for /gwor URL (for OG meta tags / rich snippets)
+# The page then redirects to /#gwor for the actual lightbox
+RewriteRule ^gwor/?$ /gwor.html [L]
+
+# Serve grief-without-ritual.html for /grief-without-ritual URL (for OG meta tags / rich snippets)
+# The page then redirects to /#gwor for the actual lightbox
+RewriteRule ^grief-without-ritual/?$ /grief-without-ritual.html [L]
+
 # Map /tootsjam to games/TootsJam (game) — redirect bare /tootsjam to /tootsjam/ so relative URLs resolve
 RewriteRule ^tootsjam$ /tootsjam/ [R=301,L]
 RewriteRule ^tootsjam/?$ games/TootsJam/tootsjam.html [L]
@@ -71,3 +79,4 @@ RewriteRule ^tootsjam/(.*)$ games/TootsJam/$1 [L]
         Header set Cache-Control "public, max-age=0, must-revalidate"
     </FilesMatch>
 </IfModule>
+

@@ -2063,6 +2063,450 @@ function initMixtapeLightbox() {
     }
 }
 
+function initGWORLightbox() {
+    const tracks = [
+        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', video: 'audio/grief-without-ritual/waiting-for-something.mov' },
+        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', video: 'audio/grief-without-ritual/underlined-once.mp4' },
+        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov' },
+        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', video: 'audio/grief-without-ritual/respect-the-exhale.mp4' },
+        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4' },
+        { title: "Theater's Last Stand", file: 'audio/grief-without-ritual/theaters-last-stand.mp3', video: 'audio/grief-without-ritual/theaters-last-stand.mp4' },
+        { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4' },
+        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4' },
+        { title: 'Future in Our Eyes', file: 'audio/grief-without-ritual/future-in-our-eyes.mp3', video: 'audio/grief-without-ritual/future-in-our-eyes.mp4' }
+    ];
+
+    const lightbox = document.getElementById('gworLightbox');
+    const tile = document.getElementById('gworTile');
+    const closeBtn = document.getElementById('gworClose');
+    const audio = document.getElementById('gworAudio');
+    const trackList = document.getElementById('gworTrackList');
+    const trackDisplay = document.getElementById('gworCurrentTrack');
+    const prevBtn = document.getElementById('gworPrev');
+    const nextBtn = document.getElementById('gworNext');
+    const playPauseBtn = document.getElementById('gworPlayPause');
+    const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
+    const PLAY_ICON = '\u25B6';
+    const PAUSE_ICON = '\u275A\u275A';
+    const progressBar = document.getElementById('gworProgressBar');
+    const progressContainer = document.getElementById('gworProgressContainer');
+    const timeDisplay = document.getElementById('gworTime');
+    const visualizerCanvas = document.getElementById('gworVisualizer');
+    const lyricsVideo = document.getElementById('gworLyricsVideo');
+    const lyricsVideoContainer = document.getElementById('gworLyricsVideoContainer');
+
+    if (!lightbox || !tile || !audio || !trackList) return;
+
+    if (playPauseIcon) {
+        playPauseIcon.textContent = PLAY_ICON;
+    }
+
+    let currentIndex = 0;
+
+    let animationId = null;
+    let isPlaying = false;
+    let audioContext = null;
+    let analyser = null;
+    let dataArray = null;
+    let useRealAnalyser = false;
+    let barHeights = new Array(8).fill(0);
+    const isLocalFile = window.location.protocol === 'file:';
+
+    function initAudioContext() {
+        if (audioContext || isLocalFile) return;
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 128;
+            analyser.smoothingTimeConstant = 0.7;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            const source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            useRealAnalyser = true;
+        } catch (e) {
+            useRealAnalyser = false;
+        }
+    }
+
+    function drawVisualizer() {
+        if (!visualizerCanvas) return;
+
+        const ctx = visualizerCanvas.getContext('2d');
+        const width = visualizerCanvas.width;
+        const height = visualizerCanvas.height;
+
+        ctx.clearRect(0, 0, width, height);
+
+        const barCount = 8;
+        const barWidth = 3;
+        const barGap = 3;
+        const maxBarHeight = height * 0.8;
+        const centerY = height / 2;
+        const edgePadding = 10;
+
+        if (useRealAnalyser && analyser && isPlaying) {
+            analyser.getByteFrequencyData(dataArray);
+        }
+
+        for (let i = 0; i < barCount; i++) {
+            let targetHeight;
+
+            if (useRealAnalyser && dataArray && isPlaying) {
+                const binIndex = Math.floor((i / barCount) * (dataArray.length * 0.6));
+                const value = dataArray[binIndex] || 0;
+                targetHeight = value / 255;
+            } else if (isPlaying) {
+                if (Math.random() < 0.12) {
+                    targetHeight = Math.random() * 0.7 + 0.15;
+                } else {
+                    targetHeight = barHeights[i] + (Math.random() - 0.5) * 0.1;
+                }
+                targetHeight = Math.max(0.05, Math.min(0.85, targetHeight));
+            } else {
+                targetHeight = 0;
+            }
+
+            const smoothing = useRealAnalyser ? 0.35 : 0.18;
+            barHeights[i] += (targetHeight - barHeights[i]) * smoothing;
+
+            const barHeight = barHeights[i] * maxBarHeight;
+            const baseHue = 6;
+            const hueVariance = 12;
+            const hue = baseHue - ((barCount - 1 - i) / barCount) * hueVariance;
+            const intensity = barHeights[i];
+            const saturation = 42 + intensity * 20;
+            const lightness = 42 + intensity * 16;
+
+            ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`;
+            ctx.shadowColor = `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`;
+            ctx.shadowBlur = 6 + intensity * 4;
+
+            const leftX = edgePadding + (i * (barWidth + barGap));
+            ctx.fillRect(leftX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+
+            const rightX = width - edgePadding - barWidth - (i * (barWidth + barGap));
+            ctx.fillRect(rightX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+        }
+
+        ctx.shadowBlur = 0;
+        animationId = requestAnimationFrame(drawVisualizer);
+    }
+
+    function startVisualizer() {
+        isPlaying = true;
+        if (!audioContext && !isLocalFile) {
+            initAudioContext();
+        }
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        if (!animationId) {
+            drawVisualizer();
+        }
+    }
+
+    function stopVisualizer() {
+        isPlaying = false;
+        setTimeout(() => {
+            if (!isPlaying && animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+                if (visualizerCanvas) {
+                    const ctx = visualizerCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+                }
+            }
+        }, 500);
+    }
+
+    function formatTime(sec) {
+        if (isNaN(sec)) return '0:00';
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function populatePlaylist() {
+        trackList.innerHTML = '';
+        let trackNumber = 1;
+
+        tracks.forEach((track, index) => {
+            const li = document.createElement('li');
+            li.className = 'mixtape-track-item';
+            li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>`;
+            trackNumber++;
+
+            li.addEventListener('click', () => {
+                loadTrack(index);
+                playTrack();
+            });
+            trackList.appendChild(li);
+        });
+    }
+
+    function loadTrack(index) {
+        currentIndex = index;
+        audio.src = tracks[index].file;
+        audio.load();
+        if (trackDisplay) {
+            trackDisplay.textContent = tracks[index].title;
+        }
+
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        if (timeDisplay) {
+            timeDisplay.textContent = '0:00';
+        }
+
+        if (lyricsVideo && lyricsVideoContainer) {
+            if (tracks[index].video) {
+                lyricsVideo.src = tracks[index].video;
+                lyricsVideo.load();
+                lyricsVideo.currentTime = 0;
+                lyricsVideoContainer.classList.add('has-video');
+            } else {
+                lyricsVideo.src = '';
+                lyricsVideoContainer.classList.remove('has-video');
+            }
+        }
+
+        const items = trackList.querySelectorAll('.mixtape-track-item');
+        items.forEach((item, i) => {
+            if (i === index) item.classList.add('active');
+            else item.classList.remove('active');
+        });
+    }
+
+    function playTrack() {
+        audio.play().catch(e => console.error('Play error:', e));
+        if (lyricsVideo && tracks[currentIndex].video) {
+            lyricsVideo.currentTime = audio.currentTime;
+            lyricsVideo.play().catch(e => console.log('Video play:', e));
+        }
+    }
+
+    function resizeCanvas() {
+        if (visualizerCanvas) {
+            const container = visualizerCanvas.parentElement;
+            if (container) {
+                visualizerCanvas.width = container.offsetWidth;
+                visualizerCanvas.height = 40;
+            }
+        }
+    }
+
+    function openGWOR() {
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (!audio.src) {
+            loadTrack(0);
+        }
+        setTimeout(resizeCanvas, 50);
+        if (window.location.hash !== '#gwor') {
+            history.pushState(null, '', '#gwor');
+        }
+    }
+
+    function closeGWOR() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        audio.pause();
+        if (lyricsVideo) lyricsVideo.pause();
+        if (window.location.hash === '#gwor') {
+            history.pushState(null, '', window.location.pathname);
+        }
+    }
+
+    populatePlaylist();
+
+    tile.addEventListener('click', (e) => {
+        e.preventDefault();
+        openGWOR();
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeGWOR);
+    }
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeGWOR();
+        }
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            let newIndex = currentIndex - 1;
+            if (newIndex < 0) newIndex = tracks.length - 1;
+            loadTrack(newIndex);
+            playTrack();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            let newIndex = (currentIndex + 1) % tracks.length;
+            loadTrack(newIndex);
+            playTrack();
+        });
+    }
+
+    audio.addEventListener('timeupdate', function() {
+        if (progressBar && audio.duration) {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+        }
+        if (timeDisplay) {
+            timeDisplay.textContent = formatTime(audio.currentTime);
+        }
+
+        if (lyricsVideo && tracks[currentIndex].video && !audio.paused) {
+            const drift = Math.abs(audio.currentTime - lyricsVideo.currentTime);
+            if (drift > 0.3) {
+                lyricsVideo.currentTime = audio.currentTime;
+            }
+        }
+    });
+
+    audio.addEventListener('play', function() {
+        if (playPauseIcon) {
+            playPauseIcon.textContent = PAUSE_ICON;
+        }
+        startVisualizer();
+        if (lyricsVideo && tracks[currentIndex].video) {
+            lyricsVideo.currentTime = audio.currentTime;
+            lyricsVideo.play().catch(e => {});
+        }
+    });
+
+    audio.addEventListener('pause', function() {
+        if (playPauseIcon) {
+            playPauseIcon.textContent = PLAY_ICON;
+        }
+        stopVisualizer();
+        if (lyricsVideo) {
+            lyricsVideo.pause();
+        }
+    });
+
+    audio.addEventListener('seeked', () => {
+        if (lyricsVideo && tracks[currentIndex].video) {
+            lyricsVideo.currentTime = audio.currentTime;
+        }
+    });
+
+    audio.addEventListener('ended', () => {
+        if (currentIndex < tracks.length - 1) {
+            loadTrack(currentIndex + 1);
+            playTrack();
+        }
+    });
+
+    if (playPauseBtn) {
+        playPauseBtn.addEventListener('click', function() {
+            document.querySelectorAll('audio.custom-audio').forEach(function(otherAudio) {
+                if (otherAudio !== audio) {
+                    otherAudio.pause();
+                }
+            });
+
+            if (audio.paused) {
+                audio.play().catch(e => console.error('Play error:', e));
+            } else {
+                audio.pause();
+            }
+        });
+    }
+
+    if (progressContainer) {
+        progressContainer.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const clickPercent = Math.max(0, Math.min(1, clickX / width));
+            const newTime = clickPercent * audio.duration;
+
+            if (!isNaN(newTime) && audio.duration && newTime >= 0) {
+                const wasPlaying = !audio.paused;
+                if (!audio.paused) audio.pause();
+
+                setTimeout(() => {
+                    audio.currentTime = newTime;
+                    if (wasPlaying) {
+                        setTimeout(() => {
+                            audio.play().catch(e => console.error('Failed to resume playback:', e));
+                        }, 50);
+                    }
+                }, 10);
+            }
+        });
+
+        progressContainer.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+
+            const wasPlaying = !audio.paused;
+            let isDragging = true;
+            if (!audio.paused) audio.pause();
+
+            const scrub = function(ev) {
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = ev.clientX - rect.left;
+                const width = rect.width;
+                const clickPercent = Math.max(0, Math.min(1, clickX / width));
+                const newTime = clickPercent * audio.duration;
+                if (!isNaN(newTime) && audio.duration && newTime >= 0) {
+                    audio.currentTime = newTime;
+                }
+            };
+
+            scrub(e);
+
+            const handleMouseMove = function(ev) {
+                if (isDragging) {
+                    scrub(ev);
+                }
+            };
+
+            const handleMouseUp = function() {
+                isDragging = false;
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+                if (wasPlaying) {
+                    setTimeout(() => {
+                        audio.play().catch(err => console.error('Failed to resume playback after drag:', err));
+                    }, 50);
+                }
+            };
+
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        });
+    }
+
+    if (window.location.hash === '#gwor') {
+        setTimeout(() => openGWOR(), 100);
+    }
+
+    window.addEventListener('popstate', () => {
+        if (window.location.hash === '#gwor') {
+            openGWOR();
+        } else if (lightbox.classList.contains('active')) {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            audio.pause();
+            if (lyricsVideo) lyricsVideo.pause();
+        }
+    });
+}
+
 onReady(() => {
     initRSSFallbackFetch();
     initTimeDial();
@@ -2074,5 +2518,6 @@ onReady(() => {
     initCustomAudioPlayers();
     initPetLightboxLinks();
     initMixtapeLightbox();
+    initGWORLightbox();
 });
 

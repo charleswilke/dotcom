@@ -2070,10 +2070,8 @@ function initGWORLightbox() {
         { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov' },
         { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', video: 'audio/grief-without-ritual/respect-the-exhale.mp4' },
         { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4' },
-        { title: "Theater's Last Stand", file: 'audio/grief-without-ritual/theaters-last-stand.mp3', video: 'audio/grief-without-ritual/theaters-last-stand.mp4' },
         { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4' },
-        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4' },
-        { title: 'Future in Our Eyes', file: 'audio/grief-without-ritual/future-in-our-eyes.mp3', video: 'audio/grief-without-ritual/future-in-our-eyes.mp4' }
+        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');

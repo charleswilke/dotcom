@@ -2064,14 +2064,16 @@ function initMixtapeLightbox() {
 }
 
 function initGWORLightbox() {
+    const gworTempArticleLink = 'https://charleswilke.substack.com/p/waiting-for-something';
     const tracks = [
-        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', video: 'audio/grief-without-ritual/waiting-for-something.mov' },
-        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', video: 'audio/grief-without-ritual/underlined-once.mp4' },
-        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov' },
-        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', video: 'audio/grief-without-ritual/respect-the-exhale.mp4' },
-        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4' },
-        { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4' },
-        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4' }
+        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', video: 'audio/grief-without-ritual/waiting-for-something.mov', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
+        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', video: 'audio/grief-without-ritual/underlined-once.mp4', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
+        { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', video: 'audio/grief-without-ritual/letter-to-the-editor.mp4', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
+        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', video: 'audio/grief-without-ritual/respect-the-exhale.mp4', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-gods-of-quiet-work' },
+        { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4', article: 'https://charleswilke.substack.com/p/agency-wo-agenda' },
+        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');
@@ -2233,7 +2235,18 @@ function initGWORLightbox() {
         tracks.forEach((track, index) => {
             const li = document.createElement('li');
             li.className = 'mixtape-track-item';
-            li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>`;
+
+            const articleBtn = track.article ?
+                `<a href="${track.article}" target="_blank" rel="noopener noreferrer" class="track-article-link" title="Read the article that inspired this song" onclick="event.stopPropagation();">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    <span class="track-article-label">spark</span>
+                </a>` : '';
+
+            li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
             trackNumber++;
 
             li.addEventListener('click', () => {

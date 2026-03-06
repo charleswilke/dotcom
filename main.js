@@ -2072,9 +2072,10 @@ function initGWORLightbox() {
         { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
         { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', video: 'audio/grief-without-ritual/respect-the-exhale.mp4', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', video: 'audio/grief-without-ritual/dearly-beloved.mp4', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-gods-of-quiet-work' },
+        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4', article: 'https://charleswilke.substack.com/p/agency-wo-agenda' },
-        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' }
+        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
+        { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', video: 'audio/grief-without-ritual/cherish-your-confident-ire.mp4', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');

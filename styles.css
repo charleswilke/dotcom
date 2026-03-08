@@ -6141,7 +6141,7 @@ section.production-header.alice p {
     .mixtape-lightbox .mixtape-content {
         flex-direction: row;
         align-items: flex-start;
-        max-width: 900px;
+        max-width: 980px;
         gap: 2rem;
     }
 
@@ -6162,7 +6162,7 @@ section.production-header.alice p {
     }
 
     .mixtape-right-section {
-        flex: 1;
+        flex: 1.12;
         display: flex;
         flex-direction: column;
         min-width: 0;
@@ -6622,7 +6622,8 @@ section.production-header.alice p {
     color: #c54a4a;
 }
 
-#gworLightbox .track-article-link {
+#gworLightbox .track-article-link,
+#gworLightbox .track-share-button {
     background: linear-gradient(180deg,
         rgba(77, 104, 101, 0.22) 0%,
         rgba(49, 68, 66, 0.18) 100%);
@@ -6631,12 +6632,16 @@ section.production-header.alice p {
     box-shadow: inset 0 0 10px rgba(18, 26, 25, 0.42);
 }
 
-#gworLightbox .track-article-label {
+#gworLightbox .track-article-label,
+#gworLightbox .track-share-label {
     letter-spacing: 0.1em;
     opacity: 0.92;
 }
 
-#gworLightbox .track-article-link:hover {
+#gworLightbox .track-article-link:hover,
+#gworLightbox .track-share-button:hover,
+#gworLightbox .track-article-link:focus-visible,
+#gworLightbox .track-share-button:focus-visible {
     background: linear-gradient(180deg,
         rgba(113, 153, 145, 0.28) 0%,
         rgba(68, 94, 90, 0.24) 100%);
@@ -6648,12 +6653,16 @@ section.production-header.alice p {
         inset 0 0 8px rgba(172, 225, 214, 0.16);
 }
 
-#gworLightbox .mixtape-track-item.active .track-article-link {
+#gworLightbox .mixtape-track-item.active .track-article-link,
+#gworLightbox .mixtape-track-item.active .track-share-button {
     border-color: rgba(165, 212, 201, 0.6);
     color: rgba(231, 247, 243, 0.92);
 }
 
-#gworLightbox .mixtape-track-item.active .track-article-link:hover {
+#gworLightbox .mixtape-track-item.active .track-article-link:hover,
+#gworLightbox .mixtape-track-item.active .track-share-button:hover,
+#gworLightbox .mixtape-track-item.active .track-article-link:focus-visible,
+#gworLightbox .mixtape-track-item.active .track-share-button:focus-visible {
     color: #f3fffc;
     box-shadow:
         0 0 12px rgba(165, 212, 201, 0.35),
@@ -7135,7 +7144,7 @@ section.production-header.alice p {
     background: rgba(0, 247, 194, 0.05);
     color: var(--neon);
     border-color: rgba(0, 247, 194, 0.1);
-    padding-left: 1.5rem;
+    transform: translateX(0.18rem);
 }
 
 .mixtape-track-item.active {
@@ -7163,17 +7172,28 @@ section.production-header.alice p {
 /* Track title text wrapper */
 .track-title-text {
     flex: 1;
+    min-width: 0;
 }
 
-/* Article Link Button */
-.track-article-link {
+.track-action-group {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-left: auto;
+    padding-left: 0.75rem;
+    flex-shrink: 0;
+}
+
+/* Track Utility Buttons */
+.track-article-link,
+.track-share-button {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 2px;
-    margin-left: auto;
     padding: 4px 8px;
+    min-width: 3.8rem;
     border-radius: 4px;
     background: rgba(255, 107, 53, 0.1);
     border: 1px solid rgba(255, 107, 53, 0.25);
@@ -7181,9 +7201,18 @@ section.production-header.alice p {
     text-decoration: none;
     transition: all 0.3s ease;
     flex-shrink: 0;
+    font-family: inherit;
+    line-height: 1;
+    cursor: pointer;
 }
 
-.track-article-label {
+.track-share-button {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.track-article-label,
+.track-share-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.60rem;
     font-variant: petite-caps;
@@ -7192,13 +7221,17 @@ section.production-header.alice p {
     line-height: 1;
 }
 
-.track-article-link svg {
+.track-article-link svg,
+.track-share-button svg {
     width: 14px;
     height: 14px;
     flex-shrink: 0;
 }
 
-.track-article-link:hover {
+.track-article-link:hover,
+.track-share-button:hover,
+.track-article-link:focus-visible,
+.track-share-button:focus-visible {
     background: rgba(255, 107, 53, 0.2);
     border-color: #ff6b35;
     color: #ff6b35;
@@ -7207,18 +7240,24 @@ section.production-header.alice p {
         0 0 24px rgba(255, 107, 53, 0.3),
         inset 0 0 8px rgba(255, 107, 53, 0.15);
     transform: scale(1.05);
+    outline: none;
 }
 
-.track-article-link:active {
+.track-article-link:active,
+.track-share-button:active {
     transform: scale(0.95);
 }
 
-.mixtape-track-item.active .track-article-link {
+.mixtape-track-item.active .track-article-link,
+.mixtape-track-item.active .track-share-button {
     color: rgba(255, 107, 53, 0.8);
     border-color: rgba(255, 107, 53, 0.4);
 }
 
-.mixtape-track-item.active .track-article-link:hover {
+.mixtape-track-item.active .track-article-link:hover,
+.mixtape-track-item.active .track-share-button:hover,
+.mixtape-track-item.active .track-article-link:focus-visible,
+.mixtape-track-item.active .track-share-button:focus-visible {
     color: #ff6b35;
     box-shadow: 
         0 0 15px rgba(255, 107, 53, 0.6),
@@ -7260,13 +7299,17 @@ section.production-header.alice p {
     color: rgba(247, 168, 0, 0.6);
 }
 
-.mixtape-lightbox.b-side-active .track-article-link {
+.mixtape-lightbox.b-side-active .track-article-link,
+.mixtape-lightbox.b-side-active .track-share-button {
     background: rgba(155, 89, 182, 0.15);
     border-color: rgba(155, 89, 182, 0.3);
     color: rgba(155, 89, 182, 0.7);
 }
 
-.mixtape-lightbox.b-side-active .track-article-link:hover {
+.mixtape-lightbox.b-side-active .track-article-link:hover,
+.mixtape-lightbox.b-side-active .track-share-button:hover,
+.mixtape-lightbox.b-side-active .track-article-link:focus-visible,
+.mixtape-lightbox.b-side-active .track-share-button:focus-visible {
     background: rgba(155, 89, 182, 0.25);
     border-color: #9b59b6;
     color: #9b59b6;
@@ -7506,16 +7549,24 @@ section.production-header.alice p {
         font-size: 0.85rem;
     }
     
-    .track-article-link {
+    .track-action-group {
+        gap: 0.3rem;
+        padding-left: 0.5rem;
+    }
+    
+    .track-article-link,
+    .track-share-button {
         padding: 3px 6px;
         gap: 1px;
     }
     
-    .track-article-label {
+    .track-article-label,
+    .track-share-label {
         font-size: 0.6rem;
     }
     
-    .track-article-link svg {
+    .track-article-link svg,
+    .track-share-button svg {
         width: 12px;
         height: 12px;
     }

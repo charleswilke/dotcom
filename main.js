@@ -209,7 +209,7 @@ let allItems = [];
 let isLoading = false;
 const ITEMS_PER_PAGE = 12;
 let isArchiveMode = false;
-const RSS_CACHE_KEY = 'charleswilke:rss-feed:v1';
+const RSS_CACHE_KEY = 'charleswilke:rss-feed:v2';
 const RSS_CACHE_TTL_MS = 30 * 60 * 1000;
 let rssIntersectionObserver = null;
 
@@ -228,7 +228,12 @@ function readCachedFeedItems() {
         if (!cached) return null;
 
         const parsed = JSON.parse(cached);
-        if (!parsed || !Array.isArray(parsed.items) || !parsed.timestamp) {
+        if (!parsed || !Array.isArray(parsed.items) || !parsed.timestamp || !parsed.version) {
+            return null;
+        }
+
+        if (parsed.version !== 2) {
+            sessionStorage.removeItem(RSS_CACHE_KEY);
             return null;
         }
 
@@ -237,16 +242,24 @@ function readCachedFeedItems() {
             return null;
         }
 
-        return parsed.items;
+        if (parsed.limit !== TOTAL_RSS_ITEMS) {
+            sessionStorage.removeItem(RSS_CACHE_KEY);
+            return null;
+        }
+
+        return parsed;
     } catch (error) {
         return null;
     }
 }
 
-function writeCachedFeedItems(items) {
+function writeCachedFeedItems(items, source = 'unknown') {
     try {
         sessionStorage.setItem(RSS_CACHE_KEY, JSON.stringify({
+            version: 2,
             timestamp: Date.now(),
+            limit: TOTAL_RSS_ITEMS,
+            source,
             items
         }));
     } catch (error) {
@@ -283,10 +296,13 @@ async function fetchRSSFeed() {
     
     let success = false;
 
-    const cachedItems = readCachedFeedItems();
-    if (cachedItems && cachedItems.length > 0) {
-        logFeedAttempt('session-cache-hit', { itemCount: cachedItems.length });
-        renderFeedItems(cachedItems, feedContent);
+    const cachedFeed = readCachedFeedItems();
+    if (cachedFeed && cachedFeed.items.length > 0) {
+        logFeedAttempt('session-cache-hit', {
+            itemCount: cachedFeed.items.length,
+            source: cachedFeed.source
+        });
+        renderFeedItems(cachedFeed.items, feedContent);
         isLoading = false;
         return;
     }
@@ -312,7 +328,7 @@ async function fetchRSSFeed() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        writeCachedFeedItems(data.items);
+                        writeCachedFeedItems(data.items, 'primary');
                         renderFeedItems(data.items, feedContent);
                         logFeedAttempt('primary-fetch-success', { itemCount: allItems.length });
                         success = true;
@@ -353,7 +369,7 @@ async function fetchRSSFeed() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        writeCachedFeedItems(data.items);
+                        writeCachedFeedItems(data.items, 'rss2json');
                         renderFeedItems(data.items, feedContent);
                         logFeedAttempt('rss2json-fallback-success', { itemCount: allItems.length });
                         success = true;
@@ -369,7 +385,7 @@ async function fetchRSSFeed() {
             logFeedAttempt('xml-fallback-start');
             const xmlItems = await fetchRssXmlFallback();
             if (xmlItems && xmlItems.length > 0) {
-                writeCachedFeedItems(xmlItems);
+                writeCachedFeedItems(xmlItems, 'xml');
                 renderFeedItems(xmlItems, feedContent);
                 logFeedAttempt('xml-fallback-success', { itemCount: allItems.length });
                 success = true;

@@ -1609,6 +1609,158 @@ function formatAudioTime(sec) {
     return m + ':' + (s < 10 ? '0' : '') + s;
 }
 
+function slugifyTrackSegment(value) {
+    return String(value || '')
+        .toLowerCase()
+        .replace(/['’]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function getTrackSlug(track) {
+    if (!track) return '';
+    const filePath = typeof track.file === 'string' ? track.file : '';
+    const fileName = filePath.split('/').pop() || '';
+    const basename = fileName.replace(/\.[^.]+$/, '');
+    return slugifyTrackSegment(basename || track.title);
+}
+
+function buildMusicHash(routeKey, trackOrSlug = '') {
+    const rawSlug = typeof trackOrSlug === 'string' ? trackOrSlug : getTrackSlug(trackOrSlug);
+    const trackSlug = slugifyTrackSegment(rawSlug);
+    return `#${routeKey}${trackSlug ? `/${encodeURIComponent(trackSlug)}` : ''}`;
+}
+
+function parseMusicHash(hash = window.location.hash) {
+    const normalizedHash = String(hash || '').replace(/^#/, '');
+    if (!normalizedHash) return null;
+
+    const [routeSegment, rawTrackSlug = ''] = normalizedHash.split('/');
+    const routes = {
+        'mixtape': {
+            player: 'mixtape',
+            canonicalRoute: 'mixtape',
+            isBSide: false
+        },
+        'mixtape-side-two': {
+            player: 'mixtape',
+            canonicalRoute: 'mixtape-side-two',
+            isBSide: true
+        },
+        'bsides': {
+            player: 'mixtape',
+            canonicalRoute: 'mixtape-side-two',
+            isBSide: true
+        },
+        'gwor': {
+            player: 'gwor',
+            canonicalRoute: 'gwor',
+            isBSide: false
+        }
+    };
+
+    const route = routes[routeSegment];
+    if (!route) return null;
+
+    const trackSlug = slugifyTrackSegment(decodeURIComponent(rawTrackSlug));
+    return {
+        ...route,
+        trackSlug,
+        canonicalHash: buildMusicHash(route.canonicalRoute, trackSlug)
+    };
+}
+
+function findTrackIndexBySlug(tracks, trackSlug) {
+    const normalizedSlug = slugifyTrackSegment(trackSlug);
+    if (!normalizedSlug) return -1;
+    return tracks.findIndex(track => getTrackSlug(track) === normalizedSlug);
+}
+
+function updateHistoryHash(nextHash, method = 'replaceState') {
+    if (!nextHash || window.location.hash === nextHash) return;
+    if (history && typeof history[method] === 'function') {
+        history[method](null, '', nextHash);
+    }
+}
+
+function buildTrackShareUrl(routeKey, track) {
+    const trackSlug = getTrackSlug(track);
+    const sharePath = `songs/${routeKey}/${trackSlug}/`;
+
+    if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+        return new URL(`/${sharePath}`, window.location.origin).href;
+    }
+
+    return new URL(sharePath, window.location.href).href;
+}
+
+async function copyTextToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    const didCopy = document.execCommand('copy');
+    document.body.removeChild(textarea);
+
+    if (!didCopy) {
+        throw new Error('Clipboard copy failed.');
+    }
+}
+
+function flashShareButtonLabel(button, label, duration = 1800) {
+    if (!button) return;
+    const labelEl = button.querySelector('.track-share-label');
+    if (!labelEl) return;
+
+    const defaultLabel = button.dataset.defaultLabel || labelEl.textContent || 'share';
+    button.dataset.defaultLabel = defaultLabel;
+    labelEl.textContent = label;
+
+    window.clearTimeout(button._shareResetTimer);
+    button._shareResetTimer = window.setTimeout(() => {
+        labelEl.textContent = defaultLabel;
+    }, duration);
+}
+
+async function shareTrackLink(button, { routeKey, track, collectionTitle }) {
+    if (!button || !track || !routeKey) return;
+
+    const url = buildTrackShareUrl(routeKey, track);
+    const title = `${track.title} | ${collectionTitle}`;
+    const text = `Listen to "${track.title}" from ${collectionTitle}.`;
+
+    if (navigator.share) {
+        try {
+            await navigator.share({ title, text, url });
+            flashShareButtonLabel(button, 'shared', 1400);
+            return;
+        } catch (error) {
+            if (error && error.name === 'AbortError') {
+                return;
+            }
+        }
+    }
+
+    try {
+        await copyTextToClipboard(url);
+        flashShareButtonLabel(button, 'copied');
+    } catch (error) {
+        console.error('Share failed:', error);
+        flashShareButtonLabel(button, 'error', 1400);
+    }
+}
+
 function syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, track) {
     if (!lyricsVideo || !lyricsVideoContainer) return;
 
@@ -1656,24 +1808,78 @@ function bindLyricsVideoSync(audio, lyricsVideo, getCurrentTrack) {
     });
 }
 
-function renderTrackList(trackList, tracks, onSelect) {
+function renderTrackList(trackList, tracks, onSelect, getShareData) {
     if (!trackList) return [];
 
     trackList.innerHTML = '';
     return tracks.map((track, index) => {
         const li = document.createElement('li');
         li.className = 'mixtape-track-item';
-        const articleBtn = track.article ?
-            `<a href="${track.article}" target="_blank" rel="noopener noreferrer" class="track-article-link" title="Read the article that inspired this song" onclick="event.stopPropagation();">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        const trackNumber = document.createElement('span');
+        trackNumber.className = 'track-number';
+        trackNumber.textContent = index + 1;
+
+        const titleText = document.createElement('span');
+        titleText.className = 'track-title-text';
+        titleText.textContent = track.title;
+
+        const actionGroup = document.createElement('div');
+        actionGroup.className = 'track-action-group';
+
+        if (track.article) {
+            const articleLink = document.createElement('a');
+            articleLink.href = track.article;
+            articleLink.target = '_blank';
+            articleLink.rel = 'noopener noreferrer';
+            articleLink.className = 'track-article-link';
+            articleLink.title = 'Read the article that inspired this song';
+            articleLink.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                     <polyline points="15 3 21 3 21 9"></polyline>
                     <line x1="10" y1="14" x2="21" y2="3"></line>
                 </svg>
                 <span class="track-article-label">spark</span>
-            </a>` : '';
+            `;
+            articleLink.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+            actionGroup.appendChild(articleLink);
+        }
 
-        li.innerHTML = `<span class="track-number">${index + 1}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
+        const shareButton = document.createElement('button');
+        shareButton.type = 'button';
+        shareButton.className = 'track-share-button';
+        shareButton.title = `Share link to ${track.title}`;
+        shareButton.setAttribute('aria-label', `Share link to ${track.title}`);
+        shareButton.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.6" y1="10.7" x2="15.4" y2="6.3"></line>
+                <line x1="8.6" y1="13.3" x2="15.4" y2="17.7"></line>
+            </svg>
+            <span class="track-share-label">share</span>
+        `;
+        shareButton.addEventListener('click', async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const shareData = typeof getShareData === 'function' ? getShareData(track, index) : null;
+            if (!shareData || !shareData.routeKey) return;
+
+            await shareTrackLink(shareButton, {
+                routeKey: shareData.routeKey,
+                track,
+                collectionTitle: shareData.collectionTitle || document.title
+            });
+        });
+        actionGroup.appendChild(shareButton);
+
+        li.appendChild(trackNumber);
+        li.appendChild(titleText);
+        li.appendChild(actionGroup);
         li.addEventListener('click', () => onSelect(index));
         trackList.appendChild(li);
         return li;
@@ -1747,6 +1953,25 @@ function initMixtapeLightbox() {
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
     let trackItems = [];
+    
+    function getCurrentRouteKey() {
+        return isBSide ? 'mixtape-side-two' : 'mixtape';
+    }
+
+    function getMixtapeCollectionTitle() {
+        return isBSide ? 'Exploring L.ai.bor Side Two' : 'Exploring L.ai.bor Mixtape';
+    }
+
+    function resolveTrackIndex(trackSlug) {
+        const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
+        return matchedIndex === -1 ? 0 : matchedIndex;
+    }
+
+    function syncMixtapeHash(method = 'replaceState') {
+        if (!lightbox || !lightbox.classList.contains('active') || !tracks[currentIndex]) return;
+        updateHistoryHash(buildMusicHash(getCurrentRouteKey(), tracks[currentIndex]), method);
+    }
+
     const visualizer = createVisualizerController({
         audio: audioEl,
         visualizerCanvas,
@@ -1767,7 +1992,10 @@ function initMixtapeLightbox() {
         trackItems = renderTrackList(trackList, tracks, (index) => {
             loadTrack(index);
             playTrack();
-        });
+        }, () => ({
+            routeKey: getCurrentRouteKey(),
+            collectionTitle: getMixtapeCollectionTitle()
+        }));
     }
     
     // Toggle sound effect
@@ -1775,12 +2003,23 @@ function initMixtapeLightbox() {
     toggleSound.volume = 0.5;
     
     // Toggle between A-side and B-side
-    function toggleSide() {
-        isBSide = !isBSide;
-        
-        // Play toggle sound
-        toggleSound.currentTime = 0;
-        toggleSound.play().catch(e => console.log("Toggle sound:", e));
+    function toggleSide(options = {}) {
+        const {
+            nextIsBSide = !isBSide,
+            requestedTrackSlug = '',
+            suppressHashUpdate = false
+        } = options;
+        const previousIsBSide = isBSide;
+        const didChangeSide = nextIsBSide !== previousIsBSide;
+
+        if (!didChangeSide && !requestedTrackSlug) return;
+
+        isBSide = nextIsBSide;
+
+        if (didChangeSide) {
+            toggleSound.currentTime = 0;
+            toggleSound.play().catch(e => console.log("Toggle sound:", e));
+        }
         
         // Stop current playback
         if (audio) {
@@ -1820,14 +2059,11 @@ function initMixtapeLightbox() {
         currentIndex = 0;
         populatePlaylist();
         
-        // Load first track (without playing) to maintain layout
-        loadTrack(0);
-        
-        // Update URL hash to match current side
-        // Use #mixtape-side-two for Side Two (canonical), but also accept #bsides for backward compatibility
-        const targetHash = isBSide ? '#mixtape-side-two' : '#mixtape';
-        if (window.location.hash !== targetHash) {
-            history.replaceState(null, '', targetHash);
+        // Load requested track if present, otherwise default to the first track
+        loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: !suppressHashUpdate });
+
+        if (!suppressHashUpdate) {
+            syncMixtapeHash('replaceState');
         }
     }
     
@@ -1839,7 +2075,8 @@ function initMixtapeLightbox() {
     // Initial playlist population
     populatePlaylist();
 
-    function loadTrack(index) {
+    function loadTrack(index, options = {}) {
+        const { syncHash = true } = options;
         currentIndex = index;
         if (audio) {
             audio.src = tracks[index].file;
@@ -1859,6 +2096,10 @@ function initMixtapeLightbox() {
 
         syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
         setActiveTrackListItem(trackItems, index);
+
+        if (syncHash) {
+            syncMixtapeHash('replaceState');
+        }
     }
 
     function playTrack() {
@@ -1888,31 +2129,36 @@ function initMixtapeLightbox() {
     }
     
     // Open/Close Mixtape functions (also handles URL hash)
-    function openMixtape(openBSide = false) {
+    function openMixtape(openBSide = false, requestedTrackSlug = '', historyMethod = 'pushState') {
         if (lightbox) {
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
             
             // Switch to B-side if requested and not already there
             if (openBSide && !isBSide) {
-                toggleSide();
+                toggleSide({
+                    nextIsBSide: true,
+                    requestedTrackSlug,
+                    suppressHashUpdate: true
+                });
             } else if (!openBSide && isBSide) {
                 // Switch back to A-side if opening A-side
-                toggleSide();
+                toggleSide({
+                    nextIsBSide: false,
+                    requestedTrackSlug,
+                    suppressHashUpdate: true
+                });
+            } else if (requestedTrackSlug) {
+                loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
             }
             
             // Load first track if empty
             if (audio && !audio.src) {
-                loadTrack(0);
+                loadTrack(0, { syncHash: false });
             }
             // Size the visualizer canvas
             setTimeout(resizeCanvas, 50);
-            // Update URL hash (without triggering scroll)
-            // Use #mixtape-side-two for Side Two (canonical), but also accept #bsides for backward compatibility
-            const targetHash = isBSide ? '#mixtape-side-two' : '#mixtape';
-            if (window.location.hash !== targetHash) {
-                history.pushState(null, '', targetHash);
-            }
+            syncMixtapeHash(historyMethod);
         }
     }
     
@@ -1922,8 +2168,8 @@ function initMixtapeLightbox() {
             document.body.style.overflow = 'auto';
             if (audio) audio.pause();
             if (lyricsVideo) lyricsVideo.pause();
-            // Remove hash from URL
-            if (window.location.hash === '#mixtape' || window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
+            const currentRoute = parseMusicHash();
+            if (currentRoute && currentRoute.player === 'mixtape') {
                 history.pushState(null, '', window.location.pathname);
             }
         }
@@ -1994,21 +2240,20 @@ function initMixtapeLightbox() {
         });
     }
     
-    // Handle direct link to #mixtape, #bsides, or #mixtape-side-two
-    if (window.location.hash === '#mixtape') {
-        // Small delay to ensure DOM is ready
-        setTimeout(() => openMixtape(false), 100);
-    } else if (window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
-        // Small delay to ensure DOM is ready, open Side Two
-        setTimeout(() => openMixtape(true), 100);
+    const initialMixtapeRoute = parseMusicHash();
+    if (initialMixtapeRoute && initialMixtapeRoute.player === 'mixtape') {
+        setTimeout(() => openMixtape(
+            initialMixtapeRoute.isBSide,
+            initialMixtapeRoute.trackSlug,
+            'replaceState'
+        ), 100);
     }
     
     // Handle browser back/forward buttons
     window.addEventListener('popstate', () => {
-        if (window.location.hash === '#mixtape') {
-            openMixtape(false);
-        } else if (window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
-            openMixtape(true);
+        const route = parseMusicHash();
+        if (route && route.player === 'mixtape') {
+            openMixtape(route.isBSide, route.trackSlug, 'replaceState');
         } else {
             if (lightbox && lightbox.classList.contains('active')) {
                 lightbox.classList.remove('active');
@@ -2108,7 +2353,7 @@ function initGWORLightbox() {
         { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4', article: 'https://charleswilke.substack.com/p/agency-wo-agenda' },
         { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
-        { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', video: 'audio/grief-without-ritual/cherish-your-confident-ire.mp4', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
+        { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', video: 'audio/grief-without-ritual/cherish-your-confident-ire.mov', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');
@@ -2139,6 +2384,17 @@ function initGWORLightbox() {
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
     let trackItems = [];
+    
+    function resolveTrackIndex(trackSlug) {
+        const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
+        return matchedIndex === -1 ? 0 : matchedIndex;
+    }
+
+    function syncGWORHash(method = 'replaceState') {
+        if (!lightbox || !lightbox.classList.contains('active') || !tracks[currentIndex]) return;
+        updateHistoryHash(buildMusicHash('gwor', tracks[currentIndex]), method);
+    }
+
     const visualizer = createVisualizerController({
         audio: audioEl,
         visualizerCanvas,
@@ -2159,10 +2415,14 @@ function initGWORLightbox() {
         trackItems = renderTrackList(trackList, tracks, (index) => {
             loadTrack(index);
             playTrack();
-        });
+        }, () => ({
+            routeKey: 'gwor',
+            collectionTitle: 'Grief without Ritual'
+        }));
     }
 
-    function loadTrack(index) {
+    function loadTrack(index, options = {}) {
+        const { syncHash = true } = options;
         currentIndex = index;
         audio.src = tracks[index].file;
         audio.load();
@@ -2179,6 +2439,10 @@ function initGWORLightbox() {
 
         syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
         setActiveTrackListItem(trackItems, index);
+
+        if (syncHash) {
+            syncGWORHash('replaceState');
+        }
     }
 
     function playTrack() {
@@ -2194,16 +2458,16 @@ function initGWORLightbox() {
         visualizer.resize();
     }
 
-    function openGWOR() {
+    function openGWOR(requestedTrackSlug = '', historyMethod = 'pushState') {
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
-        if (!audio.src) {
-            loadTrack(0);
+        if (requestedTrackSlug) {
+            loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
+        } else if (!audio.src) {
+            loadTrack(0, { syncHash: false });
         }
         setTimeout(resizeCanvas, 50);
-        if (window.location.hash !== '#gwor') {
-            history.pushState(null, '', '#gwor');
-        }
+        syncGWORHash(historyMethod);
     }
 
     function closeGWOR() {
@@ -2211,7 +2475,8 @@ function initGWORLightbox() {
         document.body.style.overflow = 'auto';
         audio.pause();
         if (lyricsVideo) lyricsVideo.pause();
-        if (window.location.hash === '#gwor') {
+        const currentRoute = parseMusicHash();
+        if (currentRoute && currentRoute.player === 'gwor') {
             history.pushState(null, '', window.location.pathname);
         }
     }
@@ -2299,13 +2564,15 @@ function initGWORLightbox() {
 
     setupProgressScrubbing(progressContainer, audio);
 
-    if (window.location.hash === '#gwor') {
-        setTimeout(() => openGWOR(), 100);
+    const initialGWORRoute = parseMusicHash();
+    if (initialGWORRoute && initialGWORRoute.player === 'gwor') {
+        setTimeout(() => openGWOR(initialGWORRoute.trackSlug, 'replaceState'), 100);
     }
 
     window.addEventListener('popstate', () => {
-        if (window.location.hash === '#gwor') {
-            openGWOR();
+        const route = parseMusicHash();
+        if (route && route.player === 'gwor') {
+            openGWOR(route.trackSlug, 'replaceState');
         } else if (lightbox.classList.contains('active')) {
             lightbox.classList.remove('active');
             document.body.style.overflow = 'auto';
@@ -2343,6 +2610,7 @@ function initDeferredHomepageMedia() {
     const mixtapeTile = document.getElementById('mixtapeTile');
     const gworTile = document.getElementById('gworTile');
     const redButtonWrapper = document.getElementById('redButtonWrapper');
+    const initialRoute = parseMusicHash();
 
     bindLazyMediaTrigger(mixtapeTile, ensureMixtapeLightbox, (instance) => {
         instance.open(false);
@@ -2358,11 +2626,11 @@ function initDeferredHomepageMedia() {
         instance.open();
     });
 
-    if (window.location.hash === '#mixtape' || window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
+    if (initialRoute && initialRoute.player === 'mixtape') {
         ensureMixtapeLightbox();
     }
 
-    if (window.location.hash === '#gwor') {
+    if (initialRoute && initialRoute.player === 'gwor') {
         ensureGWORLightbox();
     }
 }

@@ -9,7 +9,7 @@ $feedUrl = 'https://charleswilke.substack.com/feed';
 $archiveApiBase = 'https://charleswilke.substack.com/api/v1/archive';
 $altFeedUrl = 'https://rss.app/feeds/v1.1/_UNUSED.xml'; // Alternative if main RSS is limited
 $limit = isset($_GET['limit']) ? max(1, min(200, intval($_GET['limit']))) : 100;
-$cacheFile = __DIR__ . '/cache_substack_feed.json';
+$cacheFile = __DIR__ . '/cache_substack_feed_' . $limit . '.json';
 $cacheTtl = 1800; // 30 minutes (optimized for freshness vs performance)
 $noCache = isset($_GET['nocache']);
 
@@ -208,6 +208,7 @@ try {
         return $bTime <=> $aTime;
     });
 
+    $items = array_slice($items, 0, $limit);
     $payload = json_encode(['status' => 'ok', 'items' => $items], JSON_UNESCAPED_SLASHES);
     
     // Cache the result

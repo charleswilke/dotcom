@@ -209,7 +209,7 @@ let allItems = [];
 let isLoading = false;
 const ITEMS_PER_PAGE = 12;
 let isArchiveMode = false;
-const RSS_CACHE_KEY = 'charleswilke:rss-feed:v2';
+const RSS_CACHE_KEY = 'charleswilke:rss-feed:v3';
 const RSS_CACHE_TTL_MS = 30 * 60 * 1000;
 let rssIntersectionObserver = null;
 
@@ -232,7 +232,7 @@ function readCachedFeedItems() {
             return null;
         }
 
-        if (parsed.version !== 2) {
+        if (parsed.version !== 3) {
             sessionStorage.removeItem(RSS_CACHE_KEY);
             return null;
         }
@@ -247,6 +247,11 @@ function readCachedFeedItems() {
             return null;
         }
 
+        if (parsed.items.length > TOTAL_RSS_ITEMS) {
+            sessionStorage.removeItem(RSS_CACHE_KEY);
+            return null;
+        }
+
         return parsed;
     } catch (error) {
         return null;
@@ -256,7 +261,7 @@ function readCachedFeedItems() {
 function writeCachedFeedItems(items, source = 'unknown') {
     try {
         sessionStorage.setItem(RSS_CACHE_KEY, JSON.stringify({
-            version: 2,
+            version: 3,
             timestamp: Date.now(),
             limit: TOTAL_RSS_ITEMS,
             source,

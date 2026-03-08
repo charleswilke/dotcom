@@ -7211,6 +7211,46 @@ section.production-header.alice p {
     -webkit-appearance: none;
 }
 
+.track-action-group--paired {
+    gap: 0;
+    position: relative;
+}
+
+.track-action-group--paired .track-article-link,
+.track-action-group--paired .track-share-button {
+    position: relative;
+    border-radius: 0;
+}
+
+.track-action-group--paired .track-article-link {
+    padding-right: 1rem;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 0 100%);
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.track-action-group--paired .track-share-button {
+    margin-left: -0.56rem;
+    padding-left: 1rem;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 12px 100%);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.track-action-group--paired .track-share-button::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: 0.52rem;
+    width: 1px;
+    background: currentColor;
+    opacity: 0.26;
+    transform: skewX(21deg);
+    transform-origin: center;
+    pointer-events: none;
+}
+
 .track-article-label,
 .track-share-label {
     font-family: 'Space Mono', monospace;
@@ -7241,6 +7281,14 @@ section.production-header.alice p {
         inset 0 0 8px rgba(255, 107, 53, 0.15);
     transform: scale(1.05);
     outline: none;
+}
+
+.track-action-group--paired .track-article-link:hover,
+.track-action-group--paired .track-share-button:hover,
+.track-action-group--paired .track-article-link:focus-visible,
+.track-action-group--paired .track-share-button:focus-visible {
+    transform: translateY(-1px);
+    z-index: 1;
 }
 
 .track-article-link:active,
@@ -7553,11 +7601,28 @@ section.production-header.alice p {
         gap: 0.3rem;
         padding-left: 0.5rem;
     }
+
+    .track-action-group--paired {
+        gap: 0;
+    }
     
     .track-article-link,
     .track-share-button {
         padding: 3px 6px;
         gap: 1px;
+    }
+
+    .track-action-group--paired .track-article-link {
+        padding-right: 0.8rem;
+    }
+
+    .track-action-group--paired .track-share-button {
+        margin-left: -0.44rem;
+        padding-left: 0.8rem;
+    }
+
+    .track-action-group--paired .track-share-button::before {
+        left: 0.42rem;
     }
     
     .track-article-label,

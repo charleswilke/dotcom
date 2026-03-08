@@ -1827,6 +1827,7 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
         actionGroup.className = 'track-action-group';
 
         if (track.article) {
+            actionGroup.classList.add('track-action-group--paired');
             const articleLink = document.createElement('a');
             articleLink.href = track.article;
             articleLink.target = '_blank';

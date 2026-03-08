@@ -23,6 +23,165 @@ document.addEventListener('DOMContentLoaded', () => {
     readyCallbacks.forEach(callback => callback());
 });
 
+function scheduleIdleWork(callback, timeout = 2000) {
+    if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(callback, { timeout });
+        return;
+    }
+    window.setTimeout(callback, Math.min(timeout, 250));
+}
+
+function createLazyInitializer(initializer) {
+    let initialized = false;
+    let instance;
+    return function ensureInitialized() {
+        if (!initialized) {
+            initialized = true;
+            instance = initializer();
+        }
+        return instance;
+    };
+}
+
+const managedAudioPlayers = new Set();
+
+function registerManagedAudio(audio) {
+    if (audio) {
+        managedAudioPlayers.add(audio);
+    }
+    return audio;
+}
+
+function pauseManagedAudioExcept(currentAudio) {
+    managedAudioPlayers.forEach(audio => {
+        if (audio !== currentAudio) {
+            audio.pause();
+        }
+    });
+}
+
+function seekAudioToClientX(audio, rect, clientX) {
+    if (!audio || !rect || !rect.width || !audio.duration) return false;
+    const clickX = clientX - rect.left;
+    const clickPercent = Math.max(0, Math.min(1, clickX / rect.width));
+    const newTime = clickPercent * audio.duration;
+    if (isNaN(newTime) || newTime < 0) return false;
+    audio.currentTime = newTime;
+    return true;
+}
+
+function setupProgressScrubbing(progressContainer, audio) {
+    if (!progressContainer || !audio) return;
+
+    progressContainer.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const rect = progressContainer.getBoundingClientRect();
+        if (!audio.duration) return;
+
+        const wasPlaying = !audio.paused;
+        if (wasPlaying) {
+            audio.pause();
+        }
+
+        if (seekAudioToClientX(audio, rect, e.clientX) && wasPlaying) {
+            setTimeout(() => {
+                audio.play().catch(err => console.error('Failed to resume playback:', err));
+            }, 50);
+        }
+    });
+
+    progressContainer.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+
+        const rect = progressContainer.getBoundingClientRect();
+        const wasPlaying = !audio.paused;
+        let isDragging = true;
+
+        if (wasPlaying) {
+            audio.pause();
+        }
+
+        const scrub = function(event) {
+            if (audio.duration) {
+                seekAudioToClientX(audio, rect, event.clientX);
+            }
+        };
+
+        scrub(e);
+
+        const handleMouseMove = function(event) {
+            if (isDragging) {
+                scrub(event);
+            }
+        };
+
+        const handleMouseUp = function() {
+            isDragging = false;
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+
+            if (wasPlaying) {
+                setTimeout(() => {
+                    audio.play().catch(err => console.error('Failed to resume playback after drag:', err));
+                }, 50);
+            }
+        };
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    });
+}
+
+const effectTimerIds = new Set();
+
+function scheduleEffectTimeout(callback, delay) {
+    const timerId = window.setTimeout(() => {
+        effectTimerIds.delete(timerId);
+        if (document.hidden) {
+            scheduleEffectTimeout(callback, 1000);
+            return;
+        }
+        callback();
+    }, delay);
+
+    effectTimerIds.add(timerId);
+    return timerId;
+}
+
+function extractFeedImage(item) {
+    if (!item) return FALLBACK_SVG;
+    if (item.thumbnail) return item.thumbnail;
+
+    const markup = item.content || item.description || '';
+    const imgMatch = markup.match(/<img[^>]+src="([^">]+)"/i);
+    return imgMatch ? imgMatch[1] : FALLBACK_SVG;
+}
+
+function createFeedExcerpt(item) {
+    const description = decodeHtmlEntities(item && item.description ? item.description : '')
+        .replace(/<[^>]*>/g, '')
+        .trim();
+
+    return {
+        cleanDescription: description,
+        shortDescription: description.substring(0, 150) + (description.length > 150 ? '...' : '')
+    };
+}
+
+function normalizeFeedItems(items) {
+    return sortItemsByNewest(items).slice(0, TOTAL_RSS_ITEMS).map(item => {
+        const excerpt = createFeedExcerpt(item);
+        return {
+            ...item,
+            displayImage: extractFeedImage(item),
+            cleanDescription: excerpt.cleanDescription,
+            shortDescription: excerpt.shortDescription
+        };
+    });
+}
+
 // Add smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -50,6 +209,9 @@ let allItems = [];
 let isLoading = false;
 const ITEMS_PER_PAGE = 12;
 let isArchiveMode = false;
+const RSS_CACHE_KEY = 'charleswilke:rss-feed:v1';
+const RSS_CACHE_TTL_MS = 30 * 60 * 1000;
+let rssIntersectionObserver = null;
 
 function sortItemsByNewest(items) {
     if (!Array.isArray(items)) return [];
@@ -58,6 +220,51 @@ function sortItemsByNewest(items) {
         const bTime = b && b.pubDate ? Date.parse(b.pubDate) : 0;
         return (isNaN(bTime) ? 0 : bTime) - (isNaN(aTime) ? 0 : aTime);
     });
+}
+
+function readCachedFeedItems() {
+    try {
+        const cached = sessionStorage.getItem(RSS_CACHE_KEY);
+        if (!cached) return null;
+
+        const parsed = JSON.parse(cached);
+        if (!parsed || !Array.isArray(parsed.items) || !parsed.timestamp) {
+            return null;
+        }
+
+        if ((Date.now() - parsed.timestamp) > RSS_CACHE_TTL_MS) {
+            sessionStorage.removeItem(RSS_CACHE_KEY);
+            return null;
+        }
+
+        return parsed.items;
+    } catch (error) {
+        return null;
+    }
+}
+
+function writeCachedFeedItems(items) {
+    try {
+        sessionStorage.setItem(RSS_CACHE_KEY, JSON.stringify({
+            timestamp: Date.now(),
+            items
+        }));
+    } catch (error) {
+        // Ignore storage failures (private mode, quota, etc.)
+    }
+}
+
+function renderFeedItems(items, feedContent) {
+    allItems = normalizeFeedItems(items);
+    currentItems = 0;
+    isArchiveMode = false;
+
+    if (feedContent) {
+        feedContent.innerHTML = '';
+    }
+
+    populateLatestArticleSpotlight();
+    displayItems(ITEMS_PER_PAGE);
 }
 
 async function fetchRSSFeed() {
@@ -71,37 +278,32 @@ async function fetchRSSFeed() {
     }
     
     let success = false;
+
+    const cachedItems = readCachedFeedItems();
+    if (cachedItems && cachedItems.length > 0) {
+        renderFeedItems(cachedItems, feedContent);
+        isLoading = false;
+        return;
+    }
     
     try {
         // Primary endpoint: optimized PHP cache with high priority
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
                 console.log('Fetching RSS feed from optimized cache...');
-                const response = await fetch(`substack_feed.php?limit=${TOTAL_RSS_ITEMS}&nocache=1`, {
-                    cache: 'no-cache',
-                    priority: 'high', // High priority fetch
+                const response = await fetch(`substack_feed.php?limit=${TOTAL_RSS_ITEMS}`, {
+                    cache: 'default',
                     headers: {
-                        'Accept': 'application/json',
-                        'Accept-Encoding': 'gzip, deflate, br'
+                        'Accept': 'application/json'
                     }
                 });
                 
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        allItems = sortItemsByNewest(data.items).slice(0, TOTAL_RSS_ITEMS);
+                        writeCachedFeedItems(data.items);
+                        renderFeedItems(data.items, feedContent);
                         console.log(`✓ Successfully loaded ${allItems.length} articles from cache`);
-                        currentItems = 0;
-                        isArchiveMode = false;
-                        
-                        // Clear loading state immediately
-                        if (feedContent) {
-                            feedContent.innerHTML = '';
-                        }
-                        
-                        // Populate content
-                        populateLatestArticleSpotlight();
-                        displayItems(ITEMS_PER_PAGE);
                         success = true;
                     } else {
                         console.warn('Cache returned invalid data structure');
@@ -127,18 +329,9 @@ async function fetchRSSFeed() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        allItems = sortItemsByNewest(data.items).slice(0, TOTAL_RSS_ITEMS);
+                        writeCachedFeedItems(data.items);
+                        renderFeedItems(data.items, feedContent);
                         console.log(`✓ Fallback loaded ${allItems.length} articles`);
-                        currentItems = 0;
-                        isArchiveMode = false;
-                        
-                        // Clear loading state immediately
-                        if (feedContent) {
-                            feedContent.innerHTML = '';
-                        }
-                        
-                        populateLatestArticleSpotlight();
-                        displayItems(ITEMS_PER_PAGE);
                         success = true;
                     }
                 }
@@ -152,18 +345,9 @@ async function fetchRSSFeed() {
             console.log('Trying XML fallback as last resort...');
             const xmlItems = await fetchRssXmlFallback();
             if (xmlItems && xmlItems.length > 0) {
-                allItems = sortItemsByNewest(xmlItems).slice(0, TOTAL_RSS_ITEMS);
+                writeCachedFeedItems(xmlItems);
+                renderFeedItems(xmlItems, feedContent);
                 console.log(`✓ XML fallback loaded ${allItems.length} articles`);
-                currentItems = 0;
-                isArchiveMode = false;
-                
-                // Clear loading state immediately
-                if (feedContent) {
-                    feedContent.innerHTML = '';
-                }
-                
-                populateLatestArticleSpotlight();
-                displayItems(ITEMS_PER_PAGE);
                 success = true;
             }
         }
@@ -207,21 +391,7 @@ function populateLatestArticleSpotlight() {
     });
     
     // Set the image and handle sizing
-    let imageUrl = '';
-    if (latestItem.thumbnail) {
-        imageUrl = latestItem.thumbnail;
-    } else if (latestItem.content) {
-        const imgMatch = latestItem.content.match(/<img[^>]+src="([^">]+)"/);
-        if (imgMatch) {
-            imageUrl = imgMatch[1];
-        }
-    }
-    
-    if (!imageUrl) {
-        imageUrl = FALLBACK_SVG;
-    }
-    
-    spotlightImg.src = imageUrl;
+    spotlightImg.src = latestItem.displayImage || FALLBACK_SVG;
     spotlightImg.alt = latestItem.title;
     
     // Adjust card height based on image aspect ratio
@@ -237,11 +407,7 @@ function populateLatestArticleSpotlight() {
     
     // Set the description (shorter for compact design)
     // First decode HTML entities properly, then strip HTML tags
-    const cleanDescription = decodeHtmlEntities(latestItem.description)
-        .replace(/<[^>]*>/g, '')
-        .trim();
-    
-    spotlightDescription.textContent = cleanDescription.substring(0, 150) + (cleanDescription.length > 150 ? '...' : '');
+    spotlightDescription.textContent = latestItem.shortDescription || '';
     
     // Set the date
     const pubDate = new Date(latestItem.pubDate);
@@ -274,27 +440,7 @@ function displayItems(count) {
         const item = allItems[i];
         const title = item.title;
         const link = item.link;
-        const description = item.description;
         const pubDate = new Date(item.pubDate);
-        
-        let imageUrl = '';
-        if (item.thumbnail) {
-            imageUrl = item.thumbnail;
-        } else if (item.content) {
-            const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
-            if (imgMatch) {
-                imageUrl = imgMatch[1];
-            }
-        }
-        
-        if (!imageUrl) {
-            imageUrl = FALLBACK_SVG;
-        }
-        
-        // First decode HTML entities properly, then strip HTML tags
-        const cleanDescription = decodeHtmlEntities(description)
-            .replace(/<[^>]*>/g, '')
-            .trim();
         
         const feedItem = document.createElement('a');
         feedItem.className = 'feed-item';
@@ -302,9 +448,9 @@ function displayItems(count) {
         feedItem.target = '_blank';
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
-            <img src="${imageUrl}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml;base64,${FALLBACK_SVG_B64}'">
+            <img src="${item.displayImage || FALLBACK_SVG}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml;base64,${FALLBACK_SVG_B64}'">
             <h3>${title}</h3>
-            <p>${cleanDescription.substring(0, 150)}${cleanDescription.length > 150 ? '...' : ''}</p>
+            <p>${item.shortDescription || ''}</p>
             <div class="date">${pubDate.toLocaleDateString()}</div>
         `;
 
@@ -375,26 +521,30 @@ async function fetchRssXmlFallback() {
 // Skip RSS calls on localhost/file audits to avoid noisy fetch failures.
 const shouldFetchRSS = !['localhost', '127.0.0.1'].includes(location.hostname) && location.protocol !== 'file:';
 
-if (shouldFetchRSS) {
-    // Start RSS feed loading immediately, don't wait for DOMContentLoaded
-    if (document.readyState === 'loading') {
-        // If document is still loading, start RSS fetch in parallel
-        fetchRSSFeed();
-    } else {
-        // If document is already loaded, fetch immediately
-        fetchRSSFeed();
-    }
-
-    // Also set up DOMContentLoaded as fallback in case the above doesn't trigger
-    // (registered via initRSSFallbackFetch below)
-}
-
 function initRSSFallbackFetch() {
     if (!shouldFetchRSS) return;
-    // Only fetch if we haven't already started loading
-    if (!isLoading && allItems.length === 0) {
-        fetchRSSFeed();
-    }
+    const rssSection = document.querySelector('.rss-feed');
+    if (!rssSection) return;
+
+    const loadFeed = () => {
+        if (rssIntersectionObserver) {
+            rssIntersectionObserver.disconnect();
+            rssIntersectionObserver = null;
+        }
+
+        if (!isLoading && allItems.length === 0) {
+            fetchRSSFeed();
+        }
+    };
+
+    rssIntersectionObserver = new IntersectionObserver((entries) => {
+        if (entries.some(entry => entry.isIntersecting)) {
+            loadFeed();
+        }
+    }, { rootMargin: '250px 0px' });
+
+    rssIntersectionObserver.observe(rssSection);
+    scheduleIdleWork(loadFeed, 4000);
 }
 
 // Time Dial Functionality
@@ -477,15 +627,29 @@ function initTimeDial() {
     
     let currentStation = 9; // Start at station 9 (Feb '26)
     const stationLightsContainer = document.getElementById('station-lights');
-    const stationLights = document.querySelectorAll('.station-light');
+    const stationLights = Array.from(document.querySelectorAll('.station-light'));
     const dateDisplay = document.getElementById('current-recap-date');
     const recapAudio = document.getElementById('recap-audio');
+    const tunerGlass = document.querySelector('.tuner-glass');
+    const tunerIndicator = document.getElementById('tuner-indicator');
+    const scaleMarkers = Array.from(document.querySelectorAll('.scale-marker.scale-major'));
+    const clickableMarkers = Array.from(document.querySelectorAll('.scale-marker.scale-clickable'));
     let scrollAccumulator = 0; // Accumulate scroll for stepping
     const SCROLL_THRESHOLD = 50; // Pixels of scroll needed to change station
+    let tunerMarkerPositions = [];
     
     // Create audio element for tuning sounds
     const tuningAudio = new Audio();
     tuningAudio.volume = 0.4; // Set volume to 40% so it's not too loud
+
+    function cacheTunerMarkerPositions() {
+        if (!tunerGlass || !scaleMarkers.length) return;
+        const tunerRect = tunerGlass.getBoundingClientRect();
+        tunerMarkerPositions = scaleMarkers.map(marker => {
+            const markerRect = marker.getBoundingClientRect();
+            return markerRect.left - tunerRect.left + (markerRect.width / 2);
+        });
+    }
     
     function playRandomTuningSound() {
         const randomIndex = Math.floor(Math.random() * tuningSounds.length);
@@ -505,10 +669,6 @@ function initTimeDial() {
         playRandomTuningSound();
         
         // ===== CRT VISUAL EFFECTS =====
-        const tunerGlass = document.querySelector('.tuner-glass');
-        const tunerIndicator = document.getElementById('tuner-indicator');
-        const scaleMarkers = document.querySelectorAll('.scale-marker.scale-major');
-        
         // 1. Add static noise during tuning
         if (tunerGlass) {
             tunerGlass.classList.add('tuning');
@@ -584,26 +744,18 @@ function initTimeDial() {
     }
     
     function updateTunerIndicator(stationIndex) {
-        const tunerIndicator = document.getElementById('tuner-indicator');
-        const scaleMarkers = document.querySelectorAll('.scale-marker.scale-major');
-        const tunerGlass = document.querySelector('.tuner-glass');
-        
         if (!tunerIndicator || !tunerGlass) return;
         
         // Remove active class from all markers (but don't remove phosphor-decay, that's handled separately)
         scaleMarkers.forEach(marker => marker.classList.remove('active'));
-        
-        // Get the actual position of the target marker from the DOM
-        // This eliminates drift from calculation mismatches with CSS flexbox
+
+        if (!tunerMarkerPositions.length) {
+            cacheTunerMarkerPositions();
+        }
+
         const targetMarker = scaleMarkers[stationIndex];
-        if (targetMarker) {
-            const tunerRect = tunerGlass.getBoundingClientRect();
-            const markerRect = targetMarker.getBoundingClientRect();
-            
-            // Position indicator at the center of the marker
-            const markerCenterX = markerRect.left + (markerRect.width / 2);
-            const leftPosition = markerCenterX - tunerRect.left;
-            
+        const leftPosition = tunerMarkerPositions[stationIndex];
+        if (targetMarker && typeof leftPosition === 'number') {
             tunerIndicator.style.left = leftPosition + 'px';
             targetMarker.classList.add('active');
         }
@@ -687,10 +839,6 @@ function initTimeDial() {
         }
     }
     
-    function updateIndicatorGlow(nearestStation, distance, threshold) {
-        // Legacy function - kept for compatibility
-    }
-    
     // Set up station lights interactions
     if (stationLightsContainer) {
         // Scroll wheel events on the container
@@ -751,6 +899,9 @@ function initTimeDial() {
     if (stationLightsContainer) {
         stationLightsContainer.setAttribute('data-current-station', '9');
     }
+
+    cacheTunerMarkerPositions();
+    window.addEventListener('resize', cacheTunerMarkerPositions);
     
     // Initialize station (date display, audio source, etc.)
     updateStation(9);
@@ -761,19 +912,13 @@ function initTimeDial() {
     }, 100);
     
     // Add click handlers to clickable scale markers
-    const clickableMarkers = document.querySelectorAll('.scale-marker.scale-clickable');
     clickableMarkers.forEach(marker => {
         marker.addEventListener('click', function(e) {
             e.stopPropagation();
             const stationIndex = parseInt(this.getAttribute('data-station'));
             if (!isNaN(stationIndex) && stationIndex !== currentStation) {
                 updateStation(stationIndex);
-                
-                // Update glow for the new station
-                setTimeout(() => {
-                    updateIndicatorGlow(stationIndex, 0, 15);
-                }, 100);
-                
+
                 // Haptic feedback
                 if ('vibrate' in navigator) {
                     navigator.vibrate(20);
@@ -1082,8 +1227,7 @@ function handleTestimonialSwipe() {
     }
 }
 
-function triggerGlitch() {
-    const header = document.querySelector('.header-title');
+function triggerGlitch(header) {
     if (!header) return;
     
     // Randomly select glitch intensity
@@ -1123,35 +1267,38 @@ function triggerGlitch() {
                             header.classList.add('glitch', 'glitch-bars');
                             setTimeout(() => {
                                 header.classList.remove('glitch', 'glitch-bars');
-                                setTimeout(triggerGlitch, 3000 + Math.random() * 4000);
+                                    scheduleEffectTimeout(() => triggerGlitch(header), 3000 + Math.random() * 4000);
                             }, 150);
                         }, 80 + Math.random() * 50);
                     } else {
-                        setTimeout(triggerGlitch, 3000 + Math.random() * 4000);
+                            scheduleEffectTimeout(() => triggerGlitch(header), 3000 + Math.random() * 4000);
                     }
                 }, 120 + Math.random() * 80);
             }, 100 + Math.random() * 100);
         } else {
-            setTimeout(triggerGlitch, 2500 + Math.random() * 5000);
+            scheduleEffectTimeout(() => triggerGlitch(header), 2500 + Math.random() * 5000);
         }
     }, duration);
 }
 function initHeaderGlitchEffects() {
-    setTimeout(triggerGlitch, 1500 + Math.random() * 2000);
+    const header = document.querySelector('.header-title');
+    if (!header) return;
+    scheduleEffectTimeout(() => triggerGlitch(header), 1500 + Math.random() * 2000);
 }
 
 // Timed glitch effect for the FAQ link
-function triggerGlitchFAQ() {
-    const faqLink = document.querySelector('.faq-glitch-link');
+function triggerGlitchFAQ(faqLink) {
     if (!faqLink) return;
     faqLink.classList.add('glitch-link', 'glitch');
     setTimeout(() => {
         faqLink.classList.remove('glitch-link', 'glitch');
-        setTimeout(triggerGlitchFAQ, 20000 + Math.random() * 5000); // 20-25s
+        scheduleEffectTimeout(() => triggerGlitchFAQ(faqLink), 20000 + Math.random() * 5000); // 20-25s
     }, 120 + Math.random() * 180); // short burst
 }
 function initFaqGlitchTimer() {
-    setTimeout(triggerGlitchFAQ, 4000 + Math.random() * 2000); // initial delay
+    const faqLink = document.querySelector('.faq-glitch-link');
+    if (!faqLink) return;
+    scheduleEffectTimeout(() => triggerGlitchFAQ(faqLink), 4000 + Math.random() * 2000); // initial delay
 }
 // Glitch effect for the email link (hover/focus only)
 function initEmailGlitchEffects() {
@@ -1167,8 +1314,8 @@ function initEmailGlitchEffects() {
     });
 }
 
-function neonFlicker() {
-  const letters = document.querySelectorAll('.recently-bg-text span');
+function neonFlicker(letters) {
+  if (!letters || !letters.length) return;
   letters.forEach(letter => letter.classList.remove('flicker'));
   // Pick one random letter to flicker
   const idx = Math.floor(Math.random() * letters.length);
@@ -1182,25 +1329,29 @@ function neonFlicker() {
       setTimeout(doFlick, 40 + Math.random() * 20); // 40-60ms per flick (twice as fast)
     } else {
       letter.classList.remove('flicker');
-      setTimeout(neonFlicker, 5000 + Math.random() * 1000); // 5-6s until next flicker
+      scheduleEffectTimeout(() => neonFlicker(letters), 5000 + Math.random() * 1000); // 5-6s until next flicker
     }
   }
   doFlick();
 }
 function initNeonFlicker() {
-  setTimeout(neonFlicker, 2000); // initial delay
+  const letters = Array.from(document.querySelectorAll('.recently-bg-text span'));
+  if (!letters.length) return;
+  scheduleEffectTimeout(() => neonFlicker(letters), 2000); // initial delay
 }
 
-function triggerShimmer() {
-  const shimmer = document.querySelector('.recently-bg-text');
+function triggerShimmer(shimmer) {
+  if (!shimmer) return;
   shimmer.classList.add('shimmer');
   setTimeout(() => {
     shimmer.classList.remove('shimmer');
-    setTimeout(triggerShimmer, 4000 + Math.random() * 2000); // 4-6s between shimmers
+    scheduleEffectTimeout(() => triggerShimmer(shimmer), 4000 + Math.random() * 2000); // 4-6s between shimmers
   }, 1200); // match animation duration
 }
 function initShimmerEffect() {
-  setTimeout(triggerShimmer, 2000);
+  const shimmer = document.querySelector('.recently-bg-text');
+  if (!shimmer) return;
+  scheduleEffectTimeout(() => triggerShimmer(shimmer), 2000);
 }
 
 // Custom Audio Player Script
@@ -1218,7 +1369,7 @@ function initCustomAudioPlayers() {
     if (player.classList.contains('mixtape-audio-controls')) return;
     
     // Find the closest audio element (either by class or previous sibling)
-    let audio = player.parentElement.querySelector('audio.custom-audio') || player.parentElement.querySelector('audio');
+    let audio = registerManagedAudio(player.parentElement.querySelector('audio.custom-audio') || player.parentElement.querySelector('audio'));
     if (!audio) return;
     const playPauseBtn = player.querySelector('.audio-btn');
     const icon = playPauseBtn.querySelector('.audio-icon');
@@ -1226,109 +1377,14 @@ function initCustomAudioPlayers() {
     const progressContainer = player.querySelector('.audio-progress-bar');
     const currentTimeEl = player.querySelector('.audioCurrent') || player.querySelector('#audioCurrent');
 
-    // Ensure metadata is loaded
-    audio.addEventListener('loadedmetadata', function() {
-      // Audio metadata loaded
-    });
-
-    // Try to load metadata if not already loaded
-    if (audio.readyState < 1) {
-      audio.load();
-    }
-
     audio.addEventListener('timeupdate', function() {
       progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
       currentTimeEl.textContent = formatTime(audio.currentTime);
     });
-
-    // Add scrubbing functionality
-    progressContainer.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const rect = progressContainer.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const width = rect.width;
-      const clickPercent = Math.max(0, Math.min(1, clickX / width));
-      const newTime = clickPercent * audio.duration;
-      
-      if (!isNaN(newTime) && audio.duration && newTime >= 0) {
-        const wasPlaying = !audio.paused;
-        
-        // Pause the audio first to ensure clean seeking
-        if (!audio.paused) {
-          audio.pause();
-        }
-        
-        // Wait a tiny bit, then seek
-        setTimeout(() => {
-          audio.currentTime = newTime;
-          
-          // If it was playing, resume playback
-          if (wasPlaying) {
-            setTimeout(() => {
-              audio.play().catch(e => console.error('Failed to resume playback:', e));
-            }, 50);
-          }
-        }, 10);
-      }
-    });
-
-    // Add drag scrubbing functionality
-    progressContainer.addEventListener('mousedown', function(e) {
-      e.preventDefault();
-      
-      const wasPlaying = !audio.paused;
-      let isDragging = true;
-      
-      // Pause audio during drag
-      if (!audio.paused) {
-        audio.pause();
-      }
-      
-      const scrub = function(e) {
-        const rect = progressContainer.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const width = rect.width;
-        const clickPercent = Math.max(0, Math.min(1, clickX / width));
-        const newTime = clickPercent * audio.duration;
-        if (!isNaN(newTime) && audio.duration && newTime >= 0) {
-          audio.currentTime = newTime;
-        }
-      };
-      
-      scrub(e);
-      
-      const handleMouseMove = function(e) {
-        if (isDragging) {
-          scrub(e);
-        }
-      };
-      
-      const handleMouseUp = function() {
-        isDragging = false;
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-        
-        // Resume playback if it was playing before drag
-        if (wasPlaying) {
-          setTimeout(() => {
-            audio.play().catch(e => console.error('Failed to resume playback after drag:', e));
-          }, 50);
-        }
-      };
-      
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    });
+    setupProgressScrubbing(progressContainer, audio);
 
     playPauseBtn.addEventListener('click', function() {
-      // Pause all other audio elements
-      document.querySelectorAll('audio.custom-audio').forEach(function(otherAudio) {
-        if (otherAudio !== audio) {
-          otherAudio.pause();
-        }
-      });
+      pauseManagedAudioExcept(audio);
       if (audio.paused) {
         audio.play();
         icon.textContent = '❚❚';
@@ -1371,6 +1427,218 @@ function initPetLightboxLinks() {
             openLightbox('images/astro-justhappy2behere.png');
         });
     }
+}
+
+function createVisualizerController(options) {
+    const audio = registerManagedAudio(options.audio);
+    const visualizerCanvas = options.visualizerCanvas;
+    const getPalette = options.getPalette;
+    const isLocalFile = window.location.protocol === 'file:';
+    let animationId = null;
+    let isPlaying = false;
+    let audioContext = null;
+    let analyser = null;
+    let dataArray = null;
+    let useRealAnalyser = false;
+    let barHeights = new Array(8).fill(0);
+
+    function initAudioContext() {
+        if (!audio || audioContext || isLocalFile) return;
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 128;
+            analyser.smoothingTimeConstant = 0.7;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            const source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            useRealAnalyser = true;
+        } catch (error) {
+            useRealAnalyser = false;
+        }
+    }
+
+    function draw() {
+        if (!visualizerCanvas) return;
+
+        const ctx = visualizerCanvas.getContext('2d');
+        const width = visualizerCanvas.width;
+        const height = visualizerCanvas.height;
+        const barCount = 8;
+        const barWidth = 3;
+        const barGap = 3;
+        const maxBarHeight = height * 0.8;
+        const centerY = height / 2;
+        const edgePadding = 10;
+
+        ctx.clearRect(0, 0, width, height);
+
+        if (useRealAnalyser && analyser && isPlaying) {
+            analyser.getByteFrequencyData(dataArray);
+        }
+
+        for (let i = 0; i < barCount; i++) {
+            let targetHeight;
+
+            if (useRealAnalyser && dataArray && isPlaying) {
+                const binIndex = Math.floor((i / barCount) * (dataArray.length * 0.6));
+                const value = dataArray[binIndex] || 0;
+                targetHeight = value / 255;
+            } else if (isPlaying) {
+                if (Math.random() < 0.12) {
+                    targetHeight = Math.random() * 0.7 + 0.15;
+                } else {
+                    targetHeight = barHeights[i] + (Math.random() - 0.5) * 0.1;
+                }
+                targetHeight = Math.max(0.05, Math.min(0.85, targetHeight));
+            } else {
+                targetHeight = 0;
+            }
+
+            const smoothing = useRealAnalyser ? 0.35 : 0.18;
+            barHeights[i] += (targetHeight - barHeights[i]) * smoothing;
+
+            const barHeight = barHeights[i] * maxBarHeight;
+            const palette = getPalette(i, barCount, barHeights[i]);
+
+            ctx.fillStyle = palette.fillStyle;
+            ctx.shadowColor = palette.shadowColor;
+            ctx.shadowBlur = 6 + barHeights[i] * 4;
+
+            const leftX = edgePadding + (i * (barWidth + barGap));
+            ctx.fillRect(leftX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+
+            const rightX = width - edgePadding - barWidth - (i * (barWidth + barGap));
+            ctx.fillRect(rightX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+        }
+
+        ctx.shadowBlur = 0;
+        animationId = requestAnimationFrame(draw);
+    }
+
+    function start() {
+        isPlaying = true;
+        if (!audioContext && !isLocalFile) {
+            initAudioContext();
+        }
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        if (!animationId) {
+            draw();
+        }
+    }
+
+    function stop() {
+        isPlaying = false;
+        setTimeout(() => {
+            if (!isPlaying && animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+                if (visualizerCanvas) {
+                    const ctx = visualizerCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+                }
+            }
+        }, 500);
+    }
+
+    function resize() {
+        if (!visualizerCanvas) return;
+        const container = visualizerCanvas.parentElement;
+        if (container) {
+            visualizerCanvas.width = container.offsetWidth;
+            visualizerCanvas.height = 40;
+        }
+    }
+
+    return { start, stop, resize };
+}
+
+function formatAudioTime(sec) {
+    if (isNaN(sec)) return '0:00';
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, track) {
+    if (!lyricsVideo || !lyricsVideoContainer) return;
+
+    if (track && track.video) {
+        lyricsVideo.src = track.video;
+        lyricsVideo.load();
+        lyricsVideo.currentTime = 0;
+        lyricsVideoContainer.classList.add('has-video');
+    } else {
+        lyricsVideo.src = '';
+        lyricsVideoContainer.classList.remove('has-video');
+    }
+}
+
+function bindLyricsVideoSync(audio, lyricsVideo, getCurrentTrack) {
+    if (!audio || !lyricsVideo) return;
+
+    audio.addEventListener('play', () => {
+        const track = getCurrentTrack();
+        if (track && track.video) {
+            lyricsVideo.currentTime = audio.currentTime;
+            lyricsVideo.play().catch(() => {});
+        }
+    });
+
+    audio.addEventListener('pause', () => {
+        lyricsVideo.pause();
+    });
+
+    audio.addEventListener('seeked', () => {
+        const track = getCurrentTrack();
+        if (track && track.video) {
+            lyricsVideo.currentTime = audio.currentTime;
+        }
+    });
+
+    audio.addEventListener('timeupdate', () => {
+        const track = getCurrentTrack();
+        if (track && track.video && !audio.paused) {
+            const drift = Math.abs(audio.currentTime - lyricsVideo.currentTime);
+            if (drift > 0.3) {
+                lyricsVideo.currentTime = audio.currentTime;
+            }
+        }
+    });
+}
+
+function renderTrackList(trackList, tracks, onSelect) {
+    if (!trackList) return [];
+
+    trackList.innerHTML = '';
+    return tracks.map((track, index) => {
+        const li = document.createElement('li');
+        li.className = 'mixtape-track-item';
+        const articleBtn = track.article ?
+            `<a href="${track.article}" target="_blank" rel="noopener noreferrer" class="track-article-link" title="Read the article that inspired this song" onclick="event.stopPropagation();">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span class="track-article-label">spark</span>
+            </a>` : '';
+
+        li.innerHTML = `<span class="track-number">${index + 1}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
+        li.addEventListener('click', () => onSelect(index));
+        trackList.appendChild(li);
+        return li;
+    });
+}
+
+function setActiveTrackListItem(trackItems, activeIndex) {
+    trackItems.forEach((item, index) => {
+        item.classList.toggle('active', index === activeIndex);
+    });
 }
 
 // Mixtape Lightbox Logic
@@ -1431,180 +1699,29 @@ function initMixtapeLightbox() {
     const coverImg = document.getElementById('mixtapeCoverImg');
     const subtitleSpan = document.querySelector('.mixtape-subtitle');
     
+    const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
-    
-    // Audio Visualizer Setup
-    // Uses Web Audio API when served from localhost/server, simulated when running from file://
-    let animationId = null;
-    let isPlaying = false;
-    let audioContext = null;
-    let analyser = null;
-    let dataArray = null;
-    let useRealAnalyser = false;
-    let barHeights = new Array(8).fill(0);
-    const isLocalFile = window.location.protocol === 'file:';
-    
-    function initAudioContext() {
-        if (audioContext || isLocalFile) return; // Skip for file:// URLs
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioContext.createAnalyser();
-            analyser.fftSize = 128;
-            analyser.smoothingTimeConstant = 0.7;
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-            
-            const source = audioContext.createMediaElementSource(audio);
-            source.connect(analyser);
-            analyser.connect(audioContext.destination);
-            useRealAnalyser = true;
-            console.log('Audio visualizer: using real frequency analysis');
-        } catch (e) {
-            console.warn('Audio visualizer: falling back to simulation', e);
-            useRealAnalyser = false;
-        }
-    }
-    
-    function drawVisualizer() {
-        if (!visualizerCanvas) return;
-        
-        const ctx = visualizerCanvas.getContext('2d');
-        const width = visualizerCanvas.width;
-        const height = visualizerCanvas.height;
-        
-        ctx.clearRect(0, 0, width, height);
-        
-        const barCount = 8;
-        const barWidth = 3;
-        const barGap = 3;
-        const maxBarHeight = height * 0.8;
-        const centerY = height / 2;
-        
-        const edgePadding = 10; // Distance from edge of canvas
-        
-        // Get frequency data if using real analyser
-        if (useRealAnalyser && analyser && isPlaying) {
-            analyser.getByteFrequencyData(dataArray);
-        }
-        
-        for (let i = 0; i < barCount; i++) {
-            let targetHeight;
-            
-            if (useRealAnalyser && dataArray && isPlaying) {
-                // Real audio: map to frequency bins (focus on bass and mids)
-                const binIndex = Math.floor((i / barCount) * (dataArray.length * 0.6));
-                const value = dataArray[binIndex] || 0;
-                targetHeight = (value / 255);
-            } else if (isPlaying) {
-                // Simulated: organic-feeling random animation
-                if (Math.random() < 0.12) {
-                    targetHeight = Math.random() * 0.7 + 0.15;
-                } else {
-                    targetHeight = barHeights[i] + (Math.random() - 0.5) * 0.1;
-                }
-                targetHeight = Math.max(0.05, Math.min(0.85, targetHeight));
-            } else {
-                targetHeight = 0;
-            }
-            
-            // Smooth interpolation
-            const smoothing = useRealAnalyser ? 0.35 : 0.18;
-            barHeights[i] += (targetHeight - barHeights[i]) * smoothing;
-            
-            const barHeight = barHeights[i] * maxBarHeight;
-            
-            // Colors - gradient with intensity (outer bars more intense)
-            // A-side: teal (hue ~168), B-side: amber (hue ~38)
+    let trackItems = [];
+    const visualizer = createVisualizerController({
+        audio: audioEl,
+        visualizerCanvas,
+        getPalette: (index, barCount, intensity) => {
             const baseHue = isBSide ? 38 : 168;
             const hueVariance = isBSide ? 15 : 25;
-            const hue = baseHue - ((barCount - 1 - i) / barCount) * hueVariance;
-            const intensity = barHeights[i];
+            const hue = baseHue - ((barCount - 1 - index) / barCount) * hueVariance;
             const saturation = 75 + intensity * 25;
             const lightness = 40 + intensity * 20;
-            
-            ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`;
-            ctx.shadowColor = `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`;
-            ctx.shadowBlur = 6 + intensity * 4;
-            
-            // Left side bars - anchored to left edge, growing inward
-            const leftX = edgePadding + (i * (barWidth + barGap));
-            ctx.fillRect(leftX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
-            
-            // Right side bars - anchored to right edge, growing inward
-            const rightX = width - edgePadding - barWidth - (i * (barWidth + barGap));
-            ctx.fillRect(rightX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+            return {
+                fillStyle: `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`,
+                shadowColor: `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`
+            };
         }
-        
-        ctx.shadowBlur = 0;
-        animationId = requestAnimationFrame(drawVisualizer);
-    }
-    
-    function startVisualizer() {
-        isPlaying = true;
-        
-        // Only try Web Audio API if not running from file://
-        if (!audioContext && !isLocalFile) {
-            initAudioContext();
-        }
-        if (audioContext && audioContext.state === 'suspended') {
-            audioContext.resume();
-        }
-        
-        if (!animationId) {
-            drawVisualizer();
-        }
-    }
-    
-    function stopVisualizer() {
-        isPlaying = false;
-        setTimeout(() => {
-            if (!isPlaying && animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-                if (visualizerCanvas) {
-                    const ctx = visualizerCanvas.getContext('2d');
-                    ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-                }
-            }
-        }, 500);
-    }
+    });
 
-    // Format time helper
-    function formatTime(sec) {
-        if (isNaN(sec)) return '0:00';
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
-        return m + ':' + (s < 10 ? '0' : '') + s;
-    }
-
-    // Populate Playlist function
     function populatePlaylist() {
-        if (!trackList) return;
-        trackList.innerHTML = '';
-        let trackNumber = 1;
-        
-        tracks.forEach((track, index) => {
-            const li = document.createElement('li');
-            li.className = 'mixtape-track-item';
-            
-            // Create article link button if article URL exists
-            const articleBtn = track.article ? 
-                `<a href="${track.article}" target="_blank" rel="noopener noreferrer" class="track-article-link" title="Read the article that inspired this song" onclick="event.stopPropagation();">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                    <span class="track-article-label">spark</span>
-                </a>` : '';
-            
-            li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
-            trackNumber++;
-            
-            li.addEventListener('click', () => {
-                loadTrack(index);
-                playTrack();
-            });
-            trackList.appendChild(li);
+        trackItems = renderTrackList(trackList, tracks, (index) => {
+            loadTrack(index);
+            playTrack();
         });
     }
     
@@ -1635,7 +1752,7 @@ function initMixtapeLightbox() {
         if (playPauseIcon) {
             playPauseIcon.textContent = '▶';
         }
-        stopVisualizer();
+        visualizer.stop();
         
         // Switch tracks and cover
         if (isBSide) {
@@ -1694,31 +1811,13 @@ function initMixtapeLightbox() {
         if (timeDisplay) {
             timeDisplay.textContent = '0:00';
         }
-        
-        // Load lyric video if available
-        if (lyricsVideo && lyricsVideoContainer) {
-            if (tracks[index].video) {
-                lyricsVideo.src = tracks[index].video;
-                lyricsVideo.load();
-                lyricsVideo.currentTime = 0;
-                lyricsVideoContainer.classList.add('has-video');
-            } else {
-                lyricsVideo.src = '';
-                lyricsVideoContainer.classList.remove('has-video');
-            }
-        }
-        
-        // Update Active State
-        if (trackList) {
-            const items = trackList.querySelectorAll('.mixtape-track-item');
-            items.forEach((item, i) => {
-                if (i === index) item.classList.add('active');
-                else item.classList.remove('active');
-            });
-        }
+
+        syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
+        setActiveTrackListItem(trackItems, index);
     }
 
     function playTrack() {
+        pauseManagedAudioExcept(audio);
         if (audio) {
             audio.play().catch(e => console.error("Play error:", e));
         }
@@ -1737,48 +1836,10 @@ function initMixtapeLightbox() {
             lyricsVideo.pause();
         }
     }
-    
-    // Keep video synced with audio
-    if (audio) {
-        audio.addEventListener('play', () => {
-            if (lyricsVideo && tracks[currentIndex].video) {
-                lyricsVideo.currentTime = audio.currentTime;
-                lyricsVideo.play().catch(e => {});
-            }
-        });
-        
-        audio.addEventListener('pause', () => {
-            if (lyricsVideo) {
-                lyricsVideo.pause();
-            }
-        });
-        
-        audio.addEventListener('seeked', () => {
-            if (lyricsVideo && tracks[currentIndex].video) {
-                lyricsVideo.currentTime = audio.currentTime;
-            }
-        });
-        
-        // Periodic sync to prevent drift
-        audio.addEventListener('timeupdate', () => {
-            if (lyricsVideo && tracks[currentIndex].video && !audio.paused) {
-                const drift = Math.abs(audio.currentTime - lyricsVideo.currentTime);
-                if (drift > 0.3) {
-                    lyricsVideo.currentTime = audio.currentTime;
-                }
-            }
-        });
-    }
 
     // Set canvas dimensions
     function resizeCanvas() {
-        if (visualizerCanvas) {
-            const container = visualizerCanvas.parentElement;
-            if (container) {
-                visualizerCanvas.width = container.offsetWidth;
-                visualizerCanvas.height = 40;
-            }
-        }
+        visualizer.resize();
     }
     
     // Open/Close Mixtape functions (also handles URL hash)
@@ -1929,6 +1990,8 @@ function initMixtapeLightbox() {
         });
     }
 
+    bindLyricsVideoSync(audio, lyricsVideo, () => tracks[currentIndex]);
+
     if (audio) {
         // Update progress bar and time on timeupdate
         audio.addEventListener('timeupdate', function() {
@@ -1937,7 +2000,7 @@ function initMixtapeLightbox() {
                 progressBar.style.width = progress + '%';
             }
             if (timeDisplay) {
-                timeDisplay.textContent = formatTime(audio.currentTime);
+                timeDisplay.textContent = formatAudioTime(audio.currentTime);
             }
         });
 
@@ -1946,14 +2009,14 @@ function initMixtapeLightbox() {
             if (playPauseIcon) {
                 playPauseIcon.textContent = '❚❚';
             }
-            startVisualizer();
+            visualizer.start();
         });
 
         audio.addEventListener('pause', function() {
             if (playPauseIcon) {
                 playPauseIcon.textContent = '▶';
             }
-            stopVisualizer();
+            visualizer.stop();
         });
 
         audio.addEventListener('ended', () => {
@@ -1969,12 +2032,7 @@ function initMixtapeLightbox() {
     // Play/Pause button
     if (playPauseBtn && audio) {
         playPauseBtn.addEventListener('click', function() {
-            // Pause all other audio elements
-            document.querySelectorAll('audio.custom-audio').forEach(function(otherAudio) {
-                if (otherAudio !== audio) {
-                    otherAudio.pause();
-                }
-            });
+            pauseManagedAudioExcept(audio);
             
             if (audio.paused) {
                 audio.play().catch(e => console.error("Play error:", e));
@@ -1984,83 +2042,12 @@ function initMixtapeLightbox() {
         });
     }
 
-    // Progress bar scrubbing
-    if (progressContainer && audio) {
-        progressContainer.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const rect = progressContainer.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const width = rect.width;
-            const clickPercent = Math.max(0, Math.min(1, clickX / width));
-            const newTime = clickPercent * audio.duration;
-            
-            if (!isNaN(newTime) && audio.duration && newTime >= 0) {
-                const wasPlaying = !audio.paused;
-                
-                if (!audio.paused) {
-                    audio.pause();
-                }
-                
-                setTimeout(() => {
-                    audio.currentTime = newTime;
-                    
-                    if (wasPlaying) {
-                        setTimeout(() => {
-                            audio.play().catch(e => console.error('Failed to resume playback:', e));
-                        }, 50);
-                    }
-                }, 10);
-            }
-        });
+    setupProgressScrubbing(progressContainer, audio);
 
-        // Drag scrubbing
-        progressContainer.addEventListener('mousedown', function(e) {
-            e.preventDefault();
-            
-            const wasPlaying = !audio.paused;
-            let isDragging = true;
-            
-            if (!audio.paused) {
-                audio.pause();
-            }
-            
-            const scrub = function(e) {
-                const rect = progressContainer.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const width = rect.width;
-                const clickPercent = Math.max(0, Math.min(1, clickX / width));
-                const newTime = clickPercent * audio.duration;
-                if (!isNaN(newTime) && audio.duration && newTime >= 0) {
-                    audio.currentTime = newTime;
-                }
-            };
-            
-            scrub(e);
-            
-            const handleMouseMove = function(e) {
-                if (isDragging) {
-                    scrub(e);
-                }
-            };
-            
-            const handleMouseUp = function() {
-                isDragging = false;
-                document.removeEventListener('mousemove', handleMouseMove);
-                document.removeEventListener('mouseup', handleMouseUp);
-                
-                if (wasPlaying) {
-                    setTimeout(() => {
-                        audio.play().catch(e => console.error('Failed to resume playback after drag:', e));
-                    }, 50);
-                }
-            };
-            
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-        });
-    }
+    return {
+        open: openMixtape,
+        close: closeMixtape
+    };
 }
 
 function initGWORLightbox() {
@@ -2104,159 +2091,29 @@ function initGWORLightbox() {
         playPauseIcon.textContent = PLAY_ICON;
     }
 
+    const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
-
-    let animationId = null;
-    let isPlaying = false;
-    let audioContext = null;
-    let analyser = null;
-    let dataArray = null;
-    let useRealAnalyser = false;
-    let barHeights = new Array(8).fill(0);
-    const isLocalFile = window.location.protocol === 'file:';
-
-    function initAudioContext() {
-        if (audioContext || isLocalFile) return;
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioContext.createAnalyser();
-            analyser.fftSize = 128;
-            analyser.smoothingTimeConstant = 0.7;
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-            const source = audioContext.createMediaElementSource(audio);
-            source.connect(analyser);
-            analyser.connect(audioContext.destination);
-            useRealAnalyser = true;
-        } catch (e) {
-            useRealAnalyser = false;
-        }
-    }
-
-    function drawVisualizer() {
-        if (!visualizerCanvas) return;
-
-        const ctx = visualizerCanvas.getContext('2d');
-        const width = visualizerCanvas.width;
-        const height = visualizerCanvas.height;
-
-        ctx.clearRect(0, 0, width, height);
-
-        const barCount = 8;
-        const barWidth = 3;
-        const barGap = 3;
-        const maxBarHeight = height * 0.8;
-        const centerY = height / 2;
-        const edgePadding = 10;
-
-        if (useRealAnalyser && analyser && isPlaying) {
-            analyser.getByteFrequencyData(dataArray);
-        }
-
-        for (let i = 0; i < barCount; i++) {
-            let targetHeight;
-
-            if (useRealAnalyser && dataArray && isPlaying) {
-                const binIndex = Math.floor((i / barCount) * (dataArray.length * 0.6));
-                const value = dataArray[binIndex] || 0;
-                targetHeight = value / 255;
-            } else if (isPlaying) {
-                if (Math.random() < 0.12) {
-                    targetHeight = Math.random() * 0.7 + 0.15;
-                } else {
-                    targetHeight = barHeights[i] + (Math.random() - 0.5) * 0.1;
-                }
-                targetHeight = Math.max(0.05, Math.min(0.85, targetHeight));
-            } else {
-                targetHeight = 0;
-            }
-
-            const smoothing = useRealAnalyser ? 0.35 : 0.18;
-            barHeights[i] += (targetHeight - barHeights[i]) * smoothing;
-
-            const barHeight = barHeights[i] * maxBarHeight;
+    let trackItems = [];
+    const visualizer = createVisualizerController({
+        audio: audioEl,
+        visualizerCanvas,
+        getPalette: (index, barCount, intensity) => {
             const baseHue = 6;
             const hueVariance = 12;
-            const hue = baseHue - ((barCount - 1 - i) / barCount) * hueVariance;
-            const intensity = barHeights[i];
+            const hue = baseHue - ((barCount - 1 - index) / barCount) * hueVariance;
             const saturation = 42 + intensity * 20;
             const lightness = 42 + intensity * 16;
-
-            ctx.fillStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`;
-            ctx.shadowColor = `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`;
-            ctx.shadowBlur = 6 + intensity * 4;
-
-            const leftX = edgePadding + (i * (barWidth + barGap));
-            ctx.fillRect(leftX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
-
-            const rightX = width - edgePadding - barWidth - (i * (barWidth + barGap));
-            ctx.fillRect(rightX, centerY - barHeight / 2, barWidth, Math.max(2, barHeight));
+            return {
+                fillStyle: `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`,
+                shadowColor: `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`
+            };
         }
-
-        ctx.shadowBlur = 0;
-        animationId = requestAnimationFrame(drawVisualizer);
-    }
-
-    function startVisualizer() {
-        isPlaying = true;
-        if (!audioContext && !isLocalFile) {
-            initAudioContext();
-        }
-        if (audioContext && audioContext.state === 'suspended') {
-            audioContext.resume();
-        }
-        if (!animationId) {
-            drawVisualizer();
-        }
-    }
-
-    function stopVisualizer() {
-        isPlaying = false;
-        setTimeout(() => {
-            if (!isPlaying && animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-                if (visualizerCanvas) {
-                    const ctx = visualizerCanvas.getContext('2d');
-                    ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-                }
-            }
-        }, 500);
-    }
-
-    function formatTime(sec) {
-        if (isNaN(sec)) return '0:00';
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
-        return m + ':' + (s < 10 ? '0' : '') + s;
-    }
+    });
 
     function populatePlaylist() {
-        trackList.innerHTML = '';
-        let trackNumber = 1;
-
-        tracks.forEach((track, index) => {
-            const li = document.createElement('li');
-            li.className = 'mixtape-track-item';
-
-            const articleBtn = track.article ?
-                `<a href="${track.article}" target="_blank" rel="noopener noreferrer" class="track-article-link" title="Read the article that inspired this song" onclick="event.stopPropagation();">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                    <span class="track-article-label">spark</span>
-                </a>` : '';
-
-            li.innerHTML = `<span class="track-number">${trackNumber}</span><span class="track-title-text">${track.title}</span>${articleBtn}`;
-            trackNumber++;
-
-            li.addEventListener('click', () => {
-                loadTrack(index);
-                playTrack();
-            });
-            trackList.appendChild(li);
+        trackItems = renderTrackList(trackList, tracks, (index) => {
+            loadTrack(index);
+            playTrack();
         });
     }
 
@@ -2275,26 +2132,12 @@ function initGWORLightbox() {
             timeDisplay.textContent = '0:00';
         }
 
-        if (lyricsVideo && lyricsVideoContainer) {
-            if (tracks[index].video) {
-                lyricsVideo.src = tracks[index].video;
-                lyricsVideo.load();
-                lyricsVideo.currentTime = 0;
-                lyricsVideoContainer.classList.add('has-video');
-            } else {
-                lyricsVideo.src = '';
-                lyricsVideoContainer.classList.remove('has-video');
-            }
-        }
-
-        const items = trackList.querySelectorAll('.mixtape-track-item');
-        items.forEach((item, i) => {
-            if (i === index) item.classList.add('active');
-            else item.classList.remove('active');
-        });
+        syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
+        setActiveTrackListItem(trackItems, index);
     }
 
     function playTrack() {
+        pauseManagedAudioExcept(audio);
         audio.play().catch(e => console.error('Play error:', e));
         if (lyricsVideo && tracks[currentIndex].video) {
             lyricsVideo.currentTime = audio.currentTime;
@@ -2303,13 +2146,7 @@ function initGWORLightbox() {
     }
 
     function resizeCanvas() {
-        if (visualizerCanvas) {
-            const container = visualizerCanvas.parentElement;
-            if (container) {
-                visualizerCanvas.width = container.offsetWidth;
-                visualizerCanvas.height = 40;
-            }
-        }
+        visualizer.resize();
     }
 
     function openGWOR() {
@@ -2370,20 +2207,15 @@ function initGWORLightbox() {
         });
     }
 
+    bindLyricsVideoSync(audio, lyricsVideo, () => tracks[currentIndex]);
+
     audio.addEventListener('timeupdate', function() {
         if (progressBar && audio.duration) {
             const progress = (audio.currentTime / audio.duration) * 100;
             progressBar.style.width = progress + '%';
         }
         if (timeDisplay) {
-            timeDisplay.textContent = formatTime(audio.currentTime);
-        }
-
-        if (lyricsVideo && tracks[currentIndex].video && !audio.paused) {
-            const drift = Math.abs(audio.currentTime - lyricsVideo.currentTime);
-            if (drift > 0.3) {
-                lyricsVideo.currentTime = audio.currentTime;
-            }
+            timeDisplay.textContent = formatAudioTime(audio.currentTime);
         }
     });
 
@@ -2391,27 +2223,14 @@ function initGWORLightbox() {
         if (playPauseIcon) {
             playPauseIcon.textContent = PAUSE_ICON;
         }
-        startVisualizer();
-        if (lyricsVideo && tracks[currentIndex].video) {
-            lyricsVideo.currentTime = audio.currentTime;
-            lyricsVideo.play().catch(e => {});
-        }
+        visualizer.start();
     });
 
     audio.addEventListener('pause', function() {
         if (playPauseIcon) {
             playPauseIcon.textContent = PLAY_ICON;
         }
-        stopVisualizer();
-        if (lyricsVideo) {
-            lyricsVideo.pause();
-        }
-    });
-
-    audio.addEventListener('seeked', () => {
-        if (lyricsVideo && tracks[currentIndex].video) {
-            lyricsVideo.currentTime = audio.currentTime;
-        }
+        visualizer.stop();
     });
 
     audio.addEventListener('ended', () => {
@@ -2423,11 +2242,7 @@ function initGWORLightbox() {
 
     if (playPauseBtn) {
         playPauseBtn.addEventListener('click', function() {
-            document.querySelectorAll('audio.custom-audio').forEach(function(otherAudio) {
-                if (otherAudio !== audio) {
-                    otherAudio.pause();
-                }
-            });
+            pauseManagedAudioExcept(audio);
 
             if (audio.paused) {
                 audio.play().catch(e => console.error('Play error:', e));
@@ -2437,73 +2252,7 @@ function initGWORLightbox() {
         });
     }
 
-    if (progressContainer) {
-        progressContainer.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const rect = progressContainer.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const width = rect.width;
-            const clickPercent = Math.max(0, Math.min(1, clickX / width));
-            const newTime = clickPercent * audio.duration;
-
-            if (!isNaN(newTime) && audio.duration && newTime >= 0) {
-                const wasPlaying = !audio.paused;
-                if (!audio.paused) audio.pause();
-
-                setTimeout(() => {
-                    audio.currentTime = newTime;
-                    if (wasPlaying) {
-                        setTimeout(() => {
-                            audio.play().catch(e => console.error('Failed to resume playback:', e));
-                        }, 50);
-                    }
-                }, 10);
-            }
-        });
-
-        progressContainer.addEventListener('mousedown', function(e) {
-            e.preventDefault();
-
-            const wasPlaying = !audio.paused;
-            let isDragging = true;
-            if (!audio.paused) audio.pause();
-
-            const scrub = function(ev) {
-                const rect = progressContainer.getBoundingClientRect();
-                const clickX = ev.clientX - rect.left;
-                const width = rect.width;
-                const clickPercent = Math.max(0, Math.min(1, clickX / width));
-                const newTime = clickPercent * audio.duration;
-                if (!isNaN(newTime) && audio.duration && newTime >= 0) {
-                    audio.currentTime = newTime;
-                }
-            };
-
-            scrub(e);
-
-            const handleMouseMove = function(ev) {
-                if (isDragging) {
-                    scrub(ev);
-                }
-            };
-
-            const handleMouseUp = function() {
-                isDragging = false;
-                document.removeEventListener('mousemove', handleMouseMove);
-                document.removeEventListener('mouseup', handleMouseUp);
-                if (wasPlaying) {
-                    setTimeout(() => {
-                        audio.play().catch(err => console.error('Failed to resume playback after drag:', err));
-                    }, 50);
-                }
-            };
-
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-        });
-    }
+    setupProgressScrubbing(progressContainer, audio);
 
     if (window.location.hash === '#gwor') {
         setTimeout(() => openGWOR(), 100);
@@ -2519,19 +2268,76 @@ function initGWORLightbox() {
             if (lyricsVideo) lyricsVideo.pause();
         }
     });
+
+    return {
+        open: openGWOR,
+        close: closeGWOR
+    };
+}
+
+function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
+    if (!element) return;
+
+    element.addEventListener('pointerenter', ensureInitialized, { once: true });
+    element.addEventListener('focusin', ensureInitialized, { once: true });
+    element.addEventListener('touchstart', ensureInitialized, { once: true, passive: true });
+
+    element.addEventListener('click', (event) => {
+        const instance = ensureInitialized();
+        if (instance && typeof openCallback === 'function') {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            openCallback(instance);
+        }
+    }, { capture: true, once: true });
+}
+
+function initDeferredHomepageMedia() {
+    const ensureMixtapeLightbox = createLazyInitializer(initMixtapeLightbox);
+    const ensureGWORLightbox = createLazyInitializer(initGWORLightbox);
+    const mixtapeTile = document.getElementById('mixtapeTile');
+    const gworTile = document.getElementById('gworTile');
+    const redButtonWrapper = document.getElementById('redButtonWrapper');
+
+    bindLazyMediaTrigger(mixtapeTile, ensureMixtapeLightbox, (instance) => {
+        instance.open(false);
+    });
+
+    bindLazyMediaTrigger(redButtonWrapper, ensureMixtapeLightbox, (instance) => {
+        window.setTimeout(() => {
+            redButtonWrapper.click();
+        }, 0);
+    });
+
+    bindLazyMediaTrigger(gworTile, ensureGWORLightbox, (instance) => {
+        instance.open();
+    });
+
+    if (window.location.hash === '#mixtape' || window.location.hash === '#bsides' || window.location.hash === '#mixtape-side-two') {
+        ensureMixtapeLightbox();
+    }
+
+    if (window.location.hash === '#gwor') {
+        ensureGWORLightbox();
+    }
+}
+
+function initDeferredHomepageEffects() {
+    scheduleIdleWork(() => {
+        initHeaderGlitchEffects();
+        initFaqGlitchTimer();
+        initNeonFlicker();
+        initShimmerEffect();
+    }, 2000);
 }
 
 onReady(() => {
     initRSSFallbackFetch();
     initTimeDial();
-    initHeaderGlitchEffects();
-    initFaqGlitchTimer();
     initEmailGlitchEffects();
-    initNeonFlicker();
-    initShimmerEffect();
     initCustomAudioPlayers();
     initPetLightboxLinks();
-    initMixtapeLightbox();
-    initGWORLightbox();
+    initDeferredHomepageMedia();
+    initDeferredHomepageEffects();
 });
 

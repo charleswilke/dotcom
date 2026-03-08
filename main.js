@@ -254,6 +254,10 @@ function writeCachedFeedItems(items) {
     }
 }
 
+function logFeedAttempt(stage, details = {}) {
+    console.log(`[RSS] ${stage}`, details);
+}
+
 function renderFeedItems(items, feedContent) {
     allItems = normalizeFeedItems(items);
     currentItems = 0;
@@ -281,21 +285,28 @@ async function fetchRSSFeed() {
 
     const cachedItems = readCachedFeedItems();
     if (cachedItems && cachedItems.length > 0) {
+        logFeedAttempt('session-cache-hit', { itemCount: cachedItems.length });
         renderFeedItems(cachedItems, feedContent);
         isLoading = false;
         return;
     }
+    logFeedAttempt('session-cache-miss');
     
     try {
         // Primary endpoint: optimized PHP cache with high priority
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
-                console.log('Fetching RSS feed from optimized cache...');
+                logFeedAttempt('primary-fetch-start', { url: `substack_feed.php?limit=${TOTAL_RSS_ITEMS}` });
                 const response = await fetch(`substack_feed.php?limit=${TOTAL_RSS_ITEMS}`, {
-                    cache: 'default',
+                    cache: 'no-store',
                     headers: {
                         'Accept': 'application/json'
                     }
+                });
+                logFeedAttempt('primary-fetch-response', {
+                    ok: response.ok,
+                    status: response.status,
+                    contentType: response.headers.get('content-type')
                 });
                 
                 if (response.ok) {
@@ -303,21 +314,30 @@ async function fetchRSSFeed() {
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
                         writeCachedFeedItems(data.items);
                         renderFeedItems(data.items, feedContent);
-                        console.log(`✓ Successfully loaded ${allItems.length} articles from cache`);
+                        logFeedAttempt('primary-fetch-success', { itemCount: allItems.length });
                         success = true;
                     } else {
-                        console.warn('Cache returned invalid data structure');
+                        console.warn('[RSS] Primary endpoint returned invalid data structure', {
+                            status: data && data.status,
+                            hasItemsArray: !!(data && data.items),
+                            itemCount: data && Array.isArray(data.items) ? data.items.length : 0
+                        });
                     }
+                } else {
+                    console.warn('[RSS] Primary endpoint returned non-OK response', {
+                        status: response.status,
+                        statusText: response.statusText
+                    });
                 }
             } catch(cacheErr) {
-                console.warn('Cache endpoint failed:', cacheErr);
+                console.warn('[RSS] Primary endpoint failed:', cacheErr);
             }
         }
         
         // Fallback: Direct RSS2JSON (only if cache failed)
         if (!success) {
             try {
-                console.log('Trying RSS2JSON fallback...');
+                logFeedAttempt('rss2json-fallback-start');
                 const fallbackUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + 
                     encodeURIComponent('https://charleswilke.substack.com/feed') + `&count=${TOTAL_RSS_ITEMS}`;
                 
@@ -325,29 +345,33 @@ async function fetchRSSFeed() {
                     cache: 'default',
                     headers: { 'Accept': 'application/json' }
                 });
+                logFeedAttempt('rss2json-fallback-response', {
+                    ok: response.ok,
+                    status: response.status
+                });
                 
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
                         writeCachedFeedItems(data.items);
                         renderFeedItems(data.items, feedContent);
-                        console.log(`✓ Fallback loaded ${allItems.length} articles`);
+                        logFeedAttempt('rss2json-fallback-success', { itemCount: allItems.length });
                         success = true;
                     }
                 }
             } catch(fallbackErr) {
-                console.warn('RSS2JSON fallback failed:', fallbackErr);
+                console.warn('[RSS] RSS2JSON fallback failed:', fallbackErr);
             }
         }
         
         // Last resort: XML parsing
         if (!success) {
-            console.log('Trying XML fallback as last resort...');
+            logFeedAttempt('xml-fallback-start');
             const xmlItems = await fetchRssXmlFallback();
             if (xmlItems && xmlItems.length > 0) {
                 writeCachedFeedItems(xmlItems);
                 renderFeedItems(xmlItems, feedContent);
-                console.log(`✓ XML fallback loaded ${allItems.length} articles`);
+                logFeedAttempt('xml-fallback-success', { itemCount: allItems.length });
                 success = true;
             }
         }

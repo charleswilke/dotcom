@@ -28,7 +28,7 @@ if (isset($_SERVER['HTTP_HOST'])) {
     $baseUrl = $protocol . '://' . $_SERVER['HTTP_HOST'];
 }
 
-$url = $baseUrl . '/substack_feed.php?limit=200';
+$url = $baseUrl . '/substack_feed.php?limit=19';
 echo "[INFO] Warming cache for: $url\n";
 
 // Use cURL if available, otherwise file_get_contents

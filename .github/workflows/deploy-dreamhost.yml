@@ -2,26 +2,70 @@ name: Deploy to DreamHost
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DH_HOST: iad1-shared-b8-12.dreamhost.com
+      DH_USER: dh_528u8k
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
 
-      - name: Deploy to DreamHost via SSH
+      - name: Prepare deploy bundle
+        env:
+          ASSET_VERSION: ${{ github.sha }}
+        run: |
+          DEPLOY_DIR="$RUNNER_TEMP/deploy"
+          rm -rf "$DEPLOY_DIR"
+          mkdir -p "$DEPLOY_DIR"
+
+          rsync -a \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            ./ "$DEPLOY_DIR"/
+
+          export DEPLOY_DIR
+
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          asset_version = os.environ["ASSET_VERSION"]
+          deploy_dir = Path(os.environ["DEPLOY_DIR"])
+
+          for html_file in deploy_dir.rglob("*.html"):
+              contents = html_file.read_text(encoding="utf-8")
+              html_file.write_text(
+                  contents.replace("__ASSET_VERSION__", asset_version),
+                  encoding="utf-8",
+              )
+          PY
+
+      - name: Upload site via SFTP
         env:
           SSH_KEY: ${{ secrets.DH_KEY }}
         run: |
-          echo "$SSH_KEY" > key
+          printf '%s' "$SSH_KEY" > key
           chmod 600 key
-          git config --global user.name "GitHub Action"
-          git config --global user.email "gh-action@charleswilke.com"
-          git remote add production "ssh://dh_528u8k@iad1-shared-b8-12.dreamhost.com/~/git/charleswilke.com.git"
-          GIT_SSH_COMMAND="ssh -i key -o StrictHostKeyChecking=no" git push --force production main
+
+          DEPLOY_DIR="$RUNNER_TEMP/deploy"
+          # Update this if the DreamHost web root lives somewhere else.
+          REMOTE_DIR="~/charleswilke.com"
+
+          cat > lftp-script.txt <<EOF
+          set sftp:connect-program "ssh -a -x -i key -o StrictHostKeyChecking=no"
+          set net:max-retries 2
+          set net:timeout 20
+          open -u "$DH_USER" "sftp://$DH_HOST"
+          mirror -R --delete --verbose "$DEPLOY_DIR" "$REMOTE_DIR"
+          bye
+          EOF
+
+          lftp -f lftp-script.txt
 

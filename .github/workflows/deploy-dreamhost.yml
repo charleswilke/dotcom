@@ -53,16 +53,17 @@ jobs:
         run: |
           printf '%s' "$SSH_KEY" > key
           chmod 600 key
+          ssh-keygen -y -f key > /dev/null
 
           DEPLOY_DIR="$RUNNER_TEMP/deploy"
           # Update this if the DreamHost web root lives somewhere else.
           REMOTE_DIR="~/charleswilke.com"
 
           cat > lftp-script.txt <<EOF
-          set sftp:connect-program "ssh -a -x -i key -o StrictHostKeyChecking=no"
+          set sftp:connect-program "ssh -a -x -i key -o StrictHostKeyChecking=no -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o PubkeyAuthentication=yes"
           set net:max-retries 2
           set net:timeout 20
-          open -u "$DH_USER" "sftp://$DH_HOST"
+          open -u "$DH_USER," "sftp://$DH_HOST"
           mirror -R --delete --verbose "$DEPLOY_DIR" "$REMOTE_DIR"
           bye
           EOF

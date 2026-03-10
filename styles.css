@@ -168,7 +168,7 @@ header {
 
 .header-title {
     font-family: 'Audiowide', 'Orbitron', sans-serif;
-    font-weight: 700;
+    font-weight: 200;
     text-transform: uppercase;
     font-size: 4.5rem;
     margin-top: 2rem;
@@ -5678,45 +5678,252 @@ section.production-header.alice p {
 
 .recently-bg-text {
     position: absolute;
-    top: 0vw;
+    top: 5px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 3.2rem;
-    font-family: 'Exo', 'Orbitron', 'Arial Black', Arial, sans-serif;
-    font-weight: 700;
-    font-style: italic;
-    letter-spacing: 0.48em;
-    color: rgba(245,245,245,0.20);
-    text-shadow:
-        0 0 12px #f8e9d2,
-        0 0 18px #b6eaff,
-        0 0 6px #fff,
-        0 2px 6px rgba(0,0,0,0.08),
-        0 1px 0 #fff;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-image: linear-gradient(120deg, rgba(255,255,255,0.6) 0%, rgba(248,233,210,0.3) 40%, rgba(182,234,255,0.15) 100%);
-    background-clip: text;
+    font-family: 'Zen Tokyo Zoo', 'Orbitron', 'Arial Black', Arial, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.32em;
+    color: rgba(162, 255, 204, 0.42);
     user-select: none;
     z-index: 0;
     width: 100%;
     text-align: center;
     white-space: nowrap;
-    filter: blur(0.3px) brightness(1.03) saturate(1.01);
+    line-height: 1;
+    filter: brightness(0.98) saturate(0.98);
     transition: filter 0.3s, color 0.3s, text-shadow 0.3s;
     margin-top: 0.8rem;
     margin-bottom: 1.2rem;
+    --recently-glow: 0.18;
+    --recently-signal: rgba(0, 255, 120, 0.85);
+    --recently-signal-dim: rgba(115, 255, 180, 0.34);
+    --recently-static-opacity: 0.2;
+    --recently-static-contrast: 1;
+    --recently-static-brightness: 1;
+}
+
+.recently-sign {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 7px 0.92rem 7px 1.18rem;
+    min-width: min(92vw, 660px);
+    max-width: min(92vw, 660px);
+    isolation: isolate;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow:
+        0 0 14px rgba(0, 255, 120, 0.08),
+        0 0 32px rgba(0, 255, 120, 0.05);
+}
+
+.recently-sign::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(ellipse at top right, rgba(20, 30, 60, 0.34) 0%, transparent 52%),
+        radial-gradient(ellipse at bottom left, rgba(15, 25, 50, 0.28) 0%, transparent 48%),
+        linear-gradient(180deg,
+            rgba(6, 10, 14, 0.98) 0%,
+            rgba(7, 11, 16, 0.95) 46%,
+            rgba(4, 7, 11, 0.98) 100%);
+    border: 1px solid rgba(0, 0, 0, 0.78);
+    box-shadow:
+        inset 0 0 20px rgba(0, 0, 0, 0.88),
+        inset 0 2px 4px rgba(0, 0, 0, 0.72),
+        0 1px 2px rgba(0, 0, 0, 0.28),
+        0 0 calc(20px * var(--recently-glow)) rgba(0, 255, 120, 0.14),
+        0 0 calc(36px * var(--recently-glow)) rgba(0, 255, 120, 0.08);
+    opacity: 1;
+    z-index: -2;
+}
+
+.recently-sign::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -35%;
+    width: 32%;
+    bottom: 0;
+    background:
+        linear-gradient(105deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.02) 18%,
+            rgba(190, 255, 214, calc(0.16 * var(--recently-glow))) 48%,
+            rgba(255, 255, 255, 0.05) 72%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-18deg);
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.recently-sign-surface {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.18) 2px,
+            rgba(0, 0, 0, 0.18) 4px
+        ),
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.02) 24%,
+            rgba(255, 255, 255, 0) 100%);
+    background-size: 100% 4px, 100% 100%;
+    animation: recently-scan-roll 10s linear infinite;
+    opacity: 0.7;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.recently-sign .recently-sign-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg,
+            rgba(210, 255, 224, 0.22) 0%,
+            rgba(210, 255, 224, 0.08) 10%,
+            rgba(210, 255, 224, 0) 18%,
+            rgba(210, 255, 224, 0) 82%,
+            rgba(210, 255, 224, 0.08) 90%,
+            rgba(210, 255, 224, 0.22) 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 100% 100%, 140px 140px;
+    opacity: var(--recently-static-opacity);
+    pointer-events: none;
+    mix-blend-mode: screen;
+    mask-image: linear-gradient(90deg,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,0.9) 10%,
+        rgba(0,0,0,0.18) 22%,
+        rgba(0,0,0,0.05) 35%,
+        rgba(0,0,0,0.05) 65%,
+        rgba(0,0,0,0.18) 78%,
+        rgba(0,0,0,0.9) 90%,
+        rgba(0,0,0,1) 100%);
+    filter: contrast(var(--recently-static-contrast)) brightness(var(--recently-static-brightness));
+    transition: opacity 120ms ease, filter 120ms ease, mask-image 120ms ease;
+    animation: recently-static-flicker 0.16s steps(3) infinite;
+}
+
+.recently-bg-text.static-burst {
+    --recently-static-opacity: 0.42;
+    --recently-static-contrast: 1.42;
+    --recently-static-brightness: 1.14;
+}
+
+.recently-bg-text.static-burst .recently-letter {
+    color: rgba(176, 255, 205, 0.5);
+    text-shadow:
+        0 0 7px rgba(0, 255, 120, 0.22),
+        0 0 16px rgba(0, 255, 120, 0.12),
+        0 0 24px rgba(215, 255, 228, 0.08);
+}
+
+.recently-bg-text.static-overrun {
+    --recently-static-opacity: 0.58;
+    --recently-static-contrast: 1.58;
+    --recently-static-brightness: 1.22;
+}
+
+.recently-bg-text.static-overrun .recently-sign .recently-sign-surface::before {
+    mask-image: none;
+}
+
+.recently-bg-text.static-overrun .recently-letter {
+    color: rgba(208, 255, 224, 0.66);
+    text-shadow:
+        0 0 10px rgba(0, 255, 120, 0.34),
+        0 0 20px rgba(0, 255, 120, 0.16),
+        0 0 30px rgba(222, 255, 232, 0.12);
+}
+
+.recently-sign .recently-sign-surface::after {
+    content: '';
+    position: absolute;
+    top: -18%;
+    left: 0;
+    right: 0;
+    height: 62%;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(210, 255, 224, 0.025) 38%,
+        transparent 100%);
+    pointer-events: none;
+}
+
+.recently-sign {
+    animation: recently-screen-undulate 9s ease-in-out infinite, crt-screen-flicker 8s ease-in-out infinite;
+}
+
+@keyframes recently-screen-undulate {
+    0%, 100% {
+        transform: translateY(0) scaleY(1);
+    }
+    22% {
+        transform: translateY(0.5px) scaleY(1.003);
+    }
+    48% {
+        transform: translateY(-0.3px) scaleY(0.998);
+    }
+    70% {
+        transform: translateY(0.4px) scaleY(1.004);
+    }
+}
+
+@keyframes recently-static-flicker {
+    0% { opacity: 0.05; transform: translateX(0); }
+    33% { opacity: 0.09; transform: translateX(-0.5px); }
+    66% { opacity: 0.06; transform: translateX(0.5px); }
+    100% { opacity: 0.085; transform: translateX(0); }
+}
+
+@keyframes recently-scan-roll {
+    0% {
+        background-position: 0 0, 0 0;
+    }
+    100% {
+        background-position: 0 24px, 0 0;
+    }
+}
+
+.recently-bg-text.is-flickering {
+    --recently-glow: 0.72;
+    filter: brightness(1.06) saturate(1.03);
 }
 
 .recently-bg-text .recently-letter {
   display: inline-block;
   transition: 
-    transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.18s ease,
     text-shadow 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
-    color 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.18s ease;
   cursor: auto;
   will-change: transform, text-shadow, color;
   pointer-events: auto;
+  position: relative;
+  z-index: 3;
+  transform: translateY(0);
+  color: rgba(160, 255, 198, 0.38);
+  text-shadow:
+    0 0 5px rgba(0, 255, 120, 0.16),
+    0 0 12px rgba(0, 255, 120, 0.08),
+    0 0 20px rgba(0, 255, 120, 0.03);
+  opacity: 1;
 }
 
 @media (max-width: 767px) {
@@ -5734,17 +5941,6 @@ section.production-header.alice p {
     margin-top: 0.4rem;
     margin-bottom: 0.5rem;
   }
-}
-
-.recently-bg-text {
-    text-shadow:
-        0 0 2px #f8e9d2,
-        0 0 3px #b6eaff,
-        0 0 1px #fff,
-        0 1px 2px rgba(0,0,0,0.01),
-        0 1px 0 #fff;
-    background-image: linear-gradient(120deg, rgba(255,255,255,0.12) 0%, rgba(248,233,210,0.03) 40%, rgba(182,234,255,0.012) 100%);
-    filter: blur(0.1px) brightness(1.01) saturate(1.0);
 }
 
 .header-title:hover {
@@ -5789,27 +5985,33 @@ section.production-header.alice p {
 }
 
 .recently-bg-text .recently-letter:hover {
-  transform: scale(1.22);
-  color: var(--neon);
+  transform: translateY(-1px);
+  color: rgba(238, 255, 170, 0.92);
   text-shadow:
-    0 0 18px #f8e9d2,
-    0 0 32px #f8e9d2,
-    0 2px 6px rgba(0,0,0,0.08),
-    0 1px 0 #fff;
-  filter: brightness(1.2) saturate(1.2);
+    0 0 10px rgba(203, 255, 92, 0.68),
+    0 0 18px rgba(203, 255, 92, 0.34),
+    0 0 3px rgba(250, 255, 191, 0.52);
+  filter: brightness(1.08);
 }
 
 .recently-bg-text .recently-letter.flicker {
+  color: rgba(214, 255, 118, 0.12);
   text-shadow:
-    0 0 8px rgba(0, 247, 194, 0.18),
-    0 0 16px rgba(0, 247, 194, 0.08),
-    0 0 2px rgba(26, 21, 80, 0.12);
-  filter: brightness(1.08) saturate(1.08);
+    0 0 2px rgba(203, 255, 92, 0.05),
+    0 0 6px rgba(203, 255, 92, 0.03);
+  filter: brightness(0.72) saturate(0.8);
+  opacity: 0.18;
 }
 
 @media (max-width: 767px) {
+  .recently-sign {
+    min-width: min(94vw, 560px);
+    max-width: min(94vw, 560px);
+    padding: 6px 0.68rem 6px 0.9rem;
+  }
+
   .recently-bg-text .recently-letter:hover {
-    transform: scale(1.13);
+    transform: translateY(-1px);
   }
 }
 

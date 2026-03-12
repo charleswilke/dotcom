@@ -1359,92 +1359,6 @@ function initEmailGlitchEffects() {
     });
 }
 
-function neonFlicker(letters) {
-  if (!letters || !letters.length) return;
-  const sign = letters[0].closest('.recently-bg-text');
-  letters.forEach(letter => letter.classList.remove('flicker'));
-  if (sign) sign.classList.remove('is-flickering');
-  // Pick one random letter to flicker
-  const idx = Math.floor(Math.random() * letters.length);
-  const letter = letters[idx];
-  // Flicker sequence: on/off/on/off/on/off/on
-  let flicks = 0;
-  function doFlick() {
-    letter.classList.toggle('flicker');
-    if (sign) sign.classList.toggle('is-flickering', letter.classList.contains('flicker'));
-    flicks++;
-    if (flicks < 7) {
-      setTimeout(doFlick, 40 + Math.random() * 20); // 40-60ms per flick (twice as fast)
-    } else {
-      letter.classList.remove('flicker');
-      if (sign) sign.classList.remove('is-flickering');
-      scheduleEffectTimeout(() => neonFlicker(letters), 5000 + Math.random() * 1000); // 5-6s until next flicker
-    }
-  }
-  doFlick();
-}
-function initNeonFlicker() {
-  const letters = Array.from(document.querySelectorAll('.recently-bg-text .recently-letter'));
-  if (!letters.length) return;
-  scheduleEffectTimeout(() => neonFlicker(letters), 2000); // initial delay
-}
-
-function triggerShimmer(shimmer) {
-  if (!shimmer) return;
-  shimmer.classList.add('shimmer');
-  setTimeout(() => {
-    shimmer.classList.remove('shimmer');
-    scheduleEffectTimeout(() => triggerShimmer(shimmer), 4000 + Math.random() * 2000); // 4-6s between shimmers
-  }, 1200); // match animation duration
-}
-function initShimmerEffect() {
-  const shimmer = document.querySelector('.recently-bg-text');
-  if (!shimmer) return;
-  scheduleEffectTimeout(() => triggerShimmer(shimmer), 2000);
-}
-
-function triggerRecentlyStatic(display) {
-  if (!display) return;
-
-  const overrun = Math.random() < 0.22;
-  const duration = overrun
-    ? 120 + Math.random() * 220
-    : 90 + Math.random() * 180;
-  const opacity = overrun
-    ? 0.48 + Math.random() * 0.18
-    : 0.28 + Math.random() * 0.18;
-  const contrast = overrun
-    ? 1.42 + Math.random() * 0.28
-    : 1.18 + Math.random() * 0.26;
-  const brightness = overrun
-    ? 1.12 + Math.random() * 0.16
-    : 1.04 + Math.random() * 0.12;
-
-  display.style.setProperty('--recently-static-opacity', opacity.toFixed(3));
-  display.style.setProperty('--recently-static-contrast', contrast.toFixed(3));
-  display.style.setProperty('--recently-static-brightness', brightness.toFixed(3));
-  display.classList.add('static-burst');
-  if (overrun) display.classList.add('static-overrun');
-
-  setTimeout(() => {
-    display.classList.remove('static-burst', 'static-overrun');
-    display.style.removeProperty('--recently-static-opacity');
-    display.style.removeProperty('--recently-static-contrast');
-    display.style.removeProperty('--recently-static-brightness');
-
-    const nextDelay = overrun
-      ? 2400 + Math.random() * 3800
-      : 1600 + Math.random() * 5200;
-    scheduleEffectTimeout(() => triggerRecentlyStatic(display), nextDelay);
-  }, duration);
-}
-
-function initRecentlyStatic() {
-  const display = document.querySelector('.recently-bg-text');
-  if (!display) return;
-  scheduleEffectTimeout(() => triggerRecentlyStatic(display), 1800 + Math.random() * 2200);
-}
-
 // Custom Audio Player Script
 function initCustomAudioPlayers() {
   function formatTime(sec) {
@@ -2686,9 +2600,6 @@ function initDeferredHomepageEffects() {
     scheduleIdleWork(() => {
         initHeaderGlitchEffects();
         initFaqGlitchTimer();
-        initNeonFlicker();
-        initShimmerEffect();
-        initRecentlyStatic();
     }, 2000);
 }
 

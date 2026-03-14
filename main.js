@@ -1724,6 +1724,14 @@ async function shareTrackLink(button, { routeKey, track, collectionTitle }) {
 function syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, track) {
     if (!lyricsVideo || !lyricsVideoContainer) return;
 
+    const frame = track && track.lyricsVideoFrame ? track.lyricsVideoFrame : {};
+    const offsetY = frame.offsetY || '15px';
+    lyricsVideo.style.transform = `translate(-50%, calc(-50% + ${offsetY}))`;
+    lyricsVideo.style.width = frame.width || '100%';
+    lyricsVideo.style.minWidth = frame.minWidth || '100%';
+    lyricsVideo.style.minHeight = frame.minHeight || '150%';
+    lyricsVideo.style.objectPosition = frame.objectPosition || 'center center';
+
     if (track && track.video) {
         lyricsVideo.src = track.video;
         lyricsVideo.load();
@@ -2309,7 +2317,19 @@ function initGWORLightbox() {
         { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', video: 'audio/grief-without-ritual/letter-to-the-editor.mp4', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
         { title: 'Refuse the Frequency', file: 'audio/grief-without-ritual/refuse-the-frequency.mp3', video: 'audio/grief-without-ritual/refuse-the-frequency.mov', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', video: 'audio/grief-without-ritual/respect-the-exhale.mp4', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        {
+            title: 'From the Beginning',
+            file: 'audio/grief-without-ritual/from-the-beginning.mp3',
+            video: 'audio/grief-without-ritual/from-the-beginning.mp4',
+            article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen',
+            lyricsVideoFrame: {
+                offsetY: '-116px',
+                width: '152%',
+                minWidth: '152%',
+                minHeight: '112%',
+                objectPosition: 'center 42%'
+            }
+        },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', video: 'audio/grief-without-ritual/dearly-beloved.mp4', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4', article: 'https://charleswilke.substack.com/p/agency-wo-agenda' },

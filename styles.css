@@ -7419,16 +7419,16 @@ section.production-header.alice p {
 
 .lyrics-video {
     position: absolute;
-    width: 100%;
+    width: var(--lyrics-video-width, 100%);
     height: auto;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, calc(-50% + 15px));
+    transform: translate(-50%, calc(-50% + var(--lyrics-video-offset-y, 15px)));
     /* Scale to show all three lines with active line centered */
-    min-height: 150%;
-    min-width: 100%;
+    min-height: var(--lyrics-video-min-height, 150%);
+    min-width: var(--lyrics-video-min-width, 100%);
     object-fit: cover;
-    object-position: center center;
+    object-position: var(--lyrics-video-object-position, center center);
     pointer-events: none;
 }
 

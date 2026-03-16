@@ -43,6 +43,7 @@ const CONFIG = {
     playerBullet:'#00ffff',
     enemy:       '#ff00aa',
     enemyBullet: '#ff4400',
+    asteroid:    '#aaeeff',
     pickup:      '#ffd700',
     boss:        '#ffffff',
     hud:         '#e0e0ff'
@@ -596,6 +597,9 @@ function updatePlayer() {
   if (Math.abs(player.vx) < 0.05) player.vx = 0;
   if (Math.abs(player.vy) < 0.05) player.vy = 0;
 
+  // Keep pitch angle in sync with vertical velocity for bullet direction
+  player.pitchAngle = (player.vy / player.maxVel) * 0.35;
+
   player.x += player.vx;
   player.y += player.vy;
 
@@ -623,25 +627,35 @@ function firePlayerWeapon() {
   const lvl = player.weaponLevel;
   const bx = player.x + 20;
   const by = player.y;
+  const p = player.pitchAngle || 0;
+
+  // Helper: spawn a bullet at a given angle (pitch-relative)
+  function fire(x, y, angle) {
+    spawnPlayerBullet(x, y,
+      CONFIG.bulletSpeed * Math.cos(angle),
+      CONFIG.bulletSpeed * Math.sin(angle));
+  }
 
   if (lvl === 1) {
-    spawnPlayerBullet(bx, by, CONFIG.bulletSpeed, 0);
+    fire(bx, by, p);
   } else if (lvl === 2) {
-    spawnPlayerBullet(bx, by - 5, CONFIG.bulletSpeed, 0);
-    spawnPlayerBullet(bx, by + 5, CONFIG.bulletSpeed, 0);
+    fire(bx, by - 5, p);
+    fire(bx, by + 5, p);
   } else if (lvl === 3) {
-    spawnPlayerBullet(bx, by, CONFIG.bulletSpeed, 0);
-    spawnPlayerBullet(bx, by - 3, CONFIG.bulletSpeed * Math.cos(0.26), -CONFIG.bulletSpeed * Math.sin(0.26));
-    spawnPlayerBullet(bx, by + 3, CONFIG.bulletSpeed * Math.cos(0.26), CONFIG.bulletSpeed * Math.sin(0.26));
+    fire(bx, by,     p);
+    fire(bx, by - 3, p - 0.26);
+    fire(bx, by + 3, p + 0.26);
   } else if (lvl === 4) {
-    spawnPlayerBullet(bx, by, CONFIG.bulletSpeed, 0);
-    spawnPlayerBullet(bx, by - 3, CONFIG.bulletSpeed * Math.cos(0.26), -CONFIG.bulletSpeed * Math.sin(0.26));
-    spawnPlayerBullet(bx, by + 3, CONFIG.bulletSpeed * Math.cos(0.26), CONFIG.bulletSpeed * Math.sin(0.26));
-    spawnPlayerBullet(player.x - 15, by, -CONFIG.bulletSpeed * 0.7, 0); // rear shot
+    fire(bx, by,     p);
+    fire(bx, by - 3, p - 0.26);
+    fire(bx, by + 3, p + 0.26);
+    // Rear shot mirrors the pitch
+    spawnPlayerBullet(player.x - 15, by,
+      -CONFIG.bulletSpeed * 0.7 * Math.cos(p),
+      -CONFIG.bulletSpeed * 0.7 * Math.sin(p));
   } else if (lvl >= 5) {
     for (let i = -2; i <= 2; i++) {
-      const angle = i * 0.18;
-      spawnPlayerBullet(bx, by, CONFIG.bulletSpeed * Math.cos(angle), CONFIG.bulletSpeed * Math.sin(angle));
+      fire(bx, by, p + i * 0.18);
     }
   }
   player.shotsFired++;
@@ -709,6 +723,33 @@ function drawEnemyBullets() {
 }
 
 // === ENEMIES ===
+function generateAsteroidData(baseRadius) {
+  const n = 8 + Math.floor(Math.random() * 3);
+  const verts = [];
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 2 + (Math.random() - 0.5) * (Math.PI / n * 0.8);
+    const r = baseRadius * (0.65 + Math.random() * 0.55);
+    verts.push({ x: Math.cos(angle) * r, y: Math.sin(angle) * r });
+  }
+  // Interior cracks — glowing fissures radiating from near-center
+  const crackCount = 2 + Math.floor(Math.random() * 3);
+  const cracks = [];
+  for (let i = 0; i < crackCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const startR = baseRadius * 0.05;
+    const endR   = baseRadius * (0.4 + Math.random() * 0.3);
+    const midA   = angle + (Math.random() - 0.5) * 0.5;
+    const midR   = (startR + endR) * (0.45 + Math.random() * 0.2);
+    cracks.push({
+      x1: Math.cos(angle) * startR, y1: Math.sin(angle) * startR,
+      xm: Math.cos(midA)  * midR,   ym: Math.sin(midA)  * midR,
+      x2: Math.cos(angle + (Math.random() - 0.5) * 0.35) * endR,
+      y2: Math.sin(angle + (Math.random() - 0.5) * 0.35) * endR,
+    });
+  }
+  return { verts, cracks };
+}
+
 function spawnEnemy(type, x, y, options = {}) {
   if (enemies.length >= CONFIG.maxEnemies) return;
   const cfg = CONFIG.enemies[type];
@@ -728,6 +769,21 @@ function spawnEnemy(type, x, y, options = {}) {
     speed: options.speed || 2,
     triggered: false
   };
+  if (type === 'turret') {
+    enemy.bodyRotation = Math.random() * Math.PI * 2;
+    enemy.rotSpeed = 0.03;
+    const respawnFrames = Math.round(3 * Math.PI * 2 / 0.03);
+    enemy.armorPlates = [0,1,2,3].map(() => ({ alive: true, respawnTimer: 0, respawnFrames }));
+    enemy.targetX = CONFIG.width - 220; // anchor point inside playfield
+  }
+  const asteroidRadii = { drone: 14, charger: 18, spawner: 26 };
+  if (asteroidRadii[type] !== undefined) {
+    const data = generateAsteroidData(asteroidRadii[type]);
+    enemy.verts = data.verts;
+    enemy.cracks = data.cracks;
+    enemy.rotation = Math.random() * Math.PI * 2;
+    enemy.rotSpeed = (Math.random() * 0.008 + 0.003) * (Math.random() < 0.5 ? 1 : -1);
+  }
   enemies.push(enemy);
   return enemy;
 }
@@ -770,10 +826,16 @@ function updateEnemies() {
         break;
 
       case 'turret':
-        // Stationary, track and fire
+        if (e.x > e.targetX) e.x -= 2;
+        e.bodyRotation += e.rotSpeed;
+        for (const plate of e.armorPlates) {
+          if (!plate.alive && plate.respawnTimer > 0) {
+            plate.respawnTimer--;
+            if (plate.respawnTimer === 0) plate.alive = true;
+          }
+        }
         e.fireTimer--;
         if (e.fireTimer <= 0 && player.alive) {
-          // Burst of 3
           for (let s = 0; s < 3; s++) {
             setTimeout(() => { if (e.alive) fireAimedShot(e); }, s * 100);
           }
@@ -796,6 +858,8 @@ function updateEnemies() {
         break;
     }
 
+    if (e.rotSpeed !== undefined) e.rotation += e.rotSpeed;
+
     // Remove if off-screen left
     if (e.x < -60) {
       enemies.splice(i, 1);
@@ -816,109 +880,190 @@ function fireAimedShot(enemy) {
   );
 }
 
+const ASTEROID_TYPES = new Set(['drone', 'charger', 'spawner']);
+
+function drawAsteroidEnemy(e) {
+  const triggered = e.type === 'charger' && e.triggered;
+  const glowColor = triggered ? '#ff8844' : CONFIG.colors.asteroid;
+
+  ctx.shadowColor = glowColor;
+  ctx.shadowBlur = triggered ? 16 : 12;
+  ctx.translate(e.x, e.y);
+  ctx.rotate(e.rotation);
+
+  // Rocky body
+  ctx.fillStyle = '#12121e';
+  ctx.beginPath();
+  ctx.moveTo(e.verts[0].x, e.verts[0].y);
+  for (let i = 1; i < e.verts.length; i++) ctx.lineTo(e.verts[i].x, e.verts[i].y);
+  ctx.closePath();
+  ctx.fill();
+
+  // Phosphorescent outline
+  ctx.strokeStyle = glowColor;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Interior cracks — same neon glow as outline
+  ctx.strokeStyle = glowColor;
+  ctx.lineWidth = 1;
+  ctx.shadowColor = glowColor;
+  ctx.shadowBlur = 5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  for (const c of e.cracks) {
+    ctx.beginPath();
+    ctx.moveTo(c.x1, c.y1);
+    ctx.lineTo(c.xm, c.ym);
+    ctx.lineTo(c.x2, c.y2);
+    ctx.stroke();
+  }
+}
+
+function drawCraftEnemy(e) {
+  ctx.shadowColor = CONFIG.colors.enemy;
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = CONFIG.colors.enemy;
+
+  switch (e.type) {
+    case 'weaver': {
+      // Double-delta interceptor, nose pointing left
+      ctx.beginPath();
+      ctx.moveTo(e.x - 18, e.y);
+      ctx.lineTo(e.x - 8,  e.y - 5);
+      ctx.lineTo(e.x + 2,  e.y - 5);
+      ctx.lineTo(e.x + 6,  e.y - 16);   // outer wing tip
+      ctx.lineTo(e.x + 12, e.y - 5);
+      ctx.lineTo(e.x + 16, e.y - 9);    // tail fin
+      ctx.lineTo(e.x + 16, e.y);
+      ctx.lineTo(e.x + 16, e.y + 9);
+      ctx.lineTo(e.x + 12, e.y + 5);
+      ctx.lineTo(e.x + 6,  e.y + 16);
+      ctx.lineTo(e.x + 2,  e.y + 5);
+      ctx.lineTo(e.x - 8,  e.y + 5);
+      ctx.closePath();
+      ctx.fill();
+      // Engine glows at rear
+      ctx.shadowColor = '#ff6600';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = 'rgba(255,100,0,0.8)';
+      ctx.beginPath();
+      ctx.arc(e.x + 16, e.y - 5, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(e.x + 16, e.y + 5, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+
+    case 'turret': {
+      const spread = 0.55;
+      // Ghost plates — dim outline showing where plates will respawn
+      ctx.lineCap = 'round';
+      for (let i = 0; i < 4; i++) {
+        const plate = e.armorPlates[i];
+        if (plate.alive || plate.respawnTimer <= 0) continue;
+        const progress = 1 - plate.respawnTimer / plate.respawnFrames;
+        const alpha = 0.08 + progress * 0.22;
+        ctx.strokeStyle = `rgba(255,0,170,${alpha.toFixed(2)})`;
+        ctx.lineWidth = 6;
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, 15, e.bodyRotation + i * Math.PI / 2 - spread,
+                                e.bodyRotation + i * Math.PI / 2 + spread);
+        ctx.stroke();
+      }
+      // Active armor plates
+      ctx.strokeStyle = CONFIG.colors.enemy;
+      ctx.lineWidth = 6;
+      ctx.shadowColor = CONFIG.colors.enemy;
+      ctx.shadowBlur = 10;
+      for (let i = 0; i < 4; i++) {
+        if (!e.armorPlates[i].alive) continue;
+        const a = e.bodyRotation + i * Math.PI / 2;
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, 15, a - spread, a + spread);
+        ctx.stroke();
+      }
+      // Center sphere — pulses and goes white-hot when fully exposed
+      const exposed = e.armorPlates.every(p => !p.alive);
+      const pulse = Math.sin(e.frame * 0.28);
+      const coreRadius = exposed ? 6 + pulse * 3.5 : 6;
+      const coreColor  = exposed ? '#ffffff' : CONFIG.colors.enemy;
+      const coreGlow   = exposed ? 14 + pulse * 10 : 8;
+      ctx.fillStyle = coreColor;
+      ctx.shadowColor = coreColor;
+      ctx.shadowBlur = coreGlow;
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, coreRadius, 0, Math.PI * 2);
+      ctx.fill();
+      // Barrel — independently tracks player
+      if (player.alive) {
+        const angle = Math.atan2(player.y - e.y, player.x - e.x);
+        ctx.strokeStyle = CONFIG.colors.enemy;
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'square';
+        ctx.shadowColor = CONFIG.colors.enemy;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.moveTo(e.x + Math.cos(angle) * 6, e.y + Math.sin(angle) * 6);
+        ctx.lineTo(e.x + Math.cos(angle) * 24, e.y + Math.sin(angle) * 24);
+        ctx.stroke();
+      }
+      break;
+    }
+
+    case 'bomber': {
+      // Heavy fuselage with swept wings (tighter vertical span)
+      ctx.beginPath();
+      ctx.moveTo(e.x - 18, e.y);         // nose
+      ctx.lineTo(e.x - 8,  e.y - 5);     // upper fuselage
+      ctx.lineTo(e.x + 4,  e.y - 5);     // wing root upper
+      ctx.lineTo(e.x + 8,  e.y - 13);    // wing tip upper
+      ctx.lineTo(e.x + 18, e.y - 7);     // trailing wing upper
+      ctx.lineTo(e.x + 20, e.y);         // tail
+      ctx.lineTo(e.x + 18, e.y + 7);     // trailing wing lower
+      ctx.lineTo(e.x + 8,  e.y + 13);    // wing tip lower
+      ctx.lineTo(e.x + 4,  e.y + 5);     // wing root lower
+      ctx.lineTo(e.x - 8,  e.y + 5);     // lower fuselage
+      ctx.closePath();
+      ctx.fill();
+      // Bomb bay slit
+      ctx.fillStyle = '#0a0a1a';
+      ctx.shadowBlur = 0;
+      ctx.fillRect(e.x - 6, e.y - 2, 14, 4);
+      // Active bomb indicator
+      ctx.fillStyle = CONFIG.colors.enemyBullet;
+      ctx.shadowColor = CONFIG.colors.enemyBullet;
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(e.x + 2, e.y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+  }
+
+  // Scanline overlay (weaver + bomber only — turret is a ring, not a filled body)
+  if (e.type !== 'turret') {
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.shadowBlur = 0;
+    const ex = e.x - e.width / 2;
+    const ey = e.y - e.height / 2;
+    for (let sy = ey; sy < ey + e.height; sy += 4) {
+      ctx.fillRect(ex - 2, sy, e.width + 4, 2);
+    }
+  }
+}
+
 function drawEnemies() {
   ctx.save();
   for (const e of enemies) {
     ctx.save();
-    ctx.shadowColor = CONFIG.colors.enemy;
-    ctx.shadowBlur = 8;
-    ctx.fillStyle = CONFIG.colors.enemy;
-
-    const ex = e.x - e.width / 2;
-    const ey = e.y - e.height / 2;
-
-    switch (e.type) {
-      case 'drone':
-        // Diamond shape
-        ctx.beginPath();
-        ctx.moveTo(e.x - e.width / 2, e.y);
-        ctx.lineTo(e.x, e.y - e.height / 2);
-        ctx.lineTo(e.x + e.width / 2, e.y);
-        ctx.lineTo(e.x, e.y + e.height / 2);
-        ctx.closePath();
-        ctx.fill();
-        break;
-
-      case 'weaver':
-        // Wavy body — elongated hexagon
-        ctx.beginPath();
-        ctx.moveTo(e.x - 15, e.y);
-        ctx.lineTo(e.x - 8, e.y - 12);
-        ctx.lineTo(e.x + 8, e.y - 12);
-        ctx.lineTo(e.x + 15, e.y);
-        ctx.lineTo(e.x + 8, e.y + 12);
-        ctx.lineTo(e.x - 8, e.y + 12);
-        ctx.closePath();
-        ctx.fill();
-        break;
-
-      case 'charger':
-        // Aggressive wedge pointing left
-        ctx.fillStyle = e.triggered ? '#ff3366' : CONFIG.colors.enemy;
-        ctx.beginPath();
-        ctx.moveTo(e.x - 18, e.y);
-        ctx.lineTo(e.x + 12, e.y - 14);
-        ctx.lineTo(e.x + 8, e.y);
-        ctx.lineTo(e.x + 12, e.y + 14);
-        ctx.closePath();
-        ctx.fill();
-        break;
-
-      case 'turret':
-        // Square base with rotating barrel
-        ctx.fillRect(ex, ey, e.width, e.height);
-        // Barrel pointing at player
-        if (player.alive) {
-          const angle = Math.atan2(player.y - e.y, player.x - e.x);
-          ctx.strokeStyle = CONFIG.colors.enemy;
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.moveTo(e.x, e.y);
-          ctx.lineTo(e.x + Math.cos(angle) * 20, e.y + Math.sin(angle) * 20);
-          ctx.stroke();
-        }
-        break;
-
-      case 'spawner':
-        // Large hexagon
-        ctx.beginPath();
-        for (let a = 0; a < 6; a++) {
-          const angle = a * Math.PI / 3;
-          const sx = e.x + Math.cos(angle) * e.width / 2;
-          const sy = e.y + Math.sin(angle) * e.height / 2;
-          if (a === 0) ctx.moveTo(sx, sy);
-          else ctx.lineTo(sx, sy);
-        }
-        ctx.closePath();
-        ctx.fill();
-        // Inner glow
-        ctx.fillStyle = 'rgba(255,255,255,0.2)';
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, 10, 0, Math.PI * 2);
-        ctx.fill();
-        break;
-
-      case 'bomber':
-        // Flat wide shape
-        ctx.beginPath();
-        ctx.moveTo(e.x - 18, e.y - 6);
-        ctx.lineTo(e.x + 18, e.y - 6);
-        ctx.lineTo(e.x + 12, e.y + 8);
-        ctx.lineTo(e.x - 12, e.y + 8);
-        ctx.closePath();
-        ctx.fill();
-        // Bomb bay indicator
-        ctx.fillStyle = CONFIG.colors.enemyBullet;
-        ctx.fillRect(e.x - 3, e.y + 5, 6, 4);
-        break;
+    if (ASTEROID_TYPES.has(e.type)) {
+      drawAsteroidEnemy(e);
+    } else {
+      drawCraftEnemy(e);
     }
-
-    // Scanline overlay
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
-    for (let sy = ey; sy < ey + e.height; sy += 4) {
-      ctx.fillRect(ex - 2, sy, e.width + 4, 2);
-    }
-
     ctx.restore();
   }
   ctx.restore();
@@ -1063,23 +1208,60 @@ function checkCollisions() {
   // Player bullets vs enemies
   for (let bi = playerBullets.length - 1; bi >= 0; bi--) {
     const b = playerBullets[bi];
+    let consumed = false;
     for (let ei = enemies.length - 1; ei >= 0; ei--) {
       const e = enemies[ei];
-      if (rectOverlap(b.x - b.width / 2, b.y - b.height / 2, b.width, b.height,
-                       e.x - e.width / 2, e.y - e.height / 2, e.width, e.height)) {
-        e.hp--;
-        playerBullets.splice(bi, 1);
-        player.shotsHit++;
 
-        if (e.hp <= 0) {
+      if (e.type === 'turret') {
+        // Angular collision — core kill, plate block, or gap pass-through
+        const dx = b.x - e.x;
+        const dy = b.y - e.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist <= 7) {
+          // Direct core hit — instant kill
           destroyEnemy(e, ei);
-        } else {
-          // Hit flash — small spark
-          spawnExplosion(b.x, b.y, 3, ['#ffffff', CONFIG.colors.playerBullet]);
+          player.shotsHit++;
+          consumed = true;
+          break;
         }
-        break;
+        if (dist > 8 && dist < 22) {
+          const bulletAngle = Math.atan2(dy, dx);
+          const spread = 0.55;
+          for (let pi = 0; pi < 4; pi++) {
+            if (!e.armorPlates[pi].alive) continue;
+            const plateAngle = e.bodyRotation + pi * Math.PI / 2;
+            let diff = Math.abs(bulletAngle - plateAngle);
+            if (diff > Math.PI) diff = Math.PI * 2 - diff;
+            if (diff < spread) {
+              e.armorPlates[pi].alive = false;
+              e.armorPlates[pi].respawnTimer = e.armorPlates[pi].respawnFrames;
+              player.shotsHit++;
+              spawnExplosion(b.x, b.y, 10, ['#ffffff', '#ff00aa', '#440020']);
+              consumed = true;
+              break;
+            }
+          }
+        }
+        // Bullet threaded the gap — let it continue past the turret
+      } else {
+        if (rectOverlap(b.x - b.width / 2, b.y - b.height / 2, b.width, b.height,
+                         e.x - e.width / 2, e.y - e.height / 2, e.width, e.height)) {
+          e.hp--;
+          player.shotsHit++;
+          if (e.hp <= 0) {
+            destroyEnemy(e, ei);
+          } else {
+            spawnExplosion(b.x, b.y, 3, ['#ffffff', CONFIG.colors.playerBullet]);
+          }
+          consumed = true;
+          break;
+        }
       }
+
+      if (consumed) break;
     }
+    if (consumed) playerBullets.splice(bi, 1);
   }
 
   // Player bullets vs boss

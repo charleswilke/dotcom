@@ -29,7 +29,7 @@ body {
 }
 
 .frame {
-  width: min(980px, 96vw);
+  width: min(980px, 96vw, calc((100vh - 130px) * 4 / 3));
   position: relative;
   border: 4px solid var(--hud-line);
   box-shadow:

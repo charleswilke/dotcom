@@ -136,7 +136,8 @@ body::after {
 /* Header Styles */
 header {
     position: relative;
-    height: 25vh;
+    height: 20vh;
+    min-height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1553,6 +1554,39 @@ footer p {
 }
 
 /* Responsive Design */
+/* Smaller PC screens / small laptops */
+@media (min-width: 1025px) and (max-width: 1200px) {
+    header {
+        min-height: 220px;
+    }
+
+    .header-title {
+        font-size: 3.8rem;
+        letter-spacing: 2.5px;
+    }
+
+    .header-subtitle {
+        font-size: 1.1rem;
+        letter-spacing: 1.5px;
+    }
+
+    .showcase-grid {
+        gap: 1.5rem;
+    }
+
+    .showcase-item img {
+        height: 240px;
+    }
+
+    .showcase-caption {
+        padding: 0.75rem 1rem 0.4rem 1rem;
+    }
+
+    .showcase-caption p {
+        font-size: 0.85rem;
+    }
+}
+
 /* iPad Mini and tablet specific styles */
 @media (min-width: 768px) and (max-width: 1024px) {
     .header-title {

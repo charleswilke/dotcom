@@ -134,20 +134,22 @@ const skyPlane = {
   dir: 1
 };
 const gulls = [
-  { x: W * 0.36, y: 205, baseX: W * 0.36, baseY: 209, orbitX: 42, orbitY: 24, speed: 0.0019, phase: 0.2, r: 11, cooldown: 0 },
-  { x: W * 0.56, y: 232, baseX: W * 0.56, baseY: 232, orbitX: 36, orbitY: 21, speed: 0.0022, phase: 2.0, r: 11, cooldown: 0 },
-  { x: W * 0.76, y: 214, baseX: W * 0.76, baseY: 216, orbitX: 40, orbitY: 26, speed: 0.002, phase: 4.1, r: 11, cooldown: 0 },
-  { x: (W * 0.66 + player.x) * 0.5, y: hoop.y - 12, baseX: (W * 0.66 + player.x) * 0.5, baseY: hoop.y - 12, orbitX: 28, orbitY: 16, speed: 0.0021, phase: 1.3, r: 12, cooldown: 0 },
-  { x: (((W * 0.66 + player.x) * 0.5) + (((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7)) * 0.5, y: hoop.y + 2, baseX: (((W * 0.66 + player.x) * 0.5) + (((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7)) * 0.5, baseY: hoop.y + 2, orbitX: 26, orbitY: 15, speed: 0.00195, phase: 2.6, r: 12, cooldown: 0 },
-  { x: ((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7, y: hoop.y + 22, baseX: ((W * 0.81 + player.x) * 0.5) * 0.3 + (hoop.x + hoop.rimGap * 0.5) * 0.7, baseY: hoop.y + 22, orbitX: 24, orbitY: 14, speed: 0.0018, phase: 3.8, r: 12, cooldown: 0 }
+  // Upper arc gulls — staggered heights across the court
+  { x: W * 0.24, y: 238, baseX: W * 0.24, baseY: 238, orbitX: 44, orbitY: 22, speed: 0.0019, phase: 0.2, r: 11, cooldown: 0 },
+  { x: W * 0.46, y: 186, baseX: W * 0.46, baseY: 186, orbitX: 40, orbitY: 20, speed: 0.0022, phase: 2.0, r: 11, cooldown: 0 },
+  { x: W * 0.66, y: 220, baseX: W * 0.66, baseY: 220, orbitX: 38, orbitY: 22, speed: 0.002, phase: 4.1, r: 11, cooldown: 0 },
+  // Mid-descent plinko gulls — staggered 50-110px above hoop so deflections can still arc in
+  { x: W * 0.37, y: 338, baseX: W * 0.37, baseY: 338, orbitX: 32, orbitY: 18, speed: 0.0021, phase: 1.3, r: 12, cooldown: 0 },
+  { x: W * 0.55, y: 302, baseX: W * 0.55, baseY: 302, orbitX: 28, orbitY: 16, speed: 0.00195, phase: 2.6, r: 12, cooldown: 0 },
+  { x: W * 0.71, y: 358, baseX: W * 0.71, baseY: 358, orbitX: 26, orbitY: 14, speed: 0.0018, phase: 3.8, r: 12, cooldown: 0 }
 ];
 const helicopter = {
-  x: W * 0.62,
-  y: 284,
-  baseX: W * 0.62,
-  baseY: 284,
-  orbitX: 38,
-  orbitY: 16,
+  x: W * 0.60,
+  y: 300,
+  baseX: W * 0.60,
+  baseY: 300,
+  orbitX: 56,
+  orbitY: 22,
   speed: 0.0016,
   phase: 0.7,
   bodyRx: 34,
@@ -160,20 +162,21 @@ let touchedBalloonThisShot = false;
 let touchedLaserThisShot = false;
 let touchedAlienUfoThisShot = false;
 const balloons = [
-  { x: W * 0.41, y: floorY - 270, baseX: W * 0.41, baseY: floorY - 270, swayAmp: 16, swaySpeed: 0.00162, bobAmp: 24, bobSpeed: 0.00096, phase: 0.15, rx: 34, ry: 36, cooldown: 0 },
-  { x: W * 0.59125, y: floorY - 306, baseX: W * 0.59125, baseY: floorY - 306, swayAmp: 12, swaySpeed: 0.00138, bobAmp: 20, bobSpeed: 0.00128, phase: 2.0, rx: 32, ry: 34, cooldown: 0 },
-  { x: W * 0.77125, y: floorY - 353, baseX: W * 0.77125, baseY: floorY - 353, swayAmp: 12, swaySpeed: 0.00174, bobAmp: 14, bobSpeed: 0.00108, phase: 4.0, rx: 33, ry: 35, cooldown: 0 }
+  // Rising staircase left→right, but pulled back so no balloon seals off the backboard
+  { x: W * 0.40, y: floorY - 268, baseX: W * 0.40, baseY: floorY - 268, swayAmp: 18, swaySpeed: 0.00162, bobAmp: 26, bobSpeed: 0.00096, phase: 0.15, rx: 34, ry: 36, cooldown: 0 },
+  { x: W * 0.57, y: floorY - 336, baseX: W * 0.57, baseY: floorY - 336, swayAmp: 14, swaySpeed: 0.00138, bobAmp: 22, bobSpeed: 0.00128, phase: 2.0, rx: 32, ry: 34, cooldown: 0 },
+  { x: W * 0.70, y: floorY - 382, baseX: W * 0.70, baseY: floorY - 382, swayAmp: 12, swaySpeed: 0.00174, bobAmp: 16, bobSpeed: 0.00108, phase: 4.0, rx: 33, ry: 35, cooldown: 0 }
 ];
 const spaceUfos = {
-  left: { x: W * 0.28, y: 244, wobblePhase: 0.8 },
-  center: { x: W * 0.5, y: 106, wobblePhase: 2.1 },
-  right: { x: W * 0.72, y: 244, wobblePhase: 3.6 }
+  left: { x: W * 0.26, y: 256, wobblePhase: 0.8 },
+  center: { x: W * 0.5, y: 160, wobblePhase: 2.1 },
+  right: { x: W * 0.74, y: 228, wobblePhase: 3.6 }
 };
 const alienBaseUfos = [
-  { x: W * 0.88, y: floorY - 500, wobblePhase: 0.7, scale: 0.84, cooldown: 0 },
-  { x: W * 0.93, y: floorY - 452, wobblePhase: 1.8, scale: 0.8, cooldown: 0 },
-  { x: W * 0.9, y: floorY - 404, wobblePhase: 2.6, scale: 0.86, cooldown: 0 },
-  { x: W * 0.95, y: floorY - 356, wobblePhase: 3.5, scale: 0.78, cooldown: 0 }
+  { x: W * 0.66, y: floorY - 476, wobblePhase: 0.7, scale: 0.84, cooldown: 0 },  // visible mid-court, high — threatens arc apex
+  { x: W * 0.80, y: floorY - 416, wobblePhase: 1.8, scale: 0.80, cooldown: 0 },  // near backboard, mid-high
+  { x: W * 0.88, y: floorY - 352, wobblePhase: 2.6, scale: 0.86, cooldown: 0 },  // far right, mid-descent zone
+  { x: W * 0.74, y: floorY - 296, wobblePhase: 3.5, scale: 0.78, cooldown: 0 }   // hovering over the hoop — low lasers, max drama
 ];
 const alienLaserField = {
   minIntervalMs: 300,

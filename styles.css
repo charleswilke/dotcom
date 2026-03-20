@@ -6786,6 +6786,15 @@ section.production-header.alice p {
     margin-top: 0.25rem;
 }
 
+/* Mobile-only elements — hidden on desktop */
+.mixtape-mobile-title {
+    display: none;
+}
+
+.mixtape-now-playing {
+    display: none;
+}
+
 .rss-section-title.section-title {
     position: relative;
     display: table;
@@ -7102,6 +7111,52 @@ section.production-header.alice p {
     border: 1px solid rgba(0, 247, 194, 0.1);
     padding: 0.5rem;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 247, 194, 0.25) transparent;
+}
+
+/* Playlist webkit scrollbar — A-side (teal) */
+.mixtape-playlist::-webkit-scrollbar {
+    width: 4px;
+}
+
+.mixtape-playlist::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.mixtape-playlist::-webkit-scrollbar-thumb {
+    background: rgba(0, 247, 194, 0.25);
+    border-radius: 2px;
+}
+
+.mixtape-playlist::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 247, 194, 0.45);
+}
+
+/* GWOR playlist scrollbar (red) */
+#gworLightbox .mixtape-playlist {
+    scrollbar-color: rgba(197, 74, 74, 0.25) transparent;
+}
+
+#gworLightbox .mixtape-playlist::-webkit-scrollbar-thumb {
+    background: rgba(197, 74, 74, 0.25);
+}
+
+#gworLightbox .mixtape-playlist::-webkit-scrollbar-thumb:hover {
+    background: rgba(197, 74, 74, 0.45);
+}
+
+/* B-side playlist scrollbar (amber) */
+.mixtape-lightbox.b-side-active .mixtape-playlist {
+    scrollbar-color: rgba(247, 168, 0, 0.25) transparent;
+}
+
+.mixtape-lightbox.b-side-active .mixtape-playlist::-webkit-scrollbar-thumb {
+    background: rgba(247, 168, 0, 0.25);
+}
+
+.mixtape-lightbox.b-side-active .mixtape-playlist::-webkit-scrollbar-thumb:hover {
+    background: rgba(247, 168, 0, 0.45);
 }
 
 .mixtape-playlist ul {
@@ -7475,70 +7530,7 @@ section.production-header.alice p {
 
 /* ===== KARAOKE LYRICS ===== */
 
-.karaoke-toggle-btn {
-    background: none;
-    border: 1px solid rgba(0, 247, 194, 0.3);
-    color: rgba(0, 247, 194, 0.7);
-    font-size: 1.1rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    margin-left: 0.5rem;
-    line-height: 1;
-}
-
-.karaoke-toggle-btn:hover {
-    color: #00f7c2;
-    border-color: rgba(0, 247, 194, 0.6);
-    text-shadow: 0 0 8px rgba(0, 247, 194, 0.5);
-}
-
-.karaoke-mode .karaoke-toggle-btn {
-    color: #00f7c2;
-    border-color: #00f7c2;
-    background: rgba(0, 247, 194, 0.1);
-    text-shadow: 0 0 8px rgba(0, 247, 194, 0.5);
-}
-
-/* GWOR theme toggle */
-#gworLightbox .karaoke-toggle-btn {
-    border-color: rgba(166, 52, 52, 0.3);
-    color: rgba(197, 74, 74, 0.7);
-}
-
-#gworLightbox .karaoke-toggle-btn:hover {
-    color: #c54a4a;
-    border-color: rgba(197, 74, 74, 0.6);
-    text-shadow: 0 0 8px rgba(197, 74, 74, 0.5);
-}
-
-#gworLightbox .karaoke-mode .karaoke-toggle-btn {
-    color: #c54a4a;
-    border-color: #c54a4a;
-    background: rgba(197, 74, 74, 0.1);
-    text-shadow: 0 0 8px rgba(197, 74, 74, 0.5);
-}
-
-/* B-side theme toggle */
-.mixtape-lightbox.b-side-active .karaoke-toggle-btn {
-    border-color: rgba(247, 168, 0, 0.3);
-    color: rgba(247, 168, 0, 0.7);
-}
-
-.mixtape-lightbox.b-side-active .karaoke-toggle-btn:hover {
-    color: #f7a800;
-    border-color: rgba(247, 168, 0, 0.6);
-    text-shadow: 0 0 8px rgba(247, 168, 0, 0.5);
-}
-
-.mixtape-lightbox.b-side-active .karaoke-mode .karaoke-toggle-btn {
-    color: #f7a800;
-    border-color: #f7a800;
-    background: rgba(247, 168, 0, 0.1);
-}
-
-/* Karaoke container — replaces video when active */
+/* Karaoke container — replaces video display */
 .karaoke-container {
     display: none;
     width: 100%;
@@ -7565,11 +7557,10 @@ section.production-header.alice p {
 }
 
 .karaoke-scroll-region {
-    padding: 1.5rem 1rem;
+    padding: 1rem 0.75rem;
     max-height: 280px;
     overflow-y: auto;
     scroll-behavior: smooth;
-    /* Hide scrollbar but keep functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -7581,10 +7572,10 @@ section.production-header.alice p {
 /* Individual lyric lines */
 .karaoke-line {
     text-align: center;
-    padding: 0.4rem 0;
-    font-size: 1.05rem;
+    padding: 0.3rem 0;
+    font-size: 0.92rem;
     font-weight: 500;
-    line-height: 1.6;
+    line-height: 1.5;
     opacity: 0.25;
     transition: opacity 0.4s ease;
     letter-spacing: 0.02em;
@@ -7592,6 +7583,32 @@ section.production-header.alice p {
 
 .karaoke-line.active {
     opacity: 1;
+}
+
+/* Completed line — fades out while keeping words highlighted */
+.karaoke-line.completed {
+    opacity: 0.25;
+}
+
+.karaoke-line.completed .karaoke-word.past {
+    background: #00f7c2;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#gworLightbox .karaoke-line.completed .karaoke-word.past {
+    background: #c54a4a;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.mixtape-lightbox.b-side-active .karaoke-line.completed .karaoke-word.past {
+    background: #f7a800;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* Individual words with sweep highlight */
@@ -7713,38 +7730,38 @@ section.production-header.alice p {
     filter: drop-shadow(0 0 6px rgba(247, 168, 0, 0.3));
 }
 
-/* Desktop karaoke sizing */
+/* Desktop karaoke sizing — match video box height */
 @media (min-width: 768px) {
     .karaoke-container.karaoke-active {
         min-height: 162px;
+        max-height: 162px;
     }
     .karaoke-scroll-region {
-        max-height: 350px;
+        max-height: 130px;
     }
 }
 
-/* Mobile karaoke */
+/* Mobile karaoke — 3-line viewport with active line centered */
 @media (max-width: 768px) {
+    .karaoke-container.karaoke-active {
+        min-height: 0;
+    }
     .karaoke-scroll-region {
-        padding: 1rem 0.75rem;
-        max-height: 200px;
+        padding: 0.6rem 0.5rem;
+        max-height: 6.5rem;
     }
     .karaoke-line {
-        font-size: 0.95rem;
-    }
-    .karaoke-toggle-btn {
-        font-size: 0.95rem;
-        padding: 0.2rem 0.4rem;
+        font-size: 0.85rem;
     }
 }
 
 @media (max-width: 480px) {
     .karaoke-scroll-region {
-        max-height: 160px;
-        padding: 0.75rem 0.5rem;
+        max-height: 5.8rem;
+        padding: 0.5rem 0.4rem;
     }
     .karaoke-line {
-        font-size: 0.85rem;
+        font-size: 0.78rem;
     }
 }
 
@@ -7755,10 +7772,89 @@ section.production-header.alice p {
         max-width: 95%;
     }
 
+    /* Horizontal header: cover art left, title+credits+toggle right */
+    .mixtape-left-section {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
     .mixtape-cover-container {
         max-width: 250px;
+        flex-shrink: 0;
     }
-    
+
+    .mixtape-side-toggle-container {
+        flex: 1;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        gap: 0.3rem;
+        align-self: stretch;
+    }
+
+    .mixtape-track-visualizer {
+        display: none;
+    }
+
+    .mixtape-player-container {
+        flex-basis: 100%;
+    }
+
+    .mixtape-credits {
+        text-align: center;
+        font-size: 0.58rem;
+    }
+
+    /* Show mobile title in info stack, hide the one in right section */
+    .mixtape-mobile-title {
+        display: block !important;
+        font-size: 1.2rem !important;
+        margin-bottom: 0 !important;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    .mixtape-mobile-title .mixtape-subtitle {
+        text-align: center;
+    }
+
+    .mixtape-right-section .mixtape-title {
+        display: none;
+    }
+
+    /* Now-playing track name in info stack */
+    .mixtape-now-playing {
+        display: block;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.8rem;
+        color: rgba(0, 247, 194, 0.8);
+        text-shadow: 0 0 5px rgba(0, 247, 194, 0.3);
+    }
+
+    .mixtape-now-playing::before {
+        content: '▶ ';
+        color: #ff6b35;
+        font-size: 0.75em;
+    }
+
+    .mixtape-now-playing:empty {
+        display: none;
+    }
+
+    #gworLightbox .mixtape-now-playing {
+        color: rgba(240, 224, 208, 0.92);
+        text-shadow: 0 0 5px rgba(240, 224, 208, 0.24);
+    }
+
+    .mixtape-lightbox.b-side-active .mixtape-now-playing {
+        color: rgba(247, 168, 0, 0.8);
+        text-shadow: 0 0 5px rgba(247, 168, 0, 0.3);
+    }
+
     .mixtape-audio-controls {
         padding: 0.6rem;
     }
@@ -7774,23 +7870,19 @@ section.production-header.alice p {
     .mixtape-playlist {
         max-height: 250px;
     }
-    
-    .mixtape-title {
-        font-size: 1.4rem;
-    }
 
     .rss-section-title.section-title {
         margin-bottom: 1.2rem;
     }
-    
+
     .mixtape-track-visualizer {
         margin-bottom: 1rem;
     }
-    
+
     .audio-visualizer {
         height: 32px;
     }
-    
+
     .mixtape-current-track {
         font-size: 0.9rem;
     }
@@ -7807,9 +7899,6 @@ section.production-header.alice p {
         gap: 1rem;
     }
     
-    .mixtape-title {
-        display: none; /* Hide title to save space */
-    }
 
     .rss-section-title.section-title {
         display: block;
@@ -7832,10 +7921,14 @@ section.production-header.alice p {
         gap: .5rem;
     }
     
-    .mixtape-cover-container {
-        max-width: 180px;
+    .mixtape-mobile-title {
+        font-size: 1rem !important;
     }
-    
+
+    .mixtape-now-playing {
+        font-size: 0.72rem;
+    }
+
     .mixtape-right-section {
         flex: 1;
         min-height: 0; /* Important for flex child scrolling */

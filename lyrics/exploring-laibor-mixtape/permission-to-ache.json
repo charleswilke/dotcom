@@ -1,0 +1,367 @@
+{
+  "track": "Permission To Ache",
+  "album": "exploring-laibor-mixtape",
+  "duration": 177.4,
+  "lines": [
+    {
+      "start": 7.4,
+      "end": 10.22,
+      "text": "With this breath stuck in my chest",
+      "words": [
+        {
+          "word": "With",
+          "start": 7.4,
+          "end": 8.16
+        },
+        {
+          "word": "this",
+          "start": 8.16,
+          "end": 8.5
+        },
+        {
+          "word": "breath",
+          "start": 8.5,
+          "end": 8.78
+        },
+        {
+          "word": "stuck",
+          "start": 8.78,
+          "end": 9.26
+        },
+        {
+          "word": "in",
+          "start": 9.26,
+          "end": 9.52
+        },
+        {
+          "word": "my",
+          "start": 9.52,
+          "end": 9.7
+        },
+        {
+          "word": "chest",
+          "start": 9.7,
+          "end": 10.22
+        }
+      ]
+    },
+    {
+      "start": 10.22,
+      "end": 13.36,
+      "text": "Walls leaning, I second guess",
+      "words": [
+        {
+          "word": "Walls",
+          "start": 10.22,
+          "end": 11.58
+        },
+        {
+          "word": "leaning,",
+          "start": 11.58,
+          "end": 11.8
+        },
+        {
+          "word": "I",
+          "start": 12.14,
+          "end": 12.42
+        },
+        {
+          "word": "second",
+          "start": 12.42,
+          "end": 12.76
+        },
+        {
+          "word": "guess",
+          "start": 12.76,
+          "end": 13.36
+        }
+      ]
+    },
+    {
+      "start": 32.34,
+      "end": 36.32,
+      "text": "They say choose like it's a cure",
+      "words": [
+        {
+          "word": "They",
+          "start": 32.34,
+          "end": 33.52
+        },
+        {
+          "word": "say",
+          "start": 33.52,
+          "end": 34.2
+        },
+        {
+          "word": "choose",
+          "start": 34.2,
+          "end": 34.8
+        },
+        {
+          "word": "like",
+          "start": 34.8,
+          "end": 35.36
+        },
+        {
+          "word": "it's",
+          "start": 35.36,
+          "end": 35.76
+        },
+        {
+          "word": "a",
+          "start": 35.76,
+          "end": 35.78
+        },
+        {
+          "word": "cure",
+          "start": 35.78,
+          "end": 36.32
+        }
+      ]
+    },
+    {
+      "start": 36.32,
+      "end": 42.5,
+      "text": "If they clean hands, mean you're pure",
+      "words": [
+        {
+          "word": "If",
+          "start": 36.32,
+          "end": 37.2
+        },
+        {
+          "word": "they",
+          "start": 39.4,
+          "end": 39.56
+        },
+        {
+          "word": "clean",
+          "start": 39.56,
+          "end": 39.84
+        },
+        {
+          "word": "hands,",
+          "start": 39.84,
+          "end": 40.66
+        },
+        {
+          "word": "mean",
+          "start": 40.7,
+          "end": 41.04
+        },
+        {
+          "word": "you're",
+          "start": 41.04,
+          "end": 41.78
+        },
+        {
+          "word": "pure",
+          "start": 41.78,
+          "end": 42.5
+        }
+      ]
+    },
+    {
+      "start": 44.4,
+      "end": 46.15,
+      "text": "Don't need permission to ache",
+      "words": [
+        {
+          "word": "Don't",
+          "start": 44.4,
+          "end": 44.7
+        },
+        {
+          "word": "need",
+          "start": 44.75,
+          "end": 45.05
+        },
+        {
+          "word": "permission",
+          "start": 45.1,
+          "end": 45.4
+        },
+        {
+          "word": "to",
+          "start": 45.45,
+          "end": 45.75
+        },
+        {
+          "word": "ache",
+          "start": 45.8,
+          "end": 46.1
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 73.57,
+      "end": 91.19,
+      "text": "Just gravity and stubborn love",
+      "words": [
+        {
+          "word": "Just",
+          "start": 73.57,
+          "end": 74.15
+        },
+        {
+          "word": "gravity",
+          "start": 74.15,
+          "end": 74.61
+        },
+        {
+          "word": "and",
+          "start": 89.97,
+          "end": 90.17
+        },
+        {
+          "word": "stubborn",
+          "start": 90.17,
+          "end": 90.63
+        },
+        {
+          "word": "love",
+          "start": 90.63,
+          "end": 91.19
+        }
+      ]
+    },
+    {
+      "start": 88.8,
+      "end": 90.55,
+      "text": "Before it eats me alive",
+      "words": [
+        {
+          "word": "Before",
+          "start": 88.8,
+          "end": 89.1
+        },
+        {
+          "word": "it",
+          "start": 89.15,
+          "end": 89.45
+        },
+        {
+          "word": "eats",
+          "start": 89.5,
+          "end": 89.8
+        },
+        {
+          "word": "me",
+          "start": 89.85,
+          "end": 90.15
+        },
+        {
+          "word": "alive",
+          "start": 90.2,
+          "end": 90.5
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 88.8,
+      "end": 90.55,
+      "text": "No ground below,no sky above",
+      "words": [
+        {
+          "word": "No",
+          "start": 88.8,
+          "end": 89.1
+        },
+        {
+          "word": "ground",
+          "start": 89.15,
+          "end": 89.45
+        },
+        {
+          "word": "below,no",
+          "start": 89.5,
+          "end": 89.8
+        },
+        {
+          "word": "sky",
+          "start": 89.85,
+          "end": 90.15
+        },
+        {
+          "word": "above",
+          "start": 90.2,
+          "end": 90.5
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 133.2,
+      "end": 134.95,
+      "text": "Fm not numb, Imnot late",
+      "words": [
+        {
+          "word": "Fm",
+          "start": 133.2,
+          "end": 133.5
+        },
+        {
+          "word": "not",
+          "start": 133.55,
+          "end": 133.85
+        },
+        {
+          "word": "numb,",
+          "start": 133.9,
+          "end": 134.2
+        },
+        {
+          "word": "Imnot",
+          "start": 134.25,
+          "end": 134.55
+        },
+        {
+          "word": "late",
+          "start": 134.6,
+          "end": 134.9
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 133.2,
+      "end": 135.3,
+      "text": "I'm still here in the wake",
+      "words": [
+        {
+          "word": "I'm",
+          "start": 133.2,
+          "end": 133.5
+        },
+        {
+          "word": "still",
+          "start": 133.55,
+          "end": 133.85
+        },
+        {
+          "word": "here",
+          "start": 133.9,
+          "end": 134.2
+        },
+        {
+          "word": "in",
+          "start": 134.25,
+          "end": 134.55
+        },
+        {
+          "word": "the",
+          "start": 134.6,
+          "end": 134.9
+        },
+        {
+          "word": "wake",
+          "start": 134.95,
+          "end": 135.25
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

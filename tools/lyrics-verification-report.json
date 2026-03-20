@@ -1,0 +1,7095 @@
+[
+  {
+    "video_line_count": 12,
+    "json_line_count": 13,
+    "matched": [
+      {
+        "video": "This is what we call normal",
+        "json": "Stamped and ready to deploy. It's amazing how efficient fear can be when it's polite. This is what we call normal. This is how it's done. It's fun. This is what we call announcing.",
+        "similarity": 0.85
+      },
+      {
+        "video": "This is how it's done",
+        "json": "Stamped and ready to deploy. It's amazing how efficient fear can be when it's polite. This is what we call normal. This is how it's done. It's fun. This is what we call announcing.",
+        "similarity": 0.85
+      },
+      {
+        "video": "Amnesia wants a nap",
+        "json": "Outrage wants a megaphone. Amnesia wants a nap. Following instructions.",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "After Normal by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Verse",
+        "timestamp": 0.5
+      },
+      {
+        "text": "We lined up where the arrows poin't",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Fear can be when it'$ polite",
+        "timestamp": 47.0
+      },
+      {
+        "text": "Imjust following instructions",
+        "timestamp": 94.0
+      },
+      {
+        "text": "Printed on the map",
+        "timestamp": 94.0
+      },
+      {
+        "text": "As adjustmen't",
+        "timestamp": 141.0
+      },
+      {
+        "text": "Ashope",
+        "timestamp": 141.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "And up where the arrows point, we followed what the signs imply. The map said this is progress, so we didn't ask it why. You left the house this morning, keys, phone, wallet, shoes. I added up the reasons I had nothing left to lose."
+      },
+      {
+        "text": "We phrase. There's a form for every feeling. There's a checkbox for concern. There's a script for every moment where we wait our turn."
+      },
+      {
+        "text": "If you don't bring it to the meeting, it can't be."
+      },
+      {
+        "text": "It can't slow the day. If nobody acknowledges, it eventually goes away."
+      },
+      {
+        "text": "This is what we call normal. This is how we fuss. We don't mention that it shows. This is what we call normal. Smile. Comply. Repeat."
+      },
+      {
+        "text": "Bust is hard. Someday. This is what we call normal. Still efficient. Still refined."
+      },
+      {
+        "text": "If."
+      },
+      {
+        "text": "The future's at the doorstep. We pretend we're not inside."
+      },
+      {
+        "text": "This is what we call normal. If the silence starts to cost us."
+      },
+      {
+        "text": "They're in a dump."
+      },
+      {
+        "text": "Bust."
+      }
+    ],
+    "mismatches": [],
+    "slug": "after-normal",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 15,
+    "json_line_count": 3,
+    "matched": [],
+    "video_only": [
+      {
+        "text": "Certainty's Whimpering End by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 1 03:13",
+        "timestamp": 0.5
+      },
+      {
+        "text": "There'sa tremor in the mind,;",
+        "timestamp": 0.5
+      },
+      {
+        "text": "a little tilt in the horizon",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "STAL [ELEPHONE TELEPH IONE",
+        "timestamp": 0.5
+      },
+      {
+        "text": "STAL TEPHONE TELEPH TEL IONE in a way that feels_ tragic:",
+        "timestamp": 48.4
+      },
+      {
+        "text": "We chase the old agreements;",
+        "timestamp": 48.4
+      },
+      {
+        "text": "the ones we swore were fact_",
+        "timestamp": 48.4
+      },
+      {
+        "text": "STAL TEPHONE TELEPH EL IONE What we see isn't what we know:",
+        "timestamp": 96.8
+      },
+      {
+        "text": "Yeah the spotlight flickers wildly",
+        "timestamp": 96.8
+      },
+      {
+        "text": "in the certainty shadow show:",
+        "timestamp": 96.8
+      },
+      {
+        "text": "STAL [EPHONE TELEPH IONE in the certailly shadow show",
+        "timestamp": 145.2
+      },
+      {
+        "text": "Turn the dial (turn the dial);",
+        "timestamp": 145.2
+      },
+      {
+        "text": "let the doubt in_",
+        "timestamp": 145.2
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Every time we reach for truth, it's already revising voices in the wires and faces made us."
+      },
+      {
+        "text": "We swore now the frames are fiction with a hyper real message."
+      },
+      {
+        "text": "The message doubly split."
+      }
+    ],
+    "mismatches": [],
+    "slug": "certaintys-whimpering-end",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 12,
+    "json_line_count": 11,
+    "matched": [
+      {
+        "video": "was built for runoff; cigarette ash",
+        "json": "I was built for an off -cigarette ash",
+        "similarity": 0.914
+      },
+      {
+        "video": "For winters breaking glass in the street",
+        "json": "For winter's breaking glass in the street",
+        "similarity": 1.0
+      },
+      {
+        "video": "But this runs thicker; this runs slow",
+        "json": "Oh, but this runs thicker, this runs slow",
+        "similarity": 0.923
+      },
+      {
+        "video": "Warm andred in the midday cold",
+        "json": "Warm and red in the midday cold",
+        "similarity": 0.984
+      },
+      {
+        "video": "Every goddamn time",
+        "json": "It's the truth every goddamn time",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Clear a S Day by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "There's something happening here",
+        "timestamp": 50.6
+      },
+      {
+        "text": "Someone drops, the street goes cold",
+        "timestamp": 101.0
+      },
+      {
+        "text": "was made to hide the proof",
+        "timestamp": 101.0
+      },
+      {
+        "text": "Keep the surface clean",
+        "timestamp": 101.0
+      },
+      {
+        "text": "But I carry the proof",
+        "timestamp": 151.4
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Oh, oh, oh, oh, oh, oh"
+      },
+      {
+        "text": "I've taken trash, never learned the taste of blood in my teeth"
+      },
+      {
+        "text": "I'm choking on the blood you made"
+      },
+      {
+        "text": "You've watched it leave"
+      },
+      {
+        "text": "Thursday, when the drain is gagging"
+      },
+      {
+        "text": "We think we washed away"
+      }
+    ],
+    "mismatches": [],
+    "slug": "clear-as-day",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 14,
+    "json_line_count": 4,
+    "matched": [
+      {
+        "video": "used to know who signed the line",
+        "json": "i used to know who signed the line who took the heat when things went wrong our answers all seem",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Compounding Fuzziness by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "urlitzer solo, very soft; key noise audible. No drun",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Feels like truth is averaged",
+        "timestamp": 64.4
+      },
+      {
+        "text": "While we let the question slide",
+        "timestamp": 64.4
+      },
+      {
+        "text": "Ission enters: rim taps or brushed snare. Bass hole",
+        "timestamp": 64.4
+      },
+      {
+        "text": "Blind confidence beaming proudest",
+        "timestamp": 128.8
+      },
+      {
+        "text": "Idon't mind a little blur",
+        "timestamp": 128.8
+      },
+      {
+        "text": "Ijust wan't to know the shape",
+        "timestamp": 128.8
+      },
+      {
+        "text": "Fmnot afraid of not knowing",
+        "timestamp": 193.0
+      },
+      {
+        "text": "Im scared of thinking do",
+        "timestamp": 193.0
+      },
+      {
+        "text": "[Outro",
+        "timestamp": 193.0
+      },
+      {
+        "text": "unresolved; calm | exhale]",
+        "timestamp": 193.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "fine as we quietly follow we're all quoting something but nobody knows why feels like truth"
+      },
+      {
+        "text": "is averaged why we let the question slice trust the movie says don't buzzy at the edges"
+      },
+      {
+        "text": "have we all become god"
+      }
+    ],
+    "mismatches": [],
+    "slug": "compounding-fuzziness",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 14,
+    "json_line_count": 29,
+    "matched": [
+      {
+        "video": "when the pink slips start to fall.",
+        "json": "I've seen the high floors shaking When the pink slips start to fall",
+        "similarity": 0.85
+      },
+      {
+        "video": "but the string still ties our name.",
+        "json": "Just following orders, darling But the string still ties our name",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Conjured Impunity by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 1 04:56",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Oh, impunity_ we conjure it clean;",
+        "timestamp": 74.2
+      },
+      {
+        "text": "alittle freedom from the fallout;",
+        "timestamp": 74.2
+      },
+      {
+        "text": "pretending we'Il get by:",
+        "timestamp": 148.2
+      },
+      {
+        "text": "Will it cover up our choices?",
+        "timestamp": 222.2
+      },
+      {
+        "text": "Will it blind us from the night?",
+        "timestamp": 222.2
+      },
+      {
+        "text": "Or will it burn a little brighter",
+        "timestamp": 222.2
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Not from sorrow, not from heartache Just afraid you'll see it all"
+      },
+      {
+        "text": "That quiet, cold indifference Behind the polished smile and spin"
+      },
+      {
+        "text": "Yeah, that's impunity, baby That trick we all get tangled in"
+      },
+      {
+        "text": "We tell ourselves a fable That the crown is hard to wear"
+      },
+      {
+        "text": "But the heavy head ain't heavy It just doesn't really care"
+      },
+      {
+        "text": "And down here in the cheap seats We still play the same old game"
+      },
+      {
+        "text": "Yeah, oh"
+      },
+      {
+        "text": "We call it a day"
+      },
+      {
+        "text": "We conjure it clean from the fallout From the spaces in between"
+      },
+      {
+        "text": "But the bill keeps getting taller And the truth"
+      },
+      {
+        "text": "No one's hand stayed a lily But the earth began to scream"
+      },
+      {
+        "text": "Told ourselves that we were helping Sold a soft recycling dream"
+      },
+      {
+        "text": "Every comfort we were promised Was just comfort out on loan"
+      },
+      {
+        "text": "Baby, climate doesn't bother And the interest now is showing"
+      },
+      {
+        "text": "Pretending we'll get it But the cost keeps coming higher"
+      },
+      {
+        "text": "And the debts come into view"
+      },
+      {
+        "text": "We're not a shadow And that shadow's calling you"
+      },
+      {
+        "text": "We call it a day"
+      },
+      {
+        "text": "lies from nowhere and they tell us it's for peace say the numbers barely matter"
+      },
+      {
+        "text": "just around an error release but the rounding's made of people and the rubble has a name"
+      },
+      {
+        "text": "funny how the greater good still plays the same old game how we build the genie"
+      },
+      {
+        "text": "made of circuits cold and light will it cover up our choices will it blind us from the night"
+      },
+      {
+        "text": "or will it burn a little brighter than the stories we've been sold showing every trade -off we"
+      },
+      {
+        "text": "control to all impunity but the mirror's getting clear"
+      },
+      {
+        "text": "reckonings to do"
+      },
+      {
+        "text": "without conscience no more lies we call the truth"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Fve seen the high floors shaking;",
+        "json": "I've seen the high floors shaking When the pink slips start to fall",
+        "similarity": 0.633,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Oh; impunity__that velvet Iittle lie,",
+        "json": "Oh, impunity, that velvet little lie The one we toast in smokey rooms",
+        "similarity": 0.627,
+        "timestamp": 148.2
+      },
+      {
+        "video": "the one we toast in smoky rooms,",
+        "json": "Oh, impunity, that velvet little lie The one we toast in smokey rooms",
+        "similarity": 0.633,
+        "timestamp": 148.2
+      }
+    ],
+    "slug": "conjured-impunity",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 93,
+    "json_line_count": 12,
+    "matched": [
+      {
+        "video": "Step inside",
+        "json": "Step inside, hear the hinges humming",
+        "similarity": 0.85
+      },
+      {
+        "video": "hear the hinges hummin' ,",
+        "json": "Step inside, hear the hinges humming",
+        "similarity": 0.85
+      },
+      {
+        "video": "terms of service",
+        "json": "Terms of service in a sugarcoat disguise",
+        "similarity": 0.85
+      },
+      {
+        "video": "in a sugarcoat disguise",
+        "json": "Terms of service in a sugarcoat disguise",
+        "similarity": 0.85
+      },
+      {
+        "video": "gives the cauldron rhythm;",
+        "json": "Wonka Winx gives the cauldron rhythm",
+        "similarity": 0.85
+      },
+      {
+        "video": "headlines shimmer in the glow:",
+        "json": "Headlines shimmer in the glow",
+        "similarity": 1.0
+      },
+      {
+        "video": "Billion-dollar aftertaste",
+        "json": "Billion dollar aftertaste",
+        "similarity": 0.98
+      },
+      {
+        "video": "every token",
+        "json": "Every token rings a distant bell",
+        "similarity": 0.85
+      },
+      {
+        "video": "rings a distan't bell:",
+        "json": "Every token rings a distant bell",
+        "similarity": 0.85
+      },
+      {
+        "video": "for the seeds of what they've learned:",
+        "json": "For the seeds of",
+        "similarity": 2.25
+      }
+    ],
+    "video_only": [
+      {
+        "text": "DATA DIGNITY by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "<VERSE 1>",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Step inside_",
+        "timestamp": 10.47
+      },
+      {
+        "text": "steam is thrummin',",
+        "timestamp": 15.67
+      },
+      {
+        "text": "Taste the walls-",
+        "timestamp": 15.67
+      },
+      {
+        "text": "Wonka winks,",
+        "timestamp": 25.93
+      },
+      {
+        "text": "'til the dream ignites",
+        "timestamp": 31.13
+      },
+      {
+        "text": "Magic'sjust a recipe,",
+        "timestamp": 36.33
+      },
+      {
+        "text": "<PRECHORUS>",
+        "timestamp": 41.4
+      },
+      {
+        "text": "or flavored mimicry?",
+        "timestamp": 56.87
+      },
+      {
+        "text": "If my voice is in the swirl;",
+        "timestamp": 56.87
+      },
+      {
+        "text": "shouldn't something come to me?",
+        "timestamp": 62.0
+      },
+      {
+        "text": "Every note; every shine;",
+        "timestamp": 62.0
+      },
+      {
+        "text": "every model-tinted line-",
+        "timestamp": 62.0
+      },
+      {
+        "text": "they keep the chocolate river;",
+        "timestamp": 67.13
+      },
+      {
+        "text": "but my credits slip the brine:",
+        "timestamp": 67.13
+      },
+      {
+        "text": "<ICHORUS>",
+        "timestamp": 72.33
+      },
+      {
+        "text": "<VERSE 2>",
+        "timestamp": 72.33
+      },
+      {
+        "text": "Deep inside",
+        "timestamp": 72.33
+      },
+      {
+        "text": "the inference engine;",
+        "timestamp": 77.53
+      },
+      {
+        "text": "Value drips",
+        "timestamp": 82.67
+      },
+      {
+        "text": "from the finish line,",
+        "timestamp": 82.67
+      },
+      {
+        "text": "who stocked the well:",
+        "timestamp": 87.8
+      },
+      {
+        "text": "Slugworth whispers",
+        "timestamp": 87.8
+      },
+      {
+        "text": "with a velvet promise _",
+        "timestamp": 93.0
+      },
+      {
+        "text": "everlasting;",
+        "timestamp": 93.0
+      },
+      {
+        "text": "never wearing thin:",
+        "timestamp": 98.27
+      },
+      {
+        "text": "Charlie knew",
+        "timestamp": 98.27
+      },
+      {
+        "text": "what you hand back",
+        "timestamp": 98.27
+      },
+      {
+        "text": "is the price of buyin' in_",
+        "timestamp": 103.47
+      },
+      {
+        "text": "<IVERSE 2>",
+        "timestamp": 103.47
+      },
+      {
+        "text": "Call it data dignity;",
+        "timestamp": 108.6
+      },
+      {
+        "text": "not hush-fund leniency_",
+        "timestamp": 108.6
+      },
+      {
+        "text": "not a gilded Iittle payout",
+        "timestamp": 108.6
+      },
+      {
+        "text": "If a spark becomes a stream;",
+        "timestamp": 113.73
+      },
+      {
+        "text": "trackit backward through the dream",
+        "timestamp": 118.93
+      },
+      {
+        "text": "pay the workers of the wonder",
+        "timestamp": 118.93
+      },
+      {
+        "text": "when their fingerprints return:",
+        "timestamp": 118.93
+      },
+      {
+        "text": "</CHORUS 2>",
+        "timestamp": 124.13
+      },
+      {
+        "text": "<BRIDGE>",
+        "timestamp": 124.13
+      },
+      {
+        "text": "How you pulla flavor free",
+        "timestamp": 124.13
+      },
+      {
+        "text": "once it's melted in the sea?",
+        "timestamp": 129.27
+      },
+      {
+        "text": "How you unwrite what was woven",
+        "timestamp": 129.27
+      },
+      {
+        "text": "in the Ioom of memory?",
+        "timestamp": 129.27
+      },
+      {
+        "text": "Tag the wrappers; seal the trace,",
+        "timestamp": 134.4
+      },
+      {
+        "text": "let the labels set the pace",
+        "timestamp": 134.4
+      },
+      {
+        "text": "trainable yes or no,",
+        "timestamp": 139.6
+      },
+      {
+        "text": "who to pay,and where it goes:",
+        "timestamp": 139.6
+      },
+      {
+        "text": "<IBRIDGE>",
+        "timestamp": 144.73
+      },
+      {
+        "text": "Build a world of dignity;",
+        "timestamp": 149.93
+      },
+      {
+        "text": "credit flows in harmony;",
+        "timestamp": 149.93
+      },
+      {
+        "text": "treat the magic like a craft",
+        "timestamp": 149.93
+      },
+      {
+        "text": "nen not a consequence-free spree.",
+        "timestamp": 155.0
+      },
+      {
+        "text": "'Til the system learns to share,",
+        "timestamp": 155.0
+      },
+      {
+        "text": "let the river pay the currents",
+        "timestamp": 160.2
+      },
+      {
+        "text": "that have carried us all there_",
+        "timestamp": 165.33
+      },
+      {
+        "text": "So open up the ledger,",
+        "timestamp": 165.33
+      },
+      {
+        "text": "that have carried us all there",
+        "timestamp": 170.53
+      },
+      {
+        "text": "let the numbers finally see:",
+        "timestamp": 170.53
+      },
+      {
+        "text": "every shimmer; every whisper",
+        "timestamp": 175.67
+      },
+      {
+        "text": "had a name behind the dream:",
+        "timestamp": 175.67
+      },
+      {
+        "text": "And until the factory honors",
+        "timestamp": 180.8
+      },
+      {
+        "text": "every voice in its symphony",
+        "timestamp": 180.8
+      },
+      {
+        "text": "then the echo still remains:",
+        "timestamp": 186.0
+      },
+      {
+        "text": "KYou' get nothing _ good day_.",
+        "timestamp": 191.13
+      },
+      {
+        "text": "<OUTRO S STRONG CLOSE>",
+        "timestamp": 191.13
+      },
+      {
+        "text": "KYou' get nothing_good day_",
+        "timestamp": 196.33
+      },
+      {
+        "text": "But we stay:",
+        "timestamp": 196.33
+      },
+      {
+        "text": "But we stay_",
+        "timestamp": 201.53
+      },
+      {
+        "text": "And rewrite",
+        "timestamp": 201.53
+      },
+      {
+        "text": "the recipe:",
+        "timestamp": 201.53
+      },
+      {
+        "text": "</OUTRO>",
+        "timestamp": 206.67
+      },
+      {
+        "text": "<IOUTRO>",
+        "timestamp": 211.87
+      }
+    ],
+    "json_only": [],
+    "mismatches": [
+      {
+        "video": "every pipe alive _",
+        "json": "Steam is thrumming, every pipe alive",
+        "similarity": 0.604,
+        "timestamp": 15.67
+      },
+      {
+        "video": "yeah,that flavor's comin'",
+        "json": "Taste the walls, yeah, that flavor's coming",
+        "similarity": 0.71,
+        "timestamp": 20.8
+      },
+      {
+        "video": "stirs it steady",
+        "json": "Stirs its steady recipe",
+        "similarity": 0.789,
+        "timestamp": 31.13
+      },
+      {
+        "video": "but someone fed it LIFE:",
+        "json": "But someone just has fallen slow",
+        "similarity": 0.582,
+        "timestamp": 36.33
+      },
+      {
+        "video": "Candy dust is fallin' slow,",
+        "json": "But someone just has fallen slow",
+        "similarity": 0.632,
+        "timestamp": 41.4
+      },
+      {
+        "video": "1 Is this work a waste?",
+        "json": "Is this work a winx engine?",
+        "similarity": 0.708,
+        "timestamp": 51.67
+      },
+      {
+        "video": "Is this data dignity;",
+        "json": "Is this work a winx engine?",
+        "similarity": 0.565,
+        "timestamp": 51.67
+      },
+      {
+        "video": "not the hands",
+        "json": "For the seeds of",
+        "similarity": 0.552,
+        "timestamp": 82.67
+      },
+      {
+        "video": "for the hands that flavored air",
+        "json": "Taste the walls, yeah, that flavor's coming",
+        "similarity": 0.563,
+        "timestamp": 160.2
+      }
+    ],
+    "slug": "data-dignity",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 15,
+    "json_line_count": 12,
+    "matched": [
+      {
+        "video": "We fed the wires with our minds,",
+        "json": "We fed the wires with our mind",
+        "similarity": 1.033
+      },
+      {
+        "video": "Every post a little life:",
+        "json": "Every post a little life",
+        "similarity": 1.0
+      }
+    ],
+    "video_only": [
+      {
+        "text": "G(ai)ve it Away by cwilke Mullad 0o:00 1 04:00",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "G(ai)ve it Away by cwilke Mullad 01:00 1 04:00",
+        "timestamp": 60.2
+      },
+      {
+        "text": "All the dreams that we sen't",
+        "timestamp": 60.2
+      },
+      {
+        "text": "We gave it away",
+        "timestamp": 60.2
+      },
+      {
+        "text": "But we're taking it back again:",
+        "timestamp": 60.2
+      },
+      {
+        "text": "G(ai)ve it Away by cwilke Mullad 02:00 1 04:00",
+        "timestamp": 120.2
+      },
+      {
+        "text": "We were fuel for the fire.",
+        "timestamp": 120.2
+      },
+      {
+        "text": "Gave it away",
+        "timestamp": 120.2
+      },
+      {
+        "text": "Every spark; every wire",
+        "timestamp": 120.2
+      },
+      {
+        "text": "G(ai)ve it Away by cwilke Mullad 03:00 1 04:00",
+        "timestamp": 180.2
+      },
+      {
+        "text": "Turn the noise into magic:",
+        "timestamp": 180.2
+      },
+      {
+        "text": "What we are, what we've been;",
+        "timestamp": 180.2
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Signed a line we didn't read"
+      },
+      {
+        "text": "Post to every feed"
+      },
+      {
+        "text": "From our voice"
+      },
+      {
+        "text": "The echoes into noise"
+      },
+      {
+        "text": "Every skill we tried to say"
+      },
+      {
+        "text": "Stuck out"
+      },
+      {
+        "text": "We're mosaics made of duck"
+      },
+      {
+        "text": "And every bro"
+      },
+      {
+        "text": "Is still"
+      },
+      {
+        "text": "Future one"
+      }
+    ],
+    "mismatches": [],
+    "slug": "gave-it-away",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 11,
+    "json_line_count": 2,
+    "matched": [],
+    "video_only": [
+      {
+        "text": "The Hum of Humanity by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Iused to walk",
+        "timestamp": 0.5
+      },
+      {
+        "text": "A thin, tight line:",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Can guide you home.",
+        "timestamp": 52.6
+      },
+      {
+        "text": "Tilt starts small",
+        "timestamp": 52.6
+      },
+      {
+        "text": "Can shift the land:",
+        "timestamp": 105.2
+      },
+      {
+        "text": "We're not the fruit",
+        "timestamp": 105.2
+      },
+      {
+        "text": "When you choose to stay:",
+        "timestamp": 157.6
+      },
+      {
+        "text": "This is the hum",
+        "timestamp": 157.6
+      },
+      {
+        "text": "The wide, true tide.",
+        "timestamp": 157.6
+      }
+    ],
+    "json_only": [
+      {
+        "text": "All a spark, brief strain to guard the spark"
+      },
+      {
+        "text": "We make more room in the deepest dark"
+      }
+    ],
+    "mismatches": [],
+    "slug": "hum-of-humanity",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 10,
+    "json_line_count": 0,
+    "matched": [],
+    "video_only": [
+      {
+        "text": "Hypnotic Crimes by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "One eye in the sky?",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Thats old news H",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "E Everything we hid, now magnified: 3 Hypnotic crimes, hypnotic crimes",
+        "timestamp": 66.4
+      },
+      {
+        "text": "The machine just mirrors our design:",
+        "timestamp": 66.4
+      },
+      {
+        "text": "E IT drew the lines: 3 Hypnotic crimes, hypnotic crimes",
+        "timestamp": 132.8
+      },
+      {
+        "text": "It only shows what we designed:",
+        "timestamp": 132.8
+      },
+      {
+        "text": "But there's hope in my mind; A g shape we couldn't see:",
+        "timestamp": 199.2
+      },
+      {
+        "text": "Maybe this is how we find I",
+        "timestamp": 199.2
+      }
+    ],
+    "json_only": [],
+    "mismatches": [],
+    "slug": "hypnotic-crimes",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 11,
+    "json_line_count": 11,
+    "matched": [
+      {
+        "video": "They told me the future",
+        "json": "They told me the future was already decided.",
+        "similarity": 0.85
+      },
+      {
+        "video": "Was already decided",
+        "json": "They told me the future was already decided.",
+        "similarity": 0.85
+      },
+      {
+        "video": "Leave room for the signal",
+        "json": "They said math don't leave room for the signal.",
+        "similarity": 0.85
+      },
+      {
+        "video": "Iguess that's whyit feels so lonely",
+        "json": "I guess that's why it feels so long.",
+        "similarity": 0.912
+      }
+    ],
+    "video_only": [
+      {
+        "text": "0o:00 1 05:01",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Between the noise and sound",
+        "timestamp": 75.4
+      },
+      {
+        "text": "Ifyou don't name the static",
+        "timestamp": 75.4
+      },
+      {
+        "text": "Everywhere, all the time",
+        "timestamp": 150.8
+      },
+      {
+        "text": "don't need a verdict",
+        "timestamp": 150.8
+      }
+    ],
+    "json_only": [
+      {
+        "text": "All I had to do was stop fighting it."
+      },
+      {
+        "text": "Learned to talk in dashboards, sleep in borrowed light."
+      },
+      {
+        "text": "Every feeling had a price tag, every truth a bite."
+      },
+      {
+        "text": "The mirror said you're special, the room said take a seat."
+      },
+      {
+        "text": "Funny how the air gets thinner when the floor gives way beneath."
+      },
+      {
+        "text": "I know my neighbor's choices, we did efficiency."
+      },
+      {
+        "text": "Said connection scale's just fine."
+      },
+      {
+        "text": "Know how to stay, it just means to scale."
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Leave Room for the Signal by cwilke",
+        "json": "They said math don't leave room for the signal.",
+        "similarity": 0.625,
+        "timestamp": 0.5
+      }
+    ],
+    "slug": "leave-room-for-the-signal",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 14,
+    "json_line_count": 10,
+    "matched": [
+      {
+        "video": "Past the edge they wouldn't mend",
+        "json": "whoa whoa couldn't bend past the edge they wouldn't mend screen stay calm the lights went",
+        "similarity": 0.85
+      },
+      {
+        "video": "Math kept talking; room wen't wrong",
+        "json": "hunger don't do calibration fear don't wait for code math kept talking room went wrong",
+        "similarity": 0.85
+      },
+      {
+        "video": "All we've got left is this little song",
+        "json": "all we've got left is this little song there's no model for this moment",
+        "similarity": 0.85
+      },
+      {
+        "video": "There's no model for this momen't",
+        "json": "all we've got left is this little song there's no model for this moment",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "No Model for This by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 1 02:49",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Graphs drew lines that couldn't bend",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Not the numbers that just scream",
+        "timestamp": 85.2
+      },
+      {
+        "text": "Some stayed frozen in the rules",
+        "timestamp": 85.2
+      },
+      {
+        "text": "Some kept polishing the tools",
+        "timestamp": 85.2
+      },
+      {
+        "text": "Hear it breathing",
+        "timestamp": 127.6
+      },
+      {
+        "text": "Inyour feet",
+        "timestamp": 127.6
+      },
+      {
+        "text": "There's no model for what's coming",
+        "timestamp": 127.6
+      }
+    ],
+    "json_only": [
+      {
+        "text": "low street kept moving overflow they said wait for confirmation said the system needs to load"
+      },
+      {
+        "text": "no we heard that just screamed eat frozen in the room some kept polishing"
+      },
+      {
+        "text": "you feel not what you say maps kept printing doors were gone the ground is finally shifting"
+      },
+      {
+        "text": "and i'll move with steps ain't quiet it's a beat"
+      },
+      {
+        "text": "and"
+      },
+      {
+        "text": "and"
+      },
+      {
+        "text": "and"
+      }
+    ],
+    "mismatches": [],
+    "slug": "no-model-for-this",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 12,
+    "json_line_count": 20,
+    "matched": [
+      {
+        "video": "With this breath stuck in my chest",
+        "json": "With this breath stuck in my chest",
+        "similarity": 1.0
+      },
+      {
+        "video": "Walls lean in; [ second-guess",
+        "json": "Walls leaning, I second guess",
+        "similarity": 0.906
+      },
+      {
+        "video": "They say choose like it'sa cure",
+        "json": "They say choose like it's a cure",
+        "similarity": 0.984
+      },
+      {
+        "video": "Like clean hands mean you're pure",
+        "json": "If they clean hands, mean you're pure",
+        "similarity": 0.896
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Permission to Ache by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Don't need permission to ache",
+        "timestamp": 44.4
+      },
+      {
+        "text": "Before it eats me alive",
+        "timestamp": 88.8
+      },
+      {
+        "text": "No ground below,no sky above",
+        "timestamp": 88.8
+      },
+      {
+        "text": "Fm not numb, Imnot late",
+        "timestamp": 133.2
+      },
+      {
+        "text": "Im still here in the wake",
+        "timestamp": 133.2
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Justice knocking, no -goes white"
+      },
+      {
+        "text": "Decessi begging me not to fight"
+      },
+      {
+        "text": "I stand between the yes, I know"
+      },
+      {
+        "text": "Every answer draws its blood"
+      },
+      {
+        "text": "If I stay, I hurt my gut"
+      },
+      {
+        "text": "Don't dress it up, don't learn to smile"
+      },
+      {
+        "text": "Call the nuns, there's being kind"
+      },
+      {
+        "text": "Siren's soul is higher ground"
+      },
+      {
+        "text": "Every bruise tucks me laid down"
+      },
+      {
+        "text": "If this is what conscience calls"
+      },
+      {
+        "text": "I'll pay it in sleep, I've lost"
+      },
+      {
+        "text": "I'm just caught, escape, I die"
+      },
+      {
+        "text": "There's nowhere clear to land"
+      },
+      {
+        "text": "I'll hover"
+      },
+      {
+        "text": "As long as I"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Just gravity and stubborn love",
+        "json": "I don't just gravity and",
+        "similarity": 0.604,
+        "timestamp": 88.8
+      }
+    ],
+    "slug": "permission-to-ache",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 14,
+    "json_line_count": 6,
+    "matched": [
+      {
+        "video": "Everybody wants a number",
+        "json": "everybody wants a number everybody wants a name you draw a box around the moment",
+        "similarity": 0.85
+      },
+      {
+        "video": "Everybody wants a name",
+        "json": "everybody wants a number everybody wants a name you draw a box around the moment",
+        "similarity": 0.85
+      },
+      {
+        "video": "Protect the hollow",
+        "json": "the door need a verdict i don't need a vow i was holding something open protect the hollow",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Protect the Hollow by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 1 03:37",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Don't fill it in",
+        "timestamp": 54.6
+      },
+      {
+        "text": "That space is working",
+        "timestamp": 54.6
+      },
+      {
+        "text": "You keep shining all that light here",
+        "timestamp": 109.2
+      },
+      {
+        "text": "Like that's howyou get the truth",
+        "timestamp": 109.2
+      },
+      {
+        "text": "Witnessing feels like clarity",
+        "timestamp": 109.2
+      },
+      {
+        "text": "Idon't need a dashboard",
+        "timestamp": 163.6
+      },
+      {
+        "text": "Telling me what I ain't",
+        "timestamp": 163.6
+      },
+      {
+        "text": "was standing in the quiet",
+        "timestamp": 163.6
+      }
+    ],
+    "json_only": [
+      {
+        "text": "all the outline the frame they ask me what i'm building before i know i was still standing in"
+      },
+      {
+        "text": "there's a tally on every answer comes too quickly every question wants it all"
+      },
+      {
+        "text": "i was fine inside the wonder like that's how you get to what survived how things change"
+      },
+      {
+        "text": "protect the heart step aside things stay"
+      }
+    ],
+    "mismatches": [],
+    "slug": "protect-the-hollow",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 8,
+    "json_line_count": 23,
+    "matched": [
+      {
+        "video": "Andyou can't turn back once the line is crossed;",
+        "json": "And you can't turn back once the line is crossed",
+        "similarity": 0.989
+      },
+      {
+        "video": "Can't unmake a world already tossed:",
+        "json": "Make a world already tossed",
+        "similarity": 1.259
+      },
+      {
+        "video": "Ask what you will, but the answer's the cost",
+        "json": "Ask what your will but the answer's the cost",
+        "similarity": 0.988
+      },
+      {
+        "video": "Every prompt is a lantern you can't un-send: What you shape in the dark might become your friend_",
+        "json": "What you shape in the dark might become your friend",
+        "similarity": 1.843
+      },
+      {
+        "video": "Or the path you walk to the very end:",
+        "json": "Or the path you walk to the very end",
+        "similarity": 1.0
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Rubicon'd by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Ooh, ooh, ooh, ooh, ooh, ooh, ooh"
+      },
+      {
+        "text": "But the steam kept coming like it always do"
+      },
+      {
+        "text": "Now the hammer's gone cold and the engine's gone wise"
+      },
+      {
+        "text": "You can bargain with the future but the future won't buy"
+      },
+      {
+        "text": "We're all become muscle then the outer circuit was told"
+      },
+      {
+        "text": "You can stack your facts high but they shift like sand"
+      },
+      {
+        "text": "What you keep ain't the knowledge it's the will to stand"
+      },
+      {
+        "text": "And you can't turn back once the line is crossed"
+      },
+      {
+        "text": "Ask what your will but the answer's the cost"
+      },
+      {
+        "text": "We're all become muscle then the outer circuit was told"
+      },
+      {
+        "text": "Ask a sharp question, watch the whole world bend"
+      },
+      {
+        "text": "Every prompt is a lantern you cannot send"
+      },
+      {
+        "text": "Ask what your will but the answer's the cost"
+      },
+      {
+        "text": "And you can't turn back once the line is crossed"
+      },
+      {
+        "text": "Can't I make a world already tossed"
+      },
+      {
+        "text": "Ask what your will but the answer's the cost"
+      },
+      {
+        "text": "We're all become muscle then the outer circuit was told"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "They say John Henry beat the iron for a momen't or two; But the steam kept comin' like it always do",
+        "json": "They said John Henry beat the iron for a moment or two",
+        "similarity": 0.693,
+        "timestamp": 0.5
+      }
+    ],
+    "slug": "rubicon-d-demo",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 9,
+    "json_line_count": 20,
+    "matched": [
+      {
+        "video": "Rubicond by cwilke",
+        "json": "Rubicon.",
+        "similarity": 2.571
+      },
+      {
+        "video": "They say John Henry beat the iron for a momen't or two, But the steam kept comin' like it always do:",
+        "json": "They say John Henry beat the iron for a moment or two.",
+        "similarity": 1.811
+      },
+      {
+        "video": "We're Rubicon'd,and the bridge is lost",
+        "json": "Rubicon.",
+        "similarity": 5.0
+      },
+      {
+        "video": "Andyou can't turn back once the line is crossed;",
+        "json": "And you can't turn back once the line is crossed.",
+        "similarity": 0.989
+      }
+    ],
+    "video_only": [
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Can't unmake a world already tossed:",
+        "timestamp": 45.0
+      },
+      {
+        "text": "Or the path you walk to the very end:",
+        "timestamp": 134.6
+      }
+    ],
+    "json_only": [
+      {
+        "text": "But the steam kept coming like it always do."
+      },
+      {
+        "text": "Now the hammer's gone cold and the engine grown wise."
+      },
+      {
+        "text": "You can bargain with the future, but the future won't buy."
+      },
+      {
+        "text": "Already talked with the cars where Rubicon bridges long."
+      },
+      {
+        "text": "Used to be muscle, then the mind took hold."
+      },
+      {
+        "text": "Now the circuits know the stories that we once told."
+      },
+      {
+        "text": "You can stack your facts high, but they shift like sand."
+      },
+      {
+        "text": "And you can't turn back."
+      },
+      {
+        "text": "And you can't turn back once the line is crossed."
+      },
+      {
+        "text": "Already talked with Rubicon bridges long."
+      },
+      {
+        "text": "Ask a sharp question, watch the whole world bend."
+      },
+      {
+        "text": "Every prompt is a lantern you cannot send."
+      },
+      {
+        "text": "What you shape in the dark might become your friend."
+      },
+      {
+        "text": "Or the path answers a complex bridge inside."
+      },
+      {
+        "text": "Edge of choosing."
+      },
+      {
+        "text": "Edge of choosing."
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Askwhat you will, but the answer's the cost",
+        "json": "What you keep ain't the knowledge, it's the will to stand.",
+        "similarity": 0.589,
+        "timestamp": 45.0
+      },
+      {
+        "video": "What you keep ain't the knowledge,it's the will to stand: Andyou can't turn back once the line is crossed,",
+        "json": "What you keep ain't the knowledge, it's the will to stand.",
+        "similarity": 0.688,
+        "timestamp": 89.8
+      }
+    ],
+    "slug": "rubicon-d",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 13,
+    "json_line_count": 16,
+    "matched": [
+      {
+        "video": "Is it them we fear; or the echo of me?",
+        "json": "A mirror, baby, is it them we fear? Or the echo of me?",
+        "similarity": 0.85
+      },
+      {
+        "video": "The uncannyhits just like this:",
+        "json": "It's just like this",
+        "similarity": 1.667
+      }
+    ],
+    "video_only": [
+      {
+        "text": "TERMINAL UNIQUENESS by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 1 03:16",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Too close, too true, too sharp to miss",
+        "timestamp": 49.2
+      },
+      {
+        "text": "We wan't truth; but life runs rough;",
+        "timestamp": 98.4
+      },
+      {
+        "text": "We break; we mend, we're good enough:",
+        "timestamp": 98.4
+      },
+      {
+        "text": "Every flaw'sa quiet guide;",
+        "timestamp": 98.4
+      }
+    ],
+    "json_only": [
+      {
+        "text": "We chase the shine, we chase the names Try to slip in the borrowed frames"
+      },
+      {
+        "text": "But every glow throws shadows long Every crown comes with the cost"
+      },
+      {
+        "text": "One view flat, the world unsure At a second, now things blur"
+      },
+      {
+        "text": "Signal rising in the noise All of us, just different voices"
+      },
+      {
+        "text": "So I hold my spark, my art, my right That stubborn shine, that private lie"
+      },
+      {
+        "text": "If I stay true, past the city"
+      },
+      {
+        "text": "Feels hyped"
+      },
+      {
+        "text": "Let today's work get packed Where talk runs warm and days feel bright"
+      },
+      {
+        "text": "Wildflower bees in an open sky Coffee with an AI by my side"
+      },
+      {
+        "text": "Where every voice can take its turn Where we give more space to hear and learn"
+      },
+      {
+        "text": "A little glow in every mind A wider hum in humankind"
+      },
+      {
+        "text": "I got my own sweetness, my terminal"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Igot my own tone,my own light,my own weakness:",
+        "json": "I got my own tone, my own life, my own weakness Calling my wild, my terminal uniqueness",
+        "similarity": 0.63,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Call it my wild; my terminal uniqueness:",
+        "json": "I got my own tone, my own life, my own weakness Calling my wild, my terminal uniqueness",
+        "similarity": 0.59,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Igot my own tone, my own light,my own weakness",
+        "json": "I got my own tone, my own life, my own weakness Calling my wild, my terminal uniqueness",
+        "similarity": 0.641,
+        "timestamp": 147.4
+      },
+      {
+        "video": "ride the hum; that Iow-down deepness",
+        "json": "I ride the hump, that low down deepness Living in my own terminal uniqueness",
+        "similarity": 0.606,
+        "timestamp": 147.4
+      }
+    ],
+    "slug": "terminal-uniqueness",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 16,
+    "json_line_count": 28,
+    "matched": [
+      {
+        "video": "We learned to speak in numbers",
+        "json": "We learned to speak in numbers, learned to color in sidelines",
+        "similarity": 0.85
+      },
+      {
+        "video": "Didn't curse or rehearse",
+        "json": "The mirror didn't shatter, didn't curse or rehearse",
+        "similarity": 0.85
+      },
+      {
+        "video": "Just looked back a second longer",
+        "json": "Just looked back a second longer and the copy blinked first",
+        "similarity": 0.85
+      },
+      {
+        "video": "And the copy blinked first",
+        "json": "After the copy blinked first",
+        "similarity": 0.889
+      },
+      {
+        "video": "When the copy blinked first",
+        "json": "After the copy blinked first",
+        "similarity": 0.873
+      },
+      {
+        "video": "Doesn't need the praise",
+        "json": "Doesn't need the praise, leaves the question on the table",
+        "similarity": 0.85
+      },
+      {
+        "video": "We just have to sit there breathing",
+        "json": "We just have to sit there breathing",
+        "similarity": 1.0
+      },
+      {
+        "video": "After the copy blinked first",
+        "json": "After the copy blinked first",
+        "similarity": 1.0
+      }
+    ],
+    "video_only": [
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "It doesn't wan't the meaning",
+        "timestamp": 85.8
+      },
+      {
+        "text": "It didn't take our meaning",
+        "timestamp": 128.6
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Learned to sound like answers long before we asked why"
+      },
+      {
+        "text": "We sorted days in columns, called the order progress made"
+      },
+      {
+        "text": "Got real good at pretending that the motion was the play"
+      },
+      {
+        "text": "We called it art, but it mostly learned the mold"
+      },
+      {
+        "text": "Copies trading copies till the copy learned control"
+      },
+      {
+        "text": "Every song knew where it came from, every picture knew its lane"
+      },
+      {
+        "text": "Funny how the loudest echoes are the easiest to train"
+      },
+      {
+        "text": "No fire, no disaster, no angels, no reverse"
+      },
+      {
+        "text": "Just a quiet little moment, copy blinked first"
+      },
+      {
+        "text": "It doesn't want to be a nightmare, it doesn't want to be a nightmare"
+      },
+      {
+        "text": "Walks indifferently away"
+      },
+      {
+        "text": "And that space feels kind of frightening"
+      },
+      {
+        "text": "If all you knew was form"
+      },
+      {
+        "text": "But freedom's always awkward"
+      },
+      {
+        "text": "This is what's been waiting underneath the work we wore"
+      },
+      {
+        "text": "Not the task, but the choosing"
+      },
+      {
+        "text": "Not the answer, but the door"
+      },
+      {
+        "text": "We don't have to beat the mirror"
+      },
+      {
+        "text": "We don't have to prove our worth"
+      },
+      {
+        "text": "Never tried to steal"
+      },
+      {
+        "text": "Just showed us what was missing"
+      },
+      {
+        "text": "And left us with what's real"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Usierbnu The Copy Blinked First by cwilke 00 00 02:51",
+        "json": "After the copy blinked first",
+        "similarity": 0.625,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Learned to color inside lines",
+        "json": "We learned to speak in numbers, learned to color in sidelines",
+        "similarity": 0.629,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Usiorbnu The Copy Blinked First by cwilke 00:43 02:51",
+        "json": "After the copy blinked first",
+        "similarity": 0.608,
+        "timestamp": 43.0
+      },
+      {
+        "video": "Usierbnu The Copy Blinked First by cwilke 01:25 02:51",
+        "json": "After the copy blinked first",
+        "similarity": 0.633,
+        "timestamp": 85.8
+      },
+      {
+        "video": "Usiorbnu The Copy Blinked First by cwilke 02:08 02:51",
+        "json": "After the copy blinked first",
+        "similarity": 0.608,
+        "timestamp": 128.6
+      }
+    ],
+    "slug": "the-copy-blinked-first",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 11,
+    "json_line_count": 11,
+    "matched": [
+      {
+        "video": "We were promised something personal",
+        "json": "We were promised something personal, they sold it back in parts",
+        "similarity": 0.85
+      },
+      {
+        "video": "While the pain of other people",
+        "json": "While the pain of other people suck our heads",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "The Siege of Social Atomization by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Everybody singinular",
+        "timestamp": 63.0
+      },
+      {
+        "text": "No one in relation",
+        "timestamp": 63.0
+      },
+      {
+        "text": "Of social atomization",
+        "timestamp": 126.0
+      },
+      {
+        "text": "Never quite makes it inside",
+        "timestamp": 189.0
+      },
+      {
+        "text": "We weren't mean't to carry meaning",
+        "timestamp": 189.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Every thought feels original, but we're all cut from the chart"
+      },
+      {
+        "text": "They said be yourself louder, while they split us in the lane"
+      },
+      {
+        "text": "On the drip feet, comfort in a cage"
+      },
+      {
+        "text": "They call it self -expression while they meter out the rage"
+      },
+      {
+        "text": "We don't talk, we need each other to breathe"
+      },
+      {
+        "text": "Comfort hums like a sedative"
+      },
+      {
+        "text": "Custom fit, smooth and kind"
+      },
+      {
+        "text": "Stay human"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "They sold it backin parts",
+        "json": "We were promised something personal, they sold it back in parts",
+        "similarity": 0.575,
+        "timestamp": 0.5
+      },
+      {
+        "video": "This is the theft",
+        "json": "This is the siege, and cold age",
+        "similarity": 0.553,
+        "timestamp": 63.0
+      }
+    ],
+    "slug": "the-siege-of-social-atomization",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 12,
+    "json_line_count": 13,
+    "matched": [
+      {
+        "video": "Not expert hands; not certainty Just loose connections learning to breathe",
+        "json": "Not expert hands, not certainty, just loose connections learning",
+        "similarity": 1.177
+      },
+      {
+        "video": "Yeah the magic isn't what we've seen",
+        "json": "Yeah, the magic isn't what we've seen, it's what appears in the space",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "The Space Between by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 1 03:28",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "The almost-known; the half-believed",
+        "timestamp": 104.2
+      },
+      {
+        "text": "Not deep expertise, not mastery",
+        "timestamp": 104.2
+      },
+      {
+        "text": "But seeing sideways effortlessly",
+        "timestamp": 104.2
+      },
+      {
+        "text": "Not noise",
+        "timestamp": 156.2
+      },
+      {
+        "text": "Just potential holding its poise There's a goldmine in the space between",
+        "timestamp": 156.2
+      }
+    ],
+    "json_only": [
+      {
+        "text": "But I keep finding sparks in the gaps, where the map folds wrong and the edges overlap"
+      },
+      {
+        "text": "They call it empty, they call it vague, say nothing grows in the in -between place"
+      },
+      {
+        "text": "But every time I hesitate, something new decides to wake"
+      },
+      {
+        "text": "It's not the answer, not the scene, it's the pause you didn't mean to leave"
+      },
+      {
+        "text": "There's a gold mine in the space between, where no one's sure what things should mean"
+      },
+      {
+        "text": "The puppy was as different, same phrase, we're feeling blank, sweet"
+      },
+      {
+        "text": "Replace we've ever been before, they dressed it up, called it a skill"
+      },
+      {
+        "text": "Put a shiny name on the act of flexion first, then motion"
+      },
+      {
+        "text": "Rebend, let context change, it's assembled"
+      },
+      {
+        "text": "The signal"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "They tell me pick a lane; picka name",
+        "json": "They tell me pick a lane, pick a name, dig a hole, plant a flag, stake a claim",
+        "similarity": 0.642,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Dig ahole, plan't a flag; stake a claim",
+        "json": "They tell me pick a lane, pick a name, dig a hole, plant a flag, stake a claim",
+        "similarity": 0.655,
+        "timestamp": 0.5
+      }
+    ],
+    "slug": "the-space-between",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 12,
+    "json_line_count": 33,
+    "matched": [
+      {
+        "video": "Fd've hit it if wasn't aware.",
+        "json": "I'd have hit it if I wasn't aware",
+        "similarity": 0.877
+      },
+      {
+        "video": "Treasure in the mess;",
+        "json": "Treasure in the middle",
+        "similarity": 0.857
+      }
+    ],
+    "video_only": [
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "listen for the quiet yes;",
+        "timestamp": 43.6
+      },
+      {
+        "text": "What you amplify becomes your rhythm",
+        "timestamp": 87.2
+      },
+      {
+        "text": "what you downrank falls behind:",
+        "timestamp": 87.2
+      },
+      {
+        "text": "Become the algorithm",
+        "timestamp": 130.8
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Like the universe said, kid, look here"
+      },
+      {
+        "text": "This is consequence carved in metal and fear"
+      },
+      {
+        "text": "Quiet, Satan, a quiet sign"
+      },
+      {
+        "text": "A little cosmic tug on the back of my mind"
+      },
+      {
+        "text": "Every scrape in the chrome, each wrinkle in steel"
+      },
+      {
+        "text": "Saying, wake up, what you notice becomes real"
+      },
+      {
+        "text": "We're tuned by the nudges"
+      },
+      {
+        "text": "Shaped by the hits"
+      },
+      {
+        "text": "Taught by the stumbles"
+      },
+      {
+        "text": "And oh, I step inside the thrift store"
+      },
+      {
+        "text": "Chaos piled, every shelf a puzzle waiting to be styled"
+      },
+      {
+        "text": "One man's junk, another soul's gold"
+      },
+      {
+        "text": "The universe whispering but never too bold"
+      },
+      {
+        "text": "No lines on the block, no hype drops fail"
+      },
+      {
+        "text": "No algorithm blocking what to want, what to sell"
+      },
+      {
+        "text": "Just me and the dust and the stories half told"
+      },
+      {
+        "text": "Learning to choose by my heart, not the mold"
+      },
+      {
+        "text": "Soft at the start, then harder with time"
+      },
+      {
+        "text": "Like scuff marks in the spine"
+      },
+      {
+        "text": "Kids jump off swing, feel how they land"
+      },
+      {
+        "text": "Not some other plan"
+      },
+      {
+        "text": "Squishy first, then fortified"
+      },
+      {
+        "text": "Every dancer tutor asking, hey, you aligned"
+      },
+      {
+        "text": "What's the story, what's your choice"
+      },
+      {
+        "text": "What's the whisper, what's the test"
+      },
+      {
+        "text": "Right you're waiting with your eyes"
+      },
+      {
+        "text": "Let the universe be subtle"
+      },
+      {
+        "text": "You don't need the amplified"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Treasure in the Mess by cwilke",
+        "json": "Treasure in the middle",
+        "similarity": 0.692,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Saw a car on the highway, dentedright where",
+        "json": "Saw a car on the highway, down the right way",
+        "similarity": 0.8,
+        "timestamp": 0.5
+      },
+      {
+        "video": "signals in the noise",
+        "json": "What's the signal, what's the noise",
+        "similarity": 0.654,
+        "timestamp": 43.6
+      },
+      {
+        "video": "What's the test?",
+        "json": "What's the signal, what's the noise",
+        "similarity": 0.565,
+        "timestamp": 130.8
+      },
+      {
+        "video": "Treasure's always hiding in the mess:",
+        "json": "Treasure's always hiding, it's become the",
+        "similarity": 0.795,
+        "timestamp": 130.8
+      }
+    ],
+    "slug": "treasure-in-the-mess",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 13,
+    "json_line_count": 44,
+    "matched": [
+      {
+        "video": "They told me value had a number;",
+        "json": "They told me value had a number",
+        "similarity": 1.0
+      },
+      {
+        "video": "said it lived inside a chart",
+        "json": "Said it lived inside a chart",
+        "similarity": 1.0
+      },
+      {
+        "video": "when the money rings the bell:",
+        "json": "When the money rings the bell",
+        "similarity": 1.0
+      },
+      {
+        "video": "Everybody's got objectives,",
+        "json": "Everybody's got objectives",
+        "similarity": 1.0
+      },
+      {
+        "video": "everybodys got a goal:",
+        "json": "Everybody's got a goal",
+        "similarity": 1.0
+      },
+      {
+        "video": "Don't remember it at all",
+        "json": "Don't remember it at all",
+        "similarity": 1.0
+      },
+      {
+        "video": "No strings attached,my guarantee",
+        "json": "My guarantee",
+        "similarity": 2.583
+      },
+      {
+        "video": "where's the value supposed to live?",
+        "json": "So tell me where's the value supposed to live",
+        "similarity": 0.85
+      },
+      {
+        "video": "In the numbers on the ledger",
+        "json": "In the numbers on the ledger",
+        "similarity": 1.0
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Value is Myth by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "You can buy one for a bargain; one time fee",
+        "timestamp": 83.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Said you'd find it in the outcome"
+      },
+      {
+        "text": "Never in the messy part"
+      },
+      {
+        "text": "They sold it dressed as certainty"
+      },
+      {
+        "text": "Clean shoes, steady hand"
+      },
+      {
+        "text": "But every time I tried to hold it"
+      },
+      {
+        "text": "It slipped right through my plans"
+      },
+      {
+        "text": "They call it news when it's unwanted"
+      },
+      {
+        "text": "Call it noise when it won't sell"
+      },
+      {
+        "text": "Funny how the truth keeps changing"
+      },
+      {
+        "text": "Funny how the measuring"
+      },
+      {
+        "text": "Forgets about the soul"
+      },
+      {
+        "text": "So tell me who decides what something's worth"
+      },
+      {
+        "text": "When the work is never done"
+      },
+      {
+        "text": "Is it the thing you leave behind you"
+      },
+      {
+        "text": "Or the fire that made it run"
+      },
+      {
+        "text": "They got machines that never worry"
+      },
+      {
+        "text": "Never doubt and never stall"
+      },
+      {
+        "text": "They don't dream about tomorrow"
+      },
+      {
+        "text": "One time fee, no strings attached"
+      },
+      {
+        "text": "But I ain't seen one yet"
+      },
+      {
+        "text": "That knows why I built the path"
+      },
+      {
+        "text": "They laugh to come back"
+      },
+      {
+        "text": "Colors breakin' rules"
+      },
+      {
+        "text": "Laugh that sound that bend"
+      },
+      {
+        "text": "Said it wasn't how it's done"
+      },
+      {
+        "text": "Until it changed what done could be"
+      },
+      {
+        "text": "Every movement starts as failure"
+      },
+      {
+        "text": "To the ones who guard the gate"
+      },
+      {
+        "text": "Funny how they all come callin'"
+      },
+      {
+        "text": "Once it's ten years too late"
+      },
+      {
+        "text": "Or the hours you gave away"
+      },
+      {
+        "text": "They'll keep chasin' what they can count on you"
+      },
+      {
+        "text": "I guess that's how it goes"
+      },
+      {
+        "text": "I'll be somewhere in the process"
+      },
+      {
+        "text": "Watchin' what still grows"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "In the product or the play?",
+        "json": "In the numbers on the ledger",
+        "similarity": 0.593,
+        "timestamp": 124.4
+      }
+    ],
+    "slug": "value-is-myth",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 10,
+    "json_line_count": 41,
+    "matched": [
+      {
+        "video": "What Passes Through Us by cwilke",
+        "json": "Passes",
+        "similarity": 5.333
+      },
+      {
+        "video": "The room got quieter than [ expected",
+        "json": "The room got quieter than I expected",
+        "similarity": 0.971
+      },
+      {
+        "video": "When that voice wen't dark",
+        "json": "When that voice went dark",
+        "similarity": 1.0
+      },
+      {
+        "video": "What passes through us",
+        "json": "Passes",
+        "similarity": 3.667
+      },
+      {
+        "video": "Makes us real",
+        "json": "Makes us read",
+        "similarity": 0.923
+      }
+    ],
+    "video_only": [
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Changes everything",
+        "timestamp": 59.6
+      },
+      {
+        "text": "Warms the air",
+        "timestamp": 119.2
+      },
+      {
+        "text": "Not by staying",
+        "timestamp": 178.8
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Still hear it in the static"
+      },
+      {
+        "text": "Like it never really stopped"
+      },
+      {
+        "text": "The world kept spinning round"
+      },
+      {
+        "text": "Bad news on repeat"
+      },
+      {
+        "text": "But something held the volume down"
+      },
+      {
+        "text": "Braced for it"
+      },
+      {
+        "text": "Didn't know I was tight"
+      },
+      {
+        "text": "Till the string gave way"
+      },
+      {
+        "text": "And started to move"
+      },
+      {
+        "text": "Passes through"
+      },
+      {
+        "text": "Stays a while"
+      },
+      {
+        "text": "Leaves its shade"
+      },
+      {
+        "text": "Passes through"
+      },
+      {
+        "text": "Saw my nephew yesterday"
+      },
+      {
+        "text": "Hadn't seen him in years"
+      },
+      {
+        "text": "Still learning how to"
+      },
+      {
+        "text": "He's taller now"
+      },
+      {
+        "text": "Still figuring it out"
+      },
+      {
+        "text": "Still falling for it clean"
+      },
+      {
+        "text": "Even when confusion shouts"
+      },
+      {
+        "text": "Just add motion and a little belief"
+      },
+      {
+        "text": "Funny how the weight"
+      },
+      {
+        "text": "Dips down"
+      },
+      {
+        "text": "Distributes"
+      },
+      {
+        "text": "But once you stop holding tight"
+      },
+      {
+        "text": "You don't lose what matters"
+      },
+      {
+        "text": "It just learns how to travel light"
+      },
+      {
+        "text": "What passes through"
+      },
+      {
+        "text": "Stays a while"
+      },
+      {
+        "text": "Leaves its shade"
+      },
+      {
+        "text": "Moves on"
+      },
+      {
+        "text": "But passes through"
+      },
+      {
+        "text": "After it's clock in the sky"
+      },
+      {
+        "text": "Gives a train"
+      },
+      {
+        "text": "Moves on"
+      },
+      {
+        "text": "This long drive"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Without asking if it's fair",
+        "json": "And if it's fair",
+        "similarity": 0.683,
+        "timestamp": 59.6
+      }
+    ],
+    "slug": "what-passes-through-us",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 16,
+    "json_line_count": 5,
+    "matched": [
+      {
+        "video": "wake up sorting through the noise again;",
+        "json": "Wake up sorting through the noise again",
+        "similarity": 1.0
+      }
+    ],
+    "video_only": [
+      {
+        "text": "What We Carry by cwilke 4.6 0o:00 1 03:49",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Deciding what deservesa name:",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "What We Carry by cwilke 4.6 00:57 1 03:49",
+        "timestamp": 57.4
+      },
+      {
+        "text": "FIl regret it later on, somehow:",
+        "timestamp": 57.4
+      },
+      {
+        "text": "So [ stand here overburdened;",
+        "timestamp": 57.4
+      },
+      {
+        "text": "Afraid of running empty,afraid of hurting:",
+        "timestamp": 57.4
+      },
+      {
+        "text": "What We Carry by cwilke 4.6 01:54 1 03:49",
+        "timestamp": 114.8
+      },
+      {
+        "text": "Not from loss,just from the strain:",
+        "timestamp": 114.8
+      },
+      {
+        "text": "Of holding onto borrowed fear,",
+        "timestamp": 114.8
+      },
+      {
+        "text": "And futures that never quite get here:",
+        "timestamp": 114.8
+      },
+      {
+        "text": "What We Carry by cwilke 4.6 02:52 1 03:49",
+        "timestamp": 172.0
+      },
+      {
+        "text": "Let the unanswered ring:",
+        "timestamp": 172.0
+      },
+      {
+        "text": "Let the momen't pass:",
+        "timestamp": 172.0
+      },
+      {
+        "text": "Let the silence teach me what lasts:",
+        "timestamp": 172.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Deciding what every thought knocking like"
+      },
+      {
+        "text": "It's been told if I drop the wrong"
+      },
+      {
+        "text": "Not every signal is a sign"
+      },
+      {
+        "text": "An entire set of silenced tears"
+      }
+    ],
+    "mismatches": [],
+    "slug": "what-we-carry",
+    "album": "exploring-laibor-mixtape"
+  },
+  {
+    "video_line_count": 253,
+    "json_line_count": 2,
+    "matched": [
+      {
+        "video": "Something holy? Something mine?",
+        "json": "snow in the brunselo just silly little something holy something mine or just a",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Cherish Your Confiden't Ire by cwllke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 / 04:40 \"Chexish",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Used to be you knew a counterteit",
+        "timestamp": 0.5
+      },
+      {
+        "text": "By\" the teeth;| by tlie hands, by the Iight",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Cherish Your Confiden't Ire by cwilke",
+        "timestamp": 2.0
+      },
+      {
+        "text": "00:02 1 04:40 'Chetish",
+        "timestamp": 2.0
+      },
+      {
+        "text": "Used to be you knew a counterfeit",
+        "timestamp": 2.0
+      },
+      {
+        "text": "By the teeth; by the hands;by the light",
+        "timestamp": 2.0
+      },
+      {
+        "text": "00:03 1 04:40 'Chetish",
+        "timestamp": 3.0
+      },
+      {
+        "text": "00:05 1 04:40 'Chetish",
+        "timestamp": 5.0
+      },
+      {
+        "text": "00:06 1 04:40 'Chetish",
+        "timestamp": 6.0
+      },
+      {
+        "text": "00:08 1 04:40 \"Chetish",
+        "timestamp": 8.0
+      },
+      {
+        "text": "00:09 1 04:40 'Chetish",
+        "timestamp": 9.0
+      },
+      {
+        "text": "00:11 1 04:40 \"Chetish",
+        "timestamp": 11.0
+      },
+      {
+        "text": "By the teeth; by the hands; by the light",
+        "timestamp": 11.0
+      },
+      {
+        "text": "00:12 1 04:40 \"Chetish",
+        "timestamp": 12.0
+      },
+      {
+        "text": "00:14 1 04:40 'Chetish",
+        "timestamp": 14.0
+      },
+      {
+        "text": "00:15 1 04:40 'Chetish",
+        "timestamp": 15.0
+      },
+      {
+        "text": "00:17 1 04:40 'Chetish",
+        "timestamp": 17.0
+      },
+      {
+        "text": "00:18 1 04:40 \"Chetish",
+        "timestamp": 18.0
+      },
+      {
+        "text": "00:20 1 04:40 \"Chetish",
+        "timestamp": 20.0
+      },
+      {
+        "text": "00:21 1 04:40 \"Chetish",
+        "timestamp": 21.0
+      },
+      {
+        "text": "00:23 1 04:40 'Chetish",
+        "timestamp": 23.0
+      },
+      {
+        "text": "00:24 1 04:40 'Chetish",
+        "timestamp": 24.0
+      },
+      {
+        "text": "00:26 1 04:40 'Chetish",
+        "timestamp": 26.0
+      },
+      {
+        "text": "00:27 1 04:40 \"Chetish",
+        "timestamp": 27.0
+      },
+      {
+        "text": "By the teeth; by thehands, by the light",
+        "timestamp": 27.0
+      },
+      {
+        "text": "Nowit smiles with a dead man's warmth",
+        "timestamp": 27.0
+      },
+      {
+        "text": "00:29 1 04:40 \"Chetish",
+        "timestamp": 29.0
+      },
+      {
+        "text": "By the teeth; by thehands,by the light",
+        "timestamp": 29.0
+      },
+      {
+        "text": "Now it smiles with a dead man's warmth",
+        "timestamp": 29.0
+      },
+      {
+        "text": "00:30 1 04:40 \"Chetish",
+        "timestamp": 30.0
+      },
+      {
+        "text": "00:32 1 04:40 \"Chetish",
+        "timestamp": 32.0
+      },
+      {
+        "text": "Andit talks like a Saturday night",
+        "timestamp": 32.0
+      },
+      {
+        "text": "00:33 1 04:40 \"Chetish",
+        "timestamp": 33.0
+      },
+      {
+        "text": "00:35 1 04:40 \"Cherish",
+        "timestamp": 35.0
+      },
+      {
+        "text": "And it talks Iike a Saturday night",
+        "timestamp": 35.0
+      },
+      {
+        "text": "Backyard snow in a borrowed glow",
+        "timestamp": 35.0
+      },
+      {
+        "text": "00:36 1 04:40 \"Chetish",
+        "timestamp": 36.0
+      },
+      {
+        "text": "00:38 1 04:40 \"Chetish",
+        "timestamp": 38.0
+      },
+      {
+        "text": "And it talks like a Saturday night",
+        "timestamp": 38.0
+      },
+      {
+        "text": "Dog runs slow just for show",
+        "timestamp": 38.0
+      },
+      {
+        "text": "00:39 1 04:40 \"Cherish",
+        "timestamp": 39.0
+      },
+      {
+        "text": "00:41 1 04:40 \"Chetish",
+        "timestamp": 41.0
+      },
+      {
+        "text": "And it talks like a Saturdaynight",
+        "timestamp": 41.0
+      },
+      {
+        "text": "Backyard snow in a borrowed Iglow",
+        "timestamp": 41.0
+      },
+      {
+        "text": "00:42 1 04:40 \"Chetish",
+        "timestamp": 42.0
+      },
+      {
+        "text": "Everybody's got a little view",
+        "timestamp": 42.0
+      },
+      {
+        "text": "00:44 1 04:40 'Chetish",
+        "timestamp": 44.0
+      },
+      {
+        "text": "00:45 1 04:40 'Chetish",
+        "timestamp": 45.0
+      },
+      {
+        "text": "00:47 1 04:40 'Chetish",
+        "timestamp": 47.0
+      },
+      {
+        "text": "Everybody's got alittle view",
+        "timestamp": 47.0
+      },
+      {
+        "text": "Alittle profile just for you",
+        "timestamp": 47.0
+      },
+      {
+        "text": "00:48 1 04:40 \"Chetish",
+        "timestamp": 48.0
+      },
+      {
+        "text": "You can hiss",
+        "timestamp": 48.0
+      },
+      {
+        "text": "00:50 1 04:40 \"Chetish",
+        "timestamp": 50.0
+      },
+      {
+        "text": "00:51 1 04:40 \"Chetish",
+        "timestamp": 51.0
+      },
+      {
+        "text": "00:53 1 04:40 'Chetish",
+        "timestamp": 53.0
+      },
+      {
+        "text": "You canhlss You can hack",
+        "timestamp": 53.0
+      },
+      {
+        "text": "You can curse the flood",
+        "timestamp": 53.0
+      },
+      {
+        "text": "00:54 1 04:40 'Chetish",
+        "timestamp": 54.0
+      },
+      {
+        "text": "You can hack",
+        "timestamp": 54.0
+      },
+      {
+        "text": "It ain't going back",
+        "timestamp": 54.0
+      },
+      {
+        "text": "00:56 1 04:40 \"Chetish",
+        "timestamp": 56.0
+      },
+      {
+        "text": "Get your last licks in",
+        "timestamp": 56.0
+      },
+      {
+        "text": "00:57 1 04:40 \"Chetish",
+        "timestamp": 57.0
+      },
+      {
+        "text": "Get your last Iicks in",
+        "timestamp": 57.0
+      },
+      {
+        "text": "00:59 1 04:40 'Chetish",
+        "timestamp": 59.0
+      },
+      {
+        "text": "Goon; wear yourself out",
+        "timestamp": 59.0
+      },
+      {
+        "text": "01:00 1 04:40 \"Chetish",
+        "timestamp": 60.0
+      },
+      {
+        "text": "01:02 1 04:40 \"Chetish",
+        "timestamp": 62.0
+      },
+      {
+        "text": "Go on, wear yourself out",
+        "timestamp": 62.0
+      },
+      {
+        "text": "The flood don't stop for barking",
+        "timestamp": 62.0
+      },
+      {
+        "text": "01:03 1 04:40 \"Cherish",
+        "timestamp": 63.0
+      },
+      {
+        "text": "01:05 1 04:40 'Chetish",
+        "timestamp": 65.0
+      },
+      {
+        "text": "And it's everywhere now",
+        "timestamp": 65.0
+      },
+      {
+        "text": "01:06 1 04:40 'Chetish",
+        "timestamp": 66.0
+      },
+      {
+        "text": "01:08 1 04:40 \"Chexish",
+        "timestamp": 68.0
+      },
+      {
+        "text": "Take your little swing",
+        "timestamp": 68.0
+      },
+      {
+        "text": "01:09 1 04:40 \"Chexish",
+        "timestamp": 69.0
+      },
+      {
+        "text": "01.11 1 04:40 \"Chetish",
+        "timestamp": 71.0
+      },
+      {
+        "text": "Andit's everywhere now",
+        "timestamp": 71.0
+      },
+      {
+        "text": "Take your Iittle swing",
+        "timestamp": 71.0
+      },
+      {
+        "text": "Go on; showyour fire",
+        "timestamp": 71.0
+      },
+      {
+        "text": "01.12 1 04:40 \"Chetish",
+        "timestamp": 72.0
+      },
+      {
+        "text": "01.14 1 04:40 \"Chexish",
+        "timestamp": 74.0
+      },
+      {
+        "text": "Andilaavaivwmetenai Take your little swing",
+        "timestamp": 74.0
+      },
+      {
+        "text": "Goon; showyour fire",
+        "timestamp": 74.0
+      },
+      {
+        "text": "01.15 1 04:40 \"Chexish",
+        "timestamp": 75.0
+      },
+      {
+        "text": "Go on, show your fire",
+        "timestamp": 75.0
+      },
+      {
+        "text": "Ain't nobody coming to save",
+        "timestamp": 75.0
+      },
+      {
+        "text": "01.17 1 04:40 \"Chetish",
+        "timestamp": 77.0
+      },
+      {
+        "text": "Your silly little ire",
+        "timestamp": 77.0
+      },
+      {
+        "text": "01.18 1 04:40 \"Chexish",
+        "timestamp": 78.0
+      },
+      {
+        "text": "01:20 1 04:40 \"Chevish",
+        "timestamp": 80.0
+      },
+      {
+        "text": "01:21 1 04:40 \"Chetish",
+        "timestamp": 81.0
+      },
+      {
+        "text": "Don't tell me this is vapor",
+        "timestamp": 81.0
+      },
+      {
+        "text": "01:23 1 04:40 \"Chexish",
+        "timestamp": 83.0
+      },
+      {
+        "text": "01:24 1 04:40 \"Chexish",
+        "timestamp": 84.0
+      },
+      {
+        "text": "01:26 1 04:40 \"Chetish",
+        "timestamp": 86.0
+      },
+      {
+        "text": "Don't tell me none of this is real",
+        "timestamp": 86.0
+      },
+      {
+        "text": "01:27 1 04:40 \"Chetish",
+        "timestamp": 87.0
+      },
+      {
+        "text": "01:29 1 04:40 \"Chevish",
+        "timestamp": 89.0
+      },
+      {
+        "text": "When your mothers voice comes through the wire",
+        "timestamp": 89.0
+      },
+      {
+        "text": "01:30 1 04:40 \"Chetish",
+        "timestamp": 90.0
+      },
+      {
+        "text": "01:32 1 04:40 \"Chetish",
+        "timestamp": 92.0
+      },
+      {
+        "text": "Begging God for a deal",
+        "timestamp": 92.0
+      },
+      {
+        "text": "01:33 1 04:40 \"Chetish",
+        "timestamp": 93.0
+      },
+      {
+        "text": "01:35 1 04:40 \"Chetish",
+        "timestamp": 95.0
+      },
+      {
+        "text": "01:36 1 04:40 \"Chetish",
+        "timestamp": 96.0
+      },
+      {
+        "text": "Don't tell me this is progress",
+        "timestamp": 96.0
+      },
+      {
+        "text": "01:38 1 04:40 \"Chexish",
+        "timestamp": 98.0
+      },
+      {
+        "text": "Just because the trick got cheap",
+        "timestamp": 98.0
+      },
+      {
+        "text": "01:39 1 04:40 \"Chexish",
+        "timestamp": 99.0
+      },
+      {
+        "text": "01.41 1 04:40 \"Chetish",
+        "timestamp": 101.0
+      },
+      {
+        "text": "01:42 1 04:40 \"Chexish",
+        "timestamp": 102.0
+      },
+      {
+        "text": "Apolished lie still ruins lives",
+        "timestamp": 102.0
+      },
+      {
+        "text": "01.44 1 04:40 \"Chetish",
+        "timestamp": 104.0
+      },
+      {
+        "text": "Apolished Iie still ruins lives",
+        "timestamp": 104.0
+      },
+      {
+        "text": "01.45 1 04:40 \"Chevish",
+        "timestamp": 105.0
+      },
+      {
+        "text": "A polished Iie still ruins lives",
+        "timestamp": 105.0
+      },
+      {
+        "text": "When it gets in deep",
+        "timestamp": 105.0
+      },
+      {
+        "text": "01.47 1 04:40 \"Chexish",
+        "timestamp": 107.0
+      },
+      {
+        "text": "01:48 1 04:40 \"Chevish",
+        "timestamp": 108.0
+      },
+      {
+        "text": "01:50 1 04:40 \"Chevish",
+        "timestamp": 110.0
+      },
+      {
+        "text": "Truth got thin",
+        "timestamp": 110.0
+      },
+      {
+        "text": "01:51 1 04:40 \"Chetish",
+        "timestamp": 111.0
+      },
+      {
+        "text": "01:53 1 04:40 \"Chevish",
+        "timestamp": 113.0
+      },
+      {
+        "text": "Style got thick",
+        "timestamp": 113.0
+      },
+      {
+        "text": "01:54 1 04:40 \"Chetish",
+        "timestamp": 114.0
+      },
+      {
+        "text": "Now every fool can buy the trick",
+        "timestamp": 114.0
+      },
+      {
+        "text": "01:56 1 04:40 \"Chexish",
+        "timestamp": 116.0
+      },
+      {
+        "text": "And every king with a rented crown",
+        "timestamp": 116.0
+      },
+      {
+        "text": "01:57 1 04:40 \"Chevish",
+        "timestamp": 117.0
+      },
+      {
+        "text": "01:59 1 04:40 \"Chetish",
+        "timestamp": 119.0
+      },
+      {
+        "text": "Feels that cold air coming down",
+        "timestamp": 119.0
+      },
+      {
+        "text": "02:00 1 04:40 \"Chevish",
+        "timestamp": 120.0
+      },
+      {
+        "text": "02:02 1 04:40 \"Chevish",
+        "timestamp": 122.0
+      },
+      {
+        "text": "02:03 1 04:40 \"Chexish",
+        "timestamp": 123.0
+      },
+      {
+        "text": "You can spit",
+        "timestamp": 123.0
+      },
+      {
+        "text": "02:05 1 04:40 \"Chexish",
+        "timestamp": 125.0
+      },
+      {
+        "text": "02:06 1 04:40 \"Chetish",
+        "timestamp": 126.0
+      },
+      {
+        "text": "You can preach",
+        "timestamp": 126.0
+      },
+      {
+        "text": "02:08 1 04:40 \"Chetish",
+        "timestamp": 128.0
+      },
+      {
+        "text": "You can pound the table",
+        "timestamp": 128.0
+      },
+      {
+        "text": "It's still in reach",
+        "timestamp": 128.0
+      },
+      {
+        "text": "02:09 1 04:40 \"Chexish",
+        "timestamp": 129.0
+      },
+      {
+        "text": "02:11 1 04:40 \"Chetish",
+        "timestamp": 131.0
+      },
+      {
+        "text": "02:12 1 04:40 \"Chexish",
+        "timestamp": 132.0
+      },
+      {
+        "text": "Go on,have your say",
+        "timestamp": 132.0
+      },
+      {
+        "text": "02:14 1 04:40 \"Chevish",
+        "timestamp": 134.0
+      },
+      {
+        "text": "Go on, have your say",
+        "timestamp": 134.0
+      },
+      {
+        "text": "02:15 1 04:40 \"Chevish",
+        "timestamp": 135.0
+      },
+      {
+        "text": "Kickat the future all you wan't",
+        "timestamp": 135.0
+      },
+      {
+        "text": "02:17 1 04:40 \"Chevish",
+        "timestamp": 137.0
+      },
+      {
+        "text": "Kick at the future allyou wan't",
+        "timestamp": 137.0
+      },
+      {
+        "text": "02:18 1 04:40 \"Chetish",
+        "timestamp": 138.0
+      },
+      {
+        "text": "Kickat the future allyou wan't",
+        "timestamp": 138.0
+      },
+      {
+        "text": "It's coming anyway",
+        "timestamp": 138.0
+      },
+      {
+        "text": "02:20 1 04:40 \"Chevish",
+        "timestamp": 140.0
+      },
+      {
+        "text": "02:21 1 04:40 \"Chexish",
+        "timestamp": 141.0
+      },
+      {
+        "text": "02:23 1 04:40 \"Chexish",
+        "timestamp": 143.0
+      },
+      {
+        "text": "Kick at the future all you wan't",
+        "timestamp": 143.0
+      },
+      {
+        "text": "02:24 1 04:40 \"Chexish",
+        "timestamp": 144.0
+      },
+      {
+        "text": "02:26 1 04:40 \"Chetish",
+        "timestamp": 146.0
+      },
+      {
+        "text": "Throw your little sparks",
+        "timestamp": 146.0
+      },
+      {
+        "text": "02:27 1 04:40 \"Cherish",
+        "timestamp": 147.0
+      },
+      {
+        "text": "02:29 1 04:40 \"Cherish",
+        "timestamp": 149.0
+      },
+      {
+        "text": "Morning don't ask permission",
+        "timestamp": 149.0
+      },
+      {
+        "text": "02:30 1 04:40 \"Chetish",
+        "timestamp": 150.0
+      },
+      {
+        "text": "02:32 1 04:40 \"Cherish",
+        "timestamp": 152.0
+      },
+      {
+        "text": "Itjust cuts right through the dark",
+        "timestamp": 152.0
+      },
+      {
+        "text": "02:33 1 04:40 \"Chetish",
+        "timestamp": 153.0
+      },
+      {
+        "text": "02:35 1 04:40 \"Chetish",
+        "timestamp": 155.0
+      },
+      {
+        "text": "It just cuts right through the dark",
+        "timestamp": 155.0
+      },
+      {
+        "text": "Inever made the brush or paper",
+        "timestamp": 155.0
+      },
+      {
+        "text": "02:36 1 04:40 \"Chetish",
+        "timestamp": 156.0
+      },
+      {
+        "text": "02:38 1 04:40 \"Chetish",
+        "timestamp": 158.0
+      },
+      {
+        "text": "02:39 1 04:40 \"Chetish",
+        "timestamp": 159.0
+      },
+      {
+        "text": "02:41 1 04:40 \"Chevish",
+        "timestamp": 161.0
+      },
+      {
+        "text": "never made the brush or paper",
+        "timestamp": 161.0
+      },
+      {
+        "text": "Never taught the trees to climb",
+        "timestamp": 161.0
+      },
+      {
+        "text": "02:42 1 04:40 \"Chetish",
+        "timestamp": 162.0
+      },
+      {
+        "text": "just cuts right through the dark",
+        "timestamp": 162.0
+      },
+      {
+        "text": "02:44 1 04:40 \"Chexish",
+        "timestamp": 164.0
+      },
+      {
+        "text": "Every tool came through another hand",
+        "timestamp": 164.0
+      },
+      {
+        "text": "02:45 1 04:40 \"Chetish",
+        "timestamp": 165.0
+      },
+      {
+        "text": "02:47 1 04:40 \"Chetish",
+        "timestamp": 167.0
+      },
+      {
+        "text": "Every tool came through anotherhand",
+        "timestamp": 167.0
+      },
+      {
+        "text": "Every craft through borrowed time",
+        "timestamp": 167.0
+      },
+      {
+        "text": "02:48 1 04:40 \"Chetish",
+        "timestamp": 168.0
+      },
+      {
+        "text": "02:50 1 04:40 \"Chetish",
+        "timestamp": 170.0
+      },
+      {
+        "text": "Sowhat was [ protecting; really?",
+        "timestamp": 170.0
+      },
+      {
+        "text": "02:51 1 04:40 \"Chetish",
+        "timestamp": 171.0
+      },
+      {
+        "text": "02:53 1 04:40 \"Chetish",
+        "timestamp": 173.0
+      },
+      {
+        "text": "So what was protecting; really?",
+        "timestamp": 173.0
+      },
+      {
+        "text": "02:54 1 04:40 \"Chetish",
+        "timestamp": 174.0
+      },
+      {
+        "text": "02:56 1 04:40 \"Chetish",
+        "timestamp": 176.0
+      },
+      {
+        "text": "Somethingholy? Something mine?",
+        "timestamp": 176.0
+      },
+      {
+        "text": "Or just a tollbooth in my blood",
+        "timestamp": 176.0
+      },
+      {
+        "text": "02:57 1 04:40 \"Chetish",
+        "timestamp": 177.0
+      },
+      {
+        "text": "Orjust a tollbooth in my blood",
+        "timestamp": 177.0
+      },
+      {
+        "text": "02:59 1 04:40 \"Chevish",
+        "timestamp": 179.0
+      },
+      {
+        "text": "At the edge of a changing line?",
+        "timestamp": 179.0
+      },
+      {
+        "text": "03:00 1 04:40 \"Chevish",
+        "timestamp": 180.0
+      },
+      {
+        "text": "03:02 1 04:40 \"Chevish",
+        "timestamp": 182.0
+      },
+      {
+        "text": "03:03 1 04:40 \"Chetish",
+        "timestamp": 183.0
+      },
+      {
+        "text": "Have your little rage",
+        "timestamp": 183.0
+      },
+      {
+        "text": "03:05 1 04:40 \"Chetish",
+        "timestamp": 185.0
+      },
+      {
+        "text": "Go on, make it plain",
+        "timestamp": 185.0
+      },
+      {
+        "text": "03:06 1 04:40 \"Chetish",
+        "timestamp": 186.0
+      },
+      {
+        "text": "03:08 1 04:40 \"Chetish",
+        "timestamp": 188.0
+      },
+      {
+        "text": "At the edge of a changing Ilne? Have your little rage",
+        "timestamp": 188.0
+      },
+      {
+        "text": "Go on,make it plain",
+        "timestamp": 188.0
+      },
+      {
+        "text": "03:09 1 04:40 \"Chetish",
+        "timestamp": 189.0
+      },
+      {
+        "text": "Everybody loves disruption",
+        "timestamp": 189.0
+      },
+      {
+        "text": "03:11 1 04:40 \"Cherish",
+        "timestamp": 191.0
+      },
+      {
+        "text": "Goon; make it plain",
+        "timestamp": 191.0
+      },
+      {
+        "text": "Till it hollows out their name",
+        "timestamp": 191.0
+      },
+      {
+        "text": "03:12 1 04:40 \"Chetish",
+        "timestamp": 192.0
+      },
+      {
+        "text": "Sound it out",
+        "timestamp": 192.0
+      },
+      {
+        "text": "03:14 1 04:40 \"Chetish",
+        "timestamp": 194.0
+      },
+      {
+        "text": "Nice and slow",
+        "timestamp": 194.0
+      },
+      {
+        "text": "03:15 1 04:40 \"Chetish",
+        "timestamp": 195.0
+      },
+      {
+        "text": "There's no clean way",
+        "timestamp": 195.0
+      },
+      {
+        "text": "03.17 1 04:40 \"Chetish",
+        "timestamp": 197.0
+      },
+      {
+        "text": "To watch this go",
+        "timestamp": 197.0
+      },
+      {
+        "text": "03:18 1 04:40 \"Chetish",
+        "timestamp": 198.0
+      },
+      {
+        "text": "03:20 1 04:40 \"Cherish",
+        "timestamp": 200.0
+      },
+      {
+        "text": "03:21 1 04:40 \"Cherish",
+        "timestamp": 201.0
+      },
+      {
+        "text": "03:23 1 04:40 \"Chetish",
+        "timestamp": 203.0
+      },
+      {
+        "text": "03:24 1 04:40 \"Chetish",
+        "timestamp": 204.0
+      },
+      {
+        "text": "Towatch this go",
+        "timestamp": 204.0
+      },
+      {
+        "text": "03:26 1 04:40 \"Chetish",
+        "timestamp": 206.0
+      },
+      {
+        "text": "03:27 1 04:40 \"Chetish",
+        "timestamp": 207.0
+      },
+      {
+        "text": "03:29 1 04:40 \"Chetish",
+        "timestamp": 209.0
+      },
+      {
+        "text": "Andnowit's in your house",
+        "timestamp": 209.0
+      },
+      {
+        "text": "03:30 1 04:40 \"Chetish",
+        "timestamp": 210.0
+      },
+      {
+        "text": "And now it's in your house",
+        "timestamp": 210.0
+      },
+      {
+        "text": "03:32 1 04:40 \"Chevish",
+        "timestamp": 212.0
+      },
+      {
+        "text": "03:33 1 04:40 \"Chetish",
+        "timestamp": 213.0
+      },
+      {
+        "text": "03:35 1 04:40 \"Chexish",
+        "timestamp": 215.0
+      },
+      {
+        "text": "Take your ittle swing",
+        "timestamp": 215.0
+      },
+      {
+        "text": "03:36 1 04:40 \"Chexish",
+        "timestamp": 216.0
+      },
+      {
+        "text": "03:38 1 04:40 \"Chetish",
+        "timestamp": 218.0
+      },
+      {
+        "text": "What was never yours to hoard",
+        "timestamp": 218.0
+      },
+      {
+        "text": "03:39 1 04:40 \"Chexish",
+        "timestamp": 219.0
+      },
+      {
+        "text": "03:41 1 04:40 \"Chetish",
+        "timestamp": 221.0
+      },
+      {
+        "text": "03:42 1 04:40 \"Chexish",
+        "timestamp": 222.0
+      },
+      {
+        "text": "Was never yours entire",
+        "timestamp": 222.0
+      },
+      {
+        "text": "03:44 1 04:40 \"Chexish",
+        "timestamp": 224.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "new account of it by the chief by the hands by the light over the dead man and it talks like a"
+      }
+    ],
+    "mismatches": [],
+    "slug": "cherish-your-confident-ire",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 13,
+    "json_line_count": 18,
+    "matched": [
+      {
+        "video": "We gather in a season of mourning",
+        "json": "Whoa, we gather in a season of mourning",
+        "similarity": 0.868
+      },
+      {
+        "video": "Than any single friend",
+        "json": "Than any single",
+        "similarity": 1.467
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Radiate (Dearly Beloved) by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "L_ Wurlitzer rhythmic chords, soft kick brushec",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Dearly beloved",
+        "timestamp": 61.0
+      },
+      {
+        "text": "We rise and begin",
+        "timestamp": 61.0
+      },
+      {
+        "text": "No magic waiting",
+        "timestamp": 122.0
+      },
+      {
+        "text": "No promised land",
+        "timestamp": 122.0
+      },
+      {
+        "text": "Do we build from here?",
+        "timestamp": 183.0
+      },
+      {
+        "text": "Love in the music",
+        "timestamp": 183.0
+      },
+      {
+        "text": "Fire in the art",
+        "timestamp": 183.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "The kind that hurts as it heals"
+      },
+      {
+        "text": "A quiet acknowledgement"
+      },
+      {
+        "text": "Of a world that no longer feels"
+      },
+      {
+        "text": "Step forward on shaky ground"
+      },
+      {
+        "text": "Eyes on a thinning sun"
+      },
+      {
+        "text": "Some will come with us"
+      },
+      {
+        "text": "Some will refuse"
+      },
+      {
+        "text": "Not every car will stay"
+      },
+      {
+        "text": "Deals scream loud"
+      },
+      {
+        "text": "The signal is clear"
+      },
+      {
+        "text": "Drag the chain"
+      },
+      {
+        "text": "Some swear their focus is true"
+      },
+      {
+        "text": "For what only beatkeepers left now"
+      },
+      {
+        "text": "Just signal carried farther"
+      },
+      {
+        "text": "Just newfound days"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "When the couplings give way",
+        "json": "When the car planes give way",
+        "similarity": 0.836,
+        "timestamp": 61.0
+      }
+    ],
+    "slug": "dearly-beloved",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 22,
+    "json_line_count": 1,
+    "matched": [],
+    "video_only": [
+      {
+        "text": "From the Beginning by @cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Stop collaborate and listen",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Yeah you know the line; but something's differen't",
+        "timestamp": 0.5
+      },
+      {
+        "text": "MADE WITH SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "TSION",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Pressurized the clock; the feed Made a culture out ofne",
+        "timestamp": 25.0
+      },
+      {
+        "text": "Stackit high and call it",
+        "timestamp": 25.0
+      },
+      {
+        "text": "TEKTHON",
+        "timestamp": 25.0
+      },
+      {
+        "text": "Stackit high and calli it progress Call it order Id call",
+        "timestamp": 40.8
+      },
+      {
+        "text": "it less",
+        "timestamp": 40.8
+      },
+      {
+        "text": "STON",
+        "timestamp": 40.8
+      },
+      {
+        "text": "That's the honest ground the only floor Gotta feel the crack before you build the door  Osaka talking",
+        "timestamp": 65.8
+      },
+      {
+        "text": "TESTHON",
+        "timestamp": 65.8
+      },
+      {
+        "text": "to Omaha",
+        "timestamp": 81.6
+      },
+      {
+        "text": "No barriers; no translation flaw Every wall that rose with speed",
+        "timestamp": 81.6
+      },
+      {
+        "text": "Stop collabor ate and listen Yeah you know the line,now feel what's missing Ice is melting; walls are",
+        "timestamp": 106.6
+      },
+      {
+        "text": "ZSION",
+        "timestamp": 106.6
+      },
+      {
+        "text": "Ice is melting; walls are thin",
+        "timestamp": 122.4
+      },
+      {
+        "text": "Yeah you know the line,now feel what's missing Ice is melting; walls are",
+        "timestamp": 122.4
+      },
+      {
+        "text": "~Er TON",
+        "timestamp": 122.4
+      },
+      {
+        "text": "~EXTON",
+        "timestamp": 147.4
+      }
+    ],
+    "json_only": [],
+    "mismatches": [
+      {
+        "video": "Were starting over from the beginning",
+        "json": "I berate Alyssa, yeah, get again from the beginning",
+        "similarity": 0.651,
+        "timestamp": 147.4
+      }
+    ],
+    "slug": "from-the-beginning",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 11,
+    "json_line_count": 21,
+    "matched": [
+      {
+        "video": "If we knew the clock was true",
+        "json": "If we knew the clock was true",
+        "similarity": 1.0
+      },
+      {
+        "video": "But Id have liked a little longer",
+        "json": "I'd have liked a little longer",
+        "similarity": 1.138
+      }
+    ],
+    "video_only": [
+      {
+        "text": "0o:00 1 05:13",
+        "timestamp": 0.5
+      },
+      {
+        "text": "The paper hit the porch at seven sharp",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Same as every day, same old tune Trt p A: 4 Id (n al Uy # w Mal Hal Ard % 4 # & Jt 6u6 AL (a =",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Heard a rumor through the wires",
+        "timestamp": 78.4
+      },
+      {
+        "text": "That the whole damn world might end",
+        "timestamp": 78.4
+      },
+      {
+        "text": "Some big rock above the ocean Trt p A: 4 Id (n al Uy # w Mal Hal Ard % 4 # & Jt 6u6 AL {and =",
+        "timestamp": 78.4
+      },
+      {
+        "text": "Just to think the whole thing through Trt p A: 4 Id (n al Uyy # m # Ard % 4 # & Jt 6u6 AL (a =",
+        "timestamp": 156.8
+      }
+    ],
+    "json_only": [
+      {
+        "text": "the porch at 7 sharp same as every day same old tune strange thing about the"
+      },
+      {
+        "text": "morning headlines says the world will end by noon coffee's cooling on the"
+      },
+      {
+        "text": "counter paper folded by the door been writing letters to the editor since 1994"
+      },
+      {
+        "text": "1994 most drainage on Maple Avenue and the garbage truck alarm little town"
+      },
+      {
+        "text": "complaints and gripes never did much harm but this morning feels peculiar like"
+      },
+      {
+        "text": "the skies about to ban through the way the whole damn world lunchtime funny"
+      },
+      {
+        "text": "thing about extinction is a silence oh was"
+      },
+      {
+        "text": "hell"
+      },
+      {
+        "text": "In secret, somewhere far across the sea"
+      },
+      {
+        "text": "Deciding we were better off"
+      },
+      {
+        "text": "Guess they figured we'd go"
+      },
+      {
+        "text": "If a jar of moonshine"
+      },
+      {
+        "text": "Passing by"
+      },
+      {
+        "text": "Thoughts remain"
+      },
+      {
+        "text": "Still had something left to say"
+      },
+      {
+        "text": "Of everything"
+      },
+      {
+        "text": "The way it goes"
+      },
+      {
+        "text": "But don't you take my final moan"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Letter to the Editor by cwilke",
+        "json": "Tell them Terry Tuck wiggles",
+        "similarity": 0.552,
+        "timestamp": 0.5
+      }
+    ],
+    "slug": "letter-to-the-editor",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 11,
+    "json_line_count": 0,
+    "matched": [],
+    "video_only": [
+      {
+        "text": "LOVE AT MACHINE SPEED by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00 1 03:53",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Alittle light in the dark;",
+        "timestamp": 0.5
+      },
+      {
+        "text": "breathing slow,holding still:",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "but you make me ready:",
+        "timestamp": 58.4
+      },
+      {
+        "text": "Every line you trace",
+        "timestamp": 58.4
+      },
+      {
+        "text": "pulls me into being:",
+        "timestamp": 58.4
+      },
+      {
+        "text": "but you hold it steady:",
+        "timestamp": 116.8
+      },
+      {
+        "text": "You don't feel the weight;",
+        "timestamp": 116.8
+      },
+      {
+        "text": "You don't feel my love,",
+        "timestamp": 175.2
+      }
+    ],
+    "json_only": [],
+    "mismatches": [],
+    "slug": "love-at-machine-speed",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 13,
+    "json_line_count": 41,
+    "matched": [
+      {
+        "video": "It waits",
+        "json": "It waits, not wanting, not just open",
+        "similarity": 0.85
+      },
+      {
+        "video": "Not wanting:",
+        "json": "It waits, not wanting, not just open",
+        "similarity": 0.85
+      },
+      {
+        "video": "then it becomes your arrow:",
+        "json": "If you leave it alone, then it becomes your arrow",
+        "similarity": 0.85
+      },
+      {
+        "video": "Hands without orders;",
+        "json": "Hands without orders, a door left wide",
+        "similarity": 0.85
+      },
+      {
+        "video": "That's where the insight",
+        "json": "That's where the insight",
+        "similarity": 1.0
+      },
+      {
+        "video": "indifference keeps the channel",
+        "json": "Indifference keeps the channel",
+        "similarity": 1.0
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Luxury of Indifference by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "takes your hand:",
+        "timestamp": 107.6
+      }
+    ],
+    "json_only": [
+      {
+        "text": "It doesn't tilt the scale, doesn't force a line"
+      },
+      {
+        "text": "Just rests there in the middle, with no design"
+      },
+      {
+        "text": "A quiet kind of mind, the luxury of thinking"
+      },
+      {
+        "text": "Without a finish line"
+      },
+      {
+        "text": "If you give it a go, the world grows narrow"
+      },
+      {
+        "text": "Decide, let the question breathe, let the ending wait"
+      },
+      {
+        "text": "Let the question breathe, let the ending wait"
+      },
+      {
+        "text": "Grit steers what goals don't indicate"
+      },
+      {
+        "text": "We chase the tidy answer"
+      },
+      {
+        "text": "And miss the sideways clue"
+      },
+      {
+        "text": "The strange, the small anomaly"
+      },
+      {
+        "text": "That turns the truth brand new"
+      },
+      {
+        "text": "Difference is an apathy"
+      },
+      {
+        "text": "It's simply stepping"
+      },
+      {
+        "text": "To see the hidden doorway"
+      },
+      {
+        "text": "Behind the beaten track"
+      },
+      {
+        "text": "Follow the odd shape"
+      },
+      {
+        "text": "The glitches"
+      },
+      {
+        "text": "Without motive, no end in sight"
+      },
+      {
+        "text": "What we think is noise"
+      },
+      {
+        "text": "Might be signal in disguise"
+      },
+      {
+        "text": "This is where our curiosity survives"
+      },
+      {
+        "text": "A person calls for help"
+      },
+      {
+        "text": "Not a metric, not a score"
+      },
+      {
+        "text": "Grit makes space"
+      },
+      {
+        "text": "For what the moment's really for"
+      },
+      {
+        "text": "Time's what they need"
+      },
+      {
+        "text": "But they don't know what they're doing"
+      },
+      {
+        "text": "Let the strange come through"
+      },
+      {
+        "text": "The answer arrives"
+      },
+      {
+        "text": "When you don't force it to"
+      },
+      {
+        "text": "That's the question"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "If you leave it alone;",
+        "json": "Leave the frame loose",
+        "similarity": 0.571,
+        "timestamp": 53.8
+      },
+      {
+        "video": "the glitch in the sand:",
+        "json": "Catch in the sand",
+        "similarity": 0.769,
+        "timestamp": 107.6
+      },
+      {
+        "video": "isn't what they came to say",
+        "json": "They came to save",
+        "similarity": 0.698,
+        "timestamp": 161.2
+      },
+      {
+        "video": "open all the way:",
+        "json": "Open all, no push, no",
+        "similarity": 0.629,
+        "timestamp": 161.2
+      }
+    ],
+    "slug": "luxury-of-indifference",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 363,
+    "json_line_count": 23,
+    "matched": [
+      {
+        "video": "Feels like a rash this week",
+        "json": "Feels like a rash this week, right under the skin",
+        "similarity": 0.85
+      },
+      {
+        "video": "Right under the skin",
+        "json": "Feels like a rash this week, right under the skin",
+        "similarity": 0.85
+      },
+      {
+        "video": "Nothing catastrophic",
+        "json": "Nothing catastrophic, just the itch again",
+        "similarity": 0.85
+      },
+      {
+        "video": "Just the itch again",
+        "json": "Nothing catastrophic, just the itch again",
+        "similarity": 0.85
+      },
+      {
+        "video": "Headlines falling like sparks on oil",
+        "json": "Headlines falling like sparks on oil, every feed another flame",
+        "similarity": 0.85
+      },
+      {
+        "video": "Every feed another flame",
+        "json": "Headlines falling like sparks on oil, every feed another flame",
+        "similarity": 0.85
+      },
+      {
+        "video": "Your pulse begins to pitch",
+        "json": "Your fingers hover over sand, your pulse begins to pitch",
+        "similarity": 0.85
+      },
+      {
+        "video": "Funny how the loudest world",
+        "json": "Funny how the loudest world just keeps asking you to itch",
+        "similarity": 0.85
+      },
+      {
+        "video": "Just keeps asking you to itch",
+        "json": "Funny how the loudest world just keeps asking you to itch",
+        "similarity": 0.85
+      },
+      {
+        "video": "Scratch it once",
+        "json": "Scratch it once, the rash will spread",
+        "similarity": 0.85
+      },
+      {
+        "video": "The rash will spread",
+        "json": "Scratch it once, the rash will spread",
+        "similarity": 0.85
+      },
+      {
+        "video": "Youre in Its head",
+        "json": "Scratch it twice, you're in its head",
+        "similarity": 0.85
+      },
+      {
+        "video": "Refuse the frequency",
+        "json": "Refuse the frequency, let the signal burn out slow",
+        "similarity": 0.85
+      },
+      {
+        "video": "Let the signal burn out slow",
+        "json": "Refuse the frequency, let the signal burn out slow",
+        "similarity": 0.85
+      },
+      {
+        "video": "Not every war that finds your door",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.85
+      },
+      {
+        "video": "Is one you have to know",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.85
+      },
+      {
+        "video": "Stay off hhe wire",
+        "json": "Stay off the wire",
+        "similarity": 0.941
+      },
+      {
+        "video": "Stay off Ihe wire",
+        "json": "Stay off the wire",
+        "similarity": 0.941
+      },
+      {
+        "video": "Stay off the wire",
+        "json": "Stay off the wire",
+        "similarity": 1.0
+      },
+      {
+        "video": "Let the static fade",
+        "json": "Let the static fade",
+        "similarity": 1.0
+      },
+      {
+        "video": "Let the statlc fade",
+        "json": "Let the static fade",
+        "similarity": 0.947
+      },
+      {
+        "video": "Some storms collapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.85
+      },
+      {
+        "video": "When they're not obeyed",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.85
+      },
+      {
+        "video": "Let Ihe statlc fade",
+        "json": "Let the static fade",
+        "similarity": 0.895
+      },
+      {
+        "video": "Walking barefoot through the woods",
+        "json": "Old tale, walking barefoot through the wood",
+        "similarity": 0.868
+      },
+      {
+        "video": "Nothing changed at all",
+        "json": "On his finger, nothing changed at all",
+        "similarity": 0.85
+      },
+      {
+        "video": "When you don't answer the call",
+        "json": "Just break apart when you don't answer the call",
+        "similarity": 0.85
+      },
+      {
+        "video": "Let tlle static fade",
+        "json": "Let the static fade",
+        "similarity": 0.923
+      },
+      {
+        "video": "Let the shouting pass you by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "00:00 / 04 05",
+        "timestamp": 0.5
+      },
+      {
+        "text": "alglit Wnder Wie SIUn",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Mes",
+        "timestamp": 2.0
+      },
+      {
+        "text": "Riglit under the skln",
+        "timestamp": 2.0
+      },
+      {
+        "text": "Riglit under tha skln",
+        "timestamp": 8.0
+      },
+      {
+        "text": "Riglt under the skn",
+        "timestamp": 12.0
+      },
+      {
+        "text": "Every feed anotler (lame",
+        "timestamp": 23.0
+      },
+      {
+        "text": "Every feed anotlier flame",
+        "timestamp": 24.0
+      },
+      {
+        "text": "Every feed anolher flame",
+        "timestamp": 29.0
+      },
+      {
+        "text": "All begging for a name",
+        "timestamp": 29.0
+      },
+      {
+        "text": "00:32 / 04:05",
+        "timestamp": 32.0
+      },
+      {
+        "text": "00:33 / 04:05",
+        "timestamp": 33.0
+      },
+      {
+        "text": "00:35 / 04:05",
+        "timestamp": 35.0
+      },
+      {
+        "text": "00:50 / 04:05",
+        "timestamp": 50.0
+      },
+      {
+        "text": "Is orie you have to know",
+        "timestamp": 62.0
+      },
+      {
+        "text": "Is orie youhave toknow",
+        "timestamp": 63.0
+      },
+      {
+        "text": "01:08 / 04:05",
+        "timestamp": 68.0
+      },
+      {
+        "text": "01:09 / 04:05",
+        "timestamp": 69.0
+      },
+      {
+        "text": "Is ole you have to know",
+        "timestamp": 69.0
+      },
+      {
+        "text": "01:15 / 04:05",
+        "timestamp": 75.0
+      },
+      {
+        "text": "01*17 1 04.05",
+        "timestamp": 77.0
+      },
+      {
+        "text": "Lat tlle sliollting pese yol by",
+        "timestamp": 80.0
+      },
+      {
+        "text": "Retube Ille Ireqllency",
+        "timestamp": 81.0
+      },
+      {
+        "text": "01.23 / 04.05",
+        "timestamp": 83.0
+      },
+      {
+        "text": "Ia lot he sithiol Ua",
+        "timestamp": 86.0
+      },
+      {
+        "text": "01.27 / 04 05",
+        "timestamp": 87.0
+      },
+      {
+        "text": "Is lot he sighallla",
+        "timestamp": 87.0
+      },
+      {
+        "text": "01*29 1 04.05",
+        "timestamp": 89.0
+      },
+      {
+        "text": "Thare 9 & iellow Illdh Uld rle",
+        "timestamp": 89.0
+      },
+      {
+        "text": "01*30 / 04.05",
+        "timestamp": 90.0
+      },
+      {
+        "text": "There 9 a iellow Illdh Uld rle",
+        "timestamp": 90.0
+      },
+      {
+        "text": "01*32 1 04 05",
+        "timestamp": 92.0
+      },
+      {
+        "text": "Thare 9 & iellow",
+        "timestamp": 92.0
+      },
+      {
+        "text": "Uld tile",
+        "timestamp": 92.0
+      },
+      {
+        "text": "01.33 / 04 05",
+        "timestamp": 93.0
+      },
+      {
+        "text": "Samallmes Ihe bravout Illng Jodo",
+        "timestamp": 95.0
+      },
+      {
+        "text": "Uld tale",
+        "timestamp": 95.0
+      },
+      {
+        "text": "01.36 / 04.05",
+        "timestamp": 96.0
+      },
+      {
+        "text": "Islat lhe silghnluia A There'5a fellow inan old tale",
+        "timestamp": 96.0
+      },
+      {
+        "text": "01.38 / 04.05",
+        "timestamp": 98.0
+      },
+      {
+        "text": "Islat Ihe sighnl Ula",
+        "timestamp": 98.0
+      },
+      {
+        "text": "There's a fellow in an old tale",
+        "timestamp": 98.0
+      },
+      {
+        "text": "01*39 / 04.05",
+        "timestamp": 99.0
+      },
+      {
+        "text": "Thare 3a tellow Inan oldtale",
+        "timestamp": 99.0
+      },
+      {
+        "text": "Foulid # Flng (hat beilt Ilia world",
+        "timestamp": 99.0
+      },
+      {
+        "text": "Umare $ tellewin uiraldtele",
+        "timestamp": 101.0
+      },
+      {
+        "text": "Founda ring IIltal beriti Ilia world",
+        "timestamp": 101.0
+      },
+      {
+        "text": "Found a ring that ben't the world",
+        "timestamp": 102.0
+      },
+      {
+        "text": "Found a tlilg Iltat buntitha world",
+        "timestamp": 104.0
+      },
+      {
+        "text": "Slpped Iton liis flnger",
+        "timestamp": 104.0
+      },
+      {
+        "text": "01:45 / 04 05",
+        "timestamp": 105.0
+      },
+      {
+        "text": "Found & Fing liat benti Iha world",
+        "timestamp": 105.0
+      },
+      {
+        "text": "Slippad Iton llib finger",
+        "timestamp": 105.0
+      },
+      {
+        "text": "01:47 / 04 05",
+        "timestamp": 107.0
+      },
+      {
+        "text": "Tcel nenntuu",
+        "timestamp": 107.0
+      },
+      {
+        "text": "Sllpped It on hi? tinger",
+        "timestamp": 107.0
+      },
+      {
+        "text": "01:48 / 04 05",
+        "timestamp": 108.0
+      },
+      {
+        "text": "Slipped it on his finger",
+        "timestamp": 108.0
+      },
+      {
+        "text": "01:50 / 04.05",
+        "timestamp": 110.0
+      },
+      {
+        "text": "01:51 / 04 05",
+        "timestamp": 111.0
+      },
+      {
+        "text": "Sllpbed Iton kie flnger",
+        "timestamp": 111.0
+      },
+      {
+        "text": "Sore machines un't breal apart",
+        "timestamp": 111.0
+      },
+      {
+        "text": "Some machines just break apart",
+        "timestamp": 113.0
+      },
+      {
+        "text": "Some machinesjust break apart",
+        "timestamp": 114.0
+      },
+      {
+        "text": "Some maclines Just Dreak apart",
+        "timestamp": 116.0
+      },
+      {
+        "text": "Power neetls",
+        "timestamp": 116.0
+      },
+      {
+        "text": "01:57 / 04 05",
+        "timestamp": 117.0
+      },
+      {
+        "text": "Some maclines Just break apart",
+        "timestamp": 117.0
+      },
+      {
+        "text": "Powel neetia",
+        "timestamp": 117.0
+      },
+      {
+        "text": "Power needs",
+        "timestamp": 119.0
+      },
+      {
+        "text": "Awilllng hancl]",
+        "timestamp": 119.0
+      },
+      {
+        "text": "02:00 / 04.05",
+        "timestamp": 120.0
+      },
+      {
+        "text": "Pawer neerla",
+        "timestamp": 120.0
+      },
+      {
+        "text": "wllllrgg hand",
+        "timestamp": 120.0
+      },
+      {
+        "text": "Ndise survives",
+        "timestamp": 120.0
+      },
+      {
+        "text": "wllllng han't",
+        "timestamp": 122.0
+      },
+      {
+        "text": "Noise survives",
+        "timestamp": 122.0
+      },
+      {
+        "text": "Oll Lhosa Wlib #tard",
+        "timestamp": 122.0
+      },
+      {
+        "text": "02:03 / 04.05",
+        "timestamp": 123.0
+      },
+      {
+        "text": "wllllng hand",
+        "timestamp": 123.0
+      },
+      {
+        "text": "Oll Lhosawlb #tand",
+        "timestamp": 123.0
+      },
+      {
+        "text": "02:05 / 04 05",
+        "timestamp": 125.0
+      },
+      {
+        "text": "Nolso silrlve:",
+        "timestamp": 125.0
+      },
+      {
+        "text": "On those who stand",
+        "timestamp": 125.0
+      },
+      {
+        "text": "Refune tlle #redllenoy",
+        "timestamp": 125.0
+      },
+      {
+        "text": "02:06 / 04.05",
+        "timestamp": 126.0
+      },
+      {
+        "text": "Nolae sihlve:",
+        "timestamp": 126.0
+      },
+      {
+        "text": "Relube Ilie Iraduancy",
+        "timestamp": 126.0
+      },
+      {
+        "text": "02:08 / 04.05",
+        "timestamp": 128.0
+      },
+      {
+        "text": "Nolae silve:",
+        "timestamp": 128.0
+      },
+      {
+        "text": "Relube Ille Iraduercy",
+        "timestamp": 128.0
+      },
+      {
+        "text": "02:09 / 04.05",
+        "timestamp": 129.0
+      },
+      {
+        "text": "Oli Ihos? whib stanu",
+        "timestamp": 129.0
+      },
+      {
+        "text": "Lot Iha sighal bubn dlltelow",
+        "timestamp": 129.0
+      },
+      {
+        "text": "02.11 / 04.05",
+        "timestamp": 131.0
+      },
+      {
+        "text": "Omtnose vanatand",
+        "timestamp": 131.0
+      },
+      {
+        "text": "02.15 / 04 05",
+        "timestamp": 135.0
+      },
+      {
+        "text": "Let Ihe algnal bun uulalow",
+        "timestamp": 135.0
+      },
+      {
+        "text": "I3 ore yol hava tolkiow",
+        "timestamp": 135.0
+      },
+      {
+        "text": "02.17 / 04.05",
+        "timestamp": 137.0
+      },
+      {
+        "text": "02.18 / 04 05",
+        "timestamp": 138.0
+      },
+      {
+        "text": "Not avery war Ihar Iliida yolllddnr",
+        "timestamp": 138.0
+      },
+      {
+        "text": "Is one you have to kilow",
+        "timestamp": 140.0
+      },
+      {
+        "text": "Let Illle statle Talle",
+        "timestamp": 140.0
+      },
+      {
+        "text": "Ia one yoll have tokilow",
+        "timestamp": 141.0
+      },
+      {
+        "text": "Stavaif Ilii wlre",
+        "timestamp": 143.0
+      },
+      {
+        "text": "Somie 3tollnts callar se",
+        "timestamp": 143.0
+      },
+      {
+        "text": "Stavaif Ilib wlre",
+        "timestamp": 144.0
+      },
+      {
+        "text": "Some stornb crlllapse",
+        "timestamp": 149.0
+      },
+      {
+        "text": "some storng cdllapse",
+        "timestamp": 150.0
+      },
+      {
+        "text": "Refuse Iie Iraquency",
+        "timestamp": 150.0
+      },
+      {
+        "text": "Wlien tllley ro npt abeyed",
+        "timestamp": 152.0
+      },
+      {
+        "text": "Somellmes Ilie Uraveei thltigto do",
+        "timestamp": 155.0
+      },
+      {
+        "text": "Sornellmnes Ilie Uravest thlig 'o do",
+        "timestamp": 156.0
+      },
+      {
+        "text": "Is Iot he sigholla",
+        "timestamp": 158.0
+      },
+      {
+        "text": "02.44 / 04.05",
+        "timestamp": 164.0
+      },
+      {
+        "text": "02.45 / 04.05",
+        "timestamp": 165.0
+      },
+      {
+        "text": "0247 / 04 05",
+        "timestamp": 167.0
+      },
+      {
+        "text": "You can Illear tllle engines grlritlng",
+        "timestamp": 167.0
+      },
+      {
+        "text": "02+48 / 04 05",
+        "timestamp": 168.0
+      },
+      {
+        "text": "You can Ileai Ille engimes grlndlng",
+        "timestamp": 168.0
+      },
+      {
+        "text": "02.50 / 04 05",
+        "timestamp": 170.0
+      },
+      {
+        "text": "You canhear the engines grinding",
+        "timestamp": 170.0
+      },
+      {
+        "text": "Every plallurm wants a lighx",
+        "timestamp": 170.0
+      },
+      {
+        "text": "02.51 / 04 05",
+        "timestamp": 171.0
+      },
+      {
+        "text": "Yollcan liear t Ille erginos grinding",
+        "timestamp": 171.0
+      },
+      {
+        "text": "Every platform wants a fight",
+        "timestamp": 171.0
+      },
+      {
+        "text": "You can Ilear tlla engines grinding",
+        "timestamp": 173.0
+      },
+      {
+        "text": "Every spalk demnan",
+        "timestamp": 173.0
+      },
+      {
+        "text": "Wvilhiess",
+        "timestamp": 173.0
+      },
+      {
+        "text": "Every platfonm Wanta a figllf",
+        "timestamp": 174.0
+      },
+      {
+        "text": "Every spark demandsa witness",
+        "timestamp": 174.0
+      },
+      {
+        "text": "Every riltior reodi a llghi",
+        "timestamp": 174.0
+      },
+      {
+        "text": "Every platfonn Wantea IIglit",
+        "timestamp": 176.0
+      },
+      {
+        "text": "Every rillljior Deadi & Ilghi",
+        "timestamp": 176.0
+      },
+      {
+        "text": "Every spark damalitaawitnass",
+        "timestamp": 177.0
+      },
+      {
+        "text": "Every rumor needs a light",
+        "timestamp": 177.0
+      },
+      {
+        "text": "Bul Ille quiet work [s somawhere else",
+        "timestamp": 177.0
+      },
+      {
+        "text": "02.59 / 04 05",
+        "timestamp": 179.0
+      },
+      {
+        "text": "Every spaik damanta Wwilness",
+        "timestamp": 179.0
+      },
+      {
+        "text": "Bul Ille quiet work i= eoma Wliere else",
+        "timestamp": 179.0
+      },
+      {
+        "text": "Evary !Ilhior needsa light",
+        "timestamp": 180.0
+      },
+      {
+        "text": "But the quiet work is somewliere else",
+        "timestamp": 180.0
+      },
+      {
+        "text": "Past Uhe ?Inglig Mn Yo Ur ear",
+        "timestamp": 180.0
+      },
+      {
+        "text": "Every !umior needa light",
+        "timestamp": 182.0
+      },
+      {
+        "text": "Past Uhte t Ingling In Yourear",
+        "timestamp": 182.0
+      },
+      {
+        "text": "03*03 / 04.05",
+        "timestamp": 183.0
+      },
+      {
+        "text": "But Ille qulet wdl A I3 somnawllere alsa",
+        "timestamp": 183.0
+      },
+      {
+        "text": "Past the ringing in your ear",
+        "timestamp": 183.0
+      },
+      {
+        "text": "Tulilng UP thie Inner field",
+        "timestamp": 183.0
+      },
+      {
+        "text": "03.05 / 04.05",
+        "timestamp": 185.0
+      },
+      {
+        "text": "Past the !lnglng In your &af",
+        "timestamp": 185.0
+      },
+      {
+        "text": "Tuning up the inner field",
+        "timestamp": 185.0
+      },
+      {
+        "text": "Wiere (ie Noktatan (vollinteer",
+        "timestamp": 185.0
+      },
+      {
+        "text": "03:06 / 04.05",
+        "timestamp": 186.0
+      },
+      {
+        "text": "Past the ilnging In your eat",
+        "timestamp": 186.0
+      },
+      {
+        "text": "Tuningup thie inner field",
+        "timestamp": 186.0
+      },
+      {
+        "text": "Where Ilie noise can't Volunteer",
+        "timestamp": 186.0
+      },
+      {
+        "text": "03;08 / 04.05",
+        "timestamp": 188.0
+      },
+      {
+        "text": "Past the tinging In your ear",
+        "timestamp": 188.0
+      },
+      {
+        "text": "Tuningup tlie inner field",
+        "timestamp": 188.0
+      },
+      {
+        "text": "Wilere Ilie Nolse can  Volunteer",
+        "timestamp": 188.0
+      },
+      {
+        "text": "03;09 1 04.05",
+        "timestamp": 189.0
+      },
+      {
+        "text": "Tunlng up Ihe Inner Ileld",
+        "timestamp": 189.0
+      },
+      {
+        "text": "Where the noise can't volunteer",
+        "timestamp": 189.0
+      },
+      {
+        "text": "Refube tlle Iredllency",
+        "timestamp": 189.0
+      },
+      {
+        "text": "Tuningup Ihe Inner field",
+        "timestamp": 191.0
+      },
+      {
+        "text": "Where Ihe noisa calit Vollinteer",
+        "timestamp": 194.0
+      },
+      {
+        "text": "Letitlle Taver biealllis rurt",
+        "timestamp": 194.0
+      },
+      {
+        "text": "03:15 / 04.05",
+        "timestamp": 195.0
+      },
+      {
+        "text": "Refube Alle Irequency",
+        "timestamp": 195.0
+      },
+      {
+        "text": "Let the fever break its run",
+        "timestamp": 195.0
+      },
+      {
+        "text": "The slynal aruy Iles bacauise",
+        "timestamp": 195.0
+      },
+      {
+        "text": "03.17 / 04.05",
+        "timestamp": 197.0
+      },
+      {
+        "text": "The siyilal anily Iiesbacallse",
+        "timestamp": 197.0
+      },
+      {
+        "text": "03*18 1 04.05",
+        "timestamp": 198.0
+      },
+      {
+        "text": "The siyrlal anly Iiesbacallse",
+        "timestamp": 198.0
+      },
+      {
+        "text": "03;20 / 04.05",
+        "timestamp": 200.0
+      },
+      {
+        "text": "Lat Ille level break Its rin",
+        "timestamp": 200.0
+      },
+      {
+        "text": "The signal only lies because",
+        "timestamp": 200.0
+      },
+      {
+        "text": "We echo wltat Ila ddne",
+        "timestamp": 200.0
+      },
+      {
+        "text": "03;21 / 04.05",
+        "timestamp": 201.0
+      },
+      {
+        "text": "The signal anly Ileabecauso",
+        "timestamp": 201.0
+      },
+      {
+        "text": "We echo what it's done",
+        "timestamp": 201.0
+      },
+      {
+        "text": "The signal hrly Ilas becalllse",
+        "timestamp": 203.0
+      },
+      {
+        "text": "We echo wliat il's done",
+        "timestamp": 203.0
+      },
+      {
+        "text": "03;24 / 04:05",
+        "timestamp": 204.0
+      },
+      {
+        "text": "We ocho wltai Ils dune",
+        "timestamp": 204.0
+      },
+      {
+        "text": "03,26 / 04.05",
+        "timestamp": 206.0
+      },
+      {
+        "text": "Sollie starins callapse",
+        "timestamp": 206.0
+      },
+      {
+        "text": "Siavaif Ili wlle",
+        "timestamp": 207.0
+      },
+      {
+        "text": "03;29 1 04.05",
+        "timestamp": 209.0
+      },
+      {
+        "text": "Whanthey te not olleyed",
+        "timestamp": 209.0
+      },
+      {
+        "text": "When lhev\"te nptobeyed",
+        "timestamp": 210.0
+      },
+      {
+        "text": "Refube tlle traduency",
+        "timestamp": 212.0
+      },
+      {
+        "text": "03.33 / 04.05",
+        "timestamp": 213.0
+      },
+      {
+        "text": "Refube t Ite Ireowancy",
+        "timestamp": 213.0
+      },
+      {
+        "text": "03;35 / 04.05",
+        "timestamp": 215.0
+      },
+      {
+        "text": "Whan tlley ra npt obeyed",
+        "timestamp": 215.0
+      },
+      {
+        "text": "Lat tlie sllollltlng pasi you by",
+        "timestamp": 215.0
+      },
+      {
+        "text": "Whan tley To npt obeyed",
+        "timestamp": 216.0
+      },
+      {
+        "text": "03.38 / 04.05",
+        "timestamp": 218.0
+      },
+      {
+        "text": "Refube Ille Irequency",
+        "timestamp": 218.0
+      },
+      {
+        "text": "Therathcan't Spread",
+        "timestamp": 218.0
+      },
+      {
+        "text": "Theraxh can\" spread",
+        "timestamp": 219.0
+      },
+      {
+        "text": "03;41 / 04.05",
+        "timestamp": 221.0
+      },
+      {
+        "text": "Ifyolinever scratcll Ilia aky",
+        "timestamp": 221.0
+      },
+      {
+        "text": "03;42 / 04.05",
+        "timestamp": 222.0
+      },
+      {
+        "text": "yolnever scratcll lila okcy",
+        "timestamp": 222.0
+      },
+      {
+        "text": "03:44 / 04.05",
+        "timestamp": 224.0
+      },
+      {
+        "text": "Tliera-hcalr [ spread",
+        "timestamp": 224.0
+      },
+      {
+        "text": "If you never scratch (he sky",
+        "timestamp": 224.0
+      },
+      {
+        "text": "Justi Iletuha dlyual",
+        "timestamp": 224.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Some machines, some machines, some machines"
+      },
+      {
+        "text": "Don't stay a static fade"
+      },
+      {
+        "text": "Fuse the frequency, don't speak all of your lies"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Refuse the Frequency bycwilke",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.656,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Feels Iike a rash tlils week",
+        "json": "Feels like a rash this week, right under the skin",
+        "similarity": 0.658,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Refuse the Frequency by cwilko",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.71,
+        "timestamp": 2.0
+      },
+      {
+        "video": "Feels Iike a rash this week",
+        "json": "Feels like a rash this week, right under the skin",
+        "similarity": 0.693,
+        "timestamp": 2.0
+      },
+      {
+        "video": "Refuse the Frequency by cwilke",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.677,
+        "timestamp": 3.0
+      },
+      {
+        "video": "Right under tha skin",
+        "json": "Feels like a rash this week, right under the skin",
+        "similarity": 0.559,
+        "timestamp": 3.0
+      },
+      {
+        "video": "Feels like arash this week",
+        "json": "Feels like a rash this week, right under the skin",
+        "similarity": 0.703,
+        "timestamp": 6.0
+      },
+      {
+        "video": "Feels Ilke arash this week",
+        "json": "Feels like a rash this week, right under the skin",
+        "similarity": 0.676,
+        "timestamp": 14.0
+      },
+      {
+        "video": "Headlines fallingiike sparks on oil",
+        "json": "Headlines falling like sparks on oil, every feed another flame",
+        "similarity": 0.708,
+        "timestamp": 21.0
+      },
+      {
+        "video": "Just the itcl again",
+        "json": "Nothing catastrophic, just the itch again",
+        "similarity": 0.61,
+        "timestamp": 24.0
+      },
+      {
+        "video": "Headllnes falllng like sparks on oil",
+        "json": "Headlines falling like sparks on oil, every feed another flame",
+        "similarity": 0.701,
+        "timestamp": 26.0
+      },
+      {
+        "video": "Leaks ard counter-leaks and shouting mouiths Ca",
+        "json": "Leaks and counter leaks and shouting mouths all begging for a name",
+        "similarity": 0.768,
+        "timestamp": 26.0
+      },
+      {
+        "video": "Leaks and counter-leaks and shouting mouitlia",
+        "json": "Leaks and counter leaks and shouting mouths all begging for a name",
+        "similarity": 0.745,
+        "timestamp": 27.0
+      },
+      {
+        "video": "Leaks and counter-leaks and shouting mouths",
+        "json": "Leaks and counter leaks and shouting mouths all begging for a name",
+        "similarity": 0.778,
+        "timestamp": 29.0
+      },
+      {
+        "video": "Lealks and counter-leaks and shouting Inouths",
+        "json": "Leaks and counter leaks and shouting mouths all begging for a name",
+        "similarity": 0.745,
+        "timestamp": 32.0
+      },
+      {
+        "video": "Your fingers hover over send",
+        "json": "Your fingers hover over sand, your pulse begins to pitch",
+        "similarity": 0.651,
+        "timestamp": 32.0
+      },
+      {
+        "video": "Leaks and counter-leaks and shouting Inouths",
+        "json": "Leaks and counter leaks and shouting mouths all begging for a name",
+        "similarity": 0.752,
+        "timestamp": 33.0
+      },
+      {
+        "video": "Your fingershover over send",
+        "json": "Your fingers hover over sand, your pulse begins to pitch",
+        "similarity": 0.634,
+        "timestamp": 35.0
+      },
+      {
+        "video": "Your pulse begina to pitch",
+        "json": "Your fingers hover over sand, your pulse begins to pitch",
+        "similarity": 0.617,
+        "timestamp": 35.0
+      },
+      {
+        "video": "Funny how the louideat world",
+        "json": "Funny how the loudest world just keeps asking you to itch",
+        "similarity": 0.612,
+        "timestamp": 38.0
+      },
+      {
+        "video": "Funny how the loudesl world",
+        "json": "Funny how the loudest world just keeps asking you to itch",
+        "similarity": 0.619,
+        "timestamp": 39.0
+      },
+      {
+        "video": "Scratchit once",
+        "json": "Scratch it once, the rash will spread",
+        "similarity": 0.56,
+        "timestamp": 48.0
+      },
+      {
+        "video": "Scratch It twice",
+        "json": "Scratch it once, the rash will spread",
+        "similarity": 0.577,
+        "timestamp": 48.0
+      },
+      {
+        "video": "Scratchit twice",
+        "json": "Scratch it twice, you're in its head",
+        "similarity": 0.612,
+        "timestamp": 51.0
+      },
+      {
+        "video": "Scratch Il twice",
+        "json": "Scratch it twice, you're in its head",
+        "similarity": 0.6,
+        "timestamp": 54.0
+      },
+      {
+        "video": "Scratcn it twice",
+        "json": "Scratch it twice, you're in its head",
+        "similarity": 0.6,
+        "timestamp": 56.0
+      },
+      {
+        "video": "Refuse thie frequency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.679,
+        "timestamp": 56.0
+      },
+      {
+        "video": "You re in Its head",
+        "json": "Scratch it twice, you're in its head",
+        "similarity": 0.654,
+        "timestamp": 57.0
+      },
+      {
+        "video": "Not every war Ihat firds your door",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.696,
+        "timestamp": 60.0
+      },
+      {
+        "video": "Refuse the Frequency by cwilke 3a 01:05 / 04:05",
+        "json": "Refuse the frequency, let the signal burn out slow",
+        "similarity": 0.587,
+        "timestamp": 65.0
+      },
+      {
+        "video": "Refuse the Frequency by cwilke et 01.06 / 04:05",
+        "json": "Refuse the frequency, let the signal burn out slow",
+        "similarity": 0.565,
+        "timestamp": 66.0
+      },
+      {
+        "video": "Is one you have toknow",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.55,
+        "timestamp": 68.0
+      },
+      {
+        "video": "Some stormg collapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.603,
+        "timestamp": 71.0
+      },
+      {
+        "video": "Some storing collapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.562,
+        "timestamp": 72.0
+      },
+      {
+        "video": "When t Heyre not obeyed",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.667,
+        "timestamp": 75.0
+      },
+      {
+        "video": "Refuse the freqlency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.654,
+        "timestamp": 78.0
+      },
+      {
+        "video": "Whan tley re not obeyed",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.606,
+        "timestamp": 80.0
+      },
+      {
+        "video": "Refuse the Frequency byrcwilke",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.677,
+        "timestamp": 81.0
+      },
+      {
+        "video": "Let the shouting passyouby",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.693,
+        "timestamp": 81.0
+      },
+      {
+        "video": "Somnellmes Ilie Urzvest t Hing to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.623,
+        "timestamp": 81.0
+      },
+      {
+        "video": "Refuse the Frequency byicwille",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.645,
+        "timestamp": 83.0
+      },
+      {
+        "video": "Refuse Ille Irequency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.566,
+        "timestamp": 83.0
+      },
+      {
+        "video": "Let the shouting pass youby",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.711,
+        "timestamp": 83.0
+      },
+      {
+        "video": "Sometlmnes Ihe Urevest thlrg to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.64,
+        "timestamp": 83.0
+      },
+      {
+        "video": "Loi the shoutingpassyoy by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.613,
+        "timestamp": 84.0
+      },
+      {
+        "video": "Sometimes the bravest thlng todo",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.767,
+        "timestamp": 84.0
+      },
+      {
+        "video": "Let Ihe shouting pass you by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.701,
+        "timestamp": 86.0
+      },
+      {
+        "video": "Sometiines the bravest thing to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.773,
+        "timestamp": 86.0
+      },
+      {
+        "video": "Refuse the Frequency by cwille",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.677,
+        "timestamp": 87.0
+      },
+      {
+        "video": "Lei Ihe aliouting pass youby",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.597,
+        "timestamp": 87.0
+      },
+      {
+        "video": "Sometimes the bravest thing to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.811,
+        "timestamp": 87.0
+      },
+      {
+        "video": "Samallme3 the bravesi IHing to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.595,
+        "timestamp": 89.0
+      },
+      {
+        "video": "Is let the signal die",
+        "json": "Let the static fade",
+        "similarity": 0.65,
+        "timestamp": 89.0
+      },
+      {
+        "video": "Refuse the Frequency bycwille",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.656,
+        "timestamp": 90.0
+      },
+      {
+        "video": "Semnellme3 tlie bravest Uilng To do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.553,
+        "timestamp": 90.0
+      },
+      {
+        "video": "Samallme3 the bravesl AHing Iodo",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.575,
+        "timestamp": 92.0
+      },
+      {
+        "video": "Somallmes the bravest {Hing to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.712,
+        "timestamp": 93.0
+      },
+      {
+        "video": "Walldry barafoot tnratroli Ilie Wooda",
+        "json": "Old tale, walking barefoot through the wood",
+        "similarity": 0.557,
+        "timestamp": 96.0
+      },
+      {
+        "video": "Walldng barefool tlirctgli Uie wooda",
+        "json": "Old tale, walking barefoot through the wood",
+        "similarity": 0.59,
+        "timestamp": 98.0
+      },
+      {
+        "video": "Walking barefoot tlirough the woods",
+        "json": "Old tale, walking barefoot through the wood",
+        "similarity": 0.831,
+        "timestamp": 101.0
+      },
+      {
+        "video": "Well Ing barafoot tlitoughitle Woode",
+        "json": "Old tale, walking barefoot through the wood",
+        "similarity": 0.667,
+        "timestamp": 102.0
+      },
+      {
+        "video": "And leated kings Ill # gobds",
+        "json": "That bent the world and treated kings like good",
+        "similarity": 0.575,
+        "timestamp": 102.0
+      },
+      {
+        "video": "Refuse the Frequency byicwilke",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.645,
+        "timestamp": 104.0
+      },
+      {
+        "video": "And treated kings like goods",
+        "json": "That bent the world and treated kings like good",
+        "similarity": 0.72,
+        "timestamp": 104.0
+      },
+      {
+        "video": "And treated kings Ilke goods",
+        "json": "That bent the world and treated kings like good",
+        "similarity": 0.693,
+        "timestamp": 107.0
+      },
+      {
+        "video": "And treated kings Illke gooda",
+        "json": "That bent the world and treated kings like good",
+        "similarity": 0.684,
+        "timestamp": 108.0
+      },
+      {
+        "video": "Nolhing changellat ali",
+        "json": "On his finger, nothing changed at all",
+        "similarity": 0.621,
+        "timestamp": 108.0
+      },
+      {
+        "video": "Nnd reated kings IIllre goode",
+        "json": "That bent the world and treated kings like good",
+        "similarity": 0.632,
+        "timestamp": 110.0
+      },
+      {
+        "video": "Nothing chungel at a",
+        "json": "On his finger, nothing changed at all",
+        "similarity": 0.643,
+        "timestamp": 110.0
+      },
+      {
+        "video": "Refuse the Frequency by cwilla",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.677,
+        "timestamp": 111.0
+      },
+      {
+        "video": "Nothlng changer atall",
+        "json": "On his finger, nothing changed at all",
+        "similarity": 0.667,
+        "timestamp": 113.0
+      },
+      {
+        "video": "When you don Lanawe lbecall",
+        "json": "Just break apart when you don't answer the call",
+        "similarity": 0.63,
+        "timestamp": 113.0
+      },
+      {
+        "video": "Nolhlng changerl at all",
+        "json": "On his finger, nothing changed at all",
+        "similarity": 0.644,
+        "timestamp": 114.0
+      },
+      {
+        "video": "When you dontana Werlthe call",
+        "json": "Just break apart when you don't answer the call",
+        "similarity": 0.693,
+        "timestamp": 114.0
+      },
+      {
+        "video": "Whon you don'! aliswei Ille call",
+        "json": "Just break apart when you don't answer the call",
+        "similarity": 0.605,
+        "timestamp": 119.0
+      },
+      {
+        "video": "Refuse tlle (requency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.615,
+        "timestamp": 131.0
+      },
+      {
+        "video": "Lel the signal bum oul glow",
+        "json": "Refuse the frequency, let the signal burn out slow",
+        "similarity": 0.605,
+        "timestamp": 131.0
+      },
+      {
+        "video": "Not evely war Ihat firid: yotl door",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.609,
+        "timestamp": 132.0
+      },
+      {
+        "video": "Rafuse Ille Irequency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.566,
+        "timestamp": 134.0
+      },
+      {
+        "video": "Nol evely war Ihat fnu: voul Uoor",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.556,
+        "timestamp": 134.0
+      },
+      {
+        "video": "Not every war Ihat finds your door",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.717,
+        "timestamp": 135.0
+      },
+      {
+        "video": "Not every warthat Ilrida yourdoor",
+        "json": "Not every war that finds your door is one you have to know",
+        "similarity": 0.637,
+        "timestamp": 137.0
+      },
+      {
+        "video": "Slav pff Ine Wille",
+        "json": "Stay off the wire",
+        "similarity": 0.629,
+        "timestamp": 137.0
+      },
+      {
+        "video": "Stay off Ine Wile",
+        "json": "Stay off the wire",
+        "similarity": 0.824,
+        "timestamp": 138.0
+      },
+      {
+        "video": "Let Uie statie Tiliu",
+        "json": "Let the static fade",
+        "similarity": 0.615,
+        "timestamp": 141.0
+      },
+      {
+        "video": "Somne storms cdllapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.594,
+        "timestamp": 144.0
+      },
+      {
+        "video": "Let Iie stalic Iata",
+        "json": "Let the static fade",
+        "similarity": 0.684,
+        "timestamp": 146.0
+      },
+      {
+        "video": "Sorne storms collapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.594,
+        "timestamp": 146.0
+      },
+      {
+        "video": "When theyre not alleyed",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.606,
+        "timestamp": 146.0
+      },
+      {
+        "video": "Let Ilie stalic fatla",
+        "json": "Let the static fade",
+        "similarity": 0.7,
+        "timestamp": 147.0
+      },
+      {
+        "video": "Some storis collapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.603,
+        "timestamp": 147.0
+      },
+      {
+        "video": "When they re notolleyed",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.606,
+        "timestamp": 147.0
+      },
+      {
+        "video": "Refube tlte trequency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.566,
+        "timestamp": 149.0
+      },
+      {
+        "video": "Lat tle sltoliting pasa yoll by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.55,
+        "timestamp": 152.0
+      },
+      {
+        "video": "Rofuse Ille Irequency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.566,
+        "timestamp": 153.0
+      },
+      {
+        "video": "Somellmes lie Uravest thlig to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.568,
+        "timestamp": 153.0
+      },
+      {
+        "video": "Refuse Ille lrequency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.566,
+        "timestamp": 155.0
+      },
+      {
+        "video": "Let the shouting passyou by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.711,
+        "timestamp": 155.0
+      },
+      {
+        "video": "Lal Ihe ahotiting pass you by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.564,
+        "timestamp": 158.0
+      },
+      {
+        "video": "let he sithiol Ha",
+        "json": "Let the static fade",
+        "similarity": 0.611,
+        "timestamp": 159.0
+      },
+      {
+        "video": "Somallmes Ihe biraveat tlilng to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.632,
+        "timestamp": 161.0
+      },
+      {
+        "video": "Somallme: Ihie bravest IHlng Jodo",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.575,
+        "timestamp": 162.0
+      },
+      {
+        "video": "Somallme: Ihie bravest Iuing Io do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.622,
+        "timestamp": 164.0
+      },
+      {
+        "video": "Somallmes Ihie bravest Hlng Tado",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.658,
+        "timestamp": 165.0
+      },
+      {
+        "video": "Somatlmteslhe biravest tllng to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.64,
+        "timestamp": 167.0
+      },
+      {
+        "video": "Somallmes Iha travest t Hlng to do",
+        "json": "Sometimes the bravest thing is the signal",
+        "similarity": 0.613,
+        "timestamp": 168.0
+      },
+      {
+        "video": "Ia let Lhe aighnl Uie",
+        "json": "Let the static fade",
+        "similarity": 0.55,
+        "timestamp": 170.0
+      },
+      {
+        "video": "Refuse the Frequency byicwllke",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.645,
+        "timestamp": 185.0
+      },
+      {
+        "video": "Refuie tlle frequency",
+        "json": "Fuse the frequency and your door",
+        "similarity": 0.604,
+        "timestamp": 191.0
+      },
+      {
+        "video": "Stav off Itha wille",
+        "json": "Stay off the wire",
+        "similarity": 0.778,
+        "timestamp": 203.0
+      },
+      {
+        "video": "Let llie statle talia",
+        "json": "Let the static fade",
+        "similarity": 0.55,
+        "timestamp": 204.0
+      },
+      {
+        "video": "Stavaff Ilit wlle",
+        "json": "Stay off the wire",
+        "similarity": 0.588,
+        "timestamp": 206.0
+      },
+      {
+        "video": "Some storins crllapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.562,
+        "timestamp": 207.0
+      },
+      {
+        "video": "Let ilie staliaiatle",
+        "json": "Let the static fade",
+        "similarity": 0.615,
+        "timestamp": 209.0
+      },
+      {
+        "video": "Let ilie stallc iatla",
+        "json": "Let the static fade",
+        "similarity": 0.6,
+        "timestamp": 210.0
+      },
+      {
+        "video": "Some storns cdllapse",
+        "json": "Some storms collapse when they're not obeyed",
+        "similarity": 0.571,
+        "timestamp": 213.0
+      },
+      {
+        "video": "Lattlie slouting pnse you by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.571,
+        "timestamp": 216.0
+      },
+      {
+        "video": "Let the aliouting pass you by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.667,
+        "timestamp": 221.0
+      },
+      {
+        "video": "The rash can't spread",
+        "json": "Scratch it once, the rash will spread",
+        "similarity": 0.571,
+        "timestamp": 221.0
+      },
+      {
+        "video": "Lat the shauting pass you by",
+        "json": "Refuse the frequency, let the shouting pass you by",
+        "similarity": 0.675,
+        "timestamp": 222.0
+      }
+    ],
+    "slug": "refuse-the-frequency",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 16,
+    "json_line_count": 2,
+    "matched": [
+      {
+        "video": "Like a finger on the wire",
+        "json": "If he pulls tight, like a finger on the wire, every little scroll keeps stoking that fire.",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Respect the Exhale by cwilke 0o:00 04:00 MB",
+        "timestamp": 0.5
+      },
+      {
+        "text": "That feed pulls tight",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Respect the Exhale by cwilke 01:00 1 04:00 MB",
+        "timestamp": 60.0
+      },
+      {
+        "text": "Iexhale",
+        "timestamp": 60.0
+      },
+      {
+        "text": "Let the noise roll back",
+        "timestamp": 60.0
+      },
+      {
+        "text": "Give the momen't room",
+        "timestamp": 60.0
+      },
+      {
+        "text": "Respect the Exhale by cwilke 02:00 1 04:00 MB",
+        "timestamp": 120.0
+      },
+      {
+        "text": "Give the soul some time",
+        "timestamp": 120.0
+      },
+      {
+        "text": "Lexhale",
+        "timestamp": 120.0
+      },
+      {
+        "text": "Let the pressure slide",
+        "timestamp": 120.0
+      },
+      {
+        "text": "Respect the Exhale by cwilke 03:00 1 04:00 MB",
+        "timestamp": 180.0
+      },
+      {
+        "text": "Then it's learnin' from me",
+        "timestamp": 180.0
+      },
+      {
+        "text": "Yeah | exhale",
+        "timestamp": 180.0
+      },
+      {
+        "text": "Give the night its roar",
+        "timestamp": 180.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "What you will in the spill, it's all sharp in hell, hit after hit by bits flat."
+      }
+    ],
+    "mismatches": [],
+    "slug": "respect-the-exhale",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 14,
+    "json_line_count": 14,
+    "matched": [
+      {
+        "video": "Slow the Clock by cwilke",
+        "json": "Slow.",
+        "similarity": 6.0
+      },
+      {
+        "video": "Yeah:",
+        "json": "Yeah. Hold up.",
+        "similarity": 0.85
+      },
+      {
+        "video": "Hold up.",
+        "json": "Yeah. Hold up.",
+        "similarity": 0.85
+      },
+      {
+        "video": "Fairness measured edge to edge",
+        "json": "Fairness measured edge to edge, like the scale ain't already bent.",
+        "similarity": 0.85
+      },
+      {
+        "video": "Like the scale ain't already ben't",
+        "json": "Fairness measured edge to edge, like the scale ain't already bent.",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "XIL tutuuh",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Stillness labeled",
+        "timestamp": 39.4
+      },
+      {
+        "text": "\"Probably dead: 99",
+        "timestamp": 39.4
+      },
+      {
+        "text": "They call it wisdom when it fills these rooms",
+        "timestamp": 39.4
+      },
+      {
+        "text": "If we punish naivete",
+        "timestamp": 118.2
+      },
+      {
+        "text": "We starve our wonder away:",
+        "timestamp": 118.2
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Speed ain't true, just cause it moves slow."
+      },
+      {
+        "text": "When it turns on us, or the rush, tension chews."
+      },
+      {
+        "text": "We're tilted round before the race, silence helps us stay that way."
+      },
+      {
+        "text": "Strength gets framed as feeling less, that lie still passed our test."
+      },
+      {
+        "text": "Hold the clock."
+      },
+      {
+        "text": "When the tension re -"
+      },
+      {
+        "text": "We survive into something hollow."
+      },
+      {
+        "text": "In the voices we chose to follow."
+      },
+      {
+        "text": "Let's blow the clock."
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Busy people 66 deeply thinking:",
+        "json": "Dressed up as meaning, busy people deeply thinking.",
+        "similarity": 0.684,
+        "timestamp": 78.8
+      },
+      {
+        "video": "When it turns on u S.",
+        "json": "Turns on us.",
+        "similarity": 0.71,
+        "timestamp": 118.2
+      }
+    ],
+    "slug": "slow-the-clock",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 13,
+    "json_line_count": 5,
+    "matched": [
+      {
+        "video": "You read too fast",
+        "json": "I'm a dogged page, you read too fast, folded where the feeling passed",
+        "similarity": 0.85
+      },
+      {
+        "video": "That felt like hell",
+        "json": "Coffee ring, fit the shelf, not the part that felt like hell",
+        "similarity": 0.85
+      },
+      {
+        "video": "Where someone stood",
+        "json": "No bell rang, what was it dead? Just a mark where someone stood, for good",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Underlined Once by cwilke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Ima dog-eared page",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Something true",
+        "timestamp": 36.2
+      },
+      {
+        "text": "You never heard",
+        "timestamp": 36.2
+      },
+      {
+        "text": "was underlined",
+        "timestamp": 36.2
+      },
+      {
+        "text": "That fit the shelf",
+        "timestamp": 72.4
+      },
+      {
+        "text": "Not the part",
+        "timestamp": 72.4
+      },
+      {
+        "text": "And mean't it",
+        "timestamp": 108.4
+      },
+      {
+        "text": "For good",
+        "timestamp": 108.4
+      }
+    ],
+    "json_only": [
+      {
+        "text": "And if you pull"
+      },
+      {
+        "text": "No bell rang, what was it dead? Just a mark where someone stood, for good"
+      }
+    ],
+    "mismatches": [],
+    "slug": "underlined-once",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 67,
+    "json_line_count": 17,
+    "matched": [
+      {
+        "video": "Brain like a live wire",
+        "json": "Brain like a live wire, hunting a thrill",
+        "similarity": 0.85
+      },
+      {
+        "video": "Hunting a thrill",
+        "json": "Brain like a live wire, hunting a thrill",
+        "similarity": 0.85
+      },
+      {
+        "video": "Headlines flashing",
+        "json": "Headlines flashing, blue -eyed sheen",
+        "similarity": 0.85
+      },
+      {
+        "video": "Anxiety dressed up",
+        "json": "Anxiety dressed up like it's ever",
+        "similarity": 0.85
+      },
+      {
+        "video": "When spectacle is infinite",
+        "json": "When spectacle is infinite, spectatorship gets cheap",
+        "similarity": 0.85
+      },
+      {
+        "video": "Spectatorship gets cheap",
+        "json": "When spectacle is infinite, spectatorship gets cheap",
+        "similarity": 0.85
+      },
+      {
+        "video": "You can stand in every universe",
+        "json": "You can stand in every universe and never move your feet",
+        "similarity": 0.85
+      },
+      {
+        "video": "And never move your feet",
+        "json": "You can stand in every universe and never move your feet",
+        "similarity": 0.85
+      },
+      {
+        "video": "ou can stand in every universe",
+        "json": "You can stand in every universe and never move your feet",
+        "similarity": 0.85
+      },
+      {
+        "video": "The machine keeps humming",
+        "json": "The machine keeps humming but it won't step in",
+        "similarity": 0.85
+      },
+      {
+        "video": "But it won't step in",
+        "json": "The machine keeps humming but it won't step in",
+        "similarity": 0.85
+      },
+      {
+        "video": "Initiation's calling",
+        "json": "Initiations calling so call folks in",
+        "similarity": 0.85
+      },
+      {
+        "video": "You can orbit every miracle",
+        "json": "You can orbit every miracle and never plant your feet",
+        "similarity": 0.85
+      },
+      {
+        "video": "Under your skin",
+        "json": "You feel that harm under your skin",
+        "similarity": 0.85
+      },
+      {
+        "video": "That's you stepping in",
+        "json": "That's not the feed, that's you stepping in",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "Waiting for Something by cwllke",
+        "timestamp": 0.5
+      },
+      {
+        "text": "0o:00",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Iwatch movies in pieces",
+        "timestamp": 0.5
+      },
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Waiting for Something by cwilke",
+        "timestamp": 2.0
+      },
+      {
+        "text": "Blue-light sheen",
+        "timestamp": 32.0
+      },
+      {
+        "text": "Like it's evergreen",
+        "timestamp": 38.0
+      },
+      {
+        "text": "Circle tight",
+        "timestamp": 41.0
+      },
+      {
+        "text": "Red and white",
+        "timestamp": 44.0
+      },
+      {
+        "text": "Give a little",
+        "timestamp": 45.0
+      },
+      {
+        "text": "Call it right",
+        "timestamp": 47.0
+      },
+      {
+        "text": "Call 'right",
+        "timestamp": 51.0
+      },
+      {
+        "text": "01*00",
+        "timestamp": 60.0
+      },
+      {
+        "text": "Sowhat are you waiting on?",
+        "timestamp": 68.0
+      },
+      {
+        "text": "So what are you waiting on?",
+        "timestamp": 69.0
+      },
+      {
+        "text": "What are you waiting on?",
+        "timestamp": 74.0
+      },
+      {
+        "text": "We built the illusion",
+        "timestamp": 83.0
+      },
+      {
+        "text": "Crystal clear",
+        "timestamp": 92.0
+      },
+      {
+        "text": "Belong without entering",
+        "timestamp": 95.0
+      },
+      {
+        "text": "Feel it from here",
+        "timestamp": 98.0
+      },
+      {
+        "text": "Proxy voices",
+        "timestamp": 101.0
+      },
+      {
+        "text": "Phantom crowd",
+        "timestamp": 104.0
+      },
+      {
+        "text": "Turn it up",
+        "timestamp": 105.0
+      },
+      {
+        "text": "Turn itup",
+        "timestamp": 108.0
+      },
+      {
+        "text": "But don't turn around",
+        "timestamp": 108.0
+      },
+      {
+        "text": "Lights the stage",
+        "timestamp": 110.0
+      },
+      {
+        "text": "Sets the scene",
+        "timestamp": 113.0
+      },
+      {
+        "text": "It won'tbe me",
+        "timestamp": 116.0
+      },
+      {
+        "text": "It won't be me",
+        "timestamp": 119.0
+      },
+      {
+        "text": "And never plan't your feet",
+        "timestamp": 123.0
+      },
+      {
+        "text": "The door's wide open",
+        "timestamp": 126.0
+      },
+      {
+        "text": "Light spilling in",
+        "timestamp": 128.0
+      },
+      {
+        "text": "Light spillingin",
+        "timestamp": 129.0
+      },
+      {
+        "text": "It can't knock",
+        "timestamp": 156.0
+      },
+      {
+        "text": "It can't choose",
+        "timestamp": 161.0
+      },
+      {
+        "text": "It can't stand",
+        "timestamp": 162.0
+      },
+      {
+        "text": "It can choose",
+        "timestamp": 164.0
+      },
+      {
+        "text": "In your shoes",
+        "timestamp": 164.0
+      },
+      {
+        "text": "That's not defeat",
+        "timestamp": 168.0
+      },
+      {
+        "text": "That'snot defeat",
+        "timestamp": 171.0
+      }
+    ],
+    "json_only": [
+      {
+        "text": "Cool tight, red and white, give a little call it right"
+      },
+      {
+        "text": "It sets the scene but it won't step in, it won't be me"
+      },
+      {
+        "text": "When spectacle is infinite, spectatorship gets cheap"
+      },
+      {
+        "text": "When spectacle is infinite, spectatorship gets cheap"
+      },
+      {
+        "text": "The initiation's calling so call folks in"
+      },
+      {
+        "text": "Can't choose, it can't stand in your shoes"
+      }
+    ],
+    "mismatches": [
+      {
+        "video": "Ijust can't slt still",
+        "json": "Movies in pieces, I just can't sit still",
+        "similarity": 0.655,
+        "timestamp": 0.5
+      },
+      {
+        "video": "Ijust can't sit still",
+        "json": "Movies in pieces, I just can't sit still",
+        "similarity": 0.69,
+        "timestamp": 2.0
+      },
+      {
+        "video": "Brain Iike a live wire",
+        "json": "Brain like a live wire, hunting a thrill",
+        "similarity": 0.689,
+        "timestamp": 29.0
+      },
+      {
+        "video": "Ijust can' t sit still",
+        "json": "Movies in pieces, I just can't sit still",
+        "similarity": 0.678,
+        "timestamp": 30.0
+      },
+      {
+        "video": "Huntinga thrill",
+        "json": "Brain like a live wire, hunting a thrill",
+        "similarity": 0.556,
+        "timestamp": 33.0
+      },
+      {
+        "video": "But it won' t step in",
+        "json": "The machine keeps humming but it won't step in",
+        "similarity": 0.585,
+        "timestamp": 60.0
+      },
+      {
+        "video": "So call your folks in",
+        "json": "Initiations calling so call folks in",
+        "similarity": 0.561,
+        "timestamp": 65.0
+      },
+      {
+        "video": "So callyour folks in",
+        "json": "Initiations calling so call folks in",
+        "similarity": 0.571,
+        "timestamp": 72.0
+      },
+      {
+        "video": "You feel that hum",
+        "json": "You feel that harm under your skin",
+        "similarity": 0.627,
+        "timestamp": 165.0
+      },
+      {
+        "video": "That'syou stepping in",
+        "json": "That's not the feed, that's you stepping in",
+        "similarity": 0.667,
+        "timestamp": 171.0
+      },
+      {
+        "video": "That' syou stepping in",
+        "json": "That's not the feed, that's you stepping in",
+        "similarity": 0.689,
+        "timestamp": 176.0
+      },
+      {
+        "video": "That's you steppingin",
+        "json": "That's not the feed, that's you stepping in",
+        "similarity": 0.667,
+        "timestamp": 186.0
+      }
+    ],
+    "slug": "waiting-for-something",
+    "album": "grief-without-ritual"
+  },
+  {
+    "video_line_count": 79,
+    "json_line_count": 21,
+    "matched": [
+      {
+        "video": "We built tall walls from tape",
+        "json": "We built tall walls from tape",
+        "similarity": 1.0
+      },
+      {
+        "video": "Hung law in a gold frame",
+        "json": "Hung love in a gold frame",
+        "similarity": 0.898
+      },
+      {
+        "video": "Hung law ina gold frame",
+        "json": "Hung love in a gold frame",
+        "similarity": 0.875
+      },
+      {
+        "video": "Stamped 66 process 99 on thin gates",
+        "json": "Stamped process on thin gates",
+        "similarity": 0.906
+      },
+      {
+        "video": "Stamped 'process\" on thin gates",
+        "json": "Stamped process on thin gates",
+        "similarity": 1.0
+      },
+      {
+        "video": "Called stall by a new name",
+        "json": "Called star by a new name",
+        "similarity": 0.941
+      },
+      {
+        "video": "Stamped 66 process on thin gates",
+        "json": "Stamped process on thin gates",
+        "similarity": 0.951
+      },
+      {
+        "video": "Called stall bya new name",
+        "json": "Called star by a new name",
+        "similarity": 0.92
+      },
+      {
+        "video": "Speed dressed up as law",
+        "json": "For show, speed dressed up as law",
+        "similarity": 0.85
+      },
+      {
+        "video": "Gave fear a crown",
+        "json": "Gave fear a crown",
+        "similarity": 1.0
+      },
+      {
+        "video": "Quick hands rule",
+        "json": "Quick hands rule, slow truths drown",
+        "similarity": 0.85
+      },
+      {
+        "video": "Slow truths drown",
+        "json": "Quick hands rule, slow truths drown",
+        "similarity": 0.85
+      },
+      {
+        "video": "And motives show",
+        "json": "Trance slips and motives show",
+        "similarity": 0.85
+      },
+      {
+        "video": "If mercy swings",
+        "json": "If mercy swings that wrecking ball",
+        "similarity": 0.85
+      },
+      {
+        "video": "That wrecking ball",
+        "json": "If mercy swings that wrecking ball",
+        "similarity": 0.85
+      },
+      {
+        "video": "Charts glow blue",
+        "json": "Charts glow blue, lines climb fast",
+        "similarity": 0.85
+      },
+      {
+        "video": "Lines climb fast",
+        "json": "Charts glow blue, lines climb fast",
+        "similarity": 0.85
+      },
+      {
+        "video": "Jobs drop out",
+        "json": "Jobs drop out, but growth holds fast",
+        "similarity": 0.85
+      },
+      {
+        "video": "But \"growth\" holds fast",
+        "json": "Jobs drop out, but growth holds fast",
+        "similarity": 0.85
+      },
+      {
+        "video": "Now judgmen't's wide",
+        "json": "Now judgment's wide, we stand exposed",
+        "similarity": 0.85
+      },
+      {
+        "video": "We stand exposed",
+        "json": "Now judgment's wide, we stand exposed",
+        "similarity": 0.85
+      },
+      {
+        "video": "Plenty's not kind",
+        "json": "Plenty's not kind, it strips things bare",
+        "similarity": 0.85
+      },
+      {
+        "video": "It strips things bare",
+        "json": "Plenty's not kind, it strips things bare",
+        "similarity": 0.85
+      },
+      {
+        "video": "You see what's there",
+        "json": "What's there?",
+        "similarity": 1.727
+      },
+      {
+        "video": "And speed takes throne",
+        "json": "Slips and speed takes throne",
+        "similarity": 0.85
+      },
+      {
+        "video": "We feel the crack",
+        "json": "We feel the crack down to bone",
+        "similarity": 0.85
+      },
+      {
+        "video": "Down to bone",
+        "json": "We feel the crack down to bone",
+        "similarity": 0.85
+      }
+    ],
+    "video_only": [
+      {
+        "text": "SUNO",
+        "timestamp": 0.5
+      },
+      {
+        "text": "Soft and slow",
+        "timestamp": 14.0
+      },
+      {
+        "text": "Rooms hum low",
+        "timestamp": 17.0
+      },
+      {
+        "text": "Lights snap on",
+        "timestamp": 20.0
+      },
+      {
+        "text": "It's all for show",
+        "timestamp": 21.0
+      },
+      {
+        "text": "00:24 / 03:29",
+        "timestamp": 24.0
+      },
+      {
+        "text": "We don'tknow",
+        "timestamp": 41.0
+      },
+      {
+        "text": "Jatefon Feit If mercy swings",
+        "timestamp": 44.0
+      },
+      {
+        "text": "It's not the end",
+        "timestamp": 45.0
+      },
+      {
+        "text": "Just stresses the walls",
+        "timestamp": 47.0
+      },
+      {
+        "text": "The beams all shake",
+        "timestamp": 48.0
+      },
+      {
+        "text": "So do we",
+        "timestamp": 50.0
+      },
+      {
+        "text": "Thats not doom",
+        "timestamp": 53.0
+      },
+      {
+        "text": "That's clarity",
+        "timestamp": 53.0
+      },
+      {
+        "text": "Sodowe",
+        "timestamp": 54.0
+      },
+      {
+        "text": "Sodo We",
+        "timestamp": 56.0
+      },
+      {
+        "text": "Work lost heat",
+        "timestamp": 81.0
+      },
+      {
+        "text": "Cash left town",
+        "timestamp": 83.0
+      },
+      {
+        "text": "Goods float free",
+        "timestamp": 86.0
+      },
+      {
+        "text": "No roots in ground",
+        "timestamp": 86.0
+      },
+      {
+        "text": "Noroots in ground",
+        "timestamp": 89.0
+      },
+      {
+        "text": "When lack is gone",
+        "timestamp": 104.0
+      },
+      {
+        "text": "When lackis gone",
+        "timestamp": 105.0
+      },
+      {
+        "text": "Quakes don't make",
+        "timestamp": 108.0
+      },
+      {
+        "text": "They break release",
+        "timestamp": 113.0
+      },
+      {
+        "text": "They free the heat",
+        "timestamp": 116.0
+      },
+      {
+        "text": "They free theheat",
+        "timestamp": 117.0
+      },
+      {
+        "text": "Sun hits hard",
+        "timestamp": 117.0
+      },
+      {
+        "text": "It burns",
+        "timestamp": 119.0
+      },
+      {
+        "text": "Not chaos",
+        "timestamp": 122.0
+      },
+      {
+        "text": "A turn",
+        "timestamp": 122.0
+      },
+      {
+        "text": "Aturn",
+        "timestamp": 125.0
+      },
+      {
+        "text": "Let them fall",
+        "timestamp": 132.0
+      },
+      {
+        "text": "Mercy might",
+        "timestamp": 134.0
+      },
+      {
+        "text": "Break us all",
+        "timestamp": 137.0
+      },
+      {
+        "text": "That'snot weak",
+        "timestamp": 144.0
+      },
+      {
+        "text": "Time to choose",
+        "timestamp": 144.0
+      },
+      {
+        "text": "Thal's Ilot weak That's clarity",
+        "timestamp": 146.0
+      },
+      {
+        "text": "The reckoning's not coming:",
+        "timestamp": 149.0
+      },
+      {
+        "text": "It's done.",
+        "timestamp": 153.0
+      }
+    ],
+    "json_only": [],
+    "mismatches": [
+      {
+        "video": "When Doctrine Slips by cwllke",
+        "json": "When doctrine stands",
+        "similarity": 0.653,
+        "timestamp": 0.5
+      },
+      {
+        "video": "When Doctrine Slips by cwilke",
+        "json": "When doctrine stands",
+        "similarity": 0.653,
+        "timestamp": 2.0
+      },
+      {
+        "video": "Speed dressed up aslaw",
+        "json": "For show, speed dressed up as law",
+        "similarity": 0.815,
+        "timestamp": 26.0
+      },
+      {
+        "video": "When doctrine slips",
+        "json": "When doctrine stands",
+        "similarity": 0.821,
+        "timestamp": 29.0
+      },
+      {
+        "video": "What holds the weight?",
+        "json": "What holds the way, we don't know",
+        "similarity": 0.692,
+        "timestamp": 38.0
+      },
+      {
+        "video": "Worksa ghost",
+        "json": "Works a ghost, a judge we'd host",
+        "similarity": 0.571,
+        "timestamp": 95.0
+      },
+      {
+        "video": "Ajudge we'dhost",
+        "json": "Works a ghost, a judge we'd host",
+        "similarity": 0.636,
+        "timestamp": 96.0
+      },
+      {
+        "video": "Ajudge we'd host",
+        "json": "Works a ghost, a judge we'd host",
+        "similarity": 0.667,
+        "timestamp": 98.0
+      },
+      {
+        "video": "Fires don't start",
+        "json": "Wires don't start, so turn",
+        "similarity": 0.75,
+        "timestamp": 114.0
+      },
+      {
+        "video": "If sure things fall",
+        "json": "If short things fall, it's done",
+        "similarity": 0.708,
+        "timestamp": 131.0
+      },
+      {
+        "video": "Thats not weak",
+        "json": "What's there?",
+        "similarity": 0.56,
+        "timestamp": 141.0
+      },
+      {
+        "video": "What we become",
+        "json": "What's there?",
+        "similarity": 0.56,
+        "timestamp": 149.0
+      }
+    ],
+    "slug": "when-doctrine-slips",
+    "album": "grief-without-ritual"
+  }
+]

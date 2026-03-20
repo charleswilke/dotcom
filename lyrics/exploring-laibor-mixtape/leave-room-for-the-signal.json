@@ -1,0 +1,242 @@
+{
+  "track": "Leave Room For The Signal",
+  "album": "exploring-laibor-mixtape",
+  "duration": 301.033,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 7.73,
+      "text": "They told me the future was already decided.",
+      "words": [
+        {
+          "word": "They",
+          "start": 0.0,
+          "end": 0.0
+        },
+        {
+          "word": "told",
+          "start": 0.0,
+          "end": 0.3
+        },
+        {
+          "word": "me",
+          "start": 0.3,
+          "end": 0.7
+        },
+        {
+          "word": "the",
+          "start": 0.7,
+          "end": 0.86
+        },
+        {
+          "word": "future",
+          "start": 0.86,
+          "end": 1.38
+        },
+        {
+          "word": "was",
+          "start": 1.38,
+          "end": 2.9
+        },
+        {
+          "word": "already",
+          "start": 6.45,
+          "end": 7.01
+        },
+        {
+          "word": "decided.",
+          "start": 7.01,
+          "end": 7.73
+        }
+      ]
+    },
+    {
+      "start": 53.6,
+      "end": 66.38,
+      "text": "They said math don't leave room for the signal.",
+      "words": [
+        {
+          "word": "They",
+          "start": 53.6,
+          "end": 53.74
+        },
+        {
+          "word": "said",
+          "start": 53.74,
+          "end": 54.28
+        },
+        {
+          "word": "math",
+          "start": 54.28,
+          "end": 54.62
+        },
+        {
+          "word": "don't",
+          "start": 59.13,
+          "end": 60.07
+        },
+        {
+          "word": "leave",
+          "start": 63.46,
+          "end": 63.82
+        },
+        {
+          "word": "room",
+          "start": 63.82,
+          "end": 64.68
+        },
+        {
+          "word": "for",
+          "start": 64.68,
+          "end": 65.42
+        },
+        {
+          "word": "the",
+          "start": 65.42,
+          "end": 65.88
+        },
+        {
+          "word": "signal.",
+          "start": 65.88,
+          "end": 66.38
+        }
+      ]
+    },
+    {
+      "start": 75.4,
+      "end": 77.15,
+      "text": "Ifyou don't name the static",
+      "words": [
+        {
+          "word": "Ifyou",
+          "start": 75.4,
+          "end": 75.7
+        },
+        {
+          "word": "don't",
+          "start": 75.75,
+          "end": 76.05
+        },
+        {
+          "word": "name",
+          "start": 76.1,
+          "end": 76.4
+        },
+        {
+          "word": "the",
+          "start": 76.45,
+          "end": 76.75
+        },
+        {
+          "word": "static",
+          "start": 76.8,
+          "end": 77.1
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 124.01,
+      "end": 126.97,
+      "text": "I guess that's why it feels so long.",
+      "words": [
+        {
+          "word": "I",
+          "start": 124.01,
+          "end": 124.37
+        },
+        {
+          "word": "guess",
+          "start": 124.37,
+          "end": 124.71
+        },
+        {
+          "word": "that's",
+          "start": 124.71,
+          "end": 125.07
+        },
+        {
+          "word": "why",
+          "start": 125.07,
+          "end": 125.19
+        },
+        {
+          "word": "it",
+          "start": 125.19,
+          "end": 125.77
+        },
+        {
+          "word": "feels",
+          "start": 125.77,
+          "end": 126.23
+        },
+        {
+          "word": "so",
+          "start": 126.23,
+          "end": 126.51
+        },
+        {
+          "word": "long.",
+          "start": 126.51,
+          "end": 126.97
+        }
+      ]
+    },
+    {
+      "start": 150.8,
+      "end": 152.2,
+      "text": "Everywhere, all the time",
+      "words": [
+        {
+          "word": "Everywhere,",
+          "start": 150.8,
+          "end": 151.1
+        },
+        {
+          "word": "all",
+          "start": 151.15,
+          "end": 151.45
+        },
+        {
+          "word": "the",
+          "start": 151.5,
+          "end": 151.8
+        },
+        {
+          "word": "time",
+          "start": 151.85,
+          "end": 152.15
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 150.8,
+      "end": 152.2,
+      "text": "don't need a verdict",
+      "words": [
+        {
+          "word": "don't",
+          "start": 150.8,
+          "end": 151.1
+        },
+        {
+          "word": "need",
+          "start": 151.15,
+          "end": 151.45
+        },
+        {
+          "word": "a",
+          "start": 151.5,
+          "end": 151.8
+        },
+        {
+          "word": "verdict",
+          "start": 151.85,
+          "end": 152.15
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

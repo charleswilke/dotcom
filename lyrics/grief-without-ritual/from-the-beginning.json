@@ -1,0 +1,571 @@
+{
+  "track": "From The Beginning",
+  "album": "grief-without-ritual",
+  "duration": 163.36,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 1.9,
+      "text": "Stop collaborate and listen",
+      "words": [
+        {
+          "word": "Stop",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "collaborate",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "and",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "listen",
+          "start": 1.55,
+          "end": 1.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 0.5,
+      "end": 3.3,
+      "text": "Yeah you know the line; but something's differen't",
+      "words": [
+        {
+          "word": "Yeah",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "you",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "know",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "the",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "line;",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "but",
+          "start": 2.25,
+          "end": 2.55
+        },
+        {
+          "word": "something's",
+          "start": 2.6,
+          "end": 2.9
+        },
+        {
+          "word": "differen't",
+          "start": 2.95,
+          "end": 3.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 2.69,
+      "end": 19.1,
+      "text": "Were starting over from the beginning",
+      "words": [
+        {
+          "word": "Were",
+          "start": 2.69,
+          "end": 3.37
+        },
+        {
+          "word": "starting",
+          "start": 11.85,
+          "end": 12.25
+        },
+        {
+          "word": "over",
+          "start": 12.25,
+          "end": 12.73
+        },
+        {
+          "word": "from",
+          "start": 12.85,
+          "end": 13.41
+        },
+        {
+          "word": "the",
+          "start": 13.41,
+          "end": 13.55
+        },
+        {
+          "word": "beginning",
+          "start": 18.86,
+          "end": 19.1
+        }
+      ]
+    },
+    {
+      "start": 25.0,
+      "end": 28.5,
+      "text": "Pressurized the clock; the feed Made a culture out ofne",
+      "words": [
+        {
+          "word": "Pressurized",
+          "start": 25.0,
+          "end": 25.3
+        },
+        {
+          "word": "the",
+          "start": 25.35,
+          "end": 25.65
+        },
+        {
+          "word": "clock;",
+          "start": 25.7,
+          "end": 26.0
+        },
+        {
+          "word": "the",
+          "start": 26.05,
+          "end": 26.35
+        },
+        {
+          "word": "feed",
+          "start": 26.4,
+          "end": 26.7
+        },
+        {
+          "word": "Made",
+          "start": 26.75,
+          "end": 27.05
+        },
+        {
+          "word": "a",
+          "start": 27.1,
+          "end": 27.4
+        },
+        {
+          "word": "culture",
+          "start": 27.45,
+          "end": 27.75
+        },
+        {
+          "word": "out",
+          "start": 27.8,
+          "end": 28.1
+        },
+        {
+          "word": "ofne",
+          "start": 28.15,
+          "end": 28.45
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 25.0,
+      "end": 26.75,
+      "text": "Stackit high and call it",
+      "words": [
+        {
+          "word": "Stackit",
+          "start": 25.0,
+          "end": 25.3
+        },
+        {
+          "word": "high",
+          "start": 25.35,
+          "end": 25.65
+        },
+        {
+          "word": "and",
+          "start": 25.7,
+          "end": 26.0
+        },
+        {
+          "word": "call",
+          "start": 26.05,
+          "end": 26.35
+        },
+        {
+          "word": "it",
+          "start": 26.4,
+          "end": 26.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 40.8,
+      "end": 44.65,
+      "text": "Stackit high and calli it progress Call it order Id call",
+      "words": [
+        {
+          "word": "Stackit",
+          "start": 40.8,
+          "end": 41.1
+        },
+        {
+          "word": "high",
+          "start": 41.15,
+          "end": 41.45
+        },
+        {
+          "word": "and",
+          "start": 41.5,
+          "end": 41.8
+        },
+        {
+          "word": "calli",
+          "start": 41.85,
+          "end": 42.15
+        },
+        {
+          "word": "it",
+          "start": 42.2,
+          "end": 42.5
+        },
+        {
+          "word": "progress",
+          "start": 42.55,
+          "end": 42.85
+        },
+        {
+          "word": "Call",
+          "start": 42.9,
+          "end": 43.2
+        },
+        {
+          "word": "it",
+          "start": 43.25,
+          "end": 43.55
+        },
+        {
+          "word": "order",
+          "start": 43.6,
+          "end": 43.9
+        },
+        {
+          "word": "Id",
+          "start": 43.95,
+          "end": 44.25
+        },
+        {
+          "word": "call",
+          "start": 44.3,
+          "end": 44.6
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 65.8,
+      "end": 72.1,
+      "text": "That's the honest ground the only floor Gotta feel the crack before you build the door Osaka talking",
+      "words": [
+        {
+          "word": "That's",
+          "start": 65.8,
+          "end": 66.1
+        },
+        {
+          "word": "the",
+          "start": 66.15,
+          "end": 66.45
+        },
+        {
+          "word": "honest",
+          "start": 66.5,
+          "end": 66.8
+        },
+        {
+          "word": "ground",
+          "start": 66.85,
+          "end": 67.15
+        },
+        {
+          "word": "the",
+          "start": 67.2,
+          "end": 67.5
+        },
+        {
+          "word": "only",
+          "start": 67.55,
+          "end": 67.85
+        },
+        {
+          "word": "floor",
+          "start": 67.9,
+          "end": 68.2
+        },
+        {
+          "word": "Gotta",
+          "start": 68.25,
+          "end": 68.55
+        },
+        {
+          "word": "feel",
+          "start": 68.6,
+          "end": 68.9
+        },
+        {
+          "word": "the",
+          "start": 68.95,
+          "end": 69.25
+        },
+        {
+          "word": "crack",
+          "start": 69.3,
+          "end": 69.6
+        },
+        {
+          "word": "before",
+          "start": 69.65,
+          "end": 69.95
+        },
+        {
+          "word": "you",
+          "start": 70.0,
+          "end": 70.3
+        },
+        {
+          "word": "build",
+          "start": 70.35,
+          "end": 70.65
+        },
+        {
+          "word": "the",
+          "start": 70.7,
+          "end": 71.0
+        },
+        {
+          "word": "door",
+          "start": 71.05,
+          "end": 71.35
+        },
+        {
+          "word": "Osaka",
+          "start": 71.4,
+          "end": 71.7
+        },
+        {
+          "word": "talking",
+          "start": 71.75,
+          "end": 72.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 81.6,
+      "end": 85.45,
+      "text": "No barriers; no translation flaw Every wall that rose with speed",
+      "words": [
+        {
+          "word": "No",
+          "start": 81.6,
+          "end": 81.9
+        },
+        {
+          "word": "barriers;",
+          "start": 81.95,
+          "end": 82.25
+        },
+        {
+          "word": "no",
+          "start": 82.3,
+          "end": 82.6
+        },
+        {
+          "word": "translation",
+          "start": 82.65,
+          "end": 82.95
+        },
+        {
+          "word": "flaw",
+          "start": 83.0,
+          "end": 83.3
+        },
+        {
+          "word": "Every",
+          "start": 83.35,
+          "end": 83.65
+        },
+        {
+          "word": "wall",
+          "start": 83.7,
+          "end": 84.0
+        },
+        {
+          "word": "that",
+          "start": 84.05,
+          "end": 84.35
+        },
+        {
+          "word": "rose",
+          "start": 84.4,
+          "end": 84.7
+        },
+        {
+          "word": "with",
+          "start": 84.75,
+          "end": 85.05
+        },
+        {
+          "word": "speed",
+          "start": 85.1,
+          "end": 85.4
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 106.6,
+      "end": 112.9,
+      "text": "Stop collabor ate and listen Yeah you know the line,now feel what's missing Ice is melting; walls are",
+      "words": [
+        {
+          "word": "Stop",
+          "start": 106.6,
+          "end": 106.9
+        },
+        {
+          "word": "collabor",
+          "start": 106.95,
+          "end": 107.25
+        },
+        {
+          "word": "ate",
+          "start": 107.3,
+          "end": 107.6
+        },
+        {
+          "word": "and",
+          "start": 107.65,
+          "end": 107.95
+        },
+        {
+          "word": "listen",
+          "start": 108.0,
+          "end": 108.3
+        },
+        {
+          "word": "Yeah",
+          "start": 108.35,
+          "end": 108.65
+        },
+        {
+          "word": "you",
+          "start": 108.7,
+          "end": 109.0
+        },
+        {
+          "word": "know",
+          "start": 109.05,
+          "end": 109.35
+        },
+        {
+          "word": "the",
+          "start": 109.4,
+          "end": 109.7
+        },
+        {
+          "word": "line,now",
+          "start": 109.75,
+          "end": 110.05
+        },
+        {
+          "word": "feel",
+          "start": 110.1,
+          "end": 110.4
+        },
+        {
+          "word": "what's",
+          "start": 110.45,
+          "end": 110.75
+        },
+        {
+          "word": "missing",
+          "start": 110.8,
+          "end": 111.1
+        },
+        {
+          "word": "Ice",
+          "start": 111.15,
+          "end": 111.45
+        },
+        {
+          "word": "is",
+          "start": 111.5,
+          "end": 111.8
+        },
+        {
+          "word": "melting;",
+          "start": 111.85,
+          "end": 112.15
+        },
+        {
+          "word": "walls",
+          "start": 112.2,
+          "end": 112.5
+        },
+        {
+          "word": "are",
+          "start": 112.55,
+          "end": 112.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 122.4,
+      "end": 124.5,
+      "text": "Ice is melting; walls are thin",
+      "words": [
+        {
+          "word": "Ice",
+          "start": 122.4,
+          "end": 122.7
+        },
+        {
+          "word": "is",
+          "start": 122.75,
+          "end": 123.05
+        },
+        {
+          "word": "melting;",
+          "start": 123.1,
+          "end": 123.4
+        },
+        {
+          "word": "walls",
+          "start": 123.45,
+          "end": 123.75
+        },
+        {
+          "word": "are",
+          "start": 123.8,
+          "end": 124.1
+        },
+        {
+          "word": "thin",
+          "start": 124.15,
+          "end": 124.45
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

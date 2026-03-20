@@ -1,0 +1,330 @@
+{
+  "track": "Luxury Of Indifference",
+  "album": "grief-without-ritual",
+  "duration": 214.676,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 12.48,
+      "text": "It waits, not wanting, not just open",
+      "words": [
+        {
+          "word": "It",
+          "start": 0.0,
+          "end": 0.18
+        },
+        {
+          "word": "waits,",
+          "start": 0.18,
+          "end": 1.16
+        },
+        {
+          "word": "not",
+          "start": 1.86,
+          "end": 3.48
+        },
+        {
+          "word": "wanting,",
+          "start": 3.48,
+          "end": 4.94
+        },
+        {
+          "word": "not",
+          "start": 5.4,
+          "end": 6.88
+        },
+        {
+          "word": "just",
+          "start": 6.88,
+          "end": 7.88
+        },
+        {
+          "word": "open",
+          "start": 10.22,
+          "end": 12.48
+        }
+      ]
+    },
+    {
+      "start": 47.84,
+      "end": 53.73,
+      "text": "If you leave it alone, then it becomes your arrow",
+      "words": [
+        {
+          "word": "If",
+          "start": 47.84,
+          "end": 48.68
+        },
+        {
+          "word": "you",
+          "start": 48.68,
+          "end": 48.86
+        },
+        {
+          "word": "leave",
+          "start": 48.86,
+          "end": 49.14
+        },
+        {
+          "word": "it",
+          "start": 49.14,
+          "end": 49.36
+        },
+        {
+          "word": "alone,",
+          "start": 49.36,
+          "end": 49.72
+        },
+        {
+          "word": "then",
+          "start": 51.45,
+          "end": 51.89
+        },
+        {
+          "word": "it",
+          "start": 51.89,
+          "end": 52.11
+        },
+        {
+          "word": "becomes",
+          "start": 52.11,
+          "end": 52.51
+        },
+        {
+          "word": "your",
+          "start": 52.51,
+          "end": 52.99
+        },
+        {
+          "word": "arrow",
+          "start": 52.99,
+          "end": 53.73
+        }
+      ]
+    },
+    {
+      "start": 55.62,
+      "end": 59.38,
+      "text": "Hands without orders, a door left wide",
+      "words": [
+        {
+          "word": "Hands",
+          "start": 55.62,
+          "end": 56.68
+        },
+        {
+          "word": "without",
+          "start": 56.68,
+          "end": 57.1
+        },
+        {
+          "word": "orders,",
+          "start": 57.1,
+          "end": 57.96
+        },
+        {
+          "word": "a",
+          "start": 57.98,
+          "end": 58.18
+        },
+        {
+          "word": "door",
+          "start": 58.18,
+          "end": 58.48
+        },
+        {
+          "word": "left",
+          "start": 58.48,
+          "end": 58.88
+        },
+        {
+          "word": "wide",
+          "start": 58.88,
+          "end": 59.38
+        }
+      ]
+    },
+    {
+      "start": 103.2,
+      "end": 104.378,
+      "text": "the glitch in the sand:",
+      "words": [
+        {
+          "word": "the",
+          "start": 103.2,
+          "end": 103.4
+        },
+        {
+          "word": "glitch",
+          "start": 103.4,
+          "end": 103.42
+        },
+        {
+          "word": "in",
+          "start": 103.42,
+          "end": 103.6
+        },
+        {
+          "word": "the",
+          "start": 103.6,
+          "end": 104.14
+        },
+        {
+          "word": "sand:",
+          "start": 104.19,
+          "end": 104.378
+        }
+      ]
+    },
+    {
+      "start": 106.23,
+      "end": 107.85,
+      "text": "That's where the insight",
+      "words": [
+        {
+          "word": "That's",
+          "start": 106.23,
+          "end": 106.61
+        },
+        {
+          "word": "where",
+          "start": 106.61,
+          "end": 106.77
+        },
+        {
+          "word": "the",
+          "start": 106.77,
+          "end": 107.19
+        },
+        {
+          "word": "insight",
+          "start": 107.19,
+          "end": 107.85
+        }
+      ]
+    },
+    {
+      "start": 155.4,
+      "end": 160.06,
+      "text": "isn't what they came to say",
+      "words": [
+        {
+          "word": "isn't",
+          "start": 155.4,
+          "end": 155.7
+        },
+        {
+          "word": "what",
+          "start": 157.5,
+          "end": 157.84
+        },
+        {
+          "word": "they",
+          "start": 157.84,
+          "end": 158.34
+        },
+        {
+          "word": "came",
+          "start": 158.34,
+          "end": 158.82
+        },
+        {
+          "word": "to",
+          "start": 158.87,
+          "end": 159.44
+        },
+        {
+          "word": "say",
+          "start": 159.49,
+          "end": 160.06
+        }
+      ]
+    },
+    {
+      "start": 160.16,
+      "end": 161.84,
+      "text": "Indifference keeps the channel",
+      "words": [
+        {
+          "word": "Indifference",
+          "start": 160.16,
+          "end": 160.82
+        },
+        {
+          "word": "keeps",
+          "start": 160.82,
+          "end": 161.14
+        },
+        {
+          "word": "the",
+          "start": 161.14,
+          "end": 161.42
+        },
+        {
+          "word": "channel",
+          "start": 161.42,
+          "end": 161.84
+        }
+      ]
+    },
+    {
+      "start": 163.1,
+      "end": 170.19,
+      "text": "open all the way:",
+      "words": [
+        {
+          "word": "open",
+          "start": 163.1,
+          "end": 163.78
+        },
+        {
+          "word": "all",
+          "start": 163.78,
+          "end": 164.12
+        },
+        {
+          "word": "the",
+          "start": 164.38,
+          "end": 164.68
+        },
+        {
+          "word": "way:",
+          "start": 169.73,
+          "end": 170.19
+        }
+      ]
+    },
+    {
+      "start": 170.39,
+      "end": 175.828,
+      "text": "If you leave it alone;",
+      "words": [
+        {
+          "word": "If",
+          "start": 170.39,
+          "end": 170.67
+        },
+        {
+          "word": "you",
+          "start": 173.58,
+          "end": 173.92
+        },
+        {
+          "word": "leave",
+          "start": 173.92,
+          "end": 174.26
+        },
+        {
+          "word": "it",
+          "start": 174.26,
+          "end": 174.88
+        },
+        {
+          "word": "alone;",
+          "start": 174.93,
+          "end": 175.828
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+{
+  "track": "No Model For This",
+  "album": "exploring-laibor-mixtape",
+  "duration": 169.92,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 20.19,
+      "text": "whoa whoa couldn't bend past the edge they wouldn't mend screen stay calm the lights went",
+      "words": [
+        {
+          "word": "whoa",
+          "start": 0.0,
+          "end": 0.1
+        },
+        {
+          "word": "whoa",
+          "start": 0.1,
+          "end": 1.26
+        },
+        {
+          "word": "couldn't",
+          "start": 13.55,
+          "end": 14.61
+        },
+        {
+          "word": "bend",
+          "start": 14.61,
+          "end": 14.87
+        },
+        {
+          "word": "past",
+          "start": 14.87,
+          "end": 15.77
+        },
+        {
+          "word": "the",
+          "start": 15.77,
+          "end": 16.11
+        },
+        {
+          "word": "edge",
+          "start": 16.11,
+          "end": 16.45
+        },
+        {
+          "word": "they",
+          "start": 16.45,
+          "end": 16.85
+        },
+        {
+          "word": "wouldn't",
+          "start": 16.85,
+          "end": 17.45
+        },
+        {
+          "word": "mend",
+          "start": 17.45,
+          "end": 17.77
+        },
+        {
+          "word": "screen",
+          "start": 17.77,
+          "end": 18.51
+        },
+        {
+          "word": "stay",
+          "start": 18.51,
+          "end": 18.81
+        },
+        {
+          "word": "calm",
+          "start": 18.81,
+          "end": 19.41
+        },
+        {
+          "word": "the",
+          "start": 19.41,
+          "end": 19.63
+        },
+        {
+          "word": "lights",
+          "start": 19.63,
+          "end": 19.97
+        },
+        {
+          "word": "went",
+          "start": 19.97,
+          "end": 20.19
+        }
+      ]
+    },
+    {
+      "start": 0.5,
+      "end": 2.6,
+      "text": "Graphs drew lines that couldn't bend",
+      "words": [
+        {
+          "word": "Graphs",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "drew",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "lines",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "that",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "couldn't",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "bend",
+          "start": 2.25,
+          "end": 2.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 29.09,
+      "end": 38.01,
+      "text": "hunger don't do calibration fear don't wait for code math kept talking room went wrong",
+      "words": [
+        {
+          "word": "hunger",
+          "start": 29.09,
+          "end": 29.99
+        },
+        {
+          "word": "don't",
+          "start": 29.99,
+          "end": 30.63
+        },
+        {
+          "word": "do",
+          "start": 30.63,
+          "end": 30.75
+        },
+        {
+          "word": "calibration",
+          "start": 30.75,
+          "end": 31.77
+        },
+        {
+          "word": "fear",
+          "start": 31.77,
+          "end": 32.63
+        },
+        {
+          "word": "don't",
+          "start": 32.63,
+          "end": 33.25
+        },
+        {
+          "word": "wait",
+          "start": 33.25,
+          "end": 33.45
+        },
+        {
+          "word": "for",
+          "start": 33.45,
+          "end": 34.07
+        },
+        {
+          "word": "code",
+          "start": 34.07,
+          "end": 34.71
+        },
+        {
+          "word": "math",
+          "start": 34.71,
+          "end": 35.53
+        },
+        {
+          "word": "kept",
+          "start": 35.53,
+          "end": 35.83
+        },
+        {
+          "word": "talking",
+          "start": 35.83,
+          "end": 36.45
+        },
+        {
+          "word": "room",
+          "start": 36.45,
+          "end": 36.93
+        },
+        {
+          "word": "went",
+          "start": 36.93,
+          "end": 37.35
+        },
+        {
+          "word": "wrong",
+          "start": 37.35,
+          "end": 38.01
+        }
+      ]
+    },
+    {
+      "start": 38.01,
+      "end": 50.4,
+      "text": "all we've got left is this little song there's no model for this moment",
+      "words": [
+        {
+          "word": "all",
+          "start": 38.01,
+          "end": 38.81
+        },
+        {
+          "word": "we've",
+          "start": 40.7,
+          "end": 41.28
+        },
+        {
+          "word": "got",
+          "start": 41.28,
+          "end": 41.5
+        },
+        {
+          "word": "left",
+          "start": 41.5,
+          "end": 41.82
+        },
+        {
+          "word": "is",
+          "start": 41.82,
+          "end": 42.62
+        },
+        {
+          "word": "this",
+          "start": 42.62,
+          "end": 42.94
+        },
+        {
+          "word": "little",
+          "start": 42.94,
+          "end": 43.98
+        },
+        {
+          "word": "song",
+          "start": 43.98,
+          "end": 44.72
+        },
+        {
+          "word": "there's",
+          "start": 44.72,
+          "end": 46.52
+        },
+        {
+          "word": "no",
+          "start": 48.28,
+          "end": 48.4
+        },
+        {
+          "word": "model",
+          "start": 48.4,
+          "end": 49.08
+        },
+        {
+          "word": "for",
+          "start": 49.08,
+          "end": 49.54
+        },
+        {
+          "word": "this",
+          "start": 49.54,
+          "end": 49.9
+        },
+        {
+          "word": "moment",
+          "start": 49.9,
+          "end": 50.4
+        }
+      ]
+    },
+    {
+      "start": 85.2,
+      "end": 87.3,
+      "text": "Not the numbers that just scream",
+      "words": [
+        {
+          "word": "Not",
+          "start": 85.2,
+          "end": 85.5
+        },
+        {
+          "word": "the",
+          "start": 85.55,
+          "end": 85.85
+        },
+        {
+          "word": "numbers",
+          "start": 85.9,
+          "end": 86.2
+        },
+        {
+          "word": "that",
+          "start": 86.25,
+          "end": 86.55
+        },
+        {
+          "word": "just",
+          "start": 86.6,
+          "end": 86.9
+        },
+        {
+          "word": "scream",
+          "start": 86.95,
+          "end": 87.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 85.2,
+      "end": 87.3,
+      "text": "Some stayed frozen in the rules",
+      "words": [
+        {
+          "word": "Some",
+          "start": 85.2,
+          "end": 85.5
+        },
+        {
+          "word": "stayed",
+          "start": 85.55,
+          "end": 85.85
+        },
+        {
+          "word": "frozen",
+          "start": 85.9,
+          "end": 86.2
+        },
+        {
+          "word": "in",
+          "start": 86.25,
+          "end": 86.55
+        },
+        {
+          "word": "the",
+          "start": 86.6,
+          "end": 86.9
+        },
+        {
+          "word": "rules",
+          "start": 86.95,
+          "end": 87.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 85.2,
+      "end": 86.95,
+      "text": "Some kept polishing the tools",
+      "words": [
+        {
+          "word": "Some",
+          "start": 85.2,
+          "end": 85.5
+        },
+        {
+          "word": "kept",
+          "start": 85.55,
+          "end": 85.85
+        },
+        {
+          "word": "polishing",
+          "start": 85.9,
+          "end": 86.2
+        },
+        {
+          "word": "the",
+          "start": 86.25,
+          "end": 86.55
+        },
+        {
+          "word": "tools",
+          "start": 86.6,
+          "end": 86.9
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 127.6,
+      "end": 129.7,
+      "text": "There's no model for what's coming",
+      "words": [
+        {
+          "word": "There's",
+          "start": 127.6,
+          "end": 127.9
+        },
+        {
+          "word": "no",
+          "start": 127.95,
+          "end": 128.25
+        },
+        {
+          "word": "model",
+          "start": 128.3,
+          "end": 128.6
+        },
+        {
+          "word": "for",
+          "start": 128.65,
+          "end": 128.95
+        },
+        {
+          "word": "what's",
+          "start": 129.0,
+          "end": 129.3
+        },
+        {
+          "word": "coming",
+          "start": 129.35,
+          "end": 129.65
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

@@ -1,0 +1,368 @@
+{
+  "track": "Value Is Myth",
+  "album": "exploring-laibor-mixtape",
+  "duration": 165.719,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 1.78,
+      "text": "They told me value had a number",
+      "words": [
+        {
+          "word": "They",
+          "start": 0.0,
+          "end": 0.1
+        },
+        {
+          "word": "told",
+          "start": 0.1,
+          "end": 0.32
+        },
+        {
+          "word": "me",
+          "start": 0.32,
+          "end": 0.58
+        },
+        {
+          "word": "value",
+          "start": 0.58,
+          "end": 0.8
+        },
+        {
+          "word": "had",
+          "start": 0.96,
+          "end": 1.24
+        },
+        {
+          "word": "a",
+          "start": 1.24,
+          "end": 1.38
+        },
+        {
+          "word": "number",
+          "start": 1.38,
+          "end": 1.78
+        }
+      ]
+    },
+    {
+      "start": 3.08,
+      "end": 4.9,
+      "text": "Said it lived inside a chart",
+      "words": [
+        {
+          "word": "Said",
+          "start": 3.08,
+          "end": 3.64
+        },
+        {
+          "word": "it",
+          "start": 3.64,
+          "end": 3.8
+        },
+        {
+          "word": "lived",
+          "start": 3.8,
+          "end": 3.98
+        },
+        {
+          "word": "inside",
+          "start": 3.98,
+          "end": 4.34
+        },
+        {
+          "word": "a",
+          "start": 4.34,
+          "end": 4.6
+        },
+        {
+          "word": "chart",
+          "start": 4.6,
+          "end": 4.9
+        }
+      ]
+    },
+    {
+      "start": 36.16,
+      "end": 38.44,
+      "text": "When the money rings the bell",
+      "words": [
+        {
+          "word": "When",
+          "start": 36.16,
+          "end": 36.42
+        },
+        {
+          "word": "the",
+          "start": 36.42,
+          "end": 36.64
+        },
+        {
+          "word": "money",
+          "start": 36.64,
+          "end": 37.06
+        },
+        {
+          "word": "rings",
+          "start": 37.06,
+          "end": 37.52
+        },
+        {
+          "word": "the",
+          "start": 37.52,
+          "end": 38.12
+        },
+        {
+          "word": "bell",
+          "start": 38.12,
+          "end": 38.44
+        }
+      ]
+    },
+    {
+      "start": 40.56,
+      "end": 41.86,
+      "text": "Everybody's got objectives",
+      "words": [
+        {
+          "word": "Everybody's",
+          "start": 40.56,
+          "end": 41.26
+        },
+        {
+          "word": "got",
+          "start": 41.26,
+          "end": 41.42
+        },
+        {
+          "word": "objectives",
+          "start": 41.42,
+          "end": 41.86
+        }
+      ]
+    },
+    {
+      "start": 43.78,
+      "end": 45.1,
+      "text": "Everybody's got a goal",
+      "words": [
+        {
+          "word": "Everybody's",
+          "start": 43.78,
+          "end": 44.48
+        },
+        {
+          "word": "got",
+          "start": 44.48,
+          "end": 44.64
+        },
+        {
+          "word": "a",
+          "start": 44.64,
+          "end": 44.82
+        },
+        {
+          "word": "goal",
+          "start": 44.82,
+          "end": 45.1
+        }
+      ]
+    },
+    {
+      "start": 76.69,
+      "end": 78.99,
+      "text": "Don't remember it at all",
+      "words": [
+        {
+          "word": "Don't",
+          "start": 76.69,
+          "end": 77.41
+        },
+        {
+          "word": "remember",
+          "start": 77.41,
+          "end": 77.87
+        },
+        {
+          "word": "it",
+          "start": 77.87,
+          "end": 78.45
+        },
+        {
+          "word": "at",
+          "start": 78.45,
+          "end": 78.61
+        },
+        {
+          "word": "all",
+          "start": 78.61,
+          "end": 78.99
+        }
+      ]
+    },
+    {
+      "start": 83.0,
+      "end": 86.5,
+      "text": "You can buy one for a bargain; one time fee",
+      "words": [
+        {
+          "word": "You",
+          "start": 83.0,
+          "end": 83.3
+        },
+        {
+          "word": "can",
+          "start": 83.35,
+          "end": 83.65
+        },
+        {
+          "word": "buy",
+          "start": 83.7,
+          "end": 84.0
+        },
+        {
+          "word": "one",
+          "start": 84.05,
+          "end": 84.35
+        },
+        {
+          "word": "for",
+          "start": 84.4,
+          "end": 84.7
+        },
+        {
+          "word": "a",
+          "start": 84.75,
+          "end": 85.05
+        },
+        {
+          "word": "bargain;",
+          "start": 85.1,
+          "end": 85.4
+        },
+        {
+          "word": "one",
+          "start": 85.45,
+          "end": 85.75
+        },
+        {
+          "word": "time",
+          "start": 85.8,
+          "end": 86.1
+        },
+        {
+          "word": "fee",
+          "start": 86.15,
+          "end": 86.45
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 85.22,
+      "end": 86.74,
+      "text": "My guarantee",
+      "words": [
+        {
+          "word": "My",
+          "start": 85.22,
+          "end": 85.86
+        },
+        {
+          "word": "guarantee",
+          "start": 85.86,
+          "end": 86.74
+        }
+      ]
+    },
+    {
+      "start": 120.65,
+      "end": 123.33,
+      "text": "So tell me where's the value supposed to live",
+      "words": [
+        {
+          "word": "So",
+          "start": 120.65,
+          "end": 120.91
+        },
+        {
+          "word": "tell",
+          "start": 120.91,
+          "end": 121.17
+        },
+        {
+          "word": "me",
+          "start": 121.17,
+          "end": 121.37
+        },
+        {
+          "word": "where's",
+          "start": 121.37,
+          "end": 121.69
+        },
+        {
+          "word": "the",
+          "start": 121.69,
+          "end": 121.77
+        },
+        {
+          "word": "value",
+          "start": 121.77,
+          "end": 122.13
+        },
+        {
+          "word": "supposed",
+          "start": 122.13,
+          "end": 122.35
+        },
+        {
+          "word": "to",
+          "start": 122.35,
+          "end": 122.87
+        },
+        {
+          "word": "live",
+          "start": 122.87,
+          "end": 123.33
+        }
+      ]
+    },
+    {
+      "start": 127.56,
+      "end": 129.76,
+      "text": "In the product or the play?",
+      "words": [
+        {
+          "word": "In",
+          "start": 127.56,
+          "end": 127.88
+        },
+        {
+          "word": "the",
+          "start": 127.88,
+          "end": 128.04
+        },
+        {
+          "word": "product",
+          "start": 128.04,
+          "end": 128.5
+        },
+        {
+          "word": "or",
+          "start": 128.5,
+          "end": 128.74
+        },
+        {
+          "word": "the",
+          "start": 128.74,
+          "end": 128.94
+        },
+        {
+          "word": "play?",
+          "start": 128.94,
+          "end": 129.76
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "track": "Treasure In The Mess",
+  "album": "exploring-laibor-mixtape",
+  "duration": 174.214,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 2.3,
+      "text": "Saw a car on the highway, dentedright where",
+      "words": [
+        {
+          "word": "Saw",
+          "start": 0.0,
+          "end": 0.26
+        },
+        {
+          "word": "a",
+          "start": 0.26,
+          "end": 0.42
+        },
+        {
+          "word": "car",
+          "start": 0.42,
+          "end": 0.62
+        },
+        {
+          "word": "on",
+          "start": 0.62,
+          "end": 0.84
+        },
+        {
+          "word": "the",
+          "start": 0.84,
+          "end": 0.94
+        },
+        {
+          "word": "highway,",
+          "start": 0.94,
+          "end": 1.34
+        },
+        {
+          "word": "dentedright",
+          "start": 1.62,
+          "end": 2.18
+        },
+        {
+          "word": "where",
+          "start": 2.18,
+          "end": 2.3
+        }
+      ]
+    },
+    {
+      "start": 2.78,
+      "end": 4.72,
+      "text": "I'd have hit it if I wasn't aware",
+      "words": [
+        {
+          "word": "I'd",
+          "start": 2.78,
+          "end": 3.32
+        },
+        {
+          "word": "have",
+          "start": 3.32,
+          "end": 3.38
+        },
+        {
+          "word": "hit",
+          "start": 3.38,
+          "end": 3.56
+        },
+        {
+          "word": "it",
+          "start": 3.56,
+          "end": 3.7
+        },
+        {
+          "word": "if",
+          "start": 3.7,
+          "end": 3.88
+        },
+        {
+          "word": "I",
+          "start": 3.88,
+          "end": 4.06
+        },
+        {
+          "word": "wasn't",
+          "start": 4.06,
+          "end": 4.48
+        },
+        {
+          "word": "aware",
+          "start": 4.48,
+          "end": 4.72
+        }
+      ]
+    },
+    {
+      "start": 43.6,
+      "end": 45.35,
+      "text": "listen for the quiet yes;",
+      "words": [
+        {
+          "word": "listen",
+          "start": 43.6,
+          "end": 43.9
+        },
+        {
+          "word": "for",
+          "start": 43.95,
+          "end": 44.25
+        },
+        {
+          "word": "the",
+          "start": 44.3,
+          "end": 44.6
+        },
+        {
+          "word": "quiet",
+          "start": 44.65,
+          "end": 44.95
+        },
+        {
+          "word": "yes;",
+          "start": 45.0,
+          "end": 45.3
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 87.2,
+      "end": 89.3,
+      "text": "What you amplify becomes your rhythm",
+      "words": [
+        {
+          "word": "What",
+          "start": 87.2,
+          "end": 87.5
+        },
+        {
+          "word": "you",
+          "start": 87.55,
+          "end": 87.85
+        },
+        {
+          "word": "amplify",
+          "start": 87.9,
+          "end": 88.2
+        },
+        {
+          "word": "becomes",
+          "start": 88.25,
+          "end": 88.55
+        },
+        {
+          "word": "your",
+          "start": 88.6,
+          "end": 88.9
+        },
+        {
+          "word": "rhythm",
+          "start": 88.95,
+          "end": 89.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 87.2,
+      "end": 88.95,
+      "text": "what you downrank falls behind:",
+      "words": [
+        {
+          "word": "what",
+          "start": 87.2,
+          "end": 87.5
+        },
+        {
+          "word": "you",
+          "start": 87.55,
+          "end": 87.85
+        },
+        {
+          "word": "downrank",
+          "start": 87.9,
+          "end": 88.2
+        },
+        {
+          "word": "falls",
+          "start": 88.25,
+          "end": 88.55
+        },
+        {
+          "word": "behind:",
+          "start": 88.6,
+          "end": 88.9
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 122.11,
+      "end": 123.45,
+      "text": "What's the test?",
+      "words": [
+        {
+          "word": "What's",
+          "start": 122.11,
+          "end": 122.85
+        },
+        {
+          "word": "the",
+          "start": 122.85,
+          "end": 122.93
+        },
+        {
+          "word": "test?",
+          "start": 122.93,
+          "end": 123.45
+        }
+      ]
+    },
+    {
+      "start": 128.69,
+      "end": 135.86,
+      "text": "Treasure's always hiding in the mess:",
+      "words": [
+        {
+          "word": "Treasure's",
+          "start": 128.69,
+          "end": 129.53
+        },
+        {
+          "word": "always",
+          "start": 129.53,
+          "end": 129.95
+        },
+        {
+          "word": "hiding",
+          "start": 129.95,
+          "end": 130.43
+        },
+        {
+          "word": "in",
+          "start": 130.47,
+          "end": 130.67
+        },
+        {
+          "word": "the",
+          "start": 135.18,
+          "end": 135.48
+        },
+        {
+          "word": "mess:",
+          "start": 135.48,
+          "end": 135.86
+        }
+      ]
+    },
+    {
+      "start": 143.89,
+      "end": 145.55,
+      "text": "Treasure in the middle",
+      "words": [
+        {
+          "word": "Treasure",
+          "start": 143.89,
+          "end": 144.47
+        },
+        {
+          "word": "in",
+          "start": 144.47,
+          "end": 145.29
+        },
+        {
+          "word": "the",
+          "start": 145.29,
+          "end": 145.45
+        },
+        {
+          "word": "middle",
+          "start": 145.45,
+          "end": 145.55
+        }
+      ]
+    }
+  ]
+}

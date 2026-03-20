@@ -1,0 +1,312 @@
+{
+  "track": "After Normal",
+  "album": "exploring-laibor-mixtape",
+  "duration": 187.96,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 2.95,
+      "text": "We lined up where the arrows poin't",
+      "words": [
+        {
+          "word": "We",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "lined",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "up",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "where",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "the",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "arrows",
+          "start": 2.25,
+          "end": 2.55
+        },
+        {
+          "word": "poin't",
+          "start": 2.6,
+          "end": 2.9
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 35.07,
+      "end": 62.1,
+      "text": "Stamped and ready to deploy. It's amazing how efficient fear can be when it's polite. This is what we call normal. This is how it's done. It's fun. This is what we call announcing.",
+      "words": [
+        {
+          "word": "Stamped",
+          "start": 35.07,
+          "end": 35.85
+        },
+        {
+          "word": "and",
+          "start": 35.85,
+          "end": 35.97
+        },
+        {
+          "word": "ready",
+          "start": 35.97,
+          "end": 36.17
+        },
+        {
+          "word": "to",
+          "start": 36.17,
+          "end": 36.39
+        },
+        {
+          "word": "deploy.",
+          "start": 36.39,
+          "end": 36.87
+        },
+        {
+          "word": "It's",
+          "start": 37.25,
+          "end": 37.89
+        },
+        {
+          "word": "amazing",
+          "start": 37.89,
+          "end": 38.29
+        },
+        {
+          "word": "how",
+          "start": 38.29,
+          "end": 38.89
+        },
+        {
+          "word": "efficient",
+          "start": 38.89,
+          "end": 39.45
+        },
+        {
+          "word": "fear",
+          "start": 39.45,
+          "end": 39.97
+        },
+        {
+          "word": "can",
+          "start": 39.97,
+          "end": 40.29
+        },
+        {
+          "word": "be",
+          "start": 40.29,
+          "end": 40.65
+        },
+        {
+          "word": "when",
+          "start": 40.65,
+          "end": 41.13
+        },
+        {
+          "word": "it's",
+          "start": 41.13,
+          "end": 41.39
+        },
+        {
+          "word": "polite.",
+          "start": 41.39,
+          "end": 41.67
+        },
+        {
+          "word": "This",
+          "start": 42.13,
+          "end": 42.43
+        },
+        {
+          "word": "is",
+          "start": 44.7,
+          "end": 44.84
+        },
+        {
+          "word": "what",
+          "start": 44.84,
+          "end": 45.08
+        },
+        {
+          "word": "we",
+          "start": 45.08,
+          "end": 45.26
+        },
+        {
+          "word": "call",
+          "start": 45.26,
+          "end": 45.48
+        },
+        {
+          "word": "normal.",
+          "start": 45.48,
+          "end": 45.96
+        },
+        {
+          "word": "This",
+          "start": 46.56,
+          "end": 47.2
+        },
+        {
+          "word": "is",
+          "start": 47.2,
+          "end": 47.36
+        },
+        {
+          "word": "how",
+          "start": 47.36,
+          "end": 47.56
+        },
+        {
+          "word": "it's",
+          "start": 47.56,
+          "end": 48.06
+        },
+        {
+          "word": "done.",
+          "start": 48.06,
+          "end": 48.3
+        },
+        {
+          "word": "It's",
+          "start": 48.5,
+          "end": 49.0
+        },
+        {
+          "word": "fun.",
+          "start": 54.15,
+          "end": 54.39
+        },
+        {
+          "word": "This",
+          "start": 54.53,
+          "end": 54.73
+        },
+        {
+          "word": "is",
+          "start": 54.73,
+          "end": 54.85
+        },
+        {
+          "word": "what",
+          "start": 54.85,
+          "end": 55.11
+        },
+        {
+          "word": "we",
+          "start": 55.11,
+          "end": 55.31
+        },
+        {
+          "word": "call",
+          "start": 55.31,
+          "end": 55.51
+        },
+        {
+          "word": "announcing.",
+          "start": 61.62,
+          "end": 62.1
+        }
+      ]
+    },
+    {
+      "start": 86.8,
+      "end": 93.5,
+      "text": "Outrage wants a megaphone. Amnesia wants a nap. Following instructions.",
+      "words": [
+        {
+          "word": "Outrage",
+          "start": 86.8,
+          "end": 87.36
+        },
+        {
+          "word": "wants",
+          "start": 87.36,
+          "end": 87.7
+        },
+        {
+          "word": "a",
+          "start": 87.7,
+          "end": 87.96
+        },
+        {
+          "word": "megaphone.",
+          "start": 87.96,
+          "end": 88.92
+        },
+        {
+          "word": "Amnesia",
+          "start": 89.22,
+          "end": 89.78
+        },
+        {
+          "word": "wants",
+          "start": 89.78,
+          "end": 90.2
+        },
+        {
+          "word": "a",
+          "start": 90.2,
+          "end": 90.48
+        },
+        {
+          "word": "nap.",
+          "start": 90.48,
+          "end": 90.78
+        },
+        {
+          "word": "Following",
+          "start": 90.92,
+          "end": 91.42
+        },
+        {
+          "word": "instructions.",
+          "start": 92.8,
+          "end": 93.5
+        }
+      ]
+    },
+    {
+      "start": 94.0,
+      "end": 95.4,
+      "text": "Printed on the map",
+      "words": [
+        {
+          "word": "Printed",
+          "start": 94.0,
+          "end": 94.3
+        },
+        {
+          "word": "on",
+          "start": 94.35,
+          "end": 94.65
+        },
+        {
+          "word": "the",
+          "start": 94.7,
+          "end": 95.0
+        },
+        {
+          "word": "map",
+          "start": 95.05,
+          "end": 95.35
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

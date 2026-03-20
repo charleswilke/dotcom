@@ -1,0 +1,978 @@
+{
+  "track": "Refuse The Frequency",
+  "album": "grief-without-ritual",
+  "duration": 245.92,
+  "lines": [
+    {
+      "start": 1.17,
+      "end": 15.28,
+      "text": "Feels like a rash this week, right under the skin",
+      "words": [
+        {
+          "word": "Feels",
+          "start": 1.17,
+          "end": 2.37
+        },
+        {
+          "word": "like",
+          "start": 11.14,
+          "end": 11.48
+        },
+        {
+          "word": "a",
+          "start": 11.48,
+          "end": 11.64
+        },
+        {
+          "word": "rash",
+          "start": 11.64,
+          "end": 11.84
+        },
+        {
+          "word": "this",
+          "start": 11.84,
+          "end": 12.26
+        },
+        {
+          "word": "week,",
+          "start": 12.26,
+          "end": 12.86
+        },
+        {
+          "word": "right",
+          "start": 13.42,
+          "end": 13.7
+        },
+        {
+          "word": "under",
+          "start": 13.7,
+          "end": 14.02
+        },
+        {
+          "word": "the",
+          "start": 14.02,
+          "end": 14.36
+        },
+        {
+          "word": "skin",
+          "start": 14.36,
+          "end": 15.28
+        }
+      ]
+    },
+    {
+      "start": 16.44,
+      "end": 20.2,
+      "text": "Nothing catastrophic, just the itch again",
+      "words": [
+        {
+          "word": "Nothing",
+          "start": 16.44,
+          "end": 17.32
+        },
+        {
+          "word": "catastrophic,",
+          "start": 17.32,
+          "end": 18.2
+        },
+        {
+          "word": "just",
+          "start": 18.84,
+          "end": 19.2
+        },
+        {
+          "word": "the",
+          "start": 19.2,
+          "end": 19.4
+        },
+        {
+          "word": "itch",
+          "start": 19.4,
+          "end": 19.76
+        },
+        {
+          "word": "again",
+          "start": 19.76,
+          "end": 20.2
+        }
+      ]
+    },
+    {
+      "start": 22.03,
+      "end": 27.53,
+      "text": "Headlines falling like sparks on oil, every feet another flame",
+      "words": [
+        {
+          "word": "Headlines",
+          "start": 22.03,
+          "end": 22.91
+        },
+        {
+          "word": "falling",
+          "start": 22.91,
+          "end": 23.49
+        },
+        {
+          "word": "like",
+          "start": 23.49,
+          "end": 24.11
+        },
+        {
+          "word": "sparks",
+          "start": 24.11,
+          "end": 24.53
+        },
+        {
+          "word": "on",
+          "start": 24.53,
+          "end": 24.93
+        },
+        {
+          "word": "oil,",
+          "start": 24.93,
+          "end": 25.25
+        },
+        {
+          "word": "every",
+          "start": 25.45,
+          "end": 25.69
+        },
+        {
+          "word": "feet",
+          "start": 25.69,
+          "end": 26.13
+        },
+        {
+          "word": "another",
+          "start": 26.13,
+          "end": 26.63
+        },
+        {
+          "word": "flame",
+          "start": 26.63,
+          "end": 27.53
+        }
+      ]
+    },
+    {
+      "start": 27.53,
+      "end": 33.11,
+      "text": "Leaks and counter leaks and shouting mouths, all begging for a name",
+      "words": [
+        {
+          "word": "Leaks",
+          "start": 27.53,
+          "end": 28.27
+        },
+        {
+          "word": "and",
+          "start": 28.27,
+          "end": 28.65
+        },
+        {
+          "word": "counter",
+          "start": 28.65,
+          "end": 28.97
+        },
+        {
+          "word": "leaks",
+          "start": 28.97,
+          "end": 29.39
+        },
+        {
+          "word": "and",
+          "start": 29.39,
+          "end": 29.81
+        },
+        {
+          "word": "shouting",
+          "start": 29.81,
+          "end": 30.23
+        },
+        {
+          "word": "mouths,",
+          "start": 30.23,
+          "end": 30.83
+        },
+        {
+          "word": "all",
+          "start": 30.93,
+          "end": 31.27
+        },
+        {
+          "word": "begging",
+          "start": 31.27,
+          "end": 31.65
+        },
+        {
+          "word": "for",
+          "start": 31.65,
+          "end": 32.39
+        },
+        {
+          "word": "a",
+          "start": 32.39,
+          "end": 32.57
+        },
+        {
+          "word": "name",
+          "start": 32.57,
+          "end": 33.11
+        }
+      ]
+    },
+    {
+      "start": 33.11,
+      "end": 38.81,
+      "text": "Your fingers hover over sand, your pulse begins to pitch",
+      "words": [
+        {
+          "word": "Your",
+          "start": 33.11,
+          "end": 33.69
+        },
+        {
+          "word": "fingers",
+          "start": 33.69,
+          "end": 34.05
+        },
+        {
+          "word": "hover",
+          "start": 34.05,
+          "end": 34.61
+        },
+        {
+          "word": "over",
+          "start": 34.61,
+          "end": 35.27
+        },
+        {
+          "word": "sand,",
+          "start": 35.27,
+          "end": 35.89
+        },
+        {
+          "word": "your",
+          "start": 36.69,
+          "end": 36.85
+        },
+        {
+          "word": "pulse",
+          "start": 36.85,
+          "end": 37.35
+        },
+        {
+          "word": "begins",
+          "start": 37.35,
+          "end": 37.85
+        },
+        {
+          "word": "to",
+          "start": 37.85,
+          "end": 38.37
+        },
+        {
+          "word": "pitch",
+          "start": 38.37,
+          "end": 38.81
+        }
+      ]
+    },
+    {
+      "start": 38.81,
+      "end": 44.41,
+      "text": "Funny how the loudest world just keeps asking you to itch",
+      "words": [
+        {
+          "word": "Funny",
+          "start": 38.81,
+          "end": 39.59
+        },
+        {
+          "word": "how",
+          "start": 39.59,
+          "end": 40.01
+        },
+        {
+          "word": "the",
+          "start": 40.01,
+          "end": 40.37
+        },
+        {
+          "word": "loudest",
+          "start": 40.37,
+          "end": 40.99
+        },
+        {
+          "word": "world",
+          "start": 40.99,
+          "end": 41.71
+        },
+        {
+          "word": "just",
+          "start": 41.71,
+          "end": 42.13
+        },
+        {
+          "word": "keeps",
+          "start": 42.13,
+          "end": 42.49
+        },
+        {
+          "word": "asking",
+          "start": 42.49,
+          "end": 43.15
+        },
+        {
+          "word": "you",
+          "start": 43.15,
+          "end": 43.65
+        },
+        {
+          "word": "to",
+          "start": 43.65,
+          "end": 44.09
+        },
+        {
+          "word": "itch",
+          "start": 44.09,
+          "end": 44.41
+        }
+      ]
+    },
+    {
+      "start": 44.41,
+      "end": 49.01,
+      "text": "Scratch it once, the rash will spread",
+      "words": [
+        {
+          "word": "Scratch",
+          "start": 44.41,
+          "end": 45.03
+        },
+        {
+          "word": "it",
+          "start": 45.03,
+          "end": 45.25
+        },
+        {
+          "word": "once,",
+          "start": 45.25,
+          "end": 45.81
+        },
+        {
+          "word": "the",
+          "start": 47.07,
+          "end": 47.29
+        },
+        {
+          "word": "rash",
+          "start": 47.29,
+          "end": 47.69
+        },
+        {
+          "word": "will",
+          "start": 47.69,
+          "end": 48.05
+        },
+        {
+          "word": "spread",
+          "start": 48.05,
+          "end": 49.01
+        }
+      ]
+    },
+    {
+      "start": 49.01,
+      "end": 55.27,
+      "text": "Scratch it twice, you're in its head",
+      "words": [
+        {
+          "word": "Scratch",
+          "start": 49.01,
+          "end": 50.53
+        },
+        {
+          "word": "it",
+          "start": 50.53,
+          "end": 50.83
+        },
+        {
+          "word": "twice,",
+          "start": 50.83,
+          "end": 51.47
+        },
+        {
+          "word": "you're",
+          "start": 52.57,
+          "end": 53.05
+        },
+        {
+          "word": "in",
+          "start": 53.05,
+          "end": 53.33
+        },
+        {
+          "word": "its",
+          "start": 53.33,
+          "end": 53.81
+        },
+        {
+          "word": "head",
+          "start": 53.81,
+          "end": 55.27
+        }
+      ]
+    },
+    {
+      "start": 55.27,
+      "end": 60.99,
+      "text": "Refuse the frequency, let the signal burn out slow",
+      "words": [
+        {
+          "word": "Refuse",
+          "start": 55.27,
+          "end": 56.15
+        },
+        {
+          "word": "the",
+          "start": 56.15,
+          "end": 56.61
+        },
+        {
+          "word": "frequency,",
+          "start": 56.61,
+          "end": 57.85
+        },
+        {
+          "word": "let",
+          "start": 58.31,
+          "end": 58.39
+        },
+        {
+          "word": "the",
+          "start": 58.39,
+          "end": 58.69
+        },
+        {
+          "word": "signal",
+          "start": 58.69,
+          "end": 59.17
+        },
+        {
+          "word": "burn",
+          "start": 59.17,
+          "end": 59.83
+        },
+        {
+          "word": "out",
+          "start": 59.83,
+          "end": 60.29
+        },
+        {
+          "word": "slow",
+          "start": 60.29,
+          "end": 60.99
+        }
+      ]
+    },
+    {
+      "start": 60.99,
+      "end": 66.35,
+      "text": "Not every war that finds your door is one you have to know",
+      "words": [
+        {
+          "word": "Not",
+          "start": 60.99,
+          "end": 61.79
+        },
+        {
+          "word": "every",
+          "start": 61.79,
+          "end": 62.13
+        },
+        {
+          "word": "war",
+          "start": 62.13,
+          "end": 62.43
+        },
+        {
+          "word": "that",
+          "start": 62.43,
+          "end": 62.75
+        },
+        {
+          "word": "finds",
+          "start": 62.75,
+          "end": 63.11
+        },
+        {
+          "word": "your",
+          "start": 63.11,
+          "end": 63.43
+        },
+        {
+          "word": "door",
+          "start": 63.43,
+          "end": 63.87
+        },
+        {
+          "word": "is",
+          "start": 63.87,
+          "end": 64.17
+        },
+        {
+          "word": "one",
+          "start": 64.17,
+          "end": 64.55
+        },
+        {
+          "word": "you",
+          "start": 64.55,
+          "end": 64.91
+        },
+        {
+          "word": "have",
+          "start": 64.91,
+          "end": 65.41
+        },
+        {
+          "word": "to",
+          "start": 65.41,
+          "end": 66.03
+        },
+        {
+          "word": "know",
+          "start": 66.03,
+          "end": 66.35
+        }
+      ]
+    },
+    {
+      "start": 66.35,
+      "end": 71.09,
+      "text": "Stay off the wire, let the static fade",
+      "words": [
+        {
+          "word": "Stay",
+          "start": 66.35,
+          "end": 66.97
+        },
+        {
+          "word": "off",
+          "start": 66.97,
+          "end": 67.33
+        },
+        {
+          "word": "the",
+          "start": 67.33,
+          "end": 67.65
+        },
+        {
+          "word": "wire,",
+          "start": 67.65,
+          "end": 68.47
+        },
+        {
+          "word": "let",
+          "start": 69.23,
+          "end": 69.57
+        },
+        {
+          "word": "the",
+          "start": 69.57,
+          "end": 69.87
+        },
+        {
+          "word": "static",
+          "start": 69.87,
+          "end": 70.15
+        },
+        {
+          "word": "fade",
+          "start": 70.15,
+          "end": 71.09
+        }
+      ]
+    },
+    {
+      "start": 71.09,
+      "end": 76.35,
+      "text": "Some storms collapse when they're not obeyed",
+      "words": [
+        {
+          "word": "Some",
+          "start": 71.09,
+          "end": 72.45
+        },
+        {
+          "word": "storms",
+          "start": 72.45,
+          "end": 72.85
+        },
+        {
+          "word": "collapse",
+          "start": 72.85,
+          "end": 74.75
+        },
+        {
+          "word": "when",
+          "start": 74.75,
+          "end": 75.15
+        },
+        {
+          "word": "they're",
+          "start": 75.15,
+          "end": 75.47
+        },
+        {
+          "word": "not",
+          "start": 75.47,
+          "end": 75.75
+        },
+        {
+          "word": "obeyed",
+          "start": 75.75,
+          "end": 76.35
+        }
+      ]
+    },
+    {
+      "start": 78.16,
+      "end": 83.26,
+      "text": "Refuse the frequency, let the shouting pass you by",
+      "words": [
+        {
+          "word": "Refuse",
+          "start": 78.16,
+          "end": 78.5
+        },
+        {
+          "word": "the",
+          "start": 78.5,
+          "end": 79.14
+        },
+        {
+          "word": "frequency,",
+          "start": 79.14,
+          "end": 80.22
+        },
+        {
+          "word": "let",
+          "start": 80.52,
+          "end": 80.76
+        },
+        {
+          "word": "the",
+          "start": 80.76,
+          "end": 81.08
+        },
+        {
+          "word": "shouting",
+          "start": 81.08,
+          "end": 81.46
+        },
+        {
+          "word": "pass",
+          "start": 81.46,
+          "end": 82.18
+        },
+        {
+          "word": "you",
+          "start": 82.18,
+          "end": 82.74
+        },
+        {
+          "word": "by",
+          "start": 82.74,
+          "end": 83.26
+        }
+      ]
+    },
+    {
+      "start": 83.26,
+      "end": 97.5,
+      "text": "Sometimes the bravest think the signal will tail",
+      "words": [
+        {
+          "word": "Sometimes",
+          "start": 83.26,
+          "end": 84.02
+        },
+        {
+          "word": "the",
+          "start": 84.02,
+          "end": 84.4
+        },
+        {
+          "word": "bravest",
+          "start": 84.4,
+          "end": 85.06
+        },
+        {
+          "word": "think",
+          "start": 85.06,
+          "end": 85.28
+        },
+        {
+          "word": "the",
+          "start": 88.29,
+          "end": 88.67
+        },
+        {
+          "word": "signal",
+          "start": 88.67,
+          "end": 89.79
+        },
+        {
+          "word": "will",
+          "start": 96.42,
+          "end": 96.98
+        },
+        {
+          "word": "tail",
+          "start": 96.98,
+          "end": 97.5
+        }
+      ]
+    },
+    {
+      "start": 97.5,
+      "end": 103.77,
+      "text": "Walking barefoot through the wood ring that bent the world and treated",
+      "words": [
+        {
+          "word": "Walking",
+          "start": 97.5,
+          "end": 98.2
+        },
+        {
+          "word": "barefoot",
+          "start": 98.2,
+          "end": 99.06
+        },
+        {
+          "word": "through",
+          "start": 99.06,
+          "end": 99.44
+        },
+        {
+          "word": "the",
+          "start": 99.44,
+          "end": 99.82
+        },
+        {
+          "word": "wood",
+          "start": 99.82,
+          "end": 100.0
+        },
+        {
+          "word": "ring",
+          "start": 101.31,
+          "end": 101.57
+        },
+        {
+          "word": "that",
+          "start": 101.57,
+          "end": 102.01
+        },
+        {
+          "word": "bent",
+          "start": 102.01,
+          "end": 102.21
+        },
+        {
+          "word": "the",
+          "start": 102.21,
+          "end": 102.63
+        },
+        {
+          "word": "world",
+          "start": 102.63,
+          "end": 103.03
+        },
+        {
+          "word": "and",
+          "start": 103.03,
+          "end": 103.43
+        },
+        {
+          "word": "treated",
+          "start": 103.43,
+          "end": 103.77
+        }
+      ]
+    },
+    {
+      "start": 103.77,
+      "end": 111.64,
+      "text": "Kings lie good on his finger, nothing changed at all",
+      "words": [
+        {
+          "word": "Kings",
+          "start": 103.77,
+          "end": 104.67
+        },
+        {
+          "word": "lie",
+          "start": 104.67,
+          "end": 105.25
+        },
+        {
+          "word": "good",
+          "start": 105.25,
+          "end": 105.49
+        },
+        {
+          "word": "on",
+          "start": 107.44,
+          "end": 107.7
+        },
+        {
+          "word": "his",
+          "start": 107.7,
+          "end": 108.14
+        },
+        {
+          "word": "finger,",
+          "start": 108.14,
+          "end": 108.96
+        },
+        {
+          "word": "nothing",
+          "start": 110.02,
+          "end": 110.02
+        },
+        {
+          "word": "changed",
+          "start": 110.02,
+          "end": 110.74
+        },
+        {
+          "word": "at",
+          "start": 110.74,
+          "end": 111.1
+        },
+        {
+          "word": "all",
+          "start": 111.1,
+          "end": 111.64
+        }
+      ]
+    },
+    {
+      "start": 111.64,
+      "end": 117.06,
+      "text": "Some machines just break apart when you don't answer the call",
+      "words": [
+        {
+          "word": "Some",
+          "start": 111.64,
+          "end": 112.24
+        },
+        {
+          "word": "machines",
+          "start": 112.24,
+          "end": 112.7
+        },
+        {
+          "word": "just",
+          "start": 112.7,
+          "end": 113.14
+        },
+        {
+          "word": "break",
+          "start": 113.14,
+          "end": 113.48
+        },
+        {
+          "word": "apart",
+          "start": 113.48,
+          "end": 114.06
+        },
+        {
+          "word": "when",
+          "start": 114.06,
+          "end": 114.5
+        },
+        {
+          "word": "you",
+          "start": 114.5,
+          "end": 114.76
+        },
+        {
+          "word": "don't",
+          "start": 114.76,
+          "end": 115.74
+        },
+        {
+          "word": "answer",
+          "start": 115.74,
+          "end": 116.1
+        },
+        {
+          "word": "the",
+          "start": 116.1,
+          "end": 116.54
+        },
+        {
+          "word": "call",
+          "start": 116.54,
+          "end": 117.06
+        }
+      ]
+    },
+    {
+      "start": 128.39,
+      "end": 203.87,
+      "text": "Refuse the frequency, let the signal burn out slow",
+      "words": [
+        {
+          "word": "Refuse",
+          "start": 128.39,
+          "end": 128.89
+        },
+        {
+          "word": "the",
+          "start": 128.89,
+          "end": 129.27
+        },
+        {
+          "word": "frequency,",
+          "start": 135.51,
+          "end": 135.85
+        },
+        {
+          "word": "let",
+          "start": 202.99,
+          "end": 203.07
+        },
+        {
+          "word": "the",
+          "start": 203.07,
+          "end": 203.31
+        },
+        {
+          "word": "signal",
+          "start": 203.31,
+          "end": 203.31
+        },
+        {
+          "word": "burn",
+          "start": 203.31,
+          "end": 203.31
+        },
+        {
+          "word": "out",
+          "start": 203.31,
+          "end": 203.69
+        },
+        {
+          "word": "slow",
+          "start": 203.69,
+          "end": 203.87
+        }
+      ]
+    }
+  ]
+}

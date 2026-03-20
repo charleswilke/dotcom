@@ -1,0 +1,215 @@
+{
+  "track": "Certaintys Whimpering End",
+  "album": "exploring-laibor-mixtape",
+  "duration": 193.4,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 2.25,
+      "text": "There'sa tremor in the mind,;",
+      "words": [
+        {
+          "word": "There'sa",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "tremor",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "in",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "the",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "mind,;",
+          "start": 1.9,
+          "end": 2.2
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 0.5,
+      "end": 2.6,
+      "text": "a little tilt in the horizon",
+      "words": [
+        {
+          "word": "a",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "little",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "tilt",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "in",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "the",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "horizon",
+          "start": 2.25,
+          "end": 2.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 48.4,
+      "end": 50.15,
+      "text": "We chase the old agreements;",
+      "words": [
+        {
+          "word": "We",
+          "start": 48.4,
+          "end": 48.7
+        },
+        {
+          "word": "chase",
+          "start": 48.75,
+          "end": 49.05
+        },
+        {
+          "word": "the",
+          "start": 49.1,
+          "end": 49.4
+        },
+        {
+          "word": "old",
+          "start": 49.45,
+          "end": 49.75
+        },
+        {
+          "word": "agreements;",
+          "start": 49.8,
+          "end": 50.1
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 96.8,
+      "end": 98.55,
+      "text": "Yeah the spotlight flickers wildly",
+      "words": [
+        {
+          "word": "Yeah",
+          "start": 96.8,
+          "end": 97.1
+        },
+        {
+          "word": "the",
+          "start": 97.15,
+          "end": 97.45
+        },
+        {
+          "word": "spotlight",
+          "start": 97.5,
+          "end": 97.8
+        },
+        {
+          "word": "flickers",
+          "start": 97.85,
+          "end": 98.15
+        },
+        {
+          "word": "wildly",
+          "start": 98.2,
+          "end": 98.5
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 96.8,
+      "end": 98.55,
+      "text": "in the certainty shadow show:",
+      "words": [
+        {
+          "word": "in",
+          "start": 96.8,
+          "end": 97.1
+        },
+        {
+          "word": "the",
+          "start": 97.15,
+          "end": 97.45
+        },
+        {
+          "word": "certainty",
+          "start": 97.5,
+          "end": 97.8
+        },
+        {
+          "word": "shadow",
+          "start": 97.85,
+          "end": 98.15
+        },
+        {
+          "word": "show:",
+          "start": 98.2,
+          "end": 98.5
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 145.2,
+      "end": 147.3,
+      "text": "Turn the dial (turn the dial);",
+      "words": [
+        {
+          "word": "Turn",
+          "start": 145.2,
+          "end": 145.5
+        },
+        {
+          "word": "the",
+          "start": 145.55,
+          "end": 145.85
+        },
+        {
+          "word": "dial",
+          "start": 145.9,
+          "end": 146.2
+        },
+        {
+          "word": "(turn",
+          "start": 146.25,
+          "end": 146.55
+        },
+        {
+          "word": "the",
+          "start": 146.6,
+          "end": 146.9
+        },
+        {
+          "word": "dial);",
+          "start": 146.95,
+          "end": 147.25
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

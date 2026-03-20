@@ -1,0 +1,350 @@
+{
+  "track": "Compounding Fuzziness",
+  "album": "exploring-laibor-mixtape",
+  "duration": 257.16,
+  "lines": [
+    {
+      "start": 14.8,
+      "end": 28.39,
+      "text": "i used to know who signed the line who took the heat when things went wrong our answers all seem",
+      "words": [
+        {
+          "word": "i",
+          "start": 14.8,
+          "end": 14.94
+        },
+        {
+          "word": "used",
+          "start": 14.94,
+          "end": 15.16
+        },
+        {
+          "word": "to",
+          "start": 15.16,
+          "end": 15.36
+        },
+        {
+          "word": "know",
+          "start": 15.36,
+          "end": 15.68
+        },
+        {
+          "word": "who",
+          "start": 15.68,
+          "end": 15.84
+        },
+        {
+          "word": "signed",
+          "start": 15.84,
+          "end": 16.3
+        },
+        {
+          "word": "the",
+          "start": 16.3,
+          "end": 16.56
+        },
+        {
+          "word": "line",
+          "start": 16.56,
+          "end": 16.98
+        },
+        {
+          "word": "who",
+          "start": 16.98,
+          "end": 17.72
+        },
+        {
+          "word": "took",
+          "start": 19.99,
+          "end": 20.41
+        },
+        {
+          "word": "the",
+          "start": 20.41,
+          "end": 20.55
+        },
+        {
+          "word": "heat",
+          "start": 20.55,
+          "end": 20.95
+        },
+        {
+          "word": "when",
+          "start": 20.95,
+          "end": 21.27
+        },
+        {
+          "word": "things",
+          "start": 21.27,
+          "end": 21.71
+        },
+        {
+          "word": "went",
+          "start": 21.71,
+          "end": 22.13
+        },
+        {
+          "word": "wrong",
+          "start": 22.13,
+          "end": 23.11
+        },
+        {
+          "word": "our",
+          "start": 23.11,
+          "end": 23.63
+        },
+        {
+          "word": "answers",
+          "start": 26.99,
+          "end": 27.49
+        },
+        {
+          "word": "all",
+          "start": 27.49,
+          "end": 27.97
+        },
+        {
+          "word": "seem",
+          "start": 27.97,
+          "end": 28.39
+        }
+      ]
+    },
+    {
+      "start": 64.4,
+      "end": 66.15,
+      "text": "Feels like truth is averaged",
+      "words": [
+        {
+          "word": "Feels",
+          "start": 64.4,
+          "end": 64.7
+        },
+        {
+          "word": "like",
+          "start": 64.75,
+          "end": 65.05
+        },
+        {
+          "word": "truth",
+          "start": 65.1,
+          "end": 65.4
+        },
+        {
+          "word": "is",
+          "start": 65.45,
+          "end": 65.75
+        },
+        {
+          "word": "averaged",
+          "start": 65.8,
+          "end": 66.1
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 64.4,
+      "end": 66.5,
+      "text": "While we let the question slide",
+      "words": [
+        {
+          "word": "While",
+          "start": 64.4,
+          "end": 64.7
+        },
+        {
+          "word": "we",
+          "start": 64.75,
+          "end": 65.05
+        },
+        {
+          "word": "let",
+          "start": 65.1,
+          "end": 65.4
+        },
+        {
+          "word": "the",
+          "start": 65.45,
+          "end": 65.75
+        },
+        {
+          "word": "question",
+          "start": 65.8,
+          "end": 66.1
+        },
+        {
+          "word": "slide",
+          "start": 66.15,
+          "end": 66.45
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 128.8,
+      "end": 130.2,
+      "text": "Blind confidence beaming proudest",
+      "words": [
+        {
+          "word": "Blind",
+          "start": 128.8,
+          "end": 129.1
+        },
+        {
+          "word": "confidence",
+          "start": 129.15,
+          "end": 129.45
+        },
+        {
+          "word": "beaming",
+          "start": 129.5,
+          "end": 129.8
+        },
+        {
+          "word": "proudest",
+          "start": 129.85,
+          "end": 130.15
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 128.8,
+      "end": 130.55,
+      "text": "Idon't mind a little blur",
+      "words": [
+        {
+          "word": "Idon't",
+          "start": 128.8,
+          "end": 129.1
+        },
+        {
+          "word": "mind",
+          "start": 129.15,
+          "end": 129.45
+        },
+        {
+          "word": "a",
+          "start": 129.5,
+          "end": 129.8
+        },
+        {
+          "word": "little",
+          "start": 129.85,
+          "end": 130.15
+        },
+        {
+          "word": "blur",
+          "start": 130.2,
+          "end": 130.5
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 128.8,
+      "end": 130.9,
+      "text": "Ijust wan't to know the shape",
+      "words": [
+        {
+          "word": "Ijust",
+          "start": 128.8,
+          "end": 129.1
+        },
+        {
+          "word": "wan't",
+          "start": 129.15,
+          "end": 129.45
+        },
+        {
+          "word": "to",
+          "start": 129.5,
+          "end": 129.8
+        },
+        {
+          "word": "know",
+          "start": 129.85,
+          "end": 130.15
+        },
+        {
+          "word": "the",
+          "start": 130.2,
+          "end": 130.5
+        },
+        {
+          "word": "shape",
+          "start": 130.55,
+          "end": 130.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 193.0,
+      "end": 194.75,
+      "text": "Fmnot afraid of not knowing",
+      "words": [
+        {
+          "word": "Fmnot",
+          "start": 193.0,
+          "end": 193.3
+        },
+        {
+          "word": "afraid",
+          "start": 193.35,
+          "end": 193.65
+        },
+        {
+          "word": "of",
+          "start": 193.7,
+          "end": 194.0
+        },
+        {
+          "word": "not",
+          "start": 194.05,
+          "end": 194.35
+        },
+        {
+          "word": "knowing",
+          "start": 194.4,
+          "end": 194.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 193.0,
+      "end": 194.75,
+      "text": "I'm scared of thinking do",
+      "words": [
+        {
+          "word": "I'm",
+          "start": 193.0,
+          "end": 193.3
+        },
+        {
+          "word": "scared",
+          "start": 193.35,
+          "end": 193.65
+        },
+        {
+          "word": "of",
+          "start": 193.7,
+          "end": 194.0
+        },
+        {
+          "word": "thinking",
+          "start": 194.05,
+          "end": 194.35
+        },
+        {
+          "word": "do",
+          "start": 194.4,
+          "end": 194.7
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "track": "Hum Of Humanity",
+  "album": "exploring-laibor-mixtape",
+  "duration": 209.894,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 1.9,
+      "text": "A thin, tight line:",
+      "words": [
+        {
+          "word": "A",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "thin,",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "tight",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "line:",
+          "start": 1.55,
+          "end": 1.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 52.6,
+      "end": 54.0,
+      "text": "Can guide you home.",
+      "words": [
+        {
+          "word": "Can",
+          "start": 52.6,
+          "end": 52.9
+        },
+        {
+          "word": "guide",
+          "start": 52.95,
+          "end": 53.25
+        },
+        {
+          "word": "you",
+          "start": 53.3,
+          "end": 53.6
+        },
+        {
+          "word": "home.",
+          "start": 53.65,
+          "end": 53.95
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 105.2,
+      "end": 106.6,
+      "text": "Can shift the land:",
+      "words": [
+        {
+          "word": "Can",
+          "start": 105.2,
+          "end": 105.5
+        },
+        {
+          "word": "shift",
+          "start": 105.55,
+          "end": 105.85
+        },
+        {
+          "word": "the",
+          "start": 105.9,
+          "end": 106.2
+        },
+        {
+          "word": "land:",
+          "start": 106.25,
+          "end": 106.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 105.2,
+      "end": 106.6,
+      "text": "We're not the fruit",
+      "words": [
+        {
+          "word": "We're",
+          "start": 105.2,
+          "end": 105.5
+        },
+        {
+          "word": "not",
+          "start": 105.55,
+          "end": 105.85
+        },
+        {
+          "word": "the",
+          "start": 105.9,
+          "end": 106.2
+        },
+        {
+          "word": "fruit",
+          "start": 106.25,
+          "end": 106.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 157.6,
+      "end": 159.35,
+      "text": "When you choose to stay:",
+      "words": [
+        {
+          "word": "When",
+          "start": 157.6,
+          "end": 157.9
+        },
+        {
+          "word": "you",
+          "start": 157.95,
+          "end": 158.25
+        },
+        {
+          "word": "choose",
+          "start": 158.3,
+          "end": 158.6
+        },
+        {
+          "word": "to",
+          "start": 158.65,
+          "end": 158.95
+        },
+        {
+          "word": "stay:",
+          "start": 159.0,
+          "end": 159.3
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 157.6,
+      "end": 159.0,
+      "text": "This is the hum",
+      "words": [
+        {
+          "word": "This",
+          "start": 157.6,
+          "end": 157.9
+        },
+        {
+          "word": "is",
+          "start": 157.95,
+          "end": 158.25
+        },
+        {
+          "word": "the",
+          "start": 158.3,
+          "end": 158.6
+        },
+        {
+          "word": "hum",
+          "start": 158.65,
+          "end": 158.95
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 157.6,
+      "end": 159.0,
+      "text": "The wide, true tide.",
+      "words": [
+        {
+          "word": "The",
+          "start": 157.6,
+          "end": 157.9
+        },
+        {
+          "word": "wide,",
+          "start": 157.95,
+          "end": 158.25
+        },
+        {
+          "word": "true",
+          "start": 158.3,
+          "end": 158.6
+        },
+        {
+          "word": "tide.",
+          "start": 158.65,
+          "end": 158.95
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

@@ -1,0 +1,984 @@
+{
+  "track": "When Doctrine Slips",
+  "album": "grief-without-ritual",
+  "duration": 209.76,
+  "lines": [
+    {
+      "start": 0.53,
+      "end": 5.43,
+      "text": "We built tall walls from tape",
+      "words": [
+        {
+          "word": "We",
+          "start": 0.53,
+          "end": 0.99
+        },
+        {
+          "word": "built",
+          "start": 0.99,
+          "end": 1.91
+        },
+        {
+          "word": "tall",
+          "start": 1.91,
+          "end": 2.85
+        },
+        {
+          "word": "walls",
+          "start": 2.85,
+          "end": 4.03
+        },
+        {
+          "word": "from",
+          "start": 4.03,
+          "end": 4.83
+        },
+        {
+          "word": "tape",
+          "start": 4.83,
+          "end": 5.43
+        }
+      ]
+    },
+    {
+      "start": 5.43,
+      "end": 8.47,
+      "text": "Hung love in a gold frame",
+      "words": [
+        {
+          "word": "Hung",
+          "start": 5.43,
+          "end": 6.15
+        },
+        {
+          "word": "love",
+          "start": 6.15,
+          "end": 6.63
+        },
+        {
+          "word": "in",
+          "start": 6.63,
+          "end": 7.43
+        },
+        {
+          "word": "a",
+          "start": 7.43,
+          "end": 7.61
+        },
+        {
+          "word": "gold",
+          "start": 7.61,
+          "end": 7.93
+        },
+        {
+          "word": "frame",
+          "start": 7.93,
+          "end": 8.47
+        }
+      ]
+    },
+    {
+      "start": 8.47,
+      "end": 12.11,
+      "text": "Stamped process on thin gates",
+      "words": [
+        {
+          "word": "Stamped",
+          "start": 8.47,
+          "end": 9.69
+        },
+        {
+          "word": "process",
+          "start": 9.69,
+          "end": 10.33
+        },
+        {
+          "word": "on",
+          "start": 10.33,
+          "end": 10.87
+        },
+        {
+          "word": "thin",
+          "start": 10.87,
+          "end": 11.39
+        },
+        {
+          "word": "gates",
+          "start": 11.39,
+          "end": 12.11
+        }
+      ]
+    },
+    {
+      "start": 12.11,
+      "end": 15.27,
+      "text": "Called star by a new name",
+      "words": [
+        {
+          "word": "Called",
+          "start": 12.11,
+          "end": 12.57
+        },
+        {
+          "word": "star",
+          "start": 12.57,
+          "end": 13.35
+        },
+        {
+          "word": "by",
+          "start": 13.35,
+          "end": 14.09
+        },
+        {
+          "word": "a",
+          "start": 14.09,
+          "end": 14.37
+        },
+        {
+          "word": "new",
+          "start": 14.37,
+          "end": 14.57
+        },
+        {
+          "word": "name",
+          "start": 14.57,
+          "end": 15.27
+        }
+      ]
+    },
+    {
+      "start": 15.27,
+      "end": 23.86,
+      "text": "Speed dressed up aslaw",
+      "words": [
+        {
+          "word": "Speed",
+          "start": 15.27,
+          "end": 15.91
+        },
+        {
+          "word": "dressed",
+          "start": 21.7,
+          "end": 22.22
+        },
+        {
+          "word": "up",
+          "start": 22.52,
+          "end": 23.36
+        },
+        {
+          "word": "aslaw",
+          "start": 23.36,
+          "end": 23.86
+        }
+      ]
+    },
+    {
+      "start": 21.0,
+      "end": 22.4,
+      "text": "It's all for show",
+      "words": [
+        {
+          "word": "It's",
+          "start": 21.0,
+          "end": 21.3
+        },
+        {
+          "word": "all",
+          "start": 21.35,
+          "end": 21.65
+        },
+        {
+          "word": "for",
+          "start": 21.7,
+          "end": 22.0
+        },
+        {
+          "word": "show",
+          "start": 22.05,
+          "end": 22.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 24.76,
+      "end": 26.18,
+      "text": "Gave fear a crown",
+      "words": [
+        {
+          "word": "Gave",
+          "start": 24.76,
+          "end": 25.28
+        },
+        {
+          "word": "fear",
+          "start": 25.28,
+          "end": 25.64
+        },
+        {
+          "word": "a",
+          "start": 25.64,
+          "end": 25.82
+        },
+        {
+          "word": "crown",
+          "start": 25.82,
+          "end": 26.18
+        }
+      ]
+    },
+    {
+      "start": 26.18,
+      "end": 30.74,
+      "text": "Quick hands rule, slow truths drown",
+      "words": [
+        {
+          "word": "Quick",
+          "start": 26.18,
+          "end": 27.24
+        },
+        {
+          "word": "hands",
+          "start": 27.24,
+          "end": 27.68
+        },
+        {
+          "word": "rule,",
+          "start": 27.68,
+          "end": 28.0
+        },
+        {
+          "word": "slow",
+          "start": 28.26,
+          "end": 28.94
+        },
+        {
+          "word": "truths",
+          "start": 28.94,
+          "end": 29.8
+        },
+        {
+          "word": "drown",
+          "start": 29.8,
+          "end": 30.74
+        }
+      ]
+    },
+    {
+      "start": 30.74,
+      "end": 38.07,
+      "text": "Trance slips and motives show",
+      "words": [
+        {
+          "word": "Trance",
+          "start": 30.74,
+          "end": 31.72
+        },
+        {
+          "word": "slips",
+          "start": 36.33,
+          "end": 36.59
+        },
+        {
+          "word": "and",
+          "start": 36.59,
+          "end": 37.03
+        },
+        {
+          "word": "motives",
+          "start": 37.03,
+          "end": 37.41
+        },
+        {
+          "word": "show",
+          "start": 37.41,
+          "end": 38.07
+        }
+      ]
+    },
+    {
+      "start": 38.07,
+      "end": 39.87,
+      "text": "What holds the weight?",
+      "words": [
+        {
+          "word": "What",
+          "start": 38.07,
+          "end": 38.59
+        },
+        {
+          "word": "holds",
+          "start": 38.59,
+          "end": 39.23
+        },
+        {
+          "word": "the",
+          "start": 39.23,
+          "end": 39.51
+        },
+        {
+          "word": "weight?",
+          "start": 39.51,
+          "end": 39.87
+        }
+      ]
+    },
+    {
+      "start": 41.49,
+      "end": 44.89,
+      "text": "If mercy swings that wrecking ball",
+      "words": [
+        {
+          "word": "If",
+          "start": 41.49,
+          "end": 42.03
+        },
+        {
+          "word": "mercy",
+          "start": 42.03,
+          "end": 42.67
+        },
+        {
+          "word": "swings",
+          "start": 42.67,
+          "end": 43.33
+        },
+        {
+          "word": "that",
+          "start": 43.33,
+          "end": 43.81
+        },
+        {
+          "word": "wrecking",
+          "start": 43.81,
+          "end": 44.45
+        },
+        {
+          "word": "ball",
+          "start": 44.45,
+          "end": 44.89
+        }
+      ]
+    },
+    {
+      "start": 44.0,
+      "end": 45.75,
+      "text": "Jatefon Feit If mercy swings",
+      "words": [
+        {
+          "word": "Jatefon",
+          "start": 44.0,
+          "end": 44.3
+        },
+        {
+          "word": "Feit",
+          "start": 44.35,
+          "end": 44.65
+        },
+        {
+          "word": "If",
+          "start": 44.7,
+          "end": 45.0
+        },
+        {
+          "word": "mercy",
+          "start": 45.05,
+          "end": 45.35
+        },
+        {
+          "word": "swings",
+          "start": 45.4,
+          "end": 45.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 45.0,
+      "end": 46.4,
+      "text": "It's not the end",
+      "words": [
+        {
+          "word": "It's",
+          "start": 45.0,
+          "end": 45.3
+        },
+        {
+          "word": "not",
+          "start": 45.35,
+          "end": 45.65
+        },
+        {
+          "word": "the",
+          "start": 45.7,
+          "end": 46.0
+        },
+        {
+          "word": "end",
+          "start": 46.05,
+          "end": 46.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 47.0,
+      "end": 48.4,
+      "text": "Just stresses the walls",
+      "words": [
+        {
+          "word": "Just",
+          "start": 47.0,
+          "end": 47.3
+        },
+        {
+          "word": "stresses",
+          "start": 47.35,
+          "end": 47.65
+        },
+        {
+          "word": "the",
+          "start": 47.7,
+          "end": 48.0
+        },
+        {
+          "word": "walls",
+          "start": 48.05,
+          "end": 48.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 48.0,
+      "end": 49.4,
+      "text": "The beams all shake",
+      "words": [
+        {
+          "word": "The",
+          "start": 48.0,
+          "end": 48.3
+        },
+        {
+          "word": "beams",
+          "start": 48.35,
+          "end": 48.65
+        },
+        {
+          "word": "all",
+          "start": 48.7,
+          "end": 49.0
+        },
+        {
+          "word": "shake",
+          "start": 49.05,
+          "end": 49.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 86.0,
+      "end": 87.4,
+      "text": "No roots in ground",
+      "words": [
+        {
+          "word": "No",
+          "start": 86.0,
+          "end": 86.3
+        },
+        {
+          "word": "roots",
+          "start": 86.35,
+          "end": 86.65
+        },
+        {
+          "word": "in",
+          "start": 86.7,
+          "end": 87.0
+        },
+        {
+          "word": "ground",
+          "start": 87.05,
+          "end": 87.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 87.86,
+      "end": 91.52,
+      "text": "Charts glow blue, lines climb fast",
+      "words": [
+        {
+          "word": "Charts",
+          "start": 87.86,
+          "end": 89.16
+        },
+        {
+          "word": "glow",
+          "start": 89.16,
+          "end": 89.32
+        },
+        {
+          "word": "blue,",
+          "start": 89.32,
+          "end": 89.74
+        },
+        {
+          "word": "lines",
+          "start": 89.98,
+          "end": 90.6
+        },
+        {
+          "word": "climb",
+          "start": 90.6,
+          "end": 91.04
+        },
+        {
+          "word": "fast",
+          "start": 91.04,
+          "end": 91.52
+        }
+      ]
+    },
+    {
+      "start": 91.52,
+      "end": 94.76,
+      "text": "Jobs drop out, but growth holds fast",
+      "words": [
+        {
+          "word": "Jobs",
+          "start": 91.52,
+          "end": 92.18
+        },
+        {
+          "word": "drop",
+          "start": 92.18,
+          "end": 92.76
+        },
+        {
+          "word": "out,",
+          "start": 92.76,
+          "end": 93.3
+        },
+        {
+          "word": "but",
+          "start": 93.36,
+          "end": 93.58
+        },
+        {
+          "word": "growth",
+          "start": 93.58,
+          "end": 93.86
+        },
+        {
+          "word": "holds",
+          "start": 93.86,
+          "end": 94.36
+        },
+        {
+          "word": "fast",
+          "start": 94.36,
+          "end": 94.76
+        }
+      ]
+    },
+    {
+      "start": 94.76,
+      "end": 96.7,
+      "text": "Ajudge we'd host",
+      "words": [
+        {
+          "word": "Ajudge",
+          "start": 94.76,
+          "end": 95.88
+        },
+        {
+          "word": "we'd",
+          "start": 95.88,
+          "end": 96.16
+        },
+        {
+          "word": "host",
+          "start": 96.16,
+          "end": 96.7
+        }
+      ]
+    },
+    {
+      "start": 98.2,
+      "end": 101.58,
+      "text": "Now judgment's wide, we stand exposed",
+      "words": [
+        {
+          "word": "Now",
+          "start": 98.2,
+          "end": 98.7
+        },
+        {
+          "word": "judgment's",
+          "start": 98.7,
+          "end": 99.8
+        },
+        {
+          "word": "wide,",
+          "start": 99.8,
+          "end": 99.96
+        },
+        {
+          "word": "we",
+          "start": 100.16,
+          "end": 100.36
+        },
+        {
+          "word": "stand",
+          "start": 100.36,
+          "end": 100.76
+        },
+        {
+          "word": "exposed",
+          "start": 100.76,
+          "end": 101.58
+        }
+      ]
+    },
+    {
+      "start": 101.58,
+      "end": 104.92,
+      "text": "Plenty's not kind, it strips things bare",
+      "words": [
+        {
+          "word": "Plenty's",
+          "start": 101.58,
+          "end": 102.74
+        },
+        {
+          "word": "not",
+          "start": 102.74,
+          "end": 102.84
+        },
+        {
+          "word": "kind,",
+          "start": 102.84,
+          "end": 103.44
+        },
+        {
+          "word": "it",
+          "start": 103.52,
+          "end": 103.72
+        },
+        {
+          "word": "strips",
+          "start": 103.72,
+          "end": 104.0
+        },
+        {
+          "word": "things",
+          "start": 104.0,
+          "end": 104.42
+        },
+        {
+          "word": "bare",
+          "start": 104.42,
+          "end": 104.92
+        }
+      ]
+    },
+    {
+      "start": 104.0,
+      "end": 105.4,
+      "text": "When lack is gone",
+      "words": [
+        {
+          "word": "When",
+          "start": 104.0,
+          "end": 104.3
+        },
+        {
+          "word": "lack",
+          "start": 104.35,
+          "end": 104.65
+        },
+        {
+          "word": "is",
+          "start": 104.7,
+          "end": 105.0
+        },
+        {
+          "word": "gone",
+          "start": 105.05,
+          "end": 105.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 104.92,
+      "end": 109.717,
+      "text": "Thats not weak",
+      "words": [
+        {
+          "word": "Thats",
+          "start": 104.92,
+          "end": 105.78
+        },
+        {
+          "word": "not",
+          "start": 108.18,
+          "end": 108.48
+        },
+        {
+          "word": "weak",
+          "start": 108.53,
+          "end": 109.717
+        }
+      ]
+    },
+    {
+      "start": 108.7,
+      "end": 116.01,
+      "text": "Fires don't start",
+      "words": [
+        {
+          "word": "Fires",
+          "start": 108.7,
+          "end": 109.24
+        },
+        {
+          "word": "don't",
+          "start": 115.23,
+          "end": 115.75
+        },
+        {
+          "word": "start",
+          "start": 115.75,
+          "end": 116.01
+        }
+      ]
+    },
+    {
+      "start": 116.0,
+      "end": 117.4,
+      "text": "They free the heat",
+      "words": [
+        {
+          "word": "They",
+          "start": 116.0,
+          "end": 116.3
+        },
+        {
+          "word": "free",
+          "start": 116.35,
+          "end": 116.65
+        },
+        {
+          "word": "the",
+          "start": 116.7,
+          "end": 117.0
+        },
+        {
+          "word": "heat",
+          "start": 117.05,
+          "end": 117.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 123.6,
+      "end": 127.144,
+      "text": "When Doctrine Slips by cwllke",
+      "words": [
+        {
+          "word": "When",
+          "start": 123.6,
+          "end": 124.8
+        },
+        {
+          "word": "Doctrine",
+          "start": 124.8,
+          "end": 125.46
+        },
+        {
+          "word": "Slips",
+          "start": 125.46,
+          "end": 126.06
+        },
+        {
+          "word": "by",
+          "start": 126.11,
+          "end": 126.602
+        },
+        {
+          "word": "cwllke",
+          "start": 126.652,
+          "end": 127.144
+        }
+      ]
+    },
+    {
+      "start": 126.08,
+      "end": 127.62,
+      "text": "Slips and speed takes throne",
+      "words": [
+        {
+          "word": "Slips",
+          "start": 126.08,
+          "end": 126.4
+        },
+        {
+          "word": "and",
+          "start": 126.4,
+          "end": 126.52
+        },
+        {
+          "word": "speed",
+          "start": 126.52,
+          "end": 126.76
+        },
+        {
+          "word": "takes",
+          "start": 126.76,
+          "end": 127.2
+        },
+        {
+          "word": "throne",
+          "start": 127.2,
+          "end": 127.62
+        }
+      ]
+    },
+    {
+      "start": 127.62,
+      "end": 131.02,
+      "text": "We feel the crack down to bone",
+      "words": [
+        {
+          "word": "We",
+          "start": 127.62,
+          "end": 128.18
+        },
+        {
+          "word": "feel",
+          "start": 128.18,
+          "end": 128.72
+        },
+        {
+          "word": "the",
+          "start": 128.72,
+          "end": 129.08
+        },
+        {
+          "word": "crack",
+          "start": 129.08,
+          "end": 129.34
+        },
+        {
+          "word": "down",
+          "start": 129.34,
+          "end": 130.34
+        },
+        {
+          "word": "to",
+          "start": 130.34,
+          "end": 130.6
+        },
+        {
+          "word": "bone",
+          "start": 130.6,
+          "end": 131.02
+        }
+      ]
+    },
+    {
+      "start": 131.02,
+      "end": 132.94,
+      "text": "If sure things fall",
+      "words": [
+        {
+          "word": "If",
+          "start": 131.02,
+          "end": 131.64
+        },
+        {
+          "word": "sure",
+          "start": 131.64,
+          "end": 132.02
+        },
+        {
+          "word": "things",
+          "start": 132.02,
+          "end": 132.5
+        },
+        {
+          "word": "fall",
+          "start": 132.5,
+          "end": 132.94
+        }
+      ]
+    },
+    {
+      "start": 146.0,
+      "end": 147.75,
+      "text": "Thal's Ilot weak That's clarity",
+      "words": [
+        {
+          "word": "Thal's",
+          "start": 146.0,
+          "end": 146.3
+        },
+        {
+          "word": "Ilot",
+          "start": 146.35,
+          "end": 146.65
+        },
+        {
+          "word": "weak",
+          "start": 146.7,
+          "end": 147.0
+        },
+        {
+          "word": "That's",
+          "start": 147.05,
+          "end": 147.35
+        },
+        {
+          "word": "clarity",
+          "start": 147.4,
+          "end": 147.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 149.0,
+      "end": 150.4,
+      "text": "The reckoning's not coming:",
+      "words": [
+        {
+          "word": "The",
+          "start": 149.0,
+          "end": 149.3
+        },
+        {
+          "word": "reckoning's",
+          "start": 149.35,
+          "end": 149.65
+        },
+        {
+          "word": "not",
+          "start": 149.7,
+          "end": 150.0
+        },
+        {
+          "word": "coming:",
+          "start": 150.05,
+          "end": 150.35
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

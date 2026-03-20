@@ -1,0 +1,260 @@
+{
+  "track": "Rubicon D Demo",
+  "album": "exploring-laibor-mixtape",
+  "duration": 187.16,
+  "lines": [
+    {
+      "start": 19.04,
+      "end": 25.751,
+      "text": "They say John Henry beat the iron for a momen't or two; But the steam kept comin' like it always do",
+      "words": [
+        {
+          "word": "They",
+          "start": 19.04,
+          "end": 19.14
+        },
+        {
+          "word": "say",
+          "start": 19.14,
+          "end": 19.58
+        },
+        {
+          "word": "John",
+          "start": 19.58,
+          "end": 19.9
+        },
+        {
+          "word": "Henry",
+          "start": 19.9,
+          "end": 20.24
+        },
+        {
+          "word": "beat",
+          "start": 20.24,
+          "end": 20.74
+        },
+        {
+          "word": "the",
+          "start": 20.74,
+          "end": 21.08
+        },
+        {
+          "word": "iron",
+          "start": 21.08,
+          "end": 21.5
+        },
+        {
+          "word": "for",
+          "start": 21.5,
+          "end": 21.9
+        },
+        {
+          "word": "a",
+          "start": 21.9,
+          "end": 22.2
+        },
+        {
+          "word": "momen't",
+          "start": 22.2,
+          "end": 22.76
+        },
+        {
+          "word": "or",
+          "start": 22.76,
+          "end": 23.1
+        },
+        {
+          "word": "two;",
+          "start": 23.1,
+          "end": 23.42
+        },
+        {
+          "word": "But",
+          "start": 23.47,
+          "end": 23.679
+        },
+        {
+          "word": "the",
+          "start": 23.729,
+          "end": 23.938
+        },
+        {
+          "word": "steam",
+          "start": 23.988,
+          "end": 24.197
+        },
+        {
+          "word": "kept",
+          "start": 24.247,
+          "end": 24.456
+        },
+        {
+          "word": "comin'",
+          "start": 24.506,
+          "end": 24.715
+        },
+        {
+          "word": "like",
+          "start": 24.765,
+          "end": 24.974
+        },
+        {
+          "word": "it",
+          "start": 25.024,
+          "end": 25.233
+        },
+        {
+          "word": "always",
+          "start": 25.283,
+          "end": 25.492
+        },
+        {
+          "word": "do",
+          "start": 25.542,
+          "end": 25.751
+        }
+      ]
+    },
+    {
+      "start": 89.58,
+      "end": 93.98,
+      "text": "Make a world already tossed",
+      "words": [
+        {
+          "word": "Make",
+          "start": 89.58,
+          "end": 90.0
+        },
+        {
+          "word": "a",
+          "start": 91.44,
+          "end": 91.54
+        },
+        {
+          "word": "world",
+          "start": 91.54,
+          "end": 92.2
+        },
+        {
+          "word": "already",
+          "start": 92.2,
+          "end": 92.96
+        },
+        {
+          "word": "tossed",
+          "start": 92.96,
+          "end": 93.98
+        }
+      ]
+    },
+    {
+      "start": 136.32,
+      "end": 141.12,
+      "text": "What you shape in the dark might become your friend",
+      "words": [
+        {
+          "word": "What",
+          "start": 136.32,
+          "end": 137.22
+        },
+        {
+          "word": "you",
+          "start": 137.22,
+          "end": 137.44
+        },
+        {
+          "word": "shape",
+          "start": 137.44,
+          "end": 137.88
+        },
+        {
+          "word": "in",
+          "start": 137.88,
+          "end": 138.46
+        },
+        {
+          "word": "the",
+          "start": 138.46,
+          "end": 138.68
+        },
+        {
+          "word": "dark",
+          "start": 138.68,
+          "end": 139.2
+        },
+        {
+          "word": "might",
+          "start": 139.2,
+          "end": 139.54
+        },
+        {
+          "word": "become",
+          "start": 139.54,
+          "end": 140.1
+        },
+        {
+          "word": "your",
+          "start": 140.1,
+          "end": 140.48
+        },
+        {
+          "word": "friend",
+          "start": 140.48,
+          "end": 141.12
+        }
+      ]
+    },
+    {
+      "start": 141.12,
+      "end": 146.0,
+      "text": "Or the path you walk to the very end",
+      "words": [
+        {
+          "word": "Or",
+          "start": 141.12,
+          "end": 141.9
+        },
+        {
+          "word": "the",
+          "start": 141.9,
+          "end": 142.18
+        },
+        {
+          "word": "path",
+          "start": 142.18,
+          "end": 142.68
+        },
+        {
+          "word": "you",
+          "start": 142.68,
+          "end": 143.4
+        },
+        {
+          "word": "walk",
+          "start": 143.4,
+          "end": 143.88
+        },
+        {
+          "word": "to",
+          "start": 143.88,
+          "end": 144.2
+        },
+        {
+          "word": "the",
+          "start": 144.2,
+          "end": 144.54
+        },
+        {
+          "word": "very",
+          "start": 144.54,
+          "end": 145.06
+        },
+        {
+          "word": "end",
+          "start": 145.06,
+          "end": 146.0
+        }
+      ]
+    }
+  ]
+}

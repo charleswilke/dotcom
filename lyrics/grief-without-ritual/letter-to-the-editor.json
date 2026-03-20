@@ -1,0 +1,548 @@
+{
+  "track": "Letter To The Editor",
+  "album": "grief-without-ritual",
+  "duration": 313.04,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 3.3,
+      "text": "The paper hit the porch at seven sharp",
+      "words": [
+        {
+          "word": "The",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "paper",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "hit",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "the",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "porch",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "at",
+          "start": 2.25,
+          "end": 2.55
+        },
+        {
+          "word": "seven",
+          "start": 2.6,
+          "end": 2.9
+        },
+        {
+          "word": "sharp",
+          "start": 2.95,
+          "end": 3.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 0.5,
+      "end": 10.65,
+      "text": "Same as every day, same old tune Trt p A: 4 Id (n al Uy # w Mal Hal Ard % 4 # & Jt 6u6 AL (a =",
+      "words": [
+        {
+          "word": "Same",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "as",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "every",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "day,",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "same",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "old",
+          "start": 2.25,
+          "end": 2.55
+        },
+        {
+          "word": "tune",
+          "start": 2.6,
+          "end": 2.9
+        },
+        {
+          "word": "Trt",
+          "start": 2.95,
+          "end": 3.25
+        },
+        {
+          "word": "p",
+          "start": 3.3,
+          "end": 3.6
+        },
+        {
+          "word": "A:",
+          "start": 3.65,
+          "end": 3.95
+        },
+        {
+          "word": "4",
+          "start": 4.0,
+          "end": 4.3
+        },
+        {
+          "word": "Id",
+          "start": 4.35,
+          "end": 4.65
+        },
+        {
+          "word": "(n",
+          "start": 4.7,
+          "end": 5.0
+        },
+        {
+          "word": "al",
+          "start": 5.05,
+          "end": 5.35
+        },
+        {
+          "word": "Uy",
+          "start": 5.4,
+          "end": 5.7
+        },
+        {
+          "word": "#",
+          "start": 5.75,
+          "end": 6.05
+        },
+        {
+          "word": "w",
+          "start": 6.1,
+          "end": 6.4
+        },
+        {
+          "word": "Mal",
+          "start": 6.45,
+          "end": 6.75
+        },
+        {
+          "word": "Hal",
+          "start": 6.8,
+          "end": 7.1
+        },
+        {
+          "word": "Ard",
+          "start": 7.15,
+          "end": 7.45
+        },
+        {
+          "word": "%",
+          "start": 7.5,
+          "end": 7.8
+        },
+        {
+          "word": "4",
+          "start": 7.85,
+          "end": 8.15
+        },
+        {
+          "word": "#",
+          "start": 8.2,
+          "end": 8.5
+        },
+        {
+          "word": "&",
+          "start": 8.55,
+          "end": 8.85
+        },
+        {
+          "word": "Jt",
+          "start": 8.9,
+          "end": 9.2
+        },
+        {
+          "word": "6u6",
+          "start": 9.25,
+          "end": 9.55
+        },
+        {
+          "word": "AL",
+          "start": 9.6,
+          "end": 9.9
+        },
+        {
+          "word": "(a",
+          "start": 9.95,
+          "end": 10.25
+        },
+        {
+          "word": "=",
+          "start": 10.3,
+          "end": 10.6
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 78.4,
+      "end": 80.5,
+      "text": "Heard a rumor through the wires",
+      "words": [
+        {
+          "word": "Heard",
+          "start": 78.4,
+          "end": 78.7
+        },
+        {
+          "word": "a",
+          "start": 78.75,
+          "end": 79.05
+        },
+        {
+          "word": "rumor",
+          "start": 79.1,
+          "end": 79.4
+        },
+        {
+          "word": "through",
+          "start": 79.45,
+          "end": 79.75
+        },
+        {
+          "word": "the",
+          "start": 79.8,
+          "end": 80.1
+        },
+        {
+          "word": "wires",
+          "start": 80.15,
+          "end": 80.45
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 78.4,
+      "end": 80.85,
+      "text": "That the whole damn world might end",
+      "words": [
+        {
+          "word": "That",
+          "start": 78.4,
+          "end": 78.7
+        },
+        {
+          "word": "the",
+          "start": 78.75,
+          "end": 79.05
+        },
+        {
+          "word": "whole",
+          "start": 79.1,
+          "end": 79.4
+        },
+        {
+          "word": "damn",
+          "start": 79.45,
+          "end": 79.75
+        },
+        {
+          "word": "world",
+          "start": 79.8,
+          "end": 80.1
+        },
+        {
+          "word": "might",
+          "start": 80.15,
+          "end": 80.45
+        },
+        {
+          "word": "end",
+          "start": 80.5,
+          "end": 80.8
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 148.62,
+      "end": 153.04,
+      "text": "If we knew the clock was true",
+      "words": [
+        {
+          "word": "If",
+          "start": 148.62,
+          "end": 148.98
+        },
+        {
+          "word": "we",
+          "start": 151.16,
+          "end": 151.58
+        },
+        {
+          "word": "knew",
+          "start": 151.58,
+          "end": 151.86
+        },
+        {
+          "word": "the",
+          "start": 151.86,
+          "end": 152.12
+        },
+        {
+          "word": "clock",
+          "start": 152.12,
+          "end": 152.4
+        },
+        {
+          "word": "was",
+          "start": 152.4,
+          "end": 152.72
+        },
+        {
+          "word": "true",
+          "start": 152.72,
+          "end": 153.04
+        }
+      ]
+    },
+    {
+      "start": 153.04,
+      "end": 156.8,
+      "text": "I'd have liked a little longer",
+      "words": [
+        {
+          "word": "I'd",
+          "start": 153.04,
+          "end": 153.32
+        },
+        {
+          "word": "have",
+          "start": 155.72,
+          "end": 155.76
+        },
+        {
+          "word": "liked",
+          "start": 155.76,
+          "end": 156.0
+        },
+        {
+          "word": "a",
+          "start": 156.0,
+          "end": 156.14
+        },
+        {
+          "word": "little",
+          "start": 156.14,
+          "end": 156.34
+        },
+        {
+          "word": "longer",
+          "start": 156.34,
+          "end": 156.8
+        }
+      ]
+    },
+    {
+      "start": 156.8,
+      "end": 166.6,
+      "text": "Just to think the whole thing through Trt p A: 4 Id (n al Uyy # m # Ard % 4 # & Jt 6u6 AL (a =",
+      "words": [
+        {
+          "word": "Just",
+          "start": 156.8,
+          "end": 157.1
+        },
+        {
+          "word": "to",
+          "start": 157.15,
+          "end": 157.45
+        },
+        {
+          "word": "think",
+          "start": 157.5,
+          "end": 157.8
+        },
+        {
+          "word": "the",
+          "start": 157.85,
+          "end": 158.15
+        },
+        {
+          "word": "whole",
+          "start": 158.2,
+          "end": 158.5
+        },
+        {
+          "word": "thing",
+          "start": 158.55,
+          "end": 158.85
+        },
+        {
+          "word": "through",
+          "start": 158.9,
+          "end": 159.2
+        },
+        {
+          "word": "Trt",
+          "start": 159.25,
+          "end": 159.55
+        },
+        {
+          "word": "p",
+          "start": 159.6,
+          "end": 159.9
+        },
+        {
+          "word": "A:",
+          "start": 159.95,
+          "end": 160.25
+        },
+        {
+          "word": "4",
+          "start": 160.3,
+          "end": 160.6
+        },
+        {
+          "word": "Id",
+          "start": 160.65,
+          "end": 160.95
+        },
+        {
+          "word": "(n",
+          "start": 161.0,
+          "end": 161.3
+        },
+        {
+          "word": "al",
+          "start": 161.35,
+          "end": 161.65
+        },
+        {
+          "word": "Uyy",
+          "start": 161.7,
+          "end": 162.0
+        },
+        {
+          "word": "#",
+          "start": 162.05,
+          "end": 162.35
+        },
+        {
+          "word": "m",
+          "start": 162.4,
+          "end": 162.7
+        },
+        {
+          "word": "#",
+          "start": 162.75,
+          "end": 163.05
+        },
+        {
+          "word": "Ard",
+          "start": 163.1,
+          "end": 163.4
+        },
+        {
+          "word": "%",
+          "start": 163.45,
+          "end": 163.75
+        },
+        {
+          "word": "4",
+          "start": 163.8,
+          "end": 164.1
+        },
+        {
+          "word": "#",
+          "start": 164.15,
+          "end": 164.45
+        },
+        {
+          "word": "&",
+          "start": 164.5,
+          "end": 164.8
+        },
+        {
+          "word": "Jt",
+          "start": 164.85,
+          "end": 165.15
+        },
+        {
+          "word": "6u6",
+          "start": 165.2,
+          "end": 165.5
+        },
+        {
+          "word": "AL",
+          "start": 165.55,
+          "end": 165.85
+        },
+        {
+          "word": "(a",
+          "start": 165.9,
+          "end": 166.2
+        },
+        {
+          "word": "=",
+          "start": 166.25,
+          "end": 166.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 249.05,
+      "end": 253.15,
+      "text": "Tell them Terry Tuck wiggles",
+      "words": [
+        {
+          "word": "Tell",
+          "start": 249.05,
+          "end": 250.23
+        },
+        {
+          "word": "them",
+          "start": 251.73,
+          "end": 251.99
+        },
+        {
+          "word": "Terry",
+          "start": 251.99,
+          "end": 252.27
+        },
+        {
+          "word": "Tuck",
+          "start": 252.27,
+          "end": 252.77
+        },
+        {
+          "word": "wiggles",
+          "start": 252.77,
+          "end": 253.15
+        }
+      ]
+    }
+  ]
+}

@@ -2066,9 +2066,37 @@ function initMixtapeLightbox() {
         syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
         setActiveTrackListItem(trackItems, index);
 
+        // Load karaoke lyrics for this track
+        if (karaoke) {
+            karaoke.loadTrack(getTrackSlug(tracks[index]));
+        }
+
         if (syncHash) {
             syncMixtapeHash('replaceState');
         }
+    }
+
+    // Karaoke controller
+    const karaokeContainer = document.getElementById('mixtapeKaraoke');
+    const karaokeToggle = document.getElementById('mixtapeKaraokeToggle');
+    const mixtapePlayerContainer = lightbox ? lightbox.querySelector('.mixtape-player-container') : null;
+    const karaoke = typeof createKaraokeController === 'function' ? createKaraokeController({
+        audio: audio,
+        container: karaokeContainer,
+        videoContainer: lyricsVideoContainer,
+        playerContainer: mixtapePlayerContainer,
+        getTrackSlug: () => getTrackSlug(tracks[currentIndex]),
+        albumSlug: 'exploring-laibor-mixtape'
+    }) : null;
+
+    if (karaokeToggle && karaoke) {
+        karaokeToggle.addEventListener('click', () => {
+            karaoke.toggle();
+            // Pause video when karaoke is active
+            if (mixtapePlayerContainer && mixtapePlayerContainer.classList.contains('karaoke-mode') && lyricsVideo) {
+                lyricsVideo.pause();
+            }
+        });
     }
 
     function playTrack() {
@@ -2421,9 +2449,36 @@ function initGWORLightbox() {
         syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
         setActiveTrackListItem(trackItems, index);
 
+        // Load karaoke lyrics for this track
+        if (gworKaraoke) {
+            gworKaraoke.loadTrack(getTrackSlug(tracks[index]));
+        }
+
         if (syncHash) {
             syncGWORHash('replaceState');
         }
+    }
+
+    // Karaoke controller
+    const gworKaraokeContainer = document.getElementById('gworKaraoke');
+    const gworKaraokeToggle = document.getElementById('gworKaraokeToggle');
+    const gworPlayerContainer = lightbox ? lightbox.querySelector('.mixtape-player-container') : null;
+    const gworKaraoke = typeof createKaraokeController === 'function' ? createKaraokeController({
+        audio: audio,
+        container: gworKaraokeContainer,
+        videoContainer: lyricsVideoContainer,
+        playerContainer: gworPlayerContainer,
+        getTrackSlug: () => getTrackSlug(tracks[currentIndex]),
+        albumSlug: 'grief-without-ritual'
+    }) : null;
+
+    if (gworKaraokeToggle && gworKaraoke) {
+        gworKaraokeToggle.addEventListener('click', () => {
+            gworKaraoke.toggle();
+            if (gworPlayerContainer && gworPlayerContainer.classList.contains('karaoke-mode') && lyricsVideo) {
+                lyricsVideo.pause();
+            }
+        });
     }
 
     function playTrack() {

@@ -1,0 +1,352 @@
+{
+  "track": "Terminal Uniqueness",
+  "album": "exploring-laibor-mixtape",
+  "duration": 196.285,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 2.9,
+      "text": "Igot my own tone,my own light,my own weakness:",
+      "words": [
+        {
+          "word": "Igot",
+          "start": 0.0,
+          "end": 0.18
+        },
+        {
+          "word": "my",
+          "start": 0.18,
+          "end": 0.42
+        },
+        {
+          "word": "own",
+          "start": 0.42,
+          "end": 0.7
+        },
+        {
+          "word": "tone,my",
+          "start": 0.7,
+          "end": 1.2
+        },
+        {
+          "word": "own",
+          "start": 1.2,
+          "end": 1.42
+        },
+        {
+          "word": "light,my",
+          "start": 1.68,
+          "end": 2.0
+        },
+        {
+          "word": "own",
+          "start": 2.0,
+          "end": 2.4
+        },
+        {
+          "word": "weakness:",
+          "start": 2.4,
+          "end": 2.9
+        }
+      ]
+    },
+    {
+      "start": 10.12,
+      "end": 13.06,
+      "text": "ride the hum; that Iow-down deepness",
+      "words": [
+        {
+          "word": "ride",
+          "start": 10.12,
+          "end": 10.76
+        },
+        {
+          "word": "the",
+          "start": 10.76,
+          "end": 11.14
+        },
+        {
+          "word": "hum;",
+          "start": 11.14,
+          "end": 11.42
+        },
+        {
+          "word": "that",
+          "start": 11.42,
+          "end": 12.04
+        },
+        {
+          "word": "Iow-down",
+          "start": 12.34,
+          "end": 12.66
+        },
+        {
+          "word": "deepness",
+          "start": 12.66,
+          "end": 13.06
+        }
+      ]
+    },
+    {
+      "start": 41.58,
+      "end": 47.18,
+      "text": "A mirror, baby, is it them we fear? Or the echo of me?",
+      "words": [
+        {
+          "word": "A",
+          "start": 41.58,
+          "end": 42.36
+        },
+        {
+          "word": "mirror,",
+          "start": 42.36,
+          "end": 42.92
+        },
+        {
+          "word": "baby,",
+          "start": 43.02,
+          "end": 43.36
+        },
+        {
+          "word": "is",
+          "start": 44.76,
+          "end": 44.96
+        },
+        {
+          "word": "it",
+          "start": 44.96,
+          "end": 45.06
+        },
+        {
+          "word": "them",
+          "start": 45.06,
+          "end": 45.3
+        },
+        {
+          "word": "we",
+          "start": 45.3,
+          "end": 45.58
+        },
+        {
+          "word": "fear?",
+          "start": 45.58,
+          "end": 45.98
+        },
+        {
+          "word": "Or",
+          "start": 46.08,
+          "end": 46.24
+        },
+        {
+          "word": "the",
+          "start": 46.24,
+          "end": 46.32
+        },
+        {
+          "word": "echo",
+          "start": 46.32,
+          "end": 46.64
+        },
+        {
+          "word": "of",
+          "start": 46.64,
+          "end": 46.88
+        },
+        {
+          "word": "me?",
+          "start": 46.88,
+          "end": 47.18
+        }
+      ]
+    },
+    {
+      "start": 49.2,
+      "end": 52.0,
+      "text": "Too close, too true, too sharp to miss",
+      "words": [
+        {
+          "word": "Too",
+          "start": 49.2,
+          "end": 49.5
+        },
+        {
+          "word": "close,",
+          "start": 49.55,
+          "end": 49.85
+        },
+        {
+          "word": "too",
+          "start": 49.9,
+          "end": 50.2
+        },
+        {
+          "word": "true,",
+          "start": 50.25,
+          "end": 50.55
+        },
+        {
+          "word": "too",
+          "start": 50.6,
+          "end": 50.9
+        },
+        {
+          "word": "sharp",
+          "start": 50.95,
+          "end": 51.25
+        },
+        {
+          "word": "to",
+          "start": 51.3,
+          "end": 51.6
+        },
+        {
+          "word": "miss",
+          "start": 51.65,
+          "end": 51.95
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 50.98,
+      "end": 52.14,
+      "text": "It's just like this",
+      "words": [
+        {
+          "word": "It's",
+          "start": 50.98,
+          "end": 51.26
+        },
+        {
+          "word": "just",
+          "start": 51.26,
+          "end": 51.52
+        },
+        {
+          "word": "like",
+          "start": 51.52,
+          "end": 51.82
+        },
+        {
+          "word": "this",
+          "start": 51.82,
+          "end": 52.14
+        }
+      ]
+    },
+    {
+      "start": 98.4,
+      "end": 100.85,
+      "text": "We wan't truth; but life runs rough;",
+      "words": [
+        {
+          "word": "We",
+          "start": 98.4,
+          "end": 98.7
+        },
+        {
+          "word": "wan't",
+          "start": 98.75,
+          "end": 99.05
+        },
+        {
+          "word": "truth;",
+          "start": 99.1,
+          "end": 99.4
+        },
+        {
+          "word": "but",
+          "start": 99.45,
+          "end": 99.75
+        },
+        {
+          "word": "life",
+          "start": 99.8,
+          "end": 100.1
+        },
+        {
+          "word": "runs",
+          "start": 100.15,
+          "end": 100.45
+        },
+        {
+          "word": "rough;",
+          "start": 100.5,
+          "end": 100.8
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 98.4,
+      "end": 100.85,
+      "text": "We break; we mend, we're good enough:",
+      "words": [
+        {
+          "word": "We",
+          "start": 98.4,
+          "end": 98.7
+        },
+        {
+          "word": "break;",
+          "start": 98.75,
+          "end": 99.05
+        },
+        {
+          "word": "we",
+          "start": 99.1,
+          "end": 99.4
+        },
+        {
+          "word": "mend,",
+          "start": 99.45,
+          "end": 99.75
+        },
+        {
+          "word": "we're",
+          "start": 99.8,
+          "end": 100.1
+        },
+        {
+          "word": "good",
+          "start": 100.15,
+          "end": 100.45
+        },
+        {
+          "word": "enough:",
+          "start": 100.5,
+          "end": 100.8
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 98.4,
+      "end": 99.8,
+      "text": "Every flaw'sa quiet guide;",
+      "words": [
+        {
+          "word": "Every",
+          "start": 98.4,
+          "end": 98.7
+        },
+        {
+          "word": "flaw'sa",
+          "start": 98.75,
+          "end": 99.05
+        },
+        {
+          "word": "quiet",
+          "start": 99.1,
+          "end": 99.4
+        },
+        {
+          "word": "guide;",
+          "start": 99.45,
+          "end": 99.75
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

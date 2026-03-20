@@ -15,7 +15,7 @@
  */
 
 function createKaraokeController({ audio, container, videoContainer, playerContainer, getTrackSlug, albumSlug }) {
-    if (!audio || !container) return { loadTrack() {}, destroy() {}, toggle() {} };
+    if (!audio || !container) return { loadTrack() {}, destroy() {} };
 
     const scrollRegion = container.querySelector('.karaoke-scroll-region');
     const cache = new Map();
@@ -130,6 +130,14 @@ function createKaraokeController({ audio, container, videoContainer, playerConta
             const lineEls = scrollRegion.querySelectorAll('.karaoke-line');
 
             if (activeLineIndex >= 0 && lineEls[activeLineIndex]) {
+                // Mark all words as fully highlighted before fading out
+                const prevWords = lineEls[activeLineIndex].querySelectorAll('.karaoke-word');
+                prevWords.forEach(w => {
+                    w.classList.add('past');
+                    w.classList.remove('active');
+                    w.style.removeProperty('--word-progress');
+                });
+                lineEls[activeLineIndex].classList.add('completed');
                 lineEls[activeLineIndex].classList.remove('active');
             }
 
@@ -142,35 +150,45 @@ function createKaraokeController({ audio, container, videoContainer, playerConta
             activeWordIndex = -1; // Reset word when line changes
         }
 
-        // Update word highlight
+        // Update word highlight — words stay highlighted once sung (progress bar effect)
         if (lineIndex >= 0) {
             const lineEl = scrollRegion.querySelectorAll('.karaoke-line')[lineIndex];
             if (!lineEl) return;
             const wordEls = lineEl.querySelectorAll('.karaoke-word');
+            const words = lyricsData.lines[lineIndex].words;
 
-            if (wordIndex !== activeWordIndex) {
+            // Find the furthest word we've reached based on time
+            // (even if we're in a gap between words)
+            let furthestWord = -1;
+            for (let i = 0; i < words.length; i++) {
+                if (time >= words[i].start) furthestWord = i;
+            }
+
+            if (wordIndex !== activeWordIndex || furthestWord !== activeWordIndex) {
+                // Previous active word becomes past (fully highlighted)
                 if (activeWordIndex >= 0 && wordEls[activeWordIndex]) {
                     wordEls[activeWordIndex].classList.remove('active');
                     wordEls[activeWordIndex].classList.add('past');
                     wordEls[activeWordIndex].style.removeProperty('--word-progress');
                 }
-                activeWordIndex = wordIndex;
+                activeWordIndex = wordIndex >= 0 ? wordIndex : furthestWord;
 
-                // Mark all words before the active one as past
+                // All words up to the furthest reached stay highlighted as past
                 for (let i = 0; i < wordEls.length; i++) {
-                    if (i < wordIndex) {
+                    if (i < furthestWord || (i === furthestWord && wordIndex < 0)) {
                         wordEls[i].classList.add('past');
                         wordEls[i].classList.remove('active');
-                    } else if (i > wordIndex) {
+                        wordEls[i].style.removeProperty('--word-progress');
+                    } else if (i > furthestWord) {
                         wordEls[i].classList.remove('past', 'active');
                         wordEls[i].style.removeProperty('--word-progress');
                     }
                 }
             }
 
-            // Update word progress for sweep effect
+            // Update word progress sweep on the currently active word
             if (wordIndex >= 0 && wordEls[wordIndex]) {
-                const word = lyricsData.lines[lineIndex].words[wordIndex];
+                const word = words[wordIndex];
                 const duration = word.end - word.start;
                 const progress = duration > 0 ? Math.min(1, Math.max(0, (time - word.start) / duration)) : 1;
 
@@ -225,7 +243,7 @@ function createKaraokeController({ audio, container, videoContainer, playerConta
 
     // --- Public API ---
 
-    async function loadTrack(slug) {
+    async function loadTrack(slug, { defaultKaraoke = false } = {}) {
         if (!slug) slug = typeof getTrackSlug === 'function' ? getTrackSlug() : '';
         if (!slug) return;
 
@@ -236,18 +254,19 @@ function createKaraokeController({ audio, container, videoContainer, playerConta
         if (lyricsData && lyricsData.lines.length > 0) {
             renderLyrics(lyricsData);
             container.classList.add('has-lyrics');
-
-            if (isActive && !audio.paused) {
-                updateHighlight(audio.currentTime);
-                startSync();
+            if (defaultKaraoke) {
+                activate();
+                if (!audio.paused) {
+                    updateHighlight(audio.currentTime);
+                    startSync();
+                }
+            } else {
+                deactivate();
             }
         } else {
             if (scrollRegion) scrollRegion.innerHTML = '';
             container.classList.remove('has-lyrics');
-            // If no lyrics available and karaoke is active, switch back to video
-            if (isActive) {
-                deactivate();
-            }
+            deactivate();
         }
     }
 
@@ -273,14 +292,6 @@ function createKaraokeController({ audio, container, videoContainer, playerConta
         if (videoContainer) videoContainer.style.display = '';
     }
 
-    function toggle() {
-        if (isActive) {
-            deactivate();
-        } else if (lyricsData && lyricsData.lines.length > 0) {
-            activate();
-        }
-    }
-
     function destroy() {
         stopSync();
         audio.removeEventListener('play', onPlay);
@@ -290,5 +301,5 @@ function createKaraokeController({ audio, container, videoContainer, playerConta
         lyricsData = null;
     }
 
-    return { loadTrack, toggle, activate, deactivate, destroy };
+    return { loadTrack, activate, deactivate, destroy };
 }

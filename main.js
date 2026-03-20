@@ -2054,7 +2054,11 @@ function initMixtapeLightbox() {
         if (trackDisplay) {
             trackDisplay.textContent = tracks[index].title;
         }
-        
+        const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
+        if (mobileNowPlaying) {
+            mobileNowPlaying.textContent = tracks[index].title;
+        }
+
         // Reset progress bar and time
         if (progressBar) {
             progressBar.style.width = '0%';
@@ -2076,9 +2080,8 @@ function initMixtapeLightbox() {
         }
     }
 
-    // Karaoke controller
+    // Karaoke controller — auto-activates on track load
     const karaokeContainer = document.getElementById('mixtapeKaraoke');
-    const karaokeToggle = document.getElementById('mixtapeKaraokeToggle');
     const mixtapePlayerContainer = lightbox ? lightbox.querySelector('.mixtape-player-container') : null;
     const karaoke = typeof createKaraokeController === 'function' ? createKaraokeController({
         audio: audio,
@@ -2088,16 +2091,6 @@ function initMixtapeLightbox() {
         getTrackSlug: () => getTrackSlug(tracks[currentIndex]),
         albumSlug: 'exploring-laibor-mixtape'
     }) : null;
-
-    if (karaokeToggle && karaoke) {
-        karaokeToggle.addEventListener('click', () => {
-            karaoke.toggle();
-            // Pause video when karaoke is active
-            if (mixtapePlayerContainer && mixtapePlayerContainer.classList.contains('karaoke-mode') && lyricsVideo) {
-                lyricsVideo.pause();
-            }
-        });
-    }
 
     function playTrack() {
         pauseManagedAudioExcept(audio);
@@ -2438,6 +2431,10 @@ function initGWORLightbox() {
         if (trackDisplay) {
             trackDisplay.textContent = tracks[index].title;
         }
+        const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
+        if (mobileNowPlaying) {
+            mobileNowPlaying.textContent = tracks[index].title;
+        }
 
         if (progressBar) {
             progressBar.style.width = '0%';
@@ -2451,7 +2448,9 @@ function initGWORLightbox() {
 
         // Load karaoke lyrics for this track
         if (gworKaraoke) {
-            gworKaraoke.loadTrack(getTrackSlug(tracks[index]));
+            const slug = getTrackSlug(tracks[index]);
+            const KARAOKE_DEFAULT_SLUGS = new Set(['cherish-your-confident-ire', 'letter-to-the-editor', 'dearly-beloved', 'from-the-beginning']);
+            gworKaraoke.loadTrack(slug, { defaultKaraoke: KARAOKE_DEFAULT_SLUGS.has(slug) });
         }
 
         if (syncHash) {
@@ -2459,9 +2458,8 @@ function initGWORLightbox() {
         }
     }
 
-    // Karaoke controller
+    // Karaoke controller — auto-activates on track load
     const gworKaraokeContainer = document.getElementById('gworKaraoke');
-    const gworKaraokeToggle = document.getElementById('gworKaraokeToggle');
     const gworPlayerContainer = lightbox ? lightbox.querySelector('.mixtape-player-container') : null;
     const gworKaraoke = typeof createKaraokeController === 'function' ? createKaraokeController({
         audio: audio,
@@ -2471,15 +2469,6 @@ function initGWORLightbox() {
         getTrackSlug: () => getTrackSlug(tracks[currentIndex]),
         albumSlug: 'grief-without-ritual'
     }) : null;
-
-    if (gworKaraokeToggle && gworKaraoke) {
-        gworKaraokeToggle.addEventListener('click', () => {
-            gworKaraoke.toggle();
-            if (gworPlayerContainer && gworPlayerContainer.classList.contains('karaoke-mode') && lyricsVideo) {
-                lyricsVideo.pause();
-            }
-        });
-    }
 
     function playTrack() {
         pauseManagedAudioExcept(audio);

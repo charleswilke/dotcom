@@ -1,0 +1,147 @@
+{
+  "track": "What Passes Through Us",
+  "album": "exploring-laibor-mixtape",
+  "duration": 238.4,
+  "lines": [
+    {
+      "start": 0.18,
+      "end": 3.1,
+      "text": "The room got quieter than I expected",
+      "words": [
+        {
+          "word": "The",
+          "start": 0.18,
+          "end": 0.54
+        },
+        {
+          "word": "room",
+          "start": 0.54,
+          "end": 0.9
+        },
+        {
+          "word": "got",
+          "start": 0.9,
+          "end": 1.18
+        },
+        {
+          "word": "quieter",
+          "start": 1.18,
+          "end": 1.9
+        },
+        {
+          "word": "than",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "I",
+          "start": 2.2,
+          "end": 2.48
+        },
+        {
+          "word": "expected",
+          "start": 2.48,
+          "end": 3.1
+        }
+      ]
+    },
+    {
+      "start": 4.0,
+      "end": 6.84,
+      "text": "When that voice went dark",
+      "words": [
+        {
+          "word": "When",
+          "start": 4.0,
+          "end": 4.84
+        },
+        {
+          "word": "that",
+          "start": 4.84,
+          "end": 5.16
+        },
+        {
+          "word": "voice",
+          "start": 5.16,
+          "end": 5.62
+        },
+        {
+          "word": "went",
+          "start": 5.62,
+          "end": 6.04
+        },
+        {
+          "word": "dark",
+          "start": 6.04,
+          "end": 6.84
+        }
+      ]
+    },
+    {
+      "start": 51.87,
+      "end": 62.792,
+      "text": "Without asking if it's fair",
+      "words": [
+        {
+          "word": "Without",
+          "start": 51.87,
+          "end": 51.97
+        },
+        {
+          "word": "asking",
+          "start": 60.13,
+          "end": 60.29
+        },
+        {
+          "word": "if",
+          "start": 60.29,
+          "end": 60.61
+        },
+        {
+          "word": "it's",
+          "start": 60.61,
+          "end": 60.93
+        },
+        {
+          "word": "fair",
+          "start": 60.98,
+          "end": 62.792
+        }
+      ]
+    },
+    {
+      "start": 172.44,
+      "end": 173.48,
+      "text": "Passes",
+      "words": [
+        {
+          "word": "Passes",
+          "start": 172.44,
+          "end": 173.48
+        }
+      ]
+    },
+    {
+      "start": 173.48,
+      "end": 176.64,
+      "text": "Makes us read",
+      "words": [
+        {
+          "word": "Makes",
+          "start": 173.48,
+          "end": 173.72
+        },
+        {
+          "word": "us",
+          "start": 175.76,
+          "end": 176.26
+        },
+        {
+          "word": "read",
+          "start": 176.26,
+          "end": 176.64
+        }
+      ]
+    }
+  ]
+}

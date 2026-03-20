@@ -1,0 +1,376 @@
+{
+  "track": "Hypnotic Crimes",
+  "album": "exploring-laibor-mixtape",
+  "duration": 265.44,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 2.25,
+      "text": "One eye in the sky?",
+      "words": [
+        {
+          "word": "One",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "eye",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "in",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "the",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "sky?",
+          "start": 1.9,
+          "end": 2.2
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 0.5,
+      "end": 1.9,
+      "text": "Thats old news H",
+      "words": [
+        {
+          "word": "Thats",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "old",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "news",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "H",
+          "start": 1.55,
+          "end": 1.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 66.4,
+      "end": 70.25,
+      "text": "E Everything we hid, now magnified: 3 Hypnotic crimes, hypnotic crimes",
+      "words": [
+        {
+          "word": "E",
+          "start": 66.4,
+          "end": 66.7
+        },
+        {
+          "word": "Everything",
+          "start": 66.75,
+          "end": 67.05
+        },
+        {
+          "word": "we",
+          "start": 67.1,
+          "end": 67.4
+        },
+        {
+          "word": "hid,",
+          "start": 67.45,
+          "end": 67.75
+        },
+        {
+          "word": "now",
+          "start": 67.8,
+          "end": 68.1
+        },
+        {
+          "word": "magnified:",
+          "start": 68.15,
+          "end": 68.45
+        },
+        {
+          "word": "3",
+          "start": 68.5,
+          "end": 68.8
+        },
+        {
+          "word": "Hypnotic",
+          "start": 68.85,
+          "end": 69.15
+        },
+        {
+          "word": "crimes,",
+          "start": 69.2,
+          "end": 69.5
+        },
+        {
+          "word": "hypnotic",
+          "start": 69.55,
+          "end": 69.85
+        },
+        {
+          "word": "crimes",
+          "start": 69.9,
+          "end": 70.2
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 66.4,
+      "end": 68.5,
+      "text": "The machine just mirrors our design:",
+      "words": [
+        {
+          "word": "The",
+          "start": 66.4,
+          "end": 66.7
+        },
+        {
+          "word": "machine",
+          "start": 66.75,
+          "end": 67.05
+        },
+        {
+          "word": "just",
+          "start": 67.1,
+          "end": 67.4
+        },
+        {
+          "word": "mirrors",
+          "start": 67.45,
+          "end": 67.75
+        },
+        {
+          "word": "our",
+          "start": 67.8,
+          "end": 68.1
+        },
+        {
+          "word": "design:",
+          "start": 68.15,
+          "end": 68.45
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 132.8,
+      "end": 136.3,
+      "text": "E IT drew the lines: 3 Hypnotic crimes, hypnotic crimes",
+      "words": [
+        {
+          "word": "E",
+          "start": 132.8,
+          "end": 133.1
+        },
+        {
+          "word": "IT",
+          "start": 133.15,
+          "end": 133.45
+        },
+        {
+          "word": "drew",
+          "start": 133.5,
+          "end": 133.8
+        },
+        {
+          "word": "the",
+          "start": 133.85,
+          "end": 134.15
+        },
+        {
+          "word": "lines:",
+          "start": 134.2,
+          "end": 134.5
+        },
+        {
+          "word": "3",
+          "start": 134.55,
+          "end": 134.85
+        },
+        {
+          "word": "Hypnotic",
+          "start": 134.9,
+          "end": 135.2
+        },
+        {
+          "word": "crimes,",
+          "start": 135.25,
+          "end": 135.55
+        },
+        {
+          "word": "hypnotic",
+          "start": 135.6,
+          "end": 135.9
+        },
+        {
+          "word": "crimes",
+          "start": 135.95,
+          "end": 136.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 132.8,
+      "end": 134.9,
+      "text": "It only shows what we designed:",
+      "words": [
+        {
+          "word": "It",
+          "start": 132.8,
+          "end": 133.1
+        },
+        {
+          "word": "only",
+          "start": 133.15,
+          "end": 133.45
+        },
+        {
+          "word": "shows",
+          "start": 133.5,
+          "end": 133.8
+        },
+        {
+          "word": "what",
+          "start": 133.85,
+          "end": 134.15
+        },
+        {
+          "word": "we",
+          "start": 134.2,
+          "end": 134.5
+        },
+        {
+          "word": "designed:",
+          "start": 134.55,
+          "end": 134.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 199.2,
+      "end": 203.4,
+      "text": "But there's hope in my mind; A g shape we couldn't see:",
+      "words": [
+        {
+          "word": "But",
+          "start": 199.2,
+          "end": 199.5
+        },
+        {
+          "word": "there's",
+          "start": 199.55,
+          "end": 199.85
+        },
+        {
+          "word": "hope",
+          "start": 199.9,
+          "end": 200.2
+        },
+        {
+          "word": "in",
+          "start": 200.25,
+          "end": 200.55
+        },
+        {
+          "word": "my",
+          "start": 200.6,
+          "end": 200.9
+        },
+        {
+          "word": "mind;",
+          "start": 200.95,
+          "end": 201.25
+        },
+        {
+          "word": "A",
+          "start": 201.3,
+          "end": 201.6
+        },
+        {
+          "word": "g",
+          "start": 201.65,
+          "end": 201.95
+        },
+        {
+          "word": "shape",
+          "start": 202.0,
+          "end": 202.3
+        },
+        {
+          "word": "we",
+          "start": 202.35,
+          "end": 202.65
+        },
+        {
+          "word": "couldn't",
+          "start": 202.7,
+          "end": 203.0
+        },
+        {
+          "word": "see:",
+          "start": 203.05,
+          "end": 203.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 199.2,
+      "end": 201.65,
+      "text": "Maybe this is how we find I",
+      "words": [
+        {
+          "word": "Maybe",
+          "start": 199.2,
+          "end": 199.5
+        },
+        {
+          "word": "this",
+          "start": 199.55,
+          "end": 199.85
+        },
+        {
+          "word": "is",
+          "start": 199.9,
+          "end": 200.2
+        },
+        {
+          "word": "how",
+          "start": 200.25,
+          "end": 200.55
+        },
+        {
+          "word": "we",
+          "start": 200.6,
+          "end": 200.9
+        },
+        {
+          "word": "find",
+          "start": 200.95,
+          "end": 201.25
+        },
+        {
+          "word": "I",
+          "start": 201.3,
+          "end": 201.6
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

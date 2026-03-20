@@ -1,0 +1,387 @@
+{
+  "track": "Clear As Day",
+  "album": "exploring-laibor-mixtape",
+  "duration": 201.64,
+  "lines": [
+    {
+      "start": 11.5,
+      "end": 24.21,
+      "text": "I was built for an off -cigarette ash",
+      "words": [
+        {
+          "word": "I",
+          "start": 11.5,
+          "end": 11.8
+        },
+        {
+          "word": "was",
+          "start": 21.49,
+          "end": 21.85
+        },
+        {
+          "word": "built",
+          "start": 21.85,
+          "end": 22.09
+        },
+        {
+          "word": "for",
+          "start": 22.09,
+          "end": 22.37
+        },
+        {
+          "word": "an",
+          "start": 22.37,
+          "end": 22.73
+        },
+        {
+          "word": "off",
+          "start": 22.73,
+          "end": 23.17
+        },
+        {
+          "word": "-cigarette",
+          "start": 23.17,
+          "end": 23.67
+        },
+        {
+          "word": "ash",
+          "start": 23.67,
+          "end": 24.21
+        }
+      ]
+    },
+    {
+      "start": 24.21,
+      "end": 27.35,
+      "text": "For winter's breaking glass in the street",
+      "words": [
+        {
+          "word": "For",
+          "start": 24.21,
+          "end": 24.45
+        },
+        {
+          "word": "winter's",
+          "start": 24.45,
+          "end": 25.13
+        },
+        {
+          "word": "breaking",
+          "start": 25.13,
+          "end": 25.39
+        },
+        {
+          "word": "glass",
+          "start": 25.39,
+          "end": 26.11
+        },
+        {
+          "word": "in",
+          "start": 26.11,
+          "end": 26.63
+        },
+        {
+          "word": "the",
+          "start": 26.63,
+          "end": 26.85
+        },
+        {
+          "word": "street",
+          "start": 26.85,
+          "end": 27.35
+        }
+      ]
+    },
+    {
+      "start": 37.66,
+      "end": 49.87,
+      "text": "Oh, but this runs thicker, this runs slow",
+      "words": [
+        {
+          "word": "Oh,",
+          "start": 37.66,
+          "end": 38.46
+        },
+        {
+          "word": "but",
+          "start": 47.49,
+          "end": 47.65
+        },
+        {
+          "word": "this",
+          "start": 47.65,
+          "end": 47.93
+        },
+        {
+          "word": "runs",
+          "start": 47.93,
+          "end": 48.21
+        },
+        {
+          "word": "thicker,",
+          "start": 48.21,
+          "end": 48.67
+        },
+        {
+          "word": "this",
+          "start": 48.81,
+          "end": 49.19
+        },
+        {
+          "word": "runs",
+          "start": 49.19,
+          "end": 49.51
+        },
+        {
+          "word": "slow",
+          "start": 49.51,
+          "end": 49.87
+        }
+      ]
+    },
+    {
+      "start": 49.87,
+      "end": 52.49,
+      "text": "Warm and red in the midday cold",
+      "words": [
+        {
+          "word": "Warm",
+          "start": 49.87,
+          "end": 50.59
+        },
+        {
+          "word": "and",
+          "start": 50.59,
+          "end": 50.77
+        },
+        {
+          "word": "red",
+          "start": 50.77,
+          "end": 51.19
+        },
+        {
+          "word": "in",
+          "start": 51.19,
+          "end": 51.45
+        },
+        {
+          "word": "the",
+          "start": 51.45,
+          "end": 51.59
+        },
+        {
+          "word": "midday",
+          "start": 51.59,
+          "end": 52.11
+        },
+        {
+          "word": "cold",
+          "start": 52.11,
+          "end": 52.49
+        }
+      ]
+    },
+    {
+      "start": 50.6,
+      "end": 52.0,
+      "text": "There's something happening here",
+      "words": [
+        {
+          "word": "There's",
+          "start": 50.6,
+          "end": 50.9
+        },
+        {
+          "word": "something",
+          "start": 50.95,
+          "end": 51.25
+        },
+        {
+          "word": "happening",
+          "start": 51.3,
+          "end": 51.6
+        },
+        {
+          "word": "here",
+          "start": 51.65,
+          "end": 51.95
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 101.0,
+      "end": 103.1,
+      "text": "Someone drops, the street goes cold",
+      "words": [
+        {
+          "word": "Someone",
+          "start": 101.0,
+          "end": 101.3
+        },
+        {
+          "word": "drops,",
+          "start": 101.35,
+          "end": 101.65
+        },
+        {
+          "word": "the",
+          "start": 101.7,
+          "end": 102.0
+        },
+        {
+          "word": "street",
+          "start": 102.05,
+          "end": 102.35
+        },
+        {
+          "word": "goes",
+          "start": 102.4,
+          "end": 102.7
+        },
+        {
+          "word": "cold",
+          "start": 102.75,
+          "end": 103.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 101.0,
+      "end": 103.1,
+      "text": "was made to hide the proof",
+      "words": [
+        {
+          "word": "was",
+          "start": 101.0,
+          "end": 101.3
+        },
+        {
+          "word": "made",
+          "start": 101.35,
+          "end": 101.65
+        },
+        {
+          "word": "to",
+          "start": 101.7,
+          "end": 102.0
+        },
+        {
+          "word": "hide",
+          "start": 102.05,
+          "end": 102.35
+        },
+        {
+          "word": "the",
+          "start": 102.4,
+          "end": 102.7
+        },
+        {
+          "word": "proof",
+          "start": 102.75,
+          "end": 103.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 101.0,
+      "end": 102.4,
+      "text": "Keep the surface clean",
+      "words": [
+        {
+          "word": "Keep",
+          "start": 101.0,
+          "end": 101.3
+        },
+        {
+          "word": "the",
+          "start": 101.35,
+          "end": 101.65
+        },
+        {
+          "word": "surface",
+          "start": 101.7,
+          "end": 102.0
+        },
+        {
+          "word": "clean",
+          "start": 102.05,
+          "end": 102.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 109.86,
+      "end": 142.96,
+      "text": "It's the truth every goddamn time",
+      "words": [
+        {
+          "word": "It's",
+          "start": 109.86,
+          "end": 110.3
+        },
+        {
+          "word": "the",
+          "start": 127.45,
+          "end": 127.51
+        },
+        {
+          "word": "truth",
+          "start": 127.51,
+          "end": 127.87
+        },
+        {
+          "word": "every",
+          "start": 127.87,
+          "end": 128.33
+        },
+        {
+          "word": "goddamn",
+          "start": 141.8,
+          "end": 142.24
+        },
+        {
+          "word": "time",
+          "start": 142.24,
+          "end": 142.96
+        }
+      ]
+    },
+    {
+      "start": 151.4,
+      "end": 153.15,
+      "text": "But I carry the proof",
+      "words": [
+        {
+          "word": "But",
+          "start": 151.4,
+          "end": 151.7
+        },
+        {
+          "word": "I",
+          "start": 151.75,
+          "end": 152.05
+        },
+        {
+          "word": "carry",
+          "start": 152.1,
+          "end": 152.4
+        },
+        {
+          "word": "the",
+          "start": 152.45,
+          "end": 152.75
+        },
+        {
+          "word": "proof",
+          "start": 152.8,
+          "end": 153.1
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

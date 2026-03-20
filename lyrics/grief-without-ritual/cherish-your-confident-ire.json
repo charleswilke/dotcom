@@ -1,0 +1,1834 @@
+{
+  "track": "Cherish Your Confident Ire",
+  "album": "grief-without-ritual",
+  "duration": 280.24,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 2.6,
+      "text": "Cherish Your Confiden't Ire by cwllke",
+      "words": [
+        {
+          "word": "Cherish",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "Your",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "Confiden't",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "Ire",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "by",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "cwllke",
+          "start": 2.25,
+          "end": 2.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 0.5,
+      "end": 2.95,
+      "text": "Used to be you knew a counterteit",
+      "words": [
+        {
+          "word": "Used",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "to",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "be",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "you",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "knew",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "a",
+          "start": 2.25,
+          "end": 2.55
+        },
+        {
+          "word": "counterteit",
+          "start": 2.6,
+          "end": 2.9
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 0.5,
+      "end": 3.65,
+      "text": "By\" the teeth;| by tlie hands, by the Iight",
+      "words": [
+        {
+          "word": "By\"",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "the",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "teeth;|",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "by",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "tlie",
+          "start": 1.9,
+          "end": 2.2
+        },
+        {
+          "word": "hands,",
+          "start": 2.25,
+          "end": 2.55
+        },
+        {
+          "word": "by",
+          "start": 2.6,
+          "end": 2.9
+        },
+        {
+          "word": "the",
+          "start": 2.95,
+          "end": 3.25
+        },
+        {
+          "word": "Iight",
+          "start": 3.3,
+          "end": 3.6
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 2.0,
+      "end": 3.4,
+      "text": "00:02 1 04:40 'Chetish",
+      "words": [
+        {
+          "word": "00:02",
+          "start": 2.0,
+          "end": 2.3
+        },
+        {
+          "word": "1",
+          "start": 2.35,
+          "end": 2.65
+        },
+        {
+          "word": "04:40",
+          "start": 2.7,
+          "end": 3.0
+        },
+        {
+          "word": "'Chetish",
+          "start": 3.05,
+          "end": 3.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 27.0,
+      "end": 29.45,
+      "text": "Nowit smiles with a dead man's warmth",
+      "words": [
+        {
+          "word": "Nowit",
+          "start": 27.0,
+          "end": 27.3
+        },
+        {
+          "word": "smiles",
+          "start": 27.35,
+          "end": 27.65
+        },
+        {
+          "word": "with",
+          "start": 27.7,
+          "end": 28.0
+        },
+        {
+          "word": "a",
+          "start": 28.05,
+          "end": 28.35
+        },
+        {
+          "word": "dead",
+          "start": 28.4,
+          "end": 28.7
+        },
+        {
+          "word": "man's",
+          "start": 28.75,
+          "end": 29.05
+        },
+        {
+          "word": "warmth",
+          "start": 29.1,
+          "end": 29.4
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 32.0,
+      "end": 34.1,
+      "text": "Andit talks like a Saturday night",
+      "words": [
+        {
+          "word": "Andit",
+          "start": 32.0,
+          "end": 32.3
+        },
+        {
+          "word": "talks",
+          "start": 32.35,
+          "end": 32.65
+        },
+        {
+          "word": "like",
+          "start": 32.7,
+          "end": 33.0
+        },
+        {
+          "word": "a",
+          "start": 33.05,
+          "end": 33.35
+        },
+        {
+          "word": "Saturday",
+          "start": 33.4,
+          "end": 33.7
+        },
+        {
+          "word": "night",
+          "start": 33.75,
+          "end": 34.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 35.0,
+      "end": 37.1,
+      "text": "Backyard snow in a borrowed glow",
+      "words": [
+        {
+          "word": "Backyard",
+          "start": 35.0,
+          "end": 35.3
+        },
+        {
+          "word": "snow",
+          "start": 35.35,
+          "end": 35.65
+        },
+        {
+          "word": "in",
+          "start": 35.7,
+          "end": 36.0
+        },
+        {
+          "word": "a",
+          "start": 36.05,
+          "end": 36.35
+        },
+        {
+          "word": "borrowed",
+          "start": 36.4,
+          "end": 36.7
+        },
+        {
+          "word": "glow",
+          "start": 36.75,
+          "end": 37.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 35.38,
+      "end": 179.52,
+      "text": "snow in the brunselo just silly little something holy something mine or just a",
+      "words": [
+        {
+          "word": "snow",
+          "start": 35.38,
+          "end": 35.7
+        },
+        {
+          "word": "in",
+          "start": 37.85,
+          "end": 38.61
+        },
+        {
+          "word": "the",
+          "start": 38.61,
+          "end": 38.75
+        },
+        {
+          "word": "brunselo",
+          "start": 41.72,
+          "end": 42.3
+        },
+        {
+          "word": "just",
+          "start": 42.3,
+          "end": 42.62
+        },
+        {
+          "word": "silly",
+          "start": 80.48,
+          "end": 80.94
+        },
+        {
+          "word": "little",
+          "start": 80.94,
+          "end": 81.32
+        },
+        {
+          "word": "something",
+          "start": 81.32,
+          "end": 81.96
+        },
+        {
+          "word": "holy",
+          "start": 175.02,
+          "end": 175.62
+        },
+        {
+          "word": "something",
+          "start": 175.62,
+          "end": 176.64
+        },
+        {
+          "word": "mine",
+          "start": 176.64,
+          "end": 177.34
+        },
+        {
+          "word": "or",
+          "start": 177.34,
+          "end": 179.04
+        },
+        {
+          "word": "just",
+          "start": 179.04,
+          "end": 179.32
+        },
+        {
+          "word": "a",
+          "start": 179.32,
+          "end": 179.52
+        }
+      ]
+    },
+    {
+      "start": 38.0,
+      "end": 40.1,
+      "text": "Dog runs slow just for show",
+      "words": [
+        {
+          "word": "Dog",
+          "start": 38.0,
+          "end": 38.3
+        },
+        {
+          "word": "runs",
+          "start": 38.35,
+          "end": 38.65
+        },
+        {
+          "word": "slow",
+          "start": 38.7,
+          "end": 39.0
+        },
+        {
+          "word": "just",
+          "start": 39.05,
+          "end": 39.35
+        },
+        {
+          "word": "for",
+          "start": 39.4,
+          "end": 39.7
+        },
+        {
+          "word": "show",
+          "start": 39.75,
+          "end": 40.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 42.0,
+      "end": 43.75,
+      "text": "Everybody's got a little view",
+      "words": [
+        {
+          "word": "Everybody's",
+          "start": 42.0,
+          "end": 42.3
+        },
+        {
+          "word": "got",
+          "start": 42.35,
+          "end": 42.65
+        },
+        {
+          "word": "a",
+          "start": 42.7,
+          "end": 43.0
+        },
+        {
+          "word": "little",
+          "start": 43.05,
+          "end": 43.35
+        },
+        {
+          "word": "view",
+          "start": 43.4,
+          "end": 43.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 47.0,
+      "end": 48.75,
+      "text": "Alittle profile just for you",
+      "words": [
+        {
+          "word": "Alittle",
+          "start": 47.0,
+          "end": 47.3
+        },
+        {
+          "word": "profile",
+          "start": 47.35,
+          "end": 47.65
+        },
+        {
+          "word": "just",
+          "start": 47.7,
+          "end": 48.0
+        },
+        {
+          "word": "for",
+          "start": 48.05,
+          "end": 48.35
+        },
+        {
+          "word": "you",
+          "start": 48.4,
+          "end": 48.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 53.0,
+      "end": 54.75,
+      "text": "You canhlss You can hack",
+      "words": [
+        {
+          "word": "You",
+          "start": 53.0,
+          "end": 53.3
+        },
+        {
+          "word": "canhlss",
+          "start": 53.35,
+          "end": 53.65
+        },
+        {
+          "word": "You",
+          "start": 53.7,
+          "end": 54.0
+        },
+        {
+          "word": "can",
+          "start": 54.05,
+          "end": 54.35
+        },
+        {
+          "word": "hack",
+          "start": 54.4,
+          "end": 54.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 53.0,
+      "end": 54.75,
+      "text": "You can curse the flood",
+      "words": [
+        {
+          "word": "You",
+          "start": 53.0,
+          "end": 53.3
+        },
+        {
+          "word": "can",
+          "start": 53.35,
+          "end": 53.65
+        },
+        {
+          "word": "curse",
+          "start": 53.7,
+          "end": 54.0
+        },
+        {
+          "word": "the",
+          "start": 54.05,
+          "end": 54.35
+        },
+        {
+          "word": "flood",
+          "start": 54.4,
+          "end": 54.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 54.0,
+      "end": 55.4,
+      "text": "It ain't going back",
+      "words": [
+        {
+          "word": "It",
+          "start": 54.0,
+          "end": 54.3
+        },
+        {
+          "word": "ain't",
+          "start": 54.35,
+          "end": 54.65
+        },
+        {
+          "word": "going",
+          "start": 54.7,
+          "end": 55.0
+        },
+        {
+          "word": "back",
+          "start": 55.05,
+          "end": 55.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 56.0,
+      "end": 57.75,
+      "text": "Get your last licks in",
+      "words": [
+        {
+          "word": "Get",
+          "start": 56.0,
+          "end": 56.3
+        },
+        {
+          "word": "your",
+          "start": 56.35,
+          "end": 56.65
+        },
+        {
+          "word": "last",
+          "start": 56.7,
+          "end": 57.0
+        },
+        {
+          "word": "licks",
+          "start": 57.05,
+          "end": 57.35
+        },
+        {
+          "word": "in",
+          "start": 57.4,
+          "end": 57.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 59.0,
+      "end": 60.4,
+      "text": "Goon; wear yourself out",
+      "words": [
+        {
+          "word": "Goon;",
+          "start": 59.0,
+          "end": 59.3
+        },
+        {
+          "word": "wear",
+          "start": 59.35,
+          "end": 59.65
+        },
+        {
+          "word": "yourself",
+          "start": 59.7,
+          "end": 60.0
+        },
+        {
+          "word": "out",
+          "start": 60.05,
+          "end": 60.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 62.0,
+      "end": 64.1,
+      "text": "The flood don't stop for barking",
+      "words": [
+        {
+          "word": "The",
+          "start": 62.0,
+          "end": 62.3
+        },
+        {
+          "word": "flood",
+          "start": 62.35,
+          "end": 62.65
+        },
+        {
+          "word": "don't",
+          "start": 62.7,
+          "end": 63.0
+        },
+        {
+          "word": "stop",
+          "start": 63.05,
+          "end": 63.35
+        },
+        {
+          "word": "for",
+          "start": 63.4,
+          "end": 63.7
+        },
+        {
+          "word": "barking",
+          "start": 63.75,
+          "end": 64.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 65.0,
+      "end": 66.4,
+      "text": "And it's everywhere now",
+      "words": [
+        {
+          "word": "And",
+          "start": 65.0,
+          "end": 65.3
+        },
+        {
+          "word": "it's",
+          "start": 65.35,
+          "end": 65.65
+        },
+        {
+          "word": "everywhere",
+          "start": 65.7,
+          "end": 66.0
+        },
+        {
+          "word": "now",
+          "start": 66.05,
+          "end": 66.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 68.0,
+      "end": 69.4,
+      "text": "Take your little swing",
+      "words": [
+        {
+          "word": "Take",
+          "start": 68.0,
+          "end": 68.3
+        },
+        {
+          "word": "your",
+          "start": 68.35,
+          "end": 68.65
+        },
+        {
+          "word": "little",
+          "start": 68.7,
+          "end": 69.0
+        },
+        {
+          "word": "swing",
+          "start": 69.05,
+          "end": 69.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 71.0,
+      "end": 72.4,
+      "text": "Go on; showyour fire",
+      "words": [
+        {
+          "word": "Go",
+          "start": 71.0,
+          "end": 71.3
+        },
+        {
+          "word": "on;",
+          "start": 71.35,
+          "end": 71.65
+        },
+        {
+          "word": "showyour",
+          "start": 71.7,
+          "end": 72.0
+        },
+        {
+          "word": "fire",
+          "start": 72.05,
+          "end": 72.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 75.0,
+      "end": 76.75,
+      "text": "Ain't nobody coming to save",
+      "words": [
+        {
+          "word": "Ain't",
+          "start": 75.0,
+          "end": 75.3
+        },
+        {
+          "word": "nobody",
+          "start": 75.35,
+          "end": 75.65
+        },
+        {
+          "word": "coming",
+          "start": 75.7,
+          "end": 76.0
+        },
+        {
+          "word": "to",
+          "start": 76.05,
+          "end": 76.35
+        },
+        {
+          "word": "save",
+          "start": 76.4,
+          "end": 76.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 77.0,
+      "end": 78.4,
+      "text": "Your silly little ire",
+      "words": [
+        {
+          "word": "Your",
+          "start": 77.0,
+          "end": 77.3
+        },
+        {
+          "word": "silly",
+          "start": 77.35,
+          "end": 77.65
+        },
+        {
+          "word": "little",
+          "start": 77.7,
+          "end": 78.0
+        },
+        {
+          "word": "ire",
+          "start": 78.05,
+          "end": 78.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 81.0,
+      "end": 83.1,
+      "text": "Don't tell me this is vapor",
+      "words": [
+        {
+          "word": "Don't",
+          "start": 81.0,
+          "end": 81.3
+        },
+        {
+          "word": "tell",
+          "start": 81.35,
+          "end": 81.65
+        },
+        {
+          "word": "me",
+          "start": 81.7,
+          "end": 82.0
+        },
+        {
+          "word": "this",
+          "start": 82.05,
+          "end": 82.35
+        },
+        {
+          "word": "is",
+          "start": 82.4,
+          "end": 82.7
+        },
+        {
+          "word": "vapor",
+          "start": 82.75,
+          "end": 83.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 89.0,
+      "end": 91.8,
+      "text": "When your mothers voice comes through the wire",
+      "words": [
+        {
+          "word": "When",
+          "start": 89.0,
+          "end": 89.3
+        },
+        {
+          "word": "your",
+          "start": 89.35,
+          "end": 89.65
+        },
+        {
+          "word": "mothers",
+          "start": 89.7,
+          "end": 90.0
+        },
+        {
+          "word": "voice",
+          "start": 90.05,
+          "end": 90.35
+        },
+        {
+          "word": "comes",
+          "start": 90.4,
+          "end": 90.7
+        },
+        {
+          "word": "through",
+          "start": 90.75,
+          "end": 91.05
+        },
+        {
+          "word": "the",
+          "start": 91.1,
+          "end": 91.4
+        },
+        {
+          "word": "wire",
+          "start": 91.45,
+          "end": 91.75
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 92.0,
+      "end": 93.75,
+      "text": "Begging God for a deal",
+      "words": [
+        {
+          "word": "Begging",
+          "start": 92.0,
+          "end": 92.3
+        },
+        {
+          "word": "God",
+          "start": 92.35,
+          "end": 92.65
+        },
+        {
+          "word": "for",
+          "start": 92.7,
+          "end": 93.0
+        },
+        {
+          "word": "a",
+          "start": 93.05,
+          "end": 93.35
+        },
+        {
+          "word": "deal",
+          "start": 93.4,
+          "end": 93.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 98.0,
+      "end": 100.1,
+      "text": "Just because the trick got cheap",
+      "words": [
+        {
+          "word": "Just",
+          "start": 98.0,
+          "end": 98.3
+        },
+        {
+          "word": "because",
+          "start": 98.35,
+          "end": 98.65
+        },
+        {
+          "word": "the",
+          "start": 98.7,
+          "end": 99.0
+        },
+        {
+          "word": "trick",
+          "start": 99.05,
+          "end": 99.35
+        },
+        {
+          "word": "got",
+          "start": 99.4,
+          "end": 99.7
+        },
+        {
+          "word": "cheap",
+          "start": 99.75,
+          "end": 100.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 102.0,
+      "end": 103.75,
+      "text": "Apolished lie still ruins lives",
+      "words": [
+        {
+          "word": "Apolished",
+          "start": 102.0,
+          "end": 102.3
+        },
+        {
+          "word": "lie",
+          "start": 102.35,
+          "end": 102.65
+        },
+        {
+          "word": "still",
+          "start": 102.7,
+          "end": 103.0
+        },
+        {
+          "word": "ruins",
+          "start": 103.05,
+          "end": 103.35
+        },
+        {
+          "word": "lives",
+          "start": 103.4,
+          "end": 103.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 105.0,
+      "end": 106.75,
+      "text": "When it gets in deep",
+      "words": [
+        {
+          "word": "When",
+          "start": 105.0,
+          "end": 105.3
+        },
+        {
+          "word": "it",
+          "start": 105.35,
+          "end": 105.65
+        },
+        {
+          "word": "gets",
+          "start": 105.7,
+          "end": 106.0
+        },
+        {
+          "word": "in",
+          "start": 106.05,
+          "end": 106.35
+        },
+        {
+          "word": "deep",
+          "start": 106.4,
+          "end": 106.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 114.0,
+      "end": 116.45,
+      "text": "Now every fool can buy the trick",
+      "words": [
+        {
+          "word": "Now",
+          "start": 114.0,
+          "end": 114.3
+        },
+        {
+          "word": "every",
+          "start": 114.35,
+          "end": 114.65
+        },
+        {
+          "word": "fool",
+          "start": 114.7,
+          "end": 115.0
+        },
+        {
+          "word": "can",
+          "start": 115.05,
+          "end": 115.35
+        },
+        {
+          "word": "buy",
+          "start": 115.4,
+          "end": 115.7
+        },
+        {
+          "word": "the",
+          "start": 115.75,
+          "end": 116.05
+        },
+        {
+          "word": "trick",
+          "start": 116.1,
+          "end": 116.4
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 116.0,
+      "end": 118.45,
+      "text": "And every king with a rented crown",
+      "words": [
+        {
+          "word": "And",
+          "start": 116.0,
+          "end": 116.3
+        },
+        {
+          "word": "every",
+          "start": 116.35,
+          "end": 116.65
+        },
+        {
+          "word": "king",
+          "start": 116.7,
+          "end": 117.0
+        },
+        {
+          "word": "with",
+          "start": 117.05,
+          "end": 117.35
+        },
+        {
+          "word": "a",
+          "start": 117.4,
+          "end": 117.7
+        },
+        {
+          "word": "rented",
+          "start": 117.75,
+          "end": 118.05
+        },
+        {
+          "word": "crown",
+          "start": 118.1,
+          "end": 118.4
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 119.0,
+      "end": 121.1,
+      "text": "Feels that cold air coming down",
+      "words": [
+        {
+          "word": "Feels",
+          "start": 119.0,
+          "end": 119.3
+        },
+        {
+          "word": "that",
+          "start": 119.35,
+          "end": 119.65
+        },
+        {
+          "word": "cold",
+          "start": 119.7,
+          "end": 120.0
+        },
+        {
+          "word": "air",
+          "start": 120.05,
+          "end": 120.35
+        },
+        {
+          "word": "coming",
+          "start": 120.4,
+          "end": 120.7
+        },
+        {
+          "word": "down",
+          "start": 120.75,
+          "end": 121.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 128.0,
+      "end": 129.75,
+      "text": "You can pound the table",
+      "words": [
+        {
+          "word": "You",
+          "start": 128.0,
+          "end": 128.3
+        },
+        {
+          "word": "can",
+          "start": 128.35,
+          "end": 128.65
+        },
+        {
+          "word": "pound",
+          "start": 128.7,
+          "end": 129.0
+        },
+        {
+          "word": "the",
+          "start": 129.05,
+          "end": 129.35
+        },
+        {
+          "word": "table",
+          "start": 129.4,
+          "end": 129.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 128.0,
+      "end": 129.4,
+      "text": "It's still in reach",
+      "words": [
+        {
+          "word": "It's",
+          "start": 128.0,
+          "end": 128.3
+        },
+        {
+          "word": "still",
+          "start": 128.35,
+          "end": 128.65
+        },
+        {
+          "word": "in",
+          "start": 128.7,
+          "end": 129.0
+        },
+        {
+          "word": "reach",
+          "start": 129.05,
+          "end": 129.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 132.0,
+      "end": 133.4,
+      "text": "Go on,have your say",
+      "words": [
+        {
+          "word": "Go",
+          "start": 132.0,
+          "end": 132.3
+        },
+        {
+          "word": "on,have",
+          "start": 132.35,
+          "end": 132.65
+        },
+        {
+          "word": "your",
+          "start": 132.7,
+          "end": 133.0
+        },
+        {
+          "word": "say",
+          "start": 133.05,
+          "end": 133.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 135.0,
+      "end": 137.1,
+      "text": "Kickat the future all you wan't",
+      "words": [
+        {
+          "word": "Kickat",
+          "start": 135.0,
+          "end": 135.3
+        },
+        {
+          "word": "the",
+          "start": 135.35,
+          "end": 135.65
+        },
+        {
+          "word": "future",
+          "start": 135.7,
+          "end": 136.0
+        },
+        {
+          "word": "all",
+          "start": 136.05,
+          "end": 136.35
+        },
+        {
+          "word": "you",
+          "start": 136.4,
+          "end": 136.7
+        },
+        {
+          "word": "wan't",
+          "start": 136.75,
+          "end": 137.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 146.0,
+      "end": 147.4,
+      "text": "Throw your little sparks",
+      "words": [
+        {
+          "word": "Throw",
+          "start": 146.0,
+          "end": 146.3
+        },
+        {
+          "word": "your",
+          "start": 146.35,
+          "end": 146.65
+        },
+        {
+          "word": "little",
+          "start": 146.7,
+          "end": 147.0
+        },
+        {
+          "word": "sparks",
+          "start": 147.05,
+          "end": 147.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 149.0,
+      "end": 150.4,
+      "text": "Morning don't ask permission",
+      "words": [
+        {
+          "word": "Morning",
+          "start": 149.0,
+          "end": 149.3
+        },
+        {
+          "word": "don't",
+          "start": 149.35,
+          "end": 149.65
+        },
+        {
+          "word": "ask",
+          "start": 149.7,
+          "end": 150.0
+        },
+        {
+          "word": "permission",
+          "start": 150.05,
+          "end": 150.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 152.0,
+      "end": 154.1,
+      "text": "Itjust cuts right through the dark",
+      "words": [
+        {
+          "word": "Itjust",
+          "start": 152.0,
+          "end": 152.3
+        },
+        {
+          "word": "cuts",
+          "start": 152.35,
+          "end": 152.65
+        },
+        {
+          "word": "right",
+          "start": 152.7,
+          "end": 153.0
+        },
+        {
+          "word": "through",
+          "start": 153.05,
+          "end": 153.35
+        },
+        {
+          "word": "the",
+          "start": 153.4,
+          "end": 153.7
+        },
+        {
+          "word": "dark",
+          "start": 153.75,
+          "end": 154.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 155.0,
+      "end": 157.1,
+      "text": "Inever made the brush or paper",
+      "words": [
+        {
+          "word": "Inever",
+          "start": 155.0,
+          "end": 155.3
+        },
+        {
+          "word": "made",
+          "start": 155.35,
+          "end": 155.65
+        },
+        {
+          "word": "the",
+          "start": 155.7,
+          "end": 156.0
+        },
+        {
+          "word": "brush",
+          "start": 156.05,
+          "end": 156.35
+        },
+        {
+          "word": "or",
+          "start": 156.4,
+          "end": 156.7
+        },
+        {
+          "word": "paper",
+          "start": 156.75,
+          "end": 157.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 161.0,
+      "end": 163.1,
+      "text": "Never taught the trees to climb",
+      "words": [
+        {
+          "word": "Never",
+          "start": 161.0,
+          "end": 161.3
+        },
+        {
+          "word": "taught",
+          "start": 161.35,
+          "end": 161.65
+        },
+        {
+          "word": "the",
+          "start": 161.7,
+          "end": 162.0
+        },
+        {
+          "word": "trees",
+          "start": 162.05,
+          "end": 162.35
+        },
+        {
+          "word": "to",
+          "start": 162.4,
+          "end": 162.7
+        },
+        {
+          "word": "climb",
+          "start": 162.75,
+          "end": 163.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 164.0,
+      "end": 166.1,
+      "text": "Every tool came through another hand",
+      "words": [
+        {
+          "word": "Every",
+          "start": 164.0,
+          "end": 164.3
+        },
+        {
+          "word": "tool",
+          "start": 164.35,
+          "end": 164.65
+        },
+        {
+          "word": "came",
+          "start": 164.7,
+          "end": 165.0
+        },
+        {
+          "word": "through",
+          "start": 165.05,
+          "end": 165.35
+        },
+        {
+          "word": "another",
+          "start": 165.4,
+          "end": 165.7
+        },
+        {
+          "word": "hand",
+          "start": 165.75,
+          "end": 166.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 167.0,
+      "end": 168.75,
+      "text": "Every craft through borrowed time",
+      "words": [
+        {
+          "word": "Every",
+          "start": 167.0,
+          "end": 167.3
+        },
+        {
+          "word": "craft",
+          "start": 167.35,
+          "end": 167.65
+        },
+        {
+          "word": "through",
+          "start": 167.7,
+          "end": 168.0
+        },
+        {
+          "word": "borrowed",
+          "start": 168.05,
+          "end": 168.35
+        },
+        {
+          "word": "time",
+          "start": 168.4,
+          "end": 168.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 170.0,
+      "end": 171.75,
+      "text": "Sowhat was [ protecting; really?",
+      "words": [
+        {
+          "word": "Sowhat",
+          "start": 170.0,
+          "end": 170.3
+        },
+        {
+          "word": "was",
+          "start": 170.35,
+          "end": 170.65
+        },
+        {
+          "word": "[",
+          "start": 170.7,
+          "end": 171.0
+        },
+        {
+          "word": "protecting;",
+          "start": 171.05,
+          "end": 171.35
+        },
+        {
+          "word": "really?",
+          "start": 171.4,
+          "end": 171.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 176.0,
+      "end": 178.45,
+      "text": "Or just a tollbooth in my blood",
+      "words": [
+        {
+          "word": "Or",
+          "start": 176.0,
+          "end": 176.3
+        },
+        {
+          "word": "just",
+          "start": 176.35,
+          "end": 176.65
+        },
+        {
+          "word": "a",
+          "start": 176.7,
+          "end": 177.0
+        },
+        {
+          "word": "tollbooth",
+          "start": 177.05,
+          "end": 177.35
+        },
+        {
+          "word": "in",
+          "start": 177.4,
+          "end": 177.7
+        },
+        {
+          "word": "my",
+          "start": 177.75,
+          "end": 178.05
+        },
+        {
+          "word": "blood",
+          "start": 178.1,
+          "end": 178.4
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 179.0,
+      "end": 181.45,
+      "text": "At the edge of a changing line?",
+      "words": [
+        {
+          "word": "At",
+          "start": 179.0,
+          "end": 179.3
+        },
+        {
+          "word": "the",
+          "start": 179.35,
+          "end": 179.65
+        },
+        {
+          "word": "edge",
+          "start": 179.7,
+          "end": 180.0
+        },
+        {
+          "word": "of",
+          "start": 180.05,
+          "end": 180.35
+        },
+        {
+          "word": "a",
+          "start": 180.4,
+          "end": 180.7
+        },
+        {
+          "word": "changing",
+          "start": 180.75,
+          "end": 181.05
+        },
+        {
+          "word": "line?",
+          "start": 181.1,
+          "end": 181.4
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 185.0,
+      "end": 186.75,
+      "text": "Go on, make it plain",
+      "words": [
+        {
+          "word": "Go",
+          "start": 185.0,
+          "end": 185.3
+        },
+        {
+          "word": "on,",
+          "start": 185.35,
+          "end": 185.65
+        },
+        {
+          "word": "make",
+          "start": 185.7,
+          "end": 186.0
+        },
+        {
+          "word": "it",
+          "start": 186.05,
+          "end": 186.35
+        },
+        {
+          "word": "plain",
+          "start": 186.4,
+          "end": 186.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 191.0,
+      "end": 193.1,
+      "text": "Till it hollows out their name",
+      "words": [
+        {
+          "word": "Till",
+          "start": 191.0,
+          "end": 191.3
+        },
+        {
+          "word": "it",
+          "start": 191.35,
+          "end": 191.65
+        },
+        {
+          "word": "hollows",
+          "start": 191.7,
+          "end": 192.0
+        },
+        {
+          "word": "out",
+          "start": 192.05,
+          "end": 192.35
+        },
+        {
+          "word": "their",
+          "start": 192.4,
+          "end": 192.7
+        },
+        {
+          "word": "name",
+          "start": 192.75,
+          "end": 193.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 195.0,
+      "end": 196.4,
+      "text": "There's no clean way",
+      "words": [
+        {
+          "word": "There's",
+          "start": 195.0,
+          "end": 195.3
+        },
+        {
+          "word": "no",
+          "start": 195.35,
+          "end": 195.65
+        },
+        {
+          "word": "clean",
+          "start": 195.7,
+          "end": 196.0
+        },
+        {
+          "word": "way",
+          "start": 196.05,
+          "end": 196.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 197.0,
+      "end": 198.4,
+      "text": "To watch this go",
+      "words": [
+        {
+          "word": "To",
+          "start": 197.0,
+          "end": 197.3
+        },
+        {
+          "word": "watch",
+          "start": 197.35,
+          "end": 197.65
+        },
+        {
+          "word": "this",
+          "start": 197.7,
+          "end": 198.0
+        },
+        {
+          "word": "go",
+          "start": 198.05,
+          "end": 198.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 209.0,
+      "end": 210.4,
+      "text": "Andnowit's in your house",
+      "words": [
+        {
+          "word": "Andnowit's",
+          "start": 209.0,
+          "end": 209.3
+        },
+        {
+          "word": "in",
+          "start": 209.35,
+          "end": 209.65
+        },
+        {
+          "word": "your",
+          "start": 209.7,
+          "end": 210.0
+        },
+        {
+          "word": "house",
+          "start": 210.05,
+          "end": 210.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 218.0,
+      "end": 220.1,
+      "text": "What was never yours to hoard",
+      "words": [
+        {
+          "word": "What",
+          "start": 218.0,
+          "end": 218.3
+        },
+        {
+          "word": "was",
+          "start": 218.35,
+          "end": 218.65
+        },
+        {
+          "word": "never",
+          "start": 218.7,
+          "end": 219.0
+        },
+        {
+          "word": "yours",
+          "start": 219.05,
+          "end": 219.35
+        },
+        {
+          "word": "to",
+          "start": 219.4,
+          "end": 219.7
+        },
+        {
+          "word": "hoard",
+          "start": 219.75,
+          "end": 220.05
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

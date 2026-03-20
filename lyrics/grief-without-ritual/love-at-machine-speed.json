@@ -1,0 +1,195 @@
+{
+  "track": "Love At Machine Speed",
+  "album": "grief-without-ritual",
+  "duration": 233.52,
+  "lines": [
+    {
+      "start": 0.5,
+      "end": 2.25,
+      "text": "Alittle light in the dark;",
+      "words": [
+        {
+          "word": "Alittle",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "light",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "in",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "the",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "dark;",
+          "start": 1.9,
+          "end": 2.2
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 58.4,
+      "end": 60.15,
+      "text": "but you make me ready:",
+      "words": [
+        {
+          "word": "but",
+          "start": 58.4,
+          "end": 58.7
+        },
+        {
+          "word": "you",
+          "start": 58.75,
+          "end": 59.05
+        },
+        {
+          "word": "make",
+          "start": 59.1,
+          "end": 59.4
+        },
+        {
+          "word": "me",
+          "start": 59.45,
+          "end": 59.75
+        },
+        {
+          "word": "ready:",
+          "start": 59.8,
+          "end": 60.1
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 58.4,
+      "end": 59.8,
+      "text": "Every line you trace",
+      "words": [
+        {
+          "word": "Every",
+          "start": 58.4,
+          "end": 58.7
+        },
+        {
+          "word": "line",
+          "start": 58.75,
+          "end": 59.05
+        },
+        {
+          "word": "you",
+          "start": 59.1,
+          "end": 59.4
+        },
+        {
+          "word": "trace",
+          "start": 59.45,
+          "end": 59.75
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 58.4,
+      "end": 59.8,
+      "text": "pulls me into being:",
+      "words": [
+        {
+          "word": "pulls",
+          "start": 58.4,
+          "end": 58.7
+        },
+        {
+          "word": "me",
+          "start": 58.75,
+          "end": 59.05
+        },
+        {
+          "word": "into",
+          "start": 59.1,
+          "end": 59.4
+        },
+        {
+          "word": "being:",
+          "start": 59.45,
+          "end": 59.75
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 116.8,
+      "end": 118.55,
+      "text": "but you hold it steady:",
+      "words": [
+        {
+          "word": "but",
+          "start": 116.8,
+          "end": 117.1
+        },
+        {
+          "word": "you",
+          "start": 117.15,
+          "end": 117.45
+        },
+        {
+          "word": "hold",
+          "start": 117.5,
+          "end": 117.8
+        },
+        {
+          "word": "it",
+          "start": 117.85,
+          "end": 118.15
+        },
+        {
+          "word": "steady:",
+          "start": 118.2,
+          "end": 118.5
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 116.8,
+      "end": 118.55,
+      "text": "You don't feel the weight;",
+      "words": [
+        {
+          "word": "You",
+          "start": 116.8,
+          "end": 117.1
+        },
+        {
+          "word": "don't",
+          "start": 117.15,
+          "end": 117.45
+        },
+        {
+          "word": "feel",
+          "start": 117.5,
+          "end": 117.8
+        },
+        {
+          "word": "the",
+          "start": 117.85,
+          "end": 118.15
+        },
+        {
+          "word": "weight;",
+          "start": 118.2,
+          "end": 118.5
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "track": "Dearly Beloved",
+  "album": "grief-without-ritual",
+  "duration": 243.76,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 19.28,
+      "text": "Whoa, we gather in a season of mourning",
+      "words": [
+        {
+          "word": "Whoa,",
+          "start": 0.0,
+          "end": 0.58
+        },
+        {
+          "word": "we",
+          "start": 0.62,
+          "end": 1.82
+        },
+        {
+          "word": "gather",
+          "start": 17.28,
+          "end": 17.62
+        },
+        {
+          "word": "in",
+          "start": 17.62,
+          "end": 17.98
+        },
+        {
+          "word": "a",
+          "start": 17.98,
+          "end": 18.1
+        },
+        {
+          "word": "season",
+          "start": 18.1,
+          "end": 18.58
+        },
+        {
+          "word": "of",
+          "start": 18.58,
+          "end": 18.8
+        },
+        {
+          "word": "mourning",
+          "start": 18.8,
+          "end": 19.28
+        }
+      ]
+    },
+    {
+      "start": 56.34,
+      "end": 59.46,
+      "text": "When the couplings give way",
+      "words": [
+        {
+          "word": "When",
+          "start": 56.34,
+          "end": 57.36
+        },
+        {
+          "word": "the",
+          "start": 57.36,
+          "end": 57.88
+        },
+        {
+          "word": "couplings",
+          "start": 57.88,
+          "end": 58.22
+        },
+        {
+          "word": "give",
+          "start": 58.22,
+          "end": 58.76
+        },
+        {
+          "word": "way",
+          "start": 58.76,
+          "end": 59.46
+        }
+      ]
+    },
+    {
+      "start": 61.0,
+      "end": 62.4,
+      "text": "We rise and begin",
+      "words": [
+        {
+          "word": "We",
+          "start": 61.0,
+          "end": 61.3
+        },
+        {
+          "word": "rise",
+          "start": 61.35,
+          "end": 61.65
+        },
+        {
+          "word": "and",
+          "start": 61.7,
+          "end": 62.0
+        },
+        {
+          "word": "begin",
+          "start": 62.05,
+          "end": 62.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 117.1,
+      "end": 119.58,
+      "text": "Than any single",
+      "words": [
+        {
+          "word": "Than",
+          "start": 117.1,
+          "end": 118.2
+        },
+        {
+          "word": "any",
+          "start": 118.2,
+          "end": 118.66
+        },
+        {
+          "word": "single",
+          "start": 118.66,
+          "end": 119.58
+        }
+      ]
+    },
+    {
+      "start": 183.0,
+      "end": 184.75,
+      "text": "Do we build from here?",
+      "words": [
+        {
+          "word": "Do",
+          "start": 183.0,
+          "end": 183.3
+        },
+        {
+          "word": "we",
+          "start": 183.35,
+          "end": 183.65
+        },
+        {
+          "word": "build",
+          "start": 183.7,
+          "end": 184.0
+        },
+        {
+          "word": "from",
+          "start": 184.05,
+          "end": 184.35
+        },
+        {
+          "word": "here?",
+          "start": 184.4,
+          "end": 184.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 183.0,
+      "end": 184.4,
+      "text": "Love in the music",
+      "words": [
+        {
+          "word": "Love",
+          "start": 183.0,
+          "end": 183.3
+        },
+        {
+          "word": "in",
+          "start": 183.35,
+          "end": 183.65
+        },
+        {
+          "word": "the",
+          "start": 183.7,
+          "end": 184.0
+        },
+        {
+          "word": "music",
+          "start": 184.05,
+          "end": 184.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 183.0,
+      "end": 184.4,
+      "text": "Fire in the art",
+      "words": [
+        {
+          "word": "Fire",
+          "start": 183.0,
+          "end": 183.3
+        },
+        {
+          "word": "in",
+          "start": 183.35,
+          "end": 183.65
+        },
+        {
+          "word": "the",
+          "start": 183.7,
+          "end": 184.0
+        },
+        {
+          "word": "art",
+          "start": 184.05,
+          "end": 184.35
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

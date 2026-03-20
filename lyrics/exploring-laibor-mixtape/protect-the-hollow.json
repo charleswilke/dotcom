@@ -1,0 +1,445 @@
+{
+  "track": "Protect The Hollow",
+  "album": "exploring-laibor-mixtape",
+  "duration": 217.825,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 11.85,
+      "text": "everybody wants a number everybody wants a name you draw a box around the moment",
+      "words": [
+        {
+          "word": "everybody",
+          "start": 0.0,
+          "end": 0.26
+        },
+        {
+          "word": "wants",
+          "start": 0.26,
+          "end": 0.82
+        },
+        {
+          "word": "a",
+          "start": 0.82,
+          "end": 1.04
+        },
+        {
+          "word": "number",
+          "start": 1.04,
+          "end": 1.44
+        },
+        {
+          "word": "everybody",
+          "start": 1.44,
+          "end": 3.0
+        },
+        {
+          "word": "wants",
+          "start": 5.02,
+          "end": 5.74
+        },
+        {
+          "word": "a",
+          "start": 5.74,
+          "end": 6.2
+        },
+        {
+          "word": "name",
+          "start": 6.2,
+          "end": 6.54
+        },
+        {
+          "word": "you",
+          "start": 6.54,
+          "end": 7.16
+        },
+        {
+          "word": "draw",
+          "start": 9.49,
+          "end": 9.75
+        },
+        {
+          "word": "a",
+          "start": 9.75,
+          "end": 9.97
+        },
+        {
+          "word": "box",
+          "start": 9.97,
+          "end": 10.41
+        },
+        {
+          "word": "around",
+          "start": 10.41,
+          "end": 10.83
+        },
+        {
+          "word": "the",
+          "start": 10.83,
+          "end": 11.25
+        },
+        {
+          "word": "moment",
+          "start": 11.25,
+          "end": 11.85
+        }
+      ]
+    },
+    {
+      "start": 31.3,
+      "end": 52.46,
+      "text": "the door need a verdict i don't need a vow i was holding something open protect the hollow",
+      "words": [
+        {
+          "word": "the",
+          "start": 31.3,
+          "end": 31.36
+        },
+        {
+          "word": "door",
+          "start": 31.36,
+          "end": 31.74
+        },
+        {
+          "word": "need",
+          "start": 31.74,
+          "end": 32.34
+        },
+        {
+          "word": "a",
+          "start": 41.72,
+          "end": 41.92
+        },
+        {
+          "word": "verdict",
+          "start": 41.92,
+          "end": 42.46
+        },
+        {
+          "word": "i",
+          "start": 42.46,
+          "end": 43.58
+        },
+        {
+          "word": "don't",
+          "start": 43.58,
+          "end": 44.0
+        },
+        {
+          "word": "need",
+          "start": 44.0,
+          "end": 44.2
+        },
+        {
+          "word": "a",
+          "start": 44.2,
+          "end": 44.32
+        },
+        {
+          "word": "vow",
+          "start": 44.32,
+          "end": 44.56
+        },
+        {
+          "word": "i",
+          "start": 44.56,
+          "end": 45.76
+        },
+        {
+          "word": "was",
+          "start": 45.76,
+          "end": 45.96
+        },
+        {
+          "word": "holding",
+          "start": 45.96,
+          "end": 46.24
+        },
+        {
+          "word": "something",
+          "start": 46.24,
+          "end": 46.64
+        },
+        {
+          "word": "open",
+          "start": 46.64,
+          "end": 47.28
+        },
+        {
+          "word": "protect",
+          "start": 51.02,
+          "end": 51.78
+        },
+        {
+          "word": "the",
+          "start": 51.78,
+          "end": 52.1
+        },
+        {
+          "word": "hollow",
+          "start": 52.1,
+          "end": 52.46
+        }
+      ]
+    },
+    {
+      "start": 54.6,
+      "end": 56.0,
+      "text": "Don't fill it in",
+      "words": [
+        {
+          "word": "Don't",
+          "start": 54.6,
+          "end": 54.9
+        },
+        {
+          "word": "fill",
+          "start": 54.95,
+          "end": 55.25
+        },
+        {
+          "word": "it",
+          "start": 55.3,
+          "end": 55.6
+        },
+        {
+          "word": "in",
+          "start": 55.65,
+          "end": 55.95
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 54.6,
+      "end": 56.0,
+      "text": "That space is working",
+      "words": [
+        {
+          "word": "That",
+          "start": 54.6,
+          "end": 54.9
+        },
+        {
+          "word": "space",
+          "start": 54.95,
+          "end": 55.25
+        },
+        {
+          "word": "is",
+          "start": 55.3,
+          "end": 55.6
+        },
+        {
+          "word": "working",
+          "start": 55.65,
+          "end": 55.95
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 109.2,
+      "end": 111.65,
+      "text": "You keep shining all that light here",
+      "words": [
+        {
+          "word": "You",
+          "start": 109.2,
+          "end": 109.5
+        },
+        {
+          "word": "keep",
+          "start": 109.55,
+          "end": 109.85
+        },
+        {
+          "word": "shining",
+          "start": 109.9,
+          "end": 110.2
+        },
+        {
+          "word": "all",
+          "start": 110.25,
+          "end": 110.55
+        },
+        {
+          "word": "that",
+          "start": 110.6,
+          "end": 110.9
+        },
+        {
+          "word": "light",
+          "start": 110.95,
+          "end": 111.25
+        },
+        {
+          "word": "here",
+          "start": 111.3,
+          "end": 111.6
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 109.2,
+      "end": 111.3,
+      "text": "Like that's howyou get the truth",
+      "words": [
+        {
+          "word": "Like",
+          "start": 109.2,
+          "end": 109.5
+        },
+        {
+          "word": "that's",
+          "start": 109.55,
+          "end": 109.85
+        },
+        {
+          "word": "howyou",
+          "start": 109.9,
+          "end": 110.2
+        },
+        {
+          "word": "get",
+          "start": 110.25,
+          "end": 110.55
+        },
+        {
+          "word": "the",
+          "start": 110.6,
+          "end": 110.9
+        },
+        {
+          "word": "truth",
+          "start": 110.95,
+          "end": 111.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 109.2,
+      "end": 110.6,
+      "text": "Witnessing feels like clarity",
+      "words": [
+        {
+          "word": "Witnessing",
+          "start": 109.2,
+          "end": 109.5
+        },
+        {
+          "word": "feels",
+          "start": 109.55,
+          "end": 109.85
+        },
+        {
+          "word": "like",
+          "start": 109.9,
+          "end": 110.2
+        },
+        {
+          "word": "clarity",
+          "start": 110.25,
+          "end": 110.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 163.6,
+      "end": 165.0,
+      "text": "Idon't need a dashboard",
+      "words": [
+        {
+          "word": "Idon't",
+          "start": 163.6,
+          "end": 163.9
+        },
+        {
+          "word": "need",
+          "start": 163.95,
+          "end": 164.25
+        },
+        {
+          "word": "a",
+          "start": 164.3,
+          "end": 164.6
+        },
+        {
+          "word": "dashboard",
+          "start": 164.65,
+          "end": 164.95
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 163.6,
+      "end": 165.35,
+      "text": "Telling me what I ain't",
+      "words": [
+        {
+          "word": "Telling",
+          "start": 163.6,
+          "end": 163.9
+        },
+        {
+          "word": "me",
+          "start": 163.95,
+          "end": 164.25
+        },
+        {
+          "word": "what",
+          "start": 164.3,
+          "end": 164.6
+        },
+        {
+          "word": "I",
+          "start": 164.65,
+          "end": 164.95
+        },
+        {
+          "word": "ain't",
+          "start": 165.0,
+          "end": 165.3
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 163.6,
+      "end": 165.35,
+      "text": "was standing in the quiet",
+      "words": [
+        {
+          "word": "was",
+          "start": 163.6,
+          "end": 163.9
+        },
+        {
+          "word": "standing",
+          "start": 163.95,
+          "end": 164.25
+        },
+        {
+          "word": "in",
+          "start": 164.3,
+          "end": 164.6
+        },
+        {
+          "word": "the",
+          "start": 164.65,
+          "end": 164.95
+        },
+        {
+          "word": "quiet",
+          "start": 165.0,
+          "end": 165.3
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

@@ -1,0 +1,361 @@
+{
+  "track": "Conjured Impunity",
+  "album": "exploring-laibor-mixtape",
+  "duration": 296.176,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 16.68,
+      "text": "Fve seen the high floors shaking;",
+      "words": [
+        {
+          "word": "Fve",
+          "start": 0.0,
+          "end": 1.2
+        },
+        {
+          "word": "seen",
+          "start": 14.26,
+          "end": 14.72
+        },
+        {
+          "word": "the",
+          "start": 14.72,
+          "end": 14.96
+        },
+        {
+          "word": "high",
+          "start": 14.96,
+          "end": 15.28
+        },
+        {
+          "word": "floors",
+          "start": 15.28,
+          "end": 15.84
+        },
+        {
+          "word": "shaking;",
+          "start": 15.84,
+          "end": 16.68
+        }
+      ]
+    },
+    {
+      "start": 62.74,
+      "end": 69.18,
+      "text": "Just following orders, darling But the string still ties our name",
+      "words": [
+        {
+          "word": "Just",
+          "start": 62.74,
+          "end": 63.62
+        },
+        {
+          "word": "following",
+          "start": 63.62,
+          "end": 64.32
+        },
+        {
+          "word": "orders,",
+          "start": 64.32,
+          "end": 65.06
+        },
+        {
+          "word": "darling",
+          "start": 65.22,
+          "end": 65.76
+        },
+        {
+          "word": "But",
+          "start": 65.76,
+          "end": 66.84
+        },
+        {
+          "word": "the",
+          "start": 66.84,
+          "end": 67.06
+        },
+        {
+          "word": "string",
+          "start": 67.06,
+          "end": 67.48
+        },
+        {
+          "word": "still",
+          "start": 67.48,
+          "end": 67.94
+        },
+        {
+          "word": "ties",
+          "start": 67.94,
+          "end": 68.32
+        },
+        {
+          "word": "our",
+          "start": 68.32,
+          "end": 68.66
+        },
+        {
+          "word": "name",
+          "start": 68.66,
+          "end": 69.18
+        }
+      ]
+    },
+    {
+      "start": 74.2,
+      "end": 76.3,
+      "text": "Oh, impunity_ we conjure it clean;",
+      "words": [
+        {
+          "word": "Oh,",
+          "start": 74.2,
+          "end": 74.5
+        },
+        {
+          "word": "impunity_",
+          "start": 74.55,
+          "end": 74.85
+        },
+        {
+          "word": "we",
+          "start": 74.9,
+          "end": 75.2
+        },
+        {
+          "word": "conjure",
+          "start": 75.25,
+          "end": 75.55
+        },
+        {
+          "word": "it",
+          "start": 75.6,
+          "end": 75.9
+        },
+        {
+          "word": "clean;",
+          "start": 75.95,
+          "end": 76.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 74.2,
+      "end": 75.95,
+      "text": "alittle freedom from the fallout;",
+      "words": [
+        {
+          "word": "alittle",
+          "start": 74.2,
+          "end": 74.5
+        },
+        {
+          "word": "freedom",
+          "start": 74.55,
+          "end": 74.85
+        },
+        {
+          "word": "from",
+          "start": 74.9,
+          "end": 75.2
+        },
+        {
+          "word": "the",
+          "start": 75.25,
+          "end": 75.55
+        },
+        {
+          "word": "fallout;",
+          "start": 75.6,
+          "end": 75.9
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 138.91,
+      "end": 144.91,
+      "text": "Oh; impunity__that velvet Iittle lie,",
+      "words": [
+        {
+          "word": "Oh;",
+          "start": 138.91,
+          "end": 139.55
+        },
+        {
+          "word": "impunity__that",
+          "start": 139.81,
+          "end": 140.79
+        },
+        {
+          "word": "velvet",
+          "start": 141.03,
+          "end": 142.25
+        },
+        {
+          "word": "Iittle",
+          "start": 143.63,
+          "end": 144.41
+        },
+        {
+          "word": "lie,",
+          "start": 144.41,
+          "end": 144.91
+        }
+      ]
+    },
+    {
+      "start": 148.2,
+      "end": 149.6,
+      "text": "pretending we'Il get by:",
+      "words": [
+        {
+          "word": "pretending",
+          "start": 148.2,
+          "end": 148.5
+        },
+        {
+          "word": "we'Il",
+          "start": 148.55,
+          "end": 148.85
+        },
+        {
+          "word": "get",
+          "start": 148.9,
+          "end": 149.2
+        },
+        {
+          "word": "by:",
+          "start": 149.25,
+          "end": 149.55
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 222.2,
+      "end": 224.3,
+      "text": "Will it cover up our choices?",
+      "words": [
+        {
+          "word": "Will",
+          "start": 222.2,
+          "end": 222.5
+        },
+        {
+          "word": "it",
+          "start": 222.55,
+          "end": 222.85
+        },
+        {
+          "word": "cover",
+          "start": 222.9,
+          "end": 223.2
+        },
+        {
+          "word": "up",
+          "start": 223.25,
+          "end": 223.55
+        },
+        {
+          "word": "our",
+          "start": 223.6,
+          "end": 223.9
+        },
+        {
+          "word": "choices?",
+          "start": 223.95,
+          "end": 224.25
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 222.2,
+      "end": 224.65,
+      "text": "Will it blind us from the night?",
+      "words": [
+        {
+          "word": "Will",
+          "start": 222.2,
+          "end": 222.5
+        },
+        {
+          "word": "it",
+          "start": 222.55,
+          "end": 222.85
+        },
+        {
+          "word": "blind",
+          "start": 222.9,
+          "end": 223.2
+        },
+        {
+          "word": "us",
+          "start": 223.25,
+          "end": 223.55
+        },
+        {
+          "word": "from",
+          "start": 223.6,
+          "end": 223.9
+        },
+        {
+          "word": "the",
+          "start": 223.95,
+          "end": 224.25
+        },
+        {
+          "word": "night?",
+          "start": 224.3,
+          "end": 224.6
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 222.2,
+      "end": 224.65,
+      "text": "Or will it burn a little brighter",
+      "words": [
+        {
+          "word": "Or",
+          "start": 222.2,
+          "end": 222.5
+        },
+        {
+          "word": "will",
+          "start": 222.55,
+          "end": 222.85
+        },
+        {
+          "word": "it",
+          "start": 222.9,
+          "end": 223.2
+        },
+        {
+          "word": "burn",
+          "start": 223.25,
+          "end": 223.55
+        },
+        {
+          "word": "a",
+          "start": 223.6,
+          "end": 223.9
+        },
+        {
+          "word": "little",
+          "start": 223.95,
+          "end": 224.25
+        },
+        {
+          "word": "brighter",
+          "start": 224.3,
+          "end": 224.6
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

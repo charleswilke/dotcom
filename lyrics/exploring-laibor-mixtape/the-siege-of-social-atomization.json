@@ -1,0 +1,217 @@
+{
+  "track": "The Siege Of Social Atomization",
+  "album": "exploring-laibor-mixtape",
+  "duration": 251.634,
+  "lines": [
+    {
+      "start": 0.0,
+      "end": 1.76,
+      "text": "They sold it backin parts",
+      "words": [
+        {
+          "word": "They",
+          "start": 0.0,
+          "end": 0.1
+        },
+        {
+          "word": "sold",
+          "start": 0.1,
+          "end": 0.22
+        },
+        {
+          "word": "it",
+          "start": 0.22,
+          "end": 0.58
+        },
+        {
+          "word": "backin",
+          "start": 0.58,
+          "end": 1.0
+        },
+        {
+          "word": "parts",
+          "start": 1.0,
+          "end": 1.76
+        }
+      ]
+    },
+    {
+      "start": 47.3,
+      "end": 49.52,
+      "text": "This is the theft",
+      "words": [
+        {
+          "word": "This",
+          "start": 47.3,
+          "end": 48.48
+        },
+        {
+          "word": "is",
+          "start": 48.48,
+          "end": 48.88
+        },
+        {
+          "word": "the",
+          "start": 48.88,
+          "end": 48.98
+        },
+        {
+          "word": "theft",
+          "start": 48.98,
+          "end": 49.52
+        }
+      ]
+    },
+    {
+      "start": 63.0,
+      "end": 64.4,
+      "text": "No one in relation",
+      "words": [
+        {
+          "word": "No",
+          "start": 63.0,
+          "end": 63.3
+        },
+        {
+          "word": "one",
+          "start": 63.35,
+          "end": 63.65
+        },
+        {
+          "word": "in",
+          "start": 63.7,
+          "end": 64.0
+        },
+        {
+          "word": "relation",
+          "start": 64.05,
+          "end": 64.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 179.13,
+      "end": 198.26,
+      "text": "While the pain of other people suck our heads",
+      "words": [
+        {
+          "word": "While",
+          "start": 179.13,
+          "end": 180.01
+        },
+        {
+          "word": "the",
+          "start": 180.01,
+          "end": 180.19
+        },
+        {
+          "word": "pain",
+          "start": 180.19,
+          "end": 180.59
+        },
+        {
+          "word": "of",
+          "start": 180.59,
+          "end": 180.89
+        },
+        {
+          "word": "other",
+          "start": 180.89,
+          "end": 181.21
+        },
+        {
+          "word": "people",
+          "start": 181.21,
+          "end": 181.57
+        },
+        {
+          "word": "suck",
+          "start": 185.82,
+          "end": 186.48
+        },
+        {
+          "word": "our",
+          "start": 186.48,
+          "end": 187.18
+        },
+        {
+          "word": "heads",
+          "start": 197.74,
+          "end": 198.26
+        }
+      ]
+    },
+    {
+      "start": 189.0,
+      "end": 190.75,
+      "text": "Never quite makes it inside",
+      "words": [
+        {
+          "word": "Never",
+          "start": 189.0,
+          "end": 189.3
+        },
+        {
+          "word": "quite",
+          "start": 189.35,
+          "end": 189.65
+        },
+        {
+          "word": "makes",
+          "start": 189.7,
+          "end": 190.0
+        },
+        {
+          "word": "it",
+          "start": 190.05,
+          "end": 190.35
+        },
+        {
+          "word": "inside",
+          "start": 190.4,
+          "end": 190.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 189.0,
+      "end": 191.1,
+      "text": "We weren't mean't to carry meaning",
+      "words": [
+        {
+          "word": "We",
+          "start": 189.0,
+          "end": 189.3
+        },
+        {
+          "word": "weren't",
+          "start": 189.35,
+          "end": 189.65
+        },
+        {
+          "word": "mean't",
+          "start": 189.7,
+          "end": 190.0
+        },
+        {
+          "word": "to",
+          "start": 190.05,
+          "end": 190.35
+        },
+        {
+          "word": "carry",
+          "start": 190.4,
+          "end": 190.7
+        },
+        {
+          "word": "meaning",
+          "start": 190.75,
+          "end": 191.05
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

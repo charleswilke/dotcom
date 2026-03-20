@@ -1,0 +1,282 @@
+{
+  "track": "Respect The Exhale",
+  "album": "grief-without-ritual",
+  "duration": 239.935,
+  "lines": [
+    {
+      "start": 0.27,
+      "end": 20.71,
+      "text": "If he pulls tight, like a finger on the wire, every little scroll keeps stoking that fire.",
+      "words": [
+        {
+          "word": "If",
+          "start": 0.27,
+          "end": 1.71
+        },
+        {
+          "word": "he",
+          "start": 11.09,
+          "end": 11.25
+        },
+        {
+          "word": "pulls",
+          "start": 11.25,
+          "end": 11.67
+        },
+        {
+          "word": "tight,",
+          "start": 11.67,
+          "end": 12.13
+        },
+        {
+          "word": "like",
+          "start": 12.43,
+          "end": 14.45
+        },
+        {
+          "word": "a",
+          "start": 14.45,
+          "end": 14.67
+        },
+        {
+          "word": "finger",
+          "start": 14.67,
+          "end": 14.95
+        },
+        {
+          "word": "on",
+          "start": 14.95,
+          "end": 15.25
+        },
+        {
+          "word": "the",
+          "start": 15.25,
+          "end": 15.41
+        },
+        {
+          "word": "wire,",
+          "start": 15.41,
+          "end": 15.83
+        },
+        {
+          "word": "every",
+          "start": 16.15,
+          "end": 17.09
+        },
+        {
+          "word": "little",
+          "start": 17.09,
+          "end": 17.47
+        },
+        {
+          "word": "scroll",
+          "start": 17.47,
+          "end": 17.85
+        },
+        {
+          "word": "keeps",
+          "start": 17.85,
+          "end": 19.53
+        },
+        {
+          "word": "stoking",
+          "start": 19.53,
+          "end": 20.05
+        },
+        {
+          "word": "that",
+          "start": 20.05,
+          "end": 20.37
+        },
+        {
+          "word": "fire.",
+          "start": 20.37,
+          "end": 20.71
+        }
+      ]
+    },
+    {
+      "start": 0.5,
+      "end": 1.9,
+      "text": "That feed pulls tight",
+      "words": [
+        {
+          "word": "That",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "feed",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "pulls",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "tight",
+          "start": 1.55,
+          "end": 1.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 60.0,
+      "end": 61.4,
+      "text": "Give the momen't room",
+      "words": [
+        {
+          "word": "Give",
+          "start": 60.0,
+          "end": 60.3
+        },
+        {
+          "word": "the",
+          "start": 60.35,
+          "end": 60.65
+        },
+        {
+          "word": "momen't",
+          "start": 60.7,
+          "end": 61.0
+        },
+        {
+          "word": "room",
+          "start": 61.05,
+          "end": 61.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 120.0,
+      "end": 121.75,
+      "text": "Give the soul some time",
+      "words": [
+        {
+          "word": "Give",
+          "start": 120.0,
+          "end": 120.3
+        },
+        {
+          "word": "the",
+          "start": 120.35,
+          "end": 120.65
+        },
+        {
+          "word": "soul",
+          "start": 120.7,
+          "end": 121.0
+        },
+        {
+          "word": "some",
+          "start": 121.05,
+          "end": 121.35
+        },
+        {
+          "word": "time",
+          "start": 121.4,
+          "end": 121.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 120.0,
+      "end": 121.4,
+      "text": "Let the pressure slide",
+      "words": [
+        {
+          "word": "Let",
+          "start": 120.0,
+          "end": 120.3
+        },
+        {
+          "word": "the",
+          "start": 120.35,
+          "end": 120.65
+        },
+        {
+          "word": "pressure",
+          "start": 120.7,
+          "end": 121.0
+        },
+        {
+          "word": "slide",
+          "start": 121.05,
+          "end": 121.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 180.0,
+      "end": 181.75,
+      "text": "Then it's learnin' from me",
+      "words": [
+        {
+          "word": "Then",
+          "start": 180.0,
+          "end": 180.3
+        },
+        {
+          "word": "it's",
+          "start": 180.35,
+          "end": 180.65
+        },
+        {
+          "word": "learnin'",
+          "start": 180.7,
+          "end": 181.0
+        },
+        {
+          "word": "from",
+          "start": 181.05,
+          "end": 181.35
+        },
+        {
+          "word": "me",
+          "start": 181.4,
+          "end": 181.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 180.0,
+      "end": 181.75,
+      "text": "Give the night its roar",
+      "words": [
+        {
+          "word": "Give",
+          "start": 180.0,
+          "end": 180.3
+        },
+        {
+          "word": "the",
+          "start": 180.35,
+          "end": 180.65
+        },
+        {
+          "word": "night",
+          "start": 180.7,
+          "end": 181.0
+        },
+        {
+          "word": "its",
+          "start": 181.05,
+          "end": 181.35
+        },
+        {
+          "word": "roar",
+          "start": 181.4,
+          "end": 181.7
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

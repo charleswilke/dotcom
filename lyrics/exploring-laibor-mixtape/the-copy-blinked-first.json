@@ -1,0 +1,345 @@
+{
+  "track": "The Copy Blinked First",
+  "album": "exploring-laibor-mixtape",
+  "duration": 171.28,
+  "lines": [
+    {
+      "start": 9.2,
+      "end": 10.7,
+      "text": "Learned to color inside lines",
+      "words": [
+        {
+          "word": "Learned",
+          "start": 9.2,
+          "end": 9.54
+        },
+        {
+          "word": "to",
+          "start": 9.54,
+          "end": 10.08
+        },
+        {
+          "word": "color",
+          "start": 10.08,
+          "end": 10.24
+        },
+        {
+          "word": "inside",
+          "start": 10.24,
+          "end": 10.46
+        },
+        {
+          "word": "lines",
+          "start": 10.46,
+          "end": 10.7
+        }
+      ]
+    },
+    {
+      "start": 28.28,
+      "end": 37.13,
+      "text": "The mirror didn't shatter, didn't curse or rehearse",
+      "words": [
+        {
+          "word": "The",
+          "start": 28.28,
+          "end": 29.08
+        },
+        {
+          "word": "mirror",
+          "start": 33.05,
+          "end": 33.45
+        },
+        {
+          "word": "didn't",
+          "start": 33.45,
+          "end": 34.11
+        },
+        {
+          "word": "shatter,",
+          "start": 34.11,
+          "end": 34.61
+        },
+        {
+          "word": "didn't",
+          "start": 34.69,
+          "end": 35.33
+        },
+        {
+          "word": "curse",
+          "start": 35.33,
+          "end": 35.67
+        },
+        {
+          "word": "or",
+          "start": 35.67,
+          "end": 36.25
+        },
+        {
+          "word": "rehearse",
+          "start": 36.25,
+          "end": 37.13
+        }
+      ]
+    },
+    {
+      "start": 38.66,
+      "end": 45.5,
+      "text": "Just looked back a second longer and the copy blinked first",
+      "words": [
+        {
+          "word": "Just",
+          "start": 38.66,
+          "end": 39.32
+        },
+        {
+          "word": "looked",
+          "start": 39.32,
+          "end": 39.68
+        },
+        {
+          "word": "back",
+          "start": 39.68,
+          "end": 40.08
+        },
+        {
+          "word": "a",
+          "start": 40.08,
+          "end": 40.26
+        },
+        {
+          "word": "second",
+          "start": 40.26,
+          "end": 40.64
+        },
+        {
+          "word": "longer",
+          "start": 40.64,
+          "end": 41.26
+        },
+        {
+          "word": "and",
+          "start": 41.26,
+          "end": 41.8
+        },
+        {
+          "word": "the",
+          "start": 43.88,
+          "end": 44.06
+        },
+        {
+          "word": "copy",
+          "start": 44.06,
+          "end": 44.46
+        },
+        {
+          "word": "blinked",
+          "start": 44.46,
+          "end": 45.26
+        },
+        {
+          "word": "first",
+          "start": 45.26,
+          "end": 45.5
+        }
+      ]
+    },
+    {
+      "start": 85.8,
+      "end": 87.55,
+      "text": "It doesn't wan't the meaning",
+      "words": [
+        {
+          "word": "It",
+          "start": 85.8,
+          "end": 86.1
+        },
+        {
+          "word": "doesn't",
+          "start": 86.15,
+          "end": 86.45
+        },
+        {
+          "word": "wan't",
+          "start": 86.5,
+          "end": 86.8
+        },
+        {
+          "word": "the",
+          "start": 86.85,
+          "end": 87.15
+        },
+        {
+          "word": "meaning",
+          "start": 87.2,
+          "end": 87.5
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 86.62,
+      "end": 90.88,
+      "text": "Doesn't need the praise, leaves the question on the table",
+      "words": [
+        {
+          "word": "Doesn't",
+          "start": 86.62,
+          "end": 87.42
+        },
+        {
+          "word": "need",
+          "start": 87.42,
+          "end": 87.78
+        },
+        {
+          "word": "the",
+          "start": 87.78,
+          "end": 88.06
+        },
+        {
+          "word": "praise,",
+          "start": 88.06,
+          "end": 88.36
+        },
+        {
+          "word": "leaves",
+          "start": 88.74,
+          "end": 89.0
+        },
+        {
+          "word": "the",
+          "start": 89.0,
+          "end": 89.24
+        },
+        {
+          "word": "question",
+          "start": 89.24,
+          "end": 89.74
+        },
+        {
+          "word": "on",
+          "start": 89.74,
+          "end": 90.2
+        },
+        {
+          "word": "the",
+          "start": 90.2,
+          "end": 90.48
+        },
+        {
+          "word": "table",
+          "start": 90.48,
+          "end": 90.88
+        }
+      ]
+    },
+    {
+      "start": 123.12,
+      "end": 125.18,
+      "text": "We just have to sit there breathing",
+      "words": [
+        {
+          "word": "We",
+          "start": 123.12,
+          "end": 123.42
+        },
+        {
+          "word": "just",
+          "start": 123.42,
+          "end": 123.6
+        },
+        {
+          "word": "have",
+          "start": 123.6,
+          "end": 123.84
+        },
+        {
+          "word": "to",
+          "start": 123.84,
+          "end": 124.16
+        },
+        {
+          "word": "sit",
+          "start": 124.16,
+          "end": 124.38
+        },
+        {
+          "word": "there",
+          "start": 124.38,
+          "end": 124.68
+        },
+        {
+          "word": "breathing",
+          "start": 124.68,
+          "end": 125.18
+        }
+      ]
+    },
+    {
+      "start": 125.18,
+      "end": 129.86,
+      "text": "After the copy blinked first",
+      "words": [
+        {
+          "word": "After",
+          "start": 125.18,
+          "end": 126.04
+        },
+        {
+          "word": "the",
+          "start": 127.86,
+          "end": 128.4
+        },
+        {
+          "word": "copy",
+          "start": 128.4,
+          "end": 128.82
+        },
+        {
+          "word": "blinked",
+          "start": 128.82,
+          "end": 129.78
+        },
+        {
+          "word": "first",
+          "start": 129.78,
+          "end": 129.86
+        }
+      ]
+    },
+    {
+      "start": 128.6,
+      "end": 130.35,
+      "text": "It didn't take our meaning",
+      "words": [
+        {
+          "word": "It",
+          "start": 128.6,
+          "end": 128.9
+        },
+        {
+          "word": "didn't",
+          "start": 128.95,
+          "end": 129.25
+        },
+        {
+          "word": "take",
+          "start": 129.3,
+          "end": 129.6
+        },
+        {
+          "word": "our",
+          "start": 129.65,
+          "end": 129.95
+        },
+        {
+          "word": "meaning",
+          "start": 130.0,
+          "end": 130.3
+        }
+      ],
+      "_needs_timing": true
+    }
+  ]
+}

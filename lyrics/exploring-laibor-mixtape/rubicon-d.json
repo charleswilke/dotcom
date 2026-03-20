@@ -1,0 +1,224 @@
+{
+  "track": "Rubicon D",
+  "album": "exploring-laibor-mixtape",
+  "duration": 179.226,
+  "lines": [
+    {
+      "start": 10.51,
+      "end": 15.43,
+      "text": "They say John Henry beat the iron for a moment or two.",
+      "words": [
+        {
+          "word": "They",
+          "start": 10.51,
+          "end": 10.79
+        },
+        {
+          "word": "say",
+          "start": 10.79,
+          "end": 11.01
+        },
+        {
+          "word": "John",
+          "start": 11.01,
+          "end": 11.33
+        },
+        {
+          "word": "Henry",
+          "start": 11.33,
+          "end": 11.91
+        },
+        {
+          "word": "beat",
+          "start": 11.91,
+          "end": 12.35
+        },
+        {
+          "word": "the",
+          "start": 12.35,
+          "end": 12.67
+        },
+        {
+          "word": "iron",
+          "start": 12.67,
+          "end": 13.07
+        },
+        {
+          "word": "for",
+          "start": 13.07,
+          "end": 13.95
+        },
+        {
+          "word": "a",
+          "start": 13.95,
+          "end": 14.21
+        },
+        {
+          "word": "moment",
+          "start": 14.21,
+          "end": 14.63
+        },
+        {
+          "word": "or",
+          "start": 14.63,
+          "end": 15.09
+        },
+        {
+          "word": "two.",
+          "start": 15.09,
+          "end": 15.43
+        }
+      ]
+    },
+    {
+      "start": 45.0,
+      "end": 47.1,
+      "text": "Can't unmake a world already tossed:",
+      "words": [
+        {
+          "word": "Can't",
+          "start": 45.0,
+          "end": 45.3
+        },
+        {
+          "word": "unmake",
+          "start": 45.35,
+          "end": 45.65
+        },
+        {
+          "word": "a",
+          "start": 45.7,
+          "end": 46.0
+        },
+        {
+          "word": "world",
+          "start": 46.05,
+          "end": 46.35
+        },
+        {
+          "word": "already",
+          "start": 46.4,
+          "end": 46.7
+        },
+        {
+          "word": "tossed:",
+          "start": 46.75,
+          "end": 47.05
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 78.61,
+      "end": 82.15,
+      "text": "Askwhat you will, but the answer's the cost",
+      "words": [
+        {
+          "word": "Askwhat",
+          "start": 78.61,
+          "end": 79.19
+        },
+        {
+          "word": "you",
+          "start": 79.19,
+          "end": 79.43
+        },
+        {
+          "word": "will,",
+          "start": 79.43,
+          "end": 80.09
+        },
+        {
+          "word": "but",
+          "start": 80.09,
+          "end": 80.75
+        },
+        {
+          "word": "the",
+          "start": 80.75,
+          "end": 80.81
+        },
+        {
+          "word": "answer's",
+          "start": 80.81,
+          "end": 81.47
+        },
+        {
+          "word": "the",
+          "start": 81.55,
+          "end": 82.01
+        },
+        {
+          "word": "cost",
+          "start": 82.01,
+          "end": 82.15
+        }
+      ]
+    },
+    {
+      "start": 134.6,
+      "end": 137.75,
+      "text": "Or the path you walk to the very end:",
+      "words": [
+        {
+          "word": "Or",
+          "start": 134.6,
+          "end": 134.9
+        },
+        {
+          "word": "the",
+          "start": 134.95,
+          "end": 135.25
+        },
+        {
+          "word": "path",
+          "start": 135.3,
+          "end": 135.6
+        },
+        {
+          "word": "you",
+          "start": 135.65,
+          "end": 135.95
+        },
+        {
+          "word": "walk",
+          "start": 136.0,
+          "end": 136.3
+        },
+        {
+          "word": "to",
+          "start": 136.35,
+          "end": 136.65
+        },
+        {
+          "word": "the",
+          "start": 136.7,
+          "end": 137.0
+        },
+        {
+          "word": "very",
+          "start": 137.05,
+          "end": 137.35
+        },
+        {
+          "word": "end:",
+          "start": 137.4,
+          "end": 137.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 159.13,
+      "end": 160.05,
+      "text": "Rubicon.",
+      "words": [
+        {
+          "word": "Rubicon.",
+          "start": 159.13,
+          "end": 160.05
+        }
+      ]
+    }
+  ]
+}

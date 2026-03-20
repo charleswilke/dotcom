@@ -7473,6 +7473,281 @@ section.production-header.alice p {
     }
 }
 
+/* ===== KARAOKE LYRICS ===== */
+
+.karaoke-toggle-btn {
+    background: none;
+    border: 1px solid rgba(0, 247, 194, 0.3);
+    color: rgba(0, 247, 194, 0.7);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    margin-left: 0.5rem;
+    line-height: 1;
+}
+
+.karaoke-toggle-btn:hover {
+    color: #00f7c2;
+    border-color: rgba(0, 247, 194, 0.6);
+    text-shadow: 0 0 8px rgba(0, 247, 194, 0.5);
+}
+
+.karaoke-mode .karaoke-toggle-btn {
+    color: #00f7c2;
+    border-color: #00f7c2;
+    background: rgba(0, 247, 194, 0.1);
+    text-shadow: 0 0 8px rgba(0, 247, 194, 0.5);
+}
+
+/* GWOR theme toggle */
+#gworLightbox .karaoke-toggle-btn {
+    border-color: rgba(166, 52, 52, 0.3);
+    color: rgba(197, 74, 74, 0.7);
+}
+
+#gworLightbox .karaoke-toggle-btn:hover {
+    color: #c54a4a;
+    border-color: rgba(197, 74, 74, 0.6);
+    text-shadow: 0 0 8px rgba(197, 74, 74, 0.5);
+}
+
+#gworLightbox .karaoke-mode .karaoke-toggle-btn {
+    color: #c54a4a;
+    border-color: #c54a4a;
+    background: rgba(197, 74, 74, 0.1);
+    text-shadow: 0 0 8px rgba(197, 74, 74, 0.5);
+}
+
+/* B-side theme toggle */
+.mixtape-lightbox.b-side-active .karaoke-toggle-btn {
+    border-color: rgba(247, 168, 0, 0.3);
+    color: rgba(247, 168, 0, 0.7);
+}
+
+.mixtape-lightbox.b-side-active .karaoke-toggle-btn:hover {
+    color: #f7a800;
+    border-color: rgba(247, 168, 0, 0.6);
+    text-shadow: 0 0 8px rgba(247, 168, 0, 0.5);
+}
+
+.mixtape-lightbox.b-side-active .karaoke-mode .karaoke-toggle-btn {
+    color: #f7a800;
+    border-color: #f7a800;
+    background: rgba(247, 168, 0, 0.1);
+}
+
+/* Karaoke container — replaces video when active */
+.karaoke-container {
+    display: none;
+    width: 100%;
+    border-radius: 8px;
+    position: relative;
+    background: rgba(10, 5, 20, 0.9);
+    border: 1px solid rgba(0, 247, 194, 0.2);
+    box-shadow:
+        inset 0 0 30px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(0, 247, 194, 0.1);
+    overflow: hidden;
+}
+
+.karaoke-container.karaoke-active {
+    display: block;
+    flex: 1;
+    min-height: 113px;
+    margin-top: 0.4rem;
+}
+
+/* Hide video when karaoke is active */
+.karaoke-mode .mixtape-lyrics-video-container {
+    display: none !important;
+}
+
+.karaoke-scroll-region {
+    padding: 1.5rem 1rem;
+    max-height: 280px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.karaoke-scroll-region::-webkit-scrollbar {
+    display: none;
+}
+
+/* Individual lyric lines */
+.karaoke-line {
+    text-align: center;
+    padding: 0.4rem 0;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.6;
+    opacity: 0.25;
+    transition: opacity 0.4s ease;
+    letter-spacing: 0.02em;
+}
+
+.karaoke-line.active {
+    opacity: 1;
+}
+
+/* Individual words with sweep highlight */
+.karaoke-word {
+    position: relative;
+    display: inline;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.15s ease;
+}
+
+.karaoke-word.active {
+    color: #00f7c2;
+    text-shadow: 0 0 12px rgba(0, 247, 194, 0.6);
+}
+
+/* Word highlight sweep via background clip */
+.karaoke-line.active .karaoke-word {
+    background: linear-gradient(
+        90deg,
+        #00f7c2 0%,
+        #00f7c2 calc(var(--word-progress, 0) * 100%),
+        rgba(255, 255, 255, 0.85) calc(var(--word-progress, 0) * 100%),
+        rgba(255, 255, 255, 0.85) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+}
+
+.karaoke-line.active .karaoke-word.active {
+    filter: drop-shadow(0 0 8px rgba(0, 247, 194, 0.4));
+}
+
+/* Past words in active line — fully highlighted */
+.karaoke-line.active .karaoke-word.past {
+    background: #00f7c2;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 6px rgba(0, 247, 194, 0.3));
+}
+
+/* GWOR karaoke theme */
+#gworLightbox .karaoke-container {
+    border-color: rgba(166, 52, 52, 0.26);
+    box-shadow:
+        inset 0 0 30px rgba(0, 0, 0, 0.82),
+        0 0 14px rgba(166, 52, 52, 0.16);
+}
+
+#gworLightbox .karaoke-word.active {
+    color: #c54a4a;
+    text-shadow: 0 0 12px rgba(197, 74, 74, 0.6);
+}
+
+#gworLightbox .karaoke-line.active .karaoke-word {
+    background: linear-gradient(
+        90deg,
+        #c54a4a 0%,
+        #c54a4a calc(var(--word-progress, 0) * 100%),
+        rgba(255, 255, 255, 0.85) calc(var(--word-progress, 0) * 100%),
+        rgba(255, 255, 255, 0.85) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+}
+
+#gworLightbox .karaoke-line.active .karaoke-word.active {
+    filter: drop-shadow(0 0 8px rgba(197, 74, 74, 0.4));
+}
+
+#gworLightbox .karaoke-line.active .karaoke-word.past {
+    background: #c54a4a;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 6px rgba(197, 74, 74, 0.3));
+}
+
+/* B-side karaoke theme */
+.mixtape-lightbox.b-side-active .karaoke-container {
+    border-color: rgba(247, 168, 0, 0.2);
+    box-shadow:
+        inset 0 0 30px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(247, 168, 0, 0.1);
+}
+
+.mixtape-lightbox.b-side-active .karaoke-word.active {
+    color: #f7a800;
+    text-shadow: 0 0 12px rgba(247, 168, 0, 0.6);
+}
+
+.mixtape-lightbox.b-side-active .karaoke-line.active .karaoke-word {
+    background: linear-gradient(
+        90deg,
+        #f7a800 0%,
+        #f7a800 calc(var(--word-progress, 0) * 100%),
+        rgba(255, 255, 255, 0.85) calc(var(--word-progress, 0) * 100%),
+        rgba(255, 255, 255, 0.85) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+}
+
+.mixtape-lightbox.b-side-active .karaoke-line.active .karaoke-word.active {
+    filter: drop-shadow(0 0 8px rgba(247, 168, 0, 0.4));
+}
+
+.mixtape-lightbox.b-side-active .karaoke-line.active .karaoke-word.past {
+    background: #f7a800;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 6px rgba(247, 168, 0, 0.3));
+}
+
+/* Desktop karaoke sizing */
+@media (min-width: 768px) {
+    .karaoke-container.karaoke-active {
+        min-height: 162px;
+    }
+    .karaoke-scroll-region {
+        max-height: 350px;
+    }
+}
+
+/* Mobile karaoke */
+@media (max-width: 768px) {
+    .karaoke-scroll-region {
+        padding: 1rem 0.75rem;
+        max-height: 200px;
+    }
+    .karaoke-line {
+        font-size: 0.95rem;
+    }
+    .karaoke-toggle-btn {
+        font-size: 0.95rem;
+        padding: 0.2rem 0.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .karaoke-scroll-region {
+        max-height: 160px;
+        padding: 0.75rem 0.5rem;
+    }
+    .karaoke-line {
+        font-size: 0.85rem;
+    }
+}
+
 /* Mobile Responsiveness for Mixtape */
 @media (max-width: 768px) {
     .mixtape-lightbox .mixtape-content {

@@ -1,0 +1,606 @@
+{
+  "track": "Waiting For Something",
+  "album": "grief-without-ritual",
+  "duration": 189.84,
+  "lines": [
+    {
+      "start": 0.3,
+      "end": 24.51,
+      "text": "Ijust can't slt still",
+      "words": [
+        {
+          "word": "Ijust",
+          "start": 0.3,
+          "end": 1.62
+        },
+        {
+          "word": "can't",
+          "start": 22.39,
+          "end": 22.51
+        },
+        {
+          "word": "slt",
+          "start": 22.51,
+          "end": 23.47
+        },
+        {
+          "word": "still",
+          "start": 23.71,
+          "end": 24.51
+        }
+      ]
+    },
+    {
+      "start": 0.5,
+      "end": 2.25,
+      "text": "Waiting for Something by cwllke",
+      "words": [
+        {
+          "word": "Waiting",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "for",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "Something",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "by",
+          "start": 1.55,
+          "end": 1.85
+        },
+        {
+          "word": "cwllke",
+          "start": 1.9,
+          "end": 2.2
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 0.5,
+      "end": 1.9,
+      "text": "Iwatch movies in pieces",
+      "words": [
+        {
+          "word": "Iwatch",
+          "start": 0.5,
+          "end": 0.8
+        },
+        {
+          "word": "movies",
+          "start": 0.85,
+          "end": 1.15
+        },
+        {
+          "word": "in",
+          "start": 1.2,
+          "end": 1.5
+        },
+        {
+          "word": "pieces",
+          "start": 1.55,
+          "end": 1.85
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 25.99,
+      "end": 29.13,
+      "text": "Brain Iike a live wire",
+      "words": [
+        {
+          "word": "Brain",
+          "start": 25.99,
+          "end": 27.43
+        },
+        {
+          "word": "Iike",
+          "start": 27.43,
+          "end": 27.67
+        },
+        {
+          "word": "a",
+          "start": 27.67,
+          "end": 27.89
+        },
+        {
+          "word": "live",
+          "start": 27.89,
+          "end": 28.53
+        },
+        {
+          "word": "wire",
+          "start": 28.53,
+          "end": 29.13
+        }
+      ]
+    },
+    {
+      "start": 32.49,
+      "end": 36.83,
+      "text": "Headlines flashing, blue -eyed sheen",
+      "words": [
+        {
+          "word": "Headlines",
+          "start": 32.49,
+          "end": 33.41
+        },
+        {
+          "word": "flashing,",
+          "start": 33.41,
+          "end": 34.15
+        },
+        {
+          "word": "blue",
+          "start": 34.57,
+          "end": 35.13
+        },
+        {
+          "word": "-eyed",
+          "start": 35.13,
+          "end": 35.87
+        },
+        {
+          "word": "sheen",
+          "start": 35.87,
+          "end": 36.83
+        }
+      ]
+    },
+    {
+      "start": 37.51,
+      "end": 40.89,
+      "text": "Anxiety dressed up like it's ever",
+      "words": [
+        {
+          "word": "Anxiety",
+          "start": 37.51,
+          "end": 38.55
+        },
+        {
+          "word": "dressed",
+          "start": 38.55,
+          "end": 38.93
+        },
+        {
+          "word": "up",
+          "start": 38.93,
+          "end": 39.41
+        },
+        {
+          "word": "like",
+          "start": 39.41,
+          "end": 40.09
+        },
+        {
+          "word": "it's",
+          "start": 40.09,
+          "end": 40.51
+        },
+        {
+          "word": "ever",
+          "start": 40.51,
+          "end": 40.89
+        }
+      ]
+    },
+    {
+      "start": 52.81,
+      "end": 58.13,
+      "text": "You can stand in every universe and never move your feet",
+      "words": [
+        {
+          "word": "You",
+          "start": 52.81,
+          "end": 53.43
+        },
+        {
+          "word": "can",
+          "start": 53.43,
+          "end": 53.55
+        },
+        {
+          "word": "stand",
+          "start": 53.55,
+          "end": 54.11
+        },
+        {
+          "word": "in",
+          "start": 54.11,
+          "end": 54.47
+        },
+        {
+          "word": "every",
+          "start": 54.47,
+          "end": 54.95
+        },
+        {
+          "word": "universe",
+          "start": 54.95,
+          "end": 55.77
+        },
+        {
+          "word": "and",
+          "start": 55.77,
+          "end": 56.39
+        },
+        {
+          "word": "never",
+          "start": 56.39,
+          "end": 56.71
+        },
+        {
+          "word": "move",
+          "start": 56.71,
+          "end": 57.19
+        },
+        {
+          "word": "your",
+          "start": 57.19,
+          "end": 57.63
+        },
+        {
+          "word": "feet",
+          "start": 57.63,
+          "end": 58.13
+        }
+      ]
+    },
+    {
+      "start": 58.13,
+      "end": 61.71,
+      "text": "But it won' t step in",
+      "words": [
+        {
+          "word": "But",
+          "start": 58.13,
+          "end": 58.75
+        },
+        {
+          "word": "it",
+          "start": 58.75,
+          "end": 59.17
+        },
+        {
+          "word": "won'",
+          "start": 59.17,
+          "end": 60.13
+        },
+        {
+          "word": "t",
+          "start": 60.13,
+          "end": 60.91
+        },
+        {
+          "word": "step",
+          "start": 60.91,
+          "end": 61.25
+        },
+        {
+          "word": "in",
+          "start": 61.25,
+          "end": 61.71
+        }
+      ]
+    },
+    {
+      "start": 64.89,
+      "end": 69.22,
+      "text": "So call your folks in",
+      "words": [
+        {
+          "word": "So",
+          "start": 64.89,
+          "end": 65.81
+        },
+        {
+          "word": "call",
+          "start": 65.81,
+          "end": 66.37
+        },
+        {
+          "word": "your",
+          "start": 66.37,
+          "end": 67.05
+        },
+        {
+          "word": "folks",
+          "start": 67.05,
+          "end": 67.43
+        },
+        {
+          "word": "in",
+          "start": 68.74,
+          "end": 69.22
+        }
+      ]
+    },
+    {
+      "start": 68.0,
+      "end": 69.75,
+      "text": "Sowhat are you waiting on?",
+      "words": [
+        {
+          "word": "Sowhat",
+          "start": 68.0,
+          "end": 68.3
+        },
+        {
+          "word": "are",
+          "start": 68.35,
+          "end": 68.65
+        },
+        {
+          "word": "you",
+          "start": 68.7,
+          "end": 69.0
+        },
+        {
+          "word": "waiting",
+          "start": 69.05,
+          "end": 69.35
+        },
+        {
+          "word": "on?",
+          "start": 69.4,
+          "end": 69.7
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 83.0,
+      "end": 84.4,
+      "text": "We built the illusion",
+      "words": [
+        {
+          "word": "We",
+          "start": 83.0,
+          "end": 83.3
+        },
+        {
+          "word": "built",
+          "start": 83.35,
+          "end": 83.65
+        },
+        {
+          "word": "the",
+          "start": 83.7,
+          "end": 84.0
+        },
+        {
+          "word": "illusion",
+          "start": 84.05,
+          "end": 84.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 98.0,
+      "end": 99.4,
+      "text": "Feel it from here",
+      "words": [
+        {
+          "word": "Feel",
+          "start": 98.0,
+          "end": 98.3
+        },
+        {
+          "word": "it",
+          "start": 98.35,
+          "end": 98.65
+        },
+        {
+          "word": "from",
+          "start": 98.7,
+          "end": 99.0
+        },
+        {
+          "word": "here",
+          "start": 99.05,
+          "end": 99.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 108.0,
+      "end": 109.4,
+      "text": "But don't turn around",
+      "words": [
+        {
+          "word": "But",
+          "start": 108.0,
+          "end": 108.3
+        },
+        {
+          "word": "don't",
+          "start": 108.35,
+          "end": 108.65
+        },
+        {
+          "word": "turn",
+          "start": 108.7,
+          "end": 109.0
+        },
+        {
+          "word": "around",
+          "start": 109.05,
+          "end": 109.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 119.0,
+      "end": 120.4,
+      "text": "It won't be me",
+      "words": [
+        {
+          "word": "It",
+          "start": 119.0,
+          "end": 119.3
+        },
+        {
+          "word": "won't",
+          "start": 119.35,
+          "end": 119.65
+        },
+        {
+          "word": "be",
+          "start": 119.7,
+          "end": 120.0
+        },
+        {
+          "word": "me",
+          "start": 120.05,
+          "end": 120.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 121.83,
+      "end": 127.11,
+      "text": "You can orbit every miracle and never plant your feet",
+      "words": [
+        {
+          "word": "You",
+          "start": 121.83,
+          "end": 122.21
+        },
+        {
+          "word": "can",
+          "start": 122.21,
+          "end": 122.73
+        },
+        {
+          "word": "orbit",
+          "start": 122.73,
+          "end": 123.35
+        },
+        {
+          "word": "every",
+          "start": 123.35,
+          "end": 124.05
+        },
+        {
+          "word": "miracle",
+          "start": 124.05,
+          "end": 124.75
+        },
+        {
+          "word": "and",
+          "start": 124.75,
+          "end": 125.41
+        },
+        {
+          "word": "never",
+          "start": 125.41,
+          "end": 125.85
+        },
+        {
+          "word": "plant",
+          "start": 125.85,
+          "end": 126.29
+        },
+        {
+          "word": "your",
+          "start": 126.29,
+          "end": 126.65
+        },
+        {
+          "word": "feet",
+          "start": 126.65,
+          "end": 127.11
+        }
+      ]
+    },
+    {
+      "start": 126.0,
+      "end": 127.4,
+      "text": "The door's wide open",
+      "words": [
+        {
+          "word": "The",
+          "start": 126.0,
+          "end": 126.3
+        },
+        {
+          "word": "door's",
+          "start": 126.35,
+          "end": 126.65
+        },
+        {
+          "word": "wide",
+          "start": 126.7,
+          "end": 127.0
+        },
+        {
+          "word": "open",
+          "start": 127.05,
+          "end": 127.35
+        }
+      ],
+      "_needs_timing": true
+    },
+    {
+      "start": 164.89,
+      "end": 166.23,
+      "text": "You feel that hum",
+      "words": [
+        {
+          "word": "You",
+          "start": 164.89,
+          "end": 165.27
+        },
+        {
+          "word": "feel",
+          "start": 165.27,
+          "end": 165.65
+        },
+        {
+          "word": "that",
+          "start": 165.65,
+          "end": 165.89
+        },
+        {
+          "word": "hum",
+          "start": 165.89,
+          "end": 166.23
+        }
+      ]
+    },
+    {
+      "start": 167.47,
+      "end": 168.55,
+      "text": "That'syou stepping in",
+      "words": [
+        {
+          "word": "That'syou",
+          "start": 167.47,
+          "end": 168.15
+        },
+        {
+          "word": "stepping",
+          "start": 168.15,
+          "end": 168.35
+        },
+        {
+          "word": "in",
+          "start": 168.35,
+          "end": 168.55
+        }
+      ]
+    }
+  ]
+}

@@ -400,6 +400,8 @@ const player = {
   secondaryAmmo: 0,
   shotsFired: 0,
   shotsHit: 0,
+  shieldActive: false,
+  shieldRechargeTimer: 0,
   dodgeTimer: 0,
   dodgeCooldown: 0,
   dodgeVx: 0,
@@ -595,6 +597,45 @@ function drawPlayer() {
   ctx.restore();
 }
 
+function drawShield() {
+  if (!player.alive) return;
+  if (player.shieldActive) {
+    const pulse = 0.7 + Math.sin(frame * 0.07) * 0.3;
+    const r = 35;
+    ctx.save();
+    ctx.shadowColor = '#ffee88';
+    ctx.shadowBlur = 18 * pulse;
+    ctx.strokeStyle = `rgba(255, 235, 120, ${0.55 + pulse * 0.3})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, r, 0, Math.PI * 2);
+    ctx.stroke();
+    // Softer inner fill glow
+    ctx.shadowBlur = 6;
+    ctx.strokeStyle = `rgba(255, 255, 200, ${0.15 + pulse * 0.15})`;
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, r - 4, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  } else if (player.shieldRechargeTimer > 0 && player.weaponLevel >= 3) {
+    // Dim broken-ring indicator while recharging
+    const progress = 1 - player.shieldRechargeTimer / (30 * 60);
+    ctx.save();
+    ctx.shadowColor = '#ffee88';
+    ctx.shadowBlur = 4;
+    ctx.strokeStyle = `rgba(255, 220, 80, 0.2)`;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 8]);
+    ctx.beginPath();
+    // Arc grows as recharge progresses
+    ctx.arc(player.x, player.y, 35, -Math.PI / 2, -Math.PI / 2 + progress * Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+}
+
 function updatePlayer() {
   if (!player.alive) {
     player.respawnTimer--;
@@ -612,6 +653,14 @@ function updatePlayer() {
   if (player.invincible > 0) player.invincible--;
   if (player.dodgeTimer > 0) player.dodgeTimer--;
   if (player.dodgeCooldown > 0) player.dodgeCooldown--;
+  if (player.shieldRechargeTimer > 0) {
+    player.shieldRechargeTimer--;
+    if (player.shieldRechargeTimer === 0 && player.weaponLevel >= 3) {
+      player.shieldActive = true;
+      screenFlash = 8;
+      spawnExplosion(player.x, player.y, 10, ['#ffffff', '#ffee88', '#ffcc44']);
+    }
+  }
 
   // Advance barrel roll angle during active dodge
   if (player.dodgeTimer > 0) {
@@ -1598,6 +1647,11 @@ function applyPickup(p) {
   switch (p.type) {
     case 'power':
       player.weaponLevel = Math.min(player.weaponLevel + 1, 5);
+      // Shield activates on reaching LV3 (if not already up and not recharging)
+      if (player.weaponLevel >= 3 && !player.shieldActive && player.shieldRechargeTimer === 0) {
+        player.shieldActive = true;
+        screenFlash = 8;
+      }
       break;
     case 'life':
       player.lives++;
@@ -1987,11 +2041,26 @@ function destroyEnemy(e, index) {
   enemies.splice(index, 1);
 }
 
+function popShield() {
+  player.shieldActive = false;
+  player.shieldRechargeTimer = 30 * 60; // 30 seconds at 60fps
+  // Shield burst — warm gold explosion ring
+  spawnExplosion(player.x, player.y, 16, ['#ffffff', '#ffee88', '#ffaa00', '#442200']);
+  shockwaves.push({ x: player.x, y: player.y, radius: 10, maxRadius: 55 });
+}
+
 function killPlayer() {
   if (player.invincible > 0) return;
+  // Shield absorbs the hit
+  if (player.shieldActive) {
+    popShield();
+    return;
+  }
   player.alive = false;
   player.lives--;
   player.weaponLevel = 1;
+  player.shieldActive = false;
+  player.shieldRechargeTimer = 0;
   player.secondary = null;
   player.secondaryAmmo = 0;
   spawnExplosion(player.x, player.y, 25, explosionColors);
@@ -3170,6 +3239,21 @@ function drawHUD() {
   ctx.fillStyle = CONFIG.colors.playerBullet;
   ctx.fillText('WPN LV' + player.weaponLevel, 20, 48);
 
+  // Shield status
+  if (player.weaponLevel >= 3) {
+    if (player.shieldActive) {
+      ctx.fillStyle = '#ffee88';
+      ctx.shadowColor = '#ffee88';
+      ctx.shadowBlur = 6;
+      ctx.fillText('SHIELD ●', 20, 64);
+      ctx.shadowBlur = 0;
+    } else if (player.shieldRechargeTimer > 0) {
+      const secsLeft = Math.ceil(player.shieldRechargeTimer / 60);
+      ctx.fillStyle = 'rgba(255, 220, 80, 0.4)';
+      ctx.fillText('SHIELD ' + secsLeft + 's', 20, 64);
+    }
+  }
+
   // Score multiplier (shown when above 1x)
   if (player.xpLevel > 1) {
     const mult = (1 + (player.xpLevel - 1) * 0.25).toFixed(2);
@@ -3410,6 +3494,8 @@ function resetGame() {
   player.dodgeTimer = 0;
   player.dodgeCooldown = 0;
   player.dodgeRoll = 0;
+  player.shieldActive = false;
+  player.shieldRechargeTimer = 0;
 }
 
 function startStage() {
@@ -3514,6 +3600,7 @@ function gameLoop(timestamp) {
       drawPlayerBullets();
       drawEnemyBullets();
       drawPlayer();
+      drawShield();
       drawParticles();
       drawHUD();
       break;
@@ -3549,6 +3636,7 @@ function gameLoop(timestamp) {
       drawPlayerBullets();
       drawEnemyBullets();
       drawPlayer();
+      drawShield();
       drawParticles();
       drawHUD();
       drawMidBossInboundAlerts();
@@ -3582,6 +3670,7 @@ function gameLoop(timestamp) {
       drawPlayerBullets();
       drawEnemyBullets();
       drawPlayer();
+      drawShield();
       drawParticles();
       drawHUD();
 

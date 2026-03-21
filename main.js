@@ -2356,7 +2356,7 @@ function initGWORLightbox() {
             title: 'Pauses Gone',
             file: 'audio/grief-without-ritual/pauses-gone.mp3',
             video: 'audio/grief-without-ritual/pauses-gone.mp4',
-            article: 'https://charleswilke.substack.com/p/waiting-for-something',
+            article: 'https://charleswilke.substack.com/p/staccato-again',
             lyricsVideoFrame: {
                 offsetY: '-116px',
                 width: '152%',

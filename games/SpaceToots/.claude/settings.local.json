@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "mcp__Claude_Preview__preview_start",
-      "Bash(brew upgrade:*)"
+      "Bash(brew upgrade:*)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/cwilke/Documents/GitHub/dotcom/images/space-toots.jpg)"
     ]
   }
 }

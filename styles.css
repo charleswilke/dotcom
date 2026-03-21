@@ -7745,6 +7745,32 @@ section.production-header.alice p {
         max-width: 95%;
     }
 
+    .mixtape-right-section .mixtape-title {
+        display: none;
+    }
+
+    /* Track list — tighter, more room for titles */
+    .mixtape-track-item {
+        padding: 0.45rem 0.65rem;
+    }
+
+    .track-number {
+        margin-right: 0.5rem;
+    }
+
+    /* Icon-only buttons on mobile — drop the text labels */
+    .track-article-label,
+    .track-share-label {
+        display: none;
+    }
+
+    .track-article-link,
+    .track-share-button {
+        padding: 5px 7px;
+        gap: 0;
+        min-width: 0;
+    }
+
     .mixtape-track-visualizer {
         display: none;
     }
@@ -7841,7 +7867,7 @@ section.production-header.alice p {
     }
     
     .mixtape-track-item {
-        padding: 0.5rem 0.9rem;
+        padding: 0.4rem 0.55rem;
         font-size: 0.85rem;
     }
     

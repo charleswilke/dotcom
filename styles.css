@@ -7745,30 +7745,6 @@ section.production-header.alice p {
         max-width: 95%;
     }
 
-    /* Horizontal header: cover art left, title+credits+toggle right */
-    .mixtape-left-section {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-
-    .mixtape-cover-container {
-        max-width: 250px;
-        flex-shrink: 0;
-    }
-
-    .mixtape-side-toggle-container {
-        flex: 1;
-        min-width: 0;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 0;
-        gap: 0.3rem;
-        align-self: stretch;
-    }
-
     .mixtape-track-visualizer {
         display: none;
     }
@@ -7780,52 +7756,6 @@ section.production-header.alice p {
     .mixtape-credits {
         text-align: center;
         font-size: 0.58rem;
-    }
-
-    /* Show mobile title in info stack, hide the one in right section */
-    .mixtape-mobile-title {
-        display: block !important;
-        font-size: 1.2rem !important;
-        margin-bottom: 0 !important;
-        text-align: center;
-        line-height: 1.2;
-    }
-
-    .mixtape-mobile-title .mixtape-subtitle {
-        text-align: center;
-    }
-
-    .mixtape-right-section .mixtape-title {
-        display: none;
-    }
-
-    /* Now-playing track name in info stack */
-    .mixtape-now-playing {
-        display: block;
-        font-family: 'Space Mono', monospace;
-        font-size: 0.8rem;
-        color: rgba(0, 247, 194, 0.8);
-        text-shadow: 0 0 5px rgba(0, 247, 194, 0.3);
-    }
-
-    .mixtape-now-playing::before {
-        content: '▶ ';
-        color: #ff6b35;
-        font-size: 0.75em;
-    }
-
-    .mixtape-now-playing:empty {
-        display: none;
-    }
-
-    #gworLightbox .mixtape-now-playing {
-        color: rgba(240, 224, 208, 0.92);
-        text-shadow: 0 0 5px rgba(240, 224, 208, 0.24);
-    }
-
-    .mixtape-lightbox.b-side-active .mixtape-now-playing {
-        color: rgba(247, 168, 0, 0.8);
-        text-shadow: 0 0 5px rgba(247, 168, 0, 0.3);
     }
 
     .mixtape-audio-controls {
@@ -7894,13 +7824,6 @@ section.production-header.alice p {
         gap: .5rem;
     }
     
-    .mixtape-mobile-title {
-        font-size: 1rem !important;
-    }
-
-    .mixtape-now-playing {
-        font-size: 0.72rem;
-    }
 
     .mixtape-right-section {
         flex: 1;

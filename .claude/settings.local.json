@@ -26,7 +26,8 @@
       "Bash(python -c \"import easyocr; print\\(''easyocr available''\\)\")",
       "Bash(python -c \"import pytesseract; print\\(''pytesseract available''\\)\")",
       "Bash(python -c \"import torch; print\\(f''CUDA available: {torch.cuda.is_available\\(\\)}''\\); print\\(f''Device: {torch.cuda.get_device_name\\(0\\) if torch.cuda.is_available\\(\\) else \"\"N/A\"\"}''\\)\")",
-      "Bash(PYTHONIOENCODING=utf-8 python -u -c \":*)"
+      "Bash(PYTHONIOENCODING=utf-8 python -u -c \":*)",
+      "Bash(xargs cat:*)"
     ]
   }
 }

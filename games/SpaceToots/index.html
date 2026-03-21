@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Space Toots</title>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://charleswilke.com/games/SpaceToots/">
+<meta property="og:title" content="Space Toots">
+<meta property="og:description" content="A neon synthwave bullet-hell arcade game. Dodge, shoot, and toot your way through the void.">
+<meta property="og:image" content="https://charleswilke.com/images/space-toots.jpg">
+<meta property="og:image:width" content="2752">
+<meta property="og:image:height" content="1536">
+<meta property="og:image:alt" content="Space Toots arcade game">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://charleswilke.com/games/SpaceToots/">
+<meta name="twitter:title" content="Space Toots">
+<meta name="twitter:description" content="A neon synthwave bullet-hell arcade game. Dodge, shoot, and toot your way through the void.">
+<meta name="twitter:image" content="https://charleswilke.com/images/space-toots.jpg">
+<meta name="twitter:image:alt" content="Space Toots arcade game">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
@@ -73,6 +87,17 @@ const CONFIG = {
   }
 };
 
+// === DODGE & XP CONSTANTS ===
+const DODGE_DURATION = 18;    // frames of active dash
+const DODGE_COOLDOWN = 75;    // frames before next dodge (~1.25 sec at 60fps)
+const DODGE_IMPULSE  = 9;     // velocity impulse (above maxVel of 6)
+const DODGE_KEY      = 'KeyX';
+
+const XP_ATTRACT_RADIUS = 45;   // px — magnetic pull starts here
+const XP_ATTRACT_ACCEL  = 0.8;  // acceleration toward player per frame
+const XP_ATTRACT_DRAG   = 0.88; // drag on orb velocity (caps attraction speed)
+const XP_ORB_DRIFT      = 0.6;  // baseline leftward scroll speed (px/frame)
+
 // === ENGINE ===
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -106,6 +131,7 @@ const enemyBullets = [];
 const enemies = [];
 const particles = [];
 const pickups = [];
+const xpOrbs = [];
 
 // === PARALLAX BACKGROUND ===
 // Layer 1: Distant star field
@@ -373,14 +399,22 @@ const player = {
   secondary: null,
   secondaryAmmo: 0,
   shotsFired: 0,
-  shotsHit: 0
+  shotsHit: 0,
+  dodgeTimer: 0,
+  dodgeCooldown: 0,
+  dodgeVx: 0,
+  dodgeVy: 0,
+  dodgeRoll: 0,
+  xp: 0,
+  xpLevel: 1,
+  xpToNext: 100
 };
 
 function drawPlayer() {
   if (!player.alive) return;
 
-  // Blink when invincible
-  if (player.invincible > 0 && Math.floor(frame / 4) % 2 === 0) return;
+  // Blink when invincible (but not during a dodge — roll animation communicates that)
+  if (player.invincible > 0 && player.dodgeTimer <= 0 && Math.floor(frame / 4) % 2 === 0) return;
 
   const px = player.x;
   const py = player.y;
@@ -394,10 +428,16 @@ function drawPlayer() {
   ctx.translate(px, py);
   ctx.rotate(pitchAngle);
   ctx.scale(1, bankFactor);
+  // Barrel roll overlay — cos(0→2π) = 1→-1→1, a full visual flip over the dodge duration
+  if (player.dodgeTimer > 0) {
+    ctx.scale(1, Math.cos(player.dodgeRoll));
+  }
   ctx.translate(-px, -py);
 
-  // Glow — pulsing sine wave
-  const glowIntensity = 10 + Math.sin(frame * 0.08) * 5;
+  // Glow — boosted and flickering during dodge, normal idle pulse otherwise
+  const glowIntensity = player.dodgeTimer > 0
+    ? 25 + Math.sin(frame * 0.3) * 8
+    : 10 + Math.sin(frame * 0.08) * 5;
   ctx.shadowColor = CONFIG.colors.player;
   ctx.shadowBlur = glowIntensity;
 
@@ -570,6 +610,13 @@ function updatePlayer() {
   }
 
   if (player.invincible > 0) player.invincible--;
+  if (player.dodgeTimer > 0) player.dodgeTimer--;
+  if (player.dodgeCooldown > 0) player.dodgeCooldown--;
+
+  // Advance barrel roll angle during active dodge
+  if (player.dodgeTimer > 0) {
+    player.dodgeRoll += (Math.PI * 2) / DODGE_DURATION;
+  }
 
   // Movement — velocity-based with acceleration and drag
   let ix = 0, iy = 0;
@@ -626,6 +673,51 @@ function updatePlayer() {
   // Secondary fire
   if (keys['ShiftLeft'] || keys['ShiftRight']) {
     fireSecondary();
+  }
+
+  // Dodge
+  if (keys[DODGE_KEY] && !keys._dodgeHeld && player.dodgeCooldown <= 0) {
+    keys._dodgeHeld = true;
+
+    // Read current input direction; default to forward if no input
+    let dx = 0, dy = 0;
+    if (keys['ArrowLeft']  || keys['KeyA']) dx = -1;
+    if (keys['ArrowRight'] || keys['KeyD']) dx =  1;
+    if (keys['ArrowUp']    || keys['KeyW']) dy = -1;
+    if (keys['ArrowDown']  || keys['KeyS']) dy =  1;
+    if (dx === 0 && dy === 0) dx = 1;
+
+    // Normalize diagonal
+    const dlen = Math.sqrt(dx * dx + dy * dy);
+    player.dodgeVx = (dx / dlen) * DODGE_IMPULSE;
+    player.dodgeVy = (dy / dlen) * DODGE_IMPULSE;
+
+    // Override velocity for a snappy dash
+    player.vx = player.dodgeVx;
+    player.vy = player.dodgeVy;
+
+    player.dodgeTimer    = DODGE_DURATION;
+    player.dodgeCooldown = DODGE_COOLDOWN;
+    player.invincible    = DODGE_DURATION + 2;
+    player.dodgeRoll     = 0;
+
+    // Engine blast — directional burst in the opposite direction of the dash
+    for (let i = 0; i < 14; i++) {
+      const spread = (Math.random() - 0.5) * 1.2;
+      const spd    = Math.random() * 5 + 3;
+      const angle  = Math.atan2(-player.dodgeVy, -player.dodgeVx) + spread;
+      particles.push({
+        x: player.x, y: player.y,
+        vx: Math.cos(angle) * spd,
+        vy: Math.sin(angle) * spd,
+        life: 1.0,
+        decay: Math.random() * 0.04 + 0.03,
+        size: Math.random() * 5 + 2,
+        colors: ['#ffffff', '#44ddff', '#0088bb']
+      });
+    }
+  } else if (!keys[DODGE_KEY]) {
+    keys._dodgeHeld = false;
   }
 }
 
@@ -1730,6 +1822,17 @@ function checkCollisions() {
     }
   }
 
+  // Dodge-break — while dodging, player smashes through enemy bodies
+  if (player.dodgeTimer > 0) {
+    for (let ei = enemies.length - 1; ei >= 0; ei--) {
+      const e = enemies[ei];
+      if (rectOverlap(phx, phy, phw, phh, e.x - e.width/2, e.y - e.height/2, e.width, e.height)) {
+        spawnExplosion(e.x, e.y, 18, ['#ffffff', '#00ffff', '#ff00aa']);
+        destroyEnemy(e, ei);
+      }
+    }
+  }
+
   if (player.invincible > 0) return;
 
   // Enemy bullets vs player
@@ -1853,9 +1956,13 @@ function triggerGravNova(e, index) {
 }
 
 function destroyEnemy(e, index) {
-  score += e.points;
+  const multiplier = 1 + (player.xpLevel - 1) * 0.25;
+  score += Math.round(e.points * multiplier);
   enemiesDestroyed++;
   spawnExplosion(e.x, e.y, 12, explosionColors);
+
+  // XP orb — every enemy drops one; size/value proportional to enemy points
+  spawnXPOrb(e.x, e.y, Math.max(1, Math.round(e.points / 50)));
 
   // Drop logic
   if (e.type === 'spawner') {
@@ -1894,6 +2001,127 @@ function killPlayer() {
   } else {
     player.respawnTimer = 90; // 1.5 seconds
   }
+}
+
+// === XP ORB SYSTEM ===
+function spawnXPOrb(x, y, value) {
+  if (xpOrbs.length > 80) return; // soft cap to prevent pile-ups
+  const sides = 3 + Math.floor(Math.random() * 3); // 3, 4, or 5 sides
+  xpOrbs.push({
+    x, y,
+    vx: (Math.random() - 0.5) * 2,
+    vy: (Math.random() - 0.5) * 2,
+    value,
+    sides,
+    rotation: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.07,
+    pulseFrame: Math.floor(Math.random() * 60), // stagger pulse timing
+    radius: 6 + value * 0.5
+  });
+}
+
+function updateXPOrbs() {
+  for (let i = xpOrbs.length - 1; i >= 0; i--) {
+    const o = xpOrbs[i];
+
+    o.x -= XP_ORB_DRIFT;
+    if (o.x < -50) { xpOrbs.splice(i, 1); continue; }
+
+    // Magnetic attraction when within radius
+    if (player.alive) {
+      const dx = player.x - o.x;
+      const dy = player.y - o.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < XP_ATTRACT_RADIUS) {
+        const nx = dx / dist;
+        const ny = dy / dist;
+        o.vx += nx * XP_ATTRACT_ACCEL;
+        o.vy += ny * XP_ATTRACT_ACCEL;
+      }
+    }
+
+    o.vx *= XP_ATTRACT_DRAG;
+    o.vy *= XP_ATTRACT_DRAG;
+    o.x += o.vx;
+    o.y += o.vy;
+    o.rotation += o.rotSpeed;
+    o.pulseFrame++;
+
+    // Collection on contact
+    if (player.alive) {
+      const dx = player.x - o.x;
+      const dy = player.y - o.y;
+      if (Math.sqrt(dx * dx + dy * dy) < o.radius + 8) {
+        collectXPOrb(o);
+        xpOrbs.splice(i, 1);
+      }
+    }
+  }
+}
+
+function collectXPOrb(o) {
+  player.xp += o.value;
+  spawnExplosion(o.x, o.y, 5, ['#ffffff', '#00ffee', '#88ffee']);
+
+  // Level-up check
+  while (player.xp >= player.xpToNext) {
+    player.xp      -= player.xpToNext;
+    player.xpLevel++;
+    player.xpToNext = Math.floor(player.xpToNext * 1.4);
+    screenFlash = 15;
+    spawnExplosion(player.x, player.y, 20, ['#ffffff', '#00ffee', '#ffff44']);
+  }
+}
+
+function drawXPOrbs() {
+  ctx.save();
+  for (const o of xpOrbs) {
+    const pulse = 0.6 + Math.sin(o.pulseFrame * 0.09) * 0.4;
+
+    ctx.save();
+    ctx.translate(o.x, o.y);
+    ctx.rotate(o.rotation);
+
+    // Outer glow stroke
+    ctx.shadowColor = '#00ffee';
+    ctx.shadowBlur  = 10 + pulse * 10;
+    ctx.strokeStyle = `rgba(0, 255, 220, ${0.4 + pulse * 0.5})`;
+    ctx.lineWidth   = 1.5;
+
+    ctx.beginPath();
+    for (let s = 0; s < o.sides; s++) {
+      const angle = (s / o.sides) * Math.PI * 2;
+      const r = o.radius * (1 + pulse * 0.15);
+      s === 0 ? ctx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r)
+              : ctx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
+    }
+    ctx.closePath();
+    ctx.stroke();
+
+    // Translucent fill
+    ctx.shadowBlur  = 5;
+    ctx.fillStyle   = `rgba(0, 220, 200, ${0.15 + pulse * 0.25})`;
+    ctx.beginPath();
+    for (let s = 0; s < o.sides; s++) {
+      const angle = (s / o.sides) * Math.PI * 2;
+      const r = o.radius * 0.6;
+      s === 0 ? ctx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r)
+              : ctx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
+    }
+    ctx.closePath();
+    ctx.fill();
+
+    // Hot white center dot
+    ctx.shadowBlur  = 8;
+    ctx.fillStyle   = `rgba(255, 255, 255, ${0.6 + pulse * 0.4})`;
+    ctx.beginPath();
+    ctx.arc(0, 0, 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+  ctx.restore();
 }
 
 // === BOSS SYSTEM ===
@@ -2942,6 +3170,58 @@ function drawHUD() {
   ctx.fillStyle = CONFIG.colors.playerBullet;
   ctx.fillText('WPN LV' + player.weaponLevel, 20, 48);
 
+  // Score multiplier (shown when above 1x)
+  if (player.xpLevel > 1) {
+    const mult = (1 + (player.xpLevel - 1) * 0.25).toFixed(2);
+    ctx.fillStyle = '#00ffee';
+    ctx.shadowColor = '#00ffee';
+    ctx.shadowBlur = 6;
+    ctx.fillText('×' + mult, 20, 64);
+    ctx.shadowBlur = 0;
+  }
+
+  // Dodge cooldown bar — lower left
+  {
+    const dodgeReady = player.dodgeCooldown <= 0;
+    const cooldownPct = dodgeReady ? 1 : 1 - (player.dodgeCooldown / DODGE_COOLDOWN);
+    const barX = 20, barY = CONFIG.height - 32;
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = dodgeReady ? '#00ffff' : 'rgba(0,200,255,0.4)';
+    ctx.shadowBlur = 0;
+    ctx.fillText('DODGE', barX, barY - 4);
+    // Background
+    ctx.fillStyle = '#112233';
+    ctx.fillRect(barX, barY, 60, 7);
+    // Fill
+    ctx.shadowColor = '#00ffff';
+    ctx.shadowBlur = dodgeReady ? 8 : 2;
+    ctx.fillStyle = dodgeReady ? '#00ffff' : '#006688';
+    ctx.fillRect(barX, barY, Math.round(60 * cooldownPct), 7);
+    ctx.shadowBlur = 0;
+  }
+
+  // XP bar — lower right
+  {
+    const xpPct = player.xp / player.xpToNext;
+    const barW = 100;
+    const barX = CONFIG.width - 20 - barW;
+    const barY = CONFIG.height - 32;
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#88ffee';
+    ctx.fillText('LV' + player.xpLevel + ' XP', CONFIG.width - 20, barY - 4);
+    // Background
+    ctx.fillStyle = '#0a2220';
+    ctx.fillRect(barX, barY, barW, 7);
+    // Fill
+    ctx.shadowColor = '#00ffee';
+    ctx.shadowBlur = xpPct > 0.9 ? 12 : 4;
+    ctx.fillStyle = xpPct > 0.9 ? '#ffffff' : '#00ddcc';
+    ctx.fillRect(barX, barY, Math.round(barW * xpPct), 7);
+    ctx.shadowBlur = 0;
+  }
+
   ctx.restore();
 }
 
@@ -2967,7 +3247,7 @@ function drawTitleScreen() {
 
   ctx.font = '14px monospace';
   ctx.fillStyle = 'rgba(224,224,255,0.5)';
-  ctx.fillText('ARROW KEYS / WASD: MOVE    SPACE: SHOOT    SHIFT: SECONDARY', CONFIG.width / 2, CONFIG.height / 2 + 110);
+  ctx.fillText('ARROWS/WASD: MOVE   SPACE: SHOOT   SHIFT: SECONDARY   X: DODGE', CONFIG.width / 2, CONFIG.height / 2 + 110);
   ctx.fillText('P: PAUSE', CONFIG.width / 2, CONFIG.height / 2 + 135);
 
   ctx.restore();
@@ -3120,9 +3400,16 @@ function resetGame() {
   enemies.length = 0;
   particles.length = 0;
   pickups.length = 0;
+  xpOrbs.length = 0;
   shockwaves.length = 0;
   localFlashes.length = 0;
   screenFlash = 0;
+  player.xp = 0;
+  player.xpLevel = 1;
+  player.xpToNext = 100;
+  player.dodgeTimer = 0;
+  player.dodgeCooldown = 0;
+  player.dodgeRoll = 0;
 }
 
 function startStage() {
@@ -3136,6 +3423,7 @@ function startStage() {
   enemyBullets.length = 0;
   enemies.length = 0;
   pickups.length = 0;
+  xpOrbs.length = 0;
   player.x = 100;
   player.y = CONFIG.height / 2;
   player.invincible = 60;
@@ -3146,7 +3434,20 @@ function startStage() {
 }
 
 // === MAIN LOOP ===
-function gameLoop() {
+let lastFrameTime = 0;
+const TARGET_FPS = 60;
+const FRAME_MS = 1000 / TARGET_FPS; // ~16.67ms
+
+function gameLoop(timestamp) {
+  // Fixed-timestep cap at 60fps
+  if (timestamp - lastFrameTime < FRAME_MS) {
+    requestAnimationFrame(gameLoop);
+    return;
+  }
+  // Advance by exactly one target frame; catch up if badly behind
+  lastFrameTime += FRAME_MS;
+  if (timestamp - lastFrameTime > FRAME_MS) lastFrameTime = timestamp;
+
   frame++;
 
   // Pause toggle
@@ -3200,6 +3501,7 @@ function gameLoop() {
       updateWaves();
       updateParticles();
       updatePickups();
+      updateXPOrbs();
       updateShockwaves();
       updateLocalFlashes();
       checkCollisions();
@@ -3208,6 +3510,7 @@ function gameLoop() {
       drawShockwaves();
       drawLocalFlashes();
       drawPickups();
+      drawXPOrbs();
       drawPlayerBullets();
       drawEnemyBullets();
       drawPlayer();
@@ -3233,6 +3536,7 @@ function gameLoop() {
       updateAmbientAsteroids();
       updateMidBoss();
       updateParticles();
+      updateXPOrbs();
       updateShockwaves();
       updateLocalFlashes();
       checkCollisions();
@@ -3241,6 +3545,7 @@ function gameLoop() {
       drawMidBoss();
       drawShockwaves();
       drawLocalFlashes();
+      drawXPOrbs();
       drawPlayerBullets();
       drawEnemyBullets();
       drawPlayer();
@@ -3265,6 +3570,7 @@ function gameLoop() {
       updateEnemyBullets();
       updateBoss();
       updateParticles();
+      updateXPOrbs();
       updateShockwaves();
       updateLocalFlashes();
       checkCollisions();
@@ -3272,6 +3578,7 @@ function gameLoop() {
       drawBoss();
       drawShockwaves();
       drawLocalFlashes();
+      drawXPOrbs();
       drawPlayerBullets();
       drawEnemyBullets();
       drawPlayer();

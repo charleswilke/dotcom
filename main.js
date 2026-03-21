@@ -1044,13 +1044,13 @@ function openLightbox(imageSrc) {
     
     lightboxImg.src = imageSrc;
     lightbox.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
 }
 
 function closeLightbox() {
     const lightbox = document.getElementById('lightbox');
     lightbox.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = ''; document.documentElement.style.overflow = '';
 }
 
 function navigateLightbox(direction) {
@@ -2122,7 +2122,7 @@ function initMixtapeLightbox() {
     function openMixtape(openBSide = false, requestedTrackSlug = '', historyMethod = 'pushState') {
         if (lightbox) {
             lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
             
             // Switch to B-side if requested and not already there
             if (openBSide && !isBSide) {
@@ -2155,7 +2155,7 @@ function initMixtapeLightbox() {
     function closeMixtape() {
         if (lightbox) {
             lightbox.classList.remove('active');
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
             if (audio) audio.pause();
             if (lyricsVideo) lyricsVideo.pause();
             const currentRoute = parseMusicHash();
@@ -2247,7 +2247,7 @@ function initMixtapeLightbox() {
         } else {
             if (lightbox && lightbox.classList.contains('active')) {
                 lightbox.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                document.body.style.overflow = ''; document.documentElement.style.overflow = '';
                 if (audio) audio.pause();
             }
         }
@@ -2497,7 +2497,7 @@ function initGWORLightbox() {
 
     function openGWOR(requestedTrackSlug = '', historyMethod = 'pushState') {
         lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
         if (requestedTrackSlug) {
             loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
         } else if (!audio.src) {
@@ -2509,7 +2509,7 @@ function initGWORLightbox() {
 
     function closeGWOR() {
         lightbox.classList.remove('active');
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
         audio.pause();
         if (lyricsVideo) lyricsVideo.pause();
         const currentRoute = parseMusicHash();
@@ -2612,7 +2612,7 @@ function initGWORLightbox() {
             openGWOR(route.trackSlug, 'replaceState');
         } else if (lightbox.classList.contains('active')) {
             lightbox.classList.remove('active');
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
             audio.pause();
             if (lyricsVideo) lyricsVideo.pause();
         }

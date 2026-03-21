@@ -7111,52 +7111,25 @@ section.production-header.alice p {
     border: 1px solid rgba(0, 247, 194, 0.1);
     padding: 0.5rem;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Content + Playlist scrollbar — A-side (teal) */
+.mixtape-playlist,
+.mixtape-content {
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 247, 194, 0.25) transparent;
+    scrollbar-color: rgba(0, 247, 194, 0.5) transparent;
 }
 
-/* Playlist webkit scrollbar — A-side (teal) */
-.mixtape-playlist::-webkit-scrollbar {
-    width: 4px;
+/* GWOR scrollbar (red) */
+#gworLightbox .mixtape-playlist,
+#gworLightbox .mixtape-content {
+    scrollbar-color: rgba(197, 74, 74, 0.5) transparent;
 }
 
-.mixtape-playlist::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.mixtape-playlist::-webkit-scrollbar-thumb {
-    background: rgba(0, 247, 194, 0.25);
-    border-radius: 2px;
-}
-
-.mixtape-playlist::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 247, 194, 0.45);
-}
-
-/* GWOR playlist scrollbar (red) */
-#gworLightbox .mixtape-playlist {
-    scrollbar-color: rgba(197, 74, 74, 0.25) transparent;
-}
-
-#gworLightbox .mixtape-playlist::-webkit-scrollbar-thumb {
-    background: rgba(197, 74, 74, 0.25);
-}
-
-#gworLightbox .mixtape-playlist::-webkit-scrollbar-thumb:hover {
-    background: rgba(197, 74, 74, 0.45);
-}
-
-/* B-side playlist scrollbar (amber) */
-.mixtape-lightbox.b-side-active .mixtape-playlist {
-    scrollbar-color: rgba(247, 168, 0, 0.25) transparent;
-}
-
-.mixtape-lightbox.b-side-active .mixtape-playlist::-webkit-scrollbar-thumb {
-    background: rgba(247, 168, 0, 0.25);
-}
-
-.mixtape-lightbox.b-side-active .mixtape-playlist::-webkit-scrollbar-thumb:hover {
-    background: rgba(247, 168, 0, 0.45);
+/* B-side scrollbar (amber) */
+.mixtape-lightbox.b-side-active .mixtape-playlist,
+.mixtape-lightbox.b-side-active .mixtape-content {
+    scrollbar-color: rgba(247, 168, 0, 0.5) transparent;
 }
 
 .mixtape-playlist ul {

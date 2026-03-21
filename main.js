@@ -2337,7 +2337,7 @@ function initGWORLightbox() {
         { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', video: 'audio/grief-without-ritual/underlined-once.mp4', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
         { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', video: 'audio/grief-without-ritual/letter-to-the-editor.mp4', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
         { title: 'Refuse the Frequency', file: 'audio/grief-without-ritual/refuse-the-frequency.mp3', video: 'audio/grief-without-ritual/refuse-the-frequency.mov', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
-        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         {
             title: 'From the Beginning',
             file: 'audio/grief-without-ritual/from-the-beginning.mp3',
@@ -2352,8 +2352,20 @@ function initGWORLightbox() {
             }
         },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', video: 'audio/grief-without-ritual/dearly-beloved.mp4', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
-        { title: 'Luxury of Indifference', file: 'audio/grief-without-ritual/luxury-of-indifference.mp3', video: 'audio/grief-without-ritual/luxury-of-indifference.mp4', article: 'https://charleswilke.substack.com/p/agency-wo-agenda' },
+        {
+            title: 'Pauses Gone',
+            file: 'audio/grief-without-ritual/pauses-gone.mp3',
+            video: 'audio/grief-without-ritual/pauses-gone.mp4',
+            article: 'https://charleswilke.substack.com/p/waiting-for-something',
+            lyricsVideoFrame: {
+                offsetY: '-116px',
+                width: '152%',
+                minWidth: '152%',
+                minHeight: '112%',
+                objectPosition: 'center 42%'
+            }
+        },
+        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
         { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
         { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', video: 'audio/grief-without-ritual/cherish-your-confident-ire.mov', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
     ];

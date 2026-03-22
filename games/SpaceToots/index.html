@@ -89,7 +89,7 @@ const CONFIG = {
 
 // === DODGE & XP CONSTANTS ===
 const DODGE_DURATION = 18;    // frames of active dash
-const DODGE_COOLDOWN = 75;    // frames before next dodge (~1.25 sec at 60fps)
+const DODGE_COOLDOWN = 120;   // frames before next dodge (2 sec at 60fps, upgradeable)
 const DODGE_IMPULSE  = 9;     // velocity impulse (above maxVel of 6)
 const DODGE_KEY      = 'KeyX';
 
@@ -97,6 +97,35 @@ const XP_ATTRACT_RADIUS = 45;   // px — magnetic pull starts here
 const XP_ATTRACT_ACCEL  = 0.8;  // acceleration toward player per frame
 const XP_ATTRACT_DRAG   = 0.88; // drag on orb velocity (caps attraction speed)
 const XP_ORB_DRIFT      = 0.6;  // baseline leftward scroll speed (px/frame)
+
+// === LEVEL-UP UPGRADES ===
+const UPGRADES = {
+  spread:      { name: 'Spread Shot',      icon: '⚔', desc: 'More bullets per shot',     color: '#00ffff', maxTier: 5,
+                 tiers: ['1','2','3','4','5'] },
+  fireRate:    { name: 'Fire Rate',        icon: '↑', desc: 'Shoot faster',               color: '#44ddff', maxTier: 5,
+                 tiers: ['8f','7f','7f','6f','5f'], values: [8, 7, 7, 6, 5] },
+  gravLock:    { name: 'Grav Lock',        icon: '◉', desc: 'Bullets curve to enemies',   color: '#dd44ff', maxTier: 5,
+                 tiers: ['OFF','Weak','Med','Strong','Homing'],
+                 values: [
+                   { radius: 0,   force: 0 },
+                   { radius: 80,  force: 0.15 },
+                   { radius: 120, force: 0.3 },
+                   { radius: 160, force: 0.5 },
+                   { radius: 220, force: 0.8 }
+                 ]},
+  xpMagnet:    { name: 'XP Magnet',        icon: '◎', desc: 'Attract XP from further',   color: '#00ffee', maxTier: 5,
+                 tiers: ['45px','65px','90px','120px','160px'], values: [45, 65, 90, 120, 160] },
+  boostDur:    { name: 'Boost Duration',   icon: '»', desc: 'Longer dodge dash',          color: '#ff8800', maxTier: 5,
+                 tiers: ['18f','22f','26f','30f','34f'], values: [18, 22, 26, 30, 34] },
+  boostRecharge: { name: 'Boost Recharge', icon: '↻', desc: 'Faster dodge cooldown',     color: '#ffaa44', maxTier: 5,
+                 tiers: ['105f','90f','80f','70f','55f'], values: [105, 90, 80, 70, 55] },
+  speed:       { name: 'Thruster Power',   icon: '⚡', desc: 'Increase max speed',        color: '#44ff44', maxTier: 5,
+                 tiers: ['6.0','6.8','7.6','8.4','9.2'], values: [6, 6.8, 7.6, 8.4, 9.2] },
+  shieldRegen: { name: 'Shield Systems',   icon: '◈', desc: 'Faster shield recharge',    color: '#ffee88', maxTier: 5,
+                 tiers: ['30s','24s','18s','13s','9s'], values: [30, 24, 18, 13, 9] },
+  scoreMult:   { name: 'Score Bonus',      icon: '★', desc: 'Multiply score earned',     color: '#ff44ff', maxTier: 5,
+                 tiers: ['1.0×','1.25×','1.5×','1.75×','2.0×'], values: [1.0, 1.25, 1.5, 1.75, 2.0] }
+};
 
 // === ENGINE ===
 const canvas = document.getElementById('game');
@@ -116,7 +145,27 @@ window.addEventListener('resize', resizeCanvas);
 
 // Input
 const keys = {};
+const _doubleTap = {};   // tracks last tap time per direction key
+const DOUBLE_TAP_MS = 250;
+const DOUBLE_TAP_DIRS = {
+  ArrowRight: { dx: 1, dy: 0 }, KeyD: { dx: 1, dy: 0 },
+  ArrowUp:    { dx: 0, dy:-1 }, KeyW: { dx: 0, dy:-1 },
+  ArrowDown:  { dx: 0, dy: 1 }, KeyS: { dx: 0, dy: 1 }
+};
+
 window.addEventListener('keydown', e => {
+  if (!keys[e.code] && DOUBLE_TAP_DIRS[e.code]) {
+    const now = performance.now();
+    const dir = DOUBLE_TAP_DIRS[e.code];
+    // Normalize so ArrowRight and KeyD share the same slot
+    const slot = dir.dx + ',' + dir.dy;
+    if (_doubleTap[slot] && now - _doubleTap[slot] < DOUBLE_TAP_MS) {
+      player._doubleTapDodge = dir;
+      _doubleTap[slot] = 0;
+    } else {
+      _doubleTap[slot] = now;
+    }
+  }
   keys[e.code] = true;
   if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
 });
@@ -409,7 +458,17 @@ const player = {
   dodgeRoll: 0,
   xp: 0,
   xpLevel: 1,
-  xpToNext: 100
+  xpToNext: 10,
+  // Level-up upgrade system
+  upgrades: { spread: 0, fireRate: 0, gravLock: 0, xpMagnet: 0, boostDur: 0, boostRecharge: 0, speed: 0, shieldRegen: 0, scoreMult: 0 },
+  dodgeCooldownBase: DODGE_COOLDOWN,
+  pendingLevelUps: 0,
+  xpAttractRadius: XP_ATTRACT_RADIUS,
+  dodgeDuration: DODGE_DURATION,
+  shieldRechargeSeconds: 30,
+  scoreMultBonus: 1.0,
+  fireRateOverride: null,
+  gravLock: { radius: 0, force: 0 }
 };
 
 function drawPlayer() {
@@ -618,9 +677,9 @@ function drawShield() {
     ctx.arc(player.x, player.y, r - 4, 0, Math.PI * 2);
     ctx.stroke();
     ctx.restore();
-  } else if (player.shieldRechargeTimer > 0 && player.weaponLevel >= 3) {
+  } else if (player.shieldRechargeTimer > 0 && player.upgrades.shieldRegen > 0) {
     // Dim broken-ring indicator while recharging
-    const progress = 1 - player.shieldRechargeTimer / (30 * 60);
+    const progress = 1 - player.shieldRechargeTimer / (player.shieldRechargeSeconds * 60);
     ctx.save();
     ctx.shadowColor = '#ffee88';
     ctx.shadowBlur = 4;
@@ -646,6 +705,11 @@ function updatePlayer() {
       player.vx = 0;
       player.vy = 0;
       player.invincible = 120; // 2 seconds at 60fps
+      // Restore shield if player has the upgrade
+      if (player.upgrades.shieldRegen > 0) {
+        player.shieldActive = true;
+        player.shieldRechargeTimer = 0;
+      }
     }
     return;
   }
@@ -655,7 +719,7 @@ function updatePlayer() {
   if (player.dodgeCooldown > 0) player.dodgeCooldown--;
   if (player.shieldRechargeTimer > 0) {
     player.shieldRechargeTimer--;
-    if (player.shieldRechargeTimer === 0 && player.weaponLevel >= 3) {
+    if (player.shieldRechargeTimer === 0 && player.upgrades.shieldRegen > 0) {
       player.shieldActive = true;
       screenFlash = 8;
       spawnExplosion(player.x, player.y, 10, ['#ffffff', '#ffee88', '#ffcc44']);
@@ -664,7 +728,7 @@ function updatePlayer() {
 
   // Advance barrel roll angle during active dodge
   if (player.dodgeTimer > 0) {
-    player.dodgeRoll += (Math.PI * 2) / DODGE_DURATION;
+    player.dodgeRoll += (Math.PI * 2) / player.dodgeDuration;
   }
 
   // Movement — velocity-based with acceleration and drag
@@ -716,7 +780,7 @@ function updatePlayer() {
   if (player.fireTimer > 0) player.fireTimer--;
   if (keys['Space'] && player.fireTimer <= 0) {
     firePlayerWeapon();
-    player.fireTimer = CONFIG.playerFireRate;
+    player.fireTimer = player.fireRateOverride || CONFIG.playerFireRate;
   }
 
   // Secondary fire
@@ -724,10 +788,9 @@ function updatePlayer() {
     fireSecondary();
   }
 
-  // Dodge
+  // Dodge — triggered by X key or double-tap direction
   if (keys[DODGE_KEY] && !keys._dodgeHeld && player.dodgeCooldown <= 0) {
     keys._dodgeHeld = true;
-
     // Read current input direction; default to forward if no input
     let dx = 0, dy = 0;
     if (keys['ArrowLeft']  || keys['KeyA']) dx = -1;
@@ -735,38 +798,51 @@ function updatePlayer() {
     if (keys['ArrowUp']    || keys['KeyW']) dy = -1;
     if (keys['ArrowDown']  || keys['KeyS']) dy =  1;
     if (dx === 0 && dy === 0) dx = 1;
-
-    // Normalize diagonal
-    const dlen = Math.sqrt(dx * dx + dy * dy);
-    player.dodgeVx = (dx / dlen) * DODGE_IMPULSE;
-    player.dodgeVy = (dy / dlen) * DODGE_IMPULSE;
-
-    // Override velocity for a snappy dash
-    player.vx = player.dodgeVx;
-    player.vy = player.dodgeVy;
-
-    player.dodgeTimer    = DODGE_DURATION;
-    player.dodgeCooldown = DODGE_COOLDOWN;
-    player.invincible    = DODGE_DURATION + 2;
-    player.dodgeRoll     = 0;
-
-    // Engine blast — directional burst in the opposite direction of the dash
-    for (let i = 0; i < 14; i++) {
-      const spread = (Math.random() - 0.5) * 1.2;
-      const spd    = Math.random() * 5 + 3;
-      const angle  = Math.atan2(-player.dodgeVy, -player.dodgeVx) + spread;
-      particles.push({
-        x: player.x, y: player.y,
-        vx: Math.cos(angle) * spd,
-        vy: Math.sin(angle) * spd,
-        life: 1.0,
-        decay: Math.random() * 0.04 + 0.03,
-        size: Math.random() * 5 + 2,
-        colors: ['#ffffff', '#44ddff', '#0088bb']
-      });
-    }
+    triggerDodge(dx, dy);
   } else if (!keys[DODGE_KEY]) {
     keys._dodgeHeld = false;
+  }
+
+  // Double-tap dodge check (set by keydown listener)
+  if (player._doubleTapDodge) {
+    const dt = player._doubleTapDodge;
+    player._doubleTapDodge = null;
+    if (player.dodgeCooldown <= 0) {
+      triggerDodge(dt.dx, dt.dy);
+    }
+  }
+}
+
+function triggerDodge(dx, dy) {
+  if (player.dodgeTimer > 0) return; // already dodging
+  const dlen = Math.sqrt(dx * dx + dy * dy);
+  if (dlen === 0) { dx = 1; dy = 0; }
+  const nx = dlen === 0 ? 1 : dx / dlen;
+  const ny = dlen === 0 ? 0 : dy / dlen;
+
+  player.dodgeVx = nx * DODGE_IMPULSE;
+  player.dodgeVy = ny * DODGE_IMPULSE;
+  player.vx = player.dodgeVx;
+  player.vy = player.dodgeVy;
+  player.dodgeTimer    = player.dodgeDuration;
+  player.dodgeCooldown = player.dodgeCooldownBase;
+  player.invincible    = player.dodgeDuration + 2;
+  player.dodgeRoll     = 0;
+
+  // Engine blast — directional burst opposite the dash
+  for (let i = 0; i < 14; i++) {
+    const spread = (Math.random() - 0.5) * 1.2;
+    const spd    = Math.random() * 5 + 3;
+    const angle  = Math.atan2(-player.dodgeVy, -player.dodgeVx) + spread;
+    particles.push({
+      x: player.x, y: player.y,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd,
+      life: 1.0,
+      decay: Math.random() * 0.04 + 0.03,
+      size: Math.random() * 5 + 2,
+      colors: ['#ffffff', '#44ddff', '#0088bb']
+    });
   }
 }
 
@@ -786,23 +862,21 @@ function firePlayerWeapon() {
   if (lvl === 1) {
     fire(bx, by, p);
   } else if (lvl === 2) {
-    fire(bx, by - 5, p);
-    fire(bx, by + 5, p);
+    fire(bx, by - 3, p);
+    fire(bx, by + 3, p);
   } else if (lvl === 3) {
     fire(bx, by,     p);
-    fire(bx, by - 3, p - 0.26);
-    fire(bx, by + 3, p + 0.26);
+    fire(bx, by - 3, p - 0.12);
+    fire(bx, by + 3, p + 0.12);
   } else if (lvl === 4) {
-    fire(bx, by,     p);
-    fire(bx, by - 3, p - 0.26);
-    fire(bx, by + 3, p + 0.26);
-    // Rear shot mirrors the pitch
-    spawnPlayerBullet(player.x - 15, by,
-      -CONFIG.bulletSpeed * 0.7 * Math.cos(p),
-      -CONFIG.bulletSpeed * 0.7 * Math.sin(p));
+    fire(bx, by - 2, p);
+    fire(bx, by + 2, p);
+    fire(bx, by - 5, p - 0.14);
+    fire(bx, by + 5, p + 0.14);
   } else if (lvl >= 5) {
+    fire(bx, by, p);
     for (let i = -2; i <= 2; i++) {
-      fire(bx, by, p + i * 0.18);
+      if (i !== 0) fire(bx, by, p + i * 0.09);
     }
   }
   player.shotsFired++;
@@ -839,6 +913,46 @@ function updatePlayerBullets() {
         }
       }
     }
+    // Grav Lock — steer bullets toward nearest enemy
+    if (player.gravLock.radius > 0) {
+      let nearDist = player.gravLock.radius;
+      let nearDx = 0, nearDy = 0;
+      let found = false;
+      for (const e of enemies) {
+        const dx = e.x - b.x;
+        const dy = e.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < nearDist) {
+          nearDist = dist;
+          nearDx = dx / dist;
+          nearDy = dy / dist;
+          found = true;
+        }
+      }
+      // Also check mid-boss and boss
+      if (midBoss && midBoss.alive) {
+        const dx = midBoss.x - b.x, dy = midBoss.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < nearDist) { nearDist = dist; nearDx = dx / dist; nearDy = dy / dist; found = true; }
+      }
+      if (boss && boss.alive) {
+        const dx = boss.x - b.x, dy = boss.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < nearDist) { nearDist = dist; nearDx = dx / dist; nearDy = dy / dist; found = true; }
+      }
+      if (found) {
+        b.vx += nearDx * player.gravLock.force;
+        b.vy += nearDy * player.gravLock.force;
+        // Maintain bullet speed — normalize to original speed
+        const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+        const targetSpd = CONFIG.bulletSpeed;
+        if (spd > 0) {
+          b.vx = (b.vx / spd) * targetSpd;
+          b.vy = (b.vy / spd) * targetSpd;
+        }
+      }
+    }
+
     b.x += b.vx;
     b.y += b.vy;
     if (b.x > CONFIG.width + 20 || b.x < -20 || b.y < -20 || b.y > CONFIG.height + 20) {
@@ -1645,14 +1759,6 @@ function updatePickups() {
 
 function applyPickup(p) {
   switch (p.type) {
-    case 'power':
-      player.weaponLevel = Math.min(player.weaponLevel + 1, 5);
-      // Shield activates on reaching LV3 (if not already up and not recharging)
-      if (player.weaponLevel >= 3 && !player.shieldActive && player.shieldRechargeTimer === 0) {
-        player.shieldActive = true;
-        screenFlash = 8;
-      }
-      break;
     case 'life':
       player.lives++;
       break;
@@ -1694,7 +1800,7 @@ function drawPickups() {
     ctx.font = 'bold 11px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const label = p.type === 'power' ? 'P' : p.type === 'life' ? '♦' : p.type === 'score' ? '★' : '⚡';
+    const label = p.type === 'life' ? '♦' : p.type === 'score' ? '★' : '⚡';
     ctx.fillText(label, px, py);
   }
   ctx.restore();
@@ -2010,7 +2116,8 @@ function triggerGravNova(e, index) {
 }
 
 function destroyEnemy(e, index) {
-  const multiplier = 1 + (player.xpLevel - 1) * 0.25;
+  const baseMultiplier = 1 + (player.xpLevel - 1) * 0.25;
+  const multiplier = baseMultiplier * player.scoreMultBonus;
   score += Math.round(e.points * multiplier);
   enemiesDestroyed++;
   spawnExplosion(e.x, e.y, 12, explosionColors);
@@ -2024,13 +2131,6 @@ function destroyEnemy(e, index) {
     for (let d = 0; d < 3; d++) {
       spawnEnemy('drone', e.x, e.y - 20 + d * 20, { speed: 3 });
     }
-    // Drop secondary weapon pickup (placeholder — always wave for now)
-    spawnPickup(e.x, e.y, 'power');
-  }
-
-  // Every 5th kill in a wave drops a power-up
-  if (enemiesDestroyed % 5 === 0) {
-    spawnPickup(e.x, e.y, 'power');
   }
 
   // 10% chance score bonus
@@ -2043,7 +2143,7 @@ function destroyEnemy(e, index) {
 
 function popShield() {
   player.shieldActive = false;
-  player.shieldRechargeTimer = 30 * 60; // 30 seconds at 60fps
+  player.shieldRechargeTimer = player.shieldRechargeSeconds * 60;
   // Shield burst — warm gold explosion ring
   spawnExplosion(player.x, player.y, 16, ['#ffffff', '#ffee88', '#ffaa00', '#442200']);
   shockwaves.push({ x: player.x, y: player.y, radius: 10, maxRadius: 55 });
@@ -2058,7 +2158,7 @@ function killPlayer() {
   }
   player.alive = false;
   player.lives--;
-  player.weaponLevel = 1;
+  // Upgrades persist across lives — don't reset weaponLevel
   player.shieldActive = false;
   player.shieldRechargeTimer = 0;
   player.secondary = null;
@@ -2102,7 +2202,7 @@ function updateXPOrbs() {
       const dy = player.y - o.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist < XP_ATTRACT_RADIUS) {
+      if (dist < player.xpAttractRadius) {
         const nx = dx / dist;
         const ny = dy / dist;
         o.vx += nx * XP_ATTRACT_ACCEL;
@@ -2133,11 +2233,12 @@ function collectXPOrb(o) {
   player.xp += o.value;
   spawnExplosion(o.x, o.y, 5, ['#ffffff', '#00ffee', '#88ffee']);
 
-  // Level-up check
+  // Level-up check — queue card selections
   while (player.xp >= player.xpToNext) {
     player.xp      -= player.xpToNext;
     player.xpLevel++;
     player.xpToNext = Math.floor(player.xpToNext * 1.4);
+    player.pendingLevelUps++;
     screenFlash = 15;
     spawnExplosion(player.x, player.y, 20, ['#ffffff', '#00ffee', '#ffff44']);
   }
@@ -2747,8 +2848,7 @@ function drawMidBoss() {
   ctx.setLineDash([]);
 
   // Core body — larger than regular gravwell
-  const coreGlow = mb.coreExposed ? '#ff3300' : '#aa00ff';
-  ctx.shadowColor = coreGlow;
+  ctx.shadowColor = '#aa00ff';
   ctx.shadowBlur = 18 + pulse * 10;
   ctx.fillStyle = '#1a0030';
   ctx.beginPath();
@@ -2768,10 +2868,11 @@ function drawMidBoss() {
     ctx.stroke();
   }
 
-  // Core gem
-  ctx.shadowColor = mb.coreExposed ? '#ffffff' : '#cc00ff';
-  ctx.shadowBlur = mb.coreExposed ? 30 : 12;
-  ctx.fillStyle = mb.coreExposed ? '#ffffff' : '#660099';
+  // Core gem — pulses brighter when hit
+  const coreFlash = mb.hitFlash > 0 ? 1 : 0;
+  ctx.shadowColor = coreFlash ? '#ffffff' : '#cc00ff';
+  ctx.shadowBlur = 12 + coreFlash * 18 + pulse * 6;
+  ctx.fillStyle = coreFlash ? '#ffaaff' : `rgb(${Math.floor(100 + pulse * 60)},0,${Math.floor(150 + pulse * 50)})`;
   ctx.beginPath();
   ctx.arc(mb.x, mb.y, 10, 0, Math.PI * 2);
   ctx.fill();
@@ -3144,7 +3245,7 @@ const stageWaves = {
     ], delay: 500 },
     // Wave 7: Breather — pickups
     { enemies: [], delay: 300, pickups: [
-      { x: 600, y: 270, type: 'power' },
+      { x: 600, y: 270, type: 'score' },
       { x: 700, y: 200, type: 'score' }
     ]}
   ]
@@ -3233,14 +3334,17 @@ function drawHUD() {
     ctx.fillText(player.secondary + ': ' + player.secondaryAmmo, CONFIG.width - 20, 48);
   }
 
-  // Weapon level indicator
+  // Weapon stats indicator
   ctx.textAlign = 'left';
   ctx.font = '12px monospace';
   ctx.fillStyle = CONFIG.colors.playerBullet;
-  ctx.fillText('WPN LV' + player.weaponLevel, 20, 48);
+  let wpnLabel = 'WPN ' + player.weaponLevel + '×';
+  if (player.upgrades.fireRate > 0) wpnLabel += ' R' + (player.fireRateOverride || CONFIG.playerFireRate);
+  if (player.upgrades.gravLock > 0) wpnLabel += ' G' + player.upgrades.gravLock;
+  ctx.fillText(wpnLabel, 20, 48);
 
   // Shield status
-  if (player.weaponLevel >= 3) {
+  if (player.upgrades.shieldRegen > 0) {
     if (player.shieldActive) {
       ctx.fillStyle = '#ffee88';
       ctx.shadowColor = '#ffee88';
@@ -3255,19 +3359,22 @@ function drawHUD() {
   }
 
   // Score multiplier (shown when above 1x)
-  if (player.xpLevel > 1) {
-    const mult = (1 + (player.xpLevel - 1) * 0.25).toFixed(2);
-    ctx.fillStyle = '#00ffee';
-    ctx.shadowColor = '#00ffee';
-    ctx.shadowBlur = 6;
-    ctx.fillText('×' + mult, 20, 64);
-    ctx.shadowBlur = 0;
+  {
+    const baseMultiplier = 1 + (player.xpLevel - 1) * 0.25;
+    const totalMult = baseMultiplier * player.scoreMultBonus;
+    if (totalMult > 1.01) {
+      ctx.fillStyle = '#00ffee';
+      ctx.shadowColor = '#00ffee';
+      ctx.shadowBlur = 6;
+      ctx.fillText('×' + totalMult.toFixed(2), 20, player.upgrades.shieldRegen > 0 ? 80 : 64);
+      ctx.shadowBlur = 0;
+    }
   }
 
   // Dodge cooldown bar — lower left
   {
     const dodgeReady = player.dodgeCooldown <= 0;
-    const cooldownPct = dodgeReady ? 1 : 1 - (player.dodgeCooldown / DODGE_COOLDOWN);
+    const cooldownPct = dodgeReady ? 1 : 1 - (player.dodgeCooldown / player.dodgeCooldownBase);
     const barX = 20, barY = CONFIG.height - 32;
     ctx.font = '10px monospace';
     ctx.textAlign = 'left';
@@ -3313,26 +3420,183 @@ function drawHUD() {
 function drawTitleScreen() {
   drawBackground();
 
-  ctx.save();
-  ctx.shadowColor = CONFIG.colors.player;
-  ctx.shadowBlur = 20;
-  ctx.fillStyle = CONFIG.colors.player;
-  ctx.font = 'bold 52px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('S P A C E', CONFIG.width / 2, CONFIG.height / 2 - 60);
-  ctx.fillText('T O O T S', CONFIG.width / 2, CONFIG.height / 2 - 5);
+  const cx = CONFIG.width / 2;
+  const cy = CONFIG.height / 2 - 30;
+  const t = frame * 0.02;
+  const pulse = Math.sin(t * 2) * 0.5 + 0.5;
+  const slowPulse = Math.sin(t * 0.7) * 0.5 + 0.5;
 
-  ctx.shadowBlur = 5;
-  ctx.font = '18px monospace';
-  ctx.fillStyle = CONFIG.colors.hud;
-  if (Math.floor(frame / 40) % 2 === 0) {
-    ctx.fillText('► PRESS ENTER TO START', CONFIG.width / 2, CONFIG.height / 2 + 60);
+  ctx.save();
+
+  // Radial light burst behind title
+  const burstGrad = ctx.createRadialGradient(cx, cy, 20, cx, cy, 280);
+  burstGrad.addColorStop(0, `rgba(0, 240, 255, ${0.08 + slowPulse * 0.06})`);
+  burstGrad.addColorStop(0.4, `rgba(0, 120, 255, ${0.04 + slowPulse * 0.03})`);
+  burstGrad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = burstGrad;
+  ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
+
+  // === DIAGNOSTICS HUD FRAME ===
+  const scanAlpha = 0.15 + pulse * 0.1;
+  const diagColor = `rgba(0, 240, 255, ${scanAlpha})`;
+  const diagColorDim = `rgba(0, 180, 255, ${scanAlpha * 0.5})`;
+  ctx.strokeStyle = diagColor;
+  ctx.lineWidth = 1;
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 4;
+
+  // Targeting corners — top-left, top-right, bottom-left, bottom-right
+  const tl = { x: cx - 255, y: cy - 100 };
+  const br = { x: cx + 255, y: cy + 95 };
+  const cLen = 30;
+  // TL
+  ctx.beginPath();
+  ctx.moveTo(tl.x + cLen, tl.y); ctx.lineTo(tl.x, tl.y); ctx.lineTo(tl.x, tl.y + cLen);
+  ctx.stroke();
+  // TR
+  ctx.beginPath();
+  ctx.moveTo(br.x - cLen, tl.y); ctx.lineTo(br.x, tl.y); ctx.lineTo(br.x, tl.y + cLen);
+  ctx.stroke();
+  // BL
+  ctx.beginPath();
+  ctx.moveTo(tl.x + cLen, br.y); ctx.lineTo(tl.x, br.y); ctx.lineTo(tl.x, br.y - cLen);
+  ctx.stroke();
+  // BR
+  ctx.beginPath();
+  ctx.moveTo(br.x - cLen, br.y); ctx.lineTo(br.x, br.y); ctx.lineTo(br.x, br.y - cLen);
+  ctx.stroke();
+
+  // Horizontal sweep line — scans down through the title area
+  const sweepCycle = (frame % 180) / 180; // 0→1 over 3 seconds
+  const sweepY = tl.y + sweepCycle * (br.y - tl.y);
+  const sweepAlpha = Math.sin(sweepCycle * Math.PI) * 0.35;
+  ctx.strokeStyle = `rgba(0, 240, 255, ${sweepAlpha})`;
+  ctx.shadowBlur = 8;
+  ctx.beginPath();
+  ctx.moveTo(tl.x + 5, sweepY);
+  ctx.lineTo(br.x - 5, sweepY);
+  ctx.stroke();
+  // Faint glow band at sweep line
+  const sweepGrad = ctx.createLinearGradient(0, sweepY - 12, 0, sweepY + 12);
+  sweepGrad.addColorStop(0, 'rgba(0,240,255,0)');
+  sweepGrad.addColorStop(0.5, `rgba(0,240,255,${sweepAlpha * 0.3})`);
+  sweepGrad.addColorStop(1, 'rgba(0,240,255,0)');
+  ctx.fillStyle = sweepGrad;
+  ctx.fillRect(tl.x, sweepY - 12, br.x - tl.x, 24);
+
+  // Diagnostic micro-text — system readout along left edge
+  ctx.shadowBlur = 0;
+  ctx.font = '8px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = diagColorDim;
+  const diagLines = ['SYS.BOOT', 'NAV_LOCK', 'WPN.RDY', 'SHLD.OK', 'FTL:STANDBY'];
+  for (let d = 0; d < diagLines.length; d++) {
+    const dy = tl.y + 14 + d * 11;
+    // Staggered reveal based on frame
+    if (frame > 30 + d * 12) {
+      ctx.fillText(diagLines[d], tl.x + 6, dy);
+      // Status pip
+      ctx.fillStyle = d < 4 ? `rgba(0, 255, 120, ${scanAlpha})` : `rgba(255, 200, 0, ${scanAlpha})`;
+      ctx.fillRect(tl.x + 58, dy - 5, 4, 4);
+      ctx.fillStyle = diagColorDim;
+    }
   }
 
-  ctx.font = '14px monospace';
-  ctx.fillStyle = 'rgba(224,224,255,0.5)';
-  ctx.fillText('ARROWS/WASD: MOVE   SPACE: SHOOT   SHIFT: SECONDARY   X: DODGE', CONFIG.width / 2, CONFIG.height / 2 + 110);
-  ctx.fillText('P: PAUSE', CONFIG.width / 2, CONFIG.height / 2 + 135);
+  // Signal strength bars — right edge
+  ctx.textAlign = 'right';
+  ctx.fillText('SIG', br.x - 6, tl.y + 14);
+  for (let b = 0; b < 5; b++) {
+    const bh = 4 + b * 2;
+    const bx = br.x - 40 + b * 7;
+    const by = tl.y + 24 + (14 - bh);
+    const active = b < 3 + Math.floor(slowPulse * 2.5);
+    ctx.fillStyle = active ? `rgba(0, 255, 120, ${scanAlpha})` : `rgba(60, 80, 100, ${scanAlpha})`;
+    ctx.fillRect(bx, by, 5, bh);
+  }
+
+  // Coordinate readout — bottom right
+  ctx.fillStyle = diagColorDim;
+  ctx.textAlign = 'right';
+  const coordX = (Math.sin(t * 0.3) * 42 + 127.4).toFixed(1);
+  const coordY = (Math.cos(t * 0.5) * 18 + 63.2).toFixed(1);
+  ctx.fillText(`${coordX}  ${coordY}`, br.x - 6, br.y - 6);
+
+  ctx.textAlign = 'center';
+  ctx.shadowBlur = 0;
+
+  // "SPACE" — large, skewed italic, racing forward
+  ctx.textAlign = 'center';
+
+  // Apply a forward-lean skew transform for the title
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.transform(1, 0, -0.22, 1, 0, 0); // horizontal shear — italic lean
+  ctx.translate(-cx, -cy);
+
+  ctx.font = 'bold 68px monospace';
+
+  // Multi-layer glow: outer blur
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 40 + pulse * 20;
+  ctx.fillStyle = `rgba(0, 200, 255, ${0.25 + pulse * 0.15})`;
+  ctx.fillText('S P A C E', cx, cy - 25);
+
+  // Speed streak ghosts — trailing copies offset left with decreasing alpha
+  ctx.shadowBlur = 0;
+  for (let g = 3; g >= 1; g--) {
+    ctx.fillStyle = `rgba(0, 180, 255, ${0.04 * g})`;
+    ctx.fillText('S P A C E', cx - g * 8, cy - 25);
+  }
+
+  // Mid glow layer
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 18 + pulse * 8;
+  ctx.fillStyle = `rgba(0, 240, 255, ${0.6 + pulse * 0.2})`;
+  ctx.fillText('S P A C E', cx, cy - 25);
+
+  // Core text — bright white-cyan
+  ctx.shadowBlur = 6;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('S P A C E', cx, cy - 25);
+
+  // "TOOTS" — same treatment
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 40 + pulse * 20;
+  ctx.fillStyle = `rgba(0, 200, 255, ${0.25 + pulse * 0.15})`;
+  ctx.fillText('T O O T S', cx, cy + 45);
+
+  // Speed streak ghosts
+  ctx.shadowBlur = 0;
+  for (let g = 3; g >= 1; g--) {
+    ctx.fillStyle = `rgba(0, 180, 255, ${0.04 * g})`;
+    ctx.fillText('T O O T S', cx - g * 8, cy + 45);
+  }
+
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 18 + pulse * 8;
+  ctx.fillStyle = `rgba(0, 240, 255, ${0.6 + pulse * 0.2})`;
+  ctx.fillText('T O O T S', cx, cy + 45);
+
+  ctx.shadowBlur = 6;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('T O O T S', cx, cy + 45);
+
+  ctx.restore(); // pop the skew transform
+
+  // "PRESS ENTER" — breathing fade
+  ctx.shadowBlur = 0;
+  const enterAlpha = 0.4 + Math.sin(frame * 0.06) * 0.4;
+  ctx.font = '18px monospace';
+  ctx.fillStyle = `rgba(224, 224, 255, ${enterAlpha})`;
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = enterAlpha * 10;
+  ctx.fillText('PRESS ENTER TO START', cx, cy + 130);
+  ctx.shadowBlur = 0;
+
+  // Controls — dimmer, more compact
+  ctx.font = '12px monospace';
+  ctx.fillStyle = 'rgba(180, 180, 220, 0.35)';
+  ctx.fillText('WASD/ARROWS  MOVE  ·  SPACE  SHOOT  ·  X / DOUBLE-TAP  DODGE  ·  P  PAUSE', cx, cy + 170);
 
   ctx.restore();
 }
@@ -3450,8 +3714,279 @@ function drawWinScreen() {
   ctx.restore();
 }
 
+// === LEVEL-UP CARD SYSTEM ===
+let levelUpCards = [];        // array of upgrade keys to display
+let levelUpSelection = 1;    // currently highlighted card (0, 1, or 2)
+let levelUpAnimTimer = 0;    // entrance animation timer
+let levelUpPrevState = '';   // state to return to after selection
+
+function generateLevelUpCards() {
+  const available = Object.keys(UPGRADES).filter(
+    key => player.upgrades[key] < UPGRADES[key].maxTier
+  );
+  // Fisher-Yates shuffle
+  for (let i = available.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [available[i], available[j]] = [available[j], available[i]];
+  }
+  levelUpCards = available.slice(0, 3);
+  levelUpSelection = levelUpCards.length > 1 ? 1 : 0;
+  levelUpAnimTimer = 0;
+}
+
+function applyUpgrade(key) {
+  player.upgrades[key]++;
+  const tier = player.upgrades[key];
+  switch (key) {
+    case 'spread':
+      player.weaponLevel = tier + 1;
+      break;
+    case 'fireRate':
+      player.fireRateOverride = UPGRADES.fireRate.values[tier];
+      break;
+    case 'gravLock':
+      player.gravLock = UPGRADES.gravLock.values[tier];
+      break;
+    case 'xpMagnet':
+      player.xpAttractRadius = UPGRADES.xpMagnet.values[tier];
+      break;
+    case 'boostDur':
+      player.dodgeDuration = UPGRADES.boostDur.values[tier];
+      break;
+    case 'boostRecharge':
+      player.dodgeCooldownBase = UPGRADES.boostRecharge.values[tier];
+      break;
+    case 'speed':
+      player.maxVel = UPGRADES.speed.values[tier];
+      break;
+    case 'shieldRegen':
+      player.shieldRechargeSeconds = UPGRADES.shieldRegen.values[tier];
+      // First shield regen upgrade activates the shield
+      if (tier === 1 && !player.shieldActive && player.shieldRechargeTimer === 0) {
+        player.shieldActive = true;
+        screenFlash = 8;
+        spawnExplosion(player.x, player.y, 10, ['#ffffff', '#ffee88', '#ffcc44']);
+      }
+      break;
+    case 'scoreMult':
+      player.scoreMultBonus = UPGRADES.scoreMult.values[tier];
+      break;
+  }
+}
+
+function drawLevelUpScreen() {
+  // Dark overlay
+  ctx.save();
+  const overlayAlpha = Math.min(0.7, levelUpAnimTimer / 20 * 0.7);
+  ctx.fillStyle = `rgba(5, 5, 20, ${overlayAlpha})`;
+  ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
+
+  // Entrance animation
+  const animPct = Math.min(1, levelUpAnimTimer / 20);
+  const easeOut = 1 - Math.pow(1 - animPct, 3);
+
+  // "LEVEL UP" title
+  const titleAlpha = Math.min(1, animPct * 2);
+  ctx.globalAlpha = titleAlpha;
+  ctx.shadowColor = '#00ffee';
+  ctx.shadowBlur = 20;
+  ctx.fillStyle = '#00ffee';
+  ctx.font = 'bold 32px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('L E V E L   U P', CONFIG.width / 2, 70 + (1 - easeOut) * 30);
+
+  ctx.font = '14px monospace';
+  ctx.fillStyle = '#88cccc';
+  ctx.shadowBlur = 0;
+  ctx.fillText('CHOOSE AN UPGRADE', CONFIG.width / 2, 100 + (1 - easeOut) * 30);
+
+  // Cards
+  const cardCount = levelUpCards.length;
+  const cardW = 180;
+  const cardH = 240;
+  const gap = 24;
+  const totalW = cardCount * cardW + (cardCount - 1) * gap;
+  const startX = (CONFIG.width - totalW) / 2;
+  const cardY = 140;
+
+  for (let i = 0; i < cardCount; i++) {
+    const key = levelUpCards[i];
+    const upg = UPGRADES[key];
+    const currentTier = player.upgrades[key];
+    const selected = i === levelUpSelection;
+
+    // Card slide-up with stagger
+    const stagger = i * 4;
+    const cardAnim = Math.min(1, Math.max(0, (levelUpAnimTimer - stagger) / 16));
+    const cardEase = 1 - Math.pow(1 - cardAnim, 3);
+    const cardX = startX + i * (cardW + gap);
+    const drawY = cardY + (1 - cardEase) * 80;
+
+    ctx.globalAlpha = cardEase;
+    ctx.save();
+
+    // Card background
+    const bgAlpha = selected ? 0.25 : 0.12;
+    ctx.fillStyle = `rgba(20, 20, 50, ${bgAlpha + 0.6})`;
+    ctx.strokeStyle = selected ? upg.color : 'rgba(150, 150, 200, 0.3)';
+    ctx.lineWidth = selected ? 2.5 : 1;
+    if (selected) {
+      ctx.shadowColor = upg.color;
+      ctx.shadowBlur = 15 + Math.sin(frame * 0.08) * 5;
+    }
+
+    // Rounded rect
+    const r = 10;
+    ctx.beginPath();
+    ctx.moveTo(cardX + r, drawY);
+    ctx.lineTo(cardX + cardW - r, drawY);
+    ctx.quadraticCurveTo(cardX + cardW, drawY, cardX + cardW, drawY + r);
+    ctx.lineTo(cardX + cardW, drawY + cardH - r);
+    ctx.quadraticCurveTo(cardX + cardW, drawY + cardH, cardX + cardW - r, drawY + cardH);
+    ctx.lineTo(cardX + r, drawY + cardH);
+    ctx.quadraticCurveTo(cardX, drawY + cardH, cardX, drawY + cardH - r);
+    ctx.lineTo(cardX, drawY + r);
+    ctx.quadraticCurveTo(cardX, drawY, cardX + r, drawY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    const cx = cardX + cardW / 2;
+
+    // Icon
+    ctx.font = 'bold 36px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = upg.color;
+    ctx.shadowColor = upg.color;
+    ctx.shadowBlur = selected ? 12 : 4;
+    ctx.fillText(upg.icon, cx, drawY + 45);
+    ctx.shadowBlur = 0;
+
+    // Name
+    ctx.font = 'bold 14px monospace';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(upg.name, cx, drawY + 85);
+
+    // Description
+    ctx.font = '11px monospace';
+    ctx.fillStyle = 'rgba(200, 200, 230, 0.7)';
+    ctx.fillText(upg.desc, cx, drawY + 108);
+
+    // Current → Next tier
+    ctx.font = '13px monospace';
+    if (currentTier === 0) {
+      // No current tier — just show what you get
+      ctx.fillStyle = upg.color;
+      ctx.fillText(upg.tiers[0], cx, drawY + 145);
+    } else {
+      // Show current → next
+      ctx.fillStyle = 'rgba(180,180,200,0.6)';
+      ctx.fillText(upg.tiers[currentTier - 1], cx - 30, drawY + 145);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('→', cx, drawY + 145);
+      ctx.fillStyle = upg.color;
+      ctx.fillText(upg.tiers[currentTier], cx + 30, drawY + 145);
+    }
+
+    // Tier pips
+    const pipY = drawY + 175;
+    const pipGap = 14;
+    const pipStart = cx - (upg.maxTier - 1) * pipGap / 2;
+    for (let t = 0; t < upg.maxTier; t++) {
+      const px = pipStart + t * pipGap;
+      if (t < currentTier) {
+        // Filled — already purchased
+        ctx.fillStyle = upg.color;
+      } else if (t === currentTier) {
+        // Next tier — pulsing
+        const pulse = 0.5 + Math.sin(frame * 0.1) * 0.5;
+        ctx.fillStyle = selected ? upg.color : `rgba(150,150,200,${0.3 + pulse * 0.3})`;
+      } else {
+        ctx.fillStyle = 'rgba(100,100,140,0.3)';
+      }
+      ctx.beginPath();
+      ctx.arc(px, pipY, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Selected indicator
+    if (selected && animPct >= 1) {
+      ctx.font = '12px monospace';
+      ctx.fillStyle = upg.color;
+      ctx.shadowColor = upg.color;
+      ctx.shadowBlur = 8;
+      const blink = Math.floor(frame / 30) % 2 === 0;
+      if (blink) ctx.fillText('▼ ENTER ▼', cx, drawY + cardH - 15);
+      ctx.shadowBlur = 0;
+    }
+
+    ctx.restore();
+  }
+
+  // Controls hint
+  ctx.globalAlpha = Math.min(1, animPct);
+  ctx.font = '12px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(180,180,220,0.5)';
+  ctx.shadowBlur = 0;
+  ctx.fillText('◄ ► SELECT     ENTER CONFIRM', CONFIG.width / 2, CONFIG.height - 40);
+
+  ctx.restore();
+}
+
+function updateLevelUpInput() {
+  levelUpAnimTimer++;
+  if (levelUpAnimTimer < 22) return; // entrance animation still playing
+
+  if ((keys['ArrowLeft'] || keys['KeyA']) && !keys._levelLeftHeld) {
+    levelUpSelection = Math.max(0, levelUpSelection - 1);
+    keys._levelLeftHeld = true;
+  } else if (!keys['ArrowLeft'] && !keys['KeyA']) {
+    keys._levelLeftHeld = false;
+  }
+
+  if ((keys['ArrowRight'] || keys['KeyD']) && !keys._levelRightHeld) {
+    levelUpSelection = Math.min(levelUpCards.length - 1, levelUpSelection + 1);
+    keys._levelRightHeld = true;
+  } else if (!keys['ArrowRight'] && !keys['KeyD']) {
+    keys._levelRightHeld = false;
+  }
+
+  if (keys['Enter'] && !keys._levelConfirmHeld) {
+    applyUpgrade(levelUpCards[levelUpSelection]);
+    player.pendingLevelUps--;
+    keys._levelConfirmHeld = true;
+    keys['Enter'] = false;
+    keys['Space'] = false;
+    screenFlash = 10;
+    spawnExplosion(player.x, player.y, 12, [UPGRADES[levelUpCards[levelUpSelection]].color, '#ffffff']);
+
+    // Check for more pending level-ups
+    const allMaxed = Object.keys(UPGRADES).every(k => player.upgrades[k] >= UPGRADES[k].maxTier);
+    if (player.pendingLevelUps > 0 && !allMaxed) {
+      generateLevelUpCards();
+    } else {
+      player.pendingLevelUps = 0;
+      gameState = levelUpPrevState;
+    }
+  } else if (!keys['Enter']) {
+    keys._levelConfirmHeld = false;
+  }
+}
+
+function checkPendingLevelUp() {
+  if (player.pendingLevelUps <= 0) return;
+  const allMaxed = Object.keys(UPGRADES).every(k => player.upgrades[k] >= UPGRADES[k].maxTier);
+  if (allMaxed) { player.pendingLevelUps = 0; return; }
+  levelUpPrevState = gameState;
+  gameState = 'LEVEL_UP';
+  generateLevelUpCards();
+}
+
 // === STATE MACHINE ===
-let gameState = 'TITLE';   // TITLE, STAGE_INTRO, GAMEPLAY, BOSS_WARNING, BOSS_FIGHT, STAGE_CLEAR, GAME_OVER, WIN
+let gameState = 'TITLE';   // TITLE, STAGE_INTRO, GAMEPLAY, BOSS_WARNING, BOSS_FIGHT, STAGE_CLEAR, GAME_OVER, WIN, LEVEL_UP
 let stageIntroTimer = 0;
 let paused = false;
 
@@ -3490,12 +4025,23 @@ function resetGame() {
   screenFlash = 0;
   player.xp = 0;
   player.xpLevel = 1;
-  player.xpToNext = 100;
+  player.xpToNext = 10;
   player.dodgeTimer = 0;
   player.dodgeCooldown = 0;
   player.dodgeRoll = 0;
   player.shieldActive = false;
   player.shieldRechargeTimer = 0;
+  // Reset level-up upgrades
+  player.upgrades = { spread: 0, fireRate: 0, gravLock: 0, xpMagnet: 0, boostDur: 0, boostRecharge: 0, speed: 0, shieldRegen: 0, scoreMult: 0 };
+  player.dodgeCooldownBase = DODGE_COOLDOWN;
+  player.pendingLevelUps = 0;
+  player.xpAttractRadius = XP_ATTRACT_RADIUS;
+  player.dodgeDuration = DODGE_DURATION;
+  player.maxVel = 6;
+  player.shieldRechargeSeconds = 30;
+  player.scoreMultBonus = 1.0;
+  player.fireRateOverride = null;
+  player.gravLock = { radius: 0, force: 0 };
 }
 
 function startStage() {
@@ -3603,6 +4149,7 @@ function gameLoop(timestamp) {
       drawShield();
       drawParticles();
       drawHUD();
+      checkPendingLevelUp();
       break;
 
     case 'MID_BOSS_WARNING':
@@ -3640,6 +4187,7 @@ function gameLoop(timestamp) {
       drawParticles();
       drawHUD();
       drawMidBossInboundAlerts();
+      checkPendingLevelUp();
       break;
 
     case 'BOSS_WARNING':
@@ -3689,6 +4237,28 @@ function gameLoop(timestamp) {
         ctx.fillText('"' + boss.title + '"', CONFIG.width / 2, CONFIG.height - 35);
         ctx.restore();
       }
+      checkPendingLevelUp();
+      break;
+
+    case 'LEVEL_UP':
+      // Freeze game scene behind the overlay
+      drawBackground();
+      drawEnemies();
+      if (boss) drawBoss();
+      if (midBoss) drawMidBoss();
+      drawShockwaves();
+      drawLocalFlashes();
+      drawPickups();
+      drawXPOrbs();
+      drawPlayerBullets();
+      drawEnemyBullets();
+      drawPlayer();
+      drawShield();
+      drawParticles();
+      drawHUD();
+      // Draw card overlay + handle input
+      drawLevelUpScreen();
+      updateLevelUpInput();
       break;
 
     case 'STAGE_CLEAR':

@@ -314,11 +314,11 @@ async function fetchRSSFeed() {
     logFeedAttempt('session-cache-miss');
     
     try {
-        // Primary endpoint: optimized PHP cache with high priority
+        // Primary endpoint: Vercel serverless function
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
-                logFeedAttempt('primary-fetch-start', { url: `substack_feed.php?limit=${TOTAL_RSS_ITEMS}` });
-                const response = await fetch(`substack_feed.php?limit=${TOTAL_RSS_ITEMS}`, {
+                logFeedAttempt('primary-fetch-start', { url: `/api/substack-feed?limit=${TOTAL_RSS_ITEMS}` });
+                const response = await fetch(`/api/substack-feed?limit=${TOTAL_RSS_ITEMS}`, {
                     cache: 'no-store',
                     headers: {
                         'Accept': 'application/json'

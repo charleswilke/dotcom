@@ -541,13 +541,25 @@ async function fetchRssXmlFallback() {
         const title = get('title');
         const link = get('link');
         const descriptionHtml = get('description');
-        const contentEncoded = get('content\\:encoded');
+        // Use getElementsByTagNameNS for reliable content:encoded extraction
+        const contentEl = node.getElementsByTagNameNS('http://purl.org/rss/1.0/modules/content/', 'encoded')[0];
+        const contentEncoded = contentEl ? contentEl.textContent : get('content\\:encoded');
         const description = contentEncoded || descriptionHtml || '';
         const pubDate = get('pubDate');
         // Try to find first image URL in content/description
         let thumbnail = '';
-        const imgMatch = description.match(/<img[^>]+src=\"([^\">]+)\"/i);
+        const imgMatch = description.match(/<img[^>]+src="([^">]+)"/i)
+            || description.match(/<img[^>]+src='([^'>]+)'/i);
         if (imgMatch) thumbnail = imgMatch[1];
+        // Also check media:thumbnail and enclosure as fallbacks
+        if (!thumbnail) {
+            const mediaThumb = node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail')[0];
+            if (mediaThumb) thumbnail = mediaThumb.getAttribute('url') || '';
+        }
+        if (!thumbnail) {
+            const enclosure = node.querySelector('enclosure[type^="image"]');
+            if (enclosure) thumbnail = enclosure.getAttribute('url') || '';
+        }
         
         // Extract categories from RSS
         const categories = [];

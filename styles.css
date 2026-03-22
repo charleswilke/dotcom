@@ -7989,6 +7989,11 @@ section.production-header.alice p {
         flex-basis: 100%;
     }
 
+    .mixtape-cover-container {
+        max-width: 240px;
+        margin: 0 auto;
+    }
+
     .mixtape-credits {
         text-align: center;
         font-size: 0.58rem;
@@ -8058,6 +8063,11 @@ section.production-header.alice p {
     .mixtape-left-section {
         flex-shrink: 0; /* Don't shrink the cover/player */
         gap: .5rem;
+    }
+
+    .mixtape-cover-container {
+        max-width: 180px;
+        margin: 0 auto;
     }
     
 

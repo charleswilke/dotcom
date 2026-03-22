@@ -3,5 +3,18 @@
     "api/*.js": {
       "maxDuration": 15
     }
-  }
+  },
+  "redirects": [
+    { "source": "/tootsjam", "destination": "/tootsjam/", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/mixtape(/?)", "destination": "/mixtape.html" },
+    { "source": "/bsides(/?)", "destination": "/bsides.html" },
+    { "source": "/side-two(/?)", "destination": "/side-two.html" },
+    { "source": "/mixtape-side-two(/?)", "destination": "/mixtape-side-two.html" },
+    { "source": "/gwor(/?)", "destination": "/gwor.html" },
+    { "source": "/grief-without-ritual(/?)", "destination": "/grief-without-ritual.html" },
+    { "source": "/tootsjam/:path*", "destination": "/games/TootsJam/:path*" },
+    { "source": "/tootsjam/", "destination": "/games/TootsJam/tootsjam.html" }
+  ]
 }

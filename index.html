@@ -27,7 +27,7 @@
     <meta name="twitter:description" content="Conversational UX Product Designer & Projection Artist specializing in AI integration and theatrical projection design.">
     <meta name="twitter:image" content="https://charleswilke.com/images/cw3.jpg">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="styles.css?v=20260322">
+    <link rel="stylesheet" href="styles.css?v=20260323">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/gif" href="/favicon.gif">
@@ -60,6 +60,34 @@
       ]
     }
     </script>
+    <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo" id="navLogo" aria-label="Home">Charles Wilke</a>
+            <div class="nav-links" id="navLinks">
+                <a href="#portfolio" class="nav-link" data-section="portfolio">Work</a>
+                <a href="#writing" class="nav-link" data-section="writing">Writing</a>
+                <a href="#projections" class="nav-link" data-section="projections">Theater</a>
+                <a href="#about" class="nav-link" data-section="about">About</a>
+                <div class="nav-explore-wrap">
+                    <button class="nav-explore-btn" id="navExploreBtn" aria-haspopup="true" aria-expanded="false">
+                        Explore <span class="nav-explore-arrow">▾</span>
+                    </button>
+                    <div class="nav-dropdown" id="navDropdown" role="menu">
+                        <a href="/tootsjam/" class="nav-dropdown-item" role="menuitem">TootsJam <span class="nav-tag">game</span></a>
+                        <a href="/spacetoots/" class="nav-dropdown-item" role="menuitem">SpaceToots <span class="nav-tag">game</span></a>
+                        <a href="/mixtape.html" class="nav-dropdown-item" role="menuitem">Exploring L.ai.bor <span class="nav-tag">mixtape</span></a>
+                        <a href="/gwor.html" class="nav-dropdown-item" role="menuitem">Grief without Ritual <span class="nav-tag">album</span></a>
+                        <a href="https://fellowvector.com" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Fellow Vector <span class="nav-tag">consulting</span></a>
+                        <a href="/faq.html" class="nav-dropdown-item" role="menuitem">FAQ <span class="nav-tag">ama</span></a>
+                    </div>
+                </div>
+            </div>
+            <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
     <header>
         <div class="header-bg"></div>
         <div class="grid-overlay"></div>
@@ -141,7 +169,7 @@
         </div>
     </section>
     
-    <section class="about">
+    <section class="about" id="about">
         <div class="container about-container">
             <div class="image-compare">
                 <div class="image-wrapper">
@@ -190,7 +218,7 @@
         </div>
     </section>
     
-    <section class="rss-feed">
+    <section class="rss-feed" id="writing">
         <div class="container">
             <h2 class="section-title section-title-light crt-hover rss-section-title">
                 <span class="rss-title-kicker">Exploring</span>
@@ -320,7 +348,7 @@
         </div>
     </section>
     
-    <section class="gpts-section blue-section theatrical-projections-section">
+    <section class="gpts-section blue-section theatrical-projections-section" id="projections">
         <div class="container">
             <h2 class="section-title">Theatrical Projections</h2>
             <div class="gpts-grid">
@@ -564,8 +592,8 @@
         </div>
     </div>
     
-    <script src="common.js?v=20260322" defer></script>
-    <script src="karaoke.js?v=20260322" defer></script>
-    <script src="main.js?v=20260322" defer></script>
+    <script src="common.js?v=20260323" defer></script>
+    <script src="karaoke.js?v=20260323" defer></script>
+    <script src="main.js?v=20260323" defer></script>
 </body>
 </html>

@@ -2196,13 +2196,16 @@ function updateXPOrbs() {
     o.x -= XP_ORB_DRIFT;
     if (o.x < -50) { xpOrbs.splice(i, 1); continue; }
 
-    // Magnetic attraction when within radius
+    // Magnetic attraction — once locked, never let go
     if (player.alive) {
       const dx = player.x - o.x;
       const dy = player.y - o.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist < player.xpAttractRadius) {
+      if (!o.locked && dist < player.xpAttractRadius) {
+        o.locked = true;
+      }
+      if (o.locked) {
         const nx = dx / dist;
         const ny = dy / dist;
         o.vx += nx * XP_ATTRACT_ACCEL;
@@ -2582,7 +2585,19 @@ function spawnMidBoss() {
     inboundTimer: 840,
     pendingInbounds: [],
     hitFlash: 0,
-    displayHp: 40
+    displayHp: 40,
+    // Gravity pulse wave (bullet pushback)
+    gravityPulses: [],
+    gravPulseTimer: 360,
+    gravPulseCooldown: 360,
+    gravPulseTelegraph: 0,
+    // Gravity well pull (player tug — phase 2 only)
+    gravWellPullTimer: 0,
+    gravWellPullActive: false,
+    gravWellPullDuration: 0,
+    gravWellPullTelegraph: 0,
+    // Shotgun fling tracking
+    flingCount: 0
   };
 }
 
@@ -2594,6 +2609,21 @@ function midBossFling() {
   const oa = live[Math.floor(Math.random() * live.length)];
   oa.grabbed = true;
   oa.grabTimer = 38;
+}
+
+// Shotgun fling — grab 3-4 asteroids with spread aiming
+function midBossShotgunFling() {
+  if (!midBoss || !player.alive) return;
+  const live = midBoss.orbitingAsteroids.filter(oa => oa.alive && !oa.merging && !oa.grabbed);
+  const count = Math.min(live.length, 3 + Math.floor(Math.random() * 2));
+  if (count < 2) { midBossFling(); return; }
+  const shuffled = live.sort(() => Math.random() - 0.5).slice(0, count);
+  shuffled.forEach((oa, idx) => {
+    oa.grabbed = true;
+    oa.grabTimer = 25 + idx * 4;
+    oa.shotgunIndex = idx;
+    oa.shotgunTotal = count;
+  });
 }
 
 // Trigger the merge sequence on two live, non-merging asteroids
@@ -2637,6 +2667,9 @@ function updateMidBoss() {
     midBoss.phase = 2;
     midBoss.flingTimer = Math.min(midBoss.flingTimer, 80);
     midBoss.mergeTimer = Math.min(midBoss.mergeTimer, 200);
+    midBoss.gravPulseCooldown = 180;
+    midBoss.gravPulseTimer = Math.min(midBoss.gravPulseTimer, 60);
+    midBoss.gravWellPullTimer = 300;
     spawnExplosion(midBoss.x, midBoss.y, 12, ['#ff6600', '#ff0000', '#ffffff']);
   }
 
@@ -2658,10 +2691,18 @@ function updateMidBoss() {
         const wy = midBoss.y + Math.sin(oa.angle) * oa.orbitRadius;
         const dx = player.x - wx, dy = player.y - wy;
         const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        let aimAngle = Math.atan2(dy, dx);
+        // Shotgun spread
+        if (oa.shotgunIndex !== undefined) {
+          const spread = 0.2;
+          aimAngle += spread * (oa.shotgunIndex - (oa.shotgunTotal - 1) / 2);
+          delete oa.shotgunIndex;
+          delete oa.shotgunTotal;
+        }
         const spd = 4.5 + midBoss.phase * 0.8;
         enemyBullets.push({
           x: wx, y: wy,
-          vx: (dx / dist) * spd, vy: (dy / dist) * spd,
+          vx: Math.cos(aimAngle) * spd, vy: Math.sin(aimAngle) * spd,
           radius: oa.orbitRadius > 60 ? 12 : 9,
           alive: true,
           verts: oa.verts, cracks: oa.cracks,
@@ -2684,8 +2725,8 @@ function updateMidBoss() {
     }
   }
 
-  // === GRAVITY CAPTURE — pull passing asteroids into orbit ===
-  if (midBoss.entered) {
+  // === GRAVITY CAPTURE — pull passing asteroids into orbit (capped at 14) ===
+  if (midBoss.entered && midBoss.orbitingAsteroids.length < 14) {
     for (let i = enemies.length - 1; i >= 0; i--) {
       const e = enemies[i];
       if (!ASTEROID_TYPES.has(e.type)) continue;
@@ -2716,7 +2757,9 @@ function updateMidBoss() {
     if (midBoss.inboundTimer <= 0) {
       const y = 80 + Math.random() * (CONFIG.height - 160);
       midBoss.pendingInbounds.push({ y, countdown: 80 });
-      midBoss.inboundTimer = 780 + Math.floor(Math.random() * 120);  // ~13–15 s
+      midBoss.inboundTimer = midBoss.phase === 2
+        ? 240 + Math.floor(Math.random() * 80)    // ~4-5s in phase 2
+        : 480 + Math.floor(Math.random() * 120);   // ~8-10s in phase 1
     }
     for (let pi = midBoss.pendingInbounds.length - 1; pi >= 0; pi--) {
       const pending = midBoss.pendingInbounds[pi];
@@ -2742,10 +2785,75 @@ function updateMidBoss() {
     }
   }
 
+  // === GRAVITY PULSE WAVE (bullet pushback) ===
+  if (midBoss.gravPulseTelegraph > 0) {
+    midBoss.gravPulseTelegraph--;
+    if (midBoss.gravPulseTelegraph === 0) {
+      midBoss.gravityPulses.push({ x: midBoss.x, y: midBoss.y, radius: 0, maxRadius: 300, speed: 5 });
+      midBoss.gravPulseTimer = midBoss.gravPulseCooldown;
+    }
+  } else {
+    midBoss.gravPulseTimer--;
+    if (midBoss.gravPulseTimer <= 0) {
+      midBoss.gravPulseTelegraph = 25;  // brief charge-up before pulse
+    }
+  }
+  for (let pi = midBoss.gravityPulses.length - 1; pi >= 0; pi--) {
+    const pulse = midBoss.gravityPulses[pi];
+    pulse.radius += pulse.speed;
+    if (pulse.radius >= pulse.maxRadius) { midBoss.gravityPulses.splice(pi, 1); continue; }
+    // Push back player bullets that are near the wavefront
+    for (const b of playerBullets) {
+      const dx = b.x - pulse.x, dy = b.y - pulse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (Math.abs(dist - pulse.radius) < 20) {
+        const nx = dx / (dist || 1), ny = dy / (dist || 1);
+        b.vx += nx * 5;
+        b.vy += ny * 5;
+        const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+        if (spd > CONFIG.bulletSpeed * 1.7) {
+          b.vx = (b.vx / spd) * CONFIG.bulletSpeed * 1.7;
+          b.vy = (b.vy / spd) * CONFIG.bulletSpeed * 1.7;
+        }
+      }
+    }
+  }
+
+  // === GRAVITY WELL PULL (phase 2 — tug player toward Shepherd) ===
+  if (midBoss.phase === 2 && player.alive) {
+    if (midBoss.gravWellPullActive) {
+      midBoss.gravWellPullDuration--;
+      const dx = midBoss.x - player.x, dy = midBoss.y - player.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      player.vx += (dx / dist) * 0.35;
+      player.vy += (dy / dist) * 0.35;
+      if (midBoss.gravWellPullDuration <= 0) {
+        midBoss.gravWellPullActive = false;
+        midBoss.gravWellPullTimer = 420 + Math.floor(Math.random() * 120);
+      }
+    } else if (midBoss.gravWellPullTelegraph > 0) {
+      midBoss.gravWellPullTelegraph--;
+      if (midBoss.gravWellPullTelegraph === 0) {
+        midBoss.gravWellPullActive = true;
+        midBoss.gravWellPullDuration = 120;
+      }
+    } else {
+      midBoss.gravWellPullTimer--;
+      if (midBoss.gravWellPullTimer <= 0) {
+        midBoss.gravWellPullTelegraph = 90;
+      }
+    }
+  }
+
   // === FLING ATTACK ===
   midBoss.flingTimer--;
   if (midBoss.flingTimer <= 0 && midBoss.mergeState === 'idle') {
-    midBossFling();
+    if (midBoss.phase === 2 && midBoss.flingCount % 3 === 0) {
+      midBossShotgunFling();
+    } else {
+      midBossFling();
+    }
+    midBoss.flingCount++;
     midBoss.flingTimer = midBoss.phase === 1 ? 180 : 120;
   }
 
@@ -2966,6 +3074,98 @@ function drawMidBoss() {
     ctx.restore();
   }
 
+  // Gravity pulse telegraph — rapid purple halo charge-up
+  if (mb.gravPulseTelegraph > 0) {
+    const tp = 1 - mb.gravPulseTelegraph / 25;
+    const flicker = Math.sin(mb.frame * 1.2) * 0.5 + 0.5;
+    ctx.save();
+    ctx.shadowColor = '#aa00ff';
+    ctx.shadowBlur = 20 + tp * 30 + flicker * 15;
+    ctx.strokeStyle = `rgba(180,60,255,${0.3 + tp * 0.6 + flicker * 0.1})`;
+    ctx.lineWidth = 2 + tp * 3;
+    ctx.beginPath();
+    ctx.arc(mb.x, mb.y, 32 + tp * 10 + flicker * 4, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Gravity pulse waves — expanding rings
+  for (const pulse of mb.gravityPulses) {
+    const progress = pulse.radius / pulse.maxRadius;
+    const alpha = (1 - progress) * 0.75;
+    ctx.save();
+    ctx.shadowColor = '#aa00ff';
+    ctx.shadowBlur = 20 * (1 - progress);
+    ctx.strokeStyle = `rgba(160,60,255,${alpha.toFixed(2)})`;
+    ctx.lineWidth = 3.5 * (1 - progress) + 1;
+    ctx.beginPath();
+    ctx.arc(pulse.x, pulse.y, pulse.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    if (pulse.radius > 25) {
+      ctx.strokeStyle = `rgba(220,180,255,${(alpha * 0.35).toFixed(2)})`;
+      ctx.lineWidth = 1.5;
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(pulse.x, pulse.y, pulse.radius * 0.75, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Gravity well pull — tractor beam visual
+  if (mb.phase === 2 && player.alive) {
+    if (mb.gravWellPullTelegraph > 0) {
+      // Telegraph: flickering dashed beam
+      const tp = 1 - mb.gravWellPullTelegraph / 90;
+      ctx.save();
+      ctx.setLineDash([8, 12]);
+      ctx.lineDashOffset = mb.frame * 3;
+      ctx.strokeStyle = `rgba(180,60,255,${0.15 + tp * 0.45})`;
+      ctx.lineWidth = 1.5 + tp * 2;
+      ctx.shadowColor = '#cc00ff';
+      ctx.shadowBlur = 8 + tp * 12;
+      ctx.beginPath();
+      ctx.moveTo(mb.x, mb.y);
+      ctx.lineTo(player.x, player.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Warning text
+      if (tp > 0.3) {
+        const textAlpha = Math.sin(mb.frame * 0.3) * 0.3 + 0.5;
+        ctx.fillStyle = `rgba(200,100,255,${textAlpha.toFixed(2)})`;
+        ctx.font = 'bold 14px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('GRAVITY LOCK', player.x, player.y - 30);
+      }
+      ctx.restore();
+    } else if (mb.gravWellPullActive) {
+      // Active pull: thick glowing beam with particle dots
+      ctx.save();
+      ctx.strokeStyle = 'rgba(180,40,255,0.55)';
+      ctx.lineWidth = 4;
+      ctx.shadowColor = '#cc00ff';
+      ctx.shadowBlur = 18;
+      ctx.beginPath();
+      ctx.moveTo(mb.x, mb.y);
+      ctx.lineTo(player.x, player.y);
+      ctx.stroke();
+      // Particle dots streaming along beam
+      const dx = player.x - mb.x, dy = player.y - mb.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      for (let pi = 0; pi < 6; pi++) {
+        const t = ((mb.frame * 0.03 + pi / 6) % 1);
+        const px = mb.x + dx * t;
+        const py = mb.y + dy * t;
+        const dotAlpha = 0.5 + Math.sin(t * Math.PI) * 0.4;
+        ctx.fillStyle = `rgba(220,160,255,${dotAlpha.toFixed(2)})`;
+        ctx.beginPath();
+        ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
   // Charging merged shot — glowing ring at core that grows and fires
   if (mb.mergeState === 'charging' && mb.pendingShot) {
     const cp = 1 - mb.chargeTimer / 40;
@@ -3180,9 +3380,18 @@ function updateAmbientAsteroids() {
   ambientAsteroidTimer--;
   if (ambientAsteroidTimer > 0) return;
 
-  ambientAsteroidTimer = 160 + Math.floor(Math.random() * 360);
+  // Much denser asteroid field during Shepherd fight
+  if (gameState === 'MID_BOSS_FIGHT' && midBoss) {
+    const p2 = midBoss.phase === 2;
+    ambientAsteroidTimer = p2 ? 35 + Math.floor(Math.random() * 65) : 60 + Math.floor(Math.random() * 100);
+  } else {
+    ambientAsteroidTimer = 160 + Math.floor(Math.random() * 360);
+  }
 
-  const count = Math.random() < 0.25 ? 2 + Math.floor(Math.random() * 2) : 1;
+  const inBossFight = gameState === 'MID_BOSS_FIGHT' && midBoss;
+  const count = inBossFight
+    ? (midBoss.phase === 2 ? 2 + Math.floor(Math.random() * 2) : (Math.random() < 0.4 ? 2 : 1))
+    : (Math.random() < 0.25 ? 2 + Math.floor(Math.random() * 2) : 1);
   const baseY = 50 + Math.random() * (CONFIG.height - 140);
 
   for (let c = 0; c < count; c++) {
@@ -3720,6 +3929,8 @@ let levelUpSelection = 1;    // currently highlighted card (0, 1, or 2)
 let levelUpAnimTimer = 0;    // entrance animation timer
 let levelUpPrevState = '';   // state to return to after selection
 
+const WEAPON_UPGRADES = new Set(['spread', 'fireRate', 'gravLock']);
+
 function generateLevelUpCards() {
   const available = Object.keys(UPGRADES).filter(
     key => player.upgrades[key] < UPGRADES[key].maxTier
@@ -3729,7 +3940,15 @@ function generateLevelUpCards() {
     const j = Math.floor(Math.random() * (i + 1));
     [available[i], available[j]] = [available[j], available[i]];
   }
-  levelUpCards = available.slice(0, 3);
+  let picks = available.slice(0, 3);
+  // Guarantee at least one weapon upgrade in the choices
+  if (picks.length > 1 && !picks.some(k => WEAPON_UPGRADES.has(k))) {
+    const weapons = available.filter(k => WEAPON_UPGRADES.has(k));
+    if (weapons.length > 0) {
+      picks[Math.floor(Math.random() * picks.length)] = weapons[Math.floor(Math.random() * weapons.length)];
+    }
+  }
+  levelUpCards = picks;
   levelUpSelection = levelUpCards.length > 1 ? 1 : 0;
   levelUpAnimTimer = 0;
 }

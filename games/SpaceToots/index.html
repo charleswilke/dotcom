@@ -44,12 +44,12 @@ const CONFIG = {
   width: 960,
   height: 540,
   playerSpeed: 5,
-  playerFireRate: 8,        // frames between shots
+  playerFireRate: 48,       // frames between shots (~0.8 sec at 60fps)
   bulletSpeed: 10,
   enemyBulletSpeed: 4,
   maxBullets: 200,
   maxEnemies: 30,
-  maxParticles: 100,
+  maxParticles: 250,
   colors: {
     bg:          '#0a0a1a',
     grid:        '#2a1040',
@@ -103,15 +103,15 @@ const UPGRADES = {
   spread:      { name: 'Spread Shot',      icon: '⚔', desc: 'More bullets per shot',     color: '#00ffff', maxTier: 5,
                  tiers: ['1','2','3','4','5'] },
   fireRate:    { name: 'Fire Rate',        icon: '↑', desc: 'Shoot faster',               color: '#44ddff', maxTier: 5,
-                 tiers: ['8f','7f','7f','6f','5f'], values: [8, 7, 7, 6, 5] },
+                 tiers: ['36f','26f','18f','12f','8f'], values: [36, 26, 18, 12, 8] },
   gravLock:    { name: 'Grav Lock',        icon: '◉', desc: 'Bullets curve to enemies',   color: '#dd44ff', maxTier: 5,
-                 tiers: ['OFF','Weak','Med','Strong','Homing'],
+                 tiers: ['Weak','Med','Strong','Homing','Max'],
                  values: [
-                   { radius: 0,   force: 0 },
                    { radius: 80,  force: 0.15 },
                    { radius: 120, force: 0.3 },
                    { radius: 160, force: 0.5 },
-                   { radius: 220, force: 0.8 }
+                   { radius: 220, force: 0.8 },
+                   { radius: 280, force: 1.2 }
                  ]},
   xpMagnet:    { name: 'XP Magnet',        icon: '◎', desc: 'Attract XP from further',   color: '#00ffee', maxTier: 5,
                  tiers: ['45px','65px','90px','120px','160px'], values: [45, 65, 90, 120, 160] },
@@ -173,6 +173,32 @@ window.addEventListener('keyup', e => { keys[e.code] = false; });
 
 // Frame counter
 let frame = 0;
+
+// === SCREEN SHAKE & HITSTOP ===
+let screenShakeX = 0, screenShakeY = 0, screenShakeTimer = 0, screenShakeIntensity = 0;
+let hitStopFrames = 0;
+
+function triggerScreenShake(intensity, duration) {
+  screenShakeIntensity = Math.max(screenShakeIntensity, intensity);
+  screenShakeTimer = Math.max(screenShakeTimer, duration);
+}
+
+function triggerHitStop(frames) {
+  hitStopFrames = Math.max(hitStopFrames, frames);
+}
+
+function updateScreenShake() {
+  if (screenShakeTimer > 0) {
+    screenShakeX = (Math.random() - 0.5) * 2 * screenShakeIntensity;
+    screenShakeY = (Math.random() - 0.5) * 2 * screenShakeIntensity;
+    screenShakeTimer--;
+    screenShakeIntensity *= 0.85;
+  } else {
+    screenShakeX = 0;
+    screenShakeY = 0;
+    screenShakeIntensity = 0;
+  }
+}
 
 // === OBJECT POOLS ===
 const playerBullets = [];
@@ -468,7 +494,7 @@ const player = {
   shieldRechargeSeconds: 30,
   scoreMultBonus: 1.0,
   fireRateOverride: null,
-  gravLock: { radius: 0, force: 0 }
+  gravLock: { radius: 50, force: 0.06 }
 };
 
 function drawPlayer() {
@@ -963,11 +989,26 @@ function updatePlayerBullets() {
 
 function drawPlayerBullets() {
   ctx.save();
-  ctx.shadowColor = CONFIG.colors.playerBullet;
-  ctx.shadowBlur = 8;
-  ctx.fillStyle = CONFIG.colors.playerBullet;
   for (const b of playerBullets) {
-    ctx.fillRect(b.x - b.width / 2, b.y - b.height / 2, b.width, b.height);
+    const bx = b.x - b.width / 2;
+    const by = b.y - b.height / 2;
+
+    // Outer neon bloom
+    ctx.shadowColor = CONFIG.colors.playerBullet;
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = 'rgba(0, 255, 255, 0.25)';
+    ctx.fillRect(bx - 3, by - 2, b.width + 6, b.height + 4);
+
+    // Main bullet body
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = CONFIG.colors.playerBullet;
+    ctx.fillRect(bx, by, b.width, b.height);
+
+    // Hot white core
+    ctx.shadowColor = '#ffffff';
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.fillRect(bx + 2, by + 0.5, b.width * 0.5, b.height - 1);
   }
   ctx.restore();
 }
@@ -1047,11 +1088,27 @@ function drawEnemyBullets() {
       }
       ctx.restore();
     } else {
+      // Outer neon bloom
       ctx.shadowColor = CONFIG.colors.enemyBullet;
-      ctx.shadowBlur = 6;
+      ctx.shadowBlur = 22;
+      ctx.fillStyle = 'rgba(255, 68, 0, 0.2)';
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.radius + 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Main bullet body
+      ctx.shadowBlur = 14;
       ctx.fillStyle = CONFIG.colors.enemyBullet;
       ctx.beginPath();
       ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Hot white-yellow core
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 6;
+      ctx.fillStyle = 'rgba(255, 220, 150, 0.75)';
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.radius * 0.45, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -1682,6 +1739,17 @@ function drawEnemies() {
     } else {
       drawCraftEnemy(e);
     }
+    // Hit flash — bright white glow burst around enemy on hit
+    if (e.hitFlash > 0) {
+      const flashAlpha = e.hitFlash / 5 * 0.6;
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 25 * (e.hitFlash / 5);
+      ctx.fillStyle = `rgba(255,255,255,${flashAlpha})`;
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, Math.max(e.width, e.height) * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+      e.hitFlash--;
+    }
     ctx.restore();
   }
   ctx.restore();
@@ -1704,6 +1772,34 @@ function spawnExplosion(x, y, count, colorSequence) {
   }
 }
 
+// Directional impact sparks — spray particles along bullet direction with spread
+function spawnImpactSparks(x, y, bvx, bvy, count, colorSequence) {
+  const bulletAngle = Math.atan2(bvy, bvx);
+  for (let i = 0; i < count && particles.length < CONFIG.maxParticles; i++) {
+    // Sparks fly forward (bullet dir) with a wide cone + some reverse splash
+    const forward = Math.random() > 0.25;
+    const spread = forward ? (Math.random() - 0.5) * Math.PI * 0.8 : Math.PI + (Math.random() - 0.5) * Math.PI * 0.5;
+    const angle = bulletAngle + spread;
+    const speed = forward ? Math.random() * 6 + 3 : Math.random() * 3 + 1;
+    const isSpark = Math.random() < 0.4;
+    particles.push({
+      x: x + (Math.random() - 0.5) * 4,
+      y: y + (Math.random() - 0.5) * 4,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1.0,
+      decay: isSpark ? Math.random() * 0.04 + 0.05 : Math.random() * 0.03 + 0.02,
+      size: isSpark ? Math.random() * 2 + 1 : Math.random() * 4 + 2,
+      colors: colorSequence
+    });
+  }
+}
+
+// Quick bright flash at impact point
+function spawnHitFlash(x, y, radius) {
+  localFlashes.push({ x, y, radius, life: 1.0, fast: true });
+}
+
 function updateParticles() {
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
@@ -1719,14 +1815,26 @@ function updateParticles() {
 function drawParticles() {
   ctx.save();
   for (const p of particles) {
-    // Transition through color sequence based on life
     const colors = p.colors;
     const idx = Math.min(Math.floor((1 - p.life) * colors.length), colors.length - 1);
     ctx.fillStyle = colors[idx];
     ctx.globalAlpha = p.life;
     ctx.shadowColor = colors[idx];
     ctx.shadowBlur = 6;
-    ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+
+    // Small fast particles render as velocity streaks (sparks)
+    const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+    if (p.size <= 2.5 && speed > 2) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(Math.atan2(p.vy, p.vx));
+      const streakLen = Math.min(speed * 2.5, 12);
+      ctx.shadowBlur = 10;
+      ctx.fillRect(-streakLen / 2, -p.size / 2, streakLen, p.size);
+      ctx.restore();
+    } else {
+      ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+    }
   }
   ctx.restore();
 }
@@ -1836,6 +1944,10 @@ function checkCollisions() {
           e.energy = Math.min(e.maxEnergy, e.energy + 20);
           player.shotsHit++;
           spawnExplosion(e.x, e.y, 6, ['#ffffff', '#dd88ff', '#aa44ff']);
+          spawnImpactSparks(b.x, b.y, b.vx, b.vy, 6, ['#ffffff', '#dd88ff', '#aa44ff']);
+          spawnHitFlash(e.x, e.y, 22);
+          triggerScreenShake(2, 3);
+          triggerHitStop(1);
           consumed = true;
           if (e.energy >= e.maxEnergy) {
             triggerGravNova(e, ei);
@@ -1844,6 +1956,7 @@ function checkCollisions() {
         } else if (dist < 22) {
           // Struck the outer hull ring — deflect, no damage
           spawnExplosion(b.x, b.y, 3, ['#aa44ff', '#551188']);
+          spawnImpactSparks(b.x, b.y, b.vx, b.vy, 5, ['#aa44ff', '#ffffff', '#551188']);
           consumed = true;
           break;
         }
@@ -1875,6 +1988,10 @@ function checkCollisions() {
               e.armorPlates[pi].respawnTimer = e.armorPlates[pi].respawnFrames;
               player.shotsHit++;
               spawnExplosion(b.x, b.y, 10, ['#ffffff', '#ff00aa', '#440020']);
+              spawnImpactSparks(b.x, b.y, b.vx, b.vy, 10, ['#ffffff', '#ff00aa', '#ff4400']);
+              spawnHitFlash(b.x, b.y, 20);
+              triggerScreenShake(2.5, 4);
+              triggerHitStop(2);
               consumed = true;
               break;
             }
@@ -1888,8 +2005,14 @@ function checkCollisions() {
           player.shotsHit++;
           if (e.hp <= 0) {
             destroyEnemy(e, ei);
+            triggerScreenShake(3, 4);
+            triggerHitStop(2);
           } else {
-            spawnExplosion(b.x, b.y, 3, ['#ffffff', CONFIG.colors.playerBullet]);
+            spawnImpactSparks(b.x, b.y, b.vx, b.vy, 8, ['#ffffff', '#00ffff', CONFIG.colors.playerBullet]);
+            spawnHitFlash(b.x, b.y, 18);
+            e.hitFlash = 5;
+            triggerScreenShake(1.5, 3);
+            triggerHitStop(1);
           }
           consumed = true;
           break;
@@ -1918,6 +2041,10 @@ function checkCollisions() {
           oa.respawnTimer = oa.respawnFrames;
           player.shotsHit++;
           spawnExplosion(wx, wy, 8, ['#aaeeff', '#ffffff', '#336688']);
+          spawnImpactSparks(wx, wy, b.vx, b.vy, 6, ['#ffffff', '#aaeeff']);
+          spawnHitFlash(wx, wy, 14);
+          triggerScreenShake(1.5, 3);
+          triggerHitStop(1);
           consumed = true;
           break;
         }
@@ -1941,6 +2068,10 @@ function checkCollisions() {
           oa.alive = false; oa.respawnTimer = oa.respawnFrames;
           player.shotsHit++;
           spawnExplosion(wx, wy, 8, ['#aaeeff', '#ffffff', '#cc00ff']);
+          spawnImpactSparks(wx, wy, b.vx, b.vy, 8, ['#ffffff', '#aaeeff', '#cc00ff']);
+          spawnHitFlash(wx, wy, 16);
+          triggerScreenShake(2, 3);
+          triggerHitStop(1);
           consumed = true; break;
         }
       }
@@ -1952,6 +2083,10 @@ function checkCollisions() {
         midBoss.hitFlash = 12;
         player.shotsHit++;
         spawnExplosion(b.x, b.y, 4, ['#cc00ff', '#ffffff', '#ff3300']);
+        spawnImpactSparks(b.x, b.y, b.vx, b.vy, 10, ['#ffffff', '#cc00ff', '#ff3300']);
+        spawnHitFlash(b.x, b.y, 25);
+        triggerScreenShake(3, 5);
+        triggerHitStop(2);
         playerBullets.splice(bi, 1);
         if (midBoss.hp <= 0) destroyMidBoss();
       }
@@ -1969,8 +2104,14 @@ function checkCollisions() {
           boss.hp--;
           player.shotsHit++;
           spawnExplosion(b.x, b.y, 4, ['#ffffff', '#ffff00', '#ff00aa']);
+          spawnImpactSparks(b.x, b.y, b.vx, b.vy, 12, ['#ffffff', '#ffff00', '#ff00aa']);
+          spawnHitFlash(b.x, b.y, 28);
+          triggerScreenShake(3.5, 5);
+          triggerHitStop(2);
         } else {
           spawnExplosion(b.x, b.y, 2, ['#666666', '#333333']);
+          spawnImpactSparks(b.x, b.y, b.vx, b.vy, 5, ['#888888', '#444444']);
+          triggerScreenShake(1, 2);
         }
         playerBullets.splice(bi, 1);
 
@@ -3352,20 +3493,30 @@ function spawnLocalFlash(x, y, radius) {
 }
 function updateLocalFlashes() {
   for (let i = localFlashes.length - 1; i >= 0; i--) {
-    localFlashes[i].life -= 0.04;
-    if (localFlashes[i].life <= 0) localFlashes.splice(i, 1);
+    const f = localFlashes[i];
+    f.life -= f.fast ? 0.15 : 0.04;
+    if (f.life <= 0) localFlashes.splice(i, 1);
   }
 }
 function drawLocalFlashes() {
   for (const f of localFlashes) {
     const alpha = f.life * 0.85;
-    const grad = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.radius * (1.1 - f.life * 0.1));
-    grad.addColorStop(0,    `rgba(255, 220, 255, ${alpha})`);
-    grad.addColorStop(0.35, `rgba(210, 130, 255, ${alpha * 0.6})`);
-    grad.addColorStop(1,    `rgba(160, 60, 255, 0)`);
+    const r = f.radius * (1.1 - f.life * 0.1);
+    const grad = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, r);
+    if (f.fast) {
+      // Bullet impact flash — bright white/cyan
+      grad.addColorStop(0,    `rgba(255, 255, 255, ${alpha})`);
+      grad.addColorStop(0.3,  `rgba(100, 240, 255, ${alpha * 0.7})`);
+      grad.addColorStop(1,    `rgba(0, 180, 255, 0)`);
+    } else {
+      // Nova flash — purple
+      grad.addColorStop(0,    `rgba(255, 220, 255, ${alpha})`);
+      grad.addColorStop(0.35, `rgba(210, 130, 255, ${alpha * 0.6})`);
+      grad.addColorStop(1,    `rgba(160, 60, 255, 0)`);
+    }
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+    ctx.arc(f.x, f.y, r, 0, Math.PI * 2);
     ctx.fill();
   }
 }
@@ -4242,6 +4393,8 @@ function resetGame() {
   shockwaves.length = 0;
   localFlashes.length = 0;
   screenFlash = 0;
+  screenShakeX = 0; screenShakeY = 0; screenShakeTimer = 0; screenShakeIntensity = 0;
+  hitStopFrames = 0;
   player.xp = 0;
   player.xpLevel = 1;
   player.xpToNext = 10;
@@ -4260,7 +4413,7 @@ function resetGame() {
   player.shieldRechargeSeconds = 30;
   player.scoreMultBonus = 1.0;
   player.fireRateOverride = null;
-  player.gravLock = { radius: 0, force: 0 };
+  player.gravLock = { radius: 50, force: 0.06 };
 }
 
 function startStage() {
@@ -4325,6 +4478,21 @@ function gameLoop(timestamp) {
     return;
   }
 
+  // Hitstop — skip game updates but still render
+  if (hitStopFrames > 0) {
+    hitStopFrames--;
+    // Still update particles/flashes so they animate during hitstop
+    updateParticles();
+    updateLocalFlashes();
+    updateScreenShake();
+  } else {
+    updateScreenShake();
+  }
+
+  // Apply screen shake
+  ctx.save();
+  ctx.translate(screenShakeX, screenShakeY);
+
   switch (gameState) {
     case 'TITLE':
       drawTitleScreen();
@@ -4344,18 +4512,20 @@ function gameLoop(timestamp) {
 
     case 'GAMEPLAY':
       drawBackground();
-      updatePlayer();
-      updatePlayerBullets();
-      updateEnemyBullets();
-      updateEnemies();
-      updateAmbientAsteroids();
-      updateWaves();
-      updateParticles();
-      updatePickups();
-      updateXPOrbs();
-      updateShockwaves();
-      updateLocalFlashes();
-      checkCollisions();
+      if (hitStopFrames <= 0) {
+        updatePlayer();
+        updatePlayerBullets();
+        updateEnemyBullets();
+        updateEnemies();
+        updateAmbientAsteroids();
+        updateWaves();
+        updateParticles();
+        updatePickups();
+        updateXPOrbs();
+        updateShockwaves();
+        updateLocalFlashes();
+        checkCollisions();
+      }
 
       drawEnemies();
       drawShockwaves();
@@ -4382,17 +4552,19 @@ function gameLoop(timestamp) {
 
     case 'MID_BOSS_FIGHT':
       drawBackground();
-      updatePlayer();
-      updatePlayerBullets();
-      updateEnemyBullets();
-      updateEnemies();
-      updateAmbientAsteroids();
-      updateMidBoss();
-      updateParticles();
-      updateXPOrbs();
-      updateShockwaves();
-      updateLocalFlashes();
-      checkCollisions();
+      if (hitStopFrames <= 0) {
+        updatePlayer();
+        updatePlayerBullets();
+        updateEnemyBullets();
+        updateEnemies();
+        updateAmbientAsteroids();
+        updateMidBoss();
+        updateParticles();
+        updateXPOrbs();
+        updateShockwaves();
+        updateLocalFlashes();
+        checkCollisions();
+      }
 
       drawEnemies();
       drawMidBoss();
@@ -4420,15 +4592,17 @@ function gameLoop(timestamp) {
 
     case 'BOSS_FIGHT':
       drawBackground();
-      updatePlayer();
-      updatePlayerBullets();
-      updateEnemyBullets();
-      updateBoss();
-      updateParticles();
-      updateXPOrbs();
-      updateShockwaves();
-      updateLocalFlashes();
-      checkCollisions();
+      if (hitStopFrames <= 0) {
+        updatePlayer();
+        updatePlayerBullets();
+        updateEnemyBullets();
+        updateBoss();
+        updateParticles();
+        updateXPOrbs();
+        updateShockwaves();
+        updateLocalFlashes();
+        checkCollisions();
+      }
 
       drawBoss();
       drawShockwaves();
@@ -4510,6 +4684,9 @@ function gameLoop(timestamp) {
       break;
   }
 
+  // Restore screen shake transform
+  ctx.restore();
+
   // Screen flash effect
   if (screenFlash > 0) {
     ctx.fillStyle = `rgba(255,255,255,${screenFlash / 30 * 0.6})`;
@@ -4518,6 +4695,33 @@ function gameLoop(timestamp) {
   }
 
   requestAnimationFrame(gameLoop);
+}
+
+// === DEBUG: shooting range ===
+// Call debugRange() from console to spawn a column of enemies in front of the player
+function debugRange(type = 'drone', count = 6, spacing = 60) {
+  // Start a game if not in one
+  if (gameState === 'TITLE' || gameState === 'GAME_OVER') {
+    resetGame();
+    startStage();
+  }
+  gameState = 'GAMEPLAY';
+  enemies.length = 0;
+  enemyBullets.length = 0;
+  player.x = 80;
+  player.y = CONFIG.height / 2;
+  player.lives = 99;
+  player.alive = true;
+  player.invincible = 60;
+  const startY = CONFIG.height / 2 - ((count - 1) * spacing) / 2;
+  for (let i = 0; i < count; i++) {
+    const e = spawnEnemy(type, 500, startY + i * spacing, { speed: 0 });
+    if (e) {
+      e.hp = 3; // survive a couple hits so you can see the non-lethal impact effects
+      e.maxHp = 3;
+      e.fireTimer = 99999; // don't shoot back
+    }
+  }
 }
 
 // === INIT ===

@@ -8368,6 +8368,10 @@ section.production-header.alice p {
     border-left-color: var(--neon);
 }
 
+.nav-dropdown-item--wrap {
+    align-items: flex-start;
+}
+
 .nav-tag {
     font-size: 0.6rem;
     color: rgba(0, 247, 194, 0.5);

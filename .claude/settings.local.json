@@ -30,7 +30,9 @@
       "Bash(xargs cat:*)",
       "Bash(npx vercel:*)",
       "Bash(node -e \":*)",
-      "Bash(node test-api.js)"
+      "Bash(node test-api.js)",
+      "Bash(ls -lh /Users/cwilke/Documents/GitHub/dotcom/*.js /Users/cwilke/Documents/GitHub/dotcom/*.html)",
+      "Bash(git:*)"
     ]
   }
 }

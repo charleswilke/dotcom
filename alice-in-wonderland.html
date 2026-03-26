@@ -36,6 +36,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo" id="navLogo" aria-label="Home">Charles Wilke</a>
+            <div class="nav-links" id="navLinks">
+                <a href="/#portfolio" class="nav-link">Work</a>
+                <a href="/#writing" class="nav-link">Writing</a>
+                <a href="/#projections" class="nav-link">Theater</a>
+                <a href="/#about" class="nav-link">About</a>
+                <div class="nav-explore-wrap">
+                    <button class="nav-explore-btn" id="navExploreBtn" aria-haspopup="true" aria-expanded="false">
+                        Explore <span class="nav-explore-arrow">▾</span>
+                    </button>
+                    <div class="nav-dropdown" id="navDropdown" role="menu">
+                        <a href="/tootsjam/" class="nav-dropdown-item" role="menuitem">TootsJam <span class="nav-tag">game</span></a>
+                        <a href="/spacetoots/" class="nav-dropdown-item" role="menuitem">SpaceToots <span class="nav-tag">game</span></a>
+                        <a href="/mixtape.html" class="nav-dropdown-item nav-dropdown-item--wrap" role="menuitem">Exploring<br>L.ai.bor <span class="nav-tag">mixtape</span></a>
+                        <a href="/gwor.html" class="nav-dropdown-item nav-dropdown-item--wrap" role="menuitem">Grief without<br>Ritual <span class="nav-tag">album</span></a>
+                        <a href="https://fellowvector.com" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Fellow Vector <span class="nav-tag">consulting</span></a>
+                        <a href="/faq.html" class="nav-dropdown-item" role="menuitem">FAQ <span class="nav-tag">ama</span></a>
+                        <a href="mailto:cwilke.inquiry@gmail.com" class="nav-dropdown-item" role="menuitem">Contact Me <span class="nav-tag">IRL</span></a>
+                    </div>
+                </div>
+            </div>
+            <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
     <header>
         <div class="header-bg"></div>
         <div class="grid-overlay"></div>
@@ -469,5 +497,63 @@
             document.querySelector('.lightbox-nav').style.display = 'flex';
         }
     </script>
+    <script>
+    (function () {
+        var nav = document.getElementById('siteNav');
+        var hamburger = document.getElementById('navHamburger');
+        var navLinks = document.getElementById('navLinks');
+        var exploreBtn = document.getElementById('navExploreBtn');
+        var dropdown = document.getElementById('navDropdown');
+        var navLogo = document.getElementById('navLogo');
+        if (!nav) return;
+
+        // Show logo after header scrolls out
+        var siteHeader = document.querySelector('header');
+        if (navLogo && siteHeader) {
+            new IntersectionObserver(function (entries) {
+                navLogo.classList.toggle('visible', !entries[0].isIntersecting);
+            }, { threshold: 0 }).observe(siteHeader);
+        }
+
+        // Hide/show on scroll
+        var lastY = window.scrollY, ticking = false;
+        window.addEventListener('scroll', function () {
+            if (!ticking) {
+                requestAnimationFrame(function () {
+                    var y = window.scrollY;
+                    nav.classList.toggle('nav-hidden', y > lastY && y > 80);
+                    nav.classList.toggle('nav-scrolled', y > 20);
+                    if (y <= lastY) nav.classList.remove('nav-hidden');
+                    lastY = y; ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // Dropdown
+        function closeDropdown() {
+            dropdown.classList.remove('open');
+            exploreBtn.setAttribute('aria-expanded', 'false');
+        }
+        exploreBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = dropdown.classList.contains('open');
+            open ? closeDropdown() : (dropdown.classList.add('open'), exploreBtn.setAttribute('aria-expanded', 'true'));
+        });
+        document.addEventListener('click', function (e) { if (!nav.contains(e.target)) closeDropdown(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDropdown(); });
+
+        // Hamburger
+        hamburger.addEventListener('click', function () {
+            var open = navLinks.classList.contains('open');
+            navLinks.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', String(!open));
+            if (!open) closeDropdown();
+        });
+        document.addEventListener('click', function (e) {
+            if (!nav.contains(e.target)) { navLinks.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); }
+        });
+    })();
+    </script>
 </body>
-</html> 
+</html>

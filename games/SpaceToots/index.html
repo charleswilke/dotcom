@@ -91,7 +91,8 @@ const CONFIG = {
 const DODGE_DURATION = 18;    // frames of active dash
 const DODGE_COOLDOWN = 120;   // frames before next dodge (2 sec at 60fps, upgradeable)
 const DODGE_IMPULSE  = 9;     // velocity impulse (above maxVel of 6)
-const DODGE_KEY      = 'KeyX';
+const DODGE_KEY      = 'ShiftLeft';
+const DODGE_KEY_ALT  = 'ShiftRight';
 
 const XP_ATTRACT_RADIUS = 45;   // px — magnetic pull starts here
 const XP_ATTRACT_ACCEL  = 0.8;  // acceleration toward player per frame
@@ -435,9 +436,11 @@ function drawBackground() {
     ctx.fillRect(neb.x - neb.radius, neb.y - neb.radius, neb.radius * 2, neb.radius * 2);
   }
 
-  // Layer 3.5: Moon terrain
-  for (const layer of terrainLayers) {
-    drawTerrainLayer(layer);
+  // Layer 3.5: Moon terrain (suppressed during tunnel gauntlet)
+  if (!tunnelActive) {
+    for (const layer of terrainLayers) {
+      drawTerrainLayer(layer);
+    }
   }
 
   // Layer 4: Foreground debris streaks
@@ -727,10 +730,17 @@ function updatePlayer() {
     if (player.respawnTimer <= 0 && player.lives > 0) {
       player.alive = true;
       player.x = 100;
-      player.y = CONFIG.height / 2;
+      if (tunnelActive) {
+        // Respawn at tunnel center with extra i-frames
+        const bounds = getTunnelBoundsAtX(100);
+        player.y = (bounds.topY + bounds.bottomY) / 2;
+        player.invincible = 180; // 3 seconds during tunnel
+      } else {
+        player.y = CONFIG.height / 2;
+        player.invincible = 120; // 2 seconds at 60fps
+      }
       player.vx = 0;
       player.vy = 0;
-      player.invincible = 120; // 2 seconds at 60fps
       // Restore shield if player has the upgrade
       if (player.upgrades.shieldRegen > 0) {
         player.shieldActive = true;
@@ -810,12 +820,12 @@ function updatePlayer() {
   }
 
   // Secondary fire
-  if (keys['ShiftLeft'] || keys['ShiftRight']) {
+  if (keys['KeyX']) {
     fireSecondary();
   }
 
-  // Dodge — triggered by X key or double-tap direction
-  if (keys[DODGE_KEY] && !keys._dodgeHeld && player.dodgeCooldown <= 0) {
+  // Dodge — triggered by Shift key or double-tap direction
+  if ((keys[DODGE_KEY] || keys[DODGE_KEY_ALT]) && !keys._dodgeHeld && player.dodgeCooldown <= 0) {
     keys._dodgeHeld = true;
     // Read current input direction; default to forward if no input
     let dx = 0, dy = 0;
@@ -825,7 +835,7 @@ function updatePlayer() {
     if (keys['ArrowDown']  || keys['KeyS']) dy =  1;
     if (dx === 0 && dy === 0) dx = 1;
     triggerDodge(dx, dy);
-  } else if (!keys[DODGE_KEY]) {
+  } else if (!keys[DODGE_KEY] && !keys[DODGE_KEY_ALT]) {
     keys._dodgeHeld = false;
   }
 
@@ -1302,7 +1312,7 @@ function updateEnemies() {
         break;
 
       case 'turret':
-        if (e.x > e.targetX) e.x -= 2;
+        if (!e.tunnelTurret && e.x > e.targetX) e.x -= 2;
         e.bodyRotation += e.rotSpeed;
         for (const plate of e.armorPlates) {
           if (!plate.alive && plate.respawnTimer > 0) {
@@ -2304,7 +2314,24 @@ function killPlayer() {
   player.shieldRechargeTimer = 0;
   player.secondary = null;
   player.secondaryAmmo = 0;
-  spawnExplosion(player.x, player.y, 25, explosionColors);
+  // Big death blast — multi-stage explosion
+  spawnExplosion(player.x, player.y, 35, ['#ffffff', '#00ffff', '#ff00aa', '#ff4400']);
+  spawnExplosion(player.x, player.y, 20, ['#ffffff', '#ffee88', '#ff6600']);
+  triggerScreenShake(12, 20);
+  triggerHitStop(6);
+  screenFlash = 15;
+  shockwaves.push({ x: player.x, y: player.y, radius: 8, maxRadius: 90 });
+  // Delayed secondary blasts
+  const px = player.x, py = player.y;
+  for (let i = 1; i <= 3; i++) {
+    setTimeout(() => {
+      spawnExplosion(
+        px + (Math.random() - 0.5) * 50,
+        py + (Math.random() - 0.5) * 50,
+        12, ['#ff4400', '#ff8800', '#ffcc44', '#ffffff']
+      );
+    }, i * 120);
+  }
 
   if (player.lives <= 0) {
     gameState = 'GAME_OVER';
@@ -3521,6 +3548,853 @@ function drawLocalFlashes() {
   }
 }
 
+// === TUNNEL GAUNTLET SYSTEM ===
+const TUNNEL_SCROLL_SPEED = 2.0;
+const TUNNEL_SEGMENT_WIDTH = 120;
+const TUNNEL_WALL_COLOR = '#1a0e2a';
+const TUNNEL_EDGE_COLOR = '#cc00ff';
+const TUNNEL_BLADE_COLOR = '#ff4400';
+const TUNNEL_GATE_COLOR = '#ffaa00';
+
+let tunnelActive = false;
+let tunnelScrollX = 0;
+let tunnelSegments = [];
+let tunnelHazards = [];       // active hazard instances
+let tunnelWarningTimer = 0;
+let tunnelSpawnedHazards = new Set(); // track which segment hazards already spawned
+
+function buildTunnelData() {
+  const H = CONFIG.height; // 540
+  const segs = [];
+
+  // Helper: push a segment with top/bottom Y values
+  function seg(tL, tR, bL, bR, hazards) {
+    segs.push({ topLeft: tL, topRight: tR, bottomLeft: bL, bottomRight: bR, hazards: hazards || [] });
+  }
+
+  // Helper: lerp
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  // Passage height guide: H=540.  top=wall ceiling Y, bottom=wall floor Y.
+  // Passage = bottomY - topY. Target widths:
+  //   Funnel entry: 540→240,  Straight: ~240,  Weave: ~220 swinging hard,
+  //   Gauntlet: ~200,  Gates: ~210,  Double Trouble: ~200,  Crucible: ~160,  Exit: opens
+
+  // Section A: "The Funnel" (0-4) — walls close in fast
+  seg(0, 0, H, H, []);                            // 0: open sky
+  seg(0, 30, H, H - 30, []);                      // 1
+  seg(30, 80, H - 30, H - 80, []);                // 2
+  seg(80, 130, H - 80, H - 130, []);              // 3
+  seg(130, 150, H - 130, H - 150, []);            // 4: passage ~240px
+
+  // Section B: "Straight Shot" (5-12) — ~240px, slight curve down, 1 turret
+  seg(150, 155, H - 150, H - 145, []);            // 5
+  seg(155, 165, H - 145, H - 135, []);            // 6
+  seg(165, 175, H - 135, H - 130, []);            // 7
+  seg(175, 180, H - 130, H - 130, [{ type: 'turret', localX: 0.5, y: 200 }]); // 8: turret on top wall
+  seg(180, 185, H - 130, H - 135, []);            // 9
+  seg(185, 180, H - 135, H - 140, []);            // 10
+  seg(180, 170, H - 140, H - 150, []);            // 11
+  seg(170, 155, H - 150, H - 155, []);            // 12
+
+  // Section C: "The Weave" (13-24) — aggressive S-curve ~220px passage, 2 turrets
+  // Plunge down: center from ~265 to ~410
+  seg(155, 170, H - 155, H - 130, []);            // 13
+  seg(170, 210, H - 130, H - 100, []);            // 14
+  seg(210, 250, H - 100, H - 70, []);             // 15
+  seg(250, 280, H - 70, H - 55, [{ type: 'turret', localX: 0.5, y: 295 }]); // 16: turret near top wall
+  seg(280, 300, H - 55, H - 50, []);              // 17: deepest — passage centered ~395
+  seg(300, 290, H - 50, H - 60, []);              // 18: start climbing back
+  // Swing back up hard: center from ~395 to ~150
+  seg(290, 260, H - 60, H - 80, []);              // 19
+  seg(260, 210, H - 80, H - 120, []);             // 20
+  seg(210, 150, H - 120, H - 170, []);            // 21
+  seg(150, 90, H - 170, H - 230, [{ type: 'turret', localX: 0.5, y: H - 250 }]); // 22: turret on bottom wall
+  seg(90, 60, H - 230, H - 260, []);              // 23: high — passage centered ~165
+  seg(60, 70, H - 260, H - 250, []);              // 24
+
+  // Section D: "First Blade" (25-32) — ~260px, straightens, single plasma blade
+  seg(70, 90, H - 250, H - 230, []);              // 25
+  seg(90, 120, H - 230, H - 200, []);             // 26
+  seg(120, 140, H - 200, H - 180, []);            // 27
+  seg(140, 145, H - 180, H - 175, [{ type: 'plasmaBlade', localX: 0.5, cy: 290, radius: 100, rotSpeed: 0.025, double: false }]); // 28
+  seg(145, 150, H - 175, H - 170, []);            // 29
+  seg(150, 155, H - 170, H - 165, []);            // 30
+  seg(155, 160, H - 165, H - 160, []);            // 31
+  seg(160, 160, H - 160, H - 160, []);            // 32
+
+  // Section E: "The Gauntlet Begins" (33-44) — ~200px, tight S-curves, 2 blades + turret
+  seg(160, 180, H - 160, H - 140, []);            // 33
+  seg(180, 220, H - 140, H - 110, []);            // 34
+  seg(220, 260, H - 110, H - 80, [{ type: 'plasmaBlade', localX: 0.5, cy: 350, radius: 80, rotSpeed: 0.028, double: false }]); // 35
+  seg(260, 290, H - 80, H - 60, []);              // 36
+  seg(290, 310, H - 60, H - 50, []);              // 37: deep trough
+  seg(310, 300, H - 50, H - 60, [{ type: 'turret', localX: 0.4, y: 325 }]); // 38
+  seg(300, 270, H - 60, H - 80, []);              // 39
+  seg(270, 220, H - 80, H - 120, [{ type: 'plasmaBlade', localX: 0.5, cy: 250, radius: 85, rotSpeed: 0.03, double: false }]); // 40
+  seg(220, 170, H - 120, H - 160, []);            // 41
+  seg(170, 140, H - 160, H - 180, []);            // 42
+  seg(140, 130, H - 180, H - 190, []);            // 43
+  seg(130, 135, H - 190, H - 185, []);            // 44
+
+  // Section F: "Gate Check" (45-54) — ~220px, first gate
+  seg(135, 140, H - 185, H - 180, []);            // 45
+  seg(140, 150, H - 180, H - 170, []);            // 46
+  seg(150, 160, H - 170, H - 160, []);            // 47
+  seg(160, 160, H - 160, H - 160, [{ type: 'gate', localX: 0.5, openGap: 180, cycleTimes: { open: 100, closing: 20, closed: 35, opening: 20 } }]); // 48
+  seg(160, 160, H - 160, H - 160, []);            // 49
+  seg(160, 165, H - 160, H - 155, []);            // 50
+  seg(165, 170, H - 155, H - 155, [{ type: 'turret', localX: 0.5, y: 190 }]); // 51
+  seg(170, 175, H - 155, H - 150, []);            // 52
+  seg(175, 180, H - 150, H - 145, []);            // 53
+  seg(180, 180, H - 145, H - 145, []);            // 54
+
+  // Section G: "Double Trouble" (55-66) — ~200px, 2 gates + double blade + turret
+  seg(180, 190, H - 145, H - 135, [{ type: 'turret', localX: 0.5, y: H - 155 }]); // 55
+  seg(190, 200, H - 135, H - 130, []);            // 56
+  seg(200, 200, H - 130, H - 130, [{ type: 'gate', localX: 0.5, openGap: 170, cycleTimes: { open: 90, closing: 18, closed: 30, opening: 18 } }]); // 57
+  seg(200, 195, H - 130, H - 135, []);            // 58
+  seg(195, 190, H - 135, H - 140, [{ type: 'plasmaBlade', localX: 0.5, cy: 300, radius: 75, rotSpeed: 0.03, double: true }]); // 59
+  seg(190, 185, H - 140, H - 145, []);            // 60
+  seg(185, 180, H - 145, H - 150, []);            // 61
+  seg(180, 180, H - 150, H - 150, [{ type: 'gate', localX: 0.5, openGap: 160, cycleTimes: { open: 85, closing: 18, closed: 35, opening: 18 }, phaseOffset: 80 }]); // 62
+  seg(180, 175, H - 150, H - 155, []);            // 63
+  seg(175, 165, H - 155, H - 165, []);            // 64
+  seg(165, 155, H - 165, H - 170, []);            // 65
+  seg(155, 150, H - 170, H - 175, []);            // 66
+
+  // Section H: "The Crucible" (67-78) — ~160px passage, sharp S, hardest
+  seg(150, 170, H - 175, H - 155, []);            // 67
+  seg(170, 210, H - 155, H - 120, [{ type: 'turret', localX: 0.4, y: 230 }]); // 68
+  seg(210, 260, H - 120, H - 80, []);             // 69
+  seg(260, 300, H - 80, H - 50, []);              // 70: plunging deep
+  seg(300, 320, H - 50, H - 40, [{ type: 'plasmaBlade', localX: 0.5, cy: 370, radius: 70, rotSpeed: 0.035, double: true }]); // 71
+  seg(320, 300, H - 40, H - 60, []);              // 72
+  seg(300, 250, H - 60, H - 100, [{ type: 'turret', localX: 0.6, y: H - 120 }]); // 73
+  seg(250, 180, H - 100, H - 160, []);            // 74: climbing fast
+  seg(180, 160, H - 160, H - 175, [{ type: 'gate', localX: 0.5, openGap: 140, cycleTimes: { open: 65, closing: 16, closed: 30, opening: 16 } }]); // 75
+  seg(160, 140, H - 175, H - 190, []);            // 76
+  seg(140, 120, H - 190, H - 200, []);            // 77
+  seg(120, 100, H - 200, H - 210, []);            // 78
+
+  // Section I: "The Exit" (79-84) — walls open back up
+  seg(100, 75, H - 210, H - 170, []);             // 79
+  seg(75, 50, H - 170, H - 100, []);              // 80
+  seg(50, 30, H - 100, H - 40, []);               // 81
+  seg(30, 15, H - 40, H - 15, []);                // 82
+  seg(15, 0, H - 15, H, []);                      // 83
+  seg(0, 0, H, H, []);                            // 84
+
+  return segs;
+}
+
+function getTunnelBoundsAtX(screenX) {
+  if (!tunnelActive || tunnelSegments.length === 0) return { topY: 0, bottomY: CONFIG.height };
+  // Convert screen X to tunnel-space position
+  const tunnelX = screenX + tunnelScrollX;
+  const segIndex = Math.floor(tunnelX / TUNNEL_SEGMENT_WIDTH);
+  if (segIndex < 0) return { topY: tunnelSegments[0].topLeft, bottomY: tunnelSegments[0].bottomLeft };
+  if (segIndex >= tunnelSegments.length) {
+    const last = tunnelSegments[tunnelSegments.length - 1];
+    return { topY: last.topRight, bottomY: last.bottomRight };
+  }
+  const seg = tunnelSegments[segIndex];
+  const t = (tunnelX - segIndex * TUNNEL_SEGMENT_WIDTH) / TUNNEL_SEGMENT_WIDTH;
+  return {
+    topY: seg.topLeft + (seg.topRight - seg.topLeft) * t,
+    bottomY: seg.bottomLeft + (seg.bottomRight - seg.bottomLeft) * t
+  };
+}
+
+function startTunnel() {
+  tunnelActive = true;
+  tunnelScrollX = 0;
+  tunnelSegments = buildTunnelData();
+  tunnelHazards = [];
+  tunnelSpawnedHazards = new Set();
+  tunnelRockGrid = null; // regenerate rock geometry
+  gameState = 'TUNNEL_GAUNTLET';
+}
+
+function updateTunnel() {
+  if (!tunnelActive) return;
+  tunnelScrollX += TUNNEL_SCROLL_SPEED;
+
+  // Spawn hazards as segments scroll into view
+  for (let i = 0; i < tunnelSegments.length; i++) {
+    const seg = tunnelSegments[i];
+    const segScreenX = i * TUNNEL_SEGMENT_WIDTH - tunnelScrollX;
+    // Spawn when segment is about to enter the right side of screen
+    if (segScreenX < CONFIG.width + 60 && segScreenX > -TUNNEL_SEGMENT_WIDTH - 60) {
+      for (let hi = 0; hi < seg.hazards.length; hi++) {
+        const hazardKey = i + '_' + hi;
+        if (tunnelSpawnedHazards.has(hazardKey)) continue;
+        tunnelSpawnedHazards.add(hazardKey);
+        const h = seg.hazards[hi];
+        const worldX = i * TUNNEL_SEGMENT_WIDTH + h.localX * TUNNEL_SEGMENT_WIDTH;
+
+        if (h.type === 'turret') {
+          const e = spawnEnemy('turret', worldX - tunnelScrollX, h.y, { speed: 0 });
+          if (e) {
+            e.tunnelWorldX = worldX;
+            e.tunnelTurret = true;
+            e.targetX = e.x; // anchor in place
+          }
+        } else if (h.type === 'plasmaBlade') {
+          // Compute radius to fill the tunnel passage
+          const bladeBounds = getTunnelBoundsAtX(worldX - tunnelScrollX);
+          const passageHeight = bladeBounds.bottomY - bladeBounds.topY;
+          const bladeCenter = (bladeBounds.topY + bladeBounds.bottomY) / 2;
+          // Radius = half the passage height (blade tip reaches both walls)
+          const bladeRadius = (passageHeight / 2) - 2; // -2px so tip just grazes wall
+          tunnelHazards.push({
+            type: 'plasmaBlade',
+            worldX: worldX,
+            cy: bladeCenter,
+            radius: bladeRadius,
+            angle: Math.random() * Math.PI * 2,
+            rotSpeed: h.rotSpeed,
+            double: h.double || false,
+            active: true
+          });
+        } else if (h.type === 'gate') {
+          const bounds = getTunnelBoundsAtX(worldX - tunnelScrollX);
+          const centerY = (bounds.topY + bounds.bottomY) / 2;
+          const halfGap = h.openGap / 2;
+          tunnelHazards.push({
+            type: 'gate',
+            worldX: worldX,
+            gateWidth: 120,
+            topOpenY: centerY - halfGap,
+            bottomOpenY: centerY + halfGap,
+            topY: centerY - halfGap,
+            bottomY: centerY + halfGap,
+            centerY: centerY,
+            openGap: h.openGap,
+            phase: 'open',
+            timer: h.phaseOffset || 0,
+            cycleTimes: h.cycleTimes,
+            active: true
+          });
+        }
+      }
+    }
+  }
+
+  // Update tunnel turrets — override their x position to scroll with tunnel
+  for (const e of enemies) {
+    if (e.tunnelTurret) {
+      e.x = e.tunnelWorldX - tunnelScrollX;
+    }
+  }
+
+  // Update hazards
+  for (let i = tunnelHazards.length - 1; i >= 0; i--) {
+    const h = tunnelHazards[i];
+    const screenX = h.worldX - tunnelScrollX;
+
+    if (screenX < -100) {
+      tunnelHazards.splice(i, 1);
+      continue;
+    }
+
+    if (h.type === 'plasmaBlade') {
+      h.angle += h.rotSpeed;
+    } else if (h.type === 'gate') {
+      h.timer++;
+      const ct = h.cycleTimes;
+      switch (h.phase) {
+        case 'open':
+          if (h.timer >= ct.open) { h.phase = 'closing'; h.timer = 0; }
+          h.topY = h.topOpenY;
+          h.bottomY = h.bottomOpenY;
+          break;
+        case 'closing': {
+          const t = h.timer / ct.closing;
+          // Ease-in cubic — accelerates as it closes for a forceful slam
+          const eased = t * t * t;
+          h.topY = h.topOpenY + (h.centerY - h.topOpenY) * eased;
+          h.bottomY = h.bottomOpenY + (h.centerY - h.bottomOpenY) * eased;
+          if (h.timer >= ct.closing) {
+            h.phase = 'closed'; h.timer = 0;
+            // Dust plume on slam — wide horizontal burst from center
+            const sx = h.worldX - tunnelScrollX;
+            for (let p = 0; p < 18; p++) {
+              const angle = (Math.random() - 0.5) * Math.PI; // wide horizontal spread
+              const speed = 1.5 + Math.random() * 3.5;
+              particles.push({
+                x: sx + (Math.random() - 0.5) * h.gateWidth * 0.8,
+                y: h.centerY + (Math.random() - 0.5) * 12,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed * 0.4,
+                life: 25 + Math.random() * 20,
+                maxLife: 45,
+                color: ['#ff6633', '#ffaa44', '#cc4400', '#ffcc66', '#ff8844'][p % 5],
+                size: 2 + Math.random() * 3
+              });
+            }
+            // Wider dust cloud particles
+            for (let p = 0; p < 10; p++) {
+              particles.push({
+                x: sx + (Math.random() - 0.5) * h.gateWidth,
+                y: h.centerY + (Math.random() - 0.5) * 6,
+                vx: (Math.random() - 0.5) * 5,
+                vy: (Math.random() - 0.5) * 1.5,
+                life: 30 + Math.random() * 25,
+                maxLife: 55,
+                color: ['#886655', '#aa8866', '#665544'][p % 3],
+                size: 3 + Math.random() * 4
+              });
+            }
+            triggerScreenShake(4, 8);
+          }
+          break;
+        }
+        case 'closed':
+          h.topY = h.centerY;
+          h.bottomY = h.centerY;
+          if (h.timer >= ct.closed) { h.phase = 'opening'; h.timer = 0; }
+          break;
+        case 'opening': {
+          const t = h.timer / ct.opening;
+          h.topY = h.centerY + (h.topOpenY - h.centerY) * t;
+          h.bottomY = h.centerY + (h.bottomOpenY - h.centerY) * t;
+          if (h.timer >= ct.opening) { h.phase = 'open'; h.timer = 0; }
+          break;
+        }
+      }
+    }
+  }
+
+  // Check if tunnel is complete
+  const totalLength = tunnelSegments.length * TUNNEL_SEGMENT_WIDTH;
+  if (tunnelScrollX >= totalLength + 60) {
+    completeTunnel();
+  }
+}
+
+function completeTunnel() {
+  tunnelActive = false;
+  tunnelHazards = [];
+  tunnelSpawnedHazards = new Set();
+  // Remove any remaining tunnel turrets
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    if (enemies[i].tunnelTurret) enemies.splice(i, 1);
+  }
+  enemyBullets.length = 0;
+  // Advance wave system and go to boss
+  currentWave++;
+  waveActive = false;
+  waveTimer = 0;
+  gameState = 'GAMEPLAY';
+}
+
+// Pre-generate seeded random grid for full-wall triangulation
+// Grid covers the entire wall area with multiple rows of jittered vertices
+let tunnelRockGrid = null;
+const TUNNEL_SUBDIV = 4;  // X subdivisions per segment
+const TUNNEL_ROWS = 6;    // Y rows of triangles filling each wall
+
+function buildTunnelRockGrid(segCount) {
+  let seed = 12345;
+  function srand() { seed = (seed * 16807 + 0) % 2147483647; return (seed & 0x7fffffff) / 2147483647; }
+
+  const totalCols = segCount * TUNNEL_SUBDIV + 1;
+  // For each column, generate jitter and shade for each row (top wall and bottom wall)
+  const top = [];
+  const bottom = [];
+  for (let c = 0; c < totalCols; c++) {
+    const topCol = [];
+    const botCol = [];
+    for (let r = 0; r <= TUNNEL_ROWS; r++) {
+      topCol.push({
+        jx: (srand() - 0.5) * 18,  // X jitter
+        jy: (srand() - 0.5) * 14,  // Y jitter
+        shade: srand()              // brightness 0-1
+      });
+      botCol.push({
+        jx: (srand() - 0.5) * 18,
+        jy: (srand() - 0.5) * 14,
+        shade: srand()
+      });
+    }
+    top.push(topCol);
+    bottom.push(botCol);
+  }
+  return { top, bottom };
+}
+
+// Get the actual vertex position for a grid point in the top wall
+function topVertPos(col, row, seg, segIdx, leftX, subW) {
+  const grid = tunnelRockGrid.top;
+  const v = grid[Math.min(col, grid.length - 1)][row];
+  const t = (col - segIdx * TUNNEL_SUBDIV) / TUNNEL_SUBDIV;
+  const edgeY = seg.topLeft + (seg.topRight - seg.topLeft) * Math.max(0, Math.min(1, t));
+  const screenTop = 0;
+  // Row 0 = screen top edge, TUNNEL_ROWS = passage edge
+  const baseY = screenTop + (edgeY - screenTop) * (row / TUNNEL_ROWS);
+  const baseX = leftX + (col - segIdx * TUNNEL_SUBDIV) * subW;
+  // Less jitter at edges (row 0 = screen edge, last row = passage edge), more in middle
+  const edgeFactor = row === 0 ? 0.1 : row === TUNNEL_ROWS ? 1.0 : 0.7;
+  return {
+    x: baseX + v.jx * edgeFactor,
+    y: baseY + v.jy * edgeFactor,
+    shade: v.shade
+  };
+}
+
+function bottomVertPos(col, row, seg, segIdx, leftX, subW) {
+  const grid = tunnelRockGrid.bottom;
+  const v = grid[Math.min(col, grid.length - 1)][row];
+  const t = (col - segIdx * TUNNEL_SUBDIV) / TUNNEL_SUBDIV;
+  const edgeY = seg.bottomLeft + (seg.bottomRight - seg.bottomLeft) * Math.max(0, Math.min(1, t));
+  const screenBot = CONFIG.height;
+  // Row 0 = passage edge, TUNNEL_ROWS = screen bottom
+  const baseY = edgeY + (screenBot - edgeY) * (row / TUNNEL_ROWS);
+  const baseX = leftX + (col - segIdx * TUNNEL_SUBDIV) * subW;
+  const edgeFactor = row === TUNNEL_ROWS ? 0.1 : row === 0 ? 1.0 : 0.7;
+  return {
+    x: baseX + v.jx * edgeFactor,
+    y: baseY + v.jy * edgeFactor,
+    shade: v.shade
+  };
+}
+
+function drawTunnel() {
+  if (!tunnelActive || tunnelSegments.length === 0) return;
+  if (!tunnelRockGrid) tunnelRockGrid = buildTunnelRockGrid(tunnelSegments.length);
+
+  ctx.save();
+  const startSeg = Math.max(0, Math.floor(tunnelScrollX / TUNNEL_SEGMENT_WIDTH) - 1);
+  const endSeg = Math.min(tunnelSegments.length - 1, Math.ceil((tunnelScrollX + CONFIG.width) / TUNNEL_SEGMENT_WIDTH) + 1);
+  const SW = TUNNEL_SEGMENT_WIDTH;
+  const subW = SW / TUNNEL_SUBDIV;
+
+  // === Draw all triangles filling both walls ===
+  ctx.shadowBlur = 0;
+  ctx.lineWidth = 0.5;
+  // Base color components for shading
+  const bR = 20, bG = 10, bB = 35;
+
+  for (let i = startSeg; i <= endSeg; i++) {
+    const seg = tunnelSegments[i];
+    const leftX = i * SW - tunnelScrollX;
+    const colStart = i * TUNNEL_SUBDIV;
+
+    for (let s = 0; s < TUNNEL_SUBDIV; s++) {
+      const c0 = colStart + s;
+      const c1 = colStart + s + 1;
+
+      // --- TOP WALL: rows from screen top (row 0) to passage edge (TUNNEL_ROWS) ---
+      for (let r = 0; r < TUNNEL_ROWS; r++) {
+        const tl = topVertPos(c0, r, seg, i, leftX, subW);
+        const tr = topVertPos(c1, r, seg, i, leftX, subW);
+        const bl = topVertPos(c0, r + 1, seg, i, leftX, subW);
+        const br = topVertPos(c1, r + 1, seg, i, leftX, subW);
+
+        // Depth factor: darker deeper into wall, lighter near passage
+        const depthT = r / TUNNEL_ROWS; // 0=deep, 1=passage edge
+
+        // Triangle 1: tl, tr, bl
+        const s1 = (tl.shade + tr.shade + bl.shade) / 3;
+        const bright1 = depthT * 0.5 + s1 * 0.35;
+        const cr1 = Math.floor(bR + bright1 * 50);
+        const cg1 = Math.floor(bG + bright1 * 30);
+        const cb1 = Math.floor(bB + bright1 * 55);
+        ctx.fillStyle = `rgb(${cr1},${cg1},${cb1})`;
+        ctx.strokeStyle = `rgba(${cr1 + 15},${cg1 + 10},${cb1 + 20},0.35)`;
+        ctx.beginPath();
+        ctx.moveTo(tl.x, tl.y);
+        ctx.lineTo(tr.x, tr.y);
+        ctx.lineTo(bl.x, bl.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Triangle 2: tr, br, bl
+        const s2 = (tr.shade + br.shade + bl.shade) / 3;
+        const bright2 = depthT * 0.5 + s2 * 0.35;
+        const cr2 = Math.floor(bR + bright2 * 45);
+        const cg2 = Math.floor(bG + bright2 * 28);
+        const cb2 = Math.floor(bB + bright2 * 50);
+        ctx.fillStyle = `rgb(${cr2},${cg2},${cb2})`;
+        ctx.strokeStyle = `rgba(${cr2 + 15},${cg2 + 10},${cb2 + 20},0.3)`;
+        ctx.beginPath();
+        ctx.moveTo(tr.x, tr.y);
+        ctx.lineTo(br.x, br.y);
+        ctx.lineTo(bl.x, bl.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // --- BOTTOM WALL: rows from passage edge (row 0) to screen bottom (TUNNEL_ROWS) ---
+      for (let r = 0; r < TUNNEL_ROWS; r++) {
+        const tl = bottomVertPos(c0, r, seg, i, leftX, subW);
+        const tr = bottomVertPos(c1, r, seg, i, leftX, subW);
+        const bl = bottomVertPos(c0, r + 1, seg, i, leftX, subW);
+        const br = bottomVertPos(c1, r + 1, seg, i, leftX, subW);
+
+        const depthT = 1.0 - r / TUNNEL_ROWS; // 1=passage edge, 0=deep
+
+        const s1 = (tl.shade + tr.shade + bl.shade) / 3;
+        const bright1 = depthT * 0.5 + s1 * 0.35;
+        const cr1 = Math.floor(bR + bright1 * 50);
+        const cg1 = Math.floor(bG + bright1 * 30);
+        const cb1 = Math.floor(bB + bright1 * 55);
+        ctx.fillStyle = `rgb(${cr1},${cg1},${cb1})`;
+        ctx.strokeStyle = `rgba(${cr1 + 15},${cg1 + 10},${cb1 + 20},0.35)`;
+        ctx.beginPath();
+        ctx.moveTo(tl.x, tl.y);
+        ctx.lineTo(tr.x, tr.y);
+        ctx.lineTo(bl.x, bl.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        const s2 = (tr.shade + br.shade + bl.shade) / 3;
+        const bright2 = depthT * 0.5 + s2 * 0.35;
+        const cr2 = Math.floor(bR + bright2 * 45);
+        const cg2 = Math.floor(bG + bright2 * 28);
+        const cb2 = Math.floor(bB + bright2 * 50);
+        ctx.fillStyle = `rgb(${cr2},${cg2},${cb2})`;
+        ctx.strokeStyle = `rgba(${cr2 + 15},${cg2 + 10},${cb2 + 20},0.3)`;
+        ctx.beginPath();
+        ctx.moveTo(tr.x, tr.y);
+        ctx.lineTo(br.x, br.y);
+        ctx.lineTo(bl.x, bl.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+  }
+
+  // === Pass 3: Neon edge glow ===
+  ctx.shadowColor = TUNNEL_EDGE_COLOR;
+  ctx.shadowBlur = 15;
+  ctx.strokeStyle = TUNNEL_EDGE_COLOR;
+  ctx.lineWidth = 2;
+  ctx.globalAlpha = 0.8;
+
+  // Top edge — follows jittered rock vertices at passage edge (row = TUNNEL_ROWS)
+  ctx.beginPath();
+  for (let i = startSeg; i <= endSeg; i++) {
+    const seg = tunnelSegments[i];
+    const leftX = i * SW - tunnelScrollX;
+    for (let s = 0; s <= TUNNEL_SUBDIV; s++) {
+      const p = topVertPos(s, TUNNEL_ROWS, seg, i, leftX, subW);
+      if (i === startSeg && s === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    }
+  }
+  ctx.stroke();
+
+  // Bottom edge — follows jittered rock vertices at passage edge (row = 0)
+  ctx.beginPath();
+  for (let i = startSeg; i <= endSeg; i++) {
+    const seg = tunnelSegments[i];
+    const leftX = i * SW - tunnelScrollX;
+    for (let s = 0; s <= TUNNEL_SUBDIV; s++) {
+      const p = bottomVertPos(s, 0, seg, i, leftX, subW);
+      if (i === startSeg && s === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    }
+  }
+  ctx.stroke();
+
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+function drawTunnelHazards() {
+  if (!tunnelActive) return;
+  ctx.save();
+
+  for (const h of tunnelHazards) {
+    const screenX = h.worldX - tunnelScrollX;
+    if (screenX < -100 || screenX > CONFIG.width + 100) continue;
+
+    if (h.type === 'plasmaBlade') {
+      // Pivot point
+      ctx.shadowColor = TUNNEL_BLADE_COLOR;
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = '#ff6622';
+      ctx.beginPath();
+      ctx.arc(screenX, h.cy, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Inner pivot detail
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowBlur = 4;
+      ctx.beginPath();
+      ctx.arc(screenX, h.cy, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Blade arm(s)
+      const bladeCount = h.double ? 2 : 1;
+      for (let b = 0; b < bladeCount; b++) {
+        const angle = h.angle + b * Math.PI;
+        const tipX = screenX + Math.cos(angle) * h.radius;
+        const tipY = h.cy + Math.sin(angle) * h.radius;
+
+        // Blade glow
+        ctx.shadowColor = TUNNEL_BLADE_COLOR;
+        ctx.shadowBlur = 25;
+        ctx.strokeStyle = TUNNEL_BLADE_COLOR;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(screenX, h.cy);
+        ctx.lineTo(tipX, tipY);
+        ctx.stroke();
+
+        // Bright core line
+        ctx.shadowBlur = 8;
+        ctx.strokeStyle = '#ffcc88';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(screenX, h.cy);
+        ctx.lineTo(tipX, tipY);
+        ctx.stroke();
+
+        // Hot white center
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 4;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(screenX, h.cy);
+        ctx.lineTo(tipX, tipY);
+        ctx.stroke();
+
+        // Wall-contact sparks — only when blade tip is near or past the tunnel wall
+        const tipBounds = getTunnelBoundsAtX(tipX);
+        if (tipY <= tipBounds.topY + 8 || tipY >= tipBounds.bottomY - 8) {
+          // Clamp spark position to the wall edge
+          const sparkY = tipY <= tipBounds.topY + 8 ? tipBounds.topY : tipBounds.bottomY;
+          if (frame % 2 === 0) {
+            spawnExplosion(tipX, sparkY, 3, ['#ff4400', '#ff8800', '#ffcc44']);
+            spawnExplosion(tipX, sparkY, 2, ['#ffffff', '#ffcc88', '#ff6600']);
+          }
+        }
+      }
+    } else if (h.type === 'gate') {
+      const gateLeft = screenX - h.gateWidth / 2;
+      const gateRight = screenX + h.gateWidth / 2;
+      const isClosing = h.phase === 'closing';
+      const isClosed = h.phase === 'closed';
+      const warningColor = (isClosing || isClosed) ? '#ff2200' : TUNNEL_GATE_COLOR;
+
+      // Get tunnel bounds at multiple X points across gate width for clip path
+      const boundsL = getTunnelBoundsAtX(gateLeft);
+      const boundsC = getTunnelBoundsAtX(screenX);
+      const boundsR = getTunnelBoundsAtX(gateRight);
+      const topWallY = boundsC.topY;
+      const bottomWallY = boundsC.bottomY;
+
+      // Clip gate rendering to the tunnel passage so edges hide behind rock walls
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(gateLeft, boundsL.topY);
+      ctx.lineTo(screenX, boundsC.topY);
+      ctx.lineTo(gateRight, boundsR.topY);
+      ctx.lineTo(gateRight, boundsR.bottomY);
+      ctx.lineTo(screenX, boundsC.bottomY);
+      ctx.lineTo(gateLeft, boundsL.bottomY);
+      ctx.closePath();
+      ctx.clip();
+
+      // Top gate slab: extends from top wall edge down to h.topY
+      const topSlabTop = topWallY;
+      const topSlabHeight = Math.max(0, h.topY - topWallY);
+      ctx.shadowColor = warningColor;
+      ctx.shadowBlur = isClosing ? 18 : 10;
+      ctx.fillStyle = '#1a1020';
+      ctx.fillRect(gateLeft, topSlabTop, h.gateWidth, topSlabHeight);
+      ctx.strokeStyle = warningColor;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(gateLeft, topSlabTop, h.gateWidth, topSlabHeight);
+
+      // Bottom gate slab: extends from h.bottomY down to bottom wall edge
+      const bottomSlabHeight = Math.max(0, bottomWallY - h.bottomY);
+      ctx.fillRect(gateLeft, h.bottomY, h.gateWidth, bottomSlabHeight);
+      ctx.strokeRect(gateLeft, h.bottomY, h.gateWidth, bottomSlabHeight);
+
+      // Closing indicator — pulsing edges
+      if (isClosing || isClosed) {
+        const pulse = Math.sin(frame * 0.5) * 0.5 + 0.5;
+        ctx.shadowBlur = 20 + pulse * 15;
+        ctx.strokeStyle = `rgba(255, ${isClosed ? 0 : 100}, 0, ${0.5 + pulse * 0.5})`;
+        ctx.lineWidth = 3;
+        // Top edge
+        ctx.beginPath();
+        ctx.moveTo(gateLeft, h.topY);
+        ctx.lineTo(gateRight, h.topY);
+        ctx.stroke();
+        // Bottom edge
+        ctx.beginPath();
+        ctx.moveTo(gateLeft, h.bottomY);
+        ctx.lineTo(gateRight, h.bottomY);
+        ctx.stroke();
+      }
+
+      // Sparks when closed
+      if (isClosed && frame % 3 === 0) {
+        spawnExplosion(screenX + (Math.random() - 0.5) * 20, h.centerY, 2, ['#ffffff', '#ff4400', '#ffaa00']);
+      }
+
+      ctx.restore();
+
+      // Warning particles before closing
+      if (h.phase === 'open' && h.timer > h.cycleTimes.open - 40) {
+        const urgency = (h.timer - (h.cycleTimes.open - 40)) / 40;
+        if (frame % Math.max(1, Math.floor(6 - urgency * 5)) === 0) {
+          spawnExplosion(screenX, h.topOpenY + 5, 1, ['#ffaa00', '#ff6600']);
+          spawnExplosion(screenX, h.bottomOpenY - 5, 1, ['#ffaa00', '#ff6600']);
+        }
+      }
+    }
+  }
+
+  ctx.restore();
+}
+
+function checkTunnelCollisions() {
+  if (!tunnelActive || !player.alive) return;
+
+  const phw = player.width * 0.3;  // half hitbox width
+  const phh = player.height * 0.3; // half hitbox height
+
+  // Player vs tunnel walls
+  const bounds = getTunnelBoundsAtX(player.x);
+  let hitWall = false;
+
+  if (player.y - phh < bounds.topY) {
+    player.y = bounds.topY + phh;
+    player.vy = Math.abs(player.vy) * 0.3;
+    hitWall = true;
+  }
+  if (player.y + phh > bounds.bottomY) {
+    player.y = bounds.bottomY - phh;
+    player.vy = -Math.abs(player.vy) * 0.3;
+    hitWall = true;
+  }
+
+  if (hitWall && player.invincible <= 0) {
+    killPlayer();
+    return;
+  }
+
+  // Player vs plasma blades
+  for (const h of tunnelHazards) {
+    if (h.type !== 'plasmaBlade') continue;
+    const screenX = h.worldX - tunnelScrollX;
+    const bladeCount = h.double ? 2 : 1;
+
+    for (let b = 0; b < bladeCount; b++) {
+      const angle = h.angle + b * Math.PI;
+      const tipX = screenX + Math.cos(angle) * h.radius;
+      const tipY = h.cy + Math.sin(angle) * h.radius;
+
+      // Point-to-segment distance
+      const dist = pointToSegmentDist(player.x, player.y, screenX, h.cy, tipX, tipY);
+      if (dist < phw + 3) { // blade has ~3px effective width
+        if (player.invincible <= 0) {
+          killPlayer();
+          return;
+        }
+      }
+    }
+  }
+
+  // Player vs closing gates
+  for (const h of tunnelHazards) {
+    if (h.type !== 'gate') continue;
+    const screenX = h.worldX - tunnelScrollX;
+    const halfW = h.gateWidth / 2;
+
+    // Is player in the gate's X range?
+    if (player.x + phw > screenX - halfW && player.x - phw < screenX + halfW) {
+      // Is the player inside the gap? (between topY and bottomY)
+      if (player.y - phh < h.topY || player.y + phh > h.bottomY) {
+        // Player is touching the gate slabs
+        if (h.phase === 'closed' || h.phase === 'closing') {
+          // During dash, be forgiving — let them squeeze through if mid-dash
+          if (player.dodgeTimer > 0) {
+            // Forgiving: don't kill during active dash, just nudge them through
+            continue;
+          }
+          if (player.invincible <= 0) {
+            killPlayer();
+            return;
+          }
+        } else {
+          // Open/opening — push player out of gate slab
+          if (player.y < h.centerY) {
+            player.y = h.topY + phh;
+          } else {
+            player.y = h.bottomY - phh;
+          }
+        }
+      }
+    }
+  }
+
+  // Bullets vs tunnel walls
+  for (let i = playerBullets.length - 1; i >= 0; i--) {
+    const b = playerBullets[i];
+    const wb = getTunnelBoundsAtX(b.x);
+    if (b.y < wb.topY || b.y > wb.bottomY) {
+      spawnExplosion(b.x, b.y, 3, ['#00cccc', '#004466', '#002233']);
+      playerBullets.splice(i, 1);
+    }
+  }
+
+  for (let i = enemyBullets.length - 1; i >= 0; i--) {
+    const b = enemyBullets[i];
+    const wb = getTunnelBoundsAtX(b.x);
+    if (b.y < wb.topY || b.y > wb.bottomY) {
+      spawnExplosion(b.x, b.y, 2, ['#ff4400', '#441100']);
+      enemyBullets.splice(i, 1);
+    }
+  }
+}
+
+// Point-to-line-segment distance
+function pointToSegmentDist(px, py, ax, ay, bx, by) {
+  const dx = bx - ax, dy = by - ay;
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq === 0) return Math.sqrt((px - ax) * (px - ax) + (py - ay) * (py - ay));
+  let t = ((px - ax) * dx + (py - ay) * dy) / lenSq;
+  t = Math.max(0, Math.min(1, t));
+  const cx = ax + t * dx, cy = ay + t * dy;
+  return Math.sqrt((px - cx) * (px - cx) + (py - cy) * (py - cy));
+}
+
+function drawTunnelWarning() {
+  drawBackground();
+  updatePlayer();
+  drawPlayer();
+  drawPlayerBullets();
+  drawParticles();
+  drawHUD();
+
+  ctx.save();
+  ctx.shadowColor = '#ff4400';
+  ctx.shadowBlur = 25;
+  ctx.fillStyle = '#ff4400';
+  ctx.font = 'bold 38px monospace';
+  ctx.textAlign = 'center';
+  if (Math.floor(frame / 10) % 2 === 0) {
+    ctx.fillText('ENTERING THE GAUNTLET', CONFIG.width / 2, CONFIG.height / 2 - 10);
+  }
+  ctx.font = '16px monospace';
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = '#ffaa66';
+  ctx.fillText('NAVIGATE THE TUNNEL — WATCH FOR HAZARDS', CONFIG.width / 2, CONFIG.height / 2 + 25);
+  ctx.restore();
+}
+
 // === AMBIENT ASTEROID SPAWNER ===
 // Sprinkles random drones/chargers throughout gameplay independent of waves,
 // giving variable density — sometimes lonely, sometimes a cluster.
@@ -3528,6 +4402,7 @@ let ambientAsteroidTimer = 220;
 
 function updateAmbientAsteroids() {
   if (gameState !== 'GAMEPLAY' && gameState !== 'MID_BOSS_FIGHT') return;
+  if (tunnelActive) return;
   ambientAsteroidTimer--;
   if (ambientAsteroidTimer > 0) return;
 
@@ -3607,7 +4482,9 @@ const stageWaves = {
     { enemies: [], delay: 300, pickups: [
       { x: 600, y: 270, type: 'score' },
       { x: 700, y: 200, type: 'score' }
-    ]}
+    ]},
+    // Wave 8: Tunnel Gauntlet
+    { tunnel: true, delay: 200 }
   ]
 };
 
@@ -3641,6 +4518,13 @@ function updateWaves() {
         gameState = 'MID_BOSS_WARNING';
         midBossWarningTimer = 150;
         waveActive = true;   // hold here until destroyMidBoss() advances it
+        return;
+      }
+      if (wave.tunnel) {
+        // Trigger tunnel gauntlet
+        gameState = 'TUNNEL_WARNING';
+        tunnelWarningTimer = 120;
+        waveActive = true;   // hold here until completeTunnel() advances it
         return;
       }
       // Spawn wave
@@ -3956,7 +4840,7 @@ function drawTitleScreen() {
   // Controls — dimmer, more compact
   ctx.font = '12px monospace';
   ctx.fillStyle = 'rgba(180, 180, 220, 0.35)';
-  ctx.fillText('WASD/ARROWS  MOVE  ·  SPACE  SHOOT  ·  X / DOUBLE-TAP  DODGE  ·  P  PAUSE', cx, cy + 170);
+  ctx.fillText('WASD/ARROWS  MOVE  ·  SPACE  SHOOT  ·  SHIFT / DOUBLE-TAP  DODGE  ·  P  PAUSE', cx, cy + 170);
 
   ctx.restore();
 }
@@ -4356,7 +5240,7 @@ function checkPendingLevelUp() {
 }
 
 // === STATE MACHINE ===
-let gameState = 'TITLE';   // TITLE, STAGE_INTRO, GAMEPLAY, BOSS_WARNING, BOSS_FIGHT, STAGE_CLEAR, GAME_OVER, WIN, LEVEL_UP
+let gameState = 'TITLE';   // TITLE, STAGE_INTRO, GAMEPLAY, BOSS_WARNING, BOSS_FIGHT, STAGE_CLEAR, GAME_OVER, WIN, LEVEL_UP, TUNNEL_WARNING, TUNNEL_GAUNTLET
 let stageIntroTimer = 0;
 let paused = false;
 
@@ -4395,6 +5279,11 @@ function resetGame() {
   screenFlash = 0;
   screenShakeX = 0; screenShakeY = 0; screenShakeTimer = 0; screenShakeIntensity = 0;
   hitStopFrames = 0;
+  tunnelActive = false;
+  tunnelScrollX = 0;
+  tunnelSegments = [];
+  tunnelHazards = [];
+  tunnelSpawnedHazards = new Set();
   player.xp = 0;
   player.xpLevel = 1;
   player.xpToNext = 10;
@@ -4455,7 +5344,7 @@ function gameLoop(timestamp) {
   frame++;
 
   // Pause toggle
-  if (keys['KeyP'] && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT')) {
+  if (keys['KeyP'] && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET')) {
     if (!keys._pHeld) {
       paused = !paused;
       keys._pHeld = true;
@@ -4464,7 +5353,7 @@ function gameLoop(timestamp) {
     keys._pHeld = false;
   }
 
-  if (paused && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT')) {
+  if (paused && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET')) {
     // Draw current frame frozen
     ctx.save();
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
@@ -4581,6 +5470,44 @@ function gameLoop(timestamp) {
       checkPendingLevelUp();
       break;
 
+    case 'TUNNEL_WARNING':
+      tunnelWarningTimer--;
+      drawTunnelWarning();
+      if (tunnelWarningTimer <= 0) {
+        startTunnel();
+      }
+      break;
+
+    case 'TUNNEL_GAUNTLET':
+      drawBackground();
+      drawTunnel();
+      if (hitStopFrames <= 0) {
+        updatePlayer();
+        updateTunnel();
+        updatePlayerBullets();
+        updateEnemyBullets();
+        updateEnemies();
+        updateParticles();
+        updateXPOrbs();
+        updateShockwaves();
+        updateLocalFlashes();
+        checkCollisions();
+        checkTunnelCollisions();
+      }
+      drawTunnelHazards();
+      drawEnemies();
+      drawShockwaves();
+      drawLocalFlashes();
+      drawXPOrbs();
+      drawPlayerBullets();
+      drawEnemyBullets();
+      drawPlayer();
+      drawShield();
+      drawParticles();
+      drawHUD();
+      checkPendingLevelUp();
+      break;
+
     case 'BOSS_WARNING':
       bossWarningTimer--;
       drawBossWarning();
@@ -4636,6 +5563,7 @@ function gameLoop(timestamp) {
     case 'LEVEL_UP':
       // Freeze game scene behind the overlay
       drawBackground();
+      if (tunnelActive) { drawTunnel(); drawTunnelHazards(); }
       drawEnemies();
       if (boss) drawBoss();
       if (midBoss) drawMidBoss();
@@ -4722,6 +5650,24 @@ function debugRange(type = 'drone', count = 6, spacing = 60) {
       e.fireTimer = 99999; // don't shoot back
     }
   }
+}
+
+// === DEBUG: tunnel test ===
+// Call debugTunnel() from console to jump straight to the tunnel gauntlet
+function debugTunnel() {
+  if (gameState === 'TITLE' || gameState === 'GAME_OVER') {
+    resetGame();
+    startStage();
+  }
+  enemies.length = 0;
+  enemyBullets.length = 0;
+  player.x = 80;
+  player.y = CONFIG.height / 2;
+  player.lives = 99;
+  player.alive = true;
+  player.invincible = 60;
+  gameState = 'TUNNEL_WARNING';
+  tunnelWarningTimer = 60;
 }
 
 // === INIT ===

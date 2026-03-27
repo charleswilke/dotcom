@@ -5432,16 +5432,37 @@ section.production-header.alice p {
     }
 }
 
-/* Mobile styles for video section */
-@media (max-width: 767px) {
+/* Fix stage model image aspect ratio */
+.stage-model img {
+    height: auto;
+}
+
+/* Tablet styles for video/content sections */
+@media (max-width: 1024px) {
     .gpts-section .container > div {
         grid-template-columns: 1fr !important;
     }
-    
+
     .video-container {
         margin-bottom: 2rem !important;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
-    
+
+    .stage-model {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .video-description {
+        padding: 1rem 0 !important;
+    }
+}
+
+/* Mobile styles for video section */
+@media (max-width: 767px) {
     .video-description {
         padding: 0 !important;
     }

@@ -201,6 +201,89 @@ function updateScreenShake() {
   }
 }
 
+// === UTILITY HELPERS ===
+// O(1) removal from array during reverse iteration (swap with last element and pop)
+function swapRemove(arr, i) {
+  arr[i] = arr[arr.length - 1];
+  arr.pop();
+}
+
+function dist(ax, ay, bx, by) {
+  const dx = ax - bx, dy = ay - by;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function distSq(ax, ay, bx, by) {
+  const dx = ax - bx, dy = ay - by;
+  return dx * dx + dy * dy;
+}
+
+// Shared suction logic for pre-mid-boss asteroid pull effect (drone + charger)
+function updateSuctionPhase(e) {
+  if (!e.suctionPhase) {
+    if (e.suctionDelay === undefined)
+      e.suctionDelay = Math.random() < 0.1 ? 40 + Math.floor(Math.random() * 120) : -1;
+    if (e.suctionDelay > 0) e.suctionDelay--;
+    if (e.suctionDelay === 0) e.suctionPhase = 'slowing';
+    e.x -= e.speed;
+  } else if (e.suctionPhase === 'slowing') {
+    e.speed = Math.max(0, e.speed - 0.09);
+    e.x -= e.speed;
+    if (e.speed <= 0) { e.suctionPhase = 'wiggling'; e.suctionTimer = 40; }
+  } else if (e.suctionPhase === 'wiggling') {
+    e.suctionTimer--;
+    if (e.suctionTimer <= 0) { e.suctionPhase = 'sucked'; e.speed = 0.5; }
+  } else if (e.suctionPhase === 'sucked') {
+    e.speed = Math.min(e.speed + 0.55, 16);
+    e.x += e.speed;
+  }
+}
+
+// Shared asteroid shape drawing (used by enemies, gravwell orbitals, mid-boss orbitals)
+function drawAsteroidShape(verts, cracks, glowColor, shadowBlur) {
+  ctx.shadowColor = glowColor;
+  ctx.shadowBlur = shadowBlur;
+  ctx.fillStyle = '#12121e';
+  ctx.beginPath();
+  ctx.moveTo(verts[0].x, verts[0].y);
+  for (let i = 1; i < verts.length; i++) ctx.lineTo(verts[i].x, verts[i].y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = glowColor;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  if (cracks) {
+    ctx.lineWidth = 1;
+    ctx.shadowBlur = Math.min(shadowBlur, 5);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    for (const c of cracks) {
+      ctx.beginPath();
+      ctx.moveTo(c.x1, c.y1);
+      ctx.lineTo(c.xm, c.ym);
+      ctx.lineTo(c.x2, c.y2);
+      ctx.stroke();
+    }
+  }
+}
+
+// === SCHEDULED ACTIONS (frame-based timers, respects hitstop/pause) ===
+const scheduledActions = [];
+
+function scheduleAction(framesDelay, action) {
+  scheduledActions.push({ framesRemaining: framesDelay, action });
+}
+
+function updateScheduledActions() {
+  for (let i = scheduledActions.length - 1; i >= 0; i--) {
+    scheduledActions[i].framesRemaining--;
+    if (scheduledActions[i].framesRemaining <= 0) {
+      scheduledActions[i].action();
+      swapRemove(scheduledActions, i);
+    }
+  }
+}
+
 // === OBJECT POOLS ===
 const playerBullets = [];
 const enemyBullets = [];
@@ -208,6 +291,7 @@ const enemies = [];
 const particles = [];
 const pickups = [];
 const xpOrbs = [];
+const spaceMines = [];
 
 // === PARALLAX BACKGROUND ===
 // Layer 1: Distant star field
@@ -992,33 +1076,33 @@ function updatePlayerBullets() {
     b.x += b.vx;
     b.y += b.vy;
     if (b.x > CONFIG.width + 20 || b.x < -20 || b.y < -20 || b.y > CONFIG.height + 20) {
-      playerBullets.splice(i, 1);
+      swapRemove(playerBullets, i);
     }
   }
 }
 
 function drawPlayerBullets() {
+  if (playerBullets.length === 0) return;
   ctx.save();
+  // Pass 1: Outer neon bloom (all bullets)
+  ctx.shadowColor = CONFIG.colors.playerBullet;
+  ctx.shadowBlur = 20;
+  ctx.fillStyle = 'rgba(0, 255, 255, 0.25)';
   for (const b of playerBullets) {
-    const bx = b.x - b.width / 2;
-    const by = b.y - b.height / 2;
-
-    // Outer neon bloom
-    ctx.shadowColor = CONFIG.colors.playerBullet;
-    ctx.shadowBlur = 20;
-    ctx.fillStyle = 'rgba(0, 255, 255, 0.25)';
-    ctx.fillRect(bx - 3, by - 2, b.width + 6, b.height + 4);
-
-    // Main bullet body
-    ctx.shadowBlur = 12;
-    ctx.fillStyle = CONFIG.colors.playerBullet;
-    ctx.fillRect(bx, by, b.width, b.height);
-
-    // Hot white core
-    ctx.shadowColor = '#ffffff';
-    ctx.shadowBlur = 6;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.fillRect(bx + 2, by + 0.5, b.width * 0.5, b.height - 1);
+    ctx.fillRect(b.x - b.width / 2 - 3, b.y - b.height / 2 - 2, b.width + 6, b.height + 4);
+  }
+  // Pass 2: Main bullet body (all bullets)
+  ctx.shadowBlur = 12;
+  ctx.fillStyle = CONFIG.colors.playerBullet;
+  for (const b of playerBullets) {
+    ctx.fillRect(b.x - b.width / 2, b.y - b.height / 2, b.width, b.height);
+  }
+  // Pass 3: Hot white core (all bullets)
+  ctx.shadowColor = '#ffffff';
+  ctx.shadowBlur = 6;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  for (const b of playerBullets) {
+    ctx.fillRect(b.x - b.width / 2 + 2, b.y - b.height / 2 + 0.5, b.width * 0.5, b.height - 1);
   }
   ctx.restore();
 }
@@ -1047,7 +1131,7 @@ function updateEnemyBullets() {
     } else if (b.phase !== 'exiting') {
       // Normal out-of-bounds removal (don't remove exiting bullets heading right)
       if (b.x < -30 || b.x > CONFIG.width + 30 || b.y < -30 || b.y > CONFIG.height + 30) {
-        enemyBullets.splice(i, 1);
+        swapRemove(enemyBullets, i);
       }
     }
   }
@@ -1125,6 +1209,208 @@ function drawEnemyBullets() {
   ctx.restore();
 }
 
+// === SPACE MINES ===
+function spawnSpaceMine(x, y) {
+  spaceMines.push({
+    x, y,
+    frame: 0,
+    fuseTime: 90,     // 1.5s idle before pull starts
+    pullTime: 50,      // ~0.8s visible gravity pull-in
+    radius: 6,
+    alive: true,
+    phase: 'idle',     // idle → pulling → detonating
+    pullFrame: 0,
+    detonateFrame: 0
+  });
+}
+
+function updateSpaceMines() {
+  for (let i = spaceMines.length - 1; i >= 0; i--) {
+    const m = spaceMines[i];
+    m.frame++;
+    // Drift very slowly left with the background
+    m.x -= 0.3;
+
+    if (m.phase === 'idle') {
+      if (m.frame >= m.fuseTime) {
+        m.phase = 'pulling';
+        m.pullFrame = 0;
+      }
+    } else if (m.phase === 'pulling') {
+      m.pullFrame++;
+      // Spawn inward-streaking particles throughout the pull phase
+      if (m.pullFrame % 3 === 0) {
+        const count = Math.min(3 + Math.floor(m.pullFrame / 8), 6);
+        for (let p = 0; p < count; p++) {
+          const angle = Math.random() * Math.PI * 2;
+          const dist = 50 + Math.random() * 30;
+          const spd = 2.5 + Math.random() * 2 + (m.pullFrame / m.pullTime) * 3;
+          particles.push({
+            x: m.x + Math.cos(angle) * dist,
+            y: m.y + Math.sin(angle) * dist,
+            vx: -Math.cos(angle) * spd,
+            vy: -Math.sin(angle) * spd,
+            life: 1.0,
+            decay: 0.05 + (m.pullFrame / m.pullTime) * 0.04,
+            size: Math.random() * 2.5 + 1,
+            colors: ['#cc44ff', '#8800cc', '#440066']
+          });
+        }
+      }
+      if (m.pullFrame >= m.pullTime) {
+        m.phase = 'detonating';
+        m.detonateFrame = 0;
+        // Final big implosion burst — lots of particles rushing in fast
+        for (let p = 0; p < 20; p++) {
+          const angle = (p / 20) * Math.PI * 2;
+          const dist = 60 + Math.random() * 20;
+          particles.push({
+            x: m.x + Math.cos(angle) * dist,
+            y: m.y + Math.sin(angle) * dist,
+            vx: -Math.cos(angle) * (5 + Math.random() * 3),
+            vy: -Math.sin(angle) * (5 + Math.random() * 3),
+            life: 1.0,
+            decay: 0.07,
+            size: Math.random() * 3 + 2,
+            colors: ['#ffffff', '#cc44ff', '#8800cc']
+          });
+        }
+      }
+    } else if (m.phase === 'detonating') {
+      m.detonateFrame++;
+      if (m.detonateFrame === 14) {
+        // Burst outward — the grav explosion
+        spawnExplosion(m.x, m.y, 28, ['#ffffff', '#dd88ff', '#cc44ff', '#440066']);
+        spawnHitFlash(m.x, m.y, 45);
+        triggerScreenShake(5, 10);
+        // Damage zone — kill player if within blast radius
+        if (player.alive && player.invincible <= 0) {
+          if (dist(player.x, player.y, m.x, m.y) < 60) {
+            killPlayer();
+          }
+        }
+        swapRemove(spaceMines, i);
+        continue;
+      }
+    }
+
+    // Remove if off-screen
+    if (m.x < -40) {
+      swapRemove(spaceMines, i);
+    }
+  }
+}
+
+function drawSpaceMines() {
+  ctx.save();
+  for (const m of spaceMines) {
+    const idleUrgency = Math.min(m.frame / m.fuseTime, 1);
+    const fastPulse = Math.sin(m.frame * (0.15 + idleUrgency * 0.4)) * 0.5 + 0.5;
+
+    if (m.phase === 'detonating') {
+      // Imploding — shrinking bright core before burst
+      const t = m.detonateFrame / 14;
+      const shrink = m.radius * (1 - t * 0.7);
+      ctx.shadowColor = '#ff88ff';
+      ctx.shadowBlur = 30 + t * 25;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, shrink, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (m.phase === 'pulling') {
+      // Gravity pull phase — contracting rings + glowing core
+      const pullProgress = m.pullFrame / m.pullTime;
+      const pullPulse = Math.sin(m.pullFrame * 0.3) * 0.5 + 0.5;
+
+      // Multiple contracting rings — the "get away" signal
+      for (let r = 0; r < 3; r++) {
+        const ringPhase = ((m.pullFrame * 0.04 + r * 0.33) % 1);
+        const ringRadius = 55 * (1 - ringPhase) + 8;
+        const ringAlpha = (0.15 + pullProgress * 0.3) * (1 - ringPhase);
+        ctx.strokeStyle = `rgba(200, 68, 255, ${ringAlpha.toFixed(2)})`;
+        ctx.lineWidth = 1.5 + pullProgress * 1.5;
+        ctx.shadowColor = '#cc44ff';
+        ctx.shadowBlur = 6 + pullProgress * 10;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, ringRadius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Danger radius ring — shows blast zone, pulses red as it nears detonation
+      const dangerAlpha = 0.1 + pullProgress * 0.3;
+      ctx.strokeStyle = `rgba(255, 60, 60, ${dangerAlpha.toFixed(2)})`;
+      ctx.lineWidth = 1;
+      ctx.shadowColor = '#ff3333';
+      ctx.shadowBlur = 8;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 60, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Mine body — spiky, brighter during pull
+      ctx.fillStyle = '#dd66ff';
+      ctx.shadowColor = '#dd66ff';
+      ctx.shadowBlur = 14 + pullPulse * 12;
+      ctx.beginPath();
+      for (let s = 0; s < 6; s++) {
+        const a = (s / 6) * Math.PI * 2 + m.frame * 0.04;
+        const outerR = m.radius + 4;
+        const innerR = m.radius - 2;
+        ctx.lineTo(m.x + Math.cos(a) * outerR, m.y + Math.sin(a) * outerR);
+        const midA = a + Math.PI / 6;
+        ctx.lineTo(m.x + Math.cos(midA) * innerR, m.y + Math.sin(midA) * innerR);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Core — white-hot, growing
+      const coreR = 2.5 + pullProgress * 3;
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 10 + pullProgress * 15;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, coreR, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Idle phase — subtle presence
+      // Outer grav distortion ring
+      ctx.strokeStyle = `rgba(160, 80, 255, ${0.15 + fastPulse * 0.25})`;
+      ctx.lineWidth = 1;
+      ctx.shadowColor = '#aa44ff';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 14 + fastPulse * 4, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Mine body — spiky shape
+      ctx.fillStyle = '#cc44ff';
+      ctx.shadowColor = '#cc44ff';
+      ctx.shadowBlur = 10 + fastPulse * 8;
+      ctx.beginPath();
+      for (let s = 0; s < 6; s++) {
+        const a = (s / 6) * Math.PI * 2 + m.frame * 0.02;
+        const outerR = m.radius + 3;
+        const innerR = m.radius - 2;
+        ctx.lineTo(m.x + Math.cos(a) * outerR, m.y + Math.sin(a) * outerR);
+        const midA = a + Math.PI / 6;
+        ctx.lineTo(m.x + Math.cos(midA) * innerR, m.y + Math.sin(midA) * innerR);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Hot core — pulses with urgency
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.5 + fastPulse * 0.5})`;
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
 // === ENEMIES ===
 function generateAsteroidData(baseRadius) {
   const n = 8 + Math.floor(Math.random() * 3);
@@ -1169,7 +1455,8 @@ function spawnEnemy(type, x, y, options = {}) {
     fireTimer: Math.random() * 60 + 60,
     // Type-specific
     startY: y,
-    speed: options.speed || 2,
+    speed: options.speed || (type === 'weaver' ? 5 : 2),
+    arcY: options.arcY || 0,
     triggered: false
   };
   if (type === 'gravwell') {
@@ -1230,46 +1517,27 @@ function updateEnemies() {
     switch (e.type) {
       case 'drone':
         if (preMidBoss && e.ambient) {
-          // ~1 in 10 ambient asteroids get suctioned; rest fly through normally
-          if (!e.suctionPhase) {
-            if (e.suctionDelay === undefined)
-              e.suctionDelay = Math.random() < 0.1 ? 40 + Math.floor(Math.random() * 120) : -1;
-            if (e.suctionDelay > 0) e.suctionDelay--;
-            if (e.suctionDelay === 0) e.suctionPhase = 'slowing';
-            e.x -= e.speed;
-          } else if (e.suctionPhase === 'slowing') {
-            e.speed = Math.max(0, e.speed - 0.09);
-            e.x -= e.speed;
-            if (e.speed <= 0) { e.suctionPhase = 'wiggling'; e.suctionTimer = 40; }
-          } else if (e.suctionPhase === 'wiggling') {
-            e.suctionTimer--;
-            if (e.suctionTimer <= 0) { e.suctionPhase = 'sucked'; e.speed = 0.5; }
-          } else if (e.suctionPhase === 'sucked') {
-            e.speed = Math.min(e.speed + 0.55, 16);
-            e.x += e.speed;
-          }
+          updateSuctionPhase(e);
         } else {
           e.x -= e.speed;
         }
         break;
 
-      case 'weaver':
+      case 'weaver': {
+        // Streak across on a shallow arc — fast strafing-run feel
         e.x -= e.speed;
-        e.y = e.startY + Math.sin(e.frame * 0.05) * 50;
-        // Fire aimed shot only when player is in forward cone (~60° half-angle)
+        // Arc: gentle curve using progress across screen
+        const progress = 1 - (e.x / (CONFIG.width + 100));
+        const arcAmount = e.arcY || 0; // positive = curves down, negative = curves up
+        e.y = e.startY + arcAmount * Math.sin(progress * Math.PI);
+        // Drop space mines as they streak across
         e.fireTimer--;
-        if (e.fireTimer <= 0 && e.x < CONFIG.width - 100 && player.alive) {
-          const dx = player.x - e.x;
-          const dy = player.y - e.y;
-          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          // Forward is (-1, 0); dot with normalized-to-player = -dx/dist
-          // cos(60°) = 0.5 — only fire if player is within 60° of nose
-          if (-dx / dist > 0.5) {
-            fireAimedShot(e);
-          }
-          e.fireTimer = 120;
+        if (e.fireTimer <= 0 && e.x < CONFIG.width - 60 && e.x > 60) {
+          spawnSpaceMine(e.x, e.y);
+          e.fireTimer = 80 + Math.floor(Math.random() * 40);
         }
         break;
+      }
 
       case 'charger':
         if (e.isShepherdInbound) {
@@ -1278,24 +1546,7 @@ function updateEnemies() {
           break;
         }
         if (preMidBoss && e.ambient) {
-          // ~1 in 10 ambient asteroids get suctioned; rest fly through normally
-          if (!e.suctionPhase) {
-            if (e.suctionDelay === undefined)
-              e.suctionDelay = Math.random() < 0.1 ? 40 + Math.floor(Math.random() * 120) : -1;
-            if (e.suctionDelay > 0) e.suctionDelay--;
-            if (e.suctionDelay === 0) e.suctionPhase = 'slowing';
-            e.x -= e.speed;
-          } else if (e.suctionPhase === 'slowing') {
-            e.speed = Math.max(0, e.speed - 0.09);
-            e.x -= e.speed;
-            if (e.speed <= 0) { e.suctionPhase = 'wiggling'; e.suctionTimer = 40; }
-          } else if (e.suctionPhase === 'wiggling') {
-            e.suctionTimer--;
-            if (e.suctionTimer <= 0) { e.suctionPhase = 'sucked'; e.speed = 0.5; }
-          } else if (e.suctionPhase === 'sucked') {
-            e.speed = Math.min(e.speed + 0.55, 16);
-            e.x += e.speed;
-          }
+          updateSuctionPhase(e);
         } else if (!e.triggered) {
           // Drift in slowly
           e.x -= 0.5;
@@ -1323,7 +1574,7 @@ function updateEnemies() {
         e.fireTimer--;
         if (e.fireTimer <= 0 && player.alive) {
           for (let s = 0; s < 3; s++) {
-            setTimeout(() => { if (e.alive) fireAimedShot(e); }, s * 100);
+            scheduleAction(s * 6, () => { if (e.alive) fireAimedShot(e); });
           }
           e.fireTimer = 180;
         }
@@ -1393,7 +1644,7 @@ function updateEnemies() {
 
     // Remove if off-screen (either side)
     if (e.x < -60 || e.x > CONFIG.width + 80) {
-      enemies.splice(i, 1);
+      swapRemove(enemies, i);
     }
   }
 }
@@ -1418,9 +1669,7 @@ function drawAsteroidEnemy(e) {
   // Ambient asteroids being sucked by the approaching Shepherd glow red
   const sucked = e.suctionPhase != null;
   const glowColor = triggered ? '#ff8844' : sucked ? '#ff4400' : CONFIG.colors.asteroid;
-
-  ctx.shadowColor = glowColor;
-  ctx.shadowBlur = triggered ? 16 : sucked ? 22 : 12;
+  const shadowBlur = triggered ? 16 : sucked ? 22 : 12;
 
   // Wiggle effect while caught in suction
   const wiggleX = e.suctionPhase === 'wiggling' ? Math.sin(e.frame * 1.3) * 5 : 0;
@@ -1428,33 +1677,7 @@ function drawAsteroidEnemy(e) {
   ctx.translate(e.x + wiggleX, e.y + wiggleY);
   ctx.rotate(e.rotation);
 
-  // Rocky body
-  ctx.fillStyle = '#12121e';
-  ctx.beginPath();
-  ctx.moveTo(e.verts[0].x, e.verts[0].y);
-  for (let i = 1; i < e.verts.length; i++) ctx.lineTo(e.verts[i].x, e.verts[i].y);
-  ctx.closePath();
-  ctx.fill();
-
-  // Phosphorescent outline
-  ctx.strokeStyle = glowColor;
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  // Interior cracks — same neon glow as outline
-  ctx.strokeStyle = glowColor;
-  ctx.lineWidth = 1;
-  ctx.shadowColor = glowColor;
-  ctx.shadowBlur = 5;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  for (const c of e.cracks) {
-    ctx.beginPath();
-    ctx.moveTo(c.x1, c.y1);
-    ctx.lineTo(c.xm, c.ym);
-    ctx.lineTo(c.x2, c.y2);
-    ctx.stroke();
-  }
+  drawAsteroidShape(e.verts, e.cracks, glowColor, shadowBlur);
 }
 
 function drawCraftEnemy(e) {
@@ -1672,27 +1895,7 @@ function drawCraftEnemy(e) {
         ctx.save();
         ctx.translate(wx, wy);
         ctx.rotate(oa.rotation);
-        ctx.shadowColor = '#aaeeff';
-        ctx.shadowBlur = 10;
-        ctx.fillStyle = '#12121e';
-        ctx.beginPath();
-        ctx.moveTo(oa.verts[0].x, oa.verts[0].y);
-        for (let i = 1; i < oa.verts.length; i++) ctx.lineTo(oa.verts[i].x, oa.verts[i].y);
-        ctx.closePath();
-        ctx.fill();
-        ctx.strokeStyle = '#aaeeff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        ctx.strokeStyle = '#aaeeff';
-        ctx.lineWidth = 0.8;
-        ctx.shadowBlur = 4;
-        for (const c of oa.cracks) {
-          ctx.beginPath();
-          ctx.moveTo(c.x1, c.y1);
-          ctx.lineTo(c.xm, c.ym);
-          ctx.lineTo(c.x2, c.y2);
-          ctx.stroke();
-        }
+        drawAsteroidShape(oa.verts, oa.cracks, '#aaeeff', 10);
         ctx.restore();
       }
       break;
@@ -1818,19 +2021,24 @@ function updateParticles() {
     p.vx *= 0.98;
     p.vy *= 0.98;
     p.life -= p.decay;
-    if (p.life <= 0) particles.splice(i, 1);
+    if (p.life <= 0) swapRemove(particles, i);
   }
 }
 
 function drawParticles() {
   ctx.save();
+  // Disable shadow for small particles — massive perf win, minimal visual difference
+  ctx.shadowBlur = 0;
+  let lastColor = '';
   for (const p of particles) {
     const colors = p.colors;
     const idx = Math.min(Math.floor((1 - p.life) * colors.length), colors.length - 1);
-    ctx.fillStyle = colors[idx];
+    const color = colors[idx];
+    if (color !== lastColor) {
+      ctx.fillStyle = color;
+      lastColor = color;
+    }
     ctx.globalAlpha = p.life;
-    ctx.shadowColor = colors[idx];
-    ctx.shadowBlur = 6;
 
     // Small fast particles render as velocity streaks (sparks)
     const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
@@ -1839,11 +2047,18 @@ function drawParticles() {
       ctx.translate(p.x, p.y);
       ctx.rotate(Math.atan2(p.vy, p.vx));
       const streakLen = Math.min(speed * 2.5, 12);
-      ctx.shadowBlur = 10;
       ctx.fillRect(-streakLen / 2, -p.size / 2, streakLen, p.size);
       ctx.restore();
     } else {
-      ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+      // Only apply glow to larger particles (size > 4)
+      if (p.size > 4) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 6;
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+        ctx.shadowBlur = 0;
+      } else {
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+      }
     }
   }
   ctx.restore();
@@ -1861,15 +2076,13 @@ function updatePickups() {
     const p = pickups[i];
     p.x -= 1; // drift left
     p.frame++;
-    if (p.x < -30) { pickups.splice(i, 1); continue; }
+    if (p.x < -30) { swapRemove(pickups, i); continue; }
 
     // Collect on contact (circle-to-circle, generous)
     if (player.alive) {
-      const dx = p.x - player.x;
-      const dy = p.y - player.y;
-      if (Math.sqrt(dx * dx + dy * dy) < 30) {
+      if (dist(p.x, p.y, player.x, player.y) < 30) {
         applyPickup(p);
-        pickups.splice(i, 1);
+        swapRemove(pickups, i);
       }
     }
   }
@@ -1883,10 +2096,12 @@ function applyPickup(p) {
     case 'score':
       score += 1000;
       break;
-    case 'speed':
-      player.speed = CONFIG.playerSpeed + 2;
-      setTimeout(() => { player.speed = CONFIG.playerSpeed; }, 10000);
+    case 'speed': {
+      const baseMaxVel = player.maxVel;
+      player.maxVel = baseMaxVel + 2;
+      scheduleAction(600, () => { player.maxVel = baseMaxVel; }); // 10 seconds at 60fps
       break;
+    }
   }
   // Pickup sparkle
   spawnExplosion(p.x, p.y, 8, ['#ffd700', '#ffaa00', '#ffffff']);
@@ -2031,7 +2246,7 @@ function checkCollisions() {
 
       if (consumed) break;
     }
-    if (consumed) playerBullets.splice(bi, 1);
+    if (consumed) swapRemove(playerBullets, bi);
   }
 
   // Player bullets vs gravwell orbiting asteroids
@@ -2044,9 +2259,7 @@ function checkCollisions() {
         if (!oa.alive) continue;
         const wx = e.x + Math.cos(oa.angle) * oa.orbitRadius;
         const wy = e.y + Math.sin(oa.angle) * oa.orbitRadius;
-        const dx = b.x - wx;
-        const dy = b.y - wy;
-        if (Math.sqrt(dx * dx + dy * dy) < 11) {
+        if (dist(b.x, b.y, wx, wy) < 11) {
           oa.alive = false;
           oa.respawnTimer = oa.respawnFrames;
           player.shotsHit++;
@@ -2061,7 +2274,7 @@ function checkCollisions() {
       }
       if (consumed) break;
     }
-    if (consumed) playerBullets.splice(bi, 1);
+    if (consumed) swapRemove(playerBullets, bi);
   }
 
   // Player bullets vs mid-boss orbiting asteroids
@@ -2073,8 +2286,7 @@ function checkCollisions() {
         if (!oa.alive || oa.merging) continue;
         const wx = midBoss.x + Math.cos(oa.angle) * oa.orbitRadius;
         const wy = midBoss.y + Math.sin(oa.angle) * oa.orbitRadius;
-        const dx = b.x - wx, dy = b.y - wy;
-        if (Math.sqrt(dx * dx + dy * dy) < 13) {
+        if (dist(b.x, b.y, wx, wy) < 13) {
           oa.alive = false; oa.respawnTimer = oa.respawnFrames;
           player.shotsHit++;
           spawnExplosion(wx, wy, 8, ['#aaeeff', '#ffffff', '#cc00ff']);
@@ -2085,10 +2297,9 @@ function checkCollisions() {
           consumed = true; break;
         }
       }
-      if (consumed) { playerBullets.splice(bi, 1); continue; }
+      if (consumed) { swapRemove(playerBullets, bi); continue; }
       // Hit mid-boss core
-      const dx = b.x - midBoss.x, dy = b.y - midBoss.y;
-      if (Math.sqrt(dx * dx + dy * dy) < 30 && midBoss.coreExposed) {
+      if (dist(b.x, b.y, midBoss.x, midBoss.y) < 30 && midBoss.coreExposed) {
         midBoss.hp--;
         midBoss.hitFlash = 12;
         player.shotsHit++;
@@ -2097,7 +2308,7 @@ function checkCollisions() {
         spawnHitFlash(b.x, b.y, 25);
         triggerScreenShake(3, 5);
         triggerHitStop(2);
-        playerBullets.splice(bi, 1);
+        swapRemove(playerBullets, bi);
         if (midBoss.hp <= 0) destroyMidBoss();
       }
     }
@@ -2123,7 +2334,7 @@ function checkCollisions() {
           spawnImpactSparks(b.x, b.y, b.vx, b.vy, 5, ['#888888', '#444444']);
           triggerScreenShake(1, 2);
         }
-        playerBullets.splice(bi, 1);
+        swapRemove(playerBullets, bi);
 
         if (boss.hp <= 0) {
           destroyBoss();
@@ -2150,7 +2361,7 @@ function checkCollisions() {
   for (let i = enemyBullets.length - 1; i >= 0; i--) {
     const b = enemyBullets[i];
     if (rectOverlap(phx, phy, phw, phh, b.x - b.radius, b.y - b.radius, b.radius * 2, b.radius * 2)) {
-      enemyBullets.splice(i, 1);
+      swapRemove(enemyBullets, i);
       killPlayer();
       return;
     }
@@ -2166,8 +2377,7 @@ function checkCollisions() {
 
   // Mid-boss body vs player
   if (midBoss && midBoss.alive) {
-    const dx = player.x - midBoss.x, dy = player.y - midBoss.y;
-    if (Math.sqrt(dx * dx + dy * dy) < 32) { killPlayer(); return; }
+    if (dist(player.x, player.y, midBoss.x, midBoss.y) < 32) { killPlayer(); return; }
   }
 
   // Boss body vs player
@@ -2186,7 +2396,7 @@ function updateShockwaves() {
   for (let i = shockwaves.length - 1; i >= 0; i--) {
     const s = shockwaves[i];
     s.radius += (s.maxRadius - s.radius) * 0.10 + 5;
-    if (s.radius >= s.maxRadius) shockwaves.splice(i, 1);
+    if (s.radius >= s.maxRadius) swapRemove(shockwaves, i);
   }
 }
 
@@ -2220,20 +2430,20 @@ function triggerGravNova(e, index) {
   const novaRadius = 170;
 
   // Remove the gravwell first so cascading destroyEnemy calls don't double-splice
-  enemies.splice(index, 1);
+  swapRemove(enemies, index);
   score += e.points;
   enemiesDestroyed++;
 
   // Massive central explosion
   spawnExplosion(x, y, 45, ['#ffffff', '#dd88ff', '#ff44ff', '#220044']);
   for (let i = 0; i < 5; i++) {
-    setTimeout(() => {
+    scheduleAction(i * 6, () => {
       spawnExplosion(
         x + (Math.random() - 0.5) * 50,
         y + (Math.random() - 0.5) * 50,
         18, ['#ffffff', '#cc88ff', '#ff44ff']
       );
-    }, i * 100);
+    });
   }
 
   spawnLocalFlash(x, y, 240);
@@ -2258,9 +2468,7 @@ function triggerGravNova(e, index) {
   // Area damage — destroy all enemies within nova radius
   for (let ei = enemies.length - 1; ei >= 0; ei--) {
     const other = enemies[ei];
-    const dx = other.x - x;
-    const dy = other.y - y;
-    if (Math.sqrt(dx * dx + dy * dy) < novaRadius) {
+    if (dist(other.x, other.y, x, y) < novaRadius) {
       destroyEnemy(other, ei);
     }
   }
@@ -2289,7 +2497,7 @@ function destroyEnemy(e, index) {
     spawnPickup(e.x, e.y, 'score');
   }
 
-  enemies.splice(index, 1);
+  swapRemove(enemies, index);
 }
 
 function popShield() {
@@ -2324,13 +2532,13 @@ function killPlayer() {
   // Delayed secondary blasts
   const px = player.x, py = player.y;
   for (let i = 1; i <= 3; i++) {
-    setTimeout(() => {
+    scheduleAction(i * 7, () => {
       spawnExplosion(
         px + (Math.random() - 0.5) * 50,
         py + (Math.random() - 0.5) * 50,
         12, ['#ff4400', '#ff8800', '#ffcc44', '#ffffff']
       );
-    }, i * 120);
+    });
   }
 
   if (player.lives <= 0) {
@@ -2362,7 +2570,7 @@ function updateXPOrbs() {
     const o = xpOrbs[i];
 
     o.x -= XP_ORB_DRIFT;
-    if (o.x < -50) { xpOrbs.splice(i, 1); continue; }
+    if (o.x < -50) { swapRemove(xpOrbs, i); continue; }
 
     // Magnetic attraction — once locked, never let go
     if (player.alive) {
@@ -2390,11 +2598,9 @@ function updateXPOrbs() {
 
     // Collection on contact
     if (player.alive) {
-      const dx = player.x - o.x;
-      const dy = player.y - o.y;
-      if (Math.sqrt(dx * dx + dy * dy) < o.radius + 8) {
+      if (dist(player.x, player.y, o.x, o.y) < o.radius + 8) {
         collectXPOrb(o);
-        xpOrbs.splice(i, 1);
+        swapRemove(xpOrbs, i);
       }
     }
   }
@@ -2537,8 +2743,8 @@ function updateBoss() {
       }
       boss.attackTimer = 40;
       // Core exposed between attacks
-      setTimeout(() => { if (boss) boss.coreExposed = true; }, 500);
-      setTimeout(() => { if (boss) boss.coreExposed = false; }, 1500);
+      scheduleAction(30, () => { if (boss) boss.coreExposed = true; });
+      scheduleAction(90, () => { if (boss) boss.coreExposed = false; });
     } else {
       // Phase 2: faster spiral + ring bursts
       boss.coreExposed = false;
@@ -2561,8 +2767,8 @@ function updateBoss() {
         }
       }
       boss.attackTimer = 25;
-      setTimeout(() => { if (boss) boss.coreExposed = true; }, 300);
-      setTimeout(() => { if (boss) boss.coreExposed = false; }, 1000);
+      scheduleAction(18, () => { if (boss) boss.coreExposed = true; });
+      scheduleAction(60, () => { if (boss) boss.coreExposed = false; });
     }
   }
 
@@ -2678,20 +2884,20 @@ function destroyBoss() {
   score += 5000;
   // Big explosion
   for (let i = 0; i < 5; i++) {
-    setTimeout(() => {
+    scheduleAction(i * 12, () => {
       spawnExplosion(
         boss.x + (Math.random() - 0.5) * 60,
         boss.y + (Math.random() - 0.5) * 60,
         20, explosionColors
       );
-    }, i * 200);
+    });
   }
   // Screen flash
   screenFlash = 30;
   // Transition to stage clear after explosions
-  setTimeout(() => {
+  scheduleAction(90, () => {
     gameState = 'STAGE_CLEAR';
-  }, 1500);
+  });
 }
 
 let screenFlash = 0;
@@ -2898,8 +3104,7 @@ function updateMidBoss() {
     for (let i = enemies.length - 1; i >= 0; i--) {
       const e = enemies[i];
       if (!ASTEROID_TYPES.has(e.type)) continue;
-      const dx = midBoss.x - e.x, dy = midBoss.y - e.y;
-      if (Math.sqrt(dx * dx + dy * dy) < 210) {
+      if (dist(midBoss.x, midBoss.y, e.x, e.y) < 210) {
         const angle = Math.atan2(e.y - midBoss.y, e.x - midBoss.x);
         const d = e.type === 'charger' ? generateAsteroidData(14) : generateAsteroidData(10);
         midBoss.orbitingAsteroids.push({
@@ -2914,7 +3119,7 @@ function updateMidBoss() {
           merging: false, mergeProgress: 0, grabbed: false, grabTimer: 0
         });
         spawnExplosion(e.x, e.y, 5, ['#cc00ff', '#aaeeff', '#ffffff']);
-        enemies.splice(i, 1);
+        swapRemove(enemies, i);
       }
     }
   }
@@ -2948,7 +3153,7 @@ function updateMidBoss() {
           isShepherdInbound: true,
           triggered: false
         });
-        midBoss.pendingInbounds.splice(pi, 1);
+        swapRemove(midBoss.pendingInbounds, pi);
       }
     }
   }
@@ -2969,7 +3174,7 @@ function updateMidBoss() {
   for (let pi = midBoss.gravityPulses.length - 1; pi >= 0; pi--) {
     const pulse = midBoss.gravityPulses[pi];
     pulse.radius += pulse.speed;
-    if (pulse.radius >= pulse.maxRadius) { midBoss.gravityPulses.splice(pi, 1); continue; }
+    if (pulse.radius >= pulse.maxRadius) { swapRemove(midBoss.gravityPulses, pi); continue; }
     // Push back player bullets that are near the wavefront
     for (const b of playerBullets) {
       const dx = b.x - pulse.x, dy = b.y - pulse.y;
@@ -3226,19 +3431,9 @@ function drawMidBoss() {
     ctx.save();
     ctx.translate(wx + shakeX, wy + shakeY);
     ctx.rotate(oa.rotation);
-    ctx.shadowColor = oa.grabbed ? `rgb(255,${Math.floor(100 * (1 - grabFrac))},0)` : CONFIG.colors.asteroid;
-    ctx.shadowBlur = oa.grabbed ? 14 + grabFrac * 18 : 8;
-    ctx.fillStyle = '#12121e';
-    ctx.beginPath();
-    ctx.moveTo(oa.verts[0].x, oa.verts[0].y);
-    for (let vi = 1; vi < oa.verts.length; vi++) ctx.lineTo(oa.verts[vi].x, oa.verts[vi].y);
-    ctx.closePath();
-    ctx.fill();
-    ctx.strokeStyle = oa.grabbed
-      ? `rgb(255,${Math.floor(80 * (1 - grabFrac))},0)`
-      : CONFIG.colors.asteroid;
-    ctx.lineWidth = oa.grabbed ? 2 : 1.5;
-    ctx.stroke();
+    const oaColor = oa.grabbed ? `rgb(255,${Math.floor(100 * (1 - grabFrac))},0)` : CONFIG.colors.asteroid;
+    const oaBlur = oa.grabbed ? 14 + grabFrac * 18 : 8;
+    drawAsteroidShape(oa.verts, null, oaColor, oaBlur);
     ctx.restore();
   }
 
@@ -3471,17 +3666,17 @@ function destroyMidBoss() {
   midBoss.alive = false;
   score += 3000;
   for (let i = 0; i < 6; i++) {
-    setTimeout(() => {
+    scheduleAction(i * 11, () => {
       if (!midBoss) return;
       spawnExplosion(
         midBoss.x + (Math.random() - 0.5) * 70,
         midBoss.y + (Math.random() - 0.5) * 70,
         18, ['#cc00ff', '#ff3300', '#ffffff', '#ff6600']
       );
-    }, i * 180);
+    });
   }
   screenFlash = 20;
-  setTimeout(() => {
+  scheduleAction(72, () => {
     midBoss = null;
     // Advance past the mid-boss sentinel wave and resume
     currentWave++;
@@ -3489,8 +3684,10 @@ function destroyMidBoss() {
     waveTimer = 0;
     enemies.length = 0;
     enemyBullets.length = 0;
+    spaceMines.length = 0;
+    scheduledActions.length = 0;
     gameState = 'GAMEPLAY';
-  }, 1200);
+  });
 }
 
 function drawMidBossWarning() {
@@ -3522,7 +3719,7 @@ function updateLocalFlashes() {
   for (let i = localFlashes.length - 1; i >= 0; i--) {
     const f = localFlashes[i];
     f.life -= f.fast ? 0.15 : 0.04;
-    if (f.life <= 0) localFlashes.splice(i, 1);
+    if (f.life <= 0) swapRemove(localFlashes, i);
   }
 }
 function drawLocalFlashes() {
@@ -3565,127 +3762,77 @@ let tunnelSpawnedHazards = new Set(); // track which segment hazards already spa
 
 function buildTunnelData() {
   const H = CONFIG.height; // 540
-  const segs = [];
+  // Compact format: [topLeft, topRight, bottomOffset_L, bottomOffset_R, hazards?]
+  // bottomLeft = H - bottomOffset_L, bottomRight = H - bottomOffset_R
+  // Hazard shorthands: T=turret, B=plasmaBlade, G=gate
+  const T = (localX, y) => ({ type: 'turret', localX, y });
+  const B = (localX, cy, radius, rotSpeed, double) => ({ type: 'plasmaBlade', localX, cy, radius, rotSpeed, double });
+  const G = (localX, openGap, cycleTimes, phaseOffset) => {
+    const h = { type: 'gate', localX, openGap, cycleTimes };
+    if (phaseOffset) h.phaseOffset = phaseOffset;
+    return h;
+  };
 
-  // Helper: push a segment with top/bottom Y values
-  function seg(tL, tR, bL, bR, hazards) {
-    segs.push({ topLeft: tL, topRight: tR, bottomLeft: bL, bottomRight: bR, hazards: hazards || [] });
-  }
+  // [topL, topR, botOffL, botOffR, hazards?]
+  const data = [
+    // A: "The Funnel" (0-4)
+    [0,0,0,0], [0,30,30,30], [30,80,80,80], [80,130,130,130], [130,150,150,150],
+    // B: "Straight Shot" (5-12)
+    [150,155,150,145], [155,165,145,135], [165,175,135,130],
+    [175,180,130,130, T(0.5,200)],
+    [180,185,130,135], [185,180,135,140], [180,170,140,150], [170,155,150,155],
+    // C: "The Weave" (13-24)
+    [155,170,155,130], [170,210,130,100], [210,250,100,70],
+    [250,280,70,55, T(0.5,295)],
+    [280,300,55,50], [300,290,50,60], [290,260,60,80], [260,210,80,120], [210,150,120,170],
+    [150,90,170,230, T(0.5,H-250)],
+    [90,60,230,260], [60,70,260,250],
+    // D: "First Blade" (25-32)
+    [70,90,250,230], [90,120,230,200], [120,140,200,180],
+    [140,145,180,175, B(0.5,290,100,0.025,false)],
+    [145,150,175,170], [150,155,170,165], [155,160,165,160], [160,160,160,160],
+    // E: "The Gauntlet Begins" (33-44)
+    [160,180,160,140], [180,220,140,110],
+    [220,260,110,80, B(0.5,350,80,0.028,false)],
+    [260,290,80,60], [290,310,60,50],
+    [310,300,50,60, T(0.4,325)],
+    [300,270,60,80],
+    [270,220,80,120, B(0.5,250,85,0.03,false)],
+    [220,170,120,160], [170,140,160,180], [140,130,180,190], [130,135,190,185],
+    // F: "Gate Check" (45-54)
+    [135,140,185,180], [140,150,180,170], [150,160,170,160],
+    [160,160,160,160, G(0.5,180,{open:100,closing:20,closed:35,opening:20})],
+    [160,160,160,160], [160,165,160,155],
+    [165,170,155,155, T(0.5,190)],
+    [170,175,155,150], [175,180,150,145], [180,180,145,145],
+    // G: "Double Trouble" (55-66)
+    [180,190,145,135, T(0.5,H-155)],
+    [190,200,135,130],
+    [200,200,130,130, G(0.5,170,{open:90,closing:18,closed:30,opening:18})],
+    [200,195,130,135],
+    [195,190,135,140, B(0.5,300,75,0.03,true)],
+    [190,185,140,145], [185,180,145,150],
+    [180,180,150,150, G(0.5,160,{open:85,closing:18,closed:35,opening:18},80)],
+    [180,175,150,155], [175,165,155,165], [165,155,165,170], [155,150,170,175],
+    // H: "The Crucible" (67-78)
+    [150,170,175,155],
+    [170,210,155,120, T(0.4,230)],
+    [210,260,120,80], [260,300,80,50],
+    [300,320,50,40, B(0.5,370,70,0.035,true)],
+    [320,300,40,60],
+    [300,250,60,100, T(0.6,H-120)],
+    [250,180,100,160],
+    [180,160,160,175, G(0.5,140,{open:65,closing:16,closed:30,opening:16})],
+    [160,140,175,190], [140,120,190,200], [120,100,200,210],
+    // I: "The Exit" (79-84)
+    [100,75,210,170], [75,50,170,100], [50,30,100,40], [30,15,40,15], [15,0,15,0], [0,0,0,0]
+  ];
 
-  // Helper: lerp
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  // Passage height guide: H=540.  top=wall ceiling Y, bottom=wall floor Y.
-  // Passage = bottomY - topY. Target widths:
-  //   Funnel entry: 540→240,  Straight: ~240,  Weave: ~220 swinging hard,
-  //   Gauntlet: ~200,  Gates: ~210,  Double Trouble: ~200,  Crucible: ~160,  Exit: opens
-
-  // Section A: "The Funnel" (0-4) — walls close in fast
-  seg(0, 0, H, H, []);                            // 0: open sky
-  seg(0, 30, H, H - 30, []);                      // 1
-  seg(30, 80, H - 30, H - 80, []);                // 2
-  seg(80, 130, H - 80, H - 130, []);              // 3
-  seg(130, 150, H - 130, H - 150, []);            // 4: passage ~240px
-
-  // Section B: "Straight Shot" (5-12) — ~240px, slight curve down, 1 turret
-  seg(150, 155, H - 150, H - 145, []);            // 5
-  seg(155, 165, H - 145, H - 135, []);            // 6
-  seg(165, 175, H - 135, H - 130, []);            // 7
-  seg(175, 180, H - 130, H - 130, [{ type: 'turret', localX: 0.5, y: 200 }]); // 8: turret on top wall
-  seg(180, 185, H - 130, H - 135, []);            // 9
-  seg(185, 180, H - 135, H - 140, []);            // 10
-  seg(180, 170, H - 140, H - 150, []);            // 11
-  seg(170, 155, H - 150, H - 155, []);            // 12
-
-  // Section C: "The Weave" (13-24) — aggressive S-curve ~220px passage, 2 turrets
-  // Plunge down: center from ~265 to ~410
-  seg(155, 170, H - 155, H - 130, []);            // 13
-  seg(170, 210, H - 130, H - 100, []);            // 14
-  seg(210, 250, H - 100, H - 70, []);             // 15
-  seg(250, 280, H - 70, H - 55, [{ type: 'turret', localX: 0.5, y: 295 }]); // 16: turret near top wall
-  seg(280, 300, H - 55, H - 50, []);              // 17: deepest — passage centered ~395
-  seg(300, 290, H - 50, H - 60, []);              // 18: start climbing back
-  // Swing back up hard: center from ~395 to ~150
-  seg(290, 260, H - 60, H - 80, []);              // 19
-  seg(260, 210, H - 80, H - 120, []);             // 20
-  seg(210, 150, H - 120, H - 170, []);            // 21
-  seg(150, 90, H - 170, H - 230, [{ type: 'turret', localX: 0.5, y: H - 250 }]); // 22: turret on bottom wall
-  seg(90, 60, H - 230, H - 260, []);              // 23: high — passage centered ~165
-  seg(60, 70, H - 260, H - 250, []);              // 24
-
-  // Section D: "First Blade" (25-32) — ~260px, straightens, single plasma blade
-  seg(70, 90, H - 250, H - 230, []);              // 25
-  seg(90, 120, H - 230, H - 200, []);             // 26
-  seg(120, 140, H - 200, H - 180, []);            // 27
-  seg(140, 145, H - 180, H - 175, [{ type: 'plasmaBlade', localX: 0.5, cy: 290, radius: 100, rotSpeed: 0.025, double: false }]); // 28
-  seg(145, 150, H - 175, H - 170, []);            // 29
-  seg(150, 155, H - 170, H - 165, []);            // 30
-  seg(155, 160, H - 165, H - 160, []);            // 31
-  seg(160, 160, H - 160, H - 160, []);            // 32
-
-  // Section E: "The Gauntlet Begins" (33-44) — ~200px, tight S-curves, 2 blades + turret
-  seg(160, 180, H - 160, H - 140, []);            // 33
-  seg(180, 220, H - 140, H - 110, []);            // 34
-  seg(220, 260, H - 110, H - 80, [{ type: 'plasmaBlade', localX: 0.5, cy: 350, radius: 80, rotSpeed: 0.028, double: false }]); // 35
-  seg(260, 290, H - 80, H - 60, []);              // 36
-  seg(290, 310, H - 60, H - 50, []);              // 37: deep trough
-  seg(310, 300, H - 50, H - 60, [{ type: 'turret', localX: 0.4, y: 325 }]); // 38
-  seg(300, 270, H - 60, H - 80, []);              // 39
-  seg(270, 220, H - 80, H - 120, [{ type: 'plasmaBlade', localX: 0.5, cy: 250, radius: 85, rotSpeed: 0.03, double: false }]); // 40
-  seg(220, 170, H - 120, H - 160, []);            // 41
-  seg(170, 140, H - 160, H - 180, []);            // 42
-  seg(140, 130, H - 180, H - 190, []);            // 43
-  seg(130, 135, H - 190, H - 185, []);            // 44
-
-  // Section F: "Gate Check" (45-54) — ~220px, first gate
-  seg(135, 140, H - 185, H - 180, []);            // 45
-  seg(140, 150, H - 180, H - 170, []);            // 46
-  seg(150, 160, H - 170, H - 160, []);            // 47
-  seg(160, 160, H - 160, H - 160, [{ type: 'gate', localX: 0.5, openGap: 180, cycleTimes: { open: 100, closing: 20, closed: 35, opening: 20 } }]); // 48
-  seg(160, 160, H - 160, H - 160, []);            // 49
-  seg(160, 165, H - 160, H - 155, []);            // 50
-  seg(165, 170, H - 155, H - 155, [{ type: 'turret', localX: 0.5, y: 190 }]); // 51
-  seg(170, 175, H - 155, H - 150, []);            // 52
-  seg(175, 180, H - 150, H - 145, []);            // 53
-  seg(180, 180, H - 145, H - 145, []);            // 54
-
-  // Section G: "Double Trouble" (55-66) — ~200px, 2 gates + double blade + turret
-  seg(180, 190, H - 145, H - 135, [{ type: 'turret', localX: 0.5, y: H - 155 }]); // 55
-  seg(190, 200, H - 135, H - 130, []);            // 56
-  seg(200, 200, H - 130, H - 130, [{ type: 'gate', localX: 0.5, openGap: 170, cycleTimes: { open: 90, closing: 18, closed: 30, opening: 18 } }]); // 57
-  seg(200, 195, H - 130, H - 135, []);            // 58
-  seg(195, 190, H - 135, H - 140, [{ type: 'plasmaBlade', localX: 0.5, cy: 300, radius: 75, rotSpeed: 0.03, double: true }]); // 59
-  seg(190, 185, H - 140, H - 145, []);            // 60
-  seg(185, 180, H - 145, H - 150, []);            // 61
-  seg(180, 180, H - 150, H - 150, [{ type: 'gate', localX: 0.5, openGap: 160, cycleTimes: { open: 85, closing: 18, closed: 35, opening: 18 }, phaseOffset: 80 }]); // 62
-  seg(180, 175, H - 150, H - 155, []);            // 63
-  seg(175, 165, H - 155, H - 165, []);            // 64
-  seg(165, 155, H - 165, H - 170, []);            // 65
-  seg(155, 150, H - 170, H - 175, []);            // 66
-
-  // Section H: "The Crucible" (67-78) — ~160px passage, sharp S, hardest
-  seg(150, 170, H - 175, H - 155, []);            // 67
-  seg(170, 210, H - 155, H - 120, [{ type: 'turret', localX: 0.4, y: 230 }]); // 68
-  seg(210, 260, H - 120, H - 80, []);             // 69
-  seg(260, 300, H - 80, H - 50, []);              // 70: plunging deep
-  seg(300, 320, H - 50, H - 40, [{ type: 'plasmaBlade', localX: 0.5, cy: 370, radius: 70, rotSpeed: 0.035, double: true }]); // 71
-  seg(320, 300, H - 40, H - 60, []);              // 72
-  seg(300, 250, H - 60, H - 100, [{ type: 'turret', localX: 0.6, y: H - 120 }]); // 73
-  seg(250, 180, H - 100, H - 160, []);            // 74: climbing fast
-  seg(180, 160, H - 160, H - 175, [{ type: 'gate', localX: 0.5, openGap: 140, cycleTimes: { open: 65, closing: 16, closed: 30, opening: 16 } }]); // 75
-  seg(160, 140, H - 175, H - 190, []);            // 76
-  seg(140, 120, H - 190, H - 200, []);            // 77
-  seg(120, 100, H - 200, H - 210, []);            // 78
-
-  // Section I: "The Exit" (79-84) — walls open back up
-  seg(100, 75, H - 210, H - 170, []);             // 79
-  seg(75, 50, H - 170, H - 100, []);              // 80
-  seg(50, 30, H - 100, H - 40, []);               // 81
-  seg(30, 15, H - 40, H - 15, []);                // 82
-  seg(15, 0, H - 15, H, []);                      // 83
-  seg(0, 0, H, H, []);                            // 84
-
-  return segs;
+  return data.map(d => ({
+    topLeft: d[0], topRight: d[1],
+    bottomLeft: H - d[2], bottomRight: H - d[3],
+    hazards: d[4] ? [d[4]] : []
+  }));
 }
 
 function getTunnelBoundsAtX(screenX) {
@@ -3794,7 +3941,7 @@ function updateTunnel() {
     const screenX = h.worldX - tunnelScrollX;
 
     if (screenX < -100) {
-      tunnelHazards.splice(i, 1);
+      swapRemove(tunnelHazards, i);
       continue;
     }
 
@@ -3879,9 +4026,10 @@ function completeTunnel() {
   tunnelSpawnedHazards = new Set();
   // Remove any remaining tunnel turrets
   for (let i = enemies.length - 1; i >= 0; i--) {
-    if (enemies[i].tunnelTurret) enemies.splice(i, 1);
+    if (enemies[i].tunnelTurret) swapRemove(enemies, i);
   }
   enemyBullets.length = 0;
+  spaceMines.length = 0;
   // Advance wave system and go to boss
   currentWave++;
   waveActive = false;
@@ -4346,7 +4494,7 @@ function checkTunnelCollisions() {
     const wb = getTunnelBoundsAtX(b.x);
     if (b.y < wb.topY || b.y > wb.bottomY) {
       spawnExplosion(b.x, b.y, 3, ['#00cccc', '#004466', '#002233']);
-      playerBullets.splice(i, 1);
+      swapRemove(playerBullets, i);
     }
   }
 
@@ -4355,7 +4503,7 @@ function checkTunnelCollisions() {
     const wb = getTunnelBoundsAtX(b.x);
     if (b.y < wb.topY || b.y > wb.bottomY) {
       spawnExplosion(b.x, b.y, 2, ['#ff4400', '#441100']);
-      enemyBullets.splice(i, 1);
+      swapRemove(enemyBullets, i);
     }
   }
 }
@@ -4441,13 +4589,13 @@ const stageWaves = {
       { type: 'drone', x: 1130, y: 360 },
       { type: 'drone', x: 1010, y: 480 }
     ], delay: 0 },
-    // Wave 2: Weaver squadron — tight V-formation
+    // Wave 2: Weaver squadron — tight V-formation, arcing strafing run
     { enemies: [
-      { type: 'weaver', x: 1000, y: 250 },
-      { type: 'weaver', x: 1050, y: 210 },
-      { type: 'weaver', x: 1050, y: 290 },
-      { type: 'weaver', x: 1100, y: 175 },
-      { type: 'weaver', x: 1100, y: 325 }
+      { type: 'weaver', x: 1000, y: 250, arcY: 60 },
+      { type: 'weaver', x: 1040, y: 220, arcY: 60 },
+      { type: 'weaver', x: 1040, y: 280, arcY: 60 },
+      { type: 'weaver', x: 1080, y: 190, arcY: 60 },
+      { type: 'weaver', x: 1080, y: 310, arcY: 60 }
     ], delay: 300 },
     // Wave 3: 6 Drones top + weaver squadron bottom
     { enemies: [
@@ -4457,9 +4605,9 @@ const stageWaves = {
       { type: 'drone', x: 1120, y: 100 },
       { type: 'drone', x: 1160, y: 80 },
       { type: 'drone', x: 1200, y: 100 },
-      { type: 'weaver', x: 1000, y: 400 },
-      { type: 'weaver', x: 1050, y: 370 },
-      { type: 'weaver', x: 1050, y: 430 }
+      { type: 'weaver', x: 1000, y: 400, arcY: -50 },
+      { type: 'weaver', x: 1040, y: 370, arcY: -50 },
+      { type: 'weaver', x: 1040, y: 430, arcY: -50 }
     ], delay: 500 },
     // Wave 4: 2 Chargers + 4 Drones
     { enemies: [
@@ -4529,7 +4677,7 @@ function updateWaves() {
       }
       // Spawn wave
       for (const e of wave.enemies) {
-        spawnEnemy(e.type, e.x, e.y);
+        spawnEnemy(e.type, e.x, e.y, { arcY: e.arcY, speed: e.speed });
       }
       if (wave.pickups) {
         for (const p of wave.pickups) {
@@ -5270,6 +5418,7 @@ function resetGame() {
   preMidBoss = false;
   playerBullets.length = 0;
   enemyBullets.length = 0;
+  spaceMines.length = 0;
   enemies.length = 0;
   particles.length = 0;
   pickups.length = 0;
@@ -5314,6 +5463,7 @@ function startStage() {
   preMidBoss = false;
   playerBullets.length = 0;
   enemyBullets.length = 0;
+  spaceMines.length = 0;
   enemies.length = 0;
   pickups.length = 0;
   xpOrbs.length = 0;
@@ -5330,6 +5480,48 @@ function startStage() {
 let lastFrameTime = 0;
 const TARGET_FPS = 60;
 const FRAME_MS = 1000 / TARGET_FPS; // ~16.67ms
+
+// === SHARED GAME STATE UPDATE/DRAW ===
+// Consolidates the duplicated update/draw sequences across GAMEPLAY, MID_BOSS_FIGHT, TUNNEL_GAUNTLET, BOSS_FIGHT
+function updateGameFrame(opts = {}) {
+  if (hitStopFrames > 0) return;
+  updateScheduledActions();
+  updatePlayer();
+  if (opts.tunnel) updateTunnel();
+  updatePlayerBullets();
+  updateEnemyBullets();
+  updateSpaceMines();
+  if (opts.enemies !== false) updateEnemies();
+  if (opts.ambientAsteroids) updateAmbientAsteroids();
+  if (opts.waves) updateWaves();
+  if (opts.midBoss) updateMidBoss();
+  if (opts.boss) updateBoss();
+  updateParticles();
+  if (opts.pickups) updatePickups();
+  updateXPOrbs();
+  updateShockwaves();
+  updateLocalFlashes();
+  checkCollisions();
+  if (opts.tunnel) checkTunnelCollisions();
+}
+
+function drawGameFrame(opts = {}) {
+  if (opts.tunnel) { drawTunnel(); drawTunnelHazards(); }
+  drawEnemies();
+  if (opts.midBoss) drawMidBoss();
+  if (opts.boss) drawBoss();
+  drawShockwaves();
+  drawLocalFlashes();
+  if (opts.pickups) drawPickups();
+  drawXPOrbs();
+  drawPlayerBullets();
+  drawEnemyBullets();
+  drawSpaceMines();
+  drawPlayer();
+  drawShield();
+  drawParticles();
+  drawHUD();
+}
 
 function gameLoop(timestamp) {
   // Fixed-timestep cap at 60fps
@@ -5401,32 +5593,8 @@ function gameLoop(timestamp) {
 
     case 'GAMEPLAY':
       drawBackground();
-      if (hitStopFrames <= 0) {
-        updatePlayer();
-        updatePlayerBullets();
-        updateEnemyBullets();
-        updateEnemies();
-        updateAmbientAsteroids();
-        updateWaves();
-        updateParticles();
-        updatePickups();
-        updateXPOrbs();
-        updateShockwaves();
-        updateLocalFlashes();
-        checkCollisions();
-      }
-
-      drawEnemies();
-      drawShockwaves();
-      drawLocalFlashes();
-      drawPickups();
-      drawXPOrbs();
-      drawPlayerBullets();
-      drawEnemyBullets();
-      drawPlayer();
-      drawShield();
-      drawParticles();
-      drawHUD();
+      updateGameFrame({ waves: true, ambientAsteroids: true, pickups: true });
+      drawGameFrame({ pickups: true });
       checkPendingLevelUp();
       break;
 
@@ -5441,31 +5609,8 @@ function gameLoop(timestamp) {
 
     case 'MID_BOSS_FIGHT':
       drawBackground();
-      if (hitStopFrames <= 0) {
-        updatePlayer();
-        updatePlayerBullets();
-        updateEnemyBullets();
-        updateEnemies();
-        updateAmbientAsteroids();
-        updateMidBoss();
-        updateParticles();
-        updateXPOrbs();
-        updateShockwaves();
-        updateLocalFlashes();
-        checkCollisions();
-      }
-
-      drawEnemies();
-      drawMidBoss();
-      drawShockwaves();
-      drawLocalFlashes();
-      drawXPOrbs();
-      drawPlayerBullets();
-      drawEnemyBullets();
-      drawPlayer();
-      drawShield();
-      drawParticles();
-      drawHUD();
+      updateGameFrame({ ambientAsteroids: true, midBoss: true });
+      drawGameFrame({ midBoss: true });
       drawMidBossInboundAlerts();
       checkPendingLevelUp();
       break;
@@ -5480,31 +5625,8 @@ function gameLoop(timestamp) {
 
     case 'TUNNEL_GAUNTLET':
       drawBackground();
-      drawTunnel();
-      if (hitStopFrames <= 0) {
-        updatePlayer();
-        updateTunnel();
-        updatePlayerBullets();
-        updateEnemyBullets();
-        updateEnemies();
-        updateParticles();
-        updateXPOrbs();
-        updateShockwaves();
-        updateLocalFlashes();
-        checkCollisions();
-        checkTunnelCollisions();
-      }
-      drawTunnelHazards();
-      drawEnemies();
-      drawShockwaves();
-      drawLocalFlashes();
-      drawXPOrbs();
-      drawPlayerBullets();
-      drawEnemyBullets();
-      drawPlayer();
-      drawShield();
-      drawParticles();
-      drawHUD();
+      updateGameFrame({ tunnel: true });
+      drawGameFrame({ tunnel: true });
       checkPendingLevelUp();
       break;
 
@@ -5519,28 +5641,8 @@ function gameLoop(timestamp) {
 
     case 'BOSS_FIGHT':
       drawBackground();
-      if (hitStopFrames <= 0) {
-        updatePlayer();
-        updatePlayerBullets();
-        updateEnemyBullets();
-        updateBoss();
-        updateParticles();
-        updateXPOrbs();
-        updateShockwaves();
-        updateLocalFlashes();
-        checkCollisions();
-      }
-
-      drawBoss();
-      drawShockwaves();
-      drawLocalFlashes();
-      drawXPOrbs();
-      drawPlayerBullets();
-      drawEnemyBullets();
-      drawPlayer();
-      drawShield();
-      drawParticles();
-      drawHUD();
+      updateGameFrame({ boss: true, enemies: false });
+      drawGameFrame({ boss: true });
 
       // Boss name display for first few seconds
       if (boss && boss.frame < 180) {
@@ -5563,20 +5665,12 @@ function gameLoop(timestamp) {
     case 'LEVEL_UP':
       // Freeze game scene behind the overlay
       drawBackground();
-      if (tunnelActive) { drawTunnel(); drawTunnelHazards(); }
-      drawEnemies();
-      if (boss) drawBoss();
-      if (midBoss) drawMidBoss();
-      drawShockwaves();
-      drawLocalFlashes();
-      drawPickups();
-      drawXPOrbs();
-      drawPlayerBullets();
-      drawEnemyBullets();
-      drawPlayer();
-      drawShield();
-      drawParticles();
-      drawHUD();
+      drawGameFrame({
+        tunnel: tunnelActive,
+        boss: !!boss,
+        midBoss: !!midBoss,
+        pickups: true
+      });
       // Draw card overlay + handle input
       drawLevelUpScreen();
       updateLevelUpInput();
@@ -5636,6 +5730,7 @@ function debugRange(type = 'drone', count = 6, spacing = 60) {
   gameState = 'GAMEPLAY';
   enemies.length = 0;
   enemyBullets.length = 0;
+  spaceMines.length = 0;
   player.x = 80;
   player.y = CONFIG.height / 2;
   player.lives = 99;
@@ -5661,6 +5756,7 @@ function debugTunnel() {
   }
   enemies.length = 0;
   enemyBullets.length = 0;
+  spaceMines.length = 0;
   player.x = 80;
   player.y = CONFIG.height / 2;
   player.lives = 99;

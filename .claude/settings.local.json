@@ -33,7 +33,14 @@
       "Bash(node test-api.js)",
       "Bash(ls -lh /Users/cwilke/Documents/GitHub/dotcom/*.js /Users/cwilke/Documents/GitHub/dotcom/*.html)",
       "Bash(git:*)",
-      "Bash(brew upgrade:*)"
+      "Bash(brew upgrade:*)",
+      "Bash(grep -l \"site-nav\\\\|siteNav\" /Users/cwilke/Documents/GitHub/dotcom/**/*.html)",
+      "Bash(grep:*)",
+      "Bash(gh auth:*)",
+      "Bash(ssh:*)",
+      "Bash(ssh-add:*)",
+      "Bash(printf '%s\\\\n' 'boogers')",
+      "Bash(SSH_ASKPASS=/bin/cat DISPLAY='' ssh-add ~/.ssh/id_ed25519)"
     ]
   }
 }

@@ -2636,7 +2636,7 @@ html {
 }
 
 .audio-summary-content {
-    padding: 1.2rem;
+    padding: 0.8rem;
     position: relative;
     z-index: 2;
 }
@@ -2910,6 +2910,7 @@ html {
 .audio-summary-header {
     margin-bottom: 0;
     text-align: center;
+    display: none;
 }
 
 .audio-summary-title {
@@ -2918,7 +2919,7 @@ html {
     font-weight: 700;
     color: #2a1810;
     margin: 0 0 0.8rem 0;
-    text-shadow: 
+    text-shadow:
         0 2px 0 rgba(0, 0, 0, 0.9),
         0 -1px 0 rgba(139, 90, 43, 0.4),
         1px 0 0 rgba(0, 0, 0, 0.6),
@@ -3251,24 +3252,7 @@ html {
 }
 
 .audio-summary-meta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    color: #00ff64;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(180deg,
-        rgba(3, 5, 8, 0.97) 0%,
-        rgba(6, 8, 12, 0.95) 100%);
-    border-left: 1px solid rgba(0, 0, 0, 0.8);
-    border-right: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 0.45rem 1.2rem;
-    text-shadow:
-        0 0 6px rgba(0, 255, 100, 0.7),
-        0 0 12px rgba(0, 255, 100, 0.3);
+    display: none;
 }
 
 .summary-separator {
@@ -3287,7 +3271,7 @@ html {
 
 /* Time Dial Styles */
 .time-dial-container {
-    margin-top: 0.8rem;
+    margin-top: 0;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -3324,7 +3308,7 @@ html {
 .tuner-glass {
     position: relative;
     width: 100%;
-    height: 120px;
+    height: 195px;
     background:
         radial-gradient(ellipse at top right, rgba(20, 30, 60, 0.4) 0%, transparent 50%),
         radial-gradient(ellipse at bottom left, rgba(15, 25, 50, 0.3) 0%, transparent 50%),
@@ -3341,24 +3325,75 @@ html {
     overflow: hidden;
 }
 
+/* Phosphor title — hidden, replaced by oscilloscope-title */
+.tuner-title {
+    display: none;
+}
+
+/* Title overlaid inside the oscilloscope CRT, faded behind glass */
+.oscilloscope-title {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(0, 255, 100, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    white-space: nowrap;
+    z-index: 2;
+    pointer-events: none;
+    text-shadow:
+        0 0 10px rgba(0, 255, 100, 0.12),
+        0 0 25px rgba(0, 255, 100, 0.06);
+}
+
+/* Recap podcast meta — faded at bottom of oscilloscope, behind glass */
+.oscilloscope-meta {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: rgba(0, 255, 100, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    white-space: nowrap;
+    z-index: 2;
+    pointer-events: none;
+    text-shadow:
+        0 0 10px rgba(0, 255, 100, 0.12),
+        0 0 25px rgba(0, 255, 100, 0.06);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.oscilloscope-meta-sep {
+    opacity: 0.5;
+}
+
 .tuner-scale {
     position: absolute;
-    top: 0;
+    top: 122px;
     left: 0;
     right: 0;
     bottom: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 24px 0 162px;
-    z-index: 1;
+    padding: 0 24px;
+    z-index: 4;
 }
 
 .tuner-scale::before {
     content: '';
     position: absolute;
     top: 50%;
-    left: 162px;
+    left: 24px;
     right: 24px;
     height: 1px;
     background: rgba(0, 255, 100, 0.3);
@@ -3419,16 +3454,16 @@ html {
 
 .marker-label {
     font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     font-weight: 700;
     color: #00ff64;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     position: absolute;
-    bottom: 12px;
+    bottom: 6px;
     line-height: 1.1;
     text-align: center;
-    text-shadow: 
+    text-shadow:
         0 0 6px rgba(0, 255, 100, 0.8),
         0 0 12px rgba(0, 255, 100, 0.4),
         0 0 2px rgba(0, 255, 100, 1);
@@ -3440,7 +3475,7 @@ html {
 /* Staggered label positioning - alternating top and bottom */
 .scale-marker.label-top .marker-label {
     bottom: auto;
-    top: 12px;
+    top: 6px;
 }
 
 .scale-marker.scale-major.active .marker-label {
@@ -3453,10 +3488,10 @@ html {
 
 .tuner-indicator {
     position: absolute;
-    top: 0;
+    top: 122px;
     left: 24px;
     width: 4px;
-    height: 100%;
+    height: calc(100% - 122px);
     background: linear-gradient(180deg, 
         rgba(255, 0, 0, 0.3) 0%, 
         rgba(255, 0, 0, 0.9) 10%,
@@ -3497,25 +3532,88 @@ html {
     text-shadow: 0 0 4px rgba(0, 247, 194, 0.3);
 }
 
+/* LED button group */
+.tuner-led-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
 /* Bonus LED Button - Opens Mixtape */
 .tuner-led {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, 
-        #ff6b6b 0%, 
-        #e63946 40%, 
+    background: radial-gradient(circle at 30% 30%,
+        #ff6b6b 0%,
+        #e63946 40%,
         #9d0208 100%);
-    box-shadow: 
+    box-shadow:
         0 0 4px rgba(230, 57, 70, 0.6),
         0 0 8px rgba(230, 57, 70, 0.3),
         inset 0 -2px 4px rgba(0, 0, 0, 0.3),
         inset 0 1px 2px rgba(255, 255, 255, 0.3);
     cursor: pointer;
     flex-shrink: 0;
-    margin-left: 8px;
+    margin-left: 0;
     transition: all 0.3s ease;
     animation: led-pulse 3s ease-in-out infinite;
+}
+
+/* Grey LED - Opens GWOR */
+.tuner-led-grey {
+    background: radial-gradient(circle at 30% 30%,
+        #d0d0d0 0%,
+        #a0a0a0 40%,
+        #666 100%);
+    box-shadow:
+        0 0 4px rgba(180, 180, 180, 0.4),
+        0 0 8px rgba(180, 180, 180, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    animation: led-grey-pulse 3s ease-in-out infinite;
+}
+
+.tuner-led-grey:hover {
+    background: radial-gradient(circle at 30% 30%,
+        #e8e8e8 0%,
+        #c0c0c0 40%,
+        #888 100%);
+    box-shadow:
+        0 0 8px rgba(200, 200, 200, 0.7),
+        0 0 16px rgba(200, 200, 200, 0.4),
+        0 0 24px rgba(200, 200, 200, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    animation: none;
+}
+
+.tuner-led-grey:active {
+    transform: scale(0.95);
+    background: radial-gradient(circle at 30% 30%,
+        #fff 0%,
+        #ddd 40%,
+        #aaa 100%);
+}
+
+@keyframes led-grey-pulse {
+    0%, 100% {
+        box-shadow:
+            0 0 4px rgba(180, 180, 180, 0.4),
+            0 0 8px rgba(180, 180, 180, 0.2),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+            inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    }
+    50% {
+        box-shadow:
+            0 0 6px rgba(200, 200, 200, 0.5),
+            0 0 12px rgba(200, 200, 200, 0.3),
+            0 0 18px rgba(200, 200, 200, 0.1),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+            inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    }
 }
 
 .tuner-led:hover {
@@ -3560,11 +3658,36 @@ html {
 /* LED Pressed/Activated State */
 .tuner-led.pressed {
     animation: led-burst 0.4s ease-out forwards;
-    background: radial-gradient(circle at 30% 30%, 
-        #ffffff 0%, 
-        #ff6b6b 30%, 
-        #e63946 60%, 
+    background: radial-gradient(circle at 30% 30%,
+        #ffffff 0%,
+        #ff6b6b 30%,
+        #e63946 60%,
         #9d0208 100%);
+}
+
+.tuner-led-grey.pressed {
+    animation: led-burst-grey 0.4s ease-out forwards;
+    background: radial-gradient(circle at 30% 30%,
+        #ffffff 0%,
+        #e0e0e0 30%,
+        #b0b0b0 60%,
+        #888 100%);
+}
+
+@keyframes led-burst-grey {
+    0% {
+        box-shadow:
+            0 0 8px rgba(255, 255, 255, 0.9),
+            0 0 20px rgba(200, 200, 200, 0.7),
+            0 0 40px rgba(200, 200, 200, 0.4);
+        transform: scale(1.3);
+    }
+    100% {
+        box-shadow:
+            0 0 4px rgba(180, 180, 180, 0.4),
+            0 0 8px rgba(180, 180, 180, 0.2);
+        transform: scale(1);
+    }
 }
 
 @keyframes led-burst {
@@ -4046,28 +4169,31 @@ html {
 .tuner-scale .scale-marker:nth-child(18) { --marker-index: 17; }
 .tuner-scale .scale-marker:nth-child(19) { --marker-index: 18; }
 
-/* Oscilloscope CRT monitor (embedded in tuner display) */
+/* Oscilloscope CRT monitor — horizontal, recessed behind glass */
 .tuner-oscilloscope-frame {
     position: absolute;
     left: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 140px;
-    height: calc(100% - 10px);
-    aspect-ratio: 1 / 1;
-    background: linear-gradient(160deg,
-        rgba(38, 40, 44, 1) 0%,
-        rgba(24, 26, 30, 1) 35%,
+    right: 8px;
+    top: 8px;
+    height: 110px;
+    background: linear-gradient(180deg,
+        rgba(14, 16, 20, 1) 0%,
+        rgba(20, 22, 28, 1) 40%,
         rgba(16, 18, 22, 1) 100%);
     border-radius: 8px;
-    border: 1px solid rgba(55, 58, 64, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.9);
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.07),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-        inset 1px 0 0 rgba(255, 255, 255, 0.03),
-        inset -1px 0 0 rgba(0, 0, 0, 0.3),
-        0 3px 12px rgba(0, 0, 0, 0.9);
-    padding: 5px;
+        /* Deep recess — top/left shadow (light from above-left) */
+        inset 0 3px 8px rgba(0, 0, 0, 0.95),
+        inset 0 1px 2px rgba(0, 0, 0, 0.9),
+        inset 3px 0 6px rgba(0, 0, 0, 0.6),
+        /* Bottom/right inner bevel — lighter edge = recessed lip */
+        inset 0 -1px 1px rgba(255, 255, 255, 0.06),
+        inset -1px 0 1px rgba(255, 255, 255, 0.03),
+        /* Outer shadow for depth against the panel */
+        0 1px 0 rgba(255, 255, 255, 0.04),
+        0 -1px 3px rgba(0, 0, 0, 0.8);
+    padding: 4px;
     z-index: 3;
     display: flex;
     align-items: center;
@@ -4077,15 +4203,14 @@ html {
 .tuner-oscilloscope {
     width: 100%;
     height: 100%;
-    border-radius: 6px / 8px;
-    background: radial-gradient(ellipse at center,
-        rgba(0, 12, 4, 0.9) 0%,
-        rgba(0, 6, 2, 0.95) 50%,
+    border-radius: 5px;
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(0, 12, 4, 0.85) 0%,
+        rgba(0, 6, 2, 0.93) 50%,
         rgba(0, 2, 0, 1) 100%);
     box-shadow:
-        inset 0 0 20px rgba(0, 0, 0, 0.95),
-        inset 0 0 8px rgba(0, 255, 100, 0.03),
-        0 1px 4px rgba(0, 0, 0, 0.5);
+        inset 0 0 25px rgba(0, 0, 0, 0.95),
+        inset 0 0 8px rgba(0, 255, 100, 0.03);
     image-rendering: pixelated;
     display: block;
 }
@@ -4094,40 +4219,47 @@ html {
 .tuner-oscilloscope-frame::after {
     content: '';
     position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    border-radius: 6px / 8px;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border-radius: 5px;
     background:
         repeating-linear-gradient(
             0deg,
             transparent 0px,
             transparent 1px,
-            rgba(0, 0, 0, 0.07) 1px,
-            rgba(0, 0, 0, 0.07) 2px
+            rgba(0, 0, 0, 0.05) 1px,
+            rgba(0, 0, 0, 0.05) 2px
         );
     pointer-events: none;
     z-index: 4;
 }
 
-/* Convex glass reflection + edge vignette */
+/* Glass reflection — recessed pane with subtle highlight */
 .tuner-oscilloscope-frame::before {
     content: '';
     position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    border-radius: 6px / 8px;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border-radius: 5px;
     background:
-        radial-gradient(ellipse at 30% 25%,
-            rgba(255, 255, 255, 0.08) 0%,
-            rgba(255, 255, 255, 0.02) 20%,
-            transparent 45%),
+        /* Faint top highlight — glass surface catch */
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.06) 0%,
+            rgba(255, 255, 255, 0.01) 20%,
+            transparent 40%),
+        /* Specular glint — top-left */
+        radial-gradient(ellipse at 12% 15%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 40%),
+        /* Edge vignette — deepens the recess */
         radial-gradient(ellipse at center,
             transparent 35%,
-            rgba(0, 0, 0, 0.45) 100%);
+            rgba(0, 0, 0, 0.3) 75%,
+            rgba(0, 0, 0, 0.6) 100%);
     pointer-events: none;
     z-index: 5;
 }
@@ -4273,23 +4405,28 @@ html {
     }
 
     .tuner-glass {
-        height: 85px;
+        height: 110px;
     }
-    
+
     .tuner-indicator {
         height: 100%;
     }
-    
+
     .tuner-oscilloscope-frame {
-        width: 100px;
+        width: 90px;
     }
 
     .tuner-scale {
-        padding: 0 18px 0 120px;
+        padding: 0 18px 0 108px;
     }
 
     .tuner-scale::before {
-        left: 120px;
+        left: 108px;
+    }
+
+    .tuner-title {
+        font-size: 0.55rem;
+        letter-spacing: 2px;
     }
 
     .scale-marker::before {
@@ -4357,22 +4494,22 @@ html {
     }
 
     .tuner-glass {
-        height: 90px;
+        height: 120px;
     }
-    
+
     .tuner-indicator {
         height: 100%;
     }
-    
+
     .marker-label {
         font-size: 0.52rem;
     }
-    
+
     .time-dial-wrapper {
         width: 55px;
         height: 55px;
     }
-    
+
     .tuner-oscilloscope-frame {
         width: 90px;
     }
@@ -4383,6 +4520,11 @@ html {
 
     .tuner-scale::before {
         left: 110px;
+    }
+
+    .tuner-title {
+        font-size: 0.6rem;
+        letter-spacing: 2px;
     }
 
     .dial-label-top {

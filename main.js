@@ -683,8 +683,7 @@ function initTimeDial() {
     ];
     
     let currentStation = 9; // Start at station 9 (Feb '26)
-    const stationLightsContainer = document.getElementById('station-lights');
-    const stationLights = Array.from(document.querySelectorAll('.station-light'));
+    const oscilloscopeCanvas = document.getElementById('recap-oscilloscope');
     const dateDisplay = document.getElementById('current-recap-date');
     const recapAudio = document.getElementById('recap-audio');
     const tunerGlass = document.querySelector('.tuner-glass');
@@ -754,21 +753,6 @@ function initTimeDial() {
             }, 600);
         }
         // ===== END CRT EFFECTS =====
-        
-        // Update station lights
-        stationLights.forEach((light, i) => {
-            light.classList.remove('active', 'nearby');
-            if (i === stationIndex) {
-                light.classList.add('active');
-            } else if (Math.abs(i - stationIndex) === 1) {
-                light.classList.add('nearby');
-            }
-        });
-        
-        // Update data attribute for label highlighting
-        if (stationLightsContainer) {
-            stationLightsContainer.setAttribute('data-current-station', stationIndex);
-        }
         
         // Update tuner indicator position
         updateTunerIndicator(stationIndex);
@@ -896,66 +880,200 @@ function initTimeDial() {
         }
     }
     
-    // Set up station lights interactions
-    if (stationLightsContainer) {
-        // Scroll wheel events on the container
-        stationLightsContainer.addEventListener('wheel', handleScroll, { passive: false });
-        
-        // Touch swipe support for mobile
+    // Set up scroll/touch interactions on tuner glass
+    if (tunerGlass) {
+        tunerGlass.addEventListener('wheel', handleScroll, { passive: false });
+
         let touchStartY = 0;
         let touchAccumulator = 0;
-        
-        stationLightsContainer.addEventListener('touchstart', function(e) {
+
+        tunerGlass.addEventListener('touchstart', function(e) {
             touchStartY = e.touches[0].clientY;
             touchAccumulator = 0;
         }, { passive: true });
-        
-        stationLightsContainer.addEventListener('touchmove', function(e) {
+
+        tunerGlass.addEventListener('touchmove', function(e) {
             e.preventDefault();
             const touchY = e.touches[0].clientY;
             const delta = touchStartY - touchY;
             touchStartY = touchY;
-            
-            // Accumulate for station change
+
             touchAccumulator += delta;
-            
+
             if (Math.abs(touchAccumulator) >= SCROLL_THRESHOLD) {
                 const direction = touchAccumulator > 0 ? 1 : -1;
                 let newStation = currentStation + direction;
                 if (newStation < 0) newStation = recapStations.length - 1;
                 if (newStation >= recapStations.length) newStation = 0;
-                
+
                 updateStation(newStation);
-                
+
                 if ('vibrate' in navigator) {
                     navigator.vibrate(15);
                 }
-                
+
                 touchAccumulator = touchAccumulator % SCROLL_THRESHOLD;
             }
         }, { passive: false });
     }
-    
-    // Click on individual lights to go directly to that station
-    stationLights.forEach(light => {
-        light.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const stationIndex = parseInt(this.getAttribute('data-station'));
-            if (!isNaN(stationIndex) && stationIndex !== currentStation) {
-                updateStation(stationIndex);
-                
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(20);
+
+    // Oscilloscope visualizer
+    (function initOscilloscope() {
+        if (!oscilloscopeCanvas || !recapAudio) return;
+
+        const ctx = oscilloscopeCanvas.getContext('2d');
+        let audioCtx = null;
+        let analyserNode = null;
+        let timeData = null;
+        let oscAnimId = null;
+        let initialized = false;
+
+        function initAudio() {
+            if (initialized) return;
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyserNode = audioCtx.createAnalyser();
+                analyserNode.fftSize = 256;
+                analyserNode.smoothingTimeConstant = 0.6;
+                timeData = new Uint8Array(analyserNode.fftSize);
+                const source = audioCtx.createMediaElementSource(recapAudio);
+                source.connect(analyserNode);
+                analyserNode.connect(audioCtx.destination);
+                initialized = true;
+            } catch (e) {
+                // Fallback: will draw idle line
+            }
+        }
+
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = oscilloscopeCanvas.getBoundingClientRect();
+            oscilloscopeCanvas.width = rect.width * dpr;
+            oscilloscopeCanvas.height = rect.height * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function drawGraticule(w, h) {
+            var divX = 10, divY = 8;
+            var cellW = w / divX, cellH = h / divY;
+            var tickLen = 3, subTicks = 5;
+
+            // Major grid lines
+            ctx.strokeStyle = 'rgba(0, 255, 100, 0.12)';
+            ctx.lineWidth = 0.5;
+            for (var ix = 1; ix < divX; ix++) {
+                var x = ix * cellW;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, h);
+                ctx.stroke();
+            }
+            for (var iy = 1; iy < divY; iy++) {
+                var y = iy * cellH;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(w, y);
+                ctx.stroke();
+            }
+
+            // Subtick marks along center horizontal axis
+            ctx.strokeStyle = 'rgba(0, 255, 100, 0.18)';
+            ctx.lineWidth = 0.5;
+            var midY = h / 2;
+            for (var ix = 0; ix < divX; ix++) {
+                for (var s = 1; s < subTicks; s++) {
+                    var sx = ix * cellW + s * (cellW / subTicks);
+                    ctx.beginPath();
+                    ctx.moveTo(sx, midY - tickLen);
+                    ctx.lineTo(sx, midY + tickLen);
+                    ctx.stroke();
                 }
             }
+
+            // Subtick marks along center vertical axis
+            var midX = w / 2;
+            for (var iy = 0; iy < divY; iy++) {
+                for (var s = 1; s < subTicks; s++) {
+                    var sy = iy * cellH + s * (cellH / subTicks);
+                    ctx.beginPath();
+                    ctx.moveTo(midX - tickLen, sy);
+                    ctx.lineTo(midX + tickLen, sy);
+                    ctx.stroke();
+                }
+            }
+
+            // Brighter center crosshair
+            ctx.strokeStyle = 'rgba(0, 255, 100, 0.2)';
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
+            ctx.moveTo(0, midY);
+            ctx.lineTo(w, midY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(midX, 0);
+            ctx.lineTo(midX, h);
+            ctx.stroke();
+        }
+
+        function drawFrame() {
+            var w = oscilloscopeCanvas.getBoundingClientRect().width;
+            var h = oscilloscopeCanvas.getBoundingClientRect().height;
+            var isPlaying = !recapAudio.paused;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Graticule
+            drawGraticule(w, h);
+
+            // Waveform trace
+            ctx.beginPath();
+            ctx.strokeStyle = '#00ff64';
+            ctx.lineWidth = 1.5;
+            ctx.shadowColor = 'rgba(0, 255, 100, 0.8)';
+            ctx.shadowBlur = 6;
+
+            if (isPlaying && analyserNode && timeData) {
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                analyserNode.getByteTimeDomainData(timeData);
+                var sliceWidth = w / timeData.length;
+                var x = 0;
+                for (var i = 0; i < timeData.length; i++) {
+                    var v = timeData[i] / 128.0;
+                    var y = (v * h) / 2;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                    x += sliceWidth;
+                }
+            } else {
+                // Idle: flat trace with subtle noise
+                var mid = h / 2;
+                for (var x = 0; x < w; x++) {
+                    var noise = (Math.random() - 0.5) * 1.2;
+                    if (x === 0) ctx.moveTo(x, mid + noise);
+                    else ctx.lineTo(x, mid + noise);
+                }
+            }
+
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            oscAnimId = requestAnimationFrame(drawFrame);
+        }
+
+        recapAudio.addEventListener('play', function() {
+            if (!initialized) initAudio();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         });
-    });
-    
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        drawFrame();
+    })();
+
     // Initialize date display transition and current station
     dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-    if (stationLightsContainer) {
-        stationLightsContainer.setAttribute('data-current-station', '9');
-    }
 
     cacheTunerMarkerPositions();
     window.addEventListener('resize', cacheTunerMarkerPositions);

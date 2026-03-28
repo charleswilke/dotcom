@@ -107,19 +107,19 @@
                         </div>
                     </div>
                 </div>
-                <a href="/tootsjam/" class="showcase-item showcase-item-game">
+                <a href="/spacetoots/" class="showcase-item showcase-item-game">
                     <div class="showcase-media">
-                        <img src="images/tootsjam.jpg" alt="Toots Jam" width="960" height="720" loading="lazy" decoding="async">
+                        <img src="images/space-toots.jpg" alt="Space Toots arcade game" width="2752" height="1536" loading="lazy" decoding="async">
                     </div>
                     <div class="showcase-caption">
                         <div class="showcase-caption-topline">
                             <span class="showcase-kicker">Recently 03</span>
                             <span class="showcase-meta">Browser Game</span>
                         </div>
-                        <h3>Toots Jam</h3>
-                        <p>Arcade free-throw action with loud cabinet energy.</p>
+                        <h3>Space Toots</h3>
+                        <p>Synthwave bullet-hell through the void. Dodge, shoot, and toot.</p>
                         <div class="showcase-footer">
-                            <span class="showcase-cta">Play the cabinet</span>
+                            <span class="showcase-cta">Launch the arcade</span>
                         </div>
                     </div>
                 </a>
@@ -155,26 +155,10 @@
                 </div>
             </div>
             <div class="about-content">
-                <h2 class="about-title">About Me</h2>
-                <p>As a Senior Product Designer at Toast, I focus on generative AI's impact on user outcomes.</p>
-                <br />
-                <p>As the founder of <a href="https://fellowvector.com" target="_blank" class="doc-link" rel="noopener noreferrer">Fellow Vector</a>, I provide training and strategy to businesses adopting AI.</p>
-                <br />
-                <p>As a Projection Designer for theatrical productions, I blend analog sensibilities to create distinct AI art.</p>
-                <br />
-                <p>I share my life in Omaha with my wife, <a href="https://hausoftoots.com" target="_blank"  class="doc-link" rel="noopener noreferrer">Jessie</a>, and our two dogs, <a href="#" class="doc-link" id="docLightboxLink">Doc</a> and <a href="#" class="doc-link" id="astroLightboxLink">Astro</a>. We spend our evenings watching Yankees games, BBUK, or the latest season of Ru Paul's Drag Race.</p>
-                <div class="about-audio">
-                  <audio id="aboutAudio" src="audio/CharlesWilke-AIoverview.mp3" preload="metadata" style="display:none;"></audio>
-                  <div class="custom-audio-player">
-                    <button id="audioPlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
-                    <div class="audio-progress-container">
-                      <div class="audio-progress-bar">
-                        <div class="audio-progress"></div>
-                      </div>
-                    </div>
-                    <span class="audio-time"><span id="audioCurrent">0:00</span></span>
-                  </div>
-                </div>
+                <p>I'm a Senior Product Designer at Toast, focused on how generative AI reshapes the way people run their businesses.</p>
+                <p>Through <a href="https://fellowvector.com" target="_blank" class="doc-link" rel="noopener noreferrer">Fellow Vector</a>, I train and advise teams navigating their first real AI adoption.</p>
+                <p>On stage, I design projections for theatrical productions, blending analog sensibilities with AI to create something distinct.</p>
+                <p>Home is Omaha, with my wife <a href="https://hausoftoots.com" target="_blank" class="doc-link" rel="noopener noreferrer">Jessie</a> and our two dogs, <a href="#" class="doc-link" id="docLightboxLink">Doc</a> and <a href="#" class="doc-link" id="astroLightboxLink">Astro</a>. Most evenings you'll find us watching Yankees games, BBUK, or the latest season of Ru Paul's Drag Race.</p>
                 <div class="social-links">
                     <a href="https://www.linkedin.com/in/charles-wilke/" target="_blank" rel="noopener noreferrer" class="social-link">LinkedIn</a>
                     <span class="separator">|</span>
@@ -187,6 +171,18 @@
                     <a href="faq.html" class="social-link faq-glitch-link">FAQ</a>
                     <span class="separator">|</span>
                     <a href="mailto:cwilke.inquiry@gmail.com" class="social-link email-glitch-link">Email</a>
+                </div>
+                <div class="about-audio">
+                  <audio id="aboutAudio" src="audio/CharlesWilke-AIoverview.mp3" preload="metadata" style="display:none;"></audio>
+                  <div class="custom-audio-player">
+                    <button id="audioPlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
+                    <div class="audio-progress-container">
+                      <div class="audio-progress-bar">
+                        <div class="audio-progress"></div>
+                      </div>
+                    </div>
+                    <span class="audio-time"><span id="audioCurrent">0:00</span></span>
+                  </div>
                 </div>
             </div>
         </div>
@@ -217,18 +213,9 @@
                                         <!-- Radio Tuner Display with embedded lights -->
                                         <div class="radio-tuner-display">
                                             <div class="tuner-glass">
-                                                <!-- Station Lights Ring (embedded in display) -->
-                                                <div class="station-lights-ring" id="station-lights">
-                                                    <span class="station-light" data-station="0" style="--angle: 220deg"></span>
-                                                    <span class="station-light" data-station="1" style="--angle: 256deg"></span>
-                                                    <span class="station-light" data-station="2" style="--angle: 292deg"></span>
-                                                    <span class="station-light" data-station="3" style="--angle: 328deg"></span>
-                                                    <span class="station-light" data-station="4" style="--angle: 4deg"></span>
-                                                    <span class="station-light" data-station="5" style="--angle: 40deg"></span>
-                                                    <span class="station-light" data-station="6" style="--angle: 76deg"></span>
-                                                    <span class="station-light" data-station="7" style="--angle: 112deg"></span>
-                                                    <span class="station-light" data-station="8" style="--angle: 148deg"></span>
-                                                    <span class="station-light active" data-station="9" style="--angle: 184deg"></span>
+                                                <!-- Oscilloscope CRT monitor -->
+                                                <div class="tuner-oscilloscope-frame">
+                                                    <canvas class="tuner-oscilloscope" id="recap-oscilloscope"></canvas>
                                                 </div>
                                                 
                                                 <div class="tuner-indicator" id="tuner-indicator"></div>

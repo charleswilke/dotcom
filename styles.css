@@ -4383,7 +4383,7 @@ html {
 /* Mobile adjustments for dial and tuner */
 @media (max-width: 767px) {
     .time-dial-container {
-        margin-top: 0.8rem;
+        margin-top: 0;
         align-items: center;
     }
     

@@ -1043,7 +1043,7 @@ section.production-header.spotlight-production p {
 /* Showcase Grid */
 .showcase-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.9rem;
     position: relative;
     z-index: 1;
@@ -1288,11 +1288,25 @@ section.production-header.spotlight-production p {
     transform: rotate(-2deg) translateY(0.8rem);
 }
 
+.showcase-item-jc {
+    --showcase-accent: #c27038;
+    --showcase-accent-soft: rgba(194, 112, 56, 0.18);
+    --showcase-media-tint: rgba(194, 112, 56, 0.12);
+    transform: rotate(3.5deg) translateY(-0.1rem);
+}
+
 .showcase-item-gwor {
     --showcase-accent: #b48eff;
     --showcase-accent-soft: rgba(180, 142, 255, 0.18);
     --showcase-media-tint: rgba(180, 142, 255, 0.12);
-    transform: rotate(3.5deg) translateY(-0.1rem);
+    transform: rotate(-2.5deg) translateY(0.2rem);
+}
+
+.showcase-item-tootsjam {
+    --showcase-accent: #44dd88;
+    --showcase-accent-soft: rgba(68, 221, 136, 0.18);
+    --showcase-media-tint: rgba(68, 221, 136, 0.12);
+    transform: rotate(2deg) translateY(0.4rem);
 }
 
 .toast-word {
@@ -1739,7 +1753,7 @@ footer p {
     }
 
     .showcase-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.75rem;
     }
 
@@ -7144,6 +7158,222 @@ section.production-header.alice p {
 #gworLightbox .lightbox-close:hover {
     color: #c54a4a;
     text-shadow: 0 0 10px rgba(197, 74, 74, 0.68);
+}
+
+/* ===== Junkyard Cabaret Theme ===== */
+#jcLightbox .mixtape-content {
+    background: linear-gradient(180deg,
+        rgba(22, 14, 8, 0.97) 0%,
+        rgba(36, 22, 12, 0.98) 50%,
+        rgba(16, 10, 6, 0.97) 100%);
+    border-color: rgba(194, 112, 56, 0.35);
+    box-shadow:
+        0 0 40px rgba(0, 0, 0, 0.8),
+        inset 0 0 100px rgba(0, 0, 0, 0.8),
+        0 0 24px rgba(194, 112, 56, 0.18);
+}
+
+#jcLightbox .mixtape-cover-container::after {
+    border-color: rgba(194, 112, 56, 0.34);
+}
+
+#jcLightbox .mixtape-title {
+    color: #c27038;
+    text-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.9),
+        0 -1px 0 rgba(74, 38, 14, 0.45),
+        0 0 14px rgba(194, 112, 56, 0.32);
+}
+
+#jcLightbox .mixtape-subtitle {
+    color: rgba(210, 190, 160, 0.9);
+    text-shadow: 0 0 10px rgba(210, 190, 160, 0.28);
+}
+
+#jcLightbox .mixtape-current-track {
+    color: rgba(245, 230, 208, 0.92);
+    text-shadow: 0 0 5px rgba(245, 230, 208, 0.24);
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(28, 18, 10, 0.9) 15%,
+        rgba(28, 18, 10, 0.96) 50%,
+        rgba(28, 18, 10, 0.9) 85%,
+        transparent 100%);
+}
+
+#jcLightbox .mixtape-current-track::before {
+    color: #c27038;
+}
+
+#jcLightbox .mixtape-playlist {
+    background: rgba(16, 10, 6, 0.55);
+    border-color: rgba(194, 112, 56, 0.2);
+}
+
+#jcLightbox .mixtape-track-item:hover {
+    background: rgba(194, 112, 56, 0.12);
+    border-color: rgba(194, 112, 56, 0.28);
+    color: rgba(255, 240, 220, 0.95);
+}
+
+#jcLightbox .mixtape-track-item.active {
+    background: linear-gradient(90deg,
+        rgba(194, 112, 56, 0.26) 0%,
+        transparent 100%);
+    border-left-color: #c27038;
+    color: rgba(255, 240, 220, 0.96);
+    text-shadow: 0 0 8px rgba(194, 112, 56, 0.28);
+}
+
+#jcLightbox .track-number {
+    color: rgba(210, 190, 160, 0.78);
+}
+
+#jcLightbox .mixtape-track-item.active .track-number {
+    color: #c27038;
+}
+
+#jcLightbox .track-article-link,
+#jcLightbox .track-share-button {
+    background: linear-gradient(180deg,
+        rgba(100, 68, 40, 0.22) 0%,
+        rgba(66, 44, 26, 0.18) 100%);
+    border-color: rgba(194, 142, 90, 0.4);
+    color: rgba(240, 224, 200, 0.82);
+    box-shadow: inset 0 0 10px rgba(20, 12, 6, 0.42);
+}
+
+#jcLightbox .track-article-label,
+#jcLightbox .track-share-label {
+    letter-spacing: 0.1em;
+    opacity: 0.92;
+}
+
+#jcLightbox .track-article-link:hover,
+#jcLightbox .track-share-button:hover,
+#jcLightbox .track-article-link:focus-visible,
+#jcLightbox .track-share-button:focus-visible {
+    background: linear-gradient(180deg,
+        rgba(140, 96, 56, 0.28) 0%,
+        rgba(94, 64, 38, 0.24) 100%);
+    border-color: rgba(220, 170, 120, 0.75);
+    color: rgba(255, 245, 230, 0.96);
+    box-shadow:
+        0 0 10px rgba(194, 142, 90, 0.28),
+        0 0 20px rgba(194, 142, 90, 0.2),
+        inset 0 0 8px rgba(220, 170, 120, 0.16);
+}
+
+#jcLightbox .mixtape-track-item.active .track-article-link,
+#jcLightbox .mixtape-track-item.active .track-share-button {
+    border-color: rgba(220, 170, 120, 0.6);
+    color: rgba(255, 245, 230, 0.92);
+}
+
+#jcLightbox .mixtape-track-item.active .track-article-link:hover,
+#jcLightbox .mixtape-track-item.active .track-share-button:hover,
+#jcLightbox .mixtape-track-item.active .track-article-link:focus-visible,
+#jcLightbox .mixtape-track-item.active .track-share-button:focus-visible {
+    color: #fff8f0;
+    box-shadow:
+        0 0 12px rgba(220, 170, 120, 0.35),
+        0 0 24px rgba(220, 170, 120, 0.24),
+        inset 0 0 10px rgba(230, 190, 140, 0.24);
+}
+
+#jcLightbox .mixtape-audio-controls {
+    background: linear-gradient(180deg,
+        rgba(22, 14, 8, 0.86) 0%,
+        rgba(36, 22, 12, 0.74) 50%,
+        rgba(22, 14, 8, 0.86) 100%);
+    border-color: rgba(194, 112, 56, 0.34);
+    box-shadow:
+        inset 3px 3px 8px rgba(0, 0, 0, 0.8),
+        inset -2px -2px 6px rgba(210, 190, 160, 0.12),
+        0 0 14px rgba(194, 112, 56, 0.18);
+}
+
+#jcLightbox .mixtape-audio-controls:hover {
+    border-color: rgba(210, 130, 66, 0.55);
+    box-shadow:
+        inset 3px 3px 8px rgba(0, 0, 0, 0.8),
+        inset -2px -2px 6px rgba(210, 190, 160, 0.12),
+        0 0 20px rgba(210, 130, 66, 0.26);
+}
+
+#jcLightbox .mixtape-audio-controls .audio-btn,
+#jcLightbox .mixtape-nav-btn {
+    background: linear-gradient(180deg,
+        rgba(194, 112, 56, 0.24) 0%,
+        rgba(194, 112, 56, 0.12) 50%,
+        rgba(194, 112, 56, 0.24) 100%);
+    color: rgba(255, 240, 220, 0.86);
+    border-color: rgba(194, 112, 56, 0.4);
+}
+
+#jcLightbox .mixtape-audio-controls .audio-btn:hover,
+#jcLightbox .mixtape-nav-btn:hover {
+    color: rgba(255, 240, 220, 1);
+    border-color: rgba(210, 130, 66, 0.82);
+    box-shadow: 0 0 14px rgba(210, 130, 66, 0.36);
+    text-shadow: 0 0 6px rgba(210, 130, 66, 0.5);
+    background: linear-gradient(180deg,
+        rgba(210, 130, 66, 0.32) 0%,
+        rgba(194, 112, 56, 0.2) 50%,
+        rgba(210, 130, 66, 0.32) 100%);
+}
+
+#jcLightbox .audio-icon {
+    color: rgba(255, 240, 220, 0.9);
+}
+
+#jcLightbox .mixtape-audio-controls .audio-progress-bar {
+    border-color: rgba(210, 190, 160, 0.3);
+    background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0.62) 0%,
+        rgba(28, 18, 10, 0.82) 50%,
+        rgba(0, 0, 0, 0.62) 100%);
+}
+
+#jcLightbox .mixtape-audio-controls .audio-progress {
+    background: linear-gradient(90deg,
+        rgba(139, 26, 26, 0.96) 0%,
+        rgba(245, 230, 208, 1) 50%,
+        rgba(194, 112, 56, 0.96) 100%);
+    box-shadow:
+        0 0 8px rgba(194, 112, 56, 0.5),
+        0 0 15px rgba(210, 130, 66, 0.35);
+}
+
+#jcLightbox .mixtape-audio-controls .audio-time {
+    color: rgba(245, 230, 208, 0.9);
+    text-shadow: 0 0 6px rgba(245, 230, 208, 0.28);
+}
+
+#jcLightbox .mixtape-lyrics-video-container {
+    border-color: rgba(194, 112, 56, 0.26);
+    box-shadow:
+        inset 0 0 30px rgba(0, 0, 0, 0.82),
+        0 0 14px rgba(194, 112, 56, 0.16);
+}
+
+#jcLightbox .lyrics-video-overlay {
+    box-shadow: inset 0 0 20px rgba(194, 112, 56, 0.14);
+}
+
+#jcLightbox .lightbox-close {
+    color: rgba(210, 190, 160, 0.8);
+}
+
+#jcLightbox .lightbox-close:hover {
+    color: #c27038;
+    text-shadow: 0 0 10px rgba(194, 112, 56, 0.68);
+}
+
+/* Junkyard Cabaret scrollbar (rust) */
+#jcLightbox .mixtape-playlist,
+#jcLightbox .mixtape-content {
+    scrollbar-color: rgba(194, 112, 56, 0.5) transparent;
 }
 
 .mixtape-player-container {

@@ -42,7 +42,9 @@
       "Bash(printf '%s\\\\n' 'boogers')",
       "Bash(SSH_ASKPASS=/bin/cat DISPLAY='' ssh-add ~/.ssh/id_ed25519)",
       "Bash(ls -la /c/Users/cwilk/OneDrive/Desktop/WWW/*.html /c/Users/cwilk/OneDrive/Desktop/WWW/*.css /c/Users/cwilk/OneDrive/Desktop/WWW/*.js)",
-      "Bash(mar.*2026)"
+      "Bash(mar.*2026)",
+      "Bash(python -c \"import json; data=json.load\\(open\\(''cache_substack_feed.json''\\)\\); print\\(type\\(data\\)\\); print\\(list\\(data.keys\\(\\)\\)[:5] if isinstance\\(data, dict\\) else ''list''\\)\")",
+      "Bash(python -c \":*)"
     ]
   }
 }

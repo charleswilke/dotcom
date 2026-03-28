@@ -27,7 +27,7 @@
     <meta name="twitter:description" content="Conversational UX Product Designer & Projection Artist specializing in AI integration and theatrical projection design.">
     <meta name="twitter:image" content="https://charleswilke.com/images/cw3.jpg">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="styles.css?v=20260323">
+    <link rel="stylesheet" href="styles.css?v=20260328">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/gif" href="/favicon.gif">
@@ -60,7 +60,7 @@
       ]
     }
     </script>
-    <script src="/nav.js?v=20260323"></script>
+    <script src="/nav.js?v=20260328"></script>
 
     <header>
         <div class="header-bg"></div>
@@ -123,13 +123,29 @@
                         </div>
                     </div>
                 </a>
+                <div class="showcase-item showcase-item-jc" id="jcTile">
+                    <div class="showcase-media">
+                        <img src="audio/junkyard-cabaret/junkyard-cabaret-cover.jpg" alt="Junkyard Cabaret album cover" width="800" height="800" loading="lazy" decoding="async">
+                    </div>
+                    <div class="showcase-caption">
+                        <div class="showcase-caption-topline">
+                            <span class="showcase-kicker">Recently 04</span>
+                            <span class="showcase-meta">Album in Progress</span>
+                        </div>
+                        <h3>Junkyard Cabaret</h3>
+                        <p>Songs scavenged from the wreckage. A cabaret of salvaged parts.</p>
+                        <div class="showcase-footer">
+                            <span class="showcase-cta">Open the Album</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="showcase-item showcase-item-gwor" id="gworTile">
                     <div class="showcase-media">
                         <img src="audio/grief-without-ritual/grief-without-ritual-cover.jpg" alt="Grief without Ritual album cover" width="800" height="800" loading="lazy" decoding="async">
                     </div>
                     <div class="showcase-caption">
                         <div class="showcase-caption-topline">
-                            <span class="showcase-kicker">Recently 04</span>
+                            <span class="showcase-kicker">Recently 05</span>
                             <span class="showcase-meta">Album Experience</span>
                         </div>
                         <h3>Grief without Ritual</h3>
@@ -139,6 +155,22 @@
                         </div>
                     </div>
                 </div>
+                <a href="/tootsjam/" class="showcase-item showcase-item-tootsjam">
+                    <div class="showcase-media">
+                        <img src="images/tootsjam.jpg" alt="TootsJam arcade game" width="800" height="800" loading="lazy" decoding="async">
+                    </div>
+                    <div class="showcase-caption">
+                        <div class="showcase-caption-topline">
+                            <span class="showcase-kicker">Recently 06</span>
+                            <span class="showcase-meta">Arcade Game</span>
+                        </div>
+                        <h3>TootsJam</h3>
+                        <p>Rhythm-fueled arcade chaos. Dodge, jam, and chase the leaderboard.</p>
+                        <div class="showcase-footer">
+                            <span class="showcase-cta">Play the game</span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -491,6 +523,57 @@
         </div>
     </div>
 
+    <!-- Junkyard Cabaret Lightbox -->
+    <div class="lightbox mixtape-lightbox" id="jcLightbox">
+        <button class="lightbox-close" id="jcClose" aria-label="Close Junkyard Cabaret player">&times;</button>
+        <div class="mixtape-content">
+            <div class="mixtape-left-section">
+                <div class="mixtape-cover-container">
+                    <img src="audio/junkyard-cabaret/junkyard-cabaret-cover.jpg" alt="Junkyard Cabaret Cover" class="mixtape-cover" id="jcCoverImg" width="800" height="800" loading="lazy" decoding="async">
+                </div>
+                <div class="mixtape-side-toggle-container">
+                    <h2 class="mixtape-title mixtape-mobile-title">Junkyard Cabaret <span class="mixtape-subtitle">Album</span></h2>
+                    <div class="mixtape-now-playing"></div>
+                    <div class="mixtape-credits">All Songs Written & Produced by Charles Wilke x Claude 4.6 Opus x Suno v5.5</div>
+                </div>
+                <div class="mixtape-player-container">
+                    <div class="mixtape-track-visualizer">
+                        <canvas id="jcVisualizer" class="audio-visualizer"></canvas>
+                        <div class="mixtape-current-track" id="jcCurrentTrack">Select a track...</div>
+                    </div>
+
+                    <div class="custom-audio-player mixtape-audio-controls">
+                        <button id="jcPrev" class="mixtape-nav-btn" aria-label="Previous Track"><span class="track-skip prev"></span></button>
+                        <button id="jcPlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">&#9654;</span></button>
+                        <button id="jcNext" class="mixtape-nav-btn" aria-label="Next Track"><span class="track-skip next"></span></button>
+                        <div class="audio-progress-container" id="jcProgressContainer">
+                            <div class="audio-progress-bar">
+                                <div class="audio-progress" id="jcProgressBar"></div>
+                            </div>
+                        </div>
+                        <span class="audio-time"><span id="jcTime">0:00</span></span>
+                    </div>
+                    <audio id="jcAudio" class="custom-audio" preload="metadata"></audio>
+
+                    <!-- Lyric Video Display -->
+                    <div class="mixtape-lyrics-video-container" id="jcLyricsVideoContainer">
+                        <video id="jcLyricsVideo" class="lyrics-video" muted playsinline></video>
+                        <div class="lyrics-video-overlay"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mixtape-right-section">
+                <h2 class="mixtape-title">Junkyard Cabaret <span class="mixtape-subtitle">Album</span></h2>
+                <div class="mixtape-playlist">
+                    <ul id="jcTrackList">
+                        <!-- Tracks will be populated by JS -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Grief without Ritual Lightbox -->
     <div class="lightbox mixtape-lightbox" id="gworLightbox">
         <button class="lightbox-close" id="gworClose" aria-label="Close Grief without Ritual player">&times;</button>
@@ -547,8 +630,8 @@
         </div>
     </div>
     
-    <script src="common.js?v=20260323" defer></script>
-    <script src="karaoke.js?v=20260323" defer></script>
-    <script src="main.js?v=20260323" defer></script>
+    <script src="common.js?v=20260328" defer></script>
+    <script src="karaoke.js?v=20260328" defer></script>
+    <script src="main.js?v=20260328" defer></script>
 </body>
 </html>

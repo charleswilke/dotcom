@@ -201,23 +201,23 @@
                     <div class="audio-summary-content">
                         <div class="audio-summary-layout">
                             <div class="audio-summary-left">
-                                <div class="audio-summary-header">
-                                    <h4 class="audio-summary-title">
-                                        <span class="wood-letter">R</span><span class="wood-letter">e</span><span class="wood-letter">c</span><span class="wood-letter">e</span><span class="wood-letter">n</span><span class="wood-letter">t</span><span class="wood-letter">l</span><span class="wood-letter">y</span><span class="wood-letter">&nbsp;</span><span class="wood-letter">o</span><span class="wood-letter">n</span>&nbsp;<span class="wood-letter">E</span><span class="wood-letter">x</span><span class="wood-letter">p</span><span class="wood-letter">l</span><span class="wood-letter">o</span><span class="wood-letter">r</span><span class="wood-letter">i</span><span class="wood-letter">n</span><span class="wood-letter">g</span><span class="wood-letter">&nbsp;</span><span class="wood-letter">L</span><span class="wood-letter">.</span><span class="wood-letter">a</span><span class="wood-letter">i</span><span class="wood-letter">.</span><span class="wood-letter">b</span><span class="wood-letter">o</span><span class="wood-letter">r</span>
-                                    </h4>
-                                </div>
-                                
                                 <!-- Time Dial Control -->
                                 <div class="time-dial-container">
                                     <div class="time-dial-layout">
                                         <!-- Radio Tuner Display with embedded lights -->
                                         <div class="radio-tuner-display">
                                             <div class="tuner-glass">
-                                                <!-- Oscilloscope CRT monitor -->
+                                                <!-- Oscilloscope CRT monitor — horizontal, includes title -->
                                                 <div class="tuner-oscilloscope-frame">
                                                     <canvas class="tuner-oscilloscope" id="recap-oscilloscope"></canvas>
+                                                    <div class="oscilloscope-title">Recently on Exploring L.ai.bor</div>
+                                                    <div class="oscilloscope-meta">
+                                                        <span class="oscilloscope-meta-coverage">Recap Podcast</span>
+                                                        <span class="oscilloscope-meta-sep">•</span>
+                                                        <span class="oscilloscope-meta-date" id="oscilloscope-recap-date">March 2026</span>
+                                                    </div>
                                                 </div>
-                                                
+
                                                 <div class="tuner-indicator" id="tuner-indicator"></div>
                                                 <div class="tuner-scale">
                                                     <div class="scale-marker scale-major scale-clickable" data-period="Q3 '23" data-station="0"><span class="marker-label">Q3<br>2023</span></div>
@@ -238,9 +238,14 @@
                                                     <div class="scale-marker scale-minor"></div>
                                                     <div class="scale-marker scale-major scale-clickable" data-period="Jan '26" data-station="8"><span class="marker-label">JAN<br>2026</span></div>
                                                     <div class="scale-marker scale-minor"></div>
-                                                    <div class="scale-marker scale-major scale-clickable label-top active" data-period="Feb '26" data-station="9"><span class="marker-label">FEB<br>2026</span></div>
-                                                    <!-- Bonus LED - Opens Mixtape -->
-                                                    <div class="tuner-led" id="redButtonWrapper" title="Something extra..."></div>
+                                                    <div class="scale-marker scale-major scale-clickable label-top" data-period="Feb '26" data-station="9"><span class="marker-label">FEB<br>2026</span></div>
+                                                    <div class="scale-marker scale-minor"></div>
+                                                    <div class="scale-marker scale-major scale-clickable active" data-period="Mar '26" data-station="10"><span class="marker-label">MAR<br>2026</span></div>
+                                                    <!-- Bonus LEDs -->
+                                                    <div class="tuner-led-group">
+                                                        <div class="tuner-led" id="redButtonWrapper" title="Something extra..."></div>
+                                                        <div class="tuner-led tuner-led-grey" id="gworButtonWrapper" title="Grief Without Ritual"></div>
+                                                    </div>
                                                 </div>
                                                 <div class="tuner-reflection"></div>
                                             </div>
@@ -252,10 +257,10 @@
                                 <div class="audio-summary-meta">
                                     <span class="summary-coverage">Recap Podcast</span>
                                     <span class="summary-separator">•</span>
-                                    <span class="summary-date" id="current-recap-date">February 2026</span>
+                                    <span class="summary-date" id="current-recap-date">March 2026</span>
                                 </div>
                                 <div class="audio-summary-player">
-                                    <audio id="recap-audio" class="custom-audio" src="audio/feb-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
+                                    <audio id="recap-audio" class="custom-audio" src="audio/mar-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
                                     <div class="custom-audio-player">
                                         <button class="audio-btn audio-summary-btn" aria-label="Play/Pause Audio Summary">
                                             <span class="audio-icon">▶</span>

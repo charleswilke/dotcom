@@ -666,6 +666,12 @@ function initTimeDial() {
             date: 'February 2026',
             file: 'audio/feb-2026-substack-recap.mp3',
             label: 'FEB \'26'
+        },
+        {
+            angle: 40,
+            date: 'March 2026',
+            file: 'audio/mar-2026-substack-recap.mp3',
+            label: 'MAR \'26'
         }
     ];
     
@@ -682,7 +688,7 @@ function initTimeDial() {
         'audio/radio_tuning9.mp3'
     ];
     
-    let currentStation = 9; // Start at station 9 (Feb '26)
+    let currentStation = 10; // Start at station 10 (Mar '26)
     const oscilloscopeCanvas = document.getElementById('recap-oscilloscope');
     const dateDisplay = document.getElementById('current-recap-date');
     const recapAudio = document.getElementById('recap-audio');
@@ -765,6 +771,9 @@ function initTimeDial() {
             dateDisplay.textContent = station.date;
             dateDisplay.style.opacity = '1';
             dateDisplay.style.transform = 'translateY(0)';
+            // Update oscilloscope meta date too
+            var oscDate = document.getElementById('oscilloscope-recap-date');
+            if (oscDate) oscDate.textContent = station.date;
         }, 150);
         
         // Pause current audio and switch source
@@ -1028,9 +1037,9 @@ function initTimeDial() {
             // Waveform trace
             ctx.beginPath();
             ctx.strokeStyle = '#00ff64';
-            ctx.lineWidth = 1.5;
-            ctx.shadowColor = 'rgba(0, 255, 100, 0.8)';
-            ctx.shadowBlur = 6;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = 'rgba(0, 255, 100, 0.9)';
+            ctx.shadowBlur = 10;
 
             if (isPlaying && analyserNode && timeData) {
                 if (audioCtx && audioCtx.state === 'suspended') {
@@ -1039,9 +1048,13 @@ function initTimeDial() {
                 analyserNode.getByteTimeDomainData(timeData);
                 var sliceWidth = w / timeData.length;
                 var x = 0;
+                var gain = 3.0; // Amplify signal for wider display
+                var mid = h / 2;
                 for (var i = 0; i < timeData.length; i++) {
-                    var v = timeData[i] / 128.0;
-                    var y = (v * h) / 2;
+                    var v = (timeData[i] / 128.0) - 1.0; // Center around 0
+                    var y = mid + (v * mid * gain); // Amplified displacement
+                    // Soft clamp to keep within bounds
+                    y = Math.max(2, Math.min(h - 2, y));
                     if (i === 0) ctx.moveTo(x, y);
                     else ctx.lineTo(x, y);
                     x += sliceWidth;
@@ -1050,7 +1063,7 @@ function initTimeDial() {
                 // Idle: flat trace with subtle noise
                 var mid = h / 2;
                 for (var x = 0; x < w; x++) {
-                    var noise = (Math.random() - 0.5) * 1.2;
+                    var noise = (Math.random() - 0.5) * 1.5;
                     if (x === 0) ctx.moveTo(x, mid + noise);
                     else ctx.lineTo(x, mid + noise);
                 }
@@ -1079,11 +1092,11 @@ function initTimeDial() {
     window.addEventListener('resize', cacheTunerMarkerPositions);
     
     // Initialize station (date display, audio source, etc.)
-    updateStation(9);
-    
+    updateStation(10);
+
     // Initialize tuner indicator position
     setTimeout(() => {
-        updateTunerIndicator(9);
+        updateTunerIndicator(10);
     }, 100);
     
     // Add click handlers to clickable scale markers
@@ -2777,6 +2790,7 @@ function initDeferredHomepageMedia() {
     const mixtapeTile = document.getElementById('mixtapeTile');
     const gworTile = document.getElementById('gworTile');
     const redButtonWrapper = document.getElementById('redButtonWrapper');
+    const gworButtonWrapper = document.getElementById('gworButtonWrapper');
     const initialRoute = parseMusicHash();
 
     bindLazyMediaTrigger(mixtapeTile, ensureMixtapeLightbox, (instance) => {
@@ -2792,6 +2806,24 @@ function initDeferredHomepageMedia() {
     bindLazyMediaTrigger(gworTile, ensureGWORLightbox, (instance) => {
         instance.open();
     });
+
+    // GWOR grey LED — persistent click handler (bindLazyMediaTrigger is once-only)
+    if (gworButtonWrapper) {
+        const gworFoundSound = new Audio('audio/mixtape-found.mp3');
+        gworFoundSound.volume = 0.6;
+
+        gworButtonWrapper.addEventListener('click', () => {
+            gworButtonWrapper.classList.add('pressed');
+            gworFoundSound.currentTime = 0;
+            gworFoundSound.play().catch(() => {});
+
+            setTimeout(() => {
+                gworButtonWrapper.classList.remove('pressed');
+                const instance = ensureGWORLightbox();
+                if (instance) instance.open();
+            }, 300);
+        });
+    }
 
     if (initialRoute && initialRoute.player === 'mixtape') {
         ensureMixtapeLightbox();

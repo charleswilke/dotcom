@@ -2759,7 +2759,7 @@ html {
     }
     
     .audio-summary-card.expanded {
-        max-height: 300px;
+        max-height: 500px;
         opacity: 1;
         margin-top: 0;
         transform: translateY(0);
@@ -4401,7 +4401,7 @@ html {
     
     
     .radio-tuner-display {
-        width: 340px;
+        width: 100%;
     }
 
     .tuner-glass {
@@ -4412,16 +4412,27 @@ html {
         height: 100%;
     }
 
+    .tuner-glass {
+        height: 155px;
+    }
+
+    .oscilloscope-title {
+        letter-spacing: 1.5px;
+        font-size: 0.55rem;
+    }
+
     .tuner-oscilloscope-frame {
-        width: 90px;
+        height: 80px;
     }
 
     .tuner-scale {
-        padding: 0 18px 0 108px;
+        top: 95px;
+        padding: 0 18px;
     }
 
     .tuner-scale::before {
-        left: 108px;
+        left: 18px;
+        right: 18px;
     }
 
     .tuner-title {
@@ -4490,11 +4501,11 @@ html {
     }
 
     .radio-tuner-display {
-        width: 360px;
+        width: 100%;
     }
 
     .tuner-glass {
-        height: 120px;
+        height: 165px;
     }
 
     .tuner-indicator {
@@ -4511,15 +4522,17 @@ html {
     }
 
     .tuner-oscilloscope-frame {
-        width: 90px;
+        height: 90px;
     }
 
     .tuner-scale {
-        padding: 0 18px 0 110px;
+        top: 105px;
+        padding: 0 20px;
     }
 
     .tuner-scale::before {
-        left: 110px;
+        left: 20px;
+        right: 20px;
     }
 
     .tuner-title {

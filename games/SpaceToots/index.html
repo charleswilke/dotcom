@@ -292,6 +292,7 @@ const particles = [];
 const pickups = [];
 const xpOrbs = [];
 const spaceMines = [];
+const secondaryProjectiles = [];
 
 // === PARALLAX BACKGROUND ===
 // Layer 1: Distant star field
@@ -348,29 +349,154 @@ function generateTerrain(segWidth, baseY, jaggedness, craterChance, craterMaxW, 
   return points;
 }
 
-// Terrain layer config: { speed, baseY, color, fillColor, jaggedness, segWidth }
+// Build a per-vertex jitter/shade grid for faceted terrain mesh
+function buildTerrainMeshGrid(layer) {
+  let seed = 54321 + layer.meshRows * 7; // different seed per layer
+  function srand() { seed = (seed * 16807 + 0) % 2147483647; return (seed & 0x7fffffff) / 2147483647; }
+  const cols = layer.points.length;
+  const grid = [];
+  for (let c = 0; c < cols; c++) {
+    const col = [];
+    for (let r = 0; r <= layer.meshRows; r++) {
+      col.push({
+        jx: (srand() - 0.5) * layer.meshJitterX,
+        jy: (srand() - 0.5) * layer.meshJitterY,
+        shade: srand()
+      });
+    }
+    grid.push(col);
+  }
+  return grid;
+}
+
+// Compute vertex position for terrain mesh
+function getTerrainVertPos(layer, col, row) {
+  const pt = layer.points[col];
+  const g = layer.meshGrid[col][row];
+  // Row 0 = ridgeline, row meshRows = screen bottom
+  const t = row / layer.meshRows;
+  const baseY = pt.y + (CONFIG.height - pt.y) * t;
+  // Jitter tapers: full at ridge (row 0), minimal at bottom
+  const edgeFactor = 1.0 - t * 0.85;
+  return {
+    x: pt.x + g.jx * edgeFactor,
+    y: baseY + g.jy * edgeFactor,
+    shade: g.shade
+  };
+}
+
+// Pre-render a terrain layer's faceted mesh to an offscreen canvas
+function renderTerrainMeshToCanvas(layer) {
+  const cvs = document.createElement('canvas');
+  cvs.width = terrainWidth;
+  cvs.height = CONFIG.height;
+  const c = cvs.getContext('2d');
+  const pts = layer.points;
+  const bR = layer.meshBaseR, bG = layer.meshBaseG, bB = layer.meshBaseB;
+  const mR = layer.meshBrightR, mG = layer.meshBrightG, mB = layer.meshBrightB;
+
+  c.lineWidth = 0.5;
+
+  for (let col = 0; col < pts.length - 1; col++) {
+    for (let row = 0; row < layer.meshRows; row++) {
+      const tl = getTerrainVertPos(layer, col, row);
+      const tr = getTerrainVertPos(layer, col + 1, row);
+      const bl = getTerrainVertPos(layer, col, row + 1);
+      const br = getTerrainVertPos(layer, col + 1, row + 1);
+
+      // Depth: 1.0 at ridge (row 0), 0.0 at bottom
+      const depthT = 1.0 - row / layer.meshRows;
+
+      // Triangle 1: tl, tr, bl
+      const s1 = (tl.shade + tr.shade + bl.shade) / 3;
+      const b1 = depthT * 0.5 + s1 * 0.35;
+      const r1 = Math.floor(bR + b1 * mR);
+      const g1 = Math.floor(bG + b1 * mG);
+      const b1c = Math.floor(bB + b1 * mB);
+      c.fillStyle = `rgb(${r1},${g1},${b1c})`;
+      c.strokeStyle = `rgba(${r1 + 12},${g1 + 8},${b1c + 15},0.3)`;
+      c.beginPath();
+      c.moveTo(tl.x, tl.y);
+      c.lineTo(tr.x, tr.y);
+      c.lineTo(bl.x, bl.y);
+      c.closePath();
+      c.fill();
+      c.stroke();
+
+      // Triangle 2: tr, br, bl
+      const s2 = (tr.shade + br.shade + bl.shade) / 3;
+      const b2 = depthT * 0.5 + s2 * 0.35;
+      const r2 = Math.floor(bR + b2 * mR * 0.9);
+      const g2 = Math.floor(bG + b2 * mG * 0.9);
+      const b2c = Math.floor(bB + b2 * mB * 0.9);
+      c.fillStyle = `rgb(${r2},${g2},${b2c})`;
+      c.strokeStyle = `rgba(${r2 + 12},${g2 + 8},${b2c + 15},0.25)`;
+      c.beginPath();
+      c.moveTo(tr.x, tr.y);
+      c.lineTo(br.x, br.y);
+      c.lineTo(bl.x, bl.y);
+      c.closePath();
+      c.fill();
+      c.stroke();
+    }
+  }
+
+  // Ridgeline stroke
+  c.strokeStyle = layer.ridgeColor;
+  c.lineWidth = layer.ridgeWidth;
+  if (layer.ridgeGlow) {
+    c.shadowColor = 'rgba(0, 247, 194, 0.15)';
+    c.shadowBlur = 6;
+  }
+  c.beginPath();
+  for (let col = 0; col < pts.length; col++) {
+    const v = getTerrainVertPos(layer, col, 0);
+    if (col === 0) c.moveTo(v.x, v.y);
+    else c.lineTo(v.x, v.y);
+  }
+  c.stroke();
+  c.shadowBlur = 0;
+
+  return cvs;
+}
+
+// Terrain layer config
 const terrainLayers = [
   { // Far terrain — slow, dark, tall peaks
     speed: 0.4,
     baseY: CONFIG.height * 0.78,
-    color: 'rgba(60,40,80,0.6)',
-    fillColor: 'rgba(20,12,35,0.7)',
     jaggedness: 45,
     segWidth: 24,
     craterChance: 0.08,
     craterMaxW: 80,
-    craterMaxD: 25
+    craterMaxD: 25,
+    meshRows: 4,
+    meshJitterX: 8,
+    meshJitterY: 6,
+    meshBaseR: 18, meshBaseG: 10, meshBaseB: 30,
+    meshBrightR: 40, meshBrightG: 25, meshBrightB: 45,
+    alpha: 0.7,
+    ridgeColor: 'rgba(60,40,80,0.5)',
+    ridgeWidth: 1,
+    ridgeGlow: false
   },
   { // Near terrain — faster, brighter, closer to bottom
     speed: 1.2,
     baseY: CONFIG.height * 0.88,
-    color: 'rgba(100,60,140,0.5)',
-    fillColor: 'rgba(30,18,50,0.8)',
     jaggedness: 30,
     segWidth: 16,
     craterChance: 0.12,
     craterMaxW: 50,
-    craterMaxD: 18
+    craterMaxD: 18,
+    meshRows: 5,
+    meshJitterX: 12,
+    meshJitterY: 10,
+    meshBaseR: 28, meshBaseG: 16, meshBaseB: 45,
+    meshBrightR: 55, meshBrightG: 35, meshBrightB: 60,
+    alpha: 0.85,
+    ridgeColor: 'rgba(100,60,140,0.6)',
+    ridgeWidth: 1.5,
+    ridgeGlow: true
   }
 ];
 
@@ -382,64 +508,27 @@ for (const layer of terrainLayers) {
     layer.craterChance, layer.craterMaxW, layer.craterMaxD, terrainWidth
   );
   layer.offset = 0;
-  // Add some boulders along the ridgeline
-  layer.boulders = [];
-  for (let i = 0; i < 12; i++) {
-    const bx = Math.random() * terrainWidth;
-    // Sample terrain height at this x
-    const segIdx = Math.min(layer.points.length - 1, Math.floor(bx / layer.segWidth));
-    const terrainY = layer.points[segIdx] ? layer.points[segIdx].y : layer.baseY;
-    layer.boulders.push({
-      x: bx,
-      y: terrainY - Math.random() * 6 - 2,
-      r: Math.random() * 5 + 2
-    });
+  // Seamless tiling: force last point to match first
+  if (layer.points.length > 1) {
+    layer.points[layer.points.length - 1].y = layer.points[0].y;
   }
+  // Build mesh grid and pre-render to offscreen canvas
+  layer.meshGrid = buildTerrainMeshGrid(layer);
+  // Copy first column's grid values to last column for seamless tiling
+  if (layer.meshGrid.length > 1) {
+    layer.meshGrid[layer.meshGrid.length - 1] = layer.meshGrid[0].map(v => ({ ...v }));
+  }
+  layer.meshCanvas = renderTerrainMeshToCanvas(layer);
 }
 
 function drawTerrainLayer(layer) {
-  const pts = layer.points;
   const w = terrainWidth;
   const ox = -(layer.offset % w);
 
   ctx.save();
-  // Draw two copies for seamless tiling
+  ctx.globalAlpha = layer.alpha;
   for (let copy = 0; copy < 2; copy++) {
-    const shift = ox + copy * w;
-
-    // Fill terrain body
-    ctx.fillStyle = layer.fillColor;
-    ctx.beginPath();
-    ctx.moveTo(shift, CONFIG.height); // bottom-left
-    for (const pt of pts) {
-      ctx.lineTo(shift + pt.x, pt.y);
-    }
-    ctx.lineTo(shift + w, CONFIG.height); // bottom-right
-    ctx.closePath();
-    ctx.fill();
-
-    // Ridgeline stroke
-    ctx.strokeStyle = layer.color;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    for (let i = 0; i < pts.length; i++) {
-      const px = shift + pts[i].x;
-      const py = pts[i].y;
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-    }
-    ctx.stroke();
-
-    // Boulders
-    ctx.fillStyle = layer.color;
-    for (const b of layer.boulders) {
-      const bx = shift + b.x;
-      if (bx > -10 && bx < CONFIG.width + 10) {
-        ctx.beginPath();
-        ctx.arc(bx, b.y, b.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
+    ctx.drawImage(layer.meshCanvas, ox + copy * w, 0);
   }
   ctx.restore();
 
@@ -581,7 +670,7 @@ const player = {
   shieldRechargeSeconds: 30,
   scoreMultBonus: 1.0,
   fireRateOverride: null,
-  gravLock: { radius: 50, force: 0.06 }
+  gravLock: { radius: 100, force: 0.18 }
 };
 
 function drawPlayer() {
@@ -884,7 +973,7 @@ function updatePlayer() {
   if (Math.abs(player.vy) < 0.05) player.vy = 0;
 
   // Keep pitch angle in sync with vertical velocity for bullet direction
-  player.pitchAngle = (player.vy / player.maxVel) * 0.35;
+  player.pitchAngle = (player.vy / player.maxVel) * 0.05;
 
   player.x += player.vx;
   player.y += player.vy;
@@ -1004,11 +1093,300 @@ function firePlayerWeapon() {
 
 function spawnPlayerBullet(x, y, vx, vy) {
   if (playerBullets.length >= CONFIG.maxBullets) return;
-  playerBullets.push({ x, y, vx, vy, width: 12, height: 3, alive: true });
+  playerBullets.push({ x, y, vx, vy, width: 18, height: 6, alive: true });
 }
 
+let secondaryFireTimer = 0;
 function fireSecondary() {
-  // Placeholder for secondary weapon system
+  if (!player.secondary || player.secondaryAmmo <= 0 || secondaryFireTimer > 0) return;
+  const type = player.secondary;
+
+  switch (type) {
+    case 'homing': {
+      // Fire a homing missile
+      secondaryProjectiles.push({
+        type: 'homing', x: player.x + 20, y: player.y,
+        vx: 7, vy: 0, life: 300, damage: 3, radius: 8
+      });
+      player.secondaryAmmo--;
+      secondaryFireTimer = 12;
+      break;
+    }
+    case 'wave': {
+      // Fire an expanding wave pulse
+      secondaryProjectiles.push({
+        type: 'wave', x: player.x + 30, y: player.y,
+        vx: 4, vy: 0, life: 90, damage: 2, radius: 20, maxRadius: 60, startRadius: 20
+      });
+      player.secondaryAmmo--;
+      secondaryFireTimer = 20;
+      break;
+    }
+    case 'spread': {
+      // Burst of 7 projectiles in a wide fan
+      for (let i = -3; i <= 3; i++) {
+        const angle = i * 0.18;
+        secondaryProjectiles.push({
+          type: 'spread', x: player.x + 20, y: player.y,
+          vx: 9 * Math.cos(angle), vy: 9 * Math.sin(angle),
+          life: 45, damage: 2, radius: 5
+        });
+      }
+      player.secondaryAmmo--;
+      secondaryFireTimer = 18;
+      break;
+    }
+    case 'shield': {
+      // Activate bubble shield — ammo is duration in frames
+      secondaryProjectiles.push({
+        type: 'shield', x: player.x, y: player.y,
+        vx: 0, vy: 0, life: Math.min(player.secondaryAmmo, 300),
+        damage: 1, radius: 40
+      });
+      player.secondaryAmmo = 0; // consumes all remaining
+      player.secondary = null;
+      secondaryFireTimer = 30;
+      break;
+    }
+    case 'laser': {
+      // Powerful piercing beam — stays active for 40 frames
+      secondaryProjectiles.push({
+        type: 'laser', x: player.x + 25, y: player.y,
+        vx: 0, vy: 0, life: 40, damage: 5, radius: 10,
+        width: CONFIG.width, hitCooldowns: new Map()
+      });
+      player.secondaryAmmo--;
+      secondaryFireTimer = 10;
+      break;
+    }
+  }
+  if (player.secondaryAmmo <= 0 && player.secondary) {
+    player.secondary = null;
+  }
+}
+
+function updateSecondaryProjectiles() {
+  if (secondaryFireTimer > 0) secondaryFireTimer--;
+  for (let i = secondaryProjectiles.length - 1; i >= 0; i--) {
+    const p = secondaryProjectiles[i];
+    p.life--;
+    if (p.life <= 0) { swapRemove(secondaryProjectiles, i); continue; }
+
+    switch (p.type) {
+      case 'homing': {
+        // Seek nearest enemy
+        let nearD = 300, nearE = null;
+        for (const e of enemies) {
+          const d = dist(p.x, p.y, e.x, e.y);
+          if (d < nearD) { nearD = d; nearE = e; }
+        }
+        if (midBoss && midBoss.alive) {
+          const d = dist(p.x, p.y, midBoss.x, midBoss.y);
+          if (d < nearD) { nearD = d; nearE = midBoss; }
+        }
+        if (boss && boss.alive) {
+          const d = dist(p.x, p.y, boss.x, boss.y);
+          if (d < nearD) { nearD = d; nearE = boss; }
+        }
+        if (nearE) {
+          const dx = nearE.x - p.x, dy = nearE.y - p.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d > 0) { p.vx += (dx / d) * 0.6; p.vy += (dy / d) * 0.6; }
+          const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (spd > 8) { p.vx = (p.vx / spd) * 8; p.vy = (p.vy / spd) * 8; }
+        }
+        p.x += p.vx; p.y += p.vy;
+        // Trail particles
+        if (p.life % 2 === 0) {
+          particles.push({
+            x: p.x - p.vx * 0.5, y: p.y - p.vy * 0.5,
+            vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
+            life: 0.6, decay: 0.08, size: 3, colors: ['#dd44ff', '#aa22cc', '#551166']
+          });
+        }
+        break;
+      }
+      case 'wave': {
+        p.x += p.vx;
+        // Expand radius over lifetime
+        const progress = 1 - p.life / 90;
+        p.radius = p.startRadius + (p.maxRadius - p.startRadius) * progress;
+        break;
+      }
+      case 'spread':
+        p.x += p.vx; p.y += p.vy;
+        break;
+      case 'shield':
+        // Follow player
+        p.x = player.x; p.y = player.y;
+        // Destroy nearby enemy bullets
+        for (let bi = enemyBullets.length - 1; bi >= 0; bi--) {
+          const b = enemyBullets[bi];
+          if (dist(p.x, p.y, b.x, b.y) < p.radius + b.radius) {
+            spawnExplosion(b.x, b.y, 4, ['#44ddff', '#88eeff', '#ffffff']);
+            swapRemove(enemyBullets, bi);
+          }
+        }
+        break;
+      case 'laser':
+        // Follow player Y, extend from player X
+        p.x = player.x + 25; p.y = player.y;
+        // Decrement hit cooldowns
+        for (const [id, cd] of p.hitCooldowns) {
+          if (cd <= 1) p.hitCooldowns.delete(id);
+          else p.hitCooldowns.set(id, cd - 1);
+        }
+        break;
+    }
+
+    // Off-screen removal (not for shield/laser which track player)
+    if (p.type !== 'shield' && p.type !== 'laser') {
+      if (p.x > CONFIG.width + 40 || p.x < -40 || p.y < -40 || p.y > CONFIG.height + 40) {
+        swapRemove(secondaryProjectiles, i);
+      }
+    }
+  }
+}
+
+function drawSecondaryProjectiles() {
+  if (secondaryProjectiles.length === 0) return;
+  ctx.save();
+  for (const p of secondaryProjectiles) {
+    switch (p.type) {
+      case 'homing': {
+        // Glowing purple missile
+        const angle = Math.atan2(p.vy, p.vx);
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(angle);
+        ctx.shadowColor = '#dd44ff';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#dd44ff';
+        ctx.beginPath();
+        ctx.moveTo(10, 0);
+        ctx.quadraticCurveTo(4, -5, -8, -4);
+        ctx.quadraticCurveTo(-4, 0, -8, 4);
+        ctx.quadraticCurveTo(4, 5, 10, 0);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowBlur = 4;
+        ctx.beginPath();
+        ctx.ellipse(2, 0, 3, 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        break;
+      }
+      case 'wave': {
+        // Expanding ring pulse
+        const alpha = Math.max(0.1, p.life / 90);
+        ctx.strokeStyle = `rgba(68, 255, 136, ${alpha.toFixed(2)})`;
+        ctx.lineWidth = 3 + (1 - p.life / 90) * 2;
+        ctx.shadowColor = '#44ff88';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        // Inner fill
+        ctx.fillStyle = `rgba(68, 255, 136, ${(alpha * 0.15).toFixed(2)})`;
+        ctx.fill();
+        break;
+      }
+      case 'spread': {
+        // Small orange bolts
+        ctx.shadowColor = '#ff8844';
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = '#ff8844';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+      }
+      case 'shield': {
+        // Protective bubble around player
+        const pulse = Math.sin(p.life * 0.15) * 3;
+        const alpha = Math.min(0.4, p.life / 60);
+        ctx.strokeStyle = `rgba(68, 221, 255, ${alpha.toFixed(2)})`;
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#44ddff';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius + pulse, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = `rgba(68, 221, 255, ${(alpha * 0.12).toFixed(2)})`;
+        ctx.fill();
+        break;
+      }
+      case 'laser': {
+        // Full-width beam from player
+        const pulse = Math.sin(p.life * 0.5) * 2;
+        const beamH = p.radius + pulse;
+        ctx.shadowColor = '#ff4444';
+        ctx.shadowBlur = 20;
+        ctx.fillStyle = 'rgba(255, 68, 68, 0.3)';
+        ctx.fillRect(p.x, p.y - beamH * 1.5, CONFIG.width, beamH * 3);
+        ctx.fillStyle = 'rgba(255, 100, 100, 0.6)';
+        ctx.fillRect(p.x, p.y - beamH, CONFIG.width, beamH * 2);
+        ctx.fillStyle = 'rgba(255, 220, 220, 0.9)';
+        ctx.fillRect(p.x, p.y - beamH * 0.4, CONFIG.width, beamH * 0.8);
+        break;
+      }
+    }
+  }
+  ctx.restore();
+}
+
+function checkSecondaryCollisions() {
+  for (let pi = secondaryProjectiles.length - 1; pi >= 0; pi--) {
+    const p = secondaryProjectiles[pi];
+    if (p.type === 'shield') continue; // shield handles bullets in update
+
+    for (let ei = enemies.length - 1; ei >= 0; ei--) {
+      const e = enemies[ei];
+      let hit = false;
+
+      if (p.type === 'laser') {
+        // Beam: hits anything at player's Y within beam height
+        const beamH = p.radius;
+        if (e.x > p.x && Math.abs(e.y - p.y) < beamH + e.height / 2) {
+          // Check cooldown — laser hits same enemy every 8 frames
+          const eId = ei + '_' + e.type;
+          if (!p.hitCooldowns.has(eId)) {
+            hit = true;
+            p.hitCooldowns.set(eId, 8);
+          }
+        }
+      } else {
+        // Circle-rect collision for other projectile types
+        const dx = Math.abs(p.x - e.x);
+        const dy = Math.abs(p.y - e.y);
+        if (dx < p.radius + e.width / 2 && dy < p.radius + e.height / 2) {
+          hit = true;
+        }
+      }
+
+      if (hit) {
+        e.hp -= p.damage;
+        spawnImpactSparks(e.x, e.y, p.vx || 5, p.vy || 0, 8, ['#ffffff', SECONDARY_META[p.type]?.color || '#ff4444']);
+        spawnHitFlash(e.x, e.y, 18);
+        e.hitFlash = 5;
+        triggerScreenShake(2, 3);
+        if (e.hp <= 0) {
+          destroyEnemy(e, ei);
+          triggerHitStop(2);
+        }
+        // Consume projectile (except laser and wave which pierce)
+        if (p.type !== 'laser' && p.type !== 'wave') {
+          spawnExplosion(p.x, p.y, 8, ['#ffffff', SECONDARY_META[p.type]?.color || '#ff8844']);
+          swapRemove(secondaryProjectiles, pi);
+          break;
+        }
+      }
+    }
+  }
 }
 
 function updatePlayerBullets() {
@@ -1084,25 +1462,41 @@ function updatePlayerBullets() {
 function drawPlayerBullets() {
   if (playerBullets.length === 0) return;
   ctx.save();
-  // Pass 1: Outer neon bloom (all bullets)
+  // Pass 1: Outer neon bloom
   ctx.shadowColor = CONFIG.colors.playerBullet;
-  ctx.shadowBlur = 20;
-  ctx.fillStyle = 'rgba(0, 255, 255, 0.25)';
+  ctx.shadowBlur = 22;
+  ctx.fillStyle = 'rgba(0, 255, 255, 0.2)';
   for (const b of playerBullets) {
-    ctx.fillRect(b.x - b.width / 2 - 3, b.y - b.height / 2 - 2, b.width + 6, b.height + 4);
+    const hw = b.width / 2, hh = b.height / 2;
+    ctx.beginPath();
+    ctx.ellipse(b.x, b.y, hw + 4, hh + 3, 0, 0, Math.PI * 2);
+    ctx.fill();
   }
-  // Pass 2: Main bullet body (all bullets)
-  ctx.shadowBlur = 12;
+  // Pass 2: Main plasma body — tapered ellipse with a pointed nose
+  ctx.shadowBlur = 14;
   ctx.fillStyle = CONFIG.colors.playerBullet;
   for (const b of playerBullets) {
-    ctx.fillRect(b.x - b.width / 2, b.y - b.height / 2, b.width, b.height);
+    const hw = b.width / 2, hh = b.height / 2;
+    ctx.beginPath();
+    // Tail (rounded back)
+    ctx.moveTo(b.x - hw, b.y);
+    ctx.quadraticCurveTo(b.x - hw, b.y - hh, b.x, b.y - hh);
+    // Nose (pointed front)
+    ctx.quadraticCurveTo(b.x + hw * 0.6, b.y - hh * 0.6, b.x + hw, b.y);
+    ctx.quadraticCurveTo(b.x + hw * 0.6, b.y + hh * 0.6, b.x, b.y + hh);
+    // Back to tail
+    ctx.quadraticCurveTo(b.x - hw, b.y + hh, b.x - hw, b.y);
+    ctx.fill();
   }
-  // Pass 3: Hot white core (all bullets)
+  // Pass 3: Hot white core — elongated inner teardrop
   ctx.shadowColor = '#ffffff';
-  ctx.shadowBlur = 6;
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
   for (const b of playerBullets) {
-    ctx.fillRect(b.x - b.width / 2 + 2, b.y - b.height / 2 + 0.5, b.width * 0.5, b.height - 1);
+    const cw = b.width * 0.35, ch = b.height * 0.35;
+    ctx.beginPath();
+    ctx.ellipse(b.x - b.width * 0.08, b.y, cw, ch, 0, 0, Math.PI * 2);
+    ctx.fill();
   }
   ctx.restore();
 }
@@ -1238,12 +1632,25 @@ function updateSpaceMines() {
       }
     } else if (m.phase === 'pulling') {
       m.pullFrame++;
+      // Gravitational pull on player — gets stronger as detonation approaches
+      if (player.alive) {
+        const dx = m.x - player.x;
+        const dy = m.y - player.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        const pullRadius = 180;
+        if (d < pullRadius && d > 5) {
+          const pullProgress = m.pullFrame / m.pullTime;
+          const strength = (0.3 + pullProgress * 0.7) * (1 - d / pullRadius);
+          player.x += (dx / d) * strength * 1.8;
+          player.y += (dy / d) * strength * 1.8;
+        }
+      }
       // Spawn inward-streaking particles throughout the pull phase
       if (m.pullFrame % 3 === 0) {
         const count = Math.min(3 + Math.floor(m.pullFrame / 8), 6);
         for (let p = 0; p < count; p++) {
           const angle = Math.random() * Math.PI * 2;
-          const dist = 50 + Math.random() * 30;
+          const dist = 80 + Math.random() * 60;
           const spd = 2.5 + Math.random() * 2 + (m.pullFrame / m.pullTime) * 3;
           particles.push({
             x: m.x + Math.cos(angle) * dist,
@@ -1261,9 +1668,9 @@ function updateSpaceMines() {
         m.phase = 'detonating';
         m.detonateFrame = 0;
         // Final big implosion burst — lots of particles rushing in fast
-        for (let p = 0; p < 20; p++) {
-          const angle = (p / 20) * Math.PI * 2;
-          const dist = 60 + Math.random() * 20;
+        for (let p = 0; p < 24; p++) {
+          const angle = (p / 24) * Math.PI * 2;
+          const dist = 100 + Math.random() * 40;
           particles.push({
             x: m.x + Math.cos(angle) * dist,
             y: m.y + Math.sin(angle) * dist,
@@ -1285,7 +1692,7 @@ function updateSpaceMines() {
         triggerScreenShake(5, 10);
         // Damage zone — kill player if within blast radius
         if (player.alive && player.invincible <= 0) {
-          if (dist(player.x, player.y, m.x, m.y) < 60) {
+          if (dist(player.x, player.y, m.x, m.y) < 90) {
             killPlayer();
           }
         }
@@ -1325,7 +1732,7 @@ function drawSpaceMines() {
       // Multiple contracting rings — the "get away" signal
       for (let r = 0; r < 3; r++) {
         const ringPhase = ((m.pullFrame * 0.04 + r * 0.33) % 1);
-        const ringRadius = 55 * (1 - ringPhase) + 8;
+        const ringRadius = 100 * (1 - ringPhase) + 10;
         const ringAlpha = (0.15 + pullProgress * 0.3) * (1 - ringPhase);
         ctx.strokeStyle = `rgba(200, 68, 255, ${ringAlpha.toFixed(2)})`;
         ctx.lineWidth = 1.5 + pullProgress * 1.5;
@@ -1344,7 +1751,7 @@ function drawSpaceMines() {
       ctx.shadowBlur = 8;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
-      ctx.arc(m.x, m.y, 60, 0, Math.PI * 2);
+      ctx.arc(m.x, m.y, 90, 0, Math.PI * 2);
       ctx.stroke();
       ctx.setLineDash([]);
 
@@ -2088,6 +2495,15 @@ function updatePickups() {
   }
 }
 
+// Secondary weapon pickup metadata (color + icon for pickup diamond and HUD)
+const SECONDARY_META = {
+  homing:  { icon: '◎', color: '#dd44ff', glowColor: '#aa22cc' },
+  wave:    { icon: '≋', color: '#44ff88', glowColor: '#22cc66' },
+  spread:  { icon: '✺', color: '#ff8844', glowColor: '#cc6622' },
+  shield:  { icon: '◇', color: '#44ddff', glowColor: '#22aacc' },
+  laser:   { icon: '▸', color: '#ff4444', glowColor: '#cc2222' }
+};
+
 function applyPickup(p) {
   switch (p.type) {
     case 'life':
@@ -2102,9 +2518,24 @@ function applyPickup(p) {
       scheduleAction(600, () => { player.maxVel = baseMaxVel; }); // 10 seconds at 60fps
       break;
     }
+    case 'homing':
+    case 'wave':
+    case 'spread':
+    case 'shield':
+    case 'laser': {
+      const wDef = CONFIG.weapons.secondary[p.type];
+      player.secondary = p.type;
+      player.secondaryAmmo = wDef.ammo || Math.round((wDef.duration || 10) * 60); // duration→frames for shield
+      player.secondaryFlash = 90; // HUD flash timer for new pickup
+      break;
+    }
   }
-  // Pickup sparkle
-  spawnExplosion(p.x, p.y, 8, ['#ffd700', '#ffaa00', '#ffffff']);
+  // Pickup sparkle — use weapon color if secondary, gold otherwise
+  const meta = SECONDARY_META[p.type];
+  const colors = meta
+    ? ['#ffffff', meta.color, meta.glowColor]
+    : ['#ffd700', '#ffaa00', '#ffffff'];
+  spawnExplosion(p.x, p.y, 8, colors);
 }
 
 function drawPickups() {
@@ -2113,11 +2544,13 @@ function drawPickups() {
     const bob = Math.sin(p.frame * 0.1) * 3;
     const px = p.x;
     const py = p.y + bob;
+    const meta = SECONDARY_META[p.type];
+    const color = meta ? meta.color : CONFIG.colors.pickup;
 
-    ctx.shadowColor = CONFIG.colors.pickup;
-    ctx.shadowBlur = 10;
-    ctx.fillStyle = CONFIG.colors.pickup;
-    ctx.strokeStyle = CONFIG.colors.pickup;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = meta ? 14 : 10;
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
 
     // Diamond outline
@@ -2128,12 +2561,21 @@ function drawPickups() {
     ctx.lineTo(px - 10, py);
     ctx.closePath();
     ctx.stroke();
+    // Secondary pickups get a filled translucent diamond
+    if (meta) {
+      ctx.fillStyle = color.replace(')', ',0.2)').replace('rgb', 'rgba').replace('#', '');
+      // Simple approach: just use low-alpha fill
+      ctx.globalAlpha = 0.2;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
 
     // Letter inside
     ctx.font = 'bold 11px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const label = p.type === 'life' ? '♦' : p.type === 'score' ? '★' : '⚡';
+    ctx.fillStyle = color;
+    const label = meta ? meta.icon : (p.type === 'life' ? '♦' : p.type === 'score' ? '★' : '⚡');
     ctx.fillText(label, px, py);
   }
   ctx.restore();
@@ -2492,8 +2934,22 @@ function destroyEnemy(e, index) {
     }
   }
 
-  // 10% chance score bonus
-  if (Math.random() < 0.1) {
+  // Secondary weapon drops — bigger enemies drop weapons
+  let dropped = false;
+  if (e.type === 'charger' && Math.random() < 0.3) {
+    spawnPickup(e.x, e.y, 'shield');
+    dropped = true;
+  } else if (e.type === 'bomber' && Math.random() < 0.35) {
+    spawnPickup(e.x, e.y, 'wave');
+    dropped = true;
+  } else if (e.type === 'spawner' && Math.random() < 0.5) {
+    const roll = Math.random();
+    spawnPickup(e.x, e.y, roll < 0.4 ? 'homing' : roll < 0.7 ? 'laser' : 'spread');
+    dropped = true;
+  }
+
+  // 10% chance score bonus (if no weapon dropped)
+  if (!dropped && Math.random() < 0.1) {
     spawnPickup(e.x, e.y, 'score');
   }
 
@@ -3685,6 +4141,7 @@ function destroyMidBoss() {
     enemies.length = 0;
     enemyBullets.length = 0;
     spaceMines.length = 0;
+    secondaryProjectiles.length = 0;
     scheduledActions.length = 0;
     gameState = 'GAMEPLAY';
   });
@@ -4030,6 +4487,7 @@ function completeTunnel() {
   }
   enemyBullets.length = 0;
   spaceMines.length = 0;
+  secondaryProjectiles.length = 0;
   // Advance wave system and go to boss
   currentWave++;
   waveActive = false;
@@ -4618,7 +5076,27 @@ const stageWaves = {
       { type: 'drone', x: 1100, y: 350 },
       { type: 'drone', x: 1100, y: 450 }
     ], delay: 600 },
-    // Wave 5: Mid-boss — The Shepherd enters
+    // Wave 5: Second weaver squadron — high sweep + low drones
+    { enemies: [
+      { type: 'weaver', x: 1000, y: 140, arcY: 80 },
+      { type: 'weaver', x: 1040, y: 110, arcY: 80 },
+      { type: 'weaver', x: 1040, y: 170, arcY: 80 },
+      { type: 'weaver', x: 1080, y: 80, arcY: 80 },
+      { type: 'drone', x: 1060, y: 400 },
+      { type: 'drone', x: 1120, y: 440 },
+      { type: 'drone', x: 1180, y: 380 }
+    ], delay: 400 },
+    // Wave 6: Third weaver squadron — pincer, top and bottom arcs
+    { enemies: [
+      { type: 'weaver', x: 1000, y: 120, arcY: 70 },
+      { type: 'weaver', x: 1050, y: 90, arcY: 70 },
+      { type: 'weaver', x: 1100, y: 120, arcY: 70 },
+      { type: 'weaver', x: 1000, y: 420, arcY: -70 },
+      { type: 'weaver', x: 1050, y: 450, arcY: -70 },
+      { type: 'weaver', x: 1100, y: 420, arcY: -70 },
+      { type: 'charger', x: 1150, y: 270 }
+    ], delay: 400 },
+    // Wave 7: Mid-boss — The Shepherd enters
     { midBoss: true, delay: 400 },
     // Wave 6: 1 Spawner + 2 Turrets
     { enemies: [
@@ -4719,11 +5197,72 @@ function drawHUD() {
   for (let i = 0; i < player.lives; i++) livesStr += '♦ ';
   ctx.fillText(livesStr, CONFIG.width - 20, 28);
 
-  // Secondary weapon
+  // Secondary weapon HUD badge
   if (player.secondary) {
-    ctx.textAlign = 'right';
-    ctx.font = '12px monospace';
-    ctx.fillText(player.secondary + ': ' + player.secondaryAmmo, CONFIG.width - 20, 48);
+    const meta = SECONDARY_META[player.secondary];
+    const wDef = CONFIG.weapons.secondary[player.secondary];
+    const maxAmmo = wDef.ammo || Math.round((wDef.duration || 10) * 60);
+    const ammoFrac = player.secondaryAmmo / maxAmmo;
+    const bx = CONFIG.width - 155, by = 42;
+    const bw = 135, bh = 22;
+
+    // Flash effect on new pickup
+    if (player.secondaryFlash > 0) player.secondaryFlash--;
+    const flashAlpha = player.secondaryFlash > 0 ? Math.sin(player.secondaryFlash * 0.3) * 0.3 : 0;
+
+    // Badge background
+    ctx.fillStyle = `rgba(10, 6, 20, 0.7)`;
+    ctx.strokeStyle = meta.color;
+    ctx.lineWidth = 1.5;
+    ctx.shadowColor = meta.color;
+    ctx.shadowBlur = flashAlpha > 0 ? 15 : 6;
+    ctx.beginPath();
+    ctx.roundRect(bx, by, bw, bh, 4);
+    ctx.fill();
+    ctx.stroke();
+
+    // Flash overlay
+    if (flashAlpha > 0) {
+      ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha.toFixed(2)})`;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, 4);
+      ctx.fill();
+    }
+
+    // Icon circle
+    ctx.fillStyle = meta.color;
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(bx + 14, by + bh / 2, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowBlur = 0;
+    ctx.fillText(meta.icon, bx + 14, by + bh / 2);
+
+    // Weapon name
+    ctx.fillStyle = meta.color;
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(wDef.name.toUpperCase(), bx + 26, by + 9);
+
+    // Ammo bar
+    const barX = bx + 26, barY = by + 14, barW = bw - 32, barH = 4;
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.fillRect(barX, barY, barW, barH);
+    ctx.fillStyle = meta.color;
+    ctx.shadowColor = meta.color;
+    ctx.shadowBlur = 4;
+    ctx.fillRect(barX, barY, barW * ammoFrac, barH);
+    ctx.shadowBlur = 0;
+
+    // [X] key hint
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '9px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('[X]', bx + barW + 18, by + bh / 2 + 1);
   }
 
   // Weapon stats indicator
@@ -5402,6 +5941,8 @@ function resetGame() {
   player.respawnTimer = 0;
   player.secondary = null;
   player.secondaryAmmo = 0;
+  player.secondaryFlash = 0;
+  secondaryFireTimer = 0;
   player.shotsFired = 0;
   player.shotsHit = 0;
   player.speed = CONFIG.playerSpeed;
@@ -5419,6 +5960,7 @@ function resetGame() {
   playerBullets.length = 0;
   enemyBullets.length = 0;
   spaceMines.length = 0;
+  secondaryProjectiles.length = 0;
   enemies.length = 0;
   particles.length = 0;
   pickups.length = 0;
@@ -5451,7 +5993,7 @@ function resetGame() {
   player.shieldRechargeSeconds = 30;
   player.scoreMultBonus = 1.0;
   player.fireRateOverride = null;
-  player.gravLock = { radius: 50, force: 0.06 };
+  player.gravLock = { radius: 100, force: 0.18 };
 }
 
 function startStage() {
@@ -5464,6 +6006,7 @@ function startStage() {
   playerBullets.length = 0;
   enemyBullets.length = 0;
   spaceMines.length = 0;
+  secondaryProjectiles.length = 0;
   enemies.length = 0;
   pickups.length = 0;
   xpOrbs.length = 0;
@@ -5491,6 +6034,7 @@ function updateGameFrame(opts = {}) {
   updatePlayerBullets();
   updateEnemyBullets();
   updateSpaceMines();
+  updateSecondaryProjectiles();
   if (opts.enemies !== false) updateEnemies();
   if (opts.ambientAsteroids) updateAmbientAsteroids();
   if (opts.waves) updateWaves();
@@ -5502,6 +6046,7 @@ function updateGameFrame(opts = {}) {
   updateShockwaves();
   updateLocalFlashes();
   checkCollisions();
+  checkSecondaryCollisions();
   if (opts.tunnel) checkTunnelCollisions();
 }
 
@@ -5514,6 +6059,7 @@ function drawGameFrame(opts = {}) {
   drawLocalFlashes();
   if (opts.pickups) drawPickups();
   drawXPOrbs();
+  drawSecondaryProjectiles();
   drawPlayerBullets();
   drawEnemyBullets();
   drawSpaceMines();
@@ -5731,6 +6277,7 @@ function debugRange(type = 'drone', count = 6, spacing = 60) {
   enemies.length = 0;
   enemyBullets.length = 0;
   spaceMines.length = 0;
+  secondaryProjectiles.length = 0;
   player.x = 80;
   player.y = CONFIG.height / 2;
   player.lives = 99;
@@ -5757,6 +6304,7 @@ function debugTunnel() {
   enemies.length = 0;
   enemyBullets.length = 0;
   spaceMines.length = 0;
+  secondaryProjectiles.length = 0;
   player.x = 80;
   player.y = CONFIG.height / 2;
   player.lives = 99;

@@ -2014,7 +2014,7 @@ html {
 .image-compare {
     position: relative;
     width: 100%;
-    max-width: 340px;
+    max-width: 260px;
     margin: 0 auto;
     border-radius: 8px 8px 16px 16px;
     overflow: visible;

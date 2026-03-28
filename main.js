@@ -1759,6 +1759,11 @@ function parseMusicHash(hash = window.location.hash) {
             player: 'gwor',
             canonicalRoute: 'gwor',
             isBSide: false
+        },
+        'junkyard-cabaret': {
+            player: 'junkyard-cabaret',
+            canonicalRoute: 'junkyard-cabaret',
+            isBSide: false
         }
     };
 
@@ -2767,6 +2772,247 @@ function initGWORLightbox() {
     };
 }
 
+function initJCLightbox() {
+    const tracks = [
+        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', video: 'audio/junkyard-cabaret/cathedral-of-junk.mp4', article: 'https://charleswilke.substack.com/p/theaters-last-stand', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } },
+        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', video: 'audio/junkyard-cabaret/three-fifteen.mp4', article: 'https://charleswilke.substack.com/p/accumulated-velocity', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } }
+    ];
+
+    const lightbox = document.getElementById('jcLightbox');
+    const tile = document.getElementById('jcTile');
+    const closeBtn = document.getElementById('jcClose');
+    const audio = document.getElementById('jcAudio');
+    const trackList = document.getElementById('jcTrackList');
+    const trackDisplay = document.getElementById('jcCurrentTrack');
+    const prevBtn = document.getElementById('jcPrev');
+    const nextBtn = document.getElementById('jcNext');
+    const playPauseBtn = document.getElementById('jcPlayPause');
+    const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
+    const PLAY_ICON = '\u25B6';
+    const PAUSE_ICON = '\u275A\u275A';
+    const progressBar = document.getElementById('jcProgressBar');
+    const progressContainer = document.getElementById('jcProgressContainer');
+    const timeDisplay = document.getElementById('jcTime');
+    const visualizerCanvas = document.getElementById('jcVisualizer');
+    const lyricsVideo = document.getElementById('jcLyricsVideo');
+    const lyricsVideoContainer = document.getElementById('jcLyricsVideoContainer');
+
+    if (!lightbox || !tile || !audio || !trackList) return;
+
+    if (playPauseIcon) {
+        playPauseIcon.textContent = PLAY_ICON;
+    }
+
+    const audioEl = registerManagedAudio(audio);
+    let currentIndex = 0;
+    let trackItems = [];
+
+    function resolveTrackIndex(trackSlug) {
+        const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
+        return matchedIndex === -1 ? 0 : matchedIndex;
+    }
+
+    function syncJCHash(method = 'replaceState') {
+        if (!lightbox || !lightbox.classList.contains('active') || !tracks[currentIndex]) return;
+        updateHistoryHash(buildMusicHash('junkyard-cabaret', tracks[currentIndex]), method);
+    }
+
+    const visualizer = createVisualizerController({
+        audio: audioEl,
+        visualizerCanvas,
+        getPalette: (index, barCount, intensity) => {
+            const baseHue = 22;
+            const hueVariance = 16;
+            const hue = baseHue - ((barCount - 1 - index) / barCount) * hueVariance;
+            const saturation = 55 + intensity * 20;
+            const lightness = 38 + intensity * 18;
+            return {
+                fillStyle: `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`,
+                shadowColor: `hsla(${hue}, 100%, 50%, ${0.4 + intensity * 0.4})`
+            };
+        }
+    });
+
+    function populatePlaylist() {
+        trackItems = renderTrackList(trackList, tracks, (index) => {
+            loadTrack(index);
+            playTrack();
+        }, () => ({
+            routeKey: 'junkyard-cabaret',
+            collectionTitle: 'Junkyard Cabaret'
+        }));
+    }
+
+    function loadTrack(index, options = {}) {
+        const { syncHash = true } = options;
+        currentIndex = index;
+        audio.src = tracks[index].file;
+        audio.load();
+        if (trackDisplay) {
+            trackDisplay.textContent = tracks[index].title;
+        }
+        const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
+        if (mobileNowPlaying) {
+            mobileNowPlaying.textContent = tracks[index].title;
+        }
+
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        if (timeDisplay) {
+            timeDisplay.textContent = '0:00';
+        }
+
+        syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
+        setActiveTrackListItem(trackItems, index);
+
+        if (syncHash) {
+            syncJCHash('replaceState');
+        }
+    }
+
+    function playTrack() {
+        pauseManagedAudioExcept(audio);
+        audio.play().catch(e => console.error('Play error:', e));
+        if (lyricsVideo && tracks[currentIndex].video) {
+            lyricsVideo.currentTime = audio.currentTime;
+            lyricsVideo.play().catch(e => console.log('Video play:', e));
+        }
+    }
+
+    function resizeCanvas() {
+        visualizer.resize();
+    }
+
+    function openJC(requestedTrackSlug = '', historyMethod = 'pushState') {
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
+        if (requestedTrackSlug) {
+            loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
+        } else if (!audio.src) {
+            loadTrack(0, { syncHash: false });
+        }
+        setTimeout(resizeCanvas, 50);
+        syncJCHash(historyMethod);
+    }
+
+    function closeJC() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+        audio.pause();
+        if (lyricsVideo) lyricsVideo.pause();
+        const currentRoute = parseMusicHash();
+        if (currentRoute && currentRoute.player === 'junkyard-cabaret') {
+            history.pushState(null, '', window.location.pathname);
+        }
+    }
+
+    populatePlaylist();
+
+    tile.addEventListener('click', (e) => {
+        e.preventDefault();
+        openJC();
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeJC);
+    }
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeJC();
+        }
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            let newIndex = currentIndex - 1;
+            if (newIndex < 0) newIndex = tracks.length - 1;
+            loadTrack(newIndex);
+            playTrack();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            let newIndex = (currentIndex + 1) % tracks.length;
+            loadTrack(newIndex);
+            playTrack();
+        });
+    }
+
+    bindLyricsVideoSync(audio, lyricsVideo, () => tracks[currentIndex]);
+
+    audio.addEventListener('timeupdate', function() {
+        if (progressBar && audio.duration) {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+        }
+        if (timeDisplay) {
+            timeDisplay.textContent = formatAudioTime(audio.currentTime);
+        }
+    });
+
+    audio.addEventListener('play', function() {
+        if (playPauseIcon) {
+            playPauseIcon.textContent = PAUSE_ICON;
+        }
+        visualizer.start();
+    });
+
+    audio.addEventListener('pause', function() {
+        if (playPauseIcon) {
+            playPauseIcon.textContent = PLAY_ICON;
+        }
+        visualizer.stop();
+    });
+
+    audio.addEventListener('ended', () => {
+        if (currentIndex < tracks.length - 1) {
+            loadTrack(currentIndex + 1);
+            playTrack();
+        }
+    });
+
+    if (playPauseBtn) {
+        playPauseBtn.addEventListener('click', function() {
+            pauseManagedAudioExcept(audio);
+
+            if (audio.paused) {
+                audio.play().catch(e => console.error('Play error:', e));
+            } else {
+                audio.pause();
+            }
+        });
+    }
+
+    setupProgressScrubbing(progressContainer, audio);
+
+    const initialJCRoute = parseMusicHash();
+    if (initialJCRoute && initialJCRoute.player === 'junkyard-cabaret') {
+        setTimeout(() => openJC(initialJCRoute.trackSlug, 'replaceState'), 100);
+    }
+
+    window.addEventListener('popstate', () => {
+        const route = parseMusicHash();
+        if (route && route.player === 'junkyard-cabaret') {
+            openJC(route.trackSlug, 'replaceState');
+        } else if (lightbox.classList.contains('active')) {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+            audio.pause();
+            if (lyricsVideo) lyricsVideo.pause();
+        }
+    });
+
+    return {
+        open: openJC,
+        close: closeJC
+    };
+}
+
 function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
     if (!element) return;
 
@@ -2787,8 +3033,10 @@ function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
 function initDeferredHomepageMedia() {
     const ensureMixtapeLightbox = createLazyInitializer(initMixtapeLightbox);
     const ensureGWORLightbox = createLazyInitializer(initGWORLightbox);
+    const ensureJCLightbox = createLazyInitializer(initJCLightbox);
     const mixtapeTile = document.getElementById('mixtapeTile');
     const gworTile = document.getElementById('gworTile');
+    const jcTile = document.getElementById('jcTile');
     const redButtonWrapper = document.getElementById('redButtonWrapper');
     const gworButtonWrapper = document.getElementById('gworButtonWrapper');
     const initialRoute = parseMusicHash();
@@ -2804,6 +3052,10 @@ function initDeferredHomepageMedia() {
     });
 
     bindLazyMediaTrigger(gworTile, ensureGWORLightbox, (instance) => {
+        instance.open();
+    });
+
+    bindLazyMediaTrigger(jcTile, ensureJCLightbox, (instance) => {
         instance.open();
     });
 
@@ -2831,6 +3083,10 @@ function initDeferredHomepageMedia() {
 
     if (initialRoute && initialRoute.player === 'gwor') {
         ensureGWORLightbox();
+    }
+
+    if (initialRoute && initialRoute.player === 'junkyard-cabaret') {
+        ensureJCLightbox();
     }
 }
 

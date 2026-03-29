@@ -4,7 +4,7 @@
     {
       "name": "space-toots",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["-e", "require('http').createServer((q,r)=>{require('fs').readFile('.'+q.url.split('?')[0].replace(/\\/$/,'/index.html'),(e,d)=>{r.writeHead(e?404:200,{'Content-Type':'text/html'});r.end(e?'Not found':d)})}).listen(3000)"],
+      "runtimeArgs": ["-e", "const h=require('http'),f=require('fs'),p=require('path');const m={'.html':'text/html','.js':'application/javascript','.css':'text/css','.mp3':'audio/mpeg','.ogg':'audio/ogg','.wav':'audio/wav','.png':'image/png','.jpg':'image/jpeg','.json':'application/json'};h.createServer((q,r)=>{let u='.'+q.url.split('?')[0];if(u.endsWith('/'))u+='index.html';const t=m[p.extname(u)]||'application/octet-stream';f.readFile(u,(e,d)=>{r.writeHead(e?404:200,{'Content-Type':t});r.end(e?'Not found':d)})}).listen(3000)"],
       "port": 3000
     }
   ]

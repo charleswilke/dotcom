@@ -28,10 +28,81 @@
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     image-rendering: pixelated;
+    touch-action: none;
+  }
+
+  /* Portrait orientation overlay for mobile */
+  #rotate-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0a0a1a;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    font-family: monospace;
+    color: #e0e0ff;
+    text-align: center;
+  }
+  #rotate-overlay .phone-icon {
+    width: 60px;
+    height: 100px;
+    border: 3px solid #00f0ff;
+    border-radius: 10px;
+    position: relative;
+    animation: tilt-phone 2s ease-in-out infinite;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  }
+  #rotate-overlay .phone-icon::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #00f0ff;
+  }
+  #rotate-overlay .phone-icon::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+    background: #00f0ff;
+  }
+  @keyframes tilt-phone {
+    0%, 15%  { transform: rotate(0deg); }
+    40%, 60% { transform: rotate(-90deg); }
+    85%, 100% { transform: rotate(0deg); }
+  }
+  #rotate-overlay .rotate-msg {
+    font-size: 16px;
+    opacity: 0.8;
+    letter-spacing: 2px;
+  }
+  #rotate-overlay .rotate-sub {
+    font-size: 11px;
+    opacity: 0.4;
+  }
+
+  @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
+    #rotate-overlay { display: flex; }
   }
 </style>
 </head>
 <body>
+<div id="rotate-overlay">
+  <div class="phone-icon"></div>
+  <div class="rotate-msg">ROTATE TO PLAY</div>
+  <div class="rotate-sub">SPACE TOOTS IS BEST IN LANDSCAPE</div>
+</div>
 <canvas id="game"></canvas>
 <script>
 // ============================================================
@@ -54,7 +125,7 @@ const CONFIG = {
     bg:          '#0a0a1a',
     grid:        '#2a1040',
     player:      '#00f0ff',
-    playerBullet:'#00ffff',
+    playerBullet:'#a0ff00',
     enemy:       '#ff00aa',
     enemyBullet: '#ff4400',
     asteroid:    '#aaeeff',
@@ -144,6 +215,17 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
+// Mobile detection
+let isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+function screenToGame(clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (clientX - rect.left) / rect.width * CONFIG.width,
+    y: (clientY - rect.top) / rect.height * CONFIG.height
+  };
+}
+
 // Input
 const keys = {};
 const _doubleTap = {};   // tracks last tap time per direction key
@@ -171,6 +253,127 @@ window.addEventListener('keydown', e => {
   if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
 });
 window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+// Touch input state
+const touch = {
+  active: false,
+  startX: 0, startY: 0,
+  shipStartX: 0, shipStartY: 0,
+  currentX: 0, currentY: 0,
+  swipeStartX: 0, swipeStartY: 0, swipeStartTime: 0,
+  swipeDodge: null,
+  secondaryTapped: false,
+  secondaryDebounce: 0,
+  secondaryArrivalWindow: 0
+};
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  // Two-finger tap = secondary fire
+  if (e.touches.length >= 2) {
+    touch.secondaryTapped = true;
+    return;
+  }
+  // Second finger arriving within 100ms also counts
+  if (touch.secondaryArrivalWindow > 0 && e.touches.length >= 1) {
+    touch.secondaryTapped = true;
+    touch.secondaryArrivalWindow = 0;
+    return;
+  }
+
+  const pos = screenToGame(e.touches[0].clientX, e.touches[0].clientY);
+
+  // Tap-to-start on menu screens
+  if (['TITLE', 'GAME_OVER', 'WIN', 'STAGE_CLEAR'].includes(gameState)) {
+    keys['Enter'] = true;
+    setTimeout(() => { keys['Enter'] = false; }, 50);
+    return;
+  }
+
+  // Pause button tap (top-right corner, 40x40 region)
+  if (isMobile && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET')) {
+    if (pos.x > CONFIG.width - 50 && pos.y < 50) {
+      paused = !paused;
+      return;
+    }
+  }
+
+  // Unpause on tap when paused
+  if (paused) {
+    paused = false;
+    return;
+  }
+
+  // Level-up card tap selection
+  if (gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22) {
+    const cardW = 180, cardH = 240, gap = 24;
+    const cardCount = levelUpCards.length;
+    const totalW = cardCount * cardW + (cardCount - 1) * gap;
+    const startX = (CONFIG.width - totalW) / 2;
+    const cardY = 140;
+    for (let i = 0; i < cardCount; i++) {
+      const cardX = startX + i * (cardW + gap);
+      if (pos.x >= cardX && pos.x <= cardX + cardW && pos.y >= cardY && pos.y <= cardY + cardH) {
+        if (levelUpSelection === i) {
+          // Tap on already-selected card = confirm
+          keys['Enter'] = true;
+          setTimeout(() => { keys['Enter'] = false; }, 50);
+        } else {
+          levelUpSelection = i;
+        }
+        return;
+      }
+    }
+    return;
+  }
+
+  // Movement: record start position
+  touch.active = true;
+  touch.startX = pos.x;
+  touch.startY = pos.y;
+  touch.shipStartX = player.x;
+  touch.shipStartY = player.y;
+  touch.currentX = pos.x;
+  touch.currentY = pos.y;
+  touch.swipeStartX = pos.x;
+  touch.swipeStartY = pos.y;
+  touch.swipeStartTime = performance.now();
+  touch.secondaryArrivalWindow = 6; // frames (~100ms) for second finger
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (touch.active && e.touches.length >= 1) {
+    const pos = screenToGame(e.touches[0].clientX, e.touches[0].clientY);
+    touch.currentX = pos.x;
+    touch.currentY = pos.y;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  if (e.touches.length === 0) {
+    // Check for swipe dodge before clearing
+    if (touch.active) {
+      const endTime = performance.now();
+      const duration = endTime - touch.swipeStartTime;
+      const dx = touch.currentX - touch.swipeStartX;
+      const dy = touch.currentY - touch.swipeStartY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const speed = distance / duration; // px/ms in game coords
+
+      if (duration < 250 && distance > 25 && speed > 0.15) {
+        touch.swipeDodge = { dx: dx / distance, dy: dy / distance };
+      }
+    }
+    touch.active = false;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchcancel', e => {
+  e.preventDefault();
+  touch.active = false;
+}, { passive: false });
 
 // Frame counter
 let frame = 0;
@@ -947,6 +1150,17 @@ function updatePlayer() {
   if (keys['ArrowUp']    || keys['KeyW']) iy = -1;
   if (keys['ArrowDown']  || keys['KeyS']) iy = 1;
 
+  // Touch movement — relative offset driving acceleration
+  if (touch.active) {
+    const targetX = touch.shipStartX + (touch.currentX - touch.startX);
+    const targetY = touch.shipStartY + (touch.currentY - touch.startY);
+    ix = Math.max(-1, Math.min(1, (targetX - player.x) / 20));
+    iy = Math.max(-1, Math.min(1, (targetY - player.y) / 20));
+  }
+
+  // Tick down touch secondary arrival window
+  if (touch.secondaryArrivalWindow > 0) touch.secondaryArrivalWindow--;
+
   // Normalize diagonal input
   if (ix !== 0 && iy !== 0) {
     ix *= 0.707;
@@ -984,17 +1198,35 @@ function updatePlayer() {
   if (player.y < 15)  { player.y = 15; player.vy *= -0.3; }
   if (player.y > CONFIG.height - 15) { player.y = CONFIG.height - 15; player.vy *= -0.3; }
 
+  // Re-anchor touch offset on boundary collision to prevent drift
+  if (touch.active) {
+    touch.shipStartX = player.x;
+    touch.shipStartY = player.y;
+    touch.startX = touch.currentX;
+    touch.startY = touch.currentY;
+  }
+
 
   // Firing
   if (player.fireTimer > 0) player.fireTimer--;
-  if (keys['Space'] && player.fireTimer <= 0) {
+  if (player.fireTimer <= 0) {
     firePlayerWeapon();
     player.fireTimer = player.fireRateOverride || CONFIG.playerFireRate;
   }
 
   // Secondary fire
-  if (keys['KeyX']) {
+  if (keys['KeyX'] || keys['Space']) {
     fireSecondary();
+  }
+
+  // Touch: two-finger tap for secondary
+  if (touch.secondaryDebounce > 0) touch.secondaryDebounce--;
+  if (touch.secondaryTapped && touch.secondaryDebounce <= 0) {
+    touch.secondaryTapped = false;
+    touch.secondaryDebounce = 15;
+    fireSecondary();
+  } else if (touch.secondaryTapped) {
+    touch.secondaryTapped = false;
   }
 
   // Dodge — triggered by Shift key or double-tap direction
@@ -1018,6 +1250,15 @@ function updatePlayer() {
     player._doubleTapDodge = null;
     if (player.dodgeCooldown <= 0) {
       triggerDodge(dt.dx, dt.dy);
+    }
+  }
+
+  // Touch swipe dodge
+  if (touch.swipeDodge) {
+    const sd = touch.swipeDodge;
+    touch.swipeDodge = null;
+    if (player.dodgeCooldown <= 0) {
+      triggerDodge(sd.dx, sd.dy);
     }
   }
 }
@@ -5262,7 +5503,7 @@ function drawHUD() {
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.font = '9px monospace';
     ctx.textAlign = 'left';
-    ctx.fillText('[X]', bx + barW + 18, by + bh / 2 + 1);
+    ctx.fillText(isMobile ? '' : '[SPC]', bx + barW + 18, by + bh / 2 + 1);
   }
 
   // Weapon stats indicator
@@ -5342,6 +5583,14 @@ function drawHUD() {
     ctx.fillStyle = xpPct > 0.9 ? '#ffffff' : '#00ddcc';
     ctx.fillRect(barX, barY, Math.round(barW * xpPct), 7);
     ctx.shadowBlur = 0;
+  }
+
+  // Mobile pause button
+  if (isMobile) {
+    const px = CONFIG.width - 35, py = 15;
+    ctx.fillStyle = 'rgba(224, 224, 255, 0.35)';
+    ctx.fillRect(px, py, 6, 18);
+    ctx.fillRect(px + 10, py, 6, 18);
   }
 
   ctx.restore();
@@ -5521,13 +5770,17 @@ function drawTitleScreen() {
   ctx.fillStyle = `rgba(224, 224, 255, ${enterAlpha})`;
   ctx.shadowColor = '#00f0ff';
   ctx.shadowBlur = enterAlpha * 10;
-  ctx.fillText('PRESS ENTER TO START', cx, cy + 130);
+  ctx.fillText(isMobile ? 'TAP TO START' : 'PRESS ENTER TO START', cx, cy + 130);
   ctx.shadowBlur = 0;
 
   // Controls — dimmer, more compact
   ctx.font = '12px monospace';
   ctx.fillStyle = 'rgba(180, 180, 220, 0.35)';
-  ctx.fillText('WASD/ARROWS  MOVE  ·  SPACE  SHOOT  ·  SHIFT / DOUBLE-TAP  DODGE  ·  P  PAUSE', cx, cy + 170);
+  if (isMobile) {
+    ctx.fillText('DRAG  MOVE  ·  AUTO-SHOOT  ·  SWIPE  DODGE  ·  TWO-FINGER TAP  SECONDARY', cx, cy + 170);
+  } else {
+    ctx.fillText('WASD/ARROWS  MOVE  ·  AUTO-SHOOT  ·  SPACE  SECONDARY  ·  SHIFT/DBL-TAP  DODGE  ·  P  PAUSE', cx, cy + 170);
+  }
 
   ctx.restore();
 }
@@ -5588,7 +5841,7 @@ function drawGameOver() {
 
   ctx.font = '16px monospace';
   if (Math.floor(frame / 40) % 2 === 0) {
-    ctx.fillText('► PRESS ENTER TO RETRY', CONFIG.width / 2, CONFIG.height / 2 + 70);
+    ctx.fillText(isMobile ? '► TAP TO RETRY' : '► PRESS ENTER TO RETRY', CONFIG.width / 2, CONFIG.height / 2 + 70);
   }
   ctx.restore();
 }
@@ -5613,7 +5866,7 @@ function drawStageClear() {
 
   ctx.font = '16px monospace';
   if (Math.floor(frame / 40) % 2 === 0) {
-    ctx.fillText('► PRESS ENTER TO CONTINUE', CONFIG.width / 2, CONFIG.height / 2 + 100);
+    ctx.fillText(isMobile ? '► TAP TO CONTINUE' : '► PRESS ENTER TO CONTINUE', CONFIG.width / 2, CONFIG.height / 2 + 100);
   }
   ctx.restore();
 }
@@ -5640,7 +5893,7 @@ function drawWinScreen() {
 
   ctx.font = '16px monospace';
   if (Math.floor(frame / 40) % 2 === 0) {
-    ctx.fillText('► PRESS ENTER TO PLAY AGAIN', CONFIG.width / 2, CONFIG.height / 2 + 80);
+    ctx.fillText(isMobile ? '► TAP TO PLAY AGAIN' : '► PRESS ENTER TO PLAY AGAIN', CONFIG.width / 2, CONFIG.height / 2 + 80);
   }
   ctx.restore();
 }
@@ -5859,7 +6112,7 @@ function drawLevelUpScreen() {
       ctx.shadowColor = upg.color;
       ctx.shadowBlur = 8;
       const blink = Math.floor(frame / 30) % 2 === 0;
-      if (blink) ctx.fillText('▼ ENTER ▼', cx, drawY + cardH - 15);
+      if (blink) ctx.fillText(isMobile ? '▼ TAP ▼' : '▼ ENTER ▼', cx, drawY + cardH - 15);
       ctx.shadowBlur = 0;
     }
 
@@ -5872,7 +6125,7 @@ function drawLevelUpScreen() {
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(180,180,220,0.5)';
   ctx.shadowBlur = 0;
-  ctx.fillText('◄ ► SELECT     ENTER CONFIRM', CONFIG.width / 2, CONFIG.height - 40);
+  ctx.fillText(isMobile ? 'TAP TO SELECT  ·  TAP AGAIN TO CONFIRM' : '◄ ► SELECT     ENTER CONFIRM', CONFIG.width / 2, CONFIG.height - 40);
 
   ctx.restore();
 }

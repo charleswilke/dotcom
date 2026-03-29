@@ -92,6 +92,26 @@
     opacity: 0.4;
   }
 
+  /* Back to site link on title screen */
+  #back-link {
+    display: none;
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(180, 180, 220, 0.35);
+    text-decoration: none;
+    padding: 8px 16px;
+    transition: color 0.2s;
+  }
+  #back-link:hover, #back-link:active {
+    color: rgba(0, 240, 255, 0.7);
+  }
+
   @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
     #rotate-overlay { display: flex; }
   }
@@ -103,6 +123,7 @@
   <div class="rotate-msg">ROTATE TO PLAY</div>
   <div class="rotate-sub">SPACE TOOTS IS BEST IN LANDSCAPE</div>
 </div>
+<a id="back-link" href="https://charleswilke.com">&#8592; CHARLESWILKE.COM</a>
 <canvas id="game"></canvas>
 <script>
 // ============================================================
@@ -202,6 +223,7 @@ const UPGRADES = {
 // === ENGINE ===
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const backLink = document.getElementById('back-link');
 canvas.width = CONFIG.width;
 canvas.height = CONFIG.height;
 
@@ -6372,6 +6394,9 @@ function gameLoop(timestamp) {
   // Apply screen shake
   ctx.save();
   ctx.translate(screenShakeX, screenShakeY);
+
+  // Show back link on menu screens only
+  backLink.style.display = (gameState === 'TITLE' || gameState === 'GAME_OVER' || gameState === 'WIN') ? 'block' : 'none';
 
   switch (gameState) {
     case 'TITLE':

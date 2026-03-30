@@ -193,8 +193,8 @@ const XP_ORB_DRIFT      = 0.6;  // baseline leftward scroll speed (px/frame)
 
 // === LEVEL-UP UPGRADES ===
 const UPGRADES = {
-  spread:      { name: 'Spread Shot',      icon: '⚔', desc: 'More bullets per shot',     color: '#00ffff', maxTier: 5,
-                 tiers: ['1','2','3','4','5'] },
+  spread:      { name: 'Spread Shot',      icon: '⚔', desc: 'Spread & power up',         color: '#00ffff', maxTier: 5,
+                 tiers: ['2-Way','3-Way','Power ×1.2','Power ×1.4','Power ×1.7'] },
   fireRate:    { name: 'Fire Rate',        icon: '↑', desc: 'Shoot faster',               color: '#44ddff', maxTier: 5,
                  tiers: ['36f','26f','18f','12f','8f'], values: [36, 26, 18, 12, 8] },
   gravLock:    { name: 'Grav Lock',        icon: '◉', desc: 'Bullets curve to enemies',   color: '#dd44ff', maxTier: 5,
@@ -276,6 +276,151 @@ window.addEventListener('keydown', e => {
 });
 window.addEventListener('keyup', e => { keys[e.code] = false; });
 
+// Mouse position in game coords (for hover effects)
+const mousePos = { x: -1, y: -1 };
+
+// Mouse drag input state
+const mouseDrag = {
+  active: false,
+  startX: 0, startY: 0,
+  shipStartX: 0, shipStartY: 0,
+  currentX: 0, currentY: 0,
+  lastClickTime: 0,
+  lastClickX: 0, lastClickY: 0,
+  dodgePending: null
+};
+
+// Scroll wheel for level-up card selection
+canvas.addEventListener('wheel', e => {
+  if (gameState !== 'LEVEL_UP' || levelUpAnimTimer < 22) return;
+  e.preventDefault();
+  if (e.deltaY > 0 || e.deltaX > 0) {
+    levelUpSelection = Math.min(levelUpCards.length - 1, levelUpSelection + 1);
+  } else if (e.deltaY < 0 || e.deltaX < 0) {
+    levelUpSelection = Math.max(0, levelUpSelection - 1);
+  }
+}, { passive: false });
+
+// Right-click for secondary fire
+canvas.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  if (isMobile) return;
+  if (['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState)) {
+    mouseDrag.secondaryFired = true;
+  }
+});
+
+canvas.addEventListener('mousedown', e => {
+  if (isMobile) return;
+  if (e.button === 2) return; // right-click handled by contextmenu
+  const pos = screenToGame(e.clientX, e.clientY);
+  // Click to start/retry/continue on menu screens
+  if (['TITLE', 'GAME_OVER', 'WIN', 'STAGE_CLEAR'].includes(gameState)) {
+    keys['Enter'] = true;
+    setTimeout(() => { keys['Enter'] = false; }, 50);
+    return;
+  }
+  // Pause button click
+  if (['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState)) {
+    if (pos.x >= 10 && pos.x <= 46 && pos.y >= 80 && pos.y <= 116) {
+      paused = !paused;
+      return;
+    }
+    // Mute button click
+    if (pos.x >= 10 && pos.x <= 46 && pos.y >= 122 && pos.y <= 158) {
+      muted = !muted;
+      if (audioCtx) {
+        if (muted) { audioCtx.suspend(); } else { audioCtx.resume(); }
+      }
+      return;
+    }
+  }
+  // Click anywhere to unpause
+  if (paused) {
+    paused = false;
+    return;
+  }
+  // Level-up card click — select card under cursor, click again to confirm
+  if (gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22) {
+    const cardW = 180, cardH = 240, gap = 24;
+    const cardCount = levelUpCards.length;
+    const totalW = cardCount * cardW + (cardCount - 1) * gap;
+    const startX = (CONFIG.width - totalW) / 2;
+    const cardY = 140;
+    for (let i = 0; i < cardCount; i++) {
+      const cardX = startX + i * (cardW + gap);
+      if (pos.x >= cardX && pos.x <= cardX + cardW && pos.y >= cardY && pos.y <= cardY + cardH) {
+        if (levelUpSelection === i) {
+          keys['Enter'] = true;
+          setTimeout(() => { keys['Enter'] = false; }, 50);
+        } else {
+          levelUpSelection = i;
+        }
+        return;
+      }
+    }
+    return;
+  }
+  // Double-click dodge — direction from player toward click position
+  if (['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState)) {
+    const now = performance.now();
+    if (now - mouseDrag.lastClickTime < DOUBLE_TAP_MS) {
+      const dx = pos.x - player.x;
+      const dy = pos.y - player.y;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      if (len > 0) {
+        mouseDrag.dodgePending = { dx: dx / len, dy: dy / len };
+      }
+      mouseDrag.lastClickTime = 0;
+    } else {
+      mouseDrag.lastClickTime = now;
+    }
+  }
+  // Only start drag during active gameplay states
+  if (['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState)) {
+    mouseDrag.active = true;
+    mouseDrag.startX = pos.x;
+    mouseDrag.startY = pos.y;
+    mouseDrag.shipStartX = player.x;
+    mouseDrag.shipStartY = player.y;
+    mouseDrag.currentX = pos.x;
+    mouseDrag.currentY = pos.y;
+  }
+});
+
+window.addEventListener('mousemove', e => {
+  const pos = screenToGame(e.clientX, e.clientY);
+  mousePos.x = pos.x;
+  mousePos.y = pos.y;
+  // Cursor style — pointer on interactive elements
+  const inGameplay = ['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState);
+  const overPause = inGameplay && pos.x >= 10 && pos.x <= 80 && pos.y >= 80 && pos.y <= 115;
+  const overCard = gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22 && pos.y >= 140 && pos.y <= 380;
+  canvas.style.cursor = overPause || overCard ? 'pointer' : '';
+  // Level-up card hover — highlight card under cursor
+  if (gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22) {
+    const cardW = 180, cardH = 240, gap = 24;
+    const cardCount = levelUpCards.length;
+    const totalW = cardCount * cardW + (cardCount - 1) * gap;
+    const startX = (CONFIG.width - totalW) / 2;
+    const cardY = 140;
+    for (let i = 0; i < cardCount; i++) {
+      const cardX = startX + i * (cardW + gap);
+      if (pos.x >= cardX && pos.x <= cardX + cardW && pos.y >= cardY && pos.y <= cardY + cardH) {
+        levelUpSelection = i;
+        break;
+      }
+    }
+  }
+  if (!mouseDrag.active) return;
+  mouseDrag.currentX = pos.x;
+  mouseDrag.currentY = pos.y;
+});
+
+window.addEventListener('mouseup', (e) => {
+  if (e.button === 0) mouseDrag.active = false; // only end drag on left button release
+});
+
 // Touch input state
 const touch = {
   active: false,
@@ -312,10 +457,18 @@ canvas.addEventListener('touchstart', e => {
     return;
   }
 
-  // Pause button tap (top-right corner, 40x40 region)
-  if (isMobile && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET')) {
-    if (pos.x > CONFIG.width - 50 && pos.y < 50) {
+  // Pause button tap
+  if (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET') {
+    if (pos.x >= 10 && pos.x <= 46 && pos.y >= 80 && pos.y <= 116) {
       paused = !paused;
+      return;
+    }
+    // Mute button tap
+    if (pos.x >= 10 && pos.x <= 46 && pos.y >= 122 && pos.y <= 158) {
+      muted = !muted;
+      if (audioCtx) {
+        if (muted) { audioCtx.suspend(); } else { audioCtx.resume(); }
+      }
       return;
     }
   }
@@ -457,7 +610,14 @@ function updateSuctionPhase(e) {
     if (e.speed <= 0) { e.suctionPhase = 'wiggling'; e.suctionTimer = 40; }
   } else if (e.suctionPhase === 'wiggling') {
     e.suctionTimer--;
-    if (e.suctionTimer <= 0) { e.suctionPhase = 'sucked'; e.speed = 0.5; }
+    if (e.suctionTimer <= 0) {
+      e.suctionPhase = 'sucked'; e.speed = 0.5;
+      if (!shepherdMusicTriggered) {
+        shepherdMusicTriggered = true;
+        shepherdTrackChoice = Math.random() < 0.5 ? 'shepherd1' : 'shepherd2';
+        crossfadeTo(shepherdTrackChoice);
+      }
+    }
   } else if (e.suctionPhase === 'sucked') {
     e.speed = Math.min(e.speed + 0.55, 16);
     e.x += e.speed;
@@ -883,9 +1043,9 @@ const player = {
   dodgeVx: 0,
   dodgeVy: 0,
   dodgeRoll: 0,
-  xp: 0,
   xpLevel: 1,
-  xpToNext: 10,
+  nextLevelScore: 1000,
+  prevLevelScore: 0,
   // Level-up upgrade system
   upgrades: { spread: 0, fireRate: 0, gravLock: 0, xpMagnet: 0, boostDur: 0, boostRecharge: 0, speed: 0, shieldRegen: 0, scoreMult: 0 },
   dodgeCooldownBase: DODGE_COOLDOWN,
@@ -895,7 +1055,10 @@ const player = {
   shieldRechargeSeconds: 30,
   scoreMultBonus: 1.0,
   fireRateOverride: null,
-  gravLock: { radius: 100, force: 0.18 }
+  gravLock: { radius: 100, force: 0.18 },
+  bulletPower: 1.0,
+  bulletColor: null,  // null = use default CONFIG.colors.playerBullet
+  bulletGlow: null
 };
 
 function drawPlayer() {
@@ -1080,6 +1243,29 @@ function drawPlayer() {
   ctx.closePath();
   ctx.fill();
 
+  // === GRAV PULL WARNING ===
+  if (playerGravPull.active) {
+    const s = Math.min(1, playerGravPull.strength / 2);
+    const pullAngle = Math.atan2(playerGravPull.fromY - py, playerGravPull.fromX - px);
+    // Partial arcs facing the pull source — quarter of the circle
+    const arcSpan = Math.PI * 0.5; // 90 degrees
+    const ringCount = 2 + Math.floor(s * 2);
+    const flicker = 0.5 + Math.sin(frame * 0.4) * 0.3;
+    ctx.shadowColor = '#cc44ff';
+    ctx.lineCap = 'round';
+    for (let k = 0; k < ringCount; k++) {
+      const phase = ((frame * 0.04 + k * 0.33) % 1);
+      const radius = 18 + phase * 28;
+      const ringAlpha = s * flicker * (1 - phase) * 0.8;
+      ctx.strokeStyle = `rgba(200, 60, 255, ${ringAlpha.toFixed(2)})`;
+      ctx.shadowBlur = 6 + s * 10;
+      ctx.lineWidth = 1.5 + s * (1 - phase);
+      ctx.beginPath();
+      ctx.arc(px, py, radius, pullAngle - arcSpan / 2, pullAngle + arcSpan / 2);
+      ctx.stroke();
+    }
+  }
+
   ctx.restore();
 }
 
@@ -1180,6 +1366,43 @@ function updatePlayer() {
     iy = Math.max(-1, Math.min(1, (targetY - player.y) / 20));
   }
 
+  // Mouse drag movement
+  if (mouseDrag.active) {
+    const rawX = mouseDrag.currentX, rawY = mouseDrag.currentY;
+    const outOfBounds = rawX < 0 || rawX > CONFIG.width || rawY < 0 || rawY > CONFIG.height;
+    if (outOfBounds) {
+      // Mouse is outside canvas — pin a virtual cursor to the nearest edge
+      // and drive full-strength toward it
+      const edgeX = Math.max(20, Math.min(CONFIG.width - 20, rawX));
+      const edgeY = Math.max(15, Math.min(CONFIG.height - 15, rawY));
+      const dx = edgeX - player.x, dy = edgeY - player.y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d > 2) {
+        ix = dx / d;
+        iy = dy / d;
+      }
+      // Re-anchor so returning inside the canvas is seamless
+      mouseDrag.startX = rawX;
+      mouseDrag.startY = rawY;
+      mouseDrag.shipStartX = player.x;
+      mouseDrag.shipStartY = player.y;
+    } else {
+      // Normal relative offset when inside canvas
+      const targetX = mouseDrag.shipStartX + (rawX - mouseDrag.startX);
+      const targetY = mouseDrag.shipStartY + (rawY - mouseDrag.startY);
+      ix = Math.max(-1, Math.min(1, (targetX - player.x) / 20));
+      iy = Math.max(-1, Math.min(1, (targetY - player.y) / 20));
+
+      // Gentle anchor correction — slowly close the gap between the ship's
+      // "home" position and where the cursor actually is, without touching ix/iy.
+      // The relative offset target is: shipStart + (raw - start)
+      // The gap between that target and the cursor is: shipStart - start
+      // Lerping shipStart toward start gradually zeroes that gap.
+      mouseDrag.shipStartX += (mouseDrag.startX - mouseDrag.shipStartX) * 0.02;
+      mouseDrag.shipStartY += (mouseDrag.startY - mouseDrag.shipStartY) * 0.02;
+    }
+  }
+
   // Tick down touch secondary arrival window
   if (touch.secondaryArrivalWindow > 0) touch.secondaryArrivalWindow--;
 
@@ -1229,16 +1452,19 @@ function updatePlayer() {
   }
 
 
-  // Firing
-  if (player.fireTimer > 0) player.fireTimer--;
-  if (player.fireTimer <= 0) {
-    firePlayerWeapon();
-    player.fireTimer = player.fireRateOverride || CONFIG.playerFireRate;
-  }
+  // Firing — suppress during warning screens
+  const warningScreen = gameState === 'MID_BOSS_WARNING' || gameState === 'BOSS_WARNING' || gameState === 'TUNNEL_WARNING';
+  if (!warningScreen) {
+    if (player.fireTimer > 0) player.fireTimer--;
+    if (player.fireTimer <= 0) {
+      firePlayerWeapon();
+      player.fireTimer = player.fireRateOverride || CONFIG.playerFireRate;
+    }
 
-  // Secondary fire
-  if (keys['KeyX'] || keys['Space']) {
-    fireSecondary();
+    // Secondary fire
+    if (keys['KeyX'] || keys['Space']) {
+      fireSecondary();
+    }
   }
 
   // Touch: two-finger tap for secondary
@@ -1283,6 +1509,21 @@ function updatePlayer() {
       triggerDodge(sd.dx, sd.dy);
     }
   }
+
+  // Mouse double-click dodge
+  if (mouseDrag.dodgePending) {
+    const md = mouseDrag.dodgePending;
+    mouseDrag.dodgePending = null;
+    if (player.dodgeCooldown <= 0) {
+      triggerDodge(md.dx, md.dy);
+    }
+  }
+
+  // Mouse right-click secondary fire
+  if (mouseDrag.secondaryFired) {
+    mouseDrag.secondaryFired = false;
+    fireSecondary();
+  }
 }
 
 function triggerDodge(dx, dy) {
@@ -1319,44 +1560,47 @@ function triggerDodge(dx, dy) {
 }
 
 function firePlayerWeapon() {
+  playSFX('player-shoot', SFX_VOLUMES['player-shoot']);
   const lvl = player.weaponLevel;
   const bx = player.x + 20;
   const by = player.y;
   const p = player.pitchAngle || 0;
 
+  // Divide base damage across bullet count, then multiply by power tier
+  const bulletCount = Math.min(lvl, 3);
+  const perBulletDmg = (1 / bulletCount) * player.bulletPower;
+
   // Helper: spawn a bullet at a given angle (pitch-relative)
   function fire(x, y, angle) {
     spawnPlayerBullet(x, y,
       CONFIG.bulletSpeed * Math.cos(angle),
-      CONFIG.bulletSpeed * Math.sin(angle));
+      CONFIG.bulletSpeed * Math.sin(angle),
+      perBulletDmg);
   }
 
+  // Spread caps at 3 bullets; beyond that, upgrades add power
   if (lvl === 1) {
     fire(bx, by, p);
   } else if (lvl === 2) {
     fire(bx, by - 3, p);
     fire(bx, by + 3, p);
-  } else if (lvl === 3) {
+  } else {
+    // lvl 3+ all fire the same 3-way spread
     fire(bx, by,     p);
     fire(bx, by - 3, p - 0.12);
     fire(bx, by + 3, p + 0.12);
-  } else if (lvl === 4) {
-    fire(bx, by - 2, p);
-    fire(bx, by + 2, p);
-    fire(bx, by - 5, p - 0.14);
-    fire(bx, by + 5, p + 0.14);
-  } else if (lvl >= 5) {
-    fire(bx, by, p);
-    for (let i = -2; i <= 2; i++) {
-      if (i !== 0) fire(bx, by, p + i * 0.09);
-    }
   }
   player.shotsFired++;
 }
 
-function spawnPlayerBullet(x, y, vx, vy) {
+function spawnPlayerBullet(x, y, vx, vy, dmg) {
   if (playerBullets.length >= CONFIG.maxBullets) return;
-  playerBullets.push({ x, y, vx, vy, width: 18, height: 6, alive: true });
+  playerBullets.push({
+    x, y, vx, vy, width: 18, height: 6, alive: true,
+    damage: dmg != null ? dmg : player.bulletPower,
+    color: player.bulletColor,
+    glow: player.bulletGlow
+  });
 }
 
 let secondaryFireTimer = 0;
@@ -1725,40 +1969,35 @@ function updatePlayerBullets() {
 function drawPlayerBullets() {
   if (playerBullets.length === 0) return;
   ctx.save();
-  // Pass 1: Outer neon bloom
-  ctx.shadowColor = CONFIG.colors.playerBullet;
-  ctx.shadowBlur = 22;
-  ctx.fillStyle = 'rgba(0, 255, 255, 0.2)';
+  const defaultColor = CONFIG.colors.playerBullet;
+  const defaultGlow  = 'rgba(0, 255, 255, 0.2)';
   for (const b of playerBullets) {
+    const bColor = b.color || defaultColor;
+    const bGlow  = b.glow  || defaultGlow;
     const hw = b.width / 2, hh = b.height / 2;
+    // Pass 1: Outer neon bloom
+    ctx.shadowColor = bColor;
+    ctx.shadowBlur = 22;
+    ctx.fillStyle = bGlow;
     ctx.beginPath();
     ctx.ellipse(b.x, b.y, hw + 4, hh + 3, 0, 0, Math.PI * 2);
     ctx.fill();
-  }
-  // Pass 2: Main plasma body — tapered ellipse with a pointed nose
-  ctx.shadowBlur = 14;
-  ctx.fillStyle = CONFIG.colors.playerBullet;
-  for (const b of playerBullets) {
-    const hw = b.width / 2, hh = b.height / 2;
+    // Pass 2: Main plasma body — tapered ellipse with a pointed nose
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = bColor;
     ctx.beginPath();
-    // Tail (rounded back)
     ctx.moveTo(b.x - hw, b.y);
     ctx.quadraticCurveTo(b.x - hw, b.y - hh, b.x, b.y - hh);
-    // Nose (pointed front)
     ctx.quadraticCurveTo(b.x + hw * 0.6, b.y - hh * 0.6, b.x + hw, b.y);
     ctx.quadraticCurveTo(b.x + hw * 0.6, b.y + hh * 0.6, b.x, b.y + hh);
-    // Back to tail
     ctx.quadraticCurveTo(b.x - hw, b.y + hh, b.x - hw, b.y);
     ctx.fill();
-  }
-  // Pass 3: Hot white core — elongated inner teardrop
-  ctx.shadowColor = '#ffffff';
-  ctx.shadowBlur = 8;
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-  for (const b of playerBullets) {
-    const cw = b.width * 0.35, ch = b.height * 0.35;
+    // Pass 3: Hot white core
+    ctx.shadowColor = '#ffffff';
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
     ctx.beginPath();
-    ctx.ellipse(b.x - b.width * 0.08, b.y, cw, ch, 0, 0, Math.PI * 2);
+    ctx.ellipse(b.x - b.width * 0.08, b.y, b.width * 0.35, b.height * 0.35, 0, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
@@ -1881,7 +2120,11 @@ function spawnSpaceMine(x, y) {
   });
 }
 
+let playerGravPull = { active: false, strength: 0, fromX: 0, fromY: 0 };
+
 function updateSpaceMines() {
+  playerGravPull.active = false;
+  playerGravPull.strength = 0;
   for (let i = spaceMines.length - 1; i >= 0; i--) {
     const m = spaceMines[i];
     m.frame++;
@@ -1900,12 +2143,20 @@ function updateSpaceMines() {
         const dx = m.x - player.x;
         const dy = m.y - player.y;
         const d = Math.sqrt(dx * dx + dy * dy);
-        const pullRadius = 180;
+        const pullRadius = 240;
         if (d < pullRadius && d > 5) {
           const pullProgress = m.pullFrame / m.pullTime;
-          const strength = (0.3 + pullProgress * 0.7) * (1 - d / pullRadius);
-          player.x += (dx / d) * strength * 1.8;
-          player.y += (dy / d) * strength * 1.8;
+          const strength = (0.5 + pullProgress * 1.0) * (1 - d / pullRadius);
+          const force = strength * 2.8;
+          player.x += (dx / d) * force;
+          player.y += (dy / d) * force;
+          // Track strongest pull for visual effect
+          if (force > playerGravPull.strength) {
+            playerGravPull.active = true;
+            playerGravPull.strength = force;
+            playerGravPull.fromX = m.x;
+            playerGravPull.fromY = m.y;
+          }
         }
       }
       // Spawn inward-streaking particles throughout the pull phase
@@ -2774,6 +3025,7 @@ function applyPickup(p) {
       break;
     case 'score':
       score += 1000;
+      checkLevelUp();
       break;
     case 'speed': {
       const baseMaxVel = player.maxVel;
@@ -2790,6 +3042,11 @@ function applyPickup(p) {
       player.secondary = p.type;
       player.secondaryAmmo = wDef.ammo || Math.round((wDef.duration || 10) * 60); // duration→frames for shield
       player.secondaryFlash = 90; // HUD flash timer for new pickup
+      if (!secondaryTutorial.shown) {
+        secondaryTutorial.active = true;
+        secondaryTutorial.frame = 0;
+        secondaryTutorial.shown = true;
+      }
       break;
     }
   }
@@ -2870,8 +3127,8 @@ function checkCollisions() {
         const dy = b.y - e.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 13) {
-          // Core hit — charge energy
-          e.energy = Math.min(e.maxEnergy, e.energy + 20);
+          // Core hit — charge energy (scaled by bullet power)
+          e.energy = Math.min(e.maxEnergy, e.energy + 20 * (b.damage || 1));
           player.shotsHit++;
           spawnExplosion(e.x, e.y, 6, ['#ffffff', '#dd88ff', '#aa44ff']);
           spawnImpactSparks(b.x, b.y, b.vx, b.vy, 6, ['#ffffff', '#dd88ff', '#aa44ff']);
@@ -2931,7 +3188,7 @@ function checkCollisions() {
       } else {
         if (rectOverlap(b.x - b.width / 2, b.y - b.height / 2, b.width, b.height,
                          e.x - e.width / 2, e.y - e.height / 2, e.width, e.height)) {
-          e.hp--;
+          e.hp -= (b.damage || 1);
           player.shotsHit++;
           if (e.hp <= 0) {
             destroyEnemy(e, ei);
@@ -3005,7 +3262,7 @@ function checkCollisions() {
       if (consumed) { swapRemove(playerBullets, bi); continue; }
       // Hit mid-boss core
       if (dist(b.x, b.y, midBoss.x, midBoss.y) < 30 && midBoss.coreExposed) {
-        midBoss.hp--;
+        midBoss.hp -= (b.damage || 1);
         midBoss.hitFlash = 12;
         player.shotsHit++;
         spawnExplosion(b.x, b.y, 4, ['#cc00ff', '#ffffff', '#ff3300']);
@@ -3027,7 +3284,7 @@ function checkCollisions() {
                        boss.x - boss.hitW/2, boss.y - boss.hitH/2, boss.hitW, boss.hitH)) {
         // Only damage if core exposed
         if (boss.coreExposed) {
-          boss.hp--;
+          boss.hp -= (b.damage || 1);
           player.shotsHit++;
           spawnExplosion(b.x, b.y, 4, ['#ffffff', '#ffff00', '#ff00aa']);
           spawnImpactSparks(b.x, b.y, b.vx, b.vy, 12, ['#ffffff', '#ffff00', '#ff00aa']);
@@ -3137,6 +3394,7 @@ function triggerGravNova(e, index) {
   // Remove the gravwell first so cascading destroyEnemy calls don't double-splice
   swapRemove(enemies, index);
   score += e.points;
+  checkLevelUp();
   enemiesDestroyed++;
 
   // Massive central explosion
@@ -3183,8 +3441,10 @@ function destroyEnemy(e, index) {
   const baseMultiplier = 1 + (player.xpLevel - 1) * 0.25;
   const multiplier = baseMultiplier * player.scoreMultBonus;
   score += Math.round(e.points * multiplier);
+  checkLevelUp();
   enemiesDestroyed++;
   spawnExplosion(e.x, e.y, 12, explosionColors);
+  if (e.type === 'weaver') playSFX('bomber-death', SFX_VOLUMES['bomber-death']);
 
   // XP orb — every enemy drops one; size/value proportional to enemy points
   spawnXPOrb(e.x, e.y, Math.max(1, Math.round(e.points / 50)));
@@ -3262,6 +3522,7 @@ function killPlayer() {
 
   if (player.lives <= 0) {
     gameState = 'GAME_OVER';
+    stopMusic(3000);
   } else {
     player.respawnTimer = 90; // 1.5 seconds
   }
@@ -3326,14 +3587,18 @@ function updateXPOrbs() {
 }
 
 function collectXPOrb(o) {
-  player.xp += o.value;
+  // Orbs add to score — one unified progression
+  score += o.value * 50;
+  playRandomXPPickup();
   spawnExplosion(o.x, o.y, 5, ['#ffffff', '#00ffee', '#88ffee']);
+  checkLevelUp();
+}
 
-  // Level-up check — queue card selections
-  while (player.xp >= player.xpToNext) {
-    player.xp      -= player.xpToNext;
+function checkLevelUp() {
+  while (score >= player.nextLevelScore) {
+    player.prevLevelScore = player.nextLevelScore;
     player.xpLevel++;
-    player.xpToNext = Math.floor(player.xpToNext * 1.4);
+    player.nextLevelScore = Math.round(player.nextLevelScore * 1.5);
     player.pendingLevelUps++;
     screenFlash = 15;
     spawnExplosion(player.x, player.y, 20, ['#ffffff', '#00ffee', '#ffff44']);
@@ -3601,6 +3866,9 @@ function drawBoss() {
 function destroyBoss() {
   boss.alive = false;
   score += 5000;
+  checkLevelUp();
+  // Magnetize all XP orbs to player
+  for (const o of xpOrbs) o.locked = true;
   // Big explosion
   for (let i = 0; i < 5; i++) {
     scheduleAction(i * 12, () => {
@@ -3613,6 +3881,8 @@ function destroyBoss() {
   }
   // Screen flash
   screenFlash = 30;
+  // Fade out music as boss explodes
+  stopMusic(3000);
   // Transition to stage clear after explosions
   scheduleAction(90, () => {
     gameState = 'STAGE_CLEAR';
@@ -3628,6 +3898,12 @@ let preMidBoss = false;   // true while waiting for mid-boss — asteroids get s
 
 function spawnMidBoss() {
   preMidBoss = false;   // suction phase ends when Shepherd arrives
+  // Fallback: trigger shepherd music if the suction asteroid was destroyed before it triggered
+  if (!shepherdMusicTriggered) {
+    shepherdMusicTriggered = true;
+    shepherdTrackChoice = Math.random() < 0.5 ? 'shepherd1' : 'shepherd2';
+    crossfadeTo(shepherdTrackChoice);
+  }
   const orbData = [];
   // Inner ring: 4 small, fast
   for (let i = 0; i < 4; i++) {
@@ -4384,6 +4660,9 @@ function drawMidBossInboundAlerts() {
 function destroyMidBoss() {
   midBoss.alive = false;
   score += 3000;
+  checkLevelUp();
+  // Magnetize all XP orbs to player
+  for (const o of xpOrbs) o.locked = true;
   for (let i = 0; i < 6; i++) {
     scheduleAction(i * 11, () => {
       if (!midBoss) return;
@@ -4407,6 +4686,8 @@ function destroyMidBoss() {
     secondaryProjectiles.length = 0;
     scheduledActions.length = 0;
     gameState = 'GAMEPLAY';
+    // Crossfade from shepherd music to post-shepherd level track
+    crossfadeTo('level2');
   });
 }
 
@@ -5287,11 +5568,14 @@ function updateAmbientAsteroids() {
   const count = inBossFight
     ? (midBoss.phase === 2 ? 2 + Math.floor(Math.random() * 2) : (Math.random() < 0.4 ? 2 : 1))
     : (Math.random() < 0.25 ? 2 + Math.floor(Math.random() * 2) : 1);
-  const baseY = 50 + Math.random() * (CONFIG.height - 140);
+  // Keep the tutorial area clear — push asteroids to lower half while tutorial is showing
+  const tutorialActive = autofireFlash.active || mouseTutorial.active;
+  const minY = tutorialActive ? CONFIG.height * 0.5 : 50;
+  const baseY = minY + Math.random() * (CONFIG.height - minY - 90);
 
   for (let c = 0; c < count; c++) {
     const type = Math.random() < 0.2 ? 'charger' : 'drone';
-    const y = Math.max(40, Math.min(CONFIG.height - 40, baseY + (Math.random() - 0.5) * 90));
+    const y = Math.max(minY, Math.min(CONFIG.height - 40, baseY + (Math.random() - 0.5) * 90));
     const e = spawnEnemy(type, CONFIG.width + 30 + c * 45, y);
     if (e) { e.speed = 1.5 + Math.random() * 2.5; e.ambient = true; }
   }
@@ -5302,7 +5586,6 @@ const stageWaves = {
   1: [
     // Wave 1: Scattered drones — loose asteroid field, no formation
     { enemies: [
-      { type: 'drone', x: 1000, y: 95  },
       { type: 'drone', x: 1070, y: 200 },
       { type: 'drone', x: 990,  y: 310 },
       { type: 'drone', x: 1110, y: 155 },
@@ -5391,6 +5674,8 @@ function updateWaves() {
     if (!boss && gameState === 'GAMEPLAY') {
       gameState = 'BOSS_WARNING';
       bossWarningTimer = 120;
+      playerBullets.length = 0;
+      enemyBullets.length = 0;
     }
     return;
   }
@@ -5403,9 +5688,16 @@ function updateWaves() {
     if (wave.midBoss && !preMidBoss) preMidBoss = true;
     if (waveTimer >= wave.delay && enemies.filter(e => !e.ambient).length <= 2) {
       if (wave.midBoss) {
-        // Trigger mid-boss encounter
+        // Trigger mid-boss encounter — start shepherd music on warning
+        if (!shepherdMusicTriggered) {
+          shepherdMusicTriggered = true;
+          shepherdTrackChoice = Math.random() < 0.5 ? 'shepherd1' : 'shepherd2';
+          crossfadeTo(shepherdTrackChoice);
+        }
         gameState = 'MID_BOSS_WARNING';
         midBossWarningTimer = 150;
+        playerBullets.length = 0;
+        enemyBullets.length = 0;
         waveActive = true;   // hold here until destroyMidBoss() advances it
         return;
       }
@@ -5413,6 +5705,8 @@ function updateWaves() {
         // Trigger tunnel gauntlet
         gameState = 'TUNNEL_WARNING';
         tunnelWarningTimer = 120;
+        playerBullets.length = 0;
+        enemyBullets.length = 0;
         waveActive = true;   // hold here until completeTunnel() advances it
         return;
       }
@@ -5440,25 +5734,42 @@ function updateWaves() {
 let bossWarningTimer = 0;
 
 // === HUD ===
+// Barrel distortion — nudge a point inward based on distance from center
+function crtWarp(x, y) {
+  const cx = CONFIG.width / 2, cy = CONFIG.height / 2;
+  const nx = (x - cx) / cx, ny = (y - cy) / cy; // -1..1 normalized
+  const r2 = nx * nx + ny * ny;
+  const strength = 0.012; // gentle barrel push — enough to feel, not enough to clip
+  const wx = x + (x - cx) * r2 * strength;
+  const wy = y + (y - cy) * r2 * strength;
+  return { x: wx, y: wy };
+}
+
 function drawHUD() {
   ctx.save();
   ctx.shadowBlur = 0;
   ctx.fillStyle = CONFIG.colors.hud;
   ctx.font = '16px monospace';
 
-  // Score
+  // HUD margin — keep elements inside the vignette
+  const hMargin = 40, vMargin = 34;
+
+  // Score — top-left, warp position
+  const scorePos = crtWarp(hMargin, vMargin);
   ctx.textAlign = 'left';
-  ctx.fillText('SCORE: ' + String(score).padStart(8, '0'), 20, 28);
+  ctx.fillText('SCORE: ' + String(score).padStart(8, '0'), scorePos.x, scorePos.y);
 
-  // Stage
+  // Stage — top-center (minimal warp since it's centered)
+  const stagePos = crtWarp(CONFIG.width / 2, vMargin);
   ctx.textAlign = 'center';
-  ctx.fillText('STAGE ' + currentStage, CONFIG.width / 2, 28);
+  ctx.fillText('STAGE ' + currentStage, stagePos.x, stagePos.y);
 
-  // Lives
+  // Lives — top-right
+  const livesPos = crtWarp(CONFIG.width - hMargin, vMargin);
   ctx.textAlign = 'right';
   let livesStr = 'LIVES: ';
   for (let i = 0; i < player.lives; i++) livesStr += '♦ ';
-  ctx.fillText(livesStr, CONFIG.width - 20, 28);
+  ctx.fillText(livesStr, livesPos.x, livesPos.y);
 
   // Secondary weapon HUD badge
   if (player.secondary) {
@@ -5473,12 +5784,17 @@ function drawHUD() {
     if (player.secondaryFlash > 0) player.secondaryFlash--;
     const flashAlpha = player.secondaryFlash > 0 ? Math.sin(player.secondaryFlash * 0.3) * 0.3 : 0;
 
+    // Ongoing "use me!" pulse when ammo is still full (hasn't been fired yet)
+    const unusedPulse = (ammoFrac >= 1.0 && player.secondaryFlash <= 0)
+      ? 0.15 + 0.15 * Math.sin(frame * 0.1)
+      : 0;
+
     // Badge background
     ctx.fillStyle = `rgba(10, 6, 20, 0.7)`;
     ctx.strokeStyle = meta.color;
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = unusedPulse > 0 ? 2.5 : 1.5;
     ctx.shadowColor = meta.color;
-    ctx.shadowBlur = flashAlpha > 0 ? 15 : 6;
+    ctx.shadowBlur = flashAlpha > 0 ? 15 : unusedPulse > 0 ? 10 + unusedPulse * 30 : 6;
     ctx.beginPath();
     ctx.roundRect(bx, by, bw, bh, 4);
     ctx.fill();
@@ -5487,6 +5803,14 @@ function drawHUD() {
     // Flash overlay
     if (flashAlpha > 0) {
       ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha.toFixed(2)})`;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, 4);
+      ctx.fill();
+    }
+
+    // "Use me!" pulse overlay when ammo is full
+    if (unusedPulse > 0) {
+      ctx.fillStyle = `rgba(255, 255, 255, ${unusedPulse.toFixed(3)})`;
       ctx.beginPath();
       ctx.roundRect(bx, by, bw, bh, 4);
       ctx.fill();
@@ -5528,27 +5852,29 @@ function drawHUD() {
     ctx.fillText(isMobile ? '' : '[SPC]', bx + barW + 18, by + bh / 2 + 1);
   }
 
-  // Weapon stats indicator
+  // Weapon stats indicator — CRT-warped
+  const wpnPos = crtWarp(hMargin, vMargin + 18);
   ctx.textAlign = 'left';
   ctx.font = '12px monospace';
   ctx.fillStyle = CONFIG.colors.playerBullet;
   let wpnLabel = 'WPN ' + player.weaponLevel + '×';
   if (player.upgrades.fireRate > 0) wpnLabel += ' R' + (player.fireRateOverride || CONFIG.playerFireRate);
   if (player.upgrades.gravLock > 0) wpnLabel += ' G' + player.upgrades.gravLock;
-  ctx.fillText(wpnLabel, 20, 48);
+  ctx.fillText(wpnLabel, wpnPos.x, wpnPos.y);
 
-  // Shield status
+  // Shield status — CRT-warped
   if (player.upgrades.shieldRegen > 0) {
+    const shieldPos = crtWarp(hMargin, vMargin + 34);
     if (player.shieldActive) {
       ctx.fillStyle = '#ffee88';
       ctx.shadowColor = '#ffee88';
       ctx.shadowBlur = 6;
-      ctx.fillText('SHIELD ●', 20, 64);
+      ctx.fillText('SHIELD ●', shieldPos.x, shieldPos.y);
       ctx.shadowBlur = 0;
     } else if (player.shieldRechargeTimer > 0) {
       const secsLeft = Math.ceil(player.shieldRechargeTimer / 60);
       ctx.fillStyle = 'rgba(255, 220, 80, 0.4)';
-      ctx.fillText('SHIELD ' + secsLeft + 's', 20, 64);
+      ctx.fillText('SHIELD ' + secsLeft + 's', shieldPos.x, shieldPos.y);
     }
   }
 
@@ -5565,11 +5891,12 @@ function drawHUD() {
     }
   }
 
-  // Dodge cooldown bar — lower left
+  // Dodge cooldown bar — lower left, CRT-warped
   {
     const dodgeReady = player.dodgeCooldown <= 0;
     const cooldownPct = dodgeReady ? 1 : 1 - (player.dodgeCooldown / player.dodgeCooldownBase);
-    const barX = 20, barY = CONFIG.height - 32;
+    const dWarp = crtWarp(hMargin, CONFIG.height - vMargin);
+    const barX = dWarp.x, barY = dWarp.y;
     ctx.font = '10px monospace';
     ctx.textAlign = 'left';
     ctx.fillStyle = dodgeReady ? '#00ffff' : 'rgba(0,200,255,0.4)';
@@ -5586,35 +5913,604 @@ function drawHUD() {
     ctx.shadowBlur = 0;
   }
 
-  // XP bar — lower right
+  // Level progress bar — lower right, shows score progress to next level-up
   {
-    const xpPct = player.xp / player.xpToNext;
+    const range = player.nextLevelScore - player.prevLevelScore;
+    const progress = range > 0 ? (score - player.prevLevelScore) / range : 0;
+    const lvlPct = Math.min(1, Math.max(0, progress));
     const barW = 100;
-    const barX = CONFIG.width - 20 - barW;
-    const barY = CONFIG.height - 32;
+    const lvlWarp = crtWarp(CONFIG.width - hMargin - barW, CONFIG.height - vMargin);
+    const lvlLabelWarp = crtWarp(CONFIG.width - hMargin, CONFIG.height - vMargin);
+    const barX = lvlWarp.x, barY = lvlWarp.y;
     ctx.font = '10px monospace';
     ctx.textAlign = 'right';
     ctx.fillStyle = '#88ffee';
-    ctx.fillText('LV' + player.xpLevel + ' XP', CONFIG.width - 20, barY - 4);
+    ctx.fillText('LV ' + player.xpLevel, lvlLabelWarp.x, lvlLabelWarp.y - 4);
     // Background
     ctx.fillStyle = '#0a2220';
     ctx.fillRect(barX, barY, barW, 7);
     // Fill
     ctx.shadowColor = '#00ffee';
-    ctx.shadowBlur = xpPct > 0.9 ? 12 : 4;
-    ctx.fillStyle = xpPct > 0.9 ? '#ffffff' : '#00ddcc';
-    ctx.fillRect(barX, barY, Math.round(barW * xpPct), 7);
+    ctx.shadowBlur = lvlPct > 0.9 ? 12 : 4;
+    ctx.fillStyle = lvlPct > 0.9 ? '#ffffff' : '#00ddcc';
+    ctx.fillRect(barX, barY, Math.round(barW * lvlPct), 7);
     ctx.shadowBlur = 0;
   }
 
-  // Mobile pause button
-  if (isMobile) {
-    const px = CONFIG.width - 35, py = 15;
-    ctx.fillStyle = 'rgba(224, 224, 255, 0.35)';
-    ctx.fillRect(px, py, 6, 18);
-    ctx.fillRect(px + 10, py, 6, 18);
+  // Pause button — icon only, larger hit area
+  {
+    const pbX = 10, pbY = 80, pbW = 36, pbH = 36;
+    const hovered = !isMobile && mousePos.x >= pbX && mousePos.x <= pbX + pbW && mousePos.y >= pbY && mousePos.y <= pbY + pbH;
+    const alpha = hovered ? 0.8 : 0.35;
+    if (hovered) {
+      ctx.fillStyle = 'rgba(224, 224, 255, 0.08)';
+      ctx.beginPath();
+      ctx.roundRect(pbX, pbY, pbW, pbH, 6);
+      ctx.fill();
+    }
+    ctx.fillStyle = `rgba(224, 224, 255, ${alpha})`;
+    ctx.shadowColor = hovered ? '#00f0ff' : 'transparent';
+    ctx.shadowBlur = hovered ? 8 : 0;
+    // Two pause bars — centered in button
+    ctx.fillRect(pbX + 10, pbY + 8, 6, 20);
+    ctx.fillRect(pbX + 20, pbY + 8, 6, 20);
+    ctx.shadowBlur = 0;
   }
 
+  // Mute button — icon only, below pause
+  {
+    const mbX = 10, mbY = 122, mbW = 36, mbH = 36;
+    const hovered = !isMobile && mousePos.x >= mbX && mousePos.x <= mbX + mbW && mousePos.y >= mbY && mousePos.y <= mbY + mbH;
+    const alpha = hovered ? 0.8 : 0.35;
+    if (hovered) {
+      ctx.fillStyle = 'rgba(224, 224, 255, 0.08)';
+      ctx.beginPath();
+      ctx.roundRect(mbX, mbY, mbW, mbH, 6);
+      ctx.fill();
+    }
+    ctx.fillStyle = `rgba(224, 224, 255, ${alpha})`;
+    ctx.strokeStyle = `rgba(224, 224, 255, ${alpha})`;
+    ctx.shadowColor = hovered ? '#00f0ff' : 'transparent';
+    ctx.shadowBlur = hovered ? 8 : 0;
+    // Speaker body — centered, larger
+    const sx = mbX + 6, sy = mbY + 8;
+    ctx.beginPath();
+    ctx.rect(sx, sy + 6, 5, 8);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(sx + 5, sy + 6);
+    ctx.lineTo(sx + 13, sy);
+    ctx.lineTo(sx + 13, sy + 20);
+    ctx.lineTo(sx + 5, sy + 14);
+    ctx.closePath();
+    ctx.fill();
+    if (!muted) {
+      // Sound wave arcs
+      for (let w = 0; w < 3; w++) {
+        const r = 6 + w * 6;
+        const a = alpha * (1 - w * 0.25);
+        ctx.strokeStyle = `rgba(224, 224, 255, ${a.toFixed(2)})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(sx + 13, sy + 10, r, -Math.PI * 0.35, Math.PI * 0.35);
+        ctx.stroke();
+      }
+    } else {
+      // Strikethrough line
+      ctx.strokeStyle = `rgba(255, 80, 80, ${alpha})`;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(sx - 2, sy + 20);
+      ctx.lineTo(sx + 26, sy);
+      ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
+  }
+
+  ctx.restore();
+
+  // Velocity indicator — 1-3 stacked chevrons showing momentum direction & strength
+  if (player.alive && ['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState)) {
+    const speed = Math.sqrt(player.vx * player.vx + player.vy * player.vy);
+    if (speed > 0.3) {
+      const nx = player.vx / speed, ny = player.vy / speed;
+      const angle = Math.atan2(ny, nx);
+      // 1 chevron at low speed, 2 at medium, 3 at high
+      const chevrons = speed < 2 ? 1 : speed < 4 ? 2 : 3;
+      const baseAlpha = Math.min(0.6, (speed - 0.3) / 3);
+      ctx.save();
+      ctx.shadowColor = '#00f0ff';
+      ctx.shadowBlur = 4;
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+      for (let c = 0; c < chevrons; c++) {
+        const dist = 25 + c * 10;
+        const cx = player.x + nx * dist;
+        const cy = player.y + ny * dist;
+        // Each successive chevron is slightly more transparent
+        const a = baseAlpha * (1 - c * 0.25);
+        ctx.strokeStyle = `rgba(0, 240, 255, ${a.toFixed(2)})`;
+        ctx.beginPath();
+        ctx.moveTo(cx - Math.cos(angle - 0.6) * 7, cy - Math.sin(angle - 0.6) * 7);
+        ctx.lineTo(cx, cy);
+        ctx.lineTo(cx - Math.cos(angle + 0.6) * 7, cy - Math.sin(angle + 0.6) * 7);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+}
+
+// === INPUT TUTORIAL OVERLAY ===
+const autofireFlash = {
+  active: false,
+  frame: 0,
+  duration: 120, // 2 seconds at 60fps
+  shown: false
+};
+const mouseTutorial = {
+  active: false,
+  frame: 0,
+  duration: 300, // 5 seconds at 60fps
+  shown: false
+};
+const secondaryTutorial = {
+  active: false,
+  frame: 0,
+  duration: 240, // 4 seconds
+  shown: false
+};
+
+// --- Desktop mouse icon ---
+function drawMouseBody(cx, cy, scale, leftPressed, rightPressed) {
+  const s = scale;
+  ctx.fillStyle = 'rgba(180, 180, 200, 0.15)';
+  ctx.strokeStyle = 'rgba(200, 200, 220, 0.5)';
+  ctx.lineWidth = 1.5 * s;
+  ctx.beginPath();
+  ctx.roundRect(cx - 18 * s, cy - 28 * s, 36 * s, 56 * s, 12 * s);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(200, 200, 220, 0.3)';
+  ctx.lineWidth = 1 * s;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - 28 * s);
+  ctx.lineTo(cx, cy - 4 * s);
+  ctx.stroke();
+
+  ctx.fillStyle = leftPressed ? 'rgba(0, 240, 255, 0.5)' : 'rgba(200, 200, 220, 0.08)';
+  ctx.shadowColor = leftPressed ? '#00f0ff' : 'transparent';
+  ctx.shadowBlur = leftPressed ? 10 : 0;
+  ctx.beginPath();
+  ctx.roundRect(cx - 16 * s, cy - 26 * s, 15 * s, 20 * s, [8 * s, 0, 0, 0]);
+  ctx.fill();
+
+  ctx.fillStyle = rightPressed ? 'rgba(200, 60, 255, 0.5)' : 'rgba(200, 200, 220, 0.08)';
+  ctx.shadowColor = rightPressed ? '#cc44ff' : 'transparent';
+  ctx.shadowBlur = rightPressed ? 10 : 0;
+  ctx.beginPath();
+  ctx.roundRect(cx + 1 * s, cy - 26 * s, 15 * s, 20 * s, [0, 8 * s, 0, 0]);
+  ctx.fill();
+
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(200, 200, 220, 0.3)';
+  ctx.beginPath();
+  ctx.roundRect(cx - 2.5 * s, cy - 22 * s, 5 * s, 8 * s, 2 * s);
+  ctx.fill();
+}
+
+// --- Mobile: radiant touch circles ---
+function drawTouchRadiance(cx, cy, f, tapped, color) {
+  const ringCount = 3;
+  for (let i = 0; i < ringCount; i++) {
+    const phase = ((f * 0.03 + i * 0.33) % 1);
+    const radius = 12 + phase * 35;
+    const a = (1 - phase) * (tapped ? 0.6 : 0.2);
+    ctx.strokeStyle = `rgba(${color}, ${a.toFixed(2)})`;
+    ctx.shadowColor = `rgba(${color}, 0.4)`;
+    ctx.shadowBlur = tapped ? 12 : 4;
+    ctx.lineWidth = tapped ? 2.5 * (1 - phase) : 1.5 * (1 - phase);
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  // Center dot
+  ctx.fillStyle = `rgba(${color}, ${tapped ? 0.7 : 0.3})`;
+  ctx.shadowBlur = tapped ? 10 : 0;
+  ctx.beginPath();
+  ctx.arc(cx, cy, tapped ? 6 : 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function drawAutofireFlash() {
+  if (!autofireFlash.active) return;
+  autofireFlash.frame++;
+  if (autofireFlash.frame > autofireFlash.duration) {
+    autofireFlash.active = false;
+    // Chain into the mouse/touch tutorial
+    mouseTutorial.active = true;
+    mouseTutorial.frame = 0;
+    mouseTutorial.shown = true;
+    return;
+  }
+
+  const f = autofireFlash.frame;
+  const cx = CONFIG.width / 2, cy = CONFIG.height * 0.3;
+
+  // Sharp punch-in, hold, then fade
+  const punchIn = Math.min(1, f / 8); // fast snap in
+  const holdEnd = autofireFlash.duration - 30;
+  const fadeOut = f > holdEnd ? 1 - (f - holdEnd) / 30 : 1;
+  const alpha = punchIn * fadeOut;
+  if (alpha <= 0) return;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+
+  // Expanding reticle ring on punch-in
+  const ringRadius = 30 + (1 - punchIn) * 60;
+  const ringAlpha = punchIn * fadeOut * 0.4;
+  ctx.strokeStyle = `rgba(160, 255, 0, ${ringAlpha.toFixed(2)})`;
+  ctx.shadowColor = '#a0ff00';
+  ctx.shadowBlur = 15;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Crosshair ticks around the ring
+  const tickLen = 8;
+  for (let i = 0; i < 4; i++) {
+    const angle = (i * Math.PI / 2) + f * 0.01;
+    const inner = ringRadius - tickLen;
+    const outer = ringRadius + tickLen;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
+    ctx.lineTo(cx + Math.cos(angle) * outer, cy + Math.sin(angle) * outer);
+    ctx.stroke();
+  }
+
+  // Pulsing center dot
+  const dotPulse = 3 + Math.sin(f * 0.2) * 1.5;
+  ctx.fillStyle = `rgba(160, 255, 0, ${(0.6 * alpha).toFixed(2)})`;
+  ctx.beginPath();
+  ctx.arc(cx, cy, dotPulse, 0, Math.PI * 2);
+  ctx.fill();
+
+  // "AUTOFIRE ENABLED" text — distinct blocky style
+  ctx.shadowColor = '#a0ff00';
+  ctx.shadowBlur = 20;
+  ctx.fillStyle = '#a0ff00';
+  ctx.font = 'bold 22px monospace';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('A U T O F I R E', cx, cy + 55);
+  ctx.font = 'bold 14px monospace';
+  ctx.fillStyle = 'rgba(160, 255, 0, 0.7)';
+  ctx.shadowBlur = 10;
+  ctx.fillText('E N A B L E D', cx, cy + 75);
+
+  // Horizontal scan line sweep across the text area
+  const sweepY = cy + 40 + (f % 50) * 0.8;
+  ctx.strokeStyle = `rgba(160, 255, 0, ${(0.15 * alpha).toFixed(2)})`;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - 120, sweepY);
+  ctx.lineTo(cx + 120, sweepY);
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+  ctx.restore();
+}
+
+function drawMouseTutorial() {
+  if (!mouseTutorial.active) return;
+  mouseTutorial.frame++;
+  if (mouseTutorial.frame > mouseTutorial.duration) {
+    mouseTutorial.active = false;
+    return;
+  }
+
+  const f = mouseTutorial.frame;
+  const fadeIn = Math.min(1, f / 30);
+  const fadeOut = Math.min(1, (mouseTutorial.duration - f) / 40);
+  const alpha = fadeIn * fadeOut;
+  if (alpha <= 0) return;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+
+  // --- "HOW TO MOVE" neon header — bright and eye-catching ---
+  {
+    const hx = isMobile ? CONFIG.width * 0.7 : CONFIG.width * 0.75;
+    const hy = (isMobile ? CONFIG.height * 0.3 : CONFIG.height * 0.28) - 55;
+    const neonPulse = 0.6 + 0.4 * Math.sin(f * 0.18);
+    const flicker = Math.random() > 0.9 ? 0.3 : 1;
+    ctx.save();
+    ctx.globalAlpha = alpha * neonPulse * flicker;
+    ctx.font = 'bold 20px monospace';
+    ctx.textAlign = 'center';
+    // Triple-pass neon: wide glow → medium glow → crisp text
+    ctx.shadowColor = '#00f0ff';
+    ctx.shadowBlur = 35 * neonPulse;
+    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+    ctx.fillText('HOW TO MOVE', hx, hy);
+    ctx.shadowBlur = 18;
+    ctx.fillStyle = 'rgba(100, 255, 255, 0.7)';
+    ctx.fillText('HOW TO MOVE', hx, hy);
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('HOW TO MOVE', hx, hy);
+    // Underline glow bar
+    const barW = 110;
+    const barPulse = 0.5 + 0.5 * Math.sin(f * 0.12 + 1);
+    ctx.shadowBlur = 10 * barPulse;
+    ctx.shadowColor = '#00f0ff';
+    ctx.strokeStyle = `rgba(0, 240, 255, ${(0.3 * barPulse).toFixed(2)})`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(hx - barW, hy + 6);
+    ctx.lineTo(hx + barW, hy + 6);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  if (isMobile) {
+    // --- Mobile: tap then drag with radiant circles ---
+    const cx = CONFIG.width * 0.7;
+    const cy = CONFIG.height * 0.3;
+    // Phases: 0-80 tap, 80-240 drag, 240+ fade
+    const phase = f < 80 ? 'tap' : f < 240 ? 'drag' : 'fade';
+    const tapped = phase === 'tap' && Math.sin(f * 0.25) > 0;
+
+    if (phase === 'drag') {
+      // Inner circle bumps outward during drag
+      const t = (f - 80) / 160;
+      const dragX = Math.sin(t * Math.PI * 2) * 35;
+      const dragY = Math.cos(t * Math.PI * 3) * 20;
+      // Trail
+      for (let i = 6; i >= 0; i--) {
+        const tt = t - i * 0.018;
+        if (tt < 0) break;
+        const tx = cx + Math.sin(tt * Math.PI * 2) * 35;
+        const ty = cy + Math.cos(tt * Math.PI * 3) * 20;
+        const ta = (1 - i / 7) * 0.3;
+        ctx.fillStyle = `rgba(0, 240, 255, ${ta.toFixed(2)})`;
+        ctx.shadowColor = '#00f0ff';
+        ctx.shadowBlur = 3;
+        ctx.beginPath();
+        ctx.arc(tx, ty, 3 - i * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+      // Inner radiance at drag position
+      drawTouchRadiance(cx + dragX, cy + dragY, f, true, '0, 240, 255');
+    } else {
+      drawTouchRadiance(cx, cy, f, tapped, '0, 240, 255');
+    }
+    // Spark burst helper for mobile
+    function drawMobileSparkBurst(bx, by, startFrame, duration) {
+      if (f < startFrame || f >= startFrame + duration) return;
+      const sparkAge = (f - startFrame) / duration;
+      const sparkColors = ['#ffffff', '#ffee88', '#00f0ff', '#44ddff'];
+      const sparkCount = 14;
+      for (let s = 0; s < sparkCount; s++) {
+        const angle = (s / sparkCount) * Math.PI * 2 + s * 0.618;
+        const speed = 1.2 + (s % 3) * 0.7;
+        const dist = sparkAge * speed * 35;
+        const sparkLife = Math.max(0, 1 - sparkAge * (0.8 + (s % 4) * 0.07));
+        if (sparkLife <= 0) continue;
+        const sx = bx + Math.cos(angle) * dist;
+        const sy = by + Math.sin(angle) * dist;
+        const color = sparkColors[s % sparkColors.length];
+        const size = (2 + (s % 3)) * sparkLife;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = alpha * sparkLife * 0.9;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 8 * sparkLife;
+        ctx.beginPath();
+        ctx.arc(sx, sy, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (f < startFrame + 8) {
+        const flashAlpha = (1 - (f - startFrame) / 8) * 0.7;
+        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = alpha * flashAlpha;
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 25;
+        ctx.beginPath();
+        ctx.arc(bx, by, 10 * (1 - (f - startFrame) / 8), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = alpha;
+      ctx.shadowBlur = 0;
+    }
+    // Spark 1: on first tap
+    drawMobileSparkBurst(cx, cy, 10, 35);
+    // Spark 2: at drag start
+    drawMobileSparkBurst(cx, cy, 80, 35);
+
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#00f0ff';
+    ctx.shadowColor = '#00f0ff';
+    ctx.shadowBlur = 12;
+    if (phase === 'tap') {
+      ctx.fillText('TAP + HOLD', cx, cy + 55);
+    } else if (phase === 'drag') {
+      ctx.fillText('DRAG TO STEER', cx, cy + 55);
+    }
+    ctx.shadowBlur = 0;
+
+  } else {
+    // --- Desktop: mouse icon in upper-right quadrant ---
+    const cx = CONFIG.width * 0.75;
+    const cy = CONFIG.height * 0.28;
+    const scale = 1.2;
+
+    // Phase: first click at f=10 triggers big spark, then hold, then drag
+    const phase = f < 60 ? 'click' : f < 90 ? 'hold' : f < 240 ? 'drag' : 'fade';
+    const leftPressed = phase === 'click' ? Math.sin(f * 0.3) > 0 : phase !== 'fade';
+
+    let dragOffX = 0, dragOffY = 0;
+    const trail = [];
+    if (phase === 'drag') {
+      const t = (f - 90) / 150;
+      dragOffX = Math.sin(t * Math.PI * 2) * 40;
+      dragOffY = Math.sin(t * Math.PI * 4) * 20;
+      for (let i = 0; i < 8; i++) {
+        const tt = t - i * 0.015;
+        if (tt < 0) break;
+        trail.push({
+          x: cx + Math.sin(tt * Math.PI * 2) * 40,
+          y: cy + Math.sin(tt * Math.PI * 4) * 20,
+          alpha: 1 - i / 8
+        });
+      }
+    }
+
+    for (let i = trail.length - 1; i >= 0; i--) {
+      const tp = trail[i];
+      ctx.fillStyle = `rgba(0, 240, 255, ${(tp.alpha * 0.3).toFixed(2)})`;
+      ctx.shadowColor = '#00f0ff';
+      ctx.shadowBlur = 4;
+      ctx.beginPath();
+      ctx.arc(tp.x, tp.y, 3 - i * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+
+    drawMouseBody(cx + dragOffX, cy + dragOffY, scale, leftPressed, false);
+
+    // Spark burst helper — draws radiating particles centered at (bx, by)
+    function drawSparkBurst(bx, by, startFrame, duration) {
+      if (f < startFrame || f >= startFrame + duration) return;
+      const sparkAge = (f - startFrame) / duration;
+      const sparkColors = ['#ffffff', '#ffee88', '#00f0ff', '#44ddff'];
+      const sparkCount = 16;
+      for (let s = 0; s < sparkCount; s++) {
+        const angle = (s / sparkCount) * Math.PI * 2 + s * 0.618;
+        const speed = 1.5 + (s % 3) * 0.8;
+        const dist = sparkAge * speed * 40;
+        const sparkLife = Math.max(0, 1 - sparkAge * (0.8 + (s % 4) * 0.07));
+        if (sparkLife <= 0) continue;
+        const sx = bx + Math.cos(angle) * dist;
+        const sy = by + Math.sin(angle) * dist;
+        const color = sparkColors[s % sparkColors.length];
+        const size = (2.5 + (s % 3)) * sparkLife;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = alpha * sparkLife * 0.9;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 10 * sparkLife;
+        ctx.beginPath();
+        ctx.arc(sx, sy, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (f < startFrame + 8) {
+        const flashAlpha = (1 - (f - startFrame) / 8) * 0.7;
+        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = alpha * flashAlpha;
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 30;
+        ctx.beginPath();
+        ctx.arc(bx, by, 12 * (1 - (f - startFrame) / 8), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = alpha;
+      ctx.shadowBlur = 0;
+    }
+    // Spark 1: on first click press
+    drawSparkBurst(cx, cy - 16, 10, 35);
+    // Spark 2: at drag start
+    drawSparkBurst(cx, cy - 16, 90, 35);
+
+
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#00f0ff';
+    ctx.shadowColor = '#00f0ff';
+    ctx.shadowBlur = 12;
+    if (phase === 'click') {
+      ctx.fillText('CLICK + HOLD', cx, cy + 55);
+    } else if (phase === 'hold' || phase === 'drag') {
+      ctx.fillText('DRAG TO STEER', cx + dragOffX, cy + dragOffY + 55);
+    }
+    ctx.shadowBlur = 0;
+  }
+
+  ctx.restore();
+}
+
+function drawSecondaryTutorial() {
+  if (!secondaryTutorial.active) return;
+  secondaryTutorial.frame++;
+  if (secondaryTutorial.frame > secondaryTutorial.duration) {
+    secondaryTutorial.active = false;
+    return;
+  }
+
+  const f = secondaryTutorial.frame;
+  const fadeIn = Math.min(1, f / 30);
+  const fadeOut = Math.min(1, (secondaryTutorial.duration - f) / 40);
+  const alpha = fadeIn * fadeOut;
+  if (alpha <= 0) return;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+
+  const cx = isMobile ? CONFIG.width * 0.7 : CONFIG.width * 0.75;
+  const cy = isMobile ? CONFIG.height * 0.3 : CONFIG.height * 0.28;
+
+  // --- Neon "SECONDARY WEAPON" header ---
+  {
+    const hy = cy - 55;
+    const neonPulse = 0.6 + 0.4 * Math.sin(f * 0.18);
+    const flicker = Math.random() > 0.9 ? 0.3 : 1;
+    ctx.save();
+    ctx.globalAlpha = alpha * neonPulse * flicker;
+    ctx.font = 'bold 18px monospace';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#cc44ff';
+    ctx.shadowBlur = 30 * neonPulse;
+    ctx.fillStyle = 'rgba(200, 60, 255, 0.4)';
+    ctx.fillText('DEPLOY WEAPON', cx, hy);
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = 'rgba(220, 140, 255, 0.7)';
+    ctx.fillText('DEPLOY WEAPON', cx, hy);
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('DEPLOY WEAPON', cx, hy);
+    ctx.restore();
+    ctx.globalAlpha = alpha;
+  }
+
+  if (isMobile) {
+    // Two-finger tap radiance
+    const tapped = Math.sin(f * 0.15) > 0;
+    drawTouchRadiance(cx - 20, cy, f, tapped, '200, 60, 255');
+    drawTouchRadiance(cx + 20, cy, f, tapped, '200, 60, 255');
+
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#cc44ff';
+    ctx.shadowColor = '#cc44ff';
+    ctx.shadowBlur = 12;
+    ctx.fillText('TWO-FINGER TAP', cx, cy + 55);
+  } else {
+    const rightPressed = Math.sin(f * 0.15) > 0;
+    drawMouseBody(cx, cy, 1.2, false, rightPressed);
+
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#cc44ff';
+    ctx.shadowColor = '#cc44ff';
+    ctx.shadowBlur = 12;
+    ctx.fillText('RIGHT-CLICK TO DEPLOY', cx, cy + 55);
+  }
+
+  ctx.shadowBlur = 0;
   ctx.restore();
 }
 
@@ -5792,7 +6688,7 @@ function drawTitleScreen() {
   ctx.fillStyle = `rgba(224, 224, 255, ${enterAlpha})`;
   ctx.shadowColor = '#00f0ff';
   ctx.shadowBlur = enterAlpha * 10;
-  ctx.fillText(isMobile ? 'TAP TO START' : 'PRESS ENTER TO START', cx, cy + 130);
+  ctx.fillText(isMobile ? 'TAP TO START' : 'CLICK TO START', cx, cy + 130);
   ctx.shadowBlur = 0;
 
   // Controls — dimmer, more compact
@@ -5802,6 +6698,7 @@ function drawTitleScreen() {
     ctx.fillText('DRAG  MOVE  ·  AUTO-SHOOT  ·  SWIPE  DODGE  ·  TWO-FINGER TAP  SECONDARY', cx, cy + 170);
   } else {
     ctx.fillText('WASD/ARROWS  MOVE  ·  AUTO-SHOOT  ·  SPACE  SECONDARY  ·  SHIFT/DBL-TAP  DODGE  ·  P  PAUSE', cx, cy + 170);
+    ctx.fillText('CLICK+DRAG  MOVE  ·  DBL-CLICK  DODGE  ·  RIGHT-CLICK  SECONDARY  ·  SCROLL  SELECT', cx, cy + 190);
   }
 
   ctx.restore();
@@ -5863,7 +6760,7 @@ function drawGameOver() {
 
   ctx.font = '16px monospace';
   if (Math.floor(frame / 40) % 2 === 0) {
-    ctx.fillText(isMobile ? '► TAP TO RETRY' : '► PRESS ENTER TO RETRY', CONFIG.width / 2, CONFIG.height / 2 + 70);
+    ctx.fillText(isMobile ? '► TAP TO RETRY' : '► CLICK TO RETRY', CONFIG.width / 2, CONFIG.height / 2 + 70);
   }
   ctx.restore();
 }
@@ -5888,7 +6785,7 @@ function drawStageClear() {
 
   ctx.font = '16px monospace';
   if (Math.floor(frame / 40) % 2 === 0) {
-    ctx.fillText(isMobile ? '► TAP TO CONTINUE' : '► PRESS ENTER TO CONTINUE', CONFIG.width / 2, CONFIG.height / 2 + 100);
+    ctx.fillText(isMobile ? '► TAP TO CONTINUE' : '► CLICK TO CONTINUE', CONFIG.width / 2, CONFIG.height / 2 + 100);
   }
   ctx.restore();
 }
@@ -5915,7 +6812,7 @@ function drawWinScreen() {
 
   ctx.font = '16px monospace';
   if (Math.floor(frame / 40) % 2 === 0) {
-    ctx.fillText(isMobile ? '► TAP TO PLAY AGAIN' : '► PRESS ENTER TO PLAY AGAIN', CONFIG.width / 2, CONFIG.height / 2 + 80);
+    ctx.fillText(isMobile ? '► TAP TO PLAY AGAIN' : '► CLICK TO PLAY AGAIN', CONFIG.width / 2, CONFIG.height / 2 + 80);
   }
   ctx.restore();
 }
@@ -5955,7 +6852,19 @@ function applyUpgrade(key) {
   const tier = player.upgrades[key];
   switch (key) {
     case 'spread':
-      player.weaponLevel = tier + 1;
+      if (tier <= 2) {
+        // Tiers 1-2: add more bullets (weaponLevel 2 → 3)
+        player.weaponLevel = tier + 1;
+      } else {
+        // Tiers 3-5: power upgrade — change color and multiply damage
+        const POWER_COLORS = ['#ffcc00', '#ff8800', '#ff2266'];
+        const POWER_GLOW   = ['rgba(255,204,0,0.2)', 'rgba(255,136,0,0.2)', 'rgba(255,34,102,0.2)'];
+        const POWER_MULTS  = [1.2, 1.44, 1.73];
+        const powerTier = tier - 3; // 0, 1, 2
+        player.bulletPower = POWER_MULTS[powerTier];
+        player.bulletColor = POWER_COLORS[powerTier];
+        player.bulletGlow  = POWER_GLOW[powerTier];
+      }
       break;
     case 'fireRate':
       player.fireRateOverride = UPGRADES.fireRate.values[tier];
@@ -6134,7 +7043,7 @@ function drawLevelUpScreen() {
       ctx.shadowColor = upg.color;
       ctx.shadowBlur = 8;
       const blink = Math.floor(frame / 30) % 2 === 0;
-      if (blink) ctx.fillText(isMobile ? '▼ TAP ▼' : '▼ ENTER ▼', cx, drawY + cardH - 15);
+      if (blink) ctx.fillText(isMobile ? '▼ TAP ▼' : '▼ CLICK ▼', cx, drawY + cardH - 15);
       ctx.shadowBlur = 0;
     }
 
@@ -6147,7 +7056,7 @@ function drawLevelUpScreen() {
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(180,180,220,0.5)';
   ctx.shadowBlur = 0;
-  ctx.fillText(isMobile ? 'TAP TO SELECT  ·  TAP AGAIN TO CONFIRM' : '◄ ► SELECT     ENTER CONFIRM', CONFIG.width / 2, CONFIG.height - 40);
+  ctx.fillText(isMobile ? 'TAP TO SELECT  ·  TAP AGAIN TO CONFIRM' : 'SCROLL SELECT  ·  CLICK / ENTER CONFIRM', CONFIG.width / 2, CONFIG.height - 40);
 
   ctx.restore();
 }
@@ -6205,6 +7114,7 @@ function checkPendingLevelUp() {
 let gameState = 'TITLE';   // TITLE, STAGE_INTRO, GAMEPLAY, BOSS_WARNING, BOSS_FIGHT, STAGE_CLEAR, GAME_OVER, WIN, LEVEL_UP, TUNNEL_WARNING, TUNNEL_GAUNTLET
 let stageIntroTimer = 0;
 let paused = false;
+let muted = false;
 
 function resetGame() {
   player.x = 100;
@@ -6232,6 +7142,8 @@ function resetGame() {
   boss = null;
   midBoss = null;
   preMidBoss = false;
+  shepherdMusicTriggered = false;
+  shepherdTrackChoice = null;
   playerBullets.length = 0;
   enemyBullets.length = 0;
   spaceMines.length = 0;
@@ -6250,9 +7162,9 @@ function resetGame() {
   tunnelSegments = [];
   tunnelHazards = [];
   tunnelSpawnedHazards = new Set();
-  player.xp = 0;
   player.xpLevel = 1;
-  player.xpToNext = 10;
+  player.nextLevelScore = 1000;
+  player.prevLevelScore = 0;
   player.dodgeTimer = 0;
   player.dodgeCooldown = 0;
   player.dodgeRoll = 0;
@@ -6269,6 +7181,9 @@ function resetGame() {
   player.scoreMultBonus = 1.0;
   player.fireRateOverride = null;
   player.gravLock = { radius: 100, force: 0.18 };
+  player.bulletPower = 1.0;
+  player.bulletColor = null;
+  player.bulletGlow = null;
 }
 
 function startStage() {
@@ -6375,7 +7290,11 @@ function gameLoop(timestamp) {
     ctx.font = 'bold 36px monospace';
     ctx.textAlign = 'center';
     ctx.fillText('P A U S E D', CONFIG.width / 2, CONFIG.height / 2);
+    ctx.font = '14px monospace';
+    ctx.fillStyle = 'rgba(224, 224, 255, 0.5)';
+    ctx.fillText(isMobile ? 'TAP TO RESUME' : 'CLICK TO RESUME', CONFIG.width / 2, CONFIG.height / 2 + 35);
     ctx.restore();
+    drawCRT();
     requestAnimationFrame(gameLoop);
     return;
   }
@@ -6402,6 +7321,14 @@ function gameLoop(timestamp) {
     case 'TITLE':
       drawTitleScreen();
       if (keys['Enter']) {
+        ensureAudioCtx();
+        if (!musicLoaded) {
+          musicLoaded = true;
+          Promise.all([loadAllMusic(), loadAllSFX()]).then(() => { playMusic('level'); });
+        } else {
+          stopMusicImmediate();
+          playMusic('level');
+        }
         resetGame();
         startStage();
       }
@@ -6412,6 +7339,11 @@ function gameLoop(timestamp) {
       drawStageIntro();
       if (stageIntroTimer <= 0) {
         gameState = 'GAMEPLAY';
+        if (!autofireFlash.shown) {
+          autofireFlash.active = true;
+          autofireFlash.frame = 0;
+          autofireFlash.shown = true;
+        }
       }
       break;
 
@@ -6419,6 +7351,9 @@ function gameLoop(timestamp) {
       drawBackground();
       updateGameFrame({ waves: true, ambientAsteroids: true, pickups: true });
       drawGameFrame({ pickups: true });
+      drawAutofireFlash();
+      drawMouseTutorial();
+      drawSecondaryTutorial();
       checkPendingLevelUp();
       break;
 
@@ -6436,6 +7371,7 @@ function gameLoop(timestamp) {
       updateGameFrame({ ambientAsteroids: true, midBoss: true });
       drawGameFrame({ midBoss: true });
       drawMidBossInboundAlerts();
+      drawSecondaryTutorial();
       checkPendingLevelUp();
       break;
 
@@ -6508,7 +7444,11 @@ function gameLoop(timestamp) {
           gameState = 'WIN';
         } else {
           currentStage++;
+          shepherdMusicTriggered = false;
+          shepherdTrackChoice = null;
           startStage();
+          // Fresh level music for the new stage
+          crossfadeTo('level');
         }
       }
       break;
@@ -6540,7 +7480,112 @@ function gameLoop(timestamp) {
     screenFlash--;
   }
 
+  // CRT post-processing overlay (scanlines + convex vignette)
+  drawCRT();
+
   requestAnimationFrame(gameLoop);
+}
+
+// === CRT POST-PROCESSING ===
+function drawCRT() {
+  const w = CONFIG.width, h = CONFIG.height;
+
+  // --- Scanlines ---
+  ctx.save();
+  for (let y = 0; y < h; y += 2) {
+    // Every other row gets a dark band
+    const alpha = 0.12 + 0.03 * Math.sin(y * 0.5 + frame * 0.02);
+    ctx.fillStyle = `rgba(0,0,0,${alpha})`;
+    ctx.fillRect(0, y, w, 1);
+  }
+
+  // Faint horizontal color fringing on scanlines (RGB shift)
+  ctx.globalCompositeOperation = 'screen';
+  ctx.globalAlpha = 0.015;
+  ctx.fillStyle = '#ff0000';
+  ctx.fillRect(1, 0, w, h);
+  ctx.fillStyle = '#0000ff';
+  ctx.fillRect(-1, 0, w, h);
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+
+  // --- Convex CRT curvature vignette ---
+  // Gentle darkening toward edges — enough to feel convex without obscuring HUD
+  const grd = ctx.createRadialGradient(w / 2, h / 2, h * 0.35, w / 2, h / 2, h * 0.85);
+  grd.addColorStop(0, 'rgba(0,0,0,0)');
+  grd.addColorStop(0.6, 'rgba(0,0,0,0.04)');
+  grd.addColorStop(0.8, 'rgba(0,0,0,0.10)');
+  grd.addColorStop(1, 'rgba(0,0,0,0.25)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, w, h);
+
+  // Soft edge darkening — lighter so HUD cuts through
+  const edgeFade = 30;
+  const topG = ctx.createLinearGradient(0, 0, 0, edgeFade);
+  topG.addColorStop(0, 'rgba(0,0,0,0.12)');
+  topG.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = topG;
+  ctx.fillRect(0, 0, w, edgeFade);
+  const botG = ctx.createLinearGradient(0, h, 0, h - edgeFade);
+  botG.addColorStop(0, 'rgba(0,0,0,0.12)');
+  botG.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = botG;
+  ctx.fillRect(0, h - edgeFade, w, edgeFade);
+
+  // Subtle bright highlight in center (CRT phosphor bloom)
+  const bloom = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, h * 0.45);
+  bloom.addColorStop(0, 'rgba(180,200,255,0.03)');
+  bloom.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = bloom;
+  ctx.fillRect(0, 0, w, h);
+
+  // Corner shadow curves — fully opaque so no game content leaks through
+  const cornerR = 80;
+  ctx.fillStyle = '#000000';
+  // Top-left
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(cornerR, 0); ctx.quadraticCurveTo(0, 0, 0, cornerR); ctx.closePath(); ctx.fill();
+  // Top-right
+  ctx.beginPath();
+  ctx.moveTo(w, 0); ctx.lineTo(w - cornerR, 0); ctx.quadraticCurveTo(w, 0, w, cornerR); ctx.closePath(); ctx.fill();
+  // Bottom-left
+  ctx.beginPath();
+  ctx.moveTo(0, h); ctx.lineTo(cornerR, h); ctx.quadraticCurveTo(0, h, 0, h - cornerR); ctx.closePath(); ctx.fill();
+  // Bottom-right
+  ctx.beginPath();
+  ctx.moveTo(w, h); ctx.lineTo(w - cornerR, h); ctx.quadraticCurveTo(w, h, w, h - cornerR); ctx.closePath(); ctx.fill();
+
+  // Warm edge aura — follows the rounded CRT border
+  ctx.globalCompositeOperation = 'screen';
+  // Draw many thin layers that feather inward for a dithered, gradual glow
+  const layers = 10;
+  for (let i = 0; i < layers; i++) {
+    const t = i / (layers - 1); // 0 = outermost, 1 = innermost
+    const inset = t * 28;
+    const r = Math.max(4, cornerR - inset * 1.5);
+    // Fade from brightest at edge to nothing inward (smooth cubic falloff)
+    const falloff = (1 - t) * (1 - t) * (1 - t);
+    const a = (falloff * 0.018).toFixed(4);
+    ctx.strokeStyle = `rgba(255,175,90,${a})`;
+    ctx.lineWidth = 1.5;
+    ctx.shadowColor = `rgba(255,160,80,${(falloff * 0.04).toFixed(4)})`;
+    ctx.shadowBlur = 6 * (1 - t);
+    ctx.beginPath();
+    ctx.moveTo(r + inset, inset);
+    ctx.lineTo(w - r - inset, inset);
+    ctx.quadraticCurveTo(w - inset, inset, w - inset, r + inset);
+    ctx.lineTo(w - inset, h - r - inset);
+    ctx.quadraticCurveTo(w - inset, h - inset, w - r - inset, h - inset);
+    ctx.lineTo(r + inset, h - inset);
+    ctx.quadraticCurveTo(inset, h - inset, inset, h - r - inset);
+    ctx.lineTo(inset, r + inset);
+    ctx.quadraticCurveTo(inset, inset, r + inset, inset);
+    ctx.stroke();
+  }
+  ctx.shadowBlur = 0;
+  ctx.globalCompositeOperation = 'source-over';
+
+  ctx.restore();
 }
 
 // === DEBUG: shooting range ===
@@ -6591,6 +7636,129 @@ function debugTunnel() {
   gameState = 'TUNNEL_WARNING';
   tunnelWarningTimer = 60;
 }
+
+// === MUSIC SYSTEM ===
+let audioCtx = null;
+const musicTracks = {};       // name → AudioBuffer
+let currentMusic = null;      // { source, gain, name }
+const MUSIC_VOLUME = 0.4;
+const CROSSFADE_MS = 2000;    // 2-second crossfade between tracks
+let shepherdTrackChoice = null;
+let shepherdMusicTriggered = false;
+
+function ensureAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+async function loadMusicTrack(name, url) {
+  try {
+    const resp = await fetch(url);
+    const buf = await resp.arrayBuffer();
+    musicTracks[name] = await audioCtx.decodeAudioData(buf);
+  } catch (e) {
+    console.warn('Failed to load music:', name, e);
+  }
+}
+
+async function loadAllMusic() {
+  ensureAudioCtx();
+  await Promise.all([
+    loadMusicTrack('level',     'audio/drifting-the-void.mp3'),
+    loadMusicTrack('level2',    'audio/drifting-the-void2.mp3'),
+    loadMusicTrack('shepherd1', 'audio/the-shepherd.mp3'),
+    loadMusicTrack('shepherd2', 'audio/the-shepherd2.mp3'),
+  ]);
+}
+
+function playMusic(name, { fadeIn = CROSSFADE_MS, loop = true } = {}) {
+  if (!audioCtx || !musicTracks[name]) return;
+  const buffer = musicTracks[name];
+  const gain = audioCtx.createGain();
+  gain.connect(audioCtx.destination);
+  gain.gain.setValueAtTime(0, audioCtx.currentTime);
+  gain.gain.linearRampToValueAtTime(MUSIC_VOLUME, audioCtx.currentTime + fadeIn / 1000);
+
+  const source = audioCtx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = loop;
+  source.connect(gain);
+  source.start(0);
+
+  currentMusic = { source, gain, name };
+}
+
+function stopMusic(fadeOut = CROSSFADE_MS) {
+  if (!currentMusic || !audioCtx) return;
+  const { gain, source } = currentMusic;
+  const now = audioCtx.currentTime;
+  gain.gain.cancelScheduledValues(now);
+  gain.gain.setValueAtTime(gain.gain.value, now);
+  gain.gain.linearRampToValueAtTime(0, now + fadeOut / 1000);
+  const s = source;
+  setTimeout(() => { try { s.stop(); } catch (_) {} }, fadeOut + 100);
+  currentMusic = null;
+}
+
+function crossfadeTo(name, duration = CROSSFADE_MS) {
+  if (currentMusic && currentMusic.name === name) return;
+  stopMusic(duration);
+  playMusic(name, { fadeIn: duration });
+}
+
+function stopMusicImmediate() {
+  if (!currentMusic) return;
+  try { currentMusic.source.stop(); } catch (_) {}
+  currentMusic = null;
+}
+
+// === SFX SYSTEM ===
+const sfxBuffers = {};     // name → AudioBuffer
+const SFX_VOLUMES = {
+  'player-shoot': 0.2,
+  'bomber-death': 0.4,
+  'xp-pickup':   0.3,
+};
+
+async function loadSFX(name, url) {
+  try {
+    const resp = await fetch(url);
+    const buf = await resp.arrayBuffer();
+    sfxBuffers[name] = await audioCtx.decodeAudioData(buf);
+  } catch (e) {
+    console.warn('Failed to load SFX:', name, e);
+  }
+}
+
+async function loadAllSFX() {
+  await Promise.all([
+    loadSFX('player-shoot', 'audio/player-shoot.mp3'),
+    loadSFX('bomber-death', 'audio/bomber-death.mp3'),
+    loadSFX('xp-pickup-1',  'audio/xp-shard-pickup.mp3'),
+    loadSFX('xp-pickup-2',  'audio/xp-shard-pickup-2.mp3'),
+  ]);
+}
+
+function playSFX(name, volume) {
+  if (!audioCtx || !sfxBuffers[name]) return;
+  const gain = audioCtx.createGain();
+  gain.connect(audioCtx.destination);
+  gain.gain.setValueAtTime(volume ?? 0.3, audioCtx.currentTime);
+  const source = audioCtx.createBufferSource();
+  source.buffer = sfxBuffers[name];
+  source.connect(gain);
+  source.start(0);
+}
+
+function playRandomXPPickup() {
+  if (Math.random() < 0.5) {
+    playSFX('xp-pickup-1', 0.1);
+  } else {
+    playSFX('xp-pickup-2', 0.9);
+  }
+}
+
+let musicLoaded = false;
 
 // === INIT ===
 gameLoop();

@@ -334,6 +334,11 @@ canvas.addEventListener('mousedown', e => {
       }
       return;
     }
+    // Movement lock button click (desktop only)
+    if (!isMobile && pos.x >= 10 && pos.x <= 46 && pos.y >= 164 && pos.y <= 200) {
+      movementLock = !movementLock;
+      return;
+    }
   }
   // Click anywhere to unpause
   if (paused) {
@@ -378,13 +383,18 @@ canvas.addEventListener('mousedown', e => {
   }
   // Only start drag during active gameplay states
   if (['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState)) {
-    mouseDrag.active = true;
-    mouseDrag.startX = pos.x;
-    mouseDrag.startY = pos.y;
-    mouseDrag.shipStartX = player.x;
-    mouseDrag.shipStartY = player.y;
-    mouseDrag.currentX = pos.x;
-    mouseDrag.currentY = pos.y;
+    if (movementLock) {
+      // Left-click fires secondary when movement-locked (drag not needed)
+      mouseDrag.secondaryFired = true;
+    } else {
+      mouseDrag.active = true;
+      mouseDrag.startX = pos.x;
+      mouseDrag.startY = pos.y;
+      mouseDrag.shipStartX = player.x;
+      mouseDrag.shipStartY = player.y;
+      mouseDrag.currentX = pos.x;
+      mouseDrag.currentY = pos.y;
+    }
   }
 });
 
@@ -395,8 +405,9 @@ window.addEventListener('mousemove', e => {
   // Cursor style — pointer on interactive elements
   const inGameplay = ['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState);
   const overPause = inGameplay && pos.x >= 10 && pos.x <= 80 && pos.y >= 80 && pos.y <= 115;
+  const overLock = !isMobile && inGameplay && pos.x >= 10 && pos.x <= 46 && pos.y >= 164 && pos.y <= 200;
   const overCard = gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22 && pos.y >= 140 && pos.y <= 380;
-  canvas.style.cursor = overPause || overCard ? 'pointer' : '';
+  canvas.style.cursor = overPause || overLock || overCard ? 'pointer' : '';
   // Level-up card hover — highlight card under cursor
   if (gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22) {
     const cardW = 180, cardH = 240, gap = 24;
@@ -1400,6 +1411,31 @@ function updatePlayer() {
       // Lerping shipStart toward start gradually zeroes that gap.
       mouseDrag.shipStartX += (mouseDrag.startX - mouseDrag.shipStartX) * 0.02;
       mouseDrag.shipStartY += (mouseDrag.startY - mouseDrag.shipStartY) * 0.02;
+    }
+  }
+
+  // Movement lock — ship follows mouse cursor position without clicking
+  if (movementLock && !mouseDrag.active && !isMobile) {
+    const mx = mousePos.x, my = mousePos.y;
+    const inBounds = mx >= 0 && mx <= CONFIG.width && my >= 0 && my <= CONFIG.height;
+    if (inBounds) {
+      // Smooth tracking — same feel as the drag system
+      const dx = mx - player.x, dy = my - player.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > 3) { // dead zone to prevent jitter
+        ix = Math.max(-1, Math.min(1, dx / 20));
+        iy = Math.max(-1, Math.min(1, dy / 20));
+      }
+    } else {
+      // Cursor left the canvas — drive toward the edge where it exited
+      const edgeX = Math.max(20, Math.min(CONFIG.width - 20, mx));
+      const edgeY = Math.max(15, Math.min(CONFIG.height - 15, my));
+      const dx = edgeX - player.x, dy = edgeY - player.y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d > 2) {
+        ix = dx / d;
+        iy = dy / d;
+      }
     }
   }
 
@@ -6007,6 +6043,63 @@ function drawHUD() {
     ctx.shadowBlur = 0;
   }
 
+  // Movement lock button — below mute, desktop only
+  if (!isMobile) {
+    const lbX = 10, lbY = 164, lbW = 36, lbH = 36;
+    const hovered = mousePos.x >= lbX && mousePos.x <= lbX + lbW && mousePos.y >= lbY && mousePos.y <= lbY + lbH;
+    const active = movementLock;
+    const alpha = (hovered || active) ? 0.8 : 0.35;
+    if (hovered) {
+      ctx.fillStyle = 'rgba(224, 224, 255, 0.08)';
+      ctx.beginPath();
+      ctx.roundRect(lbX, lbY, lbW, lbH, 6);
+      ctx.fill();
+    }
+    ctx.strokeStyle = `rgba(224, 224, 255, ${alpha})`;
+    ctx.fillStyle = `rgba(224, 224, 255, ${alpha})`;
+    ctx.shadowColor = (hovered || active) ? '#00f0ff' : 'transparent';
+    ctx.shadowBlur = (hovered || active) ? 8 : 0;
+    ctx.lineWidth = 1.5;
+    // Arrow cursor icon — 4-direction arrows indicating free movement
+    const cx = lbX + lbW / 2, cy = lbY + lbH / 2;
+    const r = 10, headSize = 3;
+    // Up arrow
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - r); ctx.lineTo(cx, cy - 3);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx - headSize, cy - r + headSize); ctx.lineTo(cx, cy - r); ctx.lineTo(cx + headSize, cy - r + headSize);
+    ctx.stroke();
+    // Down arrow
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + 3); ctx.lineTo(cx, cy + r);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx - headSize, cy + r - headSize); ctx.lineTo(cx, cy + r); ctx.lineTo(cx + headSize, cy + r - headSize);
+    ctx.stroke();
+    // Left arrow
+    ctx.beginPath();
+    ctx.moveTo(cx - r, cy); ctx.lineTo(cx - 3, cy);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx - r + headSize, cy - headSize); ctx.lineTo(cx - r, cy); ctx.lineTo(cx - r + headSize, cy + headSize);
+    ctx.stroke();
+    // Right arrow
+    ctx.beginPath();
+    ctx.moveTo(cx + 3, cy); ctx.lineTo(cx + r, cy);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx + r - headSize, cy - headSize); ctx.lineTo(cx + r, cy); ctx.lineTo(cx + r - headSize, cy + headSize);
+    ctx.stroke();
+    // Lock indicator when active — small filled circle at center
+    if (active) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+  }
+
   ctx.restore();
 
   // Velocity indicator — 1-3 stacked chevrons showing momentum direction & strength
@@ -6698,7 +6791,7 @@ function drawTitleScreen() {
     ctx.fillText('DRAG  MOVE  ·  AUTO-SHOOT  ·  SWIPE  DODGE  ·  TWO-FINGER TAP  SECONDARY', cx, cy + 170);
   } else {
     ctx.fillText('WASD/ARROWS  MOVE  ·  AUTO-SHOOT  ·  SPACE  SECONDARY  ·  SHIFT/DBL-TAP  DODGE  ·  P  PAUSE', cx, cy + 170);
-    ctx.fillText('CLICK+DRAG  MOVE  ·  DBL-CLICK  DODGE  ·  RIGHT-CLICK  SECONDARY  ·  SCROLL  SELECT', cx, cy + 190);
+    ctx.fillText('CLICK+DRAG  MOVE  ·  L  CURSOR LOCK  ·  DBL-CLICK  DODGE  ·  RIGHT-CLICK  SECONDARY  ·  SCROLL  SELECT', cx, cy + 190);
   }
 
   ctx.restore();
@@ -7115,6 +7208,7 @@ let gameState = 'TITLE';   // TITLE, STAGE_INTRO, GAMEPLAY, BOSS_WARNING, BOSS_F
 let stageIntroTimer = 0;
 let paused = false;
 let muted = false;
+let movementLock = false;
 
 function resetGame() {
   player.x = 100;
@@ -7279,6 +7373,16 @@ function gameLoop(timestamp) {
     }
   } else {
     keys._pHeld = false;
+  }
+
+  // Movement lock toggle (L key, desktop only)
+  if (keys['KeyL'] && !isMobile && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET')) {
+    if (!keys._lHeld) {
+      movementLock = !movementLock;
+      keys._lHeld = true;
+    }
+  } else {
+    keys._lHeld = false;
   }
 
   if (paused && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET')) {

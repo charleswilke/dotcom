@@ -2346,7 +2346,7 @@ html {
     background: rgba(255, 255, 255, 0.95);
     padding: 2rem;
     border-radius: 8px;
-    border: 3px solid var(--primary);
+    border: 1px solid var(--primary);
     box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 0 10px rgba(0,247,194,0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
@@ -2420,7 +2420,7 @@ html {
     background: linear-gradient(90deg, rgba(255,255,255,0.9) 25%, rgba(0,247,194,0.1) 50%, rgba(255,255,255,0.9) 75%);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
-    border: 3px solid var(--primary);
+    border: 1px solid var(--primary);
     text-align: center;
     padding: 3rem 2rem;
 }

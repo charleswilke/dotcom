@@ -1842,18 +1842,15 @@ footer p {
         flex-direction: column;
     }
     
-    /* Move social links and audio player to appear below the photo in the left column */
+    /* Social links stay in the right column on tablet */
     .about-content .social-links {
         order: 10;
-        transform: translateX(calc(-100% - 3rem));
-        margin-top: -6.5rem;
+        margin-top: auto;
         margin-bottom: 10px;
     }
 
     .about-content .about-audio {
         order: 11;
-        transform: translateX(calc(-100% - 3rem));
-        margin-left: -.6rem;
     }
 }
 
@@ -2022,13 +2019,13 @@ html {
     grid-template-columns: minmax(270px, 1.4fr) minmax(0, 1.6fr);
     grid-template-rows: auto auto;
     gap: 3rem;
-    align-items: start;
+    align-items: stretch;
 }
 
 .image-compare {
     position: relative;
     width: 100%;
-    max-width: 260px;
+    max-width: 380px;
     margin: 0 auto;
     border-radius: 8px 8px 16px 16px;
     overflow: visible;
@@ -2039,6 +2036,10 @@ html {
     cursor: pointer;
     border: 3px solid #000;
     outline: 2px solid var(--neon);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    aspect-ratio: 3 / 4;
 }
 
 .image-compare:hover {
@@ -2049,7 +2050,8 @@ html {
 .image-wrapper {
     position: relative;
     width: 100%;
-    padding-top: 133.33%; /* 3:4 aspect ratio to match cw1 */
+    flex: 1 1 0;
+    min-height: 200px;
     overflow: hidden;
     cursor: pointer;
     border-radius: 8px 8px 0 0;
@@ -2213,6 +2215,11 @@ html {
 
     .image-compare {
         max-width: 300px;
+        height: auto;
+    }
+
+    .image-wrapper {
+        aspect-ratio: 3 / 4;
     }
 
     .social-links {

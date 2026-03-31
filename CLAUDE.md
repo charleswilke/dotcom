@@ -17,6 +17,8 @@ python verify-lyrics.py
 
 No build step — all files are served directly.
 
+**npm security:** Global `~/.npmrc` has `ignore-scripts=true` and `min-release-age=7` (supply chain protection). If `npm install` fails because a package needs lifecycle scripts, use `npm install --ignore-scripts=false` for that one install.
+
 ## Deployment
 
 **Vercel:** All three properties (main site, TootsJam, SpaceToots) auto-deploy from `main`. Serverless functions live in `/api/`. Max duration: 15s. Routing is defined in `vercel.json` — clean URLs like `/mixtape` and `/gwor` are rewritten there.

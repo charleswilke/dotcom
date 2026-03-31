@@ -8737,6 +8737,21 @@ section.production-header.alice p {
     box-shadow: 0 0 10px rgba(255, 90, 54, 0.3);
 }
 
+/* Games & Music buttons: match plain nav-link style */
+.nav-link-btn {
+    color: rgba(248, 233, 210, 0.7);
+    border: none;
+    padding: 0.4rem 0.75rem;
+}
+
+.nav-link-btn:hover,
+.nav-link-btn[aria-expanded="true"] {
+    color: var(--neon);
+    text-shadow: 0 0 8px var(--neon);
+    border-color: transparent;
+    box-shadow: none;
+}
+
 .nav-explore-arrow {
     display: inline-block;
     transition: transform 0.2s ease;

@@ -28,8 +28,7 @@ function initStickyNav() {
     const nav = document.getElementById('siteNav');
     const hamburger = document.getElementById('navHamburger');
     const navLinks = document.getElementById('navLinks');
-    const exploreBtn = document.getElementById('navExploreBtn');
-    const dropdown = document.getElementById('navDropdown');
+    const allDropdownWraps = document.querySelectorAll('.nav-explore-wrap');
     const allNavLinks = document.querySelectorAll('.nav-link');
     const navLogo = document.getElementById('navLogo');
 
@@ -70,7 +69,7 @@ function initStickyNav() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // --- Active section tracking (homepage only) ---
-    const sectionIds = ['portfolio', 'writing', 'projections', 'about'];
+    const sectionIds = ['writing', 'projections', 'about'];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
     function updateActiveLink() {
@@ -106,29 +105,38 @@ function initStickyNav() {
         });
     });
 
-    // --- Explore dropdown ---
-    function closeDropdown() {
-        dropdown.classList.remove('open');
-        exploreBtn.setAttribute('aria-expanded', 'false');
+    // --- Dropdowns (Games, Music, Explore) ---
+    function closeAllDropdowns() {
+        allDropdownWraps.forEach(wrap => {
+            const btn = wrap.querySelector('.nav-explore-btn');
+            const dd = wrap.querySelector('.nav-dropdown');
+            if (dd) dd.classList.remove('open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
     }
 
-    exploreBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = dropdown.classList.contains('open');
-        if (isOpen) {
-            closeDropdown();
-        } else {
-            dropdown.classList.add('open');
-            exploreBtn.setAttribute('aria-expanded', 'true');
-        }
+    allDropdownWraps.forEach(wrap => {
+        const btn = wrap.querySelector('.nav-explore-btn');
+        const dd = wrap.querySelector('.nav-dropdown');
+        if (!btn || !dd) return;
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = dd.classList.contains('open');
+            closeAllDropdowns();
+            if (!isOpen) {
+                dd.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
     });
 
     document.addEventListener('click', (e) => {
-        if (!nav.contains(e.target)) closeDropdown();
+        if (!nav.contains(e.target)) closeAllDropdowns();
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeDropdown();
+        if (e.key === 'Escape') closeAllDropdowns();
     });
 
     // --- Hamburger (mobile) ---
@@ -136,7 +144,7 @@ function initStickyNav() {
         const isOpen = navLinks.classList.contains('open');
         navLinks.classList.toggle('open');
         hamburger.setAttribute('aria-expanded', String(!isOpen));
-        if (!isOpen) closeDropdown();
+        if (!isOpen) closeAllDropdowns();
     });
 
     // Close mobile menu on outside click

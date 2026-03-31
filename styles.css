@@ -606,15 +606,18 @@ header {
 /* Grid Overlay */
 .grid-overlay {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        linear-gradient(rgba(0, 247, 194, 0.15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.15) 1px, transparent 1px);
+    bottom: -20%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background-image:
+        linear-gradient(rgba(0, 247, 194, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.3) 1px, transparent 1px);
     background-size: 40px 40px;
-    perspective: 500px;
-    transform: rotateX(45deg);
-    opacity: 0.5;
+    transform-origin: 50% 70%;
+    transform: perspective(400px) rotateX(45deg);
+    z-index: 1;
+    opacity: 0.6;
     animation: gridMove 20s linear infinite;
 }
 
@@ -1643,8 +1646,8 @@ footer p {
 }
 
 @keyframes gridMove {
-    0% { transform: rotateX(45deg) translateY(0); }
-    100% { transform: rotateX(45deg) translateY(40px); }
+    0% { transform: perspective(400px) rotateX(45deg) translateY(0); }
+    100% { transform: perspective(400px) rotateX(45deg) translateY(40px); }
 }
 
 @keyframes gridFlow {

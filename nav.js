@@ -13,7 +13,6 @@
         '        <div class="nav-links" id="navLinks">\n' +
         '            <a href="' + p + '#writing" class="nav-link"' + ds('writing') + '>Writing</a>\n' +
         '            <a href="' + p + '#projections" class="nav-link"' + ds('projections') + '>Theater</a>\n' +
-        '            <a href="' + p + '#about" class="nav-link"' + ds('about') + '>About</a>\n' +
         '            <div class="nav-explore-wrap">\n' +
         '                <button class="nav-explore-btn nav-link-btn" id="navGamesBtn" aria-haspopup="true" aria-expanded="false">\n' +
         '                    Games <span class="nav-explore-arrow">&#9662;</span>\n' +
@@ -38,6 +37,7 @@
         '                    Explore <span class="nav-explore-arrow">&#9662;</span>\n' +
         '                </button>\n' +
         '                <div class="nav-dropdown" id="navDropdown" role="menu">\n' +
+        '                    <a href="' + p + '#about" class="nav-dropdown-item" role="menuitem"' + ds('about') + '>About <span class="nav-tag">this guy</span></a>\n' +
         '                    <a href="https://fellowvector.com" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Fellow Vector <span class="nav-tag">consulting</span></a>\n' +
         '                    <a href="/faq.html" class="nav-dropdown-item" role="menuitem">FAQ <span class="nav-tag">ama</span></a>\n' +
         '                    <a href="mailto:cwilke.inquiry@gmail.com" class="nav-dropdown-item" role="menuitem">Contact Me <span class="nav-tag">IRL</span></a>\n' +

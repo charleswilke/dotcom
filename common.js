@@ -70,7 +70,8 @@ function initStickyNav() {
 
     // --- Active section tracking (homepage only) ---
     const sectionIds = ['writing', 'projections', 'about'];
-    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean)
+        .sort((a, b) => a.offsetTop - b.offsetTop);
 
     function updateActiveLink() {
         const scrollMid = window.scrollY + window.innerHeight / 3;

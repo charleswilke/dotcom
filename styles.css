@@ -6284,7 +6284,7 @@ section.production-header.alice p {
 }
 
 .footer-note.glitch {
-    animation: glitch-blocky 0.28s steps(1, end);
+    animation: glitch-link-crt 0.28s steps(1, end);
 }
 
 /* Blue section utility for cream underline on blue backgrounds */
@@ -6610,7 +6610,39 @@ section.production-header.alice p {
 .glitch-link.glitch {
     color: var(--neon);
     text-shadow: 0 0 8px var(--neon), 0 0 16px var(--neon), 0 0 2px var(--primary);
-    animation: glitch-blocky 0.28s steps(1, end) infinite alternate;
+    animation: glitch-link-crt 0.28s steps(1, end) infinite alternate;
+}
+
+/* Layout-safe link glitch - only transform/text-shadow, no letter-spacing */
+@keyframes glitch-link-crt {
+    0% {
+        text-shadow: 0 0 8px var(--neon), 0 0 16px var(--neon);
+        transform: none;
+    }
+    15% {
+        text-shadow: 2px 0 var(--neon), -2px 0 var(--secondary), 0 0 8px var(--neon);
+        transform: skewX(3deg) translateX(1px);
+    }
+    30% {
+        text-shadow: -2px 0 #ff00ff, 2px 0 var(--neon), 0 0 12px rgba(255, 0, 255, 0.4);
+        transform: skewX(-4deg) translateX(-2px);
+    }
+    50% {
+        text-shadow: 3px 0 var(--neon), -3px 0 var(--secondary), 0 0 16px var(--neon);
+        transform: translateX(2px) translateY(-1px);
+    }
+    70% {
+        text-shadow: -2px 0 #ff6ec7, 2px 0 var(--neon);
+        transform: skewX(2deg) translateX(-1px);
+    }
+    85% {
+        text-shadow: 1px 0 var(--neon), -1px 0 var(--secondary);
+        transform: translateX(1px);
+    }
+    100% {
+        text-shadow: 0 0 8px var(--neon), 0 0 16px var(--neon);
+        transform: none;
+    }
 }
 
 .faq-section .section-title,
@@ -6623,7 +6655,7 @@ section.production-header.alice p {
 .faq-section .section-title:hover {
     text-shadow: none;
     transform: scale(1.02);
-    animation: glitch-blocky 0.28s steps(1, end);
+    animation: glitch-link-crt 0.28s steps(1, end);
 }
 
 /* FAQ heading mobile/desktop toggle */

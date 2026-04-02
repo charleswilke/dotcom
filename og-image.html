@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>OG Image Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    font-family: 'Space Mono', monospace;
+}
+
+.og-card {
+    display: flex;
+    width: 1200px;
+    height: 630px;
+    background: #1a1550;
+}
+
+/* Left: Portrait */
+.og-portrait {
+    width: 420px;
+    height: 630px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.og-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(0.1) contrast(1.05);
+}
+
+/* Diagonal slice between portrait and right side */
+.og-portrait::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -40px;
+    width: 80px;
+    height: 100%;
+    background: #1a1550;
+    transform: skewX(-3deg);
+}
+
+/* Right: CRT content */
+.og-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 70px 60px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Scanlines */
+.og-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0, 0, 0, 0.15) 3px,
+        rgba(0, 0, 0, 0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Subtle vignette */
+.og-content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.3) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.og-content > * {
+    position: relative;
+    z-index: 3;
+}
+
+.og-name {
+    font-size: 52px;
+    font-weight: 700;
+    color: #f0eee6;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-shadow:
+        0 0 10px rgba(0, 247, 194, 0.3),
+        0 0 30px rgba(0, 247, 194, 0.15),
+        0 0 60px rgba(0, 247, 194, 0.08);
+    margin-bottom: 24px;
+    line-height: 1.1;
+}
+
+.og-divider {
+    width: 80px;
+    height: 3px;
+    background: #00f7c2;
+    opacity: 0.6;
+    margin-bottom: 28px;
+    box-shadow: 0 0 8px rgba(0, 247, 194, 0.4);
+}
+
+.og-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(240, 238, 230, 0.7);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 1.6;
+}
+
+.og-subtitle span {
+    display: block;
+}
+
+.og-slash {
+    color: rgba(0, 247, 194, 0.4);
+    margin-right: 0.3em;
+}
+
+.og-url {
+    position: absolute;
+    bottom: 36px;
+    right: 70px;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(240, 238, 230, 0.25);
+    letter-spacing: 2px;
+    z-index: 3;
+}
+</style>
+</head>
+<body>
+<div class="og-card">
+    <div class="og-portrait">
+        <img src="images/cw3.jpg" alt="Charles Wilke">
+    </div>
+    <div class="og-content">
+        <div class="og-name">Charles<br>Wilke</div>
+        <div class="og-divider"></div>
+        <div class="og-subtitle">
+            <span><span class="og-slash">//</span> product designer - conversational ai</span>
+            <span><span class="og-slash">//</span> artifacts of my journey into co-creation</span>
+        </div>
+        <div class="og-url">charleswilke.com</div>
+    </div>
+</div>
+</body>
+</html>

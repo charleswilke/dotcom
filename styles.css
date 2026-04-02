@@ -7691,7 +7691,11 @@ section.production-header.alice p {
     letter-spacing: 0.08em;
     text-shadow:
         3px 3px 0 rgba(17, 28, 44, 0.95),
-        0 1px 0 rgba(255, 248, 229, 0.3);
+        0 1px 0 rgba(255, 248, 229, 0.3),
+        0 0 7px rgba(255, 243, 215, 0.3),
+        0 0 15px rgba(255, 243, 215, 0.15),
+        0 0 30px rgba(0, 247, 194, 0.08);
+    transition: text-shadow 0.6s ease-out;
 }
 
 .rss-title-main::before,
@@ -7704,6 +7708,7 @@ section.production-header.alice p {
     height: 100%;
     opacity: 0;
     pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
 }
 
 .rss-title-main::before {
@@ -7716,18 +7721,228 @@ section.production-header.alice p {
     z-index: -1;
 }
 
+/* Active glitch state for rss-title-main (periodic + hover) */
+.rss-title-main.glitch {
+    animation: crt-glitch-laibor 0.5s steps(2, end);
+}
+
+.rss-title-main.glitch::before {
+    opacity: 0.85;
+    animation: crt-glitch-red 0.5s steps(3, end);
+}
+
+.rss-title-main.glitch::after {
+    opacity: 0.85;
+    animation: crt-glitch-cyan 0.5s steps(3, end);
+}
+
+.rss-title-main.glitch-tear {
+    animation: crt-laibor-tear 0.35s steps(1, end);
+}
+
+.rss-title-main.glitch-vhold {
+    animation: crt-laibor-vhold 0.6s ease-out;
+}
+
+/* Hover: warm-up flicker then sustained glow */
 .rss-section-title.crt-hover:hover .rss-title-main {
-    animation: crt-glitch-main 0.4s steps(2, end);
+    animation: crt-laibor-hover-warmup 0.35s ease-out forwards;
+    text-shadow:
+        3px 3px 0 rgba(17, 28, 44, 0.95),
+        0 0 10px rgba(255, 243, 215, 0.5),
+        0 0 25px rgba(0, 247, 194, 0.3),
+        0 0 50px rgba(0, 247, 194, 0.15);
 }
 
 .rss-section-title.crt-hover:hover .rss-title-main::before {
-    opacity: 0.92;
-    animation: crt-glitch-red 0.4s steps(3, end);
+    opacity: 0.35;
+    transform: translateX(-2px);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
 .rss-section-title.crt-hover:hover .rss-title-main::after {
-    opacity: 0.9;
-    animation: crt-glitch-cyan 0.4s steps(3, end);
+    opacity: 0.35;
+    transform: translateX(2px);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+/* Cool-down on mouse leave */
+.rss-section-title.crt-hover:not(:hover) .rss-title-main {
+    transition: text-shadow 0.6s ease-out;
+}
+
+.rss-section-title.crt-hover:not(:hover) .rss-title-main::before,
+.rss-section-title.crt-hover:not(:hover) .rss-title-main::after {
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+/* L.ai.bor glitch animation - synthwave color cycling with horizontal tear feel */
+@keyframes crt-glitch-laibor {
+    0% {
+        text-shadow:
+            3px 3px 0 rgba(17, 28, 44, 0.95),
+            0 0 7px rgba(255, 243, 215, 0.3);
+        transform: none;
+        filter: none;
+    }
+    8% {
+        text-shadow:
+            3px 0 #ff00ff,
+            -3px 0 var(--neon),
+            0 0 15px rgba(255, 0, 255, 0.4);
+        transform: translateX(3px) translateY(-1px);
+        filter: brightness(1.3);
+    }
+    18% {
+        text-shadow:
+            -5px 0 #ff0040,
+            5px 0 #00f7c2,
+            0 0 20px rgba(255, 0, 64, 0.3);
+        transform: translateX(-6px) translateY(2px) skewX(2deg);
+        filter: brightness(0.85) contrast(1.4);
+    }
+    28% {
+        text-shadow:
+            6px 0 #ff6ec7,
+            -4px 0 var(--neon),
+            0 0 30px rgba(255, 110, 199, 0.4);
+        transform: translateX(8px) translateY(-2px);
+        filter: brightness(1.4) saturate(1.6);
+    }
+    40% {
+        text-shadow:
+            -3px 0 var(--neon),
+            3px 0 var(--secondary);
+        transform: translateX(-3px) translateY(1px);
+        filter: brightness(1.1);
+    }
+    55% {
+        text-shadow:
+            4px 0 #ff00ff,
+            -4px 0 #00f7c2,
+            0 0 25px rgba(255, 0, 255, 0.3);
+        transform: translateX(5px) translateY(-1px) skewX(-2deg);
+        filter: brightness(1.3);
+    }
+    70% {
+        text-shadow:
+            -2px 0 var(--neon),
+            2px 0 #ff6ec7,
+            0 0 15px rgba(0, 247, 194, 0.4);
+        transform: translateX(-2px);
+        filter: brightness(1.05);
+    }
+    85% {
+        text-shadow:
+            1px 0 var(--neon),
+            -1px 0 var(--secondary);
+        transform: none;
+        filter: brightness(1.02);
+    }
+    100% {
+        text-shadow:
+            3px 3px 0 rgba(17, 28, 44, 0.95),
+            0 0 7px rgba(255, 243, 215, 0.3),
+            0 0 15px rgba(255, 243, 215, 0.15);
+        transform: none;
+        filter: none;
+    }
+}
+
+@keyframes crt-laibor-tear {
+    0% { clip-path: inset(0 0 0 0); transform: none; }
+    10% {
+        clip-path: inset(8% -5% 82% 0);
+        transform: translateX(12px);
+        text-shadow: 5px 0 #ff00ff, -5px 0 var(--neon);
+    }
+    20% {
+        clip-path: inset(30% 0 55% -5%);
+        transform: translateX(-15px);
+        text-shadow: -6px 0 #ff0040, 6px 0 #00f7c2;
+    }
+    30% {
+        clip-path: inset(60% -5% 25% 0);
+        transform: translateX(10px);
+        text-shadow: 4px 0 #ff6ec7, -3px 0 var(--neon);
+    }
+    40% {
+        clip-path: inset(0 0 0 0);
+        transform: none;
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+        transform: none;
+    }
+}
+
+@keyframes crt-laibor-vhold {
+    0% { transform: translateY(0); filter: none; }
+    15% {
+        transform: translateY(4px);
+        filter: brightness(0.85);
+    }
+    30% {
+        transform: translateY(10px);
+        filter: brightness(0.6) blur(1px);
+        text-shadow: 4px 0 #ff00ff, -4px 0 var(--neon), 0 0 20px rgba(255, 0, 255, 0.3);
+    }
+    50% {
+        transform: translateY(14px);
+        filter: brightness(0.5) blur(1.5px);
+        opacity: 0.7;
+    }
+    55% {
+        transform: translateY(-3px);
+        filter: brightness(1.6) contrast(1.4);
+        opacity: 1;
+        text-shadow: 0 0 30px rgba(255, 243, 215, 0.6), 0 0 50px rgba(0, 247, 194, 0.3);
+    }
+    70% { transform: translateY(1px); filter: brightness(1.1); }
+    100% {
+        transform: translateY(0);
+        filter: none;
+        text-shadow: 3px 3px 0 rgba(17, 28, 44, 0.95), 0 0 7px rgba(255, 243, 215, 0.3);
+    }
+}
+
+/* Hover warm-up for l.ai.bor */
+@keyframes crt-laibor-hover-warmup {
+    0% {
+        text-shadow:
+            3px 3px 0 rgba(17, 28, 44, 0.95),
+            0 0 7px rgba(255, 243, 215, 0.3);
+        filter: brightness(1);
+    }
+    10% {
+        text-shadow:
+            3px 0 #ff00ff,
+            -3px 0 var(--neon),
+            0 0 20px rgba(255, 0, 255, 0.3);
+        filter: brightness(1.3);
+    }
+    22% {
+        text-shadow:
+            -2px 0 #00f7c2,
+            2px 0 var(--secondary),
+            0 0 15px rgba(0, 247, 194, 0.4);
+        filter: brightness(0.9);
+    }
+    35% {
+        text-shadow:
+            1px 0 #ff6ec7,
+            -1px 0 #00f7c2,
+            0 0 25px rgba(255, 110, 199, 0.2);
+        filter: brightness(1.15);
+    }
+    100% {
+        text-shadow:
+            3px 3px 0 rgba(17, 28, 44, 0.95),
+            0 0 10px rgba(255, 243, 215, 0.5),
+            0 0 25px rgba(0, 247, 194, 0.3),
+            0 0 50px rgba(0, 247, 194, 0.15);
+        filter: brightness(1);
+    }
 }
 
 .mixtape-track-visualizer {

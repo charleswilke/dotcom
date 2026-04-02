@@ -182,8 +182,21 @@ header {
     position: relative;
 }
 
-/* RGB Channel pseudo-elements for chromatic aberration */
-.header-title::before,
+/* Persistent subtle scanlines - always visible for CRT texture */
+.header-title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #ff0040;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
 .header-title::after {
     content: attr(data-text);
     position: absolute;
@@ -191,159 +204,223 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.header-title::before {
-    color: #ff0040;
-    z-index: -1;
-}
-
-.header-title::after {
     color: #00f7c2;
     z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
 }
 
-/* Active glitch state */
-.header-title.glitch {
-    animation: crt-glitch-main 0.4s steps(2, end);
+/* Persistent phosphor glow - layered bloom like real CRT text */
+.header-title {
+    text-shadow:
+        0 0 7px rgba(0, 247, 194, 0.4),
+        0 0 15px rgba(0, 247, 194, 0.2),
+        0 0 30px rgba(0, 247, 194, 0.1),
+        0 0 50px rgba(0, 247, 194, 0.05);
 }
 
-.header-title.glitch::before {
-    opacity: 0.8;
-    animation: crt-glitch-red 0.4s steps(3, end);
-}
-
-.header-title.glitch::after {
-    opacity: 0.8;
-    animation: crt-glitch-cyan 0.4s steps(3, end);
-}
-
-/* Scanline overlay during glitch */
-.header-title.glitch-scanlines::before {
+/* Persistent scanline overlay via header-content (keeps pseudo-elements free for chromatic channels) */
+.header-content::after {
     content: '';
     position: absolute;
     top: 0;
-    left: -10%;
-    width: 120%;
+    left: 0;
+    width: 100%;
     height: 100%;
     background: repeating-linear-gradient(
         0deg,
         transparent 0px,
-        transparent 2px,
-        rgba(0, 0, 0, 0.15) 2px,
-        rgba(0, 0, 0, 0.15) 4px
+        transparent 3px,
+        rgba(0, 0, 0, 0.06) 3px,
+        rgba(0, 0, 0, 0.06) 4px
     );
     pointer-events: none;
-    z-index: 2;
-    animation: scanline-scroll 0.1s linear infinite;
+    z-index: 3;
 }
 
-/* Main text glitch animation */
+/* Active glitch state */
+.header-title.glitch {
+    animation: crt-glitch-main 0.5s steps(2, end);
+}
+
+.header-title.glitch::before {
+    opacity: 0.8;
+    animation: crt-glitch-red 0.5s steps(3, end);
+}
+
+.header-title.glitch::after {
+    opacity: 0.8;
+    animation: crt-glitch-cyan 0.5s steps(3, end);
+}
+
+/* Scanline intensification during glitch */
+.header-title.glitch-scanlines ~ .header-content::after,
+.header-content:has(.header-title.glitch-scanlines)::after {
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.2) 2px,
+        rgba(0, 0, 0, 0.2) 4px
+    );
+    animation: scanline-scroll 0.08s linear infinite;
+}
+
+/* Interlace flicker - alternates even/odd scanline opacity */
+.header-title.glitch-interlace {
+    animation: crt-interlace 0.12s steps(2, end) infinite;
+}
+
+@keyframes crt-interlace {
+    0% {
+        background: repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.03) 4px
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
+    50% {
+        background: repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.03) 0px,
+            rgba(255, 255, 255, 0.03) 2px,
+            transparent 2px,
+            transparent 4px
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
+}
+
+/* Main text glitch animation - analog CRT: horizontal tearing, vertical jitter, phosphor bloom */
 @keyframes crt-glitch-main {
     0% {
-        text-shadow: 0 0 0 transparent;
+        text-shadow:
+            0 0 7px rgba(0, 247, 194, 0.4),
+            0 0 15px rgba(0, 247, 194, 0.2);
         transform: none;
         filter: none;
     }
     5% {
-        text-shadow: 
+        text-shadow:
             3px 0 var(--secondary),
             -3px 0 var(--neon),
-            0 0 8px rgba(255, 255, 255, 0.5);
-        transform: skewX(2deg) translateX(2px);
+            0 0 12px rgba(255, 255, 255, 0.6),
+            0 0 30px rgba(0, 247, 194, 0.5);
+        transform: translateX(3px) translateY(-1px);
         filter: brightness(1.3) contrast(1.2);
     }
     10% {
-        text-shadow: 
-            -4px 0 var(--neon),
-            4px 0 var(--secondary),
-            0 0 15px rgba(0, 247, 194, 0.6);
-        transform: skewX(-3deg) translateX(-3px);
+        text-shadow:
+            -5px 0 var(--neon),
+            5px 0 #ff0040,
+            0 0 20px rgba(255, 0, 64, 0.4);
+        transform: translateX(-6px) translateY(2px) skewX(2deg);
         filter: brightness(0.8) contrast(1.5);
     }
     15% {
-        clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-        transform: translateX(5px);
-    }
-    20% {
-        clip-path: polygon(0 35%, 100% 35%, 100% 70%, 0 70%);
-        transform: translateX(-8px) skewX(5deg);
-        text-shadow: 
-            6px 0 var(--secondary),
-            -6px 0 #ff0040,
-            0 0 20px rgba(255, 90, 54, 0.8);
+        /* Horizontal tear - whole line shifts */
+        text-shadow:
+            8px 0 #ff0040,
+            -4px 0 var(--neon),
+            0 0 25px rgba(255, 90, 54, 0.6);
+        transform: translateX(10px) translateY(-1px);
         filter: brightness(1.4) saturate(1.5);
     }
-    25% {
-        clip-path: polygon(0 70%, 100% 70%, 100% 100%, 0 100%);
-        transform: translateX(3px);
-    }
-    30% {
-        clip-path: none;
-        text-shadow: 
-            2px 2px var(--neon),
-            -2px -2px var(--secondary),
-            0 0 10px white;
-        transform: scale(1.02, 0.98) skewX(-2deg);
+    20% {
+        /* Snap back with vertical bounce */
+        text-shadow:
+            -3px 0 var(--neon),
+            3px 0 var(--secondary);
+        transform: translateX(-4px) translateY(3px);
         filter: brightness(1.1);
     }
-    40% {
-        text-shadow: 
-            -5px 0 var(--secondary),
-            5px 0 var(--neon);
-        transform: translateY(-2px) skewX(4deg);
-        filter: blur(1px) brightness(1.2);
+    28% {
+        /* Synthwave color flash - magenta/hot pink */
+        text-shadow:
+            5px 0 #ff00ff,
+            -5px 0 #00f7c2,
+            0 0 35px rgba(255, 0, 255, 0.5),
+            0 0 60px rgba(255, 0, 255, 0.2);
+        transform: translateX(6px) translateY(-2px) skewX(-3deg);
+        filter: brightness(1.5) saturate(1.8);
+    }
+    35% {
+        /* Vertical hold slip */
+        text-shadow:
+            -6px 0 var(--secondary),
+            6px 0 #ff0040;
+        transform: translateY(4px) translateX(-2px);
+        filter: brightness(0.85) contrast(1.4);
+    }
+    42% {
+        text-shadow:
+            4px 0 #ff6ec7,
+            -4px 0 var(--neon),
+            0 0 20px rgba(255, 110, 199, 0.5);
+        transform: translateX(8px) translateY(-3px) skewX(4deg);
+        filter: brightness(1.3);
     }
     50% {
-        clip-path: inset(30% 0 40% 0);
-        transform: translateX(-10px);
-        text-shadow: 
-            8px 0 #ff0040,
-            -8px 0 #00f7c2,
-            0 0 25px rgba(255, 255, 255, 0.9);
-        filter: brightness(1.5) contrast(2);
+        /* Heavy horizontal tear */
+        text-shadow:
+            -10px 0 #ff0040,
+            10px 0 #00f7c2,
+            0 0 40px rgba(255, 255, 255, 0.8);
+        transform: translateX(-12px) translateY(1px);
+        filter: brightness(1.6) contrast(1.8);
     }
     55% {
-        clip-path: inset(60% 0 10% 0);
-        transform: translateX(8px) skewX(-6deg);
+        /* Rubber-band snap back */
+        text-shadow:
+            6px 0 #ff00ff,
+            -6px 0 var(--neon);
+        transform: translateX(5px) translateY(-4px) skewX(-2deg);
+        filter: brightness(1.2);
     }
-    60% {
-        clip-path: none;
-        text-shadow: 
-            4px 0 var(--neon),
-            -4px 0 var(--secondary);
-        transform: scale(0.98, 1.02);
+    62% {
+        text-shadow:
+            -3px 0 var(--neon),
+            3px 0 var(--secondary),
+            0 0 15px rgba(0, 247, 194, 0.6);
+        transform: translateX(-3px) translateY(2px);
         filter: brightness(0.9);
     }
     70% {
-        text-shadow: 
-            -3px 0 var(--secondary),
-            3px 0 var(--neon),
-            0 0 12px rgba(0, 247, 194, 0.7);
-        transform: skewX(3deg) translateX(-2px);
-        filter: brightness(1.15);
+        text-shadow:
+            2px 0 #ff6ec7,
+            -2px 0 var(--neon),
+            0 0 20px rgba(0, 247, 194, 0.4);
+        transform: translateX(2px) translateY(-1px) skewX(1deg);
+        filter: brightness(1.1);
     }
     80% {
-        text-shadow: 
-            2px 0 var(--neon),
-            -2px 0 var(--secondary);
-        transform: translateX(1px);
+        text-shadow:
+            -1px 0 var(--neon),
+            1px 0 var(--secondary),
+            0 0 12px rgba(0, 247, 194, 0.3);
+        transform: translateY(1px);
         filter: brightness(1.05);
     }
     90% {
-        text-shadow: 
-            1px 0 var(--neon),
-            -1px 0 var(--secondary);
+        text-shadow:
+            0 0 10px rgba(0, 247, 194, 0.5),
+            0 0 20px rgba(0, 247, 194, 0.3);
         transform: none;
         filter: brightness(1.02);
     }
     100% {
-        text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
+        text-shadow:
+            0 0 7px rgba(0, 247, 194, 0.4),
+            0 0 15px rgba(0, 247, 194, 0.2),
+            0 0 30px rgba(0, 247, 194, 0.1);
         transform: none;
         filter: none;
-        clip-path: none;
     }
 }
 
@@ -353,39 +430,39 @@ header {
         transform: none;
         opacity: 0;
     }
-    10% {
+    8% {
         transform: translateX(-4px) translateY(1px);
         opacity: 0.7;
     }
-    20% {
-        transform: translateX(6px) translateY(-2px);
+    15% {
+        transform: translateX(8px) translateY(-1px);
         opacity: 0.9;
     }
-    30% {
-        transform: translateX(-8px) translateY(1px) skewX(2deg);
+    25% {
+        transform: translateX(-10px) translateY(2px) skewX(2deg);
         opacity: 0.6;
     }
-    40% {
-        transform: translateX(3px);
-        opacity: 0.8;
-    }
-    50% {
-        transform: translateX(-5px) translateY(-1px);
-        opacity: 0.7;
-    }
-    60% {
-        transform: translateX(7px) skewX(-3deg);
+    35% {
+        transform: translateX(5px) translateY(-3px);
         opacity: 0.85;
     }
-    70% {
-        transform: translateX(-3px) translateY(2px);
+    45% {
+        transform: translateX(-7px) translateY(1px);
+        opacity: 0.7;
+    }
+    55% {
+        transform: translateX(12px) skewX(-2deg);
+        opacity: 0.9;
+    }
+    65% {
+        transform: translateX(-4px) translateY(-1px);
         opacity: 0.6;
     }
-    80% {
-        transform: translateX(2px);
+    75% {
+        transform: translateX(3px) translateY(2px);
         opacity: 0.4;
     }
-    90% {
+    85% {
         transform: translateX(-1px);
         opacity: 0.2;
     }
@@ -397,39 +474,39 @@ header {
         transform: none;
         opacity: 0;
     }
-    10% {
+    8% {
         transform: translateX(4px) translateY(-1px);
         opacity: 0.7;
     }
-    20% {
-        transform: translateX(-6px) translateY(2px);
+    15% {
+        transform: translateX(-8px) translateY(1px);
         opacity: 0.9;
     }
-    30% {
-        transform: translateX(8px) translateY(-1px) skewX(-2deg);
+    25% {
+        transform: translateX(10px) translateY(-2px) skewX(-2deg);
         opacity: 0.6;
     }
-    40% {
-        transform: translateX(-3px);
-        opacity: 0.8;
-    }
-    50% {
-        transform: translateX(5px) translateY(1px);
-        opacity: 0.7;
-    }
-    60% {
-        transform: translateX(-7px) skewX(3deg);
+    35% {
+        transform: translateX(-5px) translateY(3px);
         opacity: 0.85;
     }
-    70% {
-        transform: translateX(3px) translateY(-2px);
+    45% {
+        transform: translateX(7px) translateY(-1px);
+        opacity: 0.7;
+    }
+    55% {
+        transform: translateX(-12px) skewX(2deg);
+        opacity: 0.9;
+    }
+    65% {
+        transform: translateX(4px) translateY(1px);
         opacity: 0.6;
     }
-    80% {
-        transform: translateX(-2px);
+    75% {
+        transform: translateX(-3px) translateY(-2px);
         opacity: 0.4;
     }
-    90% {
+    85% {
         transform: translateX(1px);
         opacity: 0.2;
     }
@@ -445,43 +522,111 @@ header {
     }
 }
 
-/* Static noise filter - applied during glitch */
+/* Static noise filter - brief static flash during glitch */
 .header-title.glitch-static {
-    animation: static-noise 0.15s steps(5, end) infinite;
+    position: relative;
 }
 
-@keyframes static-noise {
+.header-title.glitch-static::before {
+    opacity: 0 !important;
+    animation: none !important;
+}
+
+/* Vertical hold slip - the whole text slides down and snaps back */
+.header-title.glitch-vhold {
+    animation: crt-vertical-hold 0.6s ease-out;
+}
+
+@keyframes crt-vertical-hold {
     0% {
-        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
-    }
-    25% {
-        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' seed='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
-    }
-    50% {
-        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='1' seed='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
-    }
-    75% {
-        filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='1' seed='8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E#n");
-    }
-    100% {
+        transform: translateY(0);
         filter: none;
     }
+    10% {
+        transform: translateY(3px);
+        filter: brightness(0.9);
+    }
+    20% {
+        transform: translateY(8px);
+        filter: brightness(0.7) contrast(1.3);
+        text-shadow:
+            4px 0 #ff00ff,
+            -4px 0 var(--neon),
+            0 0 20px rgba(255, 0, 255, 0.4);
+    }
+    35% {
+        transform: translateY(15px);
+        filter: brightness(0.5) blur(1px);
+        text-shadow:
+            6px 0 #ff0040,
+            -6px 0 #00f7c2,
+            0 0 30px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        transform: translateY(20px);
+        filter: brightness(0.4) blur(2px);
+        opacity: 0.7;
+    }
+    55% {
+        /* Snap back */
+        transform: translateY(-5px);
+        filter: brightness(1.8) contrast(1.5);
+        opacity: 1;
+        text-shadow:
+            0 0 40px rgba(0, 247, 194, 0.8),
+            0 0 60px rgba(255, 0, 255, 0.3);
+    }
+    65% {
+        transform: translateY(2px);
+        filter: brightness(1.2);
+    }
+    75% {
+        transform: translateY(-1px);
+        filter: brightness(1.05);
+    }
+    100% {
+        transform: translateY(0);
+        filter: none;
+        text-shadow:
+            0 0 7px rgba(0, 247, 194, 0.4),
+            0 0 15px rgba(0, 247, 194, 0.2);
+    }
 }
 
-/* Horizontal glitch bar effect */
-.header-title.glitch-bars {
-    animation: glitch-horizontal-bars 0.3s steps(1, end);
+/* Horizontal tear - scanlines shift independently */
+.header-title.glitch-tear {
+    animation: crt-horizontal-tear 0.35s steps(1, end);
 }
 
-@keyframes glitch-horizontal-bars {
-    0% { clip-path: inset(0 0 0 0); }
-    10% { clip-path: inset(10% 0 85% 0); transform: translateX(10px); }
-    15% { clip-path: inset(85% 0 10% 0); transform: translateX(-15px); }
-    20% { clip-path: inset(45% 0 45% 0); transform: translateX(8px); }
-    25% { clip-path: inset(20% 0 70% 0); transform: translateX(-12px); }
-    30% { clip-path: inset(70% 0 20% 0); transform: translateX(6px); }
-    35% { clip-path: inset(0 0 0 0); transform: none; }
-    100% { clip-path: inset(0 0 0 0); transform: none; }
+@keyframes crt-horizontal-tear {
+    0% { clip-path: inset(0 0 0 0); transform: none; }
+    8% {
+        clip-path: inset(5% -5% 88% 0);
+        transform: translateX(15px);
+        text-shadow: 5px 0 #ff00ff, -5px 0 var(--neon);
+    }
+    16% {
+        clip-path: inset(25% 0 65% -5%);
+        transform: translateX(-20px);
+        text-shadow: -8px 0 #ff0040, 8px 0 #00f7c2;
+    }
+    24% {
+        clip-path: inset(50% -5% 40% 0);
+        transform: translateX(12px);
+        text-shadow: 6px 0 #ff6ec7, -3px 0 var(--neon);
+    }
+    32% {
+        clip-path: inset(75% 0 15% -5%);
+        transform: translateX(-8px);
+    }
+    40% {
+        clip-path: inset(0 0 0 0);
+        transform: none;
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+        transform: none;
+    }
 }
 
 /* Legacy glitch-blocky for backwards compatibility */
@@ -6196,44 +6341,85 @@ section.production-header.alice p {
     }
 }
 
+/* CRT hover: warm-up flicker on enter, sustained glow while hovering, cool-down fade on leave */
 .header-title:hover {
-    animation: crt-hover-flicker 0.25s ease-out forwards;
+    animation: crt-hover-warmup 0.35s ease-out forwards;
+    text-shadow:
+        0 0 10px rgba(0, 247, 194, 0.6),
+        0 0 25px rgba(0, 247, 194, 0.4),
+        0 0 50px rgba(0, 247, 194, 0.2),
+        0 0 80px rgba(0, 247, 194, 0.1);
 }
 
 .header-title:hover::before {
-    opacity: 0.7;
-    transform: translateX(-3px);
-    transition: opacity 0.1s, transform 0.1s;
+    opacity: 0.35;
+    transform: translateX(-2px);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
 .header-title:hover::after {
-    opacity: 0.7;
-    transform: translateX(3px);
-    transition: opacity 0.1s, transform 0.1s;
+    opacity: 0.35;
+    transform: translateX(2px);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
-/* Simpler hover-specific animation that won't cause re-triggers */
-@keyframes crt-hover-flicker {
+/* Cool-down transition when mouse leaves */
+.header-title:not(:hover) {
+    transition: text-shadow 0.6s ease-out;
+}
+
+.header-title:not(:hover)::before,
+.header-title:not(:hover)::after {
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+/* Warm-up animation: initial flicker burst then settle into glow */
+@keyframes crt-hover-warmup {
     0% {
-        text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
+        text-shadow:
+            0 0 7px rgba(0, 247, 194, 0.4),
+            0 0 15px rgba(0, 247, 194, 0.2);
+        filter: brightness(1);
     }
-    20% {
-        text-shadow: 
-            3px 0 var(--secondary),
+    8% {
+        text-shadow:
+            4px 0 #ff00ff,
+            -4px 0 var(--neon),
+            0 0 20px rgba(255, 0, 255, 0.4);
+        filter: brightness(1.4);
+    }
+    16% {
+        text-shadow:
             -3px 0 var(--neon),
-            0 0 15px var(--neon);
+            3px 0 var(--secondary),
+            0 0 15px rgba(0, 247, 194, 0.5);
+        filter: brightness(0.85);
     }
-    40% {
-        text-shadow: 
-            -2px 0 var(--neon),
-            2px 0 var(--secondary),
-            0 0 20px var(--neon);
+    24% {
+        text-shadow:
+            2px 0 #ff6ec7,
+            -2px 0 #00f7c2,
+            0 0 30px rgba(255, 110, 199, 0.3),
+            0 0 50px rgba(0, 247, 194, 0.2);
+        filter: brightness(1.3);
+    }
+    35% {
+        text-shadow:
+            -1px 0 var(--neon),
+            1px 0 var(--secondary),
+            0 0 20px rgba(0, 247, 194, 0.4);
+        filter: brightness(1.1);
+    }
+    50% {
+        filter: brightness(0.95);
     }
     100% {
-        text-shadow: 
-            0 0 12px var(--neon), 
-            0 0 25px var(--neon),
-            0 0 40px rgba(0, 247, 194, 0.3);
+        text-shadow:
+            0 0 10px rgba(0, 247, 194, 0.6),
+            0 0 25px rgba(0, 247, 194, 0.4),
+            0 0 50px rgba(0, 247, 194, 0.2),
+            0 0 80px rgba(0, 247, 194, 0.1);
+        filter: brightness(1);
     }
 }
 

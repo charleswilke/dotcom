@@ -1415,51 +1415,66 @@ function handleTestimonialSwipe() {
     }
 }
 
+// All glitch CSS classes used by the CRT effect system
+const ALL_GLITCH_CLASSES = ['glitch', 'glitch-scanlines', 'glitch-tear', 'glitch-vhold', 'glitch-interlace', 'glitch-static'];
+
+function clearGlitch(header) {
+    header.classList.remove(...ALL_GLITCH_CLASSES);
+}
+
 function triggerGlitch(header) {
     if (!header) return;
-    
-    // Randomly select glitch intensity
-    const intensity = Math.random();
+
+    const roll = Math.random();
     const glitchClasses = ['glitch'];
-    
-    // 40% chance for extra scanlines effect
-    if (intensity > 0.6) {
+    let duration;
+
+    if (roll > 0.88) {
+        // ~12% chance: vertical hold slip — dramatic, CRT losing sync
+        glitchClasses.length = 0;
+        glitchClasses.push('glitch-vhold');
+        duration = 600;
+    } else if (roll > 0.72) {
+        // ~16% chance: horizontal tear with interlace flicker
+        glitchClasses.push('glitch-tear', 'glitch-interlace');
+        duration = 400 + Math.random() * 150;
+    } else if (roll > 0.55) {
+        // ~17% chance: chromatic glitch + scanline intensification
         glitchClasses.push('glitch-scanlines');
+        duration = 350 + Math.random() * 150;
+    } else if (roll > 0.40) {
+        // ~15% chance: chromatic glitch + interlace
+        glitchClasses.push('glitch-interlace');
+        duration = 300 + Math.random() * 100;
+    } else {
+        // ~40% chance: light chromatic aberration only
+        duration = 250 + Math.random() * 100;
     }
-    
-    // 25% chance for horizontal bar glitch (more dramatic)
-    if (intensity > 0.75) {
-        glitchClasses.push('glitch-bars');
-    }
-    
+
     // Apply all selected effects
     glitchClasses.forEach(cls => header.classList.add(cls));
-    
-    // Variable duration based on intensity (longer for more intense glitches)
-    const duration = intensity > 0.75 ? 400 + Math.random() * 200 : 250 + Math.random() * 150;
-    
+
     setTimeout(() => {
-        // Remove all glitch classes
-        header.classList.remove('glitch', 'glitch-scanlines', 'glitch-bars', 'glitch-static');
-        
-        // Variable interval - occasional "bad signal" with rapid repeated glitches
+        clearGlitch(header);
+
+        // 15% chance for "bad signal" — rapid repeated glitch bursts
         const isBadSignal = Math.random() > 0.85;
         if (isBadSignal) {
-            // Rapid double/triple glitch
             setTimeout(() => {
                 header.classList.add('glitch');
                 setTimeout(() => {
                     header.classList.remove('glitch');
                     if (Math.random() > 0.5) {
+                        // Triple burst
                         setTimeout(() => {
-                            header.classList.add('glitch', 'glitch-bars');
+                            header.classList.add('glitch', 'glitch-tear');
                             setTimeout(() => {
-                                header.classList.remove('glitch', 'glitch-bars');
-                                    scheduleEffectTimeout(() => triggerGlitch(header), 3000 + Math.random() * 4000);
+                                clearGlitch(header);
+                                scheduleEffectTimeout(() => triggerGlitch(header), 3000 + Math.random() * 4000);
                             }, 150);
                         }, 80 + Math.random() * 50);
                     } else {
-                            scheduleEffectTimeout(() => triggerGlitch(header), 3000 + Math.random() * 4000);
+                        scheduleEffectTimeout(() => triggerGlitch(header), 3000 + Math.random() * 4000);
                     }
                 }, 120 + Math.random() * 80);
             }, 100 + Math.random() * 100);
@@ -1468,9 +1483,11 @@ function triggerGlitch(header) {
         }
     }, duration);
 }
+
 function initHeaderGlitchEffects() {
     const header = document.querySelector('.header-title');
     if (!header) return;
+    window.__headerGlitchInit = true;
     scheduleEffectTimeout(() => triggerGlitch(header), 1500 + Math.random() * 2000);
 }
 

@@ -1519,6 +1519,57 @@ function initEmailGlitchEffects() {
     });
 }
 
+// Periodic CRT glitch for the "l.ai.bor" section title
+const LAIBOR_GLITCH_CLASSES = ['glitch', 'glitch-tear', 'glitch-vhold'];
+
+function clearLaiborGlitch(el) {
+    el.classList.remove(...LAIBOR_GLITCH_CLASSES);
+}
+
+function triggerLaiborGlitch(el) {
+    if (!el) return;
+
+    const roll = Math.random();
+    const classes = [];
+    let duration;
+
+    if (roll > 0.9) {
+        classes.push('glitch-vhold');
+        duration = 600;
+    } else if (roll > 0.7) {
+        classes.push('glitch', 'glitch-tear');
+        duration = 400 + Math.random() * 100;
+    } else {
+        classes.push('glitch');
+        duration = 300 + Math.random() * 150;
+    }
+
+    classes.forEach(cls => el.classList.add(cls));
+
+    setTimeout(() => {
+        clearLaiborGlitch(el);
+
+        // 12% chance for bad signal double burst
+        if (Math.random() > 0.88) {
+            setTimeout(() => {
+                el.classList.add('glitch');
+                setTimeout(() => {
+                    el.classList.remove('glitch');
+                    scheduleEffectTimeout(() => triggerLaiborGlitch(el), 4000 + Math.random() * 6000);
+                }, 120 + Math.random() * 80);
+            }, 100 + Math.random() * 80);
+        } else {
+            scheduleEffectTimeout(() => triggerLaiborGlitch(el), 4000 + Math.random() * 8000);
+        }
+    }, duration);
+}
+
+function initLaiborGlitchEffects() {
+    const el = document.querySelector('.rss-title-main');
+    if (!el) return;
+    scheduleEffectTimeout(() => triggerLaiborGlitch(el), 3000 + Math.random() * 3000);
+}
+
 // Custom Audio Player Script
 function initCustomAudioPlayers() {
   function formatTime(sec) {
@@ -3110,6 +3161,7 @@ function initDeferredHomepageMedia() {
 function initDeferredHomepageEffects() {
     scheduleIdleWork(() => {
         initHeaderGlitchEffects();
+        initLaiborGlitchEffects();
         initFaqGlitchTimer();
     }, 2000);
 }

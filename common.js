@@ -166,6 +166,75 @@ function initStickyNav() {
 }());
 // ===== END STICKY NAV =====
 
+// ===== HEADER CRT GLITCH (subpages - skipped when main.js handles it) =====
+const COMMON_GLITCH_CLASSES = ['glitch', 'glitch-scanlines', 'glitch-tear', 'glitch-vhold', 'glitch-interlace', 'glitch-static'];
+
+function commonClearGlitch(el) {
+    el.classList.remove(...COMMON_GLITCH_CLASSES);
+}
+
+function commonTriggerGlitch(header) {
+    if (!header) return;
+
+    const roll = Math.random();
+    const classes = ['glitch'];
+    let duration;
+
+    if (roll > 0.88) {
+        classes.length = 0;
+        classes.push('glitch-vhold');
+        duration = 600;
+    } else if (roll > 0.72) {
+        classes.push('glitch-tear', 'glitch-interlace');
+        duration = 400 + Math.random() * 150;
+    } else if (roll > 0.55) {
+        classes.push('glitch-scanlines');
+        duration = 350 + Math.random() * 150;
+    } else if (roll > 0.40) {
+        classes.push('glitch-interlace');
+        duration = 300 + Math.random() * 100;
+    } else {
+        duration = 250 + Math.random() * 100;
+    }
+
+    classes.forEach(cls => header.classList.add(cls));
+
+    setTimeout(() => {
+        commonClearGlitch(header);
+
+        if (Math.random() > 0.85) {
+            setTimeout(() => {
+                header.classList.add('glitch');
+                setTimeout(() => {
+                    header.classList.remove('glitch');
+                    if (Math.random() > 0.5) {
+                        setTimeout(() => {
+                            header.classList.add('glitch', 'glitch-tear');
+                            setTimeout(() => {
+                                commonClearGlitch(header);
+                                setTimeout(() => commonTriggerGlitch(header), 3000 + Math.random() * 4000);
+                            }, 150);
+                        }, 80 + Math.random() * 50);
+                    } else {
+                        setTimeout(() => commonTriggerGlitch(header), 3000 + Math.random() * 4000);
+                    }
+                }, 120 + Math.random() * 80);
+            }, 100 + Math.random() * 100);
+        } else {
+            setTimeout(() => commonTriggerGlitch(header), 2500 + Math.random() * 5000);
+        }
+    }, duration);
+}
+
+function initCommonHeaderGlitch() {
+    // Skip if main.js already initialized the header glitch (index.html)
+    if (window.__headerGlitchInit) return;
+    const header = document.querySelector('.header-title');
+    if (!header) return;
+    setTimeout(() => commonTriggerGlitch(header), 1500 + Math.random() * 2000);
+}
+// ===== END HEADER CRT GLITCH =====
+
 document.addEventListener('DOMContentLoaded', () => {
     // Update copyright year dynamically (fallback for hardcoded value)
     document.querySelectorAll('.current-year').forEach(el => {
@@ -173,5 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     setTimeout(triggerGlitchFooterNote, 2500 + Math.random() * 3000);
+
+    // Init header glitch for subpages (deferred to let main.js claim it first if present)
+    setTimeout(initCommonHeaderGlitch, 100);
 });
 

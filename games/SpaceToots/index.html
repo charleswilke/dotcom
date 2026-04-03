@@ -181,7 +181,7 @@ const CONFIG = {
 
 // === DODGE & XP CONSTANTS ===
 const DODGE_DURATION = 18;    // frames of active dash
-const DODGE_COOLDOWN = 120;   // frames before next dodge (2 sec at 60fps, upgradeable)
+const DODGE_COOLDOWN = 80;    // frames before next dodge (~1.3s at 60fps, upgradeable)
 const DODGE_IMPULSE  = 9;     // velocity impulse (above maxVel of 6)
 const DODGE_KEY      = 'ShiftLeft';
 const DODGE_KEY_ALT  = 'ShiftRight';
@@ -193,8 +193,8 @@ const XP_ORB_DRIFT      = 0.6;  // baseline leftward scroll speed (px/frame)
 
 // === LEVEL-UP UPGRADES ===
 const UPGRADES = {
-  spread:      { name: 'Spread Shot',      icon: '⚔', desc: 'Spread & power up',         color: '#00ffff', maxTier: 5,
-                 tiers: ['2-Way','3-Way','Power ×1.2','Power ×1.4','Power ×1.7'] },
+  spread:      { name: 'Power Shot',       icon: '⚔', desc: 'Spread & power up',         color: '#00ffff', maxTier: 5,
+                 tiers: ['2-Way','Power ×1.2','Power ×1.4','Power ×1.7','Power ×2.0'] },
   fireRate:    { name: 'Fire Rate',        icon: '↑', desc: 'Shoot faster',               color: '#44ddff', maxTier: 5,
                  tiers: ['36f','26f','18f','12f','8f'], values: [36, 26, 18, 12, 8] },
   gravLock:    { name: 'Grav Lock',        icon: '◉', desc: 'Bullets curve to enemies',   color: '#dd44ff', maxTier: 5,
@@ -347,6 +347,11 @@ canvas.addEventListener('mousedown', e => {
   }
   // Level-up card click — select card under cursor, click again to confirm
   if (gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22) {
+    // Reroll button click (below cards)
+    if (pos.y >= 385 && pos.y <= 425 && pos.x >= CONFIG.width / 2 - 100 && pos.x <= CONFIG.width / 2 + 100) {
+      rerollLevelUpCards();
+      return;
+    }
     const cardW = 180, cardH = 240, gap = 24;
     const cardCount = levelUpCards.length;
     const totalW = cardCount * cardW + (cardCount - 1) * gap;
@@ -367,15 +372,21 @@ canvas.addEventListener('mousedown', e => {
     return;
   }
   // Double-click dodge — direction from player toward click position
+  // In mouse lock mode, ship is on top of cursor so use velocity direction instead
   if (['GAMEPLAY', 'MID_BOSS_FIGHT', 'BOSS_FIGHT', 'TUNNEL_GAUNTLET'].includes(gameState)) {
     const now = performance.now();
     if (now - mouseDrag.lastClickTime < DOUBLE_TAP_MS) {
-      const dx = pos.x - player.x;
-      const dy = pos.y - player.y;
-      const len = Math.sqrt(dx * dx + dy * dy);
-      if (len > 0) {
-        mouseDrag.dodgePending = { dx: dx / len, dy: dy / len };
+      let dx = pos.x - player.x;
+      let dy = pos.y - player.y;
+      let len = Math.sqrt(dx * dx + dy * dy);
+      // If too close (mouse lock or near-overlap), use velocity direction
+      if (len < 15) {
+        dx = player.vx;
+        dy = player.vy;
+        len = Math.sqrt(dx * dx + dy * dy);
+        if (len < 0.5) { dx = 1; dy = 0; len = 1; } // default forward
       }
+      mouseDrag.dodgePending = { dx: dx / len, dy: dy / len };
       mouseDrag.lastClickTime = 0;
     } else {
       mouseDrag.lastClickTime = now;
@@ -407,7 +418,8 @@ window.addEventListener('mousemove', e => {
   const overPause = inGameplay && pos.x >= 10 && pos.x <= 80 && pos.y >= 80 && pos.y <= 115;
   const overLock = !isMobile && inGameplay && pos.x >= 10 && pos.x <= 46 && pos.y >= 164 && pos.y <= 200;
   const overCard = gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22 && pos.y >= 140 && pos.y <= 380;
-  canvas.style.cursor = overPause || overLock || overCard ? 'pointer' : '';
+  const overReroll = gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22 && pos.y >= 385 && pos.y <= 425 && pos.x >= CONFIG.width / 2 - 100 && pos.x <= CONFIG.width / 2 + 100;
+  canvas.style.cursor = overPause || overLock || overCard || overReroll ? 'pointer' : '';
   // Level-up card hover — highlight card under cursor
   if (gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22) {
     const cardW = 180, cardH = 240, gap = 24;
@@ -492,6 +504,11 @@ canvas.addEventListener('touchstart', e => {
 
   // Level-up card tap selection
   if (gameState === 'LEVEL_UP' && levelUpAnimTimer >= 22) {
+    // Reroll button tap
+    if (pos.y >= 385 && pos.y <= 425 && pos.x >= CONFIG.width / 2 - 100 && pos.x <= CONFIG.width / 2 + 100) {
+      rerollLevelUpCards();
+      return;
+    }
     const cardW = 180, cardH = 240, gap = 24;
     const cardCount = levelUpCards.length;
     const totalW = cardCount * cardW + (cardCount - 1) * gap;
@@ -5605,7 +5622,7 @@ function updateAmbientAsteroids() {
     ? (midBoss.phase === 2 ? 2 + Math.floor(Math.random() * 2) : (Math.random() < 0.4 ? 2 : 1))
     : (Math.random() < 0.25 ? 2 + Math.floor(Math.random() * 2) : 1);
   // Keep the tutorial area clear — push asteroids to lower half while tutorial is showing
-  const tutorialActive = autofireFlash.active || mouseTutorial.active;
+  const tutorialActive = autofireFlash.active || mouseTutorial.active || lockTutorial.active;
   const minY = tutorialActive ? CONFIG.height * 0.5 : 50;
   const baseY = minY + Math.random() * (CONFIG.height - minY - 90);
 
@@ -6153,6 +6170,12 @@ const secondaryTutorial = {
   duration: 240, // 4 seconds
   shown: false
 };
+const lockTutorial = {
+  active: false,
+  frame: 0,
+  duration: 240, // 4 seconds
+  shown: false
+};
 
 // --- Desktop mouse icon ---
 function drawMouseBody(cx, cy, scale, leftPressed, rightPressed) {
@@ -6303,6 +6326,12 @@ function drawMouseTutorial() {
   mouseTutorial.frame++;
   if (mouseTutorial.frame > mouseTutorial.duration) {
     mouseTutorial.active = false;
+    // Chain into lock tutorial on desktop
+    if (!isMobile && !lockTutorial.shown) {
+      lockTutorial.active = true;
+      lockTutorial.frame = 0;
+      lockTutorial.shown = true;
+    }
     return;
   }
 
@@ -6602,6 +6631,71 @@ function drawSecondaryTutorial() {
     ctx.shadowBlur = 12;
     ctx.fillText('RIGHT-CLICK TO DEPLOY', cx, cy + 55);
   }
+
+  ctx.shadowBlur = 0;
+  ctx.restore();
+}
+
+function drawLockTutorial() {
+  if (!lockTutorial.active) return;
+  lockTutorial.frame++;
+  if (lockTutorial.frame > lockTutorial.duration) {
+    lockTutorial.active = false;
+    return;
+  }
+
+  const f = lockTutorial.frame;
+  const fadeIn = Math.min(1, f / 30);
+  const fadeOut = Math.min(1, (lockTutorial.duration - f) / 40);
+  const alpha = fadeIn * fadeOut;
+  if (alpha <= 0) return;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+
+  // Arrow pointing at the lock button (centered at x=28, y=182)
+  const btnCX = 28, btnCY = 182;
+  const labelX = 80, labelY = btnCY;
+  const neonPulse = 0.6 + 0.4 * Math.sin(f * 0.18);
+  const flicker = Math.random() > 0.92 ? 0.3 : 1;
+  const bounce = Math.sin(f * 0.12) * 3;
+
+  // Pulsing ring around the button
+  ctx.beginPath();
+  ctx.arc(btnCX, btnCY, 22 + neonPulse * 3, 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(0, 240, 255, ${(0.4 * neonPulse * flicker).toFixed(2)})`;
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 12 * neonPulse;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Arrow line from label to button
+  ctx.beginPath();
+  ctx.moveTo(labelX + bounce, labelY);
+  ctx.lineTo(btnCX + 26, btnCY);
+  ctx.strokeStyle = `rgba(0, 240, 255, ${(0.6 * flicker).toFixed(2)})`;
+  ctx.shadowBlur = 6;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Arrowhead
+  ctx.beginPath();
+  ctx.moveTo(btnCX + 32, btnCY - 4);
+  ctx.lineTo(btnCX + 26, btnCY);
+  ctx.lineTo(btnCX + 32, btnCY + 4);
+  ctx.stroke();
+
+  // Label text
+  ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 10 * neonPulse;
+  ctx.fillStyle = `rgba(0, 240, 255, ${(0.9 * flicker).toFixed(2)})`;
+  ctx.fillText('MOUSE LOCK', labelX + 4 + bounce, labelY - 7);
+  ctx.font = '10px monospace';
+  ctx.fillStyle = `rgba(180, 220, 255, ${(0.6 * flicker).toFixed(2)})`;
+  ctx.fillText('click or press L', labelX + 4 + bounce, labelY + 7);
 
   ctx.shadowBlur = 0;
   ctx.restore();
@@ -6915,6 +7009,7 @@ let levelUpCards = [];        // array of upgrade keys to display
 let levelUpSelection = 1;    // currently highlighted card (0, 1, or 2)
 let levelUpAnimTimer = 0;    // entrance animation timer
 let levelUpPrevState = '';   // state to return to after selection
+let levelUpFreeRerollUsed = false; // first reroll per level-up is free
 
 const WEAPON_UPGRADES = new Set(['spread', 'fireRate', 'gravLock']);
 
@@ -6940,45 +7035,65 @@ function generateLevelUpCards() {
   levelUpAnimTimer = 0;
 }
 
+function getRerollCost() {
+  return Math.ceil((player.nextLevelScore - player.prevLevelScore) * 0.05);
+}
+
+function canReroll() {
+  if (!levelUpFreeRerollUsed) return true;
+  const cost = getRerollCost();
+  return score - cost >= player.prevLevelScore;
+}
+
+function rerollLevelUpCards() {
+  if (!canReroll()) return;
+  if (levelUpFreeRerollUsed) {
+    score -= getRerollCost();
+  }
+  levelUpFreeRerollUsed = true;
+  generateLevelUpCards();
+  levelUpAnimTimer = 22; // skip entrance animation on reroll
+}
+
 function applyUpgrade(key) {
   player.upgrades[key]++;
   const tier = player.upgrades[key];
   switch (key) {
     case 'spread':
-      if (tier <= 2) {
-        // Tiers 1-2: add more bullets (weaponLevel 2 → 3)
-        player.weaponLevel = tier + 1;
+      if (tier === 1) {
+        // Tier 1: 2-way split
+        player.weaponLevel = 2;
       } else {
-        // Tiers 3-5: power upgrade — change color and multiply damage
-        const POWER_COLORS = ['#ffcc00', '#ff8800', '#ff2266'];
-        const POWER_GLOW   = ['rgba(255,204,0,0.2)', 'rgba(255,136,0,0.2)', 'rgba(255,34,102,0.2)'];
-        const POWER_MULTS  = [1.2, 1.44, 1.73];
-        const powerTier = tier - 3; // 0, 1, 2
+        // Tiers 2-5: power upgrades — change color and multiply damage
+        const POWER_COLORS = ['#ffcc00', '#ff8800', '#ff2266', '#ff00ff'];
+        const POWER_GLOW   = ['rgba(255,204,0,0.2)', 'rgba(255,136,0,0.2)', 'rgba(255,34,102,0.2)', 'rgba(255,0,255,0.2)'];
+        const POWER_MULTS  = [1.2, 1.44, 1.73, 2.0];
+        const powerTier = tier - 2; // 0, 1, 2, 3
         player.bulletPower = POWER_MULTS[powerTier];
         player.bulletColor = POWER_COLORS[powerTier];
         player.bulletGlow  = POWER_GLOW[powerTier];
       }
       break;
     case 'fireRate':
-      player.fireRateOverride = UPGRADES.fireRate.values[tier];
+      player.fireRateOverride = UPGRADES.fireRate.values[tier - 1];
       break;
     case 'gravLock':
-      player.gravLock = UPGRADES.gravLock.values[tier];
+      player.gravLock = UPGRADES.gravLock.values[tier - 1];
       break;
     case 'xpMagnet':
-      player.xpAttractRadius = UPGRADES.xpMagnet.values[tier];
+      player.xpAttractRadius = UPGRADES.xpMagnet.values[tier - 1];
       break;
     case 'boostDur':
-      player.dodgeDuration = UPGRADES.boostDur.values[tier];
+      player.dodgeDuration = UPGRADES.boostDur.values[tier - 1];
       break;
     case 'boostRecharge':
-      player.dodgeCooldownBase = UPGRADES.boostRecharge.values[tier];
+      player.dodgeCooldownBase = UPGRADES.boostRecharge.values[tier - 1];
       break;
     case 'speed':
-      player.maxVel = UPGRADES.speed.values[tier];
+      player.maxVel = UPGRADES.speed.values[tier - 1];
       break;
     case 'shieldRegen':
-      player.shieldRechargeSeconds = UPGRADES.shieldRegen.values[tier];
+      player.shieldRechargeSeconds = UPGRADES.shieldRegen.values[tier - 1];
       // First shield regen upgrade activates the shield
       if (tier === 1 && !player.shieldActive && player.shieldRechargeTimer === 0) {
         player.shieldActive = true;
@@ -6987,7 +7102,7 @@ function applyUpgrade(key) {
       }
       break;
     case 'scoreMult':
-      player.scoreMultBonus = UPGRADES.scoreMult.values[tier];
+      player.scoreMultBonus = UPGRADES.scoreMult.values[tier - 1];
       break;
   }
 }
@@ -7143,6 +7258,30 @@ function drawLevelUpScreen() {
     ctx.restore();
   }
 
+  // Reroll button
+  const rerollY = 400;
+  const rerollAvailable = canReroll();
+  const rerollAlpha = rerollAvailable ? 1 : 0.3;
+  ctx.globalAlpha = Math.min(rerollAlpha, animPct);
+  ctx.font = 'bold 14px monospace';
+  ctx.textAlign = 'center';
+  ctx.shadowBlur = 0;
+
+  if (!levelUpFreeRerollUsed) {
+    ctx.fillStyle = '#00ffee';
+    ctx.fillText('⟳ FREE REROLL', CONFIG.width / 2, rerollY);
+  } else if (rerollAvailable) {
+    ctx.fillStyle = '#ffaa44';
+    ctx.fillText('⟳ REROLL  (−' + getRerollCost() + ' XP)', CONFIG.width / 2, rerollY);
+  } else {
+    ctx.fillStyle = '#666688';
+    ctx.fillText('⟳ NO XP TO REROLL', CONFIG.width / 2, rerollY);
+  }
+
+  ctx.font = '10px monospace';
+  ctx.fillStyle = 'rgba(150,150,180,0.5)';
+  ctx.fillText(isMobile ? 'TAP TO REROLL' : 'R TO REROLL', CONFIG.width / 2, rerollY + 16);
+
   // Controls hint
   ctx.globalAlpha = Math.min(1, animPct);
   ctx.font = '12px monospace';
@@ -7172,6 +7311,14 @@ function updateLevelUpInput() {
     keys._levelRightHeld = false;
   }
 
+  // Reroll with R key
+  if (keys['KeyR'] && !keys._levelRerollHeld) {
+    keys._levelRerollHeld = true;
+    rerollLevelUpCards();
+  } else if (!keys['KeyR']) {
+    keys._levelRerollHeld = false;
+  }
+
   if (keys['Enter'] && !keys._levelConfirmHeld) {
     applyUpgrade(levelUpCards[levelUpSelection]);
     player.pendingLevelUps--;
@@ -7184,6 +7331,7 @@ function updateLevelUpInput() {
     // Check for more pending level-ups
     const allMaxed = Object.keys(UPGRADES).every(k => player.upgrades[k] >= UPGRADES[k].maxTier);
     if (player.pendingLevelUps > 0 && !allMaxed) {
+      levelUpFreeRerollUsed = false;
       generateLevelUpCards();
     } else {
       player.pendingLevelUps = 0;
@@ -7200,6 +7348,7 @@ function checkPendingLevelUp() {
   if (allMaxed) { player.pendingLevelUps = 0; return; }
   levelUpPrevState = gameState;
   gameState = 'LEVEL_UP';
+  levelUpFreeRerollUsed = false;
   generateLevelUpCards();
 }
 
@@ -7457,6 +7606,7 @@ function gameLoop(timestamp) {
       drawGameFrame({ pickups: true });
       drawAutofireFlash();
       drawMouseTutorial();
+      drawLockTutorial();
       drawSecondaryTutorial();
       checkPendingLevelUp();
       break;

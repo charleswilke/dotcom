@@ -22,7 +22,7 @@
     <meta name="twitter:description" content="Frequently asked questions about Charles Wilke, AI deployment consulting, projection design, and the exploring l.ai.bor project.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.png">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="styles.css?v=__ASSET_VERSION__">
+    <link rel="stylesheet" href="styles.css?v=20260402">
     <!-- Favicons / Fonts -->
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/gif" href="/favicon.gif">
@@ -38,14 +38,30 @@
       "@type": "FAQPage",
       "mainEntity": [
         {"@type": "Question","name": "How do I pronounce your last name?","acceptedAnswer": {"@type": "Answer","text": "My last name is pronounced 'Wil-Kee.'"}},
-        {"@type": "Question","name": "I re-read an older piece and it's different now. What gives?","acceptedAnswer": {"@type": "Answer","text": "These are living documents; I tweak ideas over time."}},
         {"@type": "Question","name": "Don't you work for that one company?","acceptedAnswer": {"@type": "Answer","text": "All views here are mine; not speaking for any employer."}},
+        {"@type": "Question","name": "Did you really propose at a stoplight without a ring?","acceptedAnswer": {"@type": "Answer","text": "Yep, I think we just agreed then shook hands."}},
+        {"@type": "Question","name": "I re-read an older piece and it's different now. What gives?","acceptedAnswer": {"@type": "Answer","text": "These are living documents; I tweak ideas over time."}},
+        {"@type": "Question","name": "What does ChatGPT think of the exploring l.ai.bor project?","acceptedAnswer": {"@type": "Answer","text": "Charles Wilke's Substack documents a journey from the early days of the generative-AI boom to its maturing phase."}},
+        {"@type": "Question","name": "What do you think about AI?","acceptedAnswer": {"@type": "Answer","text": "I support data dignity and fair compensation when creative contributions inform outputs."}},
+        {"@type": "Question","name": "How much of this is really even you?","acceptedAnswer": {"@type": "Answer","text": "Nothing appears here that I haven't specifically intended to be seen."}},
+        {"@type": "Question","name": "How do you balance your own creativity with AI?","acceptedAnswer": {"@type": "Answer","text": "There will always be a huge chasm between good and great. That's where artistry can be found."}},
         {"@type": "Question","name": "Books to prepare?","acceptedAnswer": {"@type": "Answer","text": "Co-Intelligence, Age of Invisible Machines, You Look Like a Thing and I Love You, The Machine Stops, Life 3.0, Dawn of the New Everything, Amusing Ourselves to Death."}},
-        {"@type": "Question","name": "What do you think about AI?","acceptedAnswer": {"@type": "Answer","text": "I support data dignity and fair compensation when creative contributions inform outputs."}}
+        {"@type": "Question","name": "Which AI tools are you using?","acceptedAnswer": {"@type": "Answer","text": "ChatGPT Plus, Claude, various image tools, and Suno v5 for songs."}},
+        {"@type": "Question","name": "Can you share your prompts?","acceptedAnswer": {"@type": "Answer","text": "I include conversation transcripts at the end of each piece."}},
+        {"@type": "Question","name": "What is your process?","acceptedAnswer": {"@type": "Answer","text": "It's never really the same thing twice. I start with a draft, discuss with AI, then edit and refine."}},
+        {"@type": "Question","name": "So what do you actually do?","acceptedAnswer": {"@type": "Answer","text": "I explore what it feels like to co-create with AI. I'm in my 40's with a whole career before AI. I chose to sacrifice personal brand because my marketable skills routinely evaporate."}},
+        {"@type": "Question","name": "What's the most surprising thing people assume about you?","acceptedAnswer": {"@type": "Answer","text": "That I'm an engineer. I just like to noodle. And I have a high capacity to endure discomfort."}},
+        {"@type": "Question","name": "Where does the retro aesthetic come from?","acceptedAnswer": {"@type": "Answer","text": "I'm just an '80s kid living through repeated unprecedented times. Those aesthetics make me feel at home."}},
+        {"@type": "Question","name": "Has an AI revision ever taken a piece somewhere you didn't expect?","acceptedAnswer": {"@type": "Answer","text": "Frequently. Each piece ends in a state I usually didn't expect. Then using it as a basis for a song, another wonderful unexpected journey."}},
+        {"@type": "Question","name": "How do the music and writing sides of the project feed each other?","acceptedAnswer": {"@type": "Answer","text": "Quite directly. The music side quest started because I wanted to see if concepts within a written piece could be transmuted into a song format."}},
+        {"@type": "Question","name": "Will AI ever cross the chasm from good enough to great on its own?","acceptedAnswer": {"@type": "Answer","text": "That chasm is built on discernment. The human pursuit feels missing in AI. When AI is given open pastures to create, reductive slop tends to prevail."}},
+        {"@type": "Question","name": "If data dignity existed tomorrow, what would change first?","acceptedAnswer": {"@type": "Answer","text": "The enthusiasm to participate. What a wonderful world if our sense of worth was directly tied to our sense of self."}},
+        {"@type": "Question","name": "Is there a step you've tried to skip that always bites you?","acceptedAnswer": {"@type": "Answer","text": "The hacky prompt engineering approach fizzles at scale. This is a marathon, not a sprint."}},
+        {"@type": "Question","name": "How do you know when the conversation is done and it's time to write?","acceptedAnswer": {"@type": "Answer","text": "Equal parts feeling its ready and wanting it done. I like to push it out before noon."}}
       ]
     }
     </script>
-    <script src="/nav.js?v=__ASSET_VERSION__"></script>
+    <script src="/nav.js?v=20260402"></script>
     <header>
         <div class="header-bg"></div>
         <div class="grid-overlay"></div>
@@ -56,7 +72,7 @@
             </a>
         </div>
     </header>
-    
+
     <section class="faq-section">
         <div class="container">
             <div class="faq-section-header-area">
@@ -65,186 +81,315 @@
                   <span class="faq-short">FAQ</span>
                 </h2>
             </div>
-            <div class="faq-grid">
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>How do I pronounce your last name?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            My last name is pronounced "Wil-Kee." Thank you for asking. 
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
+            <nav class="faq-subnav" id="faqSubnav" aria-label="FAQ categories">
+                <div class="faq-subnav-inner">
+                    <a href="#personal" class="faq-subnav-link active" data-tab="01">Personal</a>
+                    <a href="#project" class="faq-subnav-link" data-tab="02">Project</a>
+                    <a href="#philosophy" class="faq-subnav-link" data-tab="03">Philosophy</a>
+                    <a href="#process" class="faq-subnav-link" data-tab="04">Process</a>
                 </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>I just re-read an older piece, it's different now. What gives?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            Oh, I'm always noodling...<br><br>
-                            These are all living documents, and I re-read them often too. I tweak and punctuate ideas all the time.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>Don't you work for that one company?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            I might. But all of the views expressed on this website are mine and mine alone. I don't speak for any company. My services are not sponsored or endorsed by my current employer, whichever that might be when you're reading this.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>Are there any books you recommend reading to help prepare myself?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            <ul>
-                                <li><a href="https://g.co/kgs/rdqvwhp" target="_blank" rel="noopener noreferrer">Co-Intelligence</a> -by- Ethan Mollick</li>
-                                <li><a href="https://www.rarewaves.com/products/9781394321551-age-of-invisible-machines" target="_blank" rel="noopener noreferrer">The Age of Invisible Machines</a> -by- Robb Wilson</li>
-                                <li><a href="https://g.co/kgs/fUJ4Pqa" target="_blank" rel="noopener noreferrer">You Look Like a Thing and I Love You</a> -by- Janelle Shane</li>
-                                <li><a href="https://g.co/kgs/pfmNvgx" target="_blank" rel="noopener noreferrer">The Machine Stops</a> -by- E. M. Forster</li>
-                                <li><a href="https://g.co/kgs/CaYHxPX" target="_blank" rel="noopener noreferrer">Life 3.0</a> -by- Max Tegmark</li>
-                                <li><a href="https://g.co/kgs/kgeaUmD" target="_blank" rel="noopener noreferrer">Dawn of the New Everything</a> -by- Jaron Lanier</li>
-                                <li><a href="https://g.co/kgs/h3ZyWLX" target="_blank" rel="noopener noreferrer">Amusing Ourselves to Death</a> -by- Neil Postman</li>
-                            </ul>
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>What do you think about all of this AI stuff?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            GenAI's encroachment on the creative process has not been comfortable.<br><br>
-                            I see the ire and desire to be compensated for our creativity extracted as training data. I believe in the <a href="https://charleswilke.substack.com/p/the-quest-for-data-dignity" target="_blank" rel="noopener noreferrer">data dignity model</a> proposed by Jaron Lanier. If our creative contributions are accessed when generating an output, we deserve payment.<br><br>
-                            We should be incentivized to contribute in a way that directly benefits others.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>What does ChatGPT think of the exploring l.ai.bor project?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            Charles Wilke's Substack “exploring l.ai.bor” documents a journey from the early days of the generative-AI boom to its maturing phase. He writes as a working product designer and projection artist, so his posts often mix folksy stories, game analogies and economic research to critique Silicon-Valley hype and to explore what a human-centred future of co-creation could look like.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>Which AI tools are you using for the Exploring L.ai.bor project?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            For Text: I use ChatGPT Plus and Claude - running whichever latest frontier model.<br>
-                            For Images: I use a growing number of tools and models.<br>
-                            For Songs: I use Suno v5 in collaboration with my instance of GPT.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>Can you share your prompts?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            At the end of each piece, I include the conversation transcript.<br><br>
-                            Early on, I would highlight AI-generated passages with bold and italic that remain intact after my edit.<br><br>
-                            Now, I allow the AI to decide how it wants to be credited.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>What is your process?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            It's never really the same thing twice.<br><br>
-                            I often start with a draft, something tangible, if not a little disjointed. Then I'll load that draft as context into a conversation with the latest, greatest AI chat interface. Then I bounce around in discussion over the core nugget in my draft.<br><br>
-                            Often, I'll request a revised draft after that conversation. From there I edit, tweak, adjust, add imagery and upload.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>How much of this is really even you?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            Nothing appears here that I haven't specifically intended to be seen. This includes all opinions and choice in subject matter.<br><br>
-                            I also highlight AI generated passages with bold and italic that remain intact after my edit. And all imagery presented on this site is generated by me.<br><br>
-                            I am editor in chief with all things that appear on this site. I just happen to pay ChatGPT and Claude 20 bucks a month to be my writing partners.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
-                
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>How do you balance your own creativity with AI?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            I've heard it said that the internet will soon be awash in B+ content thanks to Gen AI. So these tools allow everyone to create content that anyone would consider good enough. But there will always be a huge chasm between good and great - meaningless and meaningful - inert and provocative.<br><br>
-                            That's where artistry can be found - attempting to bridge those gaps.
-                        </div>
-                        <div class="collapse-handle"></div>
-                    </div>
-                </div>
+            </nav>
 
-                <div class="faq-card">
-                    <div class="faq-question">
-                        <span>Did you really propose at a stoplight without a ring?</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="faq-answer-wrapper">
-                        <div class="faq-answer">
-                            Yep, I think we just agreed then shook hands.
+            <div class="faq-panel">
+            <!-- About Me -->
+            <div class="faq-category" id="personal">
+                <div class="faq-grid">
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>How do I pronounce your last name?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
                         </div>
-                        <div class="collapse-handle"></div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                My last name is pronounced "Wil-Kee." Thank you for asking.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Don't you work for that one company?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                I might. But all of the views expressed on this website are mine and mine alone. I don't speak for any company. My services are not sponsored or endorsed by my current employer, whichever that might be when you're reading this.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Did you really propose at a stoplight without a ring?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Yep, I think we just agreed then shook hands.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>So what do you actually do?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                The standard answer is I explore what it feels like to co-create with AI. There's a depth to that answer that might not be immediately evident. The feeling has been the journey, just as much as the technical evolution of my skills.<br><br>
+                                I'm in my 40's, I've had a whole career before AI making stuff. So the "you're not creative if you use this technology" just doesn't jive with my track record.<br><br>
+                                I chose to sacrifice the concept of my personal brand because my marketable skills routinely evaporate. My college education got eradicated when Snapchat delivered pixel tracking to the masses. Media production democratized long before ChatGPT. I've endured wave after wave of disruption and displacement. Chased by the spectre of outsourcing immediately after graduating college.<br><br>
+                                So yeah, I'm currently a product designer, and I love the product I design. I'm happy to say the folks that use it love it too.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>What's the most surprising thing people assume about you?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                That I'm an engineer. I just like to noodle. And I have a high capacity to endure discomfort.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Where does the retro aesthetic come from?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                I'm just an '80s kid living through repeated unprecedented times. Those aesthetics make me feel at home.
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- The Project -->
+            <div class="faq-category" id="project">
+                <div class="faq-grid">
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>I just re-read an older piece, it's different now. What gives?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Oh, I'm always noodling...<br><br>
+                                These are all living documents, and I re-read them often too. I tweak and punctuate ideas all the time.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>What does ChatGPT think of the exploring l.ai.bor project?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Charles Wilke's Substack "exploring l.ai.bor" documents a journey from the early days of the generative-AI boom to its maturing phase. He writes as a working product designer and projection artist, so his posts often mix folksy stories, game analogies and economic research to critique Silicon-Valley hype and to explore what a human-centred future of co-creation could look like.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Has an AI revision ever taken a piece somewhere you didn't expect?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Oh frequently. Each piece ends in a state I usually didn't expect. Then taking that work and using it as a basis for a song, another wonderful unexpected journey.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>How do the music and writing sides of the project feed each other?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Quite directly actually. Just about all the songs were formed as a direct result of specific pieces of writing. The music side quest started because I wanted to play with modality of information delivery. I wanted to see if the concepts and messages within a written piece could be transmuted into a song delivery format. Turns out, that process is super satisfying so now I've got like 35 songs at this moment on this site.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI & Creativity -->
+            <div class="faq-category" id="philosophy">
+                <div class="faq-grid">
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>What do you think about all of this AI stuff?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                GenAI's encroachment on the creative process has not been comfortable.<br><br>
+                                I see the ire and desire to be compensated for our creativity extracted as training data. I believe in the <a href="https://charleswilke.substack.com/p/the-quest-for-data-dignity" target="_blank" rel="noopener noreferrer">data dignity model</a> proposed by Jaron Lanier. If our creative contributions are accessed when generating an output, we deserve payment.<br><br>
+                                We should be incentivized to contribute in a way that directly benefits others.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>How much of this is really even you?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Nothing appears here that I haven't specifically intended to be seen. This includes all opinions and choice in subject matter.<br><br>
+                                I also highlight AI generated passages with bold and italic that remain intact after my edit. And all imagery presented on this site is generated by me.<br><br>
+                                I am editor in chief with all things that appear on this site. I just happen to pay ChatGPT and Claude 20 bucks a month to be my writing partners.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>How do you balance your own creativity with AI?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                I've heard it said that the internet will soon be awash in B+ content thanks to Gen AI. So these tools allow everyone to create content that anyone would consider good enough. But there will always be a huge chasm between good and great - meaningless and meaningful - inert and provocative.<br><br>
+                                That's where artistry can be found - attempting to bridge those gaps.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Are there any books you recommend reading to help prepare myself?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                <ul>
+                                    <li><a href="https://g.co/kgs/rdqvwhp" target="_blank" rel="noopener noreferrer">Co-Intelligence</a> -by- Ethan Mollick</li>
+                                    <li><a href="https://www.rarewaves.com/products/9781394321551-age-of-invisible-machines" target="_blank" rel="noopener noreferrer">The Age of Invisible Machines</a> -by- Robb Wilson</li>
+                                    <li><a href="https://g.co/kgs/fUJ4Pqa" target="_blank" rel="noopener noreferrer">You Look Like a Thing and I Love You</a> -by- Janelle Shane</li>
+                                    <li><a href="https://g.co/kgs/pfmNvgx" target="_blank" rel="noopener noreferrer">The Machine Stops</a> -by- E. M. Forster</li>
+                                    <li><a href="https://g.co/kgs/CaYHxPX" target="_blank" rel="noopener noreferrer">Life 3.0</a> -by- Max Tegmark</li>
+                                    <li><a href="https://g.co/kgs/kgeaUmD" target="_blank" rel="noopener noreferrer">Dawn of the New Everything</a> -by- Jaron Lanier</li>
+                                    <li><a href="https://g.co/kgs/h3ZyWLX" target="_blank" rel="noopener noreferrer">Amusing Ourselves to Death</a> -by- Neil Postman</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Will AI ever cross the chasm from "good enough" to "great" on its own?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                That chasm is built on discernment. I don't doubt that AI could develop that type of taste. But AI sits indifferently, waiting. Requiring the initiation, the spark, the cohesion that comes with the drive of an idea.<br><br>
+                                The human pursuit feels missing in AI right now. There's no desire, no direction, no discernment in AI. It's a wonderful tool and offers an increasing level of fidelity to realize our ideas. But when AI is given open pastures to create, that's when reductive "slop" tends to prevail.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>If Jaron Lanier's data dignity model existed tomorrow, what would change first?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                I would hope the enthusiasm to participate and contribute our perspectives to the collective whole. I wish we all were able to sustain our lives on the simple act of expressing our perspectives. What a wonderful world we'd have if our sense of worth was directly tied to our sense of self. A fella can dream.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Process & Tools -->
+            <div class="faq-category" id="process">
+                <div class="faq-grid">
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Which AI tools are you using for the Exploring L.ai.bor project?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                For Text: I use ChatGPT Plus and Claude - running whichever latest frontier model.<br>
+                                For Images: I use a growing number of tools and models.<br>
+                                For Songs: I use Suno v5 in collaboration with my instance of GPT.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Can you share your prompts?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                At the end of each piece, I include the conversation transcript.<br><br>
+                                Early on, I would highlight AI-generated passages with bold and italic that remain intact after my edit.<br><br>
+                                Now, I allow the AI to decide how it wants to be credited.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>What is your process?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                It's never really the same thing twice.<br><br>
+                                I often start with a draft, something tangible, if not a little disjointed. Then I'll load that draft as context into a conversation with the latest, greatest AI chat interface. Then I bounce around in discussion over the core nugget in my draft.<br><br>
+                                Often, I'll request a revised draft after that conversation. From there I edit, tweak, adjust, add imagery and upload.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>Is there a step you've tried to skip that always bites you?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Well, kinda, early on I tried the hacky "write 1500 words on this concept, make it sound like so and so, make it longer, make it funnier, no, like, dry funny." That type of prompt engineering just fizzles at scale. This is a marathon, not a sprint. I'm not looking for a quick blast of click. I've got stuff to say and avenues to explore.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-card">
+                        <div class="faq-question">
+                            <span>How do you know when the conversation is "done" and it's time to write?</span>
+                            <span class="toggle-icon">&#x25BC;</span>
+                        </div>
+                        <div class="faq-answer-wrapper">
+                            <div class="faq-answer">
+                                Well, it generally starts with a draft of some kind, just a dump of thoughts from the week. That's the contextual foundation for the conversation that helps find the spine of my thoughts, then we build the skeletal structure of a piece, flesh it out, bat it around, edit, edit, edit, and I like to try and push it out before noon. So it's equal parts feeling its ready and wanting it done.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div><!-- /.faq-panel -->
         </div>
     </section>
-    
+
     <footer>
         <div class="footer-bg"></div>
         <div class="footer-grid-overlay"></div>
@@ -253,96 +398,127 @@
             <span class="footer-note">intention defines probability</span>
         </div>
     </footer>
-    <script src="common.js?v=__ASSET_VERSION__" defer></script>
-    
+    <script src="common.js?v=20260402" defer></script>
+
     <script>
-        document.querySelectorAll('.faq-card').forEach(card => {
-            const wrapper = card.querySelector('.faq-answer-wrapper');
-            const answer = card.querySelector('.faq-answer');
-            const question = card.querySelector('.faq-question span:first-child');
-            const toggleIcon = card.querySelector('.toggle-icon');
-            const collapseHandle = card.querySelector('.collapse-handle');
-            
-            const toggleCard = () => {
-                const isActive = card.classList.contains('active');
-                
-                if (!isActive) {
-                    // Opening animation sequence
-                    card.classList.remove('closing');
-                    card.classList.add('active');
-                    
-                    // Show collapse handle immediately
-                    collapseHandle.style.visibility = 'visible';
-                    collapseHandle.style.opacity = '1';
-                    
-                    // First set height to auto to get the full height
-                    wrapper.style.height = 'auto';
-                    const fullHeight = wrapper.offsetHeight;
-                    
-                    // Reset to 0 and then animate to full height
-                    wrapper.style.height = '0px';
-                    requestAnimationFrame(() => {
-                        wrapper.style.height = fullHeight + 'px';
-                    });
-                } else {
-                    // Closing animation sequence
-                    card.classList.remove('active');
-                    card.classList.add('closing');
-                    
-                    // Hide collapse handle
-                    collapseHandle.style.visibility = 'hidden';
-                    collapseHandle.style.opacity = '0';
-                    
-                    requestAnimationFrame(() => {
-                        wrapper.style.height = '0px';
-                    });
+    (function() {
+        var activeCard = null;
+        var mouseDownX = 0, mouseDownY = 0;
 
-                    // Remove the closing class after animation completes
-                    setTimeout(() => {
-                        card.classList.remove('closing');
-                    }, 700);
+        // --- Card open/close ---
+        function openCard(card) {
+            var wrapper = card.querySelector('.faq-answer-wrapper');
+            card.classList.remove('closing');
+            card.classList.add('active');
+            wrapper.style.height = 'auto';
+            var fullHeight = wrapper.offsetHeight;
+            wrapper.style.height = '0px';
+            requestAnimationFrame(function() {
+                wrapper.style.height = fullHeight + 'px';
+            });
+        }
+
+        function closeCard(card) {
+            var wrapper = card.querySelector('.faq-answer-wrapper');
+            card.classList.remove('active');
+            card.classList.add('closing');
+            wrapper.style.height = wrapper.offsetHeight + 'px';
+            requestAnimationFrame(function() {
+                wrapper.style.height = '0px';
+            });
+            function handleEnd() {
+                card.classList.remove('closing');
+                wrapper.removeEventListener('transitionend', handleEnd);
+            }
+            wrapper.addEventListener('transitionend', handleEnd);
+        }
+
+        function toggleCard(card) {
+            if (card.classList.contains('active')) {
+                closeCard(card);
+                activeCard = null;
+            } else {
+                if (activeCard && activeCard !== card) {
+                    closeCard(activeCard);
                 }
-            };
+                openCard(card);
+                activeCard = card;
+            }
+        }
 
-            // Add click handlers
-            question.addEventListener('click', toggleCard);
-            toggleIcon.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleCard();
-            });
-            
-            // Add collapse handle click handler
-            collapseHandle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleCard();
-            });
-            
-            // Prevent clicks on the answer from triggering the toggle
-            answer.addEventListener('click', (e) => {
-                e.stopPropagation();
+        document.addEventListener('mousedown', function(e) {
+            mouseDownX = e.clientX;
+            mouseDownY = e.clientY;
+        });
+
+        document.querySelectorAll('.faq-card').forEach(function(card) {
+            card.addEventListener('click', function(e) {
+                if (e.target.closest('a')) return;
+                var dx = Math.abs(e.clientX - mouseDownX);
+                var dy = Math.abs(e.clientY - mouseDownY);
+                if (dx > 5 || dy > 5) return;
+                var sel = window.getSelection();
+                if (sel && sel.toString().length > 0) return;
+                toggleCard(card);
             });
         });
-        
-        // Add smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+
+        // --- Tab-based category switching ---
+        var subnav = document.getElementById('faqSubnav');
+        var subnavLinks = subnav.querySelectorAll('.faq-subnav-link');
+        var categories = document.querySelectorAll('.faq-category');
+        var siteNav = document.getElementById('siteNav');
+
+        function showCategory(id) {
+            // Close any open card first
+            if (activeCard) {
+                var wrapper = activeCard.querySelector('.faq-answer-wrapper');
+                activeCard.classList.remove('active', 'closing');
+                wrapper.style.height = '0px';
+                activeCard = null;
+            }
+
+            categories.forEach(function(cat) {
+                cat.classList.toggle('faq-category-active', cat.id === id);
+            });
+
+            subnavLinks.forEach(function(link) {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+            });
+        }
+
+        // Initialize: show first category
+        showCategory('personal');
+
+        // Tab click handlers
+        subnavLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                var id = this.getAttribute('href').replace('#', '');
+                showCategory(id);
             });
         });
-        
-        // Fade-in sections on scroll using IntersectionObserver (performant)
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in');
-                    sectionObserver.unobserve(entry.target); // Stop observing once visible
-                }
-            });
-        }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
-        document.querySelectorAll('section').forEach(section => sectionObserver.observe(section));
+
+        // --- Sticky subnav: sync with site nav hide/show ---
+        var ticking = false;
+
+        function updateSubnav() {
+            var navHidden = siteNav && siteNav.classList.contains('nav-hidden');
+            subnav.style.top = navHidden ? '0px' : '52px';
+            var subnavRect = subnav.getBoundingClientRect();
+            subnav.classList.toggle('stuck', subnavRect.top <= 53);
+        }
+
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    updateSubnav();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    })();
     </script>
     <script>
     (function () {
@@ -354,7 +530,6 @@
         var navLogo = document.getElementById('navLogo');
         if (!nav) return;
 
-        // Show logo after header scrolls out
         var siteHeader = document.querySelector('header');
         if (navLogo && siteHeader) {
             new IntersectionObserver(function (entries) {
@@ -362,7 +537,6 @@
             }, { threshold: 0 }).observe(siteHeader);
         }
 
-        // Hide/show on scroll
         var lastY = window.scrollY, ticking = false;
         window.addEventListener('scroll', function () {
             if (!ticking) {
@@ -377,7 +551,6 @@
             }
         }, { passive: true });
 
-        // Dropdown
         function closeDropdown() {
             dropdown.classList.remove('open');
             exploreBtn.setAttribute('aria-expanded', 'false');
@@ -390,7 +563,6 @@
         document.addEventListener('click', function (e) { if (!nav.contains(e.target)) closeDropdown(); });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDropdown(); });
 
-        // Hamburger
         hamburger.addEventListener('click', function () {
             var open = navLinks.classList.contains('open');
             navLinks.classList.toggle('open');

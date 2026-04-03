@@ -1759,10 +1759,10 @@ section.production-header.spotlight-production p {
 .faq-card::before {
     content: '';
     position: absolute;
-    top: -10%;
-    left: -10%;
-    width: 120%;
-    height: 120%;
+    top: -40%;
+    left: -40%;
+    width: 180%;
+    height: 180%;
     background-image: radial-gradient(circle, rgba(247, 110, 17, 0.06) 2.5px, transparent 2.5px);
     background-size: 8px 8px;
     transform: rotate(-13deg);

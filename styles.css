@@ -1049,8 +1049,10 @@ section.production-header.spotlight-production p {
 /* Production details container */
 .production-details {
     margin-top: 1.5rem;
+    margin-left: 1.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: left;
 }
 
 .production-details p {
@@ -5777,7 +5779,7 @@ html {
 
 /* Production header styles */
 .production-header {
-    text-align: right;
+    text-align: center;
     padding: 4rem 2rem;
     background: #000033;
     color: #fff;
@@ -5833,6 +5835,7 @@ html {
     font-weight: 300;
     max-width: 600px;
     margin-left: auto;
+    margin-right: auto;
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.9);
 }

@@ -4049,8 +4049,11 @@ function spawnMidBoss() {
     coreScale: 0,                // 0→1 during core materialization
     ringScale: [0, 0],           // inner/outer ring scale 0→1
     captureTimer: 0,             // frame counter within capture phase
+    gemScale: 0,                 // core gem 0→1
     formationPulseCooldown: 20   // rapid pulses during formation
   };
+  // Play formation SFX layered on top of music
+  playSFX('shepherd-forms', SFX_VOLUMES['shepherd-forms']);
 }
 
 // Begin the grab telegraph — asteroid wiggles for ~35 frames then exits right
@@ -4122,6 +4125,11 @@ function updateMidBoss() {
       // Outer ring expands (frames 35–65)
       if (ft >= 35) {
         midBoss.ringScale[1] = Math.min(1, easeOutCubic(Math.min((ft - 35) / 30, 1)));
+      }
+
+      // Core gem fades in (frames 50–80)
+      if (ft >= 50) {
+        midBoss.gemScale = Math.min(1, easeOutCubic(Math.min((ft - 50) / 30, 1)));
       }
 
       // Initial bloom flash at frame 1
@@ -4209,6 +4217,10 @@ function updateMidBoss() {
         midBoss.coreExposed = true;
         midBoss.coreScale = 1;
         midBoss.ringScale = [1, 1];
+        midBoss.gemScale = 1;
+        // Sync hover so it starts from current position (no y-jump)
+        // Solve: sin(frame * 0.018) ≈ 0 → reset frame to nearest zero-crossing
+        midBoss.frame = Math.round(Math.PI / 0.018);
         // Full-assembly pulse: all tractor beams flash
         spawnLocalFlash(midBoss.x, midBoss.y, 50);
         // Reset pulse timer to normal combat cooldown (smooth transition)
@@ -4221,7 +4233,7 @@ function updateMidBoss() {
     for (let pi = midBoss.gravityPulses.length - 1; pi >= 0; pi--) {
       const pulse = midBoss.gravityPulses[pi];
       pulse.radius += pulse.speed;
-      if (pulse.radius >= pulse.maxRadius) { midBoss.gravityPulses.splice(pi, 1); continue; }
+      if (pulse.radius >= pulse.maxRadius) { swapRemove(midBoss.gravityPulses, pi); continue; }
       for (const b of playerBullets) {
         const dx = b.x - pulse.x, dy = b.y - pulse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -4627,7 +4639,7 @@ function drawMidBoss() {
   }
 
   // Core gem — pulses brighter when hit (scaled during formation, fades in last)
-  const gemScale = coreS > 0.6 ? (coreS - 0.6) / 0.4 : 0;  // appears after core is 60% formed
+  const gemScale = mb.gemScale !== undefined ? mb.gemScale : 1;
   if (gemScale > 0) {
     const coreFlash = mb.hitFlash > 0 ? 1 : 0;
     ctx.shadowColor = coreFlash ? '#ffffff' : '#cc00ff';
@@ -8123,6 +8135,27 @@ function debugTunnel() {
   tunnelWarningTimer = 60;
 }
 
+// === DEBUG: shepherd formation test ===
+// Call debugShepherd() from console to jump straight to the Shepherd mid-boss
+function debugShepherd() {
+  if (gameState === 'TITLE' || gameState === 'GAME_OVER') {
+    resetGame();
+    startStage();
+  }
+  enemies.length = 0;
+  enemyBullets.length = 0;
+  spaceMines.length = 0;
+  secondaryProjectiles.length = 0;
+  midBoss = null;
+  player.x = 80;
+  player.y = CONFIG.height / 2;
+  player.lives = 99;
+  player.alive = true;
+  player.invincible = 60;
+  gameState = 'MID_BOSS_WARNING';
+  midBossWarningTimer = 90;
+}
+
 // === MUSIC SYSTEM ===
 let audioCtx = null;
 const musicTracks = {};       // name → AudioBuffer
@@ -8204,6 +8237,7 @@ const SFX_VOLUMES = {
   'player-shoot': 0.2,
   'bomber-death': 0.4,
   'xp-pickup':   0.3,
+  'shepherd-forms': 0.5,
 };
 
 async function loadSFX(name, url) {
@@ -8222,6 +8256,7 @@ async function loadAllSFX() {
     loadSFX('bomber-death', 'audio/bomber-death.mp3'),
     loadSFX('xp-pickup-1',  'audio/xp-shard-pickup.mp3'),
     loadSFX('xp-pickup-2',  'audio/xp-shard-pickup-2.mp3'),
+    loadSFX('shepherd-forms', 'audio/shepherd-forms.mp3'),
   ]);
 }
 

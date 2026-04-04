@@ -7201,20 +7201,28 @@ section.production-header.alice p {
 }
 
 .mixtape-cover-container {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
     width: 100%;
     max-width: 400px;
+    max-height: 30vh;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     position: relative;
+    overflow: hidden;
+}
+
+.mixtape-cover-container img.mixtape-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Desktop and iPad Mini - Horizontal Layout */
 @media (min-width: 768px) {
     .mixtape-lightbox .mixtape-content {
         flex-direction: row;
-        align-items: flex-start;
+        align-items: stretch;
         max-width: 980px;
         gap: 2rem;
     }
@@ -7223,16 +7231,26 @@ section.production-header.alice p {
         flex: 1;
         align-items: flex-start;
         max-width: 400px;
+        overflow: hidden;
     }
 
     .mixtape-cover-container {
-        flex: 0 0 auto;
+        flex: 0 1 auto;
         width: 100%;
         max-width: 100%;
+        min-height: 0;
+        max-height: none;
+    }
+
+    .mixtape-cover-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .mixtape-player-container {
         width: 100%;
+        flex-shrink: 0;
     }
 
     .mixtape-right-section {
@@ -7255,6 +7273,7 @@ section.production-header.alice p {
     .mixtape-playlist {
         flex: 1;
         min-height: 0;
+        max-height: none;
     }
 }
 
@@ -8054,7 +8073,6 @@ section.production-header.alice p {
     display: flex;
     flex-direction: column;
     width: 100%;
-    overflow: hidden;
 }
 
 .mixtape-right-section {
@@ -8965,6 +8983,171 @@ section.production-header.alice p {
     transform: rotate(90deg);
 }
 
+/* ===== MODAL OSCILLOSCOPE ===== */
+
+.modal-oscilloscope-frame {
+    position: relative;
+    width: 100%;
+    min-height: 113px;
+    flex: 1;
+    margin-top: 0.4rem;
+    background: linear-gradient(180deg,
+        rgba(14, 16, 20, 1) 0%,
+        rgba(20, 22, 28, 1) 40%,
+        rgba(16, 18, 22, 1) 100%);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.9);
+    box-shadow:
+        inset 0 3px 8px rgba(0, 0, 0, 0.95),
+        inset 0 1px 2px rgba(0, 0, 0, 0.9),
+        inset 3px 0 6px rgba(0, 0, 0, 0.6),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.06),
+        inset -1px 0 1px rgba(255, 255, 255, 0.03),
+        0 1px 0 rgba(255, 255, 255, 0.04),
+        0 -1px 3px rgba(0, 0, 0, 0.8);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-oscilloscope {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(0, 6, 4, 0.85) 0%,
+        rgba(0, 3, 2, 0.93) 50%,
+        rgba(0, 0, 0, 1) 100%);
+    box-shadow:
+        inset 0 0 25px rgba(0, 0, 0, 0.95),
+        inset 0 0 8px rgba(0, 0, 0, 0.5);
+    image-rendering: pixelated;
+    display: block;
+}
+
+/* Per-album CRT screen tints */
+#mixtapeLightbox .modal-oscilloscope {
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(0, 12, 8, 0.85) 0%, rgba(0, 6, 4, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.95), inset 0 0 8px rgba(0, 247, 194, 0.03);
+}
+#mixtapeLightbox.b-side-active .modal-oscilloscope {
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(12, 8, 0, 0.85) 0%, rgba(6, 4, 0, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.95), inset 0 0 8px rgba(247, 168, 0, 0.03);
+}
+#gworLightbox .modal-oscilloscope {
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(10, 2, 2, 0.85) 0%, rgba(5, 1, 1, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.95), inset 0 0 8px rgba(197, 74, 74, 0.03);
+}
+#jcLightbox .modal-oscilloscope {
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(10, 5, 2, 0.85) 0%, rgba(5, 3, 1, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.95), inset 0 0 8px rgba(194, 112, 56, 0.03);
+}
+
+/* Scanlines overlay */
+.modal-oscilloscope-frame::after {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border-radius: 5px;
+    background: repeating-linear-gradient(0deg,
+        transparent 0px, transparent 1px,
+        rgba(0, 0, 0, 0.05) 1px, rgba(0, 0, 0, 0.05) 2px);
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* Glass reflection */
+.modal-oscilloscope-frame::before {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border-radius: 5px;
+    background:
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.06) 0%,
+            rgba(255, 255, 255, 0.01) 20%,
+            transparent 40%),
+        radial-gradient(ellipse at 12% 15%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 40%),
+        radial-gradient(ellipse at center,
+            transparent 35%,
+            rgba(0, 0, 0, 0.3) 75%,
+            rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Per-album color theming */
+
+/* Mixtape A-Side — cyan */
+#mixtapeLightbox .modal-oscilloscope-frame {
+    --osc-r: 0; --osc-g: 247; --osc-b: 194;
+    border-color: rgba(0, 247, 194, 0.15);
+    box-shadow:
+        inset 0 3px 8px rgba(0, 0, 0, 0.95),
+        inset 0 1px 2px rgba(0, 0, 0, 0.9),
+        0 0 12px rgba(0, 247, 194, 0.08);
+}
+
+/* Mixtape B-Side — orange */
+#mixtapeLightbox.b-side-active .modal-oscilloscope-frame {
+    --osc-r: 247; --osc-g: 168; --osc-b: 0;
+    border-color: rgba(247, 168, 0, 0.15);
+    box-shadow:
+        inset 0 3px 8px rgba(0, 0, 0, 0.95),
+        inset 0 1px 2px rgba(0, 0, 0, 0.9),
+        0 0 12px rgba(247, 168, 0, 0.08);
+}
+
+/* GWOR — deep red */
+#gworLightbox .modal-oscilloscope-frame {
+    --osc-r: 197; --osc-g: 74; --osc-b: 74;
+    border-color: rgba(197, 74, 74, 0.15);
+    box-shadow:
+        inset 0 3px 8px rgba(0, 0, 0, 0.95),
+        inset 0 1px 2px rgba(0, 0, 0, 0.9),
+        0 0 12px rgba(197, 74, 74, 0.08);
+}
+
+/* Junkyard Cabaret — rust/bronze */
+#jcLightbox .modal-oscilloscope-frame {
+    --osc-r: 194; --osc-g: 112; --osc-b: 56;
+    border-color: rgba(194, 112, 56, 0.15);
+    box-shadow:
+        inset 0 3px 8px rgba(0, 0, 0, 0.95),
+        inset 0 1px 2px rgba(0, 0, 0, 0.9),
+        0 0 12px rgba(194, 112, 56, 0.08);
+}
+
+@media (min-width: 768px) {
+    .modal-oscilloscope-frame {
+        min-height: 80px;
+    }
+}
+
+@media (max-width: 767px) {
+    .modal-oscilloscope-frame {
+        flex: 0 0 auto;
+        min-height: 60px;
+        max-height: 80px;
+        height: 75px;
+    }
+}
+
+/* Hide video/karaoke when oscilloscope is present */
+.modal-oscilloscope-frame ~ .mixtape-lyrics-video-container,
+.modal-oscilloscope-frame ~ .mixtape-lyrics-video-container.has-video,
+.modal-oscilloscope-frame ~ .karaoke-container,
+.modal-oscilloscope-frame ~ .karaoke-container.karaoke-active {
+    display: none !important;
+}
+
 /* Lyrics Video Display */
 .mixtape-lyrics-video-container {
     display: none;
@@ -9324,7 +9507,7 @@ section.production-header.alice p {
     }
 
     .mixtape-playlist {
-        max-height: 250px;
+        max-height: none;
     }
 
     .rss-section-title.section-title {

@@ -197,8 +197,8 @@
                 // Create <picture> element
                 const picture = document.createElement('picture');
                 const source = document.createElement('source');
-                source.media = '(max-width: 768px)';
-                source.srcset = img.thumb;
+                source.media = '(max-width: 1024px)';
+                source.srcset = img.full;
                 const image = document.createElement('img');
                 image.src = img.thumb;
                 image.alt = img.alt;

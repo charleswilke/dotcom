@@ -1663,7 +1663,7 @@ function createVisualizerController(options) {
         try {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioContext.createAnalyser();
-            analyser.fftSize = 128;
+            analyser.fftSize = 256;
             analyser.smoothingTimeConstant = 0.7;
             dataArray = new Uint8Array(analyser.frequencyBinCount);
 
@@ -1770,7 +1770,128 @@ function createVisualizerController(options) {
         }
     }
 
-    return { start, stop, resize };
+    return { start, stop, resize, getAnalyser: () => analyser, getAudioContext: () => audioContext };
+}
+
+function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
+    if (!canvas) return null;
+    const ctx = canvas.getContext('2d');
+    let oscAnimId = null;
+    let currentColors = Object.assign({}, colors);
+
+    function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function drawGraticule(w, h) {
+        var divX = 10, divY = 8;
+        var cellW = w / divX, cellH = h / divY;
+        var tickLen = 3, subTicks = 5;
+        var gc = currentColors.graticule;
+
+        ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.12)');
+        ctx.lineWidth = 0.5;
+        for (var ix = 1; ix < divX; ix++) {
+            var x = ix * cellW;
+            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (var iy = 1; iy < divY; iy++) {
+            var y = iy * cellH;
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.18)');
+        ctx.lineWidth = 0.5;
+        var midY = h / 2;
+        for (var ix = 0; ix < divX; ix++) {
+            for (var s = 1; s < subTicks; s++) {
+                var sx = ix * cellW + s * (cellW / subTicks);
+                ctx.beginPath(); ctx.moveTo(sx, midY - tickLen); ctx.lineTo(sx, midY + tickLen); ctx.stroke();
+            }
+        }
+        var midX = w / 2;
+        for (var iy = 0; iy < divY; iy++) {
+            for (var s = 1; s < subTicks; s++) {
+                var sy = iy * cellH + s * (cellH / subTicks);
+                ctx.beginPath(); ctx.moveTo(midX - tickLen, sy); ctx.lineTo(midX + tickLen, sy); ctx.stroke();
+            }
+        }
+
+        ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.2)');
+        ctx.lineWidth = 0.7;
+        ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, h); ctx.stroke();
+    }
+
+    function drawFrame() {
+        var w = canvas.getBoundingClientRect().width;
+        var h = canvas.getBoundingClientRect().height;
+        var isPlaying = !audioEl.paused;
+
+        ctx.clearRect(0, 0, w, h);
+        drawGraticule(w, h);
+
+        ctx.beginPath();
+        ctx.strokeStyle = currentColors.trace;
+        ctx.lineWidth = 2;
+        ctx.shadowColor = currentColors.glow;
+        ctx.shadowBlur = 10;
+
+        var analyser = getAnalyser();
+        if (isPlaying && analyser) {
+            var timeData = new Uint8Array(analyser.fftSize);
+            analyser.getByteTimeDomainData(timeData);
+            var sliceWidth = w / timeData.length;
+            var x = 0;
+            var gain = 3.0;
+            var mid = h / 2;
+            for (var i = 0; i < timeData.length; i++) {
+                var v = (timeData[i] / 128.0) - 1.0;
+                var y = mid + (v * mid * gain);
+                y = Math.max(2, Math.min(h - 2, y));
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+                x += sliceWidth;
+            }
+        } else {
+            var mid = h / 2;
+            for (var x = 0; x < w; x++) {
+                var noise = (Math.random() - 0.5) * 1.5;
+                if (x === 0) ctx.moveTo(x, mid + noise);
+                else ctx.lineTo(x, mid + noise);
+            }
+        }
+
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        oscAnimId = requestAnimationFrame(drawFrame);
+    }
+
+    function start() {
+        resizeCanvas();
+        if (!oscAnimId) drawFrame();
+    }
+
+    function stop() {
+        if (oscAnimId) {
+            cancelAnimationFrame(oscAnimId);
+            oscAnimId = null;
+        }
+    }
+
+    function updateColors(newColors) {
+        Object.assign(currentColors, newColors);
+    }
+
+    window.addEventListener('resize', function() {
+        if (oscAnimId) resizeCanvas();
+    });
+
+    return { start, stop, updateColors, resizeCanvas };
 }
 
 function formatAudioTime(sec) {
@@ -2173,6 +2294,17 @@ function initMixtapeLightbox() {
         }
     });
 
+    const MIXTAPE_OSC_COLORS = {
+        a: { trace: '#00f7c2', glow: 'rgba(0, 247, 194, 0.9)', graticule: 'rgba(0, 247, 194, 1)' },
+        b: { trace: '#f7a800', glow: 'rgba(247, 168, 0, 0.9)', graticule: 'rgba(247, 168, 0, 1)' }
+    };
+    const mixtapeOscilloscope = createModalOscilloscope(
+        document.getElementById('mixtapeOscilloscope'),
+        audioEl,
+        () => visualizer.getAnalyser(),
+        MIXTAPE_OSC_COLORS.a
+    );
+
     function populatePlaylist() {
         trackItems = renderTrackList(trackList, tracks, (index) => {
             loadTrack(index);
@@ -2222,7 +2354,12 @@ function initMixtapeLightbox() {
             playPauseIcon.textContent = '▶';
         }
         visualizer.stop();
-        
+
+        // Update oscilloscope colors for A/B side
+        if (mixtapeOscilloscope) {
+            mixtapeOscilloscope.updateColors(nextIsBSide ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a);
+        }
+
         // Switch tracks and cover
         if (isBSide) {
             tracks = bSideTracks;
@@ -2362,8 +2499,9 @@ function initMixtapeLightbox() {
             if (audio && !audio.src) {
                 loadTrack(0, { syncHash: false });
             }
-            // Size the visualizer canvas
+            // Size the visualizer canvas and start oscilloscope
             setTimeout(resizeCanvas, 50);
+            if (mixtapeOscilloscope) setTimeout(() => mixtapeOscilloscope.start(), 50);
             syncMixtapeHash(historyMethod);
         }
     }
@@ -2374,6 +2512,7 @@ function initMixtapeLightbox() {
             document.body.style.overflow = ''; document.documentElement.style.overflow = '';
             if (audio) audio.pause();
             if (lyricsVideo) lyricsVideo.pause();
+            if (mixtapeOscilloscope) mixtapeOscilloscope.stop();
             const currentRoute = parseMusicHash();
             if (currentRoute && currentRoute.player === 'mixtape') {
                 history.pushState(null, '', window.location.pathname);
@@ -2641,6 +2780,13 @@ function initGWORLightbox() {
         }
     });
 
+    const gworOscilloscope = createModalOscilloscope(
+        document.getElementById('gworOscilloscope'),
+        audioEl,
+        () => visualizer.getAnalyser(),
+        { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' }
+    );
+
     function populatePlaylist() {
         trackItems = renderTrackList(trackList, tracks, (index) => {
             loadTrack(index);
@@ -2720,6 +2866,7 @@ function initGWORLightbox() {
             loadTrack(0, { syncHash: false });
         }
         setTimeout(resizeCanvas, 50);
+        if (gworOscilloscope) setTimeout(() => gworOscilloscope.start(), 50);
         syncGWORHash(historyMethod);
     }
 
@@ -2728,6 +2875,7 @@ function initGWORLightbox() {
         document.body.style.overflow = ''; document.documentElement.style.overflow = '';
         audio.pause();
         if (lyricsVideo) lyricsVideo.pause();
+        if (gworOscilloscope) gworOscilloscope.stop();
         const currentRoute = parseMusicHash();
         if (currentRoute && currentRoute.player === 'gwor') {
             history.pushState(null, '', window.location.pathname);
@@ -2901,6 +3049,13 @@ function initJCLightbox() {
         }
     });
 
+    const jcOscilloscope = createModalOscilloscope(
+        document.getElementById('jcOscilloscope'),
+        audioEl,
+        () => visualizer.getAnalyser(),
+        { trace: '#c27038', glow: 'rgba(194, 112, 56, 0.9)', graticule: 'rgba(194, 112, 56, 1)' }
+    );
+
     function populatePlaylist() {
         trackItems = renderTrackList(trackList, tracks, (index) => {
             loadTrack(index);
@@ -2961,6 +3116,7 @@ function initJCLightbox() {
             loadTrack(0, { syncHash: false });
         }
         setTimeout(resizeCanvas, 50);
+        if (jcOscilloscope) setTimeout(() => jcOscilloscope.start(), 50);
         syncJCHash(historyMethod);
     }
 
@@ -2969,6 +3125,7 @@ function initJCLightbox() {
         document.body.style.overflow = ''; document.documentElement.style.overflow = '';
         audio.pause();
         if (lyricsVideo) lyricsVideo.pause();
+        if (jcOscilloscope) jcOscilloscope.stop();
         const currentRoute = parseMusicHash();
         if (currentRoute && currentRoute.player === 'junkyard-cabaret') {
             history.pushState(null, '', window.location.pathname);

@@ -3958,38 +3958,61 @@ function spawnMidBoss() {
     crossfadeTo(shepherdTrackChoice);
   }
   const orbData = [];
-  // Inner ring: 4 small, fast
+  // Inner ring: 4 small, fast — start not alive, will be captured during formation
+  const edges = ['top', 'bottom', 'right'];
   for (let i = 0; i < 4; i++) {
     const d = generateAsteroidData(10);
+    const edge = edges[i % edges.length];
     orbData.push({
       angle: (i / 4) * Math.PI * 2 + 0.3,
       orbitRadius: 52, orbitSpeed: 0.026,
       verts: d.verts, cracks: d.cracks,
       rotation: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() * 0.04 + 0.02) * (Math.random() < 0.5 ? 1 : -1),
-      alive: true, respawnTimer: 0, respawnFrames: 280,
-      merging: false, mergeProgress: 0
+      alive: false, respawnTimer: 0, respawnFrames: 280,
+      merging: false, mergeProgress: 0,
+      // Formation capture fields
+      captureDelay: i * 12,          // staggered: 0, 12, 24, 36
+      capturing: false, captureProgress: 0,
+      captureFromX: edge === 'right' ? CONFIG.width + 40
+        : CONFIG.width - 200 + (Math.random() - 0.5) * 300,
+      captureFromY: edge === 'top' ? -40
+        : edge === 'bottom' ? CONFIG.height + 40
+        : 80 + Math.random() * (CONFIG.height - 160),
+      captured: false
     });
   }
-  // Outer ring: 3 larger, slower
+  // Outer ring: 3 larger, slower — captured after inner ring
   for (let i = 0; i < 3; i++) {
     const d = generateAsteroidData(15);
+    const edge = edges[i % edges.length];
     orbData.push({
       angle: (i / 3) * Math.PI * 2,
       orbitRadius: 80, orbitSpeed: 0.014,
       verts: d.verts, cracks: d.cracks,
       rotation: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() * 0.03 + 0.01) * (Math.random() < 0.5 ? 1 : -1),
-      alive: true, respawnTimer: 0, respawnFrames: 340,
-      merging: false, mergeProgress: 0
+      alive: false, respawnTimer: 0, respawnFrames: 340,
+      merging: false, mergeProgress: 0,
+      // Formation capture fields — outer ring starts after inner (delay offset by 48)
+      captureDelay: 48 + i * 14,    // staggered: 48, 62, 76
+      capturing: false, captureProgress: 0,
+      captureFromX: edge === 'right' ? CONFIG.width + 50
+        : CONFIG.width - 200 + (Math.random() - 0.5) * 400,
+      captureFromY: edge === 'top' ? -50
+        : edge === 'bottom' ? CONFIG.height + 50
+        : 60 + Math.random() * (CONFIG.height - 120),
+      captured: false
     });
   }
 
+  const targetX = CONFIG.width - 200;
+  const targetY = CONFIG.height / 2;
   midBoss = {
-    x: CONFIG.width + 80,
-    y: CONFIG.height / 2,
-    startY: CONFIG.height / 2,
-    targetX: CONFIG.width - 200,
+    x: targetX,             // spawn at final position (no slide-in)
+    y: targetY,
+    startY: targetY,
+    targetX: targetX,
     hp: 40, maxHp: 40,
     alive: true,
     frame: 0,
@@ -4010,7 +4033,7 @@ function spawnMidBoss() {
     displayHp: 40,
     // Gravity pulse wave (bullet pushback)
     gravityPulses: [],
-    gravPulseTimer: 360,
+    gravPulseTimer: 20,          // first pulse fires quickly during formation
     gravPulseCooldown: 360,
     gravPulseTelegraph: 0,
     // Gravity well pull (player tug — phase 2 only)
@@ -4019,7 +4042,14 @@ function spawnMidBoss() {
     gravWellPullDuration: 0,
     gravWellPullTelegraph: 0,
     // Shotgun fling tracking
-    flingCount: 0
+    flingCount: 0,
+    // Formation animation state
+    formationPhase: 'core',      // 'core' → 'capture' → done (entered=true)
+    formationTimer: 0,
+    coreScale: 0,                // 0→1 during core materialization
+    ringScale: [0, 0],           // inner/outer ring scale 0→1
+    captureTimer: 0,             // frame counter within capture phase
+    formationPulseCooldown: 20   // rapid pulses during formation
   };
 }
 
@@ -4070,14 +4100,145 @@ function updateMidBoss() {
   if (!midBoss || !midBoss.alive) return;
   midBoss.frame++;
 
-  // Entrance glide
+  // === FORMATION ANIMATION (replaces old slide-in) ===
   if (!midBoss.entered) {
-    midBoss.x -= 2;
-    if (midBoss.x <= midBoss.targetX) {
-      midBoss.entered = true;
-      midBoss.coreExposed = true;
+    // Easing helpers
+    const easeOutBack = t => { const c = 1.7; return 1 + (--t) * t * ((c + 1) * t + c); };
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+    const easeInOutQuad = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+    if (midBoss.formationPhase === 'core') {
+      // --- Phase 1: Core Materialization (~80 frames) ---
+      midBoss.formationTimer++;
+      const ft = midBoss.formationTimer;
+
+      // Core sphere scales up (frames 0–30, easeOutBack for snappy pop)
+      midBoss.coreScale = Math.min(1, easeOutBack(Math.min(ft / 30, 1)));
+
+      // Inner ring expands (frames 20–50)
+      if (ft >= 20) {
+        midBoss.ringScale[0] = Math.min(1, easeOutCubic(Math.min((ft - 20) / 30, 1)));
+      }
+      // Outer ring expands (frames 35–65)
+      if (ft >= 35) {
+        midBoss.ringScale[1] = Math.min(1, easeOutCubic(Math.min((ft - 35) / 30, 1)));
+      }
+
+      // Initial bloom flash at frame 1
+      if (ft === 1) {
+        spawnLocalFlash(midBoss.x, midBoss.y, 60);
+      }
+
+      // Rapid gravity pulses during formation — deflects player bullets
+      midBoss.formationPulseCooldown--;
+      if (midBoss.formationPulseCooldown <= 0) {
+        midBoss.gravityPulses.push({
+          x: midBoss.x, y: midBoss.y,
+          radius: 0, maxRadius: 250, speed: 4.5
+        });
+        midBoss.formationPulseCooldown = 22;
+      }
+
+      // Transition to capture phase after 80 frames
+      if (ft >= 80) {
+        midBoss.formationPhase = 'capture';
+        midBoss.captureTimer = 0;
+      }
+    } else if (midBoss.formationPhase === 'capture') {
+      // --- Phase 2: Asteroid Capture (~100 frames) ---
+      midBoss.captureTimer++;
+
+      // Continue rapid pulses during capture (slightly slower ramp)
+      midBoss.formationPulseCooldown--;
+      if (midBoss.formationPulseCooldown <= 0) {
+        midBoss.gravityPulses.push({
+          x: midBoss.x, y: midBoss.y,
+          radius: 0, maxRadius: 250, speed: 4.5
+        });
+        midBoss.formationPulseCooldown = 26;
+      }
+
+      let allCaptured = true;
+      for (const oa of midBoss.orbitingAsteroids) {
+        if (oa.captured) continue;
+        allCaptured = false;
+
+        // Start capturing once delay has elapsed
+        if (!oa.capturing && midBoss.captureTimer >= oa.captureDelay) {
+          oa.capturing = true;
+          oa.captureProgress = 0;
+        }
+
+        // Animate capture: fly from edge toward orbital position
+        if (oa.capturing) {
+          oa.captureProgress += 0.018;  // ~56 frames to complete
+          const t = Math.min(oa.captureProgress, 1);
+          const et = easeInOutQuad(t);
+
+          // Target orbital world position
+          const targetWX = midBoss.x + Math.cos(oa.angle) * oa.orbitRadius;
+          const targetWY = midBoss.y + Math.sin(oa.angle) * oa.orbitRadius;
+
+          // Spiral offset — adds a curve to the trajectory
+          const spiralAngle = (1 - t) * Math.PI * 1.5;
+          const spiralRadius = (1 - et) * 40;
+          const spiralX = Math.cos(spiralAngle) * spiralRadius;
+          const spiralY = Math.sin(spiralAngle) * spiralRadius;
+
+          // Current position: lerp from spawn edge + spiral
+          oa.captureCurrentX = oa.captureFromX + (targetWX - oa.captureFromX) * et + spiralX;
+          oa.captureCurrentY = oa.captureFromY + (targetWY - oa.captureFromY) * et + spiralY;
+
+          // Spin faster as it approaches
+          oa.rotation += oa.rotSpeed * (1 + (1 - t) * 4);
+
+          // Lock into orbit
+          if (t >= 1) {
+            oa.captured = true;
+            oa.capturing = false;
+            oa.alive = true;
+            spawnLocalFlash(targetWX, targetWY, 25);
+            spawnExplosion(targetWX, targetWY, 4, ['#cc00ff', '#aaeeff', '#ffffff']);
+          }
+        }
+      }
+
+      // All 7 asteroids locked in — formation complete
+      if (allCaptured) {
+        midBoss.entered = true;
+        midBoss.coreExposed = true;
+        midBoss.coreScale = 1;
+        midBoss.ringScale = [1, 1];
+        // Full-assembly pulse: all tractor beams flash
+        spawnLocalFlash(midBoss.x, midBoss.y, 50);
+        // Reset pulse timer to normal combat cooldown (smooth transition)
+        midBoss.gravPulseTimer = 120;
+        midBoss.gravPulseCooldown = 360;
+      }
     }
-    // Still spin orbits during entrance
+
+    // Gravity pulse physics still run during formation (pushes bullets)
+    for (let pi = midBoss.gravityPulses.length - 1; pi >= 0; pi--) {
+      const pulse = midBoss.gravityPulses[pi];
+      pulse.radius += pulse.speed;
+      if (pulse.radius >= pulse.maxRadius) { midBoss.gravityPulses.splice(pi, 1); continue; }
+      for (const b of playerBullets) {
+        const dx = b.x - pulse.x, dy = b.y - pulse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (Math.abs(dist - pulse.radius) < 20) {
+          const nx = dx / (dist || 1), ny = dy / (dist || 1);
+          b.vx += nx * 5;
+          b.vy += ny * 5;
+          const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+          if (spd > CONFIG.bulletSpeed * 1.7) {
+            b.vx = (b.vx / spd) * CONFIG.bulletSpeed * 1.7;
+            b.vy = (b.vy / spd) * CONFIG.bulletSpeed * 1.7;
+          }
+        }
+      }
+    }
+
+    // Spin any alive orbiting asteroids (after capture)
     for (const oa of midBoss.orbitingAsteroids) {
       if (oa.alive) { oa.angle += oa.orbitSpeed; oa.rotation += oa.rotSpeed; }
     }
@@ -4335,6 +4496,70 @@ function drawMidBoss() {
   const mb = midBoss;
   const pulse = Math.sin(mb.frame * 0.06) * 0.5 + 0.5;
   const energyFrac = mb.hp / mb.maxHp;
+  const coreS = mb.coreScale !== undefined ? mb.coreScale : 1;
+  const ringS0 = mb.ringScale ? mb.ringScale[0] : 1;
+  const ringS1 = mb.ringScale ? mb.ringScale[1] : 1;
+
+  // Formation bloom — intense glow during core materialization
+  if (!mb.entered && mb.formationPhase === 'core' && coreS > 0) {
+    const bloomIntensity = coreS < 0.5 ? coreS * 2 : 2 * (1 - coreS);  // peaks at 50%
+    const bloomR = 80 + bloomIntensity * 60;
+    const grad = ctx.createRadialGradient(mb.x, mb.y, 0, mb.x, mb.y, bloomR);
+    grad.addColorStop(0, `rgba(200,100,255,${0.6 * bloomIntensity})`);
+    grad.addColorStop(0.5, `rgba(170,0,255,${0.3 * bloomIntensity})`);
+    grad.addColorStop(1, 'rgba(100,0,200,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(mb.x, mb.y, bloomR, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Draw capturing asteroids (flying in from edges during formation)
+  if (!mb.entered && mb.formationPhase === 'capture') {
+    for (const oa of mb.orbitingAsteroids) {
+      if (!oa.capturing) continue;
+      const cx = oa.captureCurrentX, cy = oa.captureCurrentY;
+      // Motion trail — 3 fading ghost copies behind the asteroid
+      const targetWX = mb.x + Math.cos(oa.angle) * oa.orbitRadius;
+      const targetWY = mb.y + Math.sin(oa.angle) * oa.orbitRadius;
+      const dx = targetWX - oa.captureFromX, dy = targetWY - oa.captureFromY;
+      for (let g = 3; g >= 1; g--) {
+        const ghostT = Math.max(0, oa.captureProgress - g * 0.04);
+        const ghostAlpha = 0.12 * (4 - g);
+        ctx.save();
+        ctx.globalAlpha = ghostAlpha;
+        const gx = oa.captureFromX + dx * ghostT;
+        const gy = oa.captureFromY + dy * ghostT;
+        ctx.translate(gx, gy);
+        ctx.rotate(oa.rotation - oa.rotSpeed * g * 3);
+        ctx.shadowColor = '#cc00ff';
+        ctx.shadowBlur = 6;
+        drawAsteroidShape(oa.verts, null, '#cc00ff', 6);
+        ctx.restore();
+      }
+      // Main asteroid
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(oa.rotation);
+      ctx.shadowColor = '#cc00ff';
+      ctx.shadowBlur = 10 + oa.captureProgress * 8;
+      drawAsteroidShape(oa.verts, null, CONFIG.colors.asteroid, 10);
+      ctx.restore();
+      // Tractor beam from core to incoming asteroid
+      ctx.save();
+      ctx.setLineDash([4, 8]);
+      ctx.strokeStyle = `rgba(180,80,255,${0.15 + oa.captureProgress * 0.4})`;
+      ctx.lineWidth = 1;
+      ctx.shadowColor = '#cc00ff';
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.moveTo(mb.x, mb.y);
+      ctx.lineTo(cx, cy);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+  }
 
   // Tractor beams to nearby ambient asteroids (gravity pull telegraph)
   if (mb.entered) {
@@ -4376,35 +4601,42 @@ function drawMidBoss() {
   }
   ctx.setLineDash([]);
 
-  // Core body — larger than regular gravwell
-  ctx.shadowColor = '#aa00ff';
-  ctx.shadowBlur = 18 + pulse * 10;
-  ctx.fillStyle = '#1a0030';
-  ctx.beginPath();
-  ctx.arc(mb.x, mb.y, 30, 0, Math.PI * 2);
-  ctx.fill();
+  // Core body — larger than regular gravwell (scaled during formation)
+  if (coreS > 0) {
+    ctx.shadowColor = '#aa00ff';
+    ctx.shadowBlur = (18 + pulse * 10) * coreS;
+    ctx.fillStyle = '#1a0030';
+    ctx.beginPath();
+    ctx.arc(mb.x, mb.y, 30 * coreS, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-  // Outer spinning rings
+  // Outer spinning rings (scaled during formation)
   for (let r = 0; r < 2; r++) {
-    const ringR = 42 + r * 16;
+    const rScale = r === 0 ? ringS0 : ringS1;
+    if (rScale <= 0) continue;
+    const ringR = (42 + r * 16) * rScale;
     const rot = mb.frame * (0.02 + r * 0.015) * (r % 2 === 0 ? 1 : -1);
     ctx.strokeStyle = r === 0
-      ? `rgba(180,80,255,${0.5 + pulse * 0.3})`
-      : `rgba(255,60,0,${0.3 + energyFrac * 0.4})`;
+      ? `rgba(180,80,255,${(0.5 + pulse * 0.3) * rScale})`
+      : `rgba(255,60,0,${(0.3 + energyFrac * 0.4) * rScale})`;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(mb.x, mb.y, ringR, rot, rot + Math.PI * 1.5);
     ctx.stroke();
   }
 
-  // Core gem — pulses brighter when hit
-  const coreFlash = mb.hitFlash > 0 ? 1 : 0;
-  ctx.shadowColor = coreFlash ? '#ffffff' : '#cc00ff';
-  ctx.shadowBlur = 12 + coreFlash * 18 + pulse * 6;
-  ctx.fillStyle = coreFlash ? '#ffaaff' : `rgb(${Math.floor(100 + pulse * 60)},0,${Math.floor(150 + pulse * 50)})`;
-  ctx.beginPath();
-  ctx.arc(mb.x, mb.y, 10, 0, Math.PI * 2);
-  ctx.fill();
+  // Core gem — pulses brighter when hit (scaled during formation, fades in last)
+  const gemScale = coreS > 0.6 ? (coreS - 0.6) / 0.4 : 0;  // appears after core is 60% formed
+  if (gemScale > 0) {
+    const coreFlash = mb.hitFlash > 0 ? 1 : 0;
+    ctx.shadowColor = coreFlash ? '#ffffff' : '#cc00ff';
+    ctx.shadowBlur = (12 + coreFlash * 18 + pulse * 6) * gemScale;
+    ctx.fillStyle = coreFlash ? '#ffaaff' : `rgb(${Math.floor(100 + pulse * 60)},0,${Math.floor(150 + pulse * 50)})`;
+    ctx.beginPath();
+    ctx.arc(mb.x, mb.y, 10 * gemScale, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // Merge convergence visual — red lines between merging pair + their moving positions
   if (mb.mergeState === 'converging' && mb.mergeTargets.length === 2) {

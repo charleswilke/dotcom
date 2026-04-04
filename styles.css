@@ -1048,7 +1048,30 @@ section.production-header.spotlight-production p {
 
 /* Production details container */
 .production-details {
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.production-details p {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 0.3rem;
+}
+
+.production-details p strong {
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 1.2px;
+    color: #dc143c;
+    font-weight: 700;
+}
+
+section.production-header.alice .production-details p strong {
+    color: #ff3366;
 }
 
 /* Remove old grid overlay styles since we integrated it */
@@ -5806,11 +5829,20 @@ html {
 }
 
 .production-header p {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
+    font-weight: 300;
     max-width: 600px;
     margin-left: auto;
-    line-height: 1.6;
+    line-height: 1.7;
     color: rgba(255, 255, 255, 0.9);
+}
+
+.production-header .production-details p {
+    font-size: 0.82rem;
+    font-weight: 400;
+    max-width: none;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
 }
 
 /* Alice in Wonderland specific styles */
@@ -5881,6 +5913,14 @@ section.production-header.alice p {
     .production-header.alice p {
         margin: 1rem auto;
         text-align: center;
+    }
+
+    .production-details {
+        text-align: left;
+    }
+
+    .production-details p {
+        text-align: left;
     }
 }
 

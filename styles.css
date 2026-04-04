@@ -8988,9 +8988,10 @@ section.production-header.alice p {
 .modal-oscilloscope-frame {
     position: relative;
     width: 100%;
-    min-height: 113px;
+    min-height: 60px;
     flex: 1;
     margin-top: 0.4rem;
+    max-height: 148px;
     background: linear-gradient(180deg,
         rgba(14, 16, 20, 1) 0%,
         rgba(20, 22, 28, 1) 40%,

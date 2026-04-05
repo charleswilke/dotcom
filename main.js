@@ -1131,39 +1131,39 @@ let currentImageIndex = 0;
 let currentImageSet = [];
 const imageSets = {
     'jb': [
-        'images/jb/jb1.png',
-        'images/jb/jb2.png',
-        'images/jb/jb3.png',
-        'images/jb/jb4.png',
-        'images/jb/jb5.png',
-        'images/jb/jb6.png',
-        'images/jb/jb7.png',
-        'images/jb/jb8.png',
-        'images/jb/jb9.png',
-        'images/jb/jb10.png',
-        'images/jb/jb11.png',
-        'images/jb/jb12.png'
+        'images/jb/jb1.webp',
+        'images/jb/jb2.webp',
+        'images/jb/jb3.webp',
+        'images/jb/jb4.webp',
+        'images/jb/jb5.webp',
+        'images/jb/jb6.webp',
+        'images/jb/jb7.webp',
+        'images/jb/jb8.webp',
+        'images/jb/jb9.webp',
+        'images/jb/jb10.webp',
+        'images/jb/jb11.webp',
+        'images/jb/jb12.webp'
     ],
     'aiw': [
         'images/aiw/aiw1.png',
-        'images/aiw/aiw2.png',
-        'images/aiw/aiw3.png',
-        'images/aiw/aiw4.png',
-        'images/aiw/aiw5.png',
-        'images/aiw/aiw6.png',
-        'images/aiw/aiw7.png',
-        'images/aiw/aiw8.png',
-        'images/aiw/aiw9.png',
-        'images/aiw/aiw10.png',
-        'images/aiw/aiw11.png',
-        'images/aiw/aiw12.png',
-        'images/aiw/aiw13.png',
-        'images/aiw/aiw14.png',
-        'images/aiw/aiw15.png',
-        'images/aiw/aiw16.png'
+        'images/aiw/aiw2.webp',
+        'images/aiw/aiw3.webp',
+        'images/aiw/aiw4.webp',
+        'images/aiw/aiw5.webp',
+        'images/aiw/aiw6.webp',
+        'images/aiw/aiw7.webp',
+        'images/aiw/aiw8.webp',
+        'images/aiw/aiw9.webp',
+        'images/aiw/aiw10.webp',
+        'images/aiw/aiw11.webp',
+        'images/aiw/aiw12.webp',
+        'images/aiw/aiw13.webp',
+        'images/aiw/aiw14.webp',
+        'images/aiw/aiw15.webp',
+        'images/aiw/aiw16.webp'
     ],
-    'fv': ['images/fv1.jpg'],
-    'dogs': ['images/doc_resist.png', 'images/astro-justhappy2behere.png']
+    'fv': ['images/fv1.webp'],
+    'dogs': ['images/doc_resist.webp', 'images/astro-justhappy2behere.webp']
 };
 
 function openLightbox(imageSrc) {
@@ -1176,7 +1176,7 @@ function openLightbox(imageSrc) {
         setKey = 'jb';
     } else if (imageSrc.includes('aiw/')) {
         setKey = 'aiw';
-    } else if (imageSrc.includes('doc_resist.png') || imageSrc.includes('astro-justhappy2behere.png')) {
+    } else if (imageSrc.includes('doc_resist.webp') || imageSrc.includes('astro-justhappy2behere.webp')) {
         setKey = 'dogs';
     } else {
         setKey = 'fv';
@@ -1634,13 +1634,13 @@ function initPetLightboxLinks() {
     if (docLink) {
         docLink.addEventListener('click', function(e) {
             e.preventDefault();
-            openLightbox('images/doc_resist.png');
+            openLightbox('images/doc_resist.webp');
         });
     }
     if (astroLink) {
         astroLink.addEventListener('click', function(e) {
             e.preventDefault();
-            openLightbox('images/astro-justhappy2behere.png');
+            openLightbox('images/astro-justhappy2behere.webp');
         });
     }
 }
@@ -2228,8 +2228,8 @@ function initMixtapeLightbox() {
         { title: 'After Normal', file: 'audio/exploring-laibor-mixtape/after-normal.mp3', video: 'audio/exploring-laibor-mixtape/after-normal.mp4', article: 'https://charleswilke.substack.com/p/after-normal' }
     ];
     
-    const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.jpg';
-    const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover.jpg';
+    const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.webp';
+    const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover.webp';
     
     let tracks = aSideTracks;
     let isBSide = false;

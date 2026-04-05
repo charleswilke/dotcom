@@ -115,7 +115,7 @@ body {
 }
 
 .hud-audio-btn.is-muted {
-  background-image: url("images/speakermute.png");
+  background-image: url("images/speakermute.webp");
 }
 
 #state {
@@ -364,7 +364,7 @@ body {
   padding: 0;
   border: 0;
   background-color: transparent;
-  background-image: url("images/speaker.png");
+  background-image: url("images/speaker.webp");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 44px 44px;
@@ -375,7 +375,7 @@ body {
 }
 
 .audio-icon-btn.is-muted {
-  background-image: url("images/speakermute.png");
+  background-image: url("images/speakermute.webp");
 }
 
 .audio-icon-btn:hover {

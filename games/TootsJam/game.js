@@ -337,13 +337,13 @@ let leaderboardModeFilter = "normal";
 let latestLeaderboardScores = [];
 let newScoreSpotlight = null;
 const brickStampImage = new Image();
-brickStampImage.src = "images/brick.png";
+brickStampImage.src = "images/brick.webp";
 const airballStampImage = new Image();
-airballStampImage.src = "images/airball.png";
+airballStampImage.src = "images/airball.webp";
 const swishStampImage = new Image();
-swishStampImage.src = "images/swish.png";
+swishStampImage.src = "images/swish.webp";
 const tootsBounceStickerImage = new Image();
-tootsBounceStickerImage.src = "images/tootsbounce.png";
+tootsBounceStickerImage.src = "images/tootsbounce.webp";
 const comboCalloutImages = {
   nice: new Image(),
   groovy: new Image(),
@@ -352,12 +352,12 @@ const comboCalloutImages = {
   tootsfever: new Image(),
   tootsbounce: new Image()
 };
-comboCalloutImages.nice.src = "images/nice.png";
-comboCalloutImages.groovy.src = "images/groovy.png";
-comboCalloutImages.smooth.src = "images/smooth.png";
-comboCalloutImages.onfire.src = "images/onfire.png";
-comboCalloutImages.tootsfever.src = "images/tootsfever.png";
-comboCalloutImages.tootsbounce.src = "images/tootsbounce.png";
+comboCalloutImages.nice.src = "images/nice.webp";
+comboCalloutImages.groovy.src = "images/groovy.webp";
+comboCalloutImages.smooth.src = "images/smooth.webp";
+comboCalloutImages.onfire.src = "images/onfire.webp";
+comboCalloutImages.tootsfever.src = "images/tootsfever.webp";
+comboCalloutImages.tootsbounce.src = "images/tootsbounce.webp";
 const sfxLastChoiceByKey = {};
 const apiBaseMetaEl = document.querySelector('meta[name="tootsjam-api-base"]');
 const rawApiBase = typeof window.TOOTSJAM_API_BASE === "string" && window.TOOTSJAM_API_BASE.trim()

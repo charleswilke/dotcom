@@ -8,7 +8,7 @@
 <meta property="og:url" content="https://charleswilke.com/games/SpaceToots/">
 <meta property="og:title" content="Space Toots">
 <meta property="og:description" content="A neon synthwave bullet-hell arcade game. Dodge, shoot, and toot your way through the void.">
-<meta property="og:image" content="https://charleswilke.com/images/space-toots.jpg">
+<meta property="og:image" content="https://charleswilke.com/images/space-toots.webp">
 <meta property="og:image:width" content="2752">
 <meta property="og:image:height" content="1536">
 <meta property="og:image:alt" content="Space Toots arcade game">
@@ -16,7 +16,7 @@
 <meta name="twitter:url" content="https://charleswilke.com/games/SpaceToots/">
 <meta name="twitter:title" content="Space Toots">
 <meta name="twitter:description" content="A neon synthwave bullet-hell arcade game. Dodge, shoot, and toot your way through the void.">
-<meta name="twitter:image" content="https://charleswilke.com/images/space-toots.jpg">
+<meta name="twitter:image" content="https://charleswilke.com/images/space-toots.webp">
 <meta name="twitter:image:alt" content="Space Toots arcade game">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -578,6 +578,85 @@ canvas.addEventListener('touchcancel', e => {
   touch.active = false;
 }, { passive: false });
 
+// === GAMEPAD SUPPORT ===
+const GAMEPAD_DEADZONE = 0.3;
+const _gpKeys = {};  // tracks which keys the gamepad is currently "holding"
+
+function pollGamepad() {
+  const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+  const gp = gamepads[0];
+  if (!gp) {
+    // No gamepad — release any keys the gamepad was holding
+    for (const k in _gpKeys) { if (_gpKeys[k]) { keys[k] = false; _gpKeys[k] = false; } }
+    return;
+  }
+
+  // Helper: set a key on behalf of the gamepad without clobbering keyboard
+  function gpSet(key, pressed) {
+    if (pressed) {
+      keys[key] = true;
+      _gpKeys[key] = true;
+    } else if (_gpKeys[key]) {
+      // Only release if the gamepad was the one holding it
+      keys[key] = false;
+      _gpKeys[key] = false;
+    }
+  }
+
+  // --- D-pad: check axes 0/1, buttons 12-15, AND hat-switch axis 9 ---
+  const ax = gp.axes[0] || 0;
+  const ay = gp.axes[1] || 0;
+  const dpadUp    = (gp.buttons[12] && gp.buttons[12].pressed);
+  const dpadDown  = (gp.buttons[13] && gp.buttons[13].pressed);
+  const dpadLeft  = (gp.buttons[14] && gp.buttons[14].pressed);
+  const dpadRight = (gp.buttons[15] && gp.buttons[15].pressed);
+
+  // Hat-switch on axis 9: discrete values encode D-pad direction
+  // Common values: up=-1, down≈0.14, left≈0.71, right≈-0.43
+  // Diagonals: up-left≈-0.71, up-right≈-0.71, down-left≈0.43, down-right≈-0.14
+  // Neutral ≈ 1.29 or 3.29
+  let hatUp = false, hatDown = false, hatLeft = false, hatRight = false;
+  if (gp.axes.length > 9) {
+    const hat = gp.axes[9];
+    const h = Math.round(hat * 100);  // compare as integers to avoid float issues
+    // Up: -100, Up-Right: -71, Right: -43, Down-Right: -14
+    // Down: 14, Down-Left: 43, Left: 71, Up-Left: -100 (some) or 100
+    hatUp    = (h === -100 || h === -71);
+    hatRight = (h === -43 || h === -71 || h === -14);
+    hatDown  = (h === 14 || h === 43 || h === -14);
+    hatLeft  = (h === 71 || h === 43);
+  }
+
+  gpSet('ArrowLeft',  ax < -GAMEPAD_DEADZONE || dpadLeft  || hatLeft);
+  gpSet('ArrowRight', ax >  GAMEPAD_DEADZONE || dpadRight || hatRight);
+  gpSet('ArrowUp',    ay < -GAMEPAD_DEADZONE || dpadUp    || hatUp);
+  gpSet('ArrowDown',  ay >  GAMEPAD_DEADZONE || dpadDown  || hatDown);
+
+  // --- Buttons (standard mapping) ---
+  // B (index 0) = fire secondary (Space/X)
+  // A (index 1) = confirm (Enter)
+  // Y (index 2) = dodge (Shift)
+  // X (index 3) = reroll (R) during level-up
+  // L shoulder (index 4) = dodge alt
+  // R shoulder (index 5) = fire secondary alt
+  // Start (index 9) = pause (P)
+  const map = [
+    [0, 'Space'],
+    [1, 'Enter'],
+    [2, DODGE_KEY],
+    [3, 'KeyR'],
+    [4, DODGE_KEY],
+    [5, 'Space'],
+    [9, 'KeyP'],
+  ];
+
+  for (const [idx, key] of map) {
+    const btn = gp.buttons[idx];
+    if (!btn) continue;
+    gpSet(key, btn.pressed);
+  }
+}
+
 // Frame counter
 let frame = 0;
 
@@ -950,6 +1029,118 @@ function drawTerrainLayer(layer) {
   if (layer.offset >= w) layer.offset -= w;
 }
 
+// Layer 1.5: Celestial bodies — faint planets, moons, galaxies
+const celestials = [];
+function makeCelestial(x) {
+  const kind = Math.random();
+  if (kind < 0.3) {
+    // Galaxy — faint spiral/ellipse
+    return {
+      type: 'galaxy', x, y: Math.random() * CONFIG.height * 0.55,
+      radius: Math.random() * 30 + 15, angle: Math.random() * Math.PI,
+      alpha: Math.random() * 0.06 + 0.02, speed: 0.08 + Math.random() * 0.06,
+      hue: Math.random() > 0.5 ? '200,180,255' : '255,200,220',
+      elongation: 0.4 + Math.random() * 0.3,
+    };
+  } else if (kind < 0.65) {
+    // Planet — large disc with atmosphere glow
+    const r = Math.random() * 25 + 12;
+    const colors = [
+      { body: '#3a2244', atmo: 'rgba(120,60,180,0.08)' },
+      { body: '#1a3348', atmo: 'rgba(40,120,200,0.07)' },
+      { body: '#2d1f1a', atmo: 'rgba(200,100,40,0.06)' },
+      { body: '#1a2a2a', atmo: 'rgba(40,180,160,0.07)' },
+    ];
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    return {
+      type: 'planet', x, y: Math.random() * CONFIG.height * 0.5,
+      radius: r, alpha: Math.random() * 0.12 + 0.06, speed: 0.1 + Math.random() * 0.08,
+      bodyColor: c.body, atmoColor: c.atmo, rings: Math.random() > 0.6,
+      ringTilt: 0.15 + Math.random() * 0.25,
+    };
+  } else {
+    // Moon — small cratered sphere
+    return {
+      type: 'moon', x, y: Math.random() * CONFIG.height * 0.55,
+      radius: Math.random() * 8 + 5, alpha: Math.random() * 0.1 + 0.05,
+      speed: 0.15 + Math.random() * 0.1, shade: Math.random() * 40 + 30,
+    };
+  }
+}
+for (let i = 0; i < 8; i++) {
+  celestials.push(makeCelestial(Math.random() * CONFIG.width * 2));
+}
+
+function drawCelestial(c) {
+  ctx.save();
+  ctx.globalAlpha = c.alpha;
+  if (c.type === 'galaxy') {
+    ctx.translate(c.x, c.y);
+    ctx.rotate(c.angle);
+    ctx.scale(1, c.elongation);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, c.radius);
+    g.addColorStop(0, `rgba(${c.hue},0.6)`);
+    g.addColorStop(0.3, `rgba(${c.hue},0.3)`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(-c.radius, -c.radius, c.radius * 2, c.radius * 2);
+    // Spiral arm hints
+    ctx.strokeStyle = `rgba(${c.hue},0.2)`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let a = 0; a < Math.PI * 3; a += 0.15) {
+      const sr = (a / (Math.PI * 3)) * c.radius * 0.9;
+      const sx = Math.cos(a) * sr, sy = Math.sin(a) * sr;
+      a === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy);
+    }
+    ctx.stroke();
+  } else if (c.type === 'planet') {
+    // Atmosphere glow
+    const ag = ctx.createRadialGradient(c.x, c.y, c.radius * 0.8, c.x, c.y, c.radius * 2.5);
+    ag.addColorStop(0, c.atmoColor);
+    ag.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = ag;
+    ctx.fillRect(c.x - c.radius * 3, c.y - c.radius * 3, c.radius * 6, c.radius * 6);
+    // Body
+    const bg = ctx.createRadialGradient(c.x - c.radius * 0.3, c.y - c.radius * 0.3, 0, c.x, c.y, c.radius);
+    bg.addColorStop(0, c.bodyColor);
+    bg.addColorStop(1, '#0a0a12');
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+    ctx.fill();
+    // Rings
+    if (c.rings) {
+      ctx.strokeStyle = `rgba(180,160,200,${c.alpha * 0.6})`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.ellipse(c.x, c.y, c.radius * 1.8, c.radius * c.ringTilt, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  } else {
+    // Moon — simple shaded circle with crater dots
+    const mg = ctx.createRadialGradient(c.x - c.radius * 0.25, c.y - c.radius * 0.25, 0, c.x, c.y, c.radius);
+    mg.addColorStop(0, `rgb(${c.shade + 30},${c.shade + 25},${c.shade + 20})`);
+    mg.addColorStop(1, `rgb(${c.shade - 10},${c.shade - 15},${c.shade - 15})`);
+    ctx.fillStyle = mg;
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+    ctx.fill();
+    // Crater hints
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    const seed = Math.round(c.radius * 100);
+    for (let j = 0; j < 3; j++) {
+      const ca = (seed + j * 2.3) % (Math.PI * 2);
+      const cr = c.radius * 0.4 * ((seed * (j + 1) * 0.1) % 0.6 + 0.2);
+      const cdist = c.radius * 0.4 * ((seed * (j + 1) * 0.3) % 0.8 + 0.1);
+      ctx.beginPath();
+      ctx.arc(c.x + Math.cos(ca) * cdist, c.y + Math.sin(ca) * cdist, cr, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
 // Layer 4: Foreground debris streaks
 const debris = [];
 for (let i = 0; i < 15; i++) {
@@ -1010,6 +1201,15 @@ function drawBackground() {
     }
   }
   ctx.restore();
+
+  // Layer 1.5: Celestial bodies (planets, moons, galaxies)
+  for (const c of celestials) {
+    c.x -= c.speed;
+    if (c.x < -c.radius * 3) {
+      Object.assign(c, makeCelestial(CONFIG.width + c.radius * 3 + Math.random() * 200));
+    }
+    drawCelestial(c);
+  }
 
   // Layer 3: Nebula clouds
   for (const neb of nebulae) {
@@ -6995,23 +7195,83 @@ function drawTitleScreen() {
   ctx.moveTo(br.x - cLen, br.y); ctx.lineTo(br.x, br.y); ctx.lineTo(br.x, br.y - cLen);
   ctx.stroke();
 
-  // Horizontal sweep line — scans down through the title area
-  const sweepCycle = (frame % 180) / 180; // 0→1 over 3 seconds
-  const sweepY = tl.y + sweepCycle * (br.y - tl.y);
-  const sweepAlpha = Math.sin(sweepCycle * Math.PI) * 0.35;
+  // Horizontal sweep line — dual gravity well oscillation
+  const sweepPeriod = 240;
+  const sweepPhase = frame / sweepPeriod * Math.PI * 2;
+  const rawOsc = Math.sin(sweepPhase);
+  const shaped = Math.sign(rawOsc) * Math.pow(Math.abs(rawOsc), 0.85);
+  const midY = (tl.y + br.y) / 2;
+  const halfRange = (br.y - tl.y) / 2;
+  const baseSweepY = midY + shaped * halfRange;
+
+  const velocity = Math.abs(Math.cos(sweepPhase));
+  const sweepAlpha = 0.15 + velocity * 0.3;
+
+  // Two gravity wells — "C" in SPACE and first "O" in TOOTS
+  const gravWells = [
+    { x: cx + 75,  y: cy - 25 }, // C in SPACE
+    { x: cx - 105, y: cy + 45 }, // first T in TOOTS
+  ];
+  const gravStrength = 420; // pull intensity — cranked
+  const gravRadius = 42;    // tight falloff — intense but localized
+
+  // Compute warped y for each segment point
+  // Proximity to the vertical center scales the warp — straight at apex/nadir
+  const verticalProximity = 1 - Math.abs(shaped); // 1 at center, 0 at extremes
+
+  function warpedY(px) {
+    let py = baseSweepY;
+    for (const well of gravWells) {
+      const dx = px - well.x;
+      const xProximity = Math.exp(-(dx * dx) / (gravRadius * gravRadius));
+      const dy = well.y - py;
+      const dist = Math.abs(dy) + 10;
+      const pull = gravStrength / (1 + (dist / gravRadius));
+      py += dy * (pull / gravStrength) * xProximity * verticalProximity;
+    }
+    return py;
+  }
+
+  // Draw the warped line as segments
+  const segments = 80;
+  const lineLeft = tl.x + 5, lineRight = br.x - 5;
+
+  // Draw glow band first — follows the warped path
+  ctx.save();
+  ctx.shadowBlur = 0;
+  for (let i = 0; i < segments; i++) {
+    const frac = i / segments;
+    const nextFrac = (i + 1) / segments;
+    const px = lineLeft + frac * (lineRight - lineLeft);
+    const nx = lineLeft + nextFrac * (lineRight - lineLeft);
+    const py = warpedY(px);
+    const ny = warpedY(nx);
+    const segMidY = (py + ny) / 2;
+    const glowH = 14 + velocity * 14;
+    const grd = ctx.createLinearGradient(0, segMidY - glowH, 0, segMidY + glowH);
+    grd.addColorStop(0, 'rgba(0,240,255,0)');
+    grd.addColorStop(0.5, `rgba(0,240,255,${sweepAlpha * 0.3})`);
+    grd.addColorStop(1, 'rgba(0,240,255,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(px, segMidY - glowH, nx - px, glowH * 2);
+  }
+  ctx.restore();
+
+  // Draw the crisp line on top
   ctx.strokeStyle = `rgba(0, 240, 255, ${sweepAlpha})`;
-  ctx.shadowBlur = 8;
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 6 + velocity * 14;
+  ctx.lineWidth = 1 + velocity * 0.5;
   ctx.beginPath();
-  ctx.moveTo(tl.x + 5, sweepY);
-  ctx.lineTo(br.x - 5, sweepY);
+  for (let i = 0; i <= segments; i++) {
+    const frac = i / segments;
+    const px = lineLeft + frac * (lineRight - lineLeft);
+    const py = warpedY(px);
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
   ctx.stroke();
-  // Faint glow band at sweep line
-  const sweepGrad = ctx.createLinearGradient(0, sweepY - 12, 0, sweepY + 12);
-  sweepGrad.addColorStop(0, 'rgba(0,240,255,0)');
-  sweepGrad.addColorStop(0.5, `rgba(0,240,255,${sweepAlpha * 0.3})`);
-  sweepGrad.addColorStop(1, 'rgba(0,240,255,0)');
-  ctx.fillStyle = sweepGrad;
-  ctx.fillRect(tl.x, sweepY - 12, br.x - tl.x, 24);
+  ctx.lineWidth = 1;
 
   // Diagnostic micro-text — system readout along left edge
   ctx.shadowBlur = 0;
@@ -7555,11 +7815,11 @@ function updateLevelUpInput() {
     keys._levelRightHeld = false;
   }
 
-  // Reroll with R key
-  if (keys['KeyR'] && !keys._levelRerollHeld) {
+  // Reroll with R key or D-pad down
+  if ((keys['KeyR'] || keys['ArrowDown'] || keys['KeyS']) && !keys._levelRerollHeld) {
     keys._levelRerollHeld = true;
     rerollLevelUpCards();
-  } else if (!keys['KeyR']) {
+  } else if (!keys['KeyR'] && !keys['ArrowDown'] && !keys['KeyS']) {
     keys._levelRerollHeld = false;
   }
 
@@ -7757,6 +8017,9 @@ function gameLoop(timestamp) {
   if (timestamp - lastFrameTime > FRAME_MS) lastFrameTime = timestamp;
 
   frame++;
+
+  // Poll gamepad every frame
+  pollGamepad();
 
   // Pause toggle
   if (keys['KeyP'] && (gameState === 'GAMEPLAY' || gameState === 'BOSS_FIGHT' || gameState === 'MID_BOSS_FIGHT' || gameState === 'TUNNEL_GAUNTLET')) {

@@ -63,3 +63,4 @@ Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a3
 - **SpaceToots:** `games/SpaceToots/SPACE_TOOTS_SPEC.md`
 - **Adding GWOR songs:** `adding-a-gwor-song.md`
 - **RSS caching:** `RSS_OPTIMIZATION_README.md`
+- **SEO & performance:** `SEO_PERFORMANCE_PLAYBOOK.md` — checklist for WebP conversion, sitemap, structured data, robots.txt

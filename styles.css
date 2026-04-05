@@ -2891,7 +2891,7 @@ html {
 
 /* Audio Summary Card with Animations */
 .audio-summary-card {
-    background: url('images/recap-bg.png');
+    background: url('images/recap-bg.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

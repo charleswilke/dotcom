@@ -2990,6 +2990,7 @@ function initGWORLightbox() {
 
 function initJCLightbox() {
     const tracks = [
+        { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', video: 'audio/junkyard-cabaret/why-this-way.mp4', article: 'https://charleswilke.substack.com/p/the-narrower-path', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } },
         { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', video: 'audio/junkyard-cabaret/cathedral-of-junk.mp4', article: 'https://charleswilke.substack.com/p/theaters-last-stand', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', video: 'audio/junkyard-cabaret/three-fifteen.mp4', article: 'https://charleswilke.substack.com/p/accumulated-velocity', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } }
     ];

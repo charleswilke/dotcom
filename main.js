@@ -2058,60 +2058,6 @@ async function shareTrackLink(button, { routeKey, track, collectionTitle }) {
     }
 }
 
-function syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, track) {
-    if (!lyricsVideo || !lyricsVideoContainer) return;
-
-    const frame = track && track.lyricsVideoFrame ? track.lyricsVideoFrame : {};
-    const offsetY = frame.offsetY || '15px';
-    lyricsVideo.style.transform = `translate(-50%, calc(-50% + ${offsetY}))`;
-    lyricsVideo.style.width = frame.width || '100%';
-    lyricsVideo.style.minWidth = frame.minWidth || '100%';
-    lyricsVideo.style.minHeight = frame.minHeight || '150%';
-    lyricsVideo.style.objectPosition = frame.objectPosition || 'center center';
-
-    if (track && track.video) {
-        lyricsVideo.src = track.video;
-        lyricsVideo.load();
-        lyricsVideo.currentTime = 0;
-        lyricsVideoContainer.classList.add('has-video');
-    } else {
-        lyricsVideo.src = '';
-        lyricsVideoContainer.classList.remove('has-video');
-    }
-}
-
-function bindLyricsVideoSync(audio, lyricsVideo, getCurrentTrack) {
-    if (!audio || !lyricsVideo) return;
-
-    audio.addEventListener('play', () => {
-        const track = getCurrentTrack();
-        if (track && track.video) {
-            lyricsVideo.currentTime = audio.currentTime;
-            lyricsVideo.play().catch(() => {});
-        }
-    });
-
-    audio.addEventListener('pause', () => {
-        lyricsVideo.pause();
-    });
-
-    audio.addEventListener('seeked', () => {
-        const track = getCurrentTrack();
-        if (track && track.video) {
-            lyricsVideo.currentTime = audio.currentTime;
-        }
-    });
-
-    audio.addEventListener('timeupdate', () => {
-        const track = getCurrentTrack();
-        if (track && track.video && !audio.paused) {
-            const drift = Math.abs(audio.currentTime - lyricsVideo.currentTime);
-            if (drift > 0.3) {
-                lyricsVideo.currentTime = audio.currentTime;
-            }
-        }
-    });
-}
 
 function renderTrackList(trackList, tracks, onSelect, getShareData) {
     if (!trackList) return [];
@@ -2201,9 +2147,9 @@ function setActiveTrackListItem(trackItems, activeIndex) {
 // Mixtape Lightbox Logic
 function initMixtapeLightbox() {
     const aSideTracks = [
-        { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', video: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp4', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
-        { title: 'Protect the Hollow', file: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp3', video: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp4', article: 'https://charleswilke.substack.com/p/protect-the-hollow' },
-        { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', video: 'audio/exploring-laibor-mixtape/data-dignity.mp4', article: 'https://charleswilke.substack.com/p/the-quest-for-data-dignity' },
+        { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
+        { title: 'Protect the Hollow', file: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp3', article: 'https://charleswilke.substack.com/p/protect-the-hollow' },
+        { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', article: 'https://charleswilke.substack.com/p/the-quest-for-data-dignity' },
         { title: 'Compounding Fuzziness', file: 'audio/exploring-laibor-mixtape/compounding-fuzziness.mp3', video: 'audio/exploring-laibor-mixtape/compounding-fuzziness.mp4', article: 'https://charleswilke.substack.com/p/compounding-fuzziness' },
         { title: 'Conjured Impunity', file: 'audio/exploring-laibor-mixtape/conjured-impunity.mp3', video: 'audio/exploring-laibor-mixtape/conjured-impunity.mp4', article: 'https://charleswilke.substack.com/p/imagined-impunity' },
         { title: 'Hypnotic Crimes', file: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp3', video: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp4', article: 'https://charleswilke.substack.com/p/hypnotic-crimes' },
@@ -2248,8 +2194,6 @@ function initMixtapeLightbox() {
     const progressContainer = document.getElementById('mixtapeProgressContainer');
     const timeDisplay = document.getElementById('mixtapeTime');
     const visualizerCanvas = document.getElementById('mixtapeVisualizer');
-    const lyricsVideo = document.getElementById('lyricsVideo');
-    const lyricsVideoContainer = document.getElementById('lyricsVideoContainer');
     const sideToggle = document.getElementById('sideToggleSwitch');
     const sideALabel = document.querySelector('.side-a-label');
     const sideBLabel = document.querySelector('.side-b-label');
@@ -2343,12 +2287,6 @@ function initMixtapeLightbox() {
             audio.pause();
             audio.src = '';
         }
-        if (lyricsVideo) {
-            lyricsVideo.pause();
-            lyricsVideo.src = '';
-            lyricsVideoContainer.classList.remove('has-video');
-        }
-        
         // Update play button
         if (playPauseIcon) {
             playPauseIcon.textContent = '▶';
@@ -2420,49 +2358,23 @@ function initMixtapeLightbox() {
             timeDisplay.textContent = '0:00';
         }
 
-        syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
         setActiveTrackListItem(trackItems, index);
-
-        // Load karaoke lyrics for this track
-        if (karaoke) {
-            karaoke.loadTrack(getTrackSlug(tracks[index]));
-        }
 
         if (syncHash) {
             syncMixtapeHash('replaceState');
         }
     }
 
-    // Karaoke controller — auto-activates on track load
-    const karaokeContainer = document.getElementById('mixtapeKaraoke');
-    const mixtapePlayerContainer = lightbox ? lightbox.querySelector('.mixtape-player-container') : null;
-    const karaoke = typeof createKaraokeController === 'function' ? createKaraokeController({
-        audio: audio,
-        container: karaokeContainer,
-        videoContainer: lyricsVideoContainer,
-        playerContainer: mixtapePlayerContainer,
-        getTrackSlug: () => getTrackSlug(tracks[currentIndex]),
-        albumSlug: 'exploring-laibor-mixtape'
-    }) : null;
-
     function playTrack() {
         pauseManagedAudioExcept(audio);
         if (audio) {
             audio.play().catch(e => console.error("Play error:", e));
-        }
-        // Sync video playback
-        if (lyricsVideo && tracks[currentIndex].video) {
-            lyricsVideo.currentTime = audio.currentTime;
-            lyricsVideo.play().catch(e => console.log("Video play:", e));
         }
     }
     
     function pauseTrack() {
         if (audio) {
             audio.pause();
-        }
-        if (lyricsVideo) {
-            lyricsVideo.pause();
         }
     }
 
@@ -2511,7 +2423,6 @@ function initMixtapeLightbox() {
             lightbox.classList.remove('active');
             document.body.style.overflow = ''; document.documentElement.style.overflow = '';
             if (audio) audio.pause();
-            if (lyricsVideo) lyricsVideo.pause();
             if (mixtapeOscilloscope) mixtapeOscilloscope.stop();
             const currentRoute = parseMusicHash();
             if (currentRoute && currentRoute.player === 'mixtape') {
@@ -2625,8 +2536,6 @@ function initMixtapeLightbox() {
         });
     }
 
-    bindLyricsVideoSync(audio, lyricsVideo, () => tracks[currentIndex]);
-
     if (audio) {
         // Update progress bar and time on timeupdate
         audio.addEventListener('timeupdate', function() {
@@ -2688,41 +2597,17 @@ function initMixtapeLightbox() {
 function initGWORLightbox() {
     const gworTempArticleLink = 'https://charleswilke.substack.com/p/waiting-for-something';
     const tracks = [
-        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', video: 'audio/grief-without-ritual/waiting-for-something.mov', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
-        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', video: 'audio/grief-without-ritual/underlined-once.mp4', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
-        { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', video: 'audio/grief-without-ritual/letter-to-the-editor.mp4', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
-        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', video: 'audio/grief-without-ritual/love-at-machine-speed.mp4', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
-        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', video: 'audio/grief-without-ritual/slow-the-clock.mp4', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
-        {
-            title: 'From the Beginning',
-            file: 'audio/grief-without-ritual/from-the-beginning.mp3',
-            video: 'audio/grief-without-ritual/from-the-beginning.mp4',
-            article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen',
-            lyricsVideoFrame: {
-                offsetY: '-116px',
-                width: '152%',
-                minWidth: '152%',
-                minHeight: '112%',
-                objectPosition: 'center 42%'
-            }
-        },
-        { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', video: 'audio/grief-without-ritual/dearly-beloved.mp4', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        {
-            title: 'Pauses Gone',
-            file: 'audio/grief-without-ritual/pauses-gone.mp3',
-            video: 'audio/grief-without-ritual/pauses-gone.mp4',
-            article: 'https://charleswilke.substack.com/p/staccato-again',
-            lyricsVideoFrame: {
-                offsetY: '-116px',
-                width: '152%',
-                minWidth: '152%',
-                minHeight: '112%',
-                objectPosition: 'center 42%'
-            }
-        },
-        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', video: 'audio/grief-without-ritual/when-doctrine-slips.mov', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: 'Refuse the Frequency', file: 'audio/grief-without-ritual/refuse-the-frequency.mp3', video: 'audio/grief-without-ritual/refuse-the-frequency.mov', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
-        { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', video: 'audio/grief-without-ritual/cherish-your-confident-ire.mov', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
+        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
+        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
+        { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
+        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
+        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
+        { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
+        { title: 'Pauses Gone', file: 'audio/grief-without-ritual/pauses-gone.mp3', article: 'https://charleswilke.substack.com/p/staccato-again' },
+        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        { title: 'Refuse the Frequency', file: 'audio/grief-without-ritual/refuse-the-frequency.mp3', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
+        { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');
@@ -2741,9 +2626,6 @@ function initGWORLightbox() {
     const progressContainer = document.getElementById('gworProgressContainer');
     const timeDisplay = document.getElementById('gworTime');
     const visualizerCanvas = document.getElementById('gworVisualizer');
-    const lyricsVideo = document.getElementById('gworLyricsVideo');
-    const lyricsVideoContainer = document.getElementById('gworLyricsVideoContainer');
-
     if (!lightbox || !tile || !audio || !trackList) return;
 
     if (playPauseIcon) {
@@ -2817,40 +2699,16 @@ function initGWORLightbox() {
             timeDisplay.textContent = '0:00';
         }
 
-        syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
         setActiveTrackListItem(trackItems, index);
-
-        // Load karaoke lyrics for this track
-        if (gworKaraoke) {
-            const slug = getTrackSlug(tracks[index]);
-            const KARAOKE_DEFAULT_SLUGS = new Set(['cherish-your-confident-ire', 'letter-to-the-editor', 'dearly-beloved', 'from-the-beginning']);
-            gworKaraoke.loadTrack(slug, { defaultKaraoke: KARAOKE_DEFAULT_SLUGS.has(slug) });
-        }
 
         if (syncHash) {
             syncGWORHash('replaceState');
         }
     }
 
-    // Karaoke controller — auto-activates on track load
-    const gworKaraokeContainer = document.getElementById('gworKaraoke');
-    const gworPlayerContainer = lightbox ? lightbox.querySelector('.mixtape-player-container') : null;
-    const gworKaraoke = typeof createKaraokeController === 'function' ? createKaraokeController({
-        audio: audio,
-        container: gworKaraokeContainer,
-        videoContainer: lyricsVideoContainer,
-        playerContainer: gworPlayerContainer,
-        getTrackSlug: () => getTrackSlug(tracks[currentIndex]),
-        albumSlug: 'grief-without-ritual'
-    }) : null;
-
     function playTrack() {
         pauseManagedAudioExcept(audio);
         audio.play().catch(e => console.error('Play error:', e));
-        if (lyricsVideo && tracks[currentIndex].video) {
-            lyricsVideo.currentTime = audio.currentTime;
-            lyricsVideo.play().catch(e => console.log('Video play:', e));
-        }
     }
 
     function resizeCanvas() {
@@ -2874,7 +2732,6 @@ function initGWORLightbox() {
         lightbox.classList.remove('active');
         document.body.style.overflow = ''; document.documentElement.style.overflow = '';
         audio.pause();
-        if (lyricsVideo) lyricsVideo.pause();
         if (gworOscilloscope) gworOscilloscope.stop();
         const currentRoute = parseMusicHash();
         if (currentRoute && currentRoute.player === 'gwor') {
@@ -2917,8 +2774,6 @@ function initGWORLightbox() {
             playTrack();
         });
     }
-
-    bindLyricsVideoSync(audio, lyricsVideo, () => tracks[currentIndex]);
 
     audio.addEventListener('timeupdate', function() {
         if (progressBar && audio.duration) {
@@ -2978,7 +2833,6 @@ function initGWORLightbox() {
             lightbox.classList.remove('active');
             document.body.style.overflow = ''; document.documentElement.style.overflow = '';
             audio.pause();
-            if (lyricsVideo) lyricsVideo.pause();
         }
     });
 
@@ -2990,9 +2844,9 @@ function initGWORLightbox() {
 
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', video: 'audio/junkyard-cabaret/why-this-way.mp4', article: 'https://charleswilke.substack.com/p/the-narrower-path', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } },
-        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', video: 'audio/junkyard-cabaret/cathedral-of-junk.mp4', article: 'https://charleswilke.substack.com/p/theaters-last-stand', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } },
-        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', video: 'audio/junkyard-cabaret/three-fifteen.mp4', article: 'https://charleswilke.substack.com/p/accumulated-velocity', lyricsVideoFrame: { offsetY: '-128px', width: '195%', minWidth: '195%', minHeight: '195%' } }
+        { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
+        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
+        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', article: 'https://charleswilke.substack.com/p/accumulated-velocity' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');
@@ -3011,9 +2865,6 @@ function initJCLightbox() {
     const progressContainer = document.getElementById('jcProgressContainer');
     const timeDisplay = document.getElementById('jcTime');
     const visualizerCanvas = document.getElementById('jcVisualizer');
-    const lyricsVideo = document.getElementById('jcLyricsVideo');
-    const lyricsVideoContainer = document.getElementById('jcLyricsVideoContainer');
-
     if (!lightbox || !tile || !audio || !trackList) return;
 
     if (playPauseIcon) {
@@ -3087,7 +2938,6 @@ function initJCLightbox() {
             timeDisplay.textContent = '0:00';
         }
 
-        syncLyricsVideoSource(lyricsVideo, lyricsVideoContainer, tracks[index]);
         setActiveTrackListItem(trackItems, index);
 
         if (syncHash) {
@@ -3098,10 +2948,6 @@ function initJCLightbox() {
     function playTrack() {
         pauseManagedAudioExcept(audio);
         audio.play().catch(e => console.error('Play error:', e));
-        if (lyricsVideo && tracks[currentIndex].video) {
-            lyricsVideo.currentTime = audio.currentTime;
-            lyricsVideo.play().catch(e => console.log('Video play:', e));
-        }
     }
 
     function resizeCanvas() {
@@ -3125,7 +2971,6 @@ function initJCLightbox() {
         lightbox.classList.remove('active');
         document.body.style.overflow = ''; document.documentElement.style.overflow = '';
         audio.pause();
-        if (lyricsVideo) lyricsVideo.pause();
         if (jcOscilloscope) jcOscilloscope.stop();
         const currentRoute = parseMusicHash();
         if (currentRoute && currentRoute.player === 'junkyard-cabaret') {
@@ -3168,8 +3013,6 @@ function initJCLightbox() {
             playTrack();
         });
     }
-
-    bindLyricsVideoSync(audio, lyricsVideo, () => tracks[currentIndex]);
 
     audio.addEventListener('timeupdate', function() {
         if (progressBar && audio.duration) {
@@ -3229,7 +3072,6 @@ function initJCLightbox() {
             lightbox.classList.remove('active');
             document.body.style.overflow = ''; document.documentElement.style.overflow = '';
             audio.pause();
-            if (lyricsVideo) lyricsVideo.pause();
         }
     });
 

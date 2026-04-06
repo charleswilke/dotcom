@@ -1145,7 +1145,7 @@ const imageSets = {
         'images/jb/jb12.webp'
     ],
     'aiw': [
-        'images/aiw/aiw1.png',
+        'images/aiw/aiw1.webp',
         'images/aiw/aiw2.webp',
         'images/aiw/aiw3.webp',
         'images/aiw/aiw4.webp',

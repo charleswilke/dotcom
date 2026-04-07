@@ -7204,7 +7204,7 @@ section.production-header.alice p {
     border-radius: 1rem;
     max-width: 600px;
     width: 90%;
-    max-height: 90vh;
+    max-height: 100vh;
     gap: 2rem;
     position: relative;
     flex-direction: column;
@@ -7244,7 +7244,7 @@ section.production-header.alice p {
         flex-direction: row;
         align-items: stretch;
         max-width: 980px;
-        min-height: min(680px, 75vh);
+        min-height: min(680px, 96vh);
         gap: 2rem;
     }
 

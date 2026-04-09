@@ -1758,9 +1758,8 @@ section.production-header.alice .production-details p strong {
 }
 
 .faq-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    columns: 2;
+    column-gap: 2rem;
     position: relative;
     z-index: 1;
 }
@@ -1784,6 +1783,8 @@ section.production-header.alice .production-details p strong {
     will-change: transform, height;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    break-inside: avoid;
+    margin-bottom: 2rem;
 }
 
 .faq-card::before {
@@ -2233,8 +2234,8 @@ footer p {
     }
 
     .faq-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        columns: 1;
+        column-gap: 1.5rem;
     }
     
     .container {

@@ -9136,11 +9136,32 @@ section.production-header.alice p {
 
 
 
+/* Music player close button — inside .mixtape-content */
+.mixtape-lightbox .lightbox-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 10;
+}
+
 /* Mobile Responsiveness for Mixtape */
 @media (max-width: 768px) {
+    .mixtape-lightbox {
+        align-items: flex-start;
+        padding-top: env(safe-area-inset-top, 0px);
+    }
+
     .mixtape-lightbox .mixtape-content {
-        padding: 1.5rem;
-        max-width: 95%;
+        padding: 1rem 1rem 1.5rem;
+        max-width: 100%;
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        max-height: 100vh;
+        max-height: 100dvh;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
     }
 
     .mixtape-right-section .mixtape-title {
@@ -9178,7 +9199,7 @@ section.production-header.alice p {
     }
 
     .mixtape-cover-container {
-        max-width: min(240px, 40vw);
+        max-width: 60vw;
         margin: 0 auto;
     }
 
@@ -9224,7 +9245,10 @@ section.production-header.alice p {
 @media (max-width: 480px) {
     .mixtape-lightbox .mixtape-content {
         padding: 1rem;
-        max-height: 90vh;
+        max-height: 100vh;
+        max-height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
         overflow: hidden; /* No scroll on container - only playlist scrolls */
         display: flex;
         flex-direction: column;
@@ -9254,7 +9278,7 @@ section.production-header.alice p {
     }
 
     .mixtape-cover-container {
-        max-width: min(180px, 35vw);
+        max-width: min(240px, 55vw);
         margin: 0 auto;
     }
     

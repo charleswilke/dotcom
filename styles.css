@@ -9199,7 +9199,7 @@ section.production-header.alice p {
     }
 
     .mixtape-cover-container {
-        max-width: min(240px, 40vw);
+        max-width: 60vw;
         margin: 0 auto;
     }
 
@@ -9245,7 +9245,10 @@ section.production-header.alice p {
 @media (max-width: 480px) {
     .mixtape-lightbox .mixtape-content {
         padding: 1rem;
-        max-height: 90vh;
+        max-height: 100vh;
+        max-height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
         overflow: hidden; /* No scroll on container - only playlist scrolls */
         display: flex;
         flex-direction: column;
@@ -9275,7 +9278,7 @@ section.production-header.alice p {
     }
 
     .mixtape-cover-container {
-        max-width: min(180px, 35vw);
+        max-width: min(240px, 55vw);
         margin: 0 auto;
     }
     

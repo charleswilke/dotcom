@@ -6931,6 +6931,8 @@ section.production-header.alice p {
     .chatgpt-blurb::before {
         width: 800%;
         left: -350%;
+        top: -110%;
+        height: 320%;
     }
 }
 

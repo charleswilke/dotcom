@@ -6929,10 +6929,10 @@ section.production-header.alice p {
     .dimensional-showcase::before,
     .rss-feed::before,
     .chatgpt-blurb::before {
-        width: 800%;
-        left: -350%;
-        top: -110%;
-        height: 320%;
+        width: 1000%;
+        height: 1000%;
+        top: -450%;
+        left: -450%;
     }
 }
 

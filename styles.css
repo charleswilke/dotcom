@@ -6922,6 +6922,15 @@ section.production-header.alice p {
     margin-top: 0.2rem;
     padding-bottom: 1.8rem;
   }
+    /* On mobile, sections stack taller than they are wide. The rotated ::before
+       pseudo-element (rotate 30deg) loses coverage at the left/right edges once
+       the section height exceeds ~1664px on a 390px-wide screen. Widen it so
+       the rotated texture fully covers even tall mobile layouts. */
+    .dimensional-showcase::before,
+    .rss-feed::before {
+        width: 600%;
+        left: -250%;
+    }
 }
 
 .section-title.section-title-light {

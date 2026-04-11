@@ -6927,7 +6927,8 @@ section.production-header.alice p {
        the section height exceeds ~1664px on a 390px-wide screen. Widen it so
        the rotated texture fully covers even tall mobile layouts. */
     .dimensional-showcase::before,
-    .rss-feed::before {
+    .rss-feed::before,
+    .chatgpt-blurb::before {
         width: 600%;
         left: -250%;
     }

@@ -6929,8 +6929,8 @@ section.production-header.alice p {
     .dimensional-showcase::before,
     .rss-feed::before,
     .chatgpt-blurb::before {
-        width: 600%;
-        left: -250%;
+        width: 800%;
+        left: -350%;
     }
 }
 

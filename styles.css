@@ -157,7 +157,7 @@ header {
 
 .header-content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     text-align: center;
     color: var(--light);
     text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
@@ -217,8 +217,8 @@ header {
         0 0 50px rgba(0, 247, 194, 0.05);
 }
 
-/* Persistent scanline overlay via header-content (keeps pseudo-elements free for chromatic channels) */
-.header-content::after {
+/* Persistent scanline overlay — covers full header for authentic CRT texture */
+header::before {
     content: '';
     position: absolute;
     top: 0;
@@ -233,7 +233,7 @@ header {
         rgba(0, 0, 0, 0.06) 4px
     );
     pointer-events: none;
-    z-index: 3;
+    z-index: 1;
 }
 
 /* Active glitch state */
@@ -251,9 +251,8 @@ header {
     animation: crt-glitch-cyan 0.5s steps(3, end);
 }
 
-/* Scanline intensification during glitch */
-.header-title.glitch-scanlines ~ .header-content::after,
-.header-content:has(.header-title.glitch-scanlines)::after {
+/* Scanline intensification during glitch — uses header::before for full-width coverage */
+header:has(.header-title.glitch-scanlines)::before {
     background: repeating-linear-gradient(
         0deg,
         transparent 0px,
@@ -770,7 +769,7 @@ header::after {
     height: 100%;
     background: var(--light);
     clip-path: polygon(0 100%, 100% 85%, 100% 100%);
-    z-index: 1;
+    z-index: 2;
 }
 
 /* Grid Overlay */

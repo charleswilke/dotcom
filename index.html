@@ -628,6 +628,24 @@
         </div>
     </div>
     
+    <!-- Floating Mini Player (shared across album/mixtape players) -->
+    <div id="miniPlayer" class="mini-player" data-theme="mixtape-a" hidden aria-hidden="true">
+        <button type="button" class="mini-player-cover" id="miniPlayerCover" aria-label="Play/Pause">
+            <img id="miniPlayerCoverImg" alt="" width="56" height="56" decoding="async">
+            <span class="mini-player-cover-overlay">
+                <span class="mini-player-cover-icon" id="miniPlayerCoverIcon">&#10074;&#10074;</span>
+            </span>
+        </button>
+        <div class="mini-player-screen">
+            <button type="button" class="mini-player-oscilloscope-frame modal-oscilloscope-frame" id="miniPlayerOscFrame" aria-label="Reopen player">
+                <canvas class="modal-oscilloscope" id="miniPlayerOscilloscope"></canvas>
+                <span class="oscilloscope-title mini-player-album" id="miniPlayerAlbum"></span>
+                <span class="oscilloscope-meta mini-player-title" id="miniPlayerTitle"></span>
+            </button>
+            <button type="button" class="mini-player-close" id="miniPlayerClose" aria-label="Stop and close mini player">&times;</button>
+        </div>
+    </div>
+
     <script src="common.js?v=20260408" defer></script>
 <script src="main.js?v=20260408" defer></script>
 </body>

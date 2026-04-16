@@ -727,6 +727,11 @@ header {
     .header-subtitle .mobile-break {
         display: block;
     }
+
+    .header-subtitle .subtitle-line-2 {
+        display: inline-block;
+        margin-top: 0.4em;
+    }
 }
 
 .header-subtitle.glitch {

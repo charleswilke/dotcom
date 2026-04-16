@@ -9170,8 +9170,9 @@ section.production-header.alice p {
     bottom: 1.25rem;
     z-index: 9000;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 0.65rem;
+    height: 80px;
     padding: 0.55rem 0.7rem 0.55rem 0.55rem;
     border-radius: 0;
     background: radial-gradient(ellipse at 50% 50%,
@@ -9242,6 +9243,7 @@ section.production-header.alice p {
     width: 60px;
     height: 60px;
     flex: 0 0 auto;
+    align-self: center;
     padding: 0;
     border-radius: 0;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -9300,9 +9302,10 @@ section.production-header.alice p {
     height: 60px;
     min-height: 0;
     max-height: none;
+    align-self: center;
     flex: 1 1 auto;
     margin-top: 0;
-    padding: 4px;
+    padding: 0;
     border-radius: 0;
     cursor: pointer;
     border: none;
@@ -9352,13 +9355,13 @@ section.production-header.alice p {
 }
 
 .mini-player-album {
-    top: 6px;
+    top: 0;
     font-size: 0.55rem;
     letter-spacing: 3px;
 }
 
 .mini-player-title {
-    bottom: 6px;
+    bottom: 0;
     font-size: 0.6rem;
     letter-spacing: 2px;
 }
@@ -9408,8 +9411,8 @@ section.production-header.alice p {
 
 .mini-player-close {
     position: absolute;
-    top: 2px;
-    right: 4px;
+    top: -2px;
+    right: 0;
     z-index: 7;
     flex: 0 0 auto;
     width: 16px;

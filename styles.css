@@ -9174,16 +9174,17 @@ section.production-header.alice p {
     gap: 0.65rem;
     padding: 0.55rem 0.7rem 0.55rem 0.55rem;
     border-radius: 0;
-    background: linear-gradient(180deg,
-        rgba(18, 20, 26, 0.96) 0%,
-        rgba(10, 12, 18, 0.96) 100%);
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(0, 6, 4, 0.95) 0%,
+        rgba(0, 3, 2, 0.97) 50%,
+        rgba(0, 0, 0, 1) 100%);
     border: 2px solid rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), 0.3);
     box-shadow:
         0 0 20px rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), 0.15),
         0 12px 36px rgba(0, 0, 0, 0.55),
         0 2px 6px rgba(0, 0, 0, 0.4),
-        inset 0 0 60px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        inset 0 0 25px rgba(0, 0, 0, 0.95),
+        inset 0 0 8px rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), 0.04);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     color: #e8ecef;
@@ -9199,6 +9200,37 @@ section.production-header.alice p {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+}
+
+.mini-player::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+        transparent 0px, transparent 1px,
+        rgba(0, 0, 0, 0.05) 1px, rgba(0, 0, 0, 0.05) 2px);
+    pointer-events: none;
+    z-index: 4;
+}
+
+.mini-player::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.06) 0%,
+            rgba(255, 255, 255, 0.01) 20%,
+            transparent 40%),
+        radial-gradient(ellipse at 12% 15%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 40%),
+        radial-gradient(ellipse at center,
+            transparent 35%,
+            rgba(0, 0, 0, 0.3) 75%,
+            rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+    z-index: 5;
 }
 
 .mini-player[hidden] {
@@ -9273,26 +9305,29 @@ section.production-header.alice p {
     padding: 4px;
     border-radius: 0;
     cursor: pointer;
-    border: 1px solid rgba(0, 0, 0, 0.9);
+    border: none;
+    background: transparent;
+    box-shadow: none;
     font: inherit;
 }
 
-.mini-player .modal-oscilloscope { border-radius: 0; }
+.mini-player .modal-oscilloscope {
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
 
 .mini-player-album { padding-right: 22px; }
 
+/* Suppress the frame's own glass/scanline overlays — the parent provides them */
 .mini-player-oscilloscope-frame::before,
 .mini-player-oscilloscope-frame::after {
-    top: 4px; left: 4px; right: 4px; bottom: 4px;
-    border-radius: 0;
+    display: none;
 }
 
 .mini-player-oscilloscope-frame:hover,
 .mini-player-oscilloscope-frame:focus-visible {
     outline: none;
-    box-shadow:
-        inset 0 2px 5px rgba(0, 0, 0, 0.9),
-        0 0 16px rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), 0.28);
 }
 
 /* CRT-glass labels layered over the oscilloscope */
@@ -9328,52 +9363,22 @@ section.production-header.alice p {
     letter-spacing: 2px;
 }
 
-.mini-player[data-theme="mixtape-a"] .mini-player-oscilloscope-frame {
-    --osc-r: 0; --osc-g: 247; --osc-b: 194;
-    border-color: rgba(0, 247, 194, 0.18);
-    box-shadow:
-        inset 0 2px 5px rgba(0, 0, 0, 0.9),
-        0 0 10px rgba(0, 247, 194, 0.12);
-}
-.mini-player[data-theme="mixtape-a"] .modal-oscilloscope {
+/* Per-theme CRT screen tint on the full mini body */
+.mini-player[data-theme="mixtape-a"] {
     background: radial-gradient(ellipse at 50% 50%,
-        rgba(0, 12, 8, 0.85) 0%, rgba(0, 6, 4, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+        rgba(0, 12, 8, 0.92) 0%, rgba(0, 6, 4, 0.96) 50%, rgba(0, 0, 0, 1) 100%);
 }
-
-.mini-player[data-theme="mixtape-b"] .mini-player-oscilloscope-frame {
-    --osc-r: 247; --osc-g: 168; --osc-b: 0;
-    border-color: rgba(247, 168, 0, 0.18);
-    box-shadow:
-        inset 0 2px 5px rgba(0, 0, 0, 0.9),
-        0 0 10px rgba(247, 168, 0, 0.12);
-}
-.mini-player[data-theme="mixtape-b"] .modal-oscilloscope {
+.mini-player[data-theme="mixtape-b"] {
     background: radial-gradient(ellipse at 50% 50%,
-        rgba(12, 8, 0, 0.85) 0%, rgba(6, 4, 0, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+        rgba(12, 8, 0, 0.92) 0%, rgba(6, 4, 0, 0.96) 50%, rgba(0, 0, 0, 1) 100%);
 }
-
-.mini-player[data-theme="gwor"] .mini-player-oscilloscope-frame {
-    --osc-r: 197; --osc-g: 74; --osc-b: 74;
-    border-color: rgba(197, 74, 74, 0.18);
-    box-shadow:
-        inset 0 2px 5px rgba(0, 0, 0, 0.9),
-        0 0 10px rgba(197, 74, 74, 0.12);
-}
-.mini-player[data-theme="gwor"] .modal-oscilloscope {
+.mini-player[data-theme="gwor"] {
     background: radial-gradient(ellipse at 50% 50%,
-        rgba(10, 2, 2, 0.85) 0%, rgba(5, 1, 1, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+        rgba(10, 2, 2, 0.92) 0%, rgba(5, 1, 1, 0.96) 50%, rgba(0, 0, 0, 1) 100%);
 }
-
-.mini-player[data-theme="jc"] .mini-player-oscilloscope-frame {
-    --osc-r: 194; --osc-g: 112; --osc-b: 56;
-    border-color: rgba(194, 112, 56, 0.18);
-    box-shadow:
-        inset 0 2px 5px rgba(0, 0, 0, 0.9),
-        0 0 10px rgba(194, 112, 56, 0.12);
-}
-.mini-player[data-theme="jc"] .modal-oscilloscope {
+.mini-player[data-theme="jc"] {
     background: radial-gradient(ellipse at 50% 50%,
-        rgba(10, 5, 2, 0.85) 0%, rgba(5, 3, 1, 0.93) 50%, rgba(0, 0, 0, 1) 100%);
+        rgba(10, 5, 2, 0.92) 0%, rgba(5, 3, 1, 0.96) 50%, rgba(0, 0, 0, 1) 100%);
 }
 
 .mini-player-close {

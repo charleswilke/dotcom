@@ -9320,7 +9320,7 @@ section.production-header.alice p {
     box-shadow: none;
 }
 
-.mini-player-album { padding-right: 22px; }
+.mini-player-album { padding: 0 22px; }
 
 /* Suppress the frame's own glass/scanline overlays — the parent provides them */
 .mini-player-oscilloscope-frame::before,

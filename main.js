@@ -1894,6 +1894,161 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     return { start, stop, updateColors, resizeCanvas };
 }
 
+function createMiniPlayer() {
+    const root = document.getElementById('miniPlayer');
+    if (!root) return null;
+
+    const coverBtn = document.getElementById('miniPlayerCover');
+    const coverImg = document.getElementById('miniPlayerCoverImg');
+    const coverIcon = document.getElementById('miniPlayerCoverIcon');
+    const albumEl = document.getElementById('miniPlayerAlbum');
+    const titleEl = document.getElementById('miniPlayerTitle');
+    const oscFrame = document.getElementById('miniPlayerOscFrame');
+    const closeBtn = document.getElementById('miniPlayerClose');
+    const oscCanvas = document.getElementById('miniPlayerOscilloscope');
+
+    const PLAY_ICON = '\u25B6';
+    const PAUSE_ICON = '\u275A\u275A';
+
+    let current = null; // { audio, onExpand, onClose, refreshTitle, listeners, oscilloscope }
+
+    function detachListeners() {
+        if (!current || !current.listeners) return;
+        const { audio } = current;
+        current.listeners.forEach(({ event, fn }) => audio.removeEventListener(event, fn));
+        current.listeners = [];
+    }
+
+    function teardown(stopAudio) {
+        if (!current) return;
+        if (current.oscilloscope) current.oscilloscope.stop();
+        if (stopAudio && current.audio) current.audio.pause();
+        detachListeners();
+        root.classList.remove('active');
+        root.setAttribute('aria-hidden', 'true');
+        setTimeout(() => {
+            if (!current) root.hidden = true;
+        }, 380);
+        current = null;
+    }
+
+    function syncPlayIcon() {
+        if (!current) return;
+        const paused = current.audio.paused;
+        if (coverIcon) coverIcon.textContent = paused ? PLAY_ICON : PAUSE_ICON;
+        root.classList.toggle('is-paused', paused);
+    }
+
+    function attach(options) {
+        if (current) teardown(false);
+
+        const {
+            audio,
+            coverSrc,
+            albumTitle,
+            theme,
+            oscColors,
+            getAnalyser,
+            getTitle,
+            onExpand,
+            onClose
+        } = options;
+
+        if (!audio) return;
+
+        root.dataset.theme = theme || 'mixtape-a';
+        if (coverSrc && coverImg) {
+            coverImg.src = coverSrc;
+            coverImg.alt = albumTitle ? `${albumTitle} cover` : '';
+        }
+        if (albumEl) albumEl.textContent = albumTitle || '';
+        const updateTitle = () => {
+            if (!titleEl) return;
+            const t = typeof getTitle === 'function' ? getTitle() : '';
+            titleEl.textContent = t || '';
+        };
+        updateTitle();
+
+        const oscilloscope = oscCanvas && getAnalyser
+            ? createModalOscilloscope(oscCanvas, audio, getAnalyser, oscColors || {
+                trace: '#00f7c2', glow: 'rgba(0,247,194,0.9)', graticule: 'rgba(0,247,194,1)'
+            })
+            : null;
+
+        const listeners = [];
+        const add = (event, fn) => {
+            audio.addEventListener(event, fn);
+            listeners.push({ event, fn });
+        };
+        add('play', () => { syncPlayIcon(); if (oscilloscope) oscilloscope.start(); });
+        add('pause', syncPlayIcon);
+        add('ended', syncPlayIcon);
+        add('loadedmetadata', updateTitle);
+        add('play', updateTitle);
+
+        current = { audio, onExpand, onClose, listeners, oscilloscope, updateTitle };
+
+        root.hidden = false;
+        // force reflow so the transition animates in
+        void root.offsetWidth;
+        root.classList.add('active');
+        root.setAttribute('aria-hidden', 'false');
+        syncPlayIcon();
+        if (oscilloscope) {
+            setTimeout(() => {
+                oscilloscope.resizeCanvas();
+                oscilloscope.start();
+            }, 50);
+        }
+    }
+
+    if (coverBtn) {
+        coverBtn.addEventListener('click', () => {
+            if (!current) return;
+            if (typeof pauseManagedAudioExcept === 'function') {
+                pauseManagedAudioExcept(current.audio);
+            }
+            if (current.audio.paused) {
+                current.audio.play().catch(() => {});
+            } else {
+                current.audio.pause();
+            }
+        });
+    }
+
+    if (oscFrame) {
+        oscFrame.addEventListener('click', () => {
+            if (!current) return;
+            const expand = current.onExpand;
+            teardown(false);
+            if (typeof expand === 'function') expand();
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            const onClose = current && current.onClose;
+            teardown(true);
+            if (typeof onClose === 'function') onClose();
+        });
+    }
+
+    return {
+        attach,
+        detach: (stopAudio = false) => teardown(stopAudio),
+        isActive: () => !!current,
+        getAudio: () => (current ? current.audio : null)
+    };
+}
+
+let miniPlayerInstance = null;
+function getMiniPlayer() {
+    if (!miniPlayerInstance) {
+        miniPlayerInstance = createMiniPlayer();
+    }
+    return miniPlayerInstance;
+}
+
 function formatAudioTime(sec) {
     if (isNaN(sec)) return '0:00';
     const m = Math.floor(sec / 60);
@@ -2415,18 +2570,41 @@ function initMixtapeLightbox() {
             setTimeout(resizeCanvas, 50);
             if (mixtapeOscilloscope) setTimeout(() => mixtapeOscilloscope.start(), 50);
             syncMixtapeHash(historyMethod);
+
+            // If the mini-player is holding our audio, dismiss it — full player takes over
+            const mini = getMiniPlayer();
+            if (mini && mini.isActive() && mini.getAudio() === audio) {
+                mini.detach(false);
+            }
         }
     }
-    
+
     function closeMixtape() {
         if (lightbox) {
             lightbox.classList.remove('active');
             document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-            if (audio) audio.pause();
             if (mixtapeOscilloscope) mixtapeOscilloscope.stop();
             const currentRoute = parseMusicHash();
             if (currentRoute && currentRoute.player === 'mixtape') {
                 history.pushState(null, '', window.location.pathname);
+            }
+
+            const mini = getMiniPlayer();
+            if (audio && !audio.paused && mini) {
+                const coverImg = document.getElementById('mixtapeCoverImg');
+                mini.attach({
+                    audio,
+                    coverSrc: coverImg ? coverImg.src : '',
+                    albumTitle: 'Exploring L.ai.bor',
+                    theme: isBSide ? 'mixtape-b' : 'mixtape-a',
+                    oscColors: isBSide ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a,
+                    getAnalyser: () => visualizer.getAnalyser(),
+                    getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
+                    onExpand: () => openMixtape(isBSide, '', 'pushState'),
+                    onClose: () => {}
+                });
+            } else if (audio) {
+                audio.pause();
             }
         }
     }
@@ -2726,16 +2904,38 @@ function initGWORLightbox() {
         setTimeout(resizeCanvas, 50);
         if (gworOscilloscope) setTimeout(() => gworOscilloscope.start(), 50);
         syncGWORHash(historyMethod);
+
+        const mini = getMiniPlayer();
+        if (mini && mini.isActive() && mini.getAudio() === audio) {
+            mini.detach(false);
+        }
     }
 
     function closeGWOR() {
         lightbox.classList.remove('active');
         document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-        audio.pause();
         if (gworOscilloscope) gworOscilloscope.stop();
         const currentRoute = parseMusicHash();
         if (currentRoute && currentRoute.player === 'gwor') {
             history.pushState(null, '', window.location.pathname);
+        }
+
+        const mini = getMiniPlayer();
+        if (audio && !audio.paused && mini) {
+            const coverImg = document.getElementById('gworCoverImg');
+            mini.attach({
+                audio,
+                coverSrc: coverImg ? coverImg.src : '',
+                albumTitle: 'Grief without Ritual',
+                theme: 'gwor',
+                oscColors: { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' },
+                getAnalyser: () => visualizer.getAnalyser(),
+                getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
+                onExpand: () => openGWOR('', 'pushState'),
+                onClose: () => {}
+            });
+        } else if (audio) {
+            audio.pause();
         }
     }
 
@@ -2966,16 +3166,38 @@ function initJCLightbox() {
         setTimeout(resizeCanvas, 50);
         if (jcOscilloscope) setTimeout(() => jcOscilloscope.start(), 50);
         syncJCHash(historyMethod);
+
+        const mini = getMiniPlayer();
+        if (mini && mini.isActive() && mini.getAudio() === audio) {
+            mini.detach(false);
+        }
     }
 
     function closeJC() {
         lightbox.classList.remove('active');
         document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-        audio.pause();
         if (jcOscilloscope) jcOscilloscope.stop();
         const currentRoute = parseMusicHash();
         if (currentRoute && currentRoute.player === 'junkyard-cabaret') {
             history.pushState(null, '', window.location.pathname);
+        }
+
+        const mini = getMiniPlayer();
+        if (audio && !audio.paused && mini) {
+            const coverImg = document.getElementById('jcCoverImg');
+            mini.attach({
+                audio,
+                coverSrc: coverImg ? coverImg.src : '',
+                albumTitle: 'Junkyard Cabaret',
+                theme: 'jc',
+                oscColors: { trace: '#c27038', glow: 'rgba(194, 112, 56, 0.9)', graticule: 'rgba(194, 112, 56, 1)' },
+                getAnalyser: () => visualizer.getAnalyser(),
+                getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
+                onExpand: () => openJC('', 'pushState'),
+                onClose: () => {}
+            });
+        } else if (audio) {
+            audio.pause();
         }
     }
 

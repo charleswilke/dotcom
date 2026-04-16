@@ -719,6 +719,16 @@ header {
     letter-spacing: 2px;
 }
 
+.header-subtitle .mobile-break {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .header-subtitle .mobile-break {
+        display: block;
+    }
+}
+
 .header-subtitle.glitch {
     animation: glitch-subtle 0.22s steps(2, end);
 }

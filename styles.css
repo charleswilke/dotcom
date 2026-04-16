@@ -1924,12 +1924,12 @@ footer::after {
     z-index: 1;
 }
 
-/* Dark footer on production pages */
-body:has(.production-header) footer::after {
+/* Dark footer on production pages (not index where .production-header is nested in a card) */
+body:has(> main > .production-header) footer::after {
     background: #0a0a1a;
 }
 
-body:has(.production-header) footer .footer-bg {
+body:has(> main > .production-header) footer .footer-bg {
     clip-path: none;
 }
 

@@ -2624,10 +2624,10 @@ html {
 .rss-feed::before {
     content: '';
     position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 300%;
-    height: 300%;
+    top: -100000px;
+    left: -100000px;
+    width: 200000px;
+    height: 200000px;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="4" fill="%23000" opacity="0.09"/></svg>');
     transform: rotate(30deg);
     z-index: 0;
@@ -6941,14 +6941,15 @@ section.production-header.alice p {
     /* On mobile, sections stack taller than they are wide. The rotated ::before
        pseudo-element (rotate 30deg) loses coverage at the left/right edges once
        the section height exceeds ~1664px on a 390px-wide screen. Widen it so
-       the rotated texture fully covers even tall mobile layouts. */
+       the rotated texture fully covers even tall mobile layouts. Uses fixed px
+       because browsers clamp very large CSS percentages. */
     .dimensional-showcase::before,
     .rss-feed::before,
     .chatgpt-blurb::before {
-        width: 1000%;
-        height: 1000%;
-        top: -450%;
-        left: -450%;
+        width: 200000px;
+        height: 200000px;
+        top: -100000px;
+        left: -100000px;
     }
 }
 

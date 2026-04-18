@@ -2782,7 +2782,7 @@ function initGWORLightbox() {
         { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'Pauses Gone', file: 'audio/grief-without-ritual/pauses-gone.mp3', article: 'https://charleswilke.substack.com/p/staccato-again' },
+        { title: 'Scattered Thunderstorms', file: 'audio/grief-without-ritual/scattered-thunderstorms.mp3', article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },
         { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
         { title: 'Refuse the Frequency', file: 'audio/grief-without-ritual/refuse-the-frequency.mp3', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
@@ -3047,7 +3047,8 @@ function initJCLightbox() {
         { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
         { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
-        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' }
+        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
+        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', article: 'https://charleswilke.substack.com/p/staccato-again' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

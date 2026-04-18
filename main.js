@@ -520,7 +520,7 @@ function updateDynamicButton() {
         return;
     }
 
-    dynamicBtn.textContent = 'Full Archive ->';
+    dynamicBtn.innerHTML = 'Full Archive <span class="arrow" aria-hidden="true">&rarr;</span>';
     dynamicBtn.className = 'archive-btn';
     dynamicBtn.onclick = () => {
         window.open('https://charleswilke.substack.com/archive?sort=new', '_blank', 'noopener,noreferrer');

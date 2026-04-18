@@ -48,8 +48,61 @@ const managedAudioPlayers = new Set();
 function registerManagedAudio(audio) {
     if (audio) {
         managedAudioPlayers.add(audio);
+        attachPlayTracker(audio);
     }
     return audio;
+}
+
+const PLAY_TRACK_THRESHOLD_SEC = 15;
+const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,80}$/;
+
+function parsePlayTarget(src) {
+    if (!src) return null;
+    let path;
+    try { path = new URL(src, window.location.href).pathname; } catch { return null; }
+    const match = path.match(/\/audio\/(?:([^/]+)\/)?([^/]+)\.(?:mp3|mp4|mov|m4a|wav)$/i);
+    if (!match) return null;
+    const album = (match[1] || 'recaps').toLowerCase();
+    const slug = match[2].toLowerCase();
+    if (!SLUG_RE.test(album) || !SLUG_RE.test(slug)) return null;
+    return { album, slug };
+}
+
+const reportedPlayKeys = new Set();
+
+function sendPlayBeacon(target) {
+    const key = `${target.album}/${target.slug}`;
+    if (reportedPlayKeys.has(key)) return;
+    reportedPlayKeys.add(key);
+    const payload = JSON.stringify(target);
+    try {
+        if (navigator.sendBeacon) {
+            const blob = new Blob([payload], { type: 'application/json' });
+            if (navigator.sendBeacon('/api/play', blob)) return;
+        }
+        fetch('/api/play', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload,
+            keepalive: true,
+        }).catch(() => {});
+    } catch { /* ignore */ }
+}
+
+function attachPlayTracker(audio) {
+    if (!audio || audio.dataset.playTrackerAttached === '1') return;
+    audio.dataset.playTrackerAttached = '1';
+    let armed = false;
+    audio.addEventListener('play', () => { armed = true; });
+    audio.addEventListener('timeupdate', () => {
+        if (!armed || audio.currentTime < PLAY_TRACK_THRESHOLD_SEC) return;
+        armed = false;
+        const target = parsePlayTarget(audio.currentSrc || audio.src);
+        if (target) sendPlayBeacon(target);
+    });
+    audio.addEventListener('loadstart', () => {
+        armed = false;
+    });
 }
 
 function pauseManagedAudioExcept(currentAudio) {
@@ -692,6 +745,7 @@ function initTimeDial() {
     const oscilloscopeCanvas = document.getElementById('recap-oscilloscope');
     const dateDisplay = document.getElementById('current-recap-date');
     const recapAudio = document.getElementById('recap-audio');
+    attachPlayTracker(recapAudio);
     const tunerGlass = document.querySelector('.tuner-glass');
     const tunerIndicator = document.getElementById('tuner-indicator');
     const scaleMarkers = Array.from(document.querySelectorAll('.scale-marker.scale-major'));

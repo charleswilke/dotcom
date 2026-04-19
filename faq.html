@@ -662,16 +662,41 @@
             wrapper.addEventListener('transitionend', handleEnd);
         }
 
+        function pinDuringReflow(pinCard, closingWrapper) {
+            // Keep the just-opened card visually anchored while the previous
+            // card closes and the masonry columns reflow around it.
+            var initialTop = pinCard.getBoundingClientRect().top;
+            var running = true;
+            function tick() {
+                if (!running) return;
+                var delta = pinCard.getBoundingClientRect().top - initialTop;
+                if (delta !== 0) window.scrollBy(0, delta);
+                requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+            function stop() {
+                if (!running) return;
+                running = false;
+                var delta = pinCard.getBoundingClientRect().top - initialTop;
+                if (delta !== 0) window.scrollBy(0, delta);
+                closingWrapper.removeEventListener('transitionend', stop);
+            }
+            closingWrapper.addEventListener('transitionend', stop);
+            setTimeout(stop, 700);
+        }
+
         function toggleCard(card) {
             if (card.classList.contains('active')) {
                 closeCard(card);
                 activeCard = null;
             } else {
-                if (activeCard && activeCard !== card) {
-                    closeCard(activeCard);
-                }
+                var prev = activeCard;
                 openCard(card);
                 activeCard = card;
+                if (prev && prev !== card) {
+                    closeCard(prev);
+                    pinDuringReflow(card, prev.querySelector('.faq-answer-wrapper'));
+                }
             }
         }
 

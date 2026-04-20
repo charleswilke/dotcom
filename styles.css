@@ -906,16 +906,16 @@ header::after {
 
 /* Redesigned spotlight card with production header aesthetic */
 section.production-header.spotlight-production {
-    background: linear-gradient(135deg, var(--accent), var(--primary)) !important;
+    background: linear-gradient(135deg, #7ba7d4, #3d6aa3) !important;
     color: var(--text) !important;
     text-align: left !important;
     justify-content: flex-start !important;
-    border: 3px solid var(--primary) !important;
-    outline: 2px solid var(--groovy-gradient1) !important;
-    box-shadow: 
-        0 15px 30px rgba(0,0,0,0.12), 
-        0 0 20px rgba(0,247,194,0.3),
-        inset 0 0 40px rgba(44, 79, 124, 0.4) !important;
+    border: 3px solid #1a1550 !important;
+    outline: 2px solid #ffb347 !important;
+    box-shadow:
+        0 15px 30px rgba(0,0,0,0.12),
+        0 0 20px rgba(255, 179, 71, 0.35),
+        inset 0 0 40px rgba(26, 21, 80, 0.35) !important;
     position: relative;
     overflow: hidden;
     min-height: 420px;
@@ -927,15 +927,15 @@ section.production-header.spotlight-production {
 section.production-header.spotlight-production::before {
     content: '';
     position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 110%;
-    height: 110%;
-    background-image: 
-        linear-gradient(rgba(0, 247, 194, 0.25) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.25) 1px, transparent 1px),
-        linear-gradient(rgba(26, 21, 80, 0.15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(26, 21, 80, 0.15) 1px, transparent 1px);
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background-image:
+        linear-gradient(rgba(26, 21, 80, 0.45) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 21, 80, 0.45) 1px, transparent 1px),
+        linear-gradient(rgba(26, 21, 80, 0.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 21, 80, 0.22) 1px, transparent 1px);
     background-size: 30px 30px, 30px 30px, 10px 10px, 10px 10px;
     background-position: 5px 5px, 5px 5px, 0px 0px, 0px 0px;
     transform: rotate(1deg);
@@ -974,16 +974,16 @@ section.production-header.spotlight-production .featured-image {
     font-family: 'Space Mono', monospace;
     font-size: 0.7rem;
     font-weight: 700;
-    color: var(--neon);
-    background: rgba(0, 247, 194, 0.15);
-    border: 1px solid var(--neon);
+    color: #ffb347;
+    background: rgba(12, 10, 40, 0.75);
+    border: 1px solid #ffb347;
     padding: 0.25rem 0.6rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     border-radius: 3px;
-    text-shadow: 0 0 8px var(--neon);
-    box-shadow: 0 0 8px rgba(0, 247, 194, 0.3);
+    text-shadow: 0 0 8px #ffb347;
+    box-shadow: 0 0 8px rgba(255, 179, 71, 0.35);
     animation: neon-ripple 8s ease-out infinite;
     position: relative;
     overflow: visible;
@@ -991,40 +991,40 @@ section.production-header.spotlight-production .featured-image {
 
 @keyframes neon-ripple {
     0% {
-        box-shadow: 
-            0 0 8px rgba(0, 247, 194, 0.3),
-            0 0 20px rgba(0, 247, 194, 0.1);
-        text-shadow: 0 0 8px var(--neon);
+        box-shadow:
+            0 0 8px rgba(255, 179, 71, 0.3),
+            0 0 20px rgba(255, 179, 71, 0.1);
+        text-shadow: 0 0 8px #ffb347;
     }
     20% {
-        box-shadow: 
-            0 0 10px rgba(0, 247, 194, 0.4),
-            0 0 30px rgba(0, 247, 194, 0.08);
-        text-shadow: 0 0 10px var(--neon);
+        box-shadow:
+            0 0 10px rgba(255, 179, 71, 0.4),
+            0 0 30px rgba(255, 179, 71, 0.08);
+        text-shadow: 0 0 10px #ffb347;
     }
     40% {
-        box-shadow: 
-            0 0 12px rgba(0, 247, 194, 0.5),
-            0 0 40px rgba(0, 247, 194, 0.06);
-        text-shadow: 0 0 12px var(--neon);
+        box-shadow:
+            0 0 12px rgba(255, 179, 71, 0.5),
+            0 0 40px rgba(255, 179, 71, 0.06);
+        text-shadow: 0 0 12px #ffb347;
     }
     60% {
-        box-shadow: 
-            0 0 10px rgba(0, 247, 194, 0.4),
-            0 0 50px rgba(0, 247, 194, 0.04);
-        text-shadow: 0 0 10px var(--neon);
+        box-shadow:
+            0 0 10px rgba(255, 179, 71, 0.4),
+            0 0 50px rgba(255, 179, 71, 0.04);
+        text-shadow: 0 0 10px #ffb347;
     }
     80% {
-        box-shadow: 
-            0 0 9px rgba(0, 247, 194, 0.35),
-            0 0 60px rgba(0, 247, 194, 0.02);
-        text-shadow: 0 0 9px var(--neon);
+        box-shadow:
+            0 0 9px rgba(255, 179, 71, 0.35),
+            0 0 60px rgba(255, 179, 71, 0.02);
+        text-shadow: 0 0 9px #ffb347;
     }
     100% {
-        box-shadow: 
-            0 0 8px rgba(0, 247, 194, 0.3),
-            0 0 70px rgba(0, 247, 194, 0);
-        text-shadow: 0 0 8px var(--neon);
+        box-shadow:
+            0 0 8px rgba(255, 179, 71, 0.3),
+            0 0 70px rgba(255, 179, 71, 0);
+        text-shadow: 0 0 8px #ffb347;
     }
 }
 
@@ -1032,15 +1032,15 @@ section.production-header.spotlight-production .featured-image {
 
 section.production-header.spotlight-production h1 {
     color: var(--light) !important;
-    text-shadow: 
+    text-shadow:
         0 2px 8px rgba(0,0,0,0.4),
-        0 0 10px rgba(0,247,194,0.3) !important;
+        0 0 10px rgba(255, 179, 71, 0.3) !important;
     font-weight: 700;
     margin-bottom: 0.75rem;
     font-size: 2.2rem;
     line-height: 1.2;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(0, 247, 194, 0.3);
+    border-bottom: 2px solid rgba(255, 179, 71, 0.45);
 }
 
 section.production-header.spotlight-production p {
@@ -1057,16 +1057,22 @@ section.production-header.spotlight-production p {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin: 2.8rem 0;
-    padding: 0.2rem 0;
-    border-bottom: 1px solid rgba(0, 247, 194, 0.2);
+    margin: 2.8rem 0 0;
+    padding: 0.45rem 0.7rem;
+    background: rgba(12, 10, 40, 0.7);
+    border: 1px solid rgba(255, 179, 71, 0.35);
+    border-radius: 3px;
     flex-wrap: nowrap;
 }
 
 .spotlight-metadata .spotlight-date,
 .spotlight-metadata .spotlight-tags {
     flex: 1;
-    text-align: right !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left !important;
     white-space: nowrap;
 }
 
@@ -1086,7 +1092,7 @@ section.production-header.spotlight-production p {
     font-family: 'Space Mono', monospace;
     font-weight: 700;
     font-size: 0.8rem;
-    color: var(--neon);
+    color: var(--light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -4673,8 +4679,8 @@ html {
 }
 
 .spotlight-date {
-    color: var(--secondary);
-    opacity: 0.9;
+    color: #ffb347;
+    opacity: 0.95;
     font-size: 1rem;
     font-weight: bold;
     text-align: right;
@@ -4916,13 +4922,13 @@ html {
 @media (max-width: 767px) {
     /* Use the same blue background styling on mobile */
     section.production-header.spotlight-production {
-        background: linear-gradient(135deg, var(--accent), var(--primary)) !important;
-        border: 3px solid var(--primary) !important;
-        outline: 2px solid var(--groovy-gradient1) !important;
-        box-shadow: 
-            0 15px 30px rgba(0,0,0,0.12), 
-            0 0 20px rgba(0,247,194,0.3),
-            inset 0 0 40px rgba(44, 79, 124, 0.4) !important;
+        background: linear-gradient(135deg, #7ba7d4, #3d6aa3) !important;
+        border: 3px solid #1a1550 !important;
+        outline: 2px solid #ffb347 !important;
+        box-shadow:
+            0 15px 30px rgba(0,0,0,0.12),
+            0 0 20px rgba(255, 179, 71, 0.35),
+            inset 0 0 40px rgba(26, 21, 80, 0.35) !important;
         min-height: auto !important;
         max-height: none !important;
         height: auto !important;

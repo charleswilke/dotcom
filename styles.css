@@ -932,10 +932,10 @@ section.production-header.spotlight-production::before {
     width: 120%;
     height: 120%;
     background-image:
-        linear-gradient(rgba(26, 21, 80, 0.45) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(26, 21, 80, 0.45) 1px, transparent 1px),
-        linear-gradient(rgba(26, 21, 80, 0.22) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(26, 21, 80, 0.22) 1px, transparent 1px);
+        linear-gradient(rgba(248, 233, 210, 0.45) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(248, 233, 210, 0.45) 1px, transparent 1px),
+        linear-gradient(rgba(248, 233, 210, 0.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(248, 233, 210, 0.22) 1px, transparent 1px);
     background-size: 30px 30px, 30px 30px, 10px 10px, 10px 10px;
     background-position: 5px 5px, 5px 5px, 0px 0px, 0px 0px;
     transform: rotate(1deg);

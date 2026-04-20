@@ -725,6 +725,52 @@ header:has(.header-title.glitch-scanlines)::before {
         0 0 28px rgba(0, 247, 194, 0.6);
 }
 
+.header-subtitle .subtitle-line-2 .electric {
+    color: #fff4a3;
+    text-shadow:
+        0 0 4px #fff4a3,
+        0 0 10px #ffdd33,
+        0 0 20px rgba(255, 200, 0, 0.75),
+        0 0 32px rgba(255, 170, 0, 0.5);
+    animation: electric-flicker 2.6s infinite;
+}
+
+@keyframes electric-flicker {
+    0%, 100% {
+        text-shadow:
+            0 0 4px #fff4a3,
+            0 0 10px #ffdd33,
+            0 0 20px rgba(255, 200, 0, 0.75),
+            0 0 32px rgba(255, 170, 0, 0.5);
+    }
+    42% {
+        text-shadow:
+            0 0 3px #fff4a3,
+            0 0 8px #ffdd33,
+            0 0 16px rgba(255, 200, 0, 0.6);
+    }
+    44% {
+        text-shadow:
+            0 0 6px #fffbe0,
+            0 0 14px #ffe955,
+            0 0 26px rgba(255, 220, 50, 0.9),
+            0 0 40px rgba(255, 180, 0, 0.6);
+    }
+    46% {
+        text-shadow:
+            0 0 4px #fff4a3,
+            0 0 10px #ffdd33,
+            0 0 20px rgba(255, 200, 0, 0.75);
+    }
+    80% {
+        text-shadow:
+            0 0 5px #fffbe0,
+            0 0 12px #ffe955,
+            0 0 22px rgba(255, 220, 50, 0.85),
+            0 0 36px rgba(255, 180, 0, 0.55);
+    }
+}
+
 @media (max-width: 767px) {
     .header-subtitle .mobile-break {
         display: block;

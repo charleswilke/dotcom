@@ -1055,8 +1055,9 @@ section.production-header.spotlight-production p {
 /* Spotlight metadata styling */
 .spotlight-metadata {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
+    gap: 0.75rem;
     margin: 2.8rem 0 0;
     padding: 0.45rem 0.7rem;
     background: rgba(12, 10, 40, 0.7);
@@ -1067,12 +1068,7 @@ section.production-header.spotlight-production p {
 
 .spotlight-metadata .spotlight-date,
 .spotlight-metadata .spotlight-tags {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.75rem;
-    text-align: left !important;
+    text-align: right !important;
     white-space: nowrap;
 }
 

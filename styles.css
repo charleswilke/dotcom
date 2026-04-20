@@ -1054,23 +1054,22 @@ section.production-header.spotlight-production p {
 
 /* Spotlight metadata styling */
 .spotlight-metadata {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 2.8rem 0 0;
-    padding: 0;
-    flex-wrap: nowrap;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+    margin: 2.8rem 0 0 auto;
+    padding: 0.45rem 0.8rem;
+    background: rgba(12, 10, 40, 0.7);
+    border: 1px solid rgba(255, 179, 71, 0.35);
+    border-radius: 3px;
+    float: right;
 }
 
 .spotlight-metadata .spotlight-date,
 .spotlight-metadata .spotlight-tags {
     text-align: right !important;
     white-space: nowrap;
-    padding: 0.35rem 0.7rem;
-    background: rgba(12, 10, 40, 0.7);
-    border: 1px solid rgba(255, 179, 71, 0.35);
-    border-radius: 3px;
 }
 
 /* Extra specificity for tags */

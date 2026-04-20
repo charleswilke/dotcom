@@ -1059,10 +1059,7 @@ section.production-header.spotlight-production p {
     align-items: flex-end;
     gap: 0.15rem;
     margin: 2.8rem 0 0 auto;
-    padding: 0.45rem 0.8rem;
-    background: rgba(12, 10, 40, 0.7);
-    border: 1px solid rgba(255, 179, 71, 0.35);
-    border-radius: 3px;
+    padding: 0;
     float: right;
 }
 

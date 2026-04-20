@@ -1022,7 +1022,7 @@ function initTimeDial() {
             var tickLen = 3, subTicks = 5;
 
             // Major grid lines
-            ctx.strokeStyle = 'rgba(0, 255, 100, 0.12)';
+            ctx.strokeStyle = 'rgba(255, 190, 60, 0.12)';
             ctx.lineWidth = 0.5;
             for (var ix = 1; ix < divX; ix++) {
                 var x = ix * cellW;
@@ -1040,7 +1040,7 @@ function initTimeDial() {
             }
 
             // Subtick marks along center horizontal axis
-            ctx.strokeStyle = 'rgba(0, 255, 100, 0.18)';
+            ctx.strokeStyle = 'rgba(255, 190, 60, 0.18)';
             ctx.lineWidth = 0.5;
             var midY = h / 2;
             for (var ix = 0; ix < divX; ix++) {
@@ -1066,7 +1066,7 @@ function initTimeDial() {
             }
 
             // Brighter center crosshair
-            ctx.strokeStyle = 'rgba(0, 255, 100, 0.2)';
+            ctx.strokeStyle = 'rgba(255, 190, 60, 0.2)';
             ctx.lineWidth = 0.7;
             ctx.beginPath();
             ctx.moveTo(0, midY);
@@ -1090,9 +1090,9 @@ function initTimeDial() {
 
             // Waveform trace
             ctx.beginPath();
-            ctx.strokeStyle = '#00ff64';
+            ctx.strokeStyle = '#ffc94a';
             ctx.lineWidth = 2;
-            ctx.shadowColor = 'rgba(0, 255, 100, 0.9)';
+            ctx.shadowColor = 'rgba(255, 190, 60, 0.9)';
             ctx.shadowBlur = 10;
 
             if (isPlaying && analyserNode && timeData) {

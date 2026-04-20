@@ -2013,7 +2013,7 @@ footer p {
         background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px;
     }
     100% {
-        background-position: 30px 30px, 30px 30px, 10px 10px, 10px 10px;
+        background-position: 30px 30px, 30px 30px, 30px 30px, 30px 30px;
     }
 }
 

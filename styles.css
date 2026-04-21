@@ -725,7 +725,8 @@ header:has(.header-title.glitch-scanlines)::before {
         0 0 28px rgba(0, 247, 194, 0.6);
 }
 
-.header-subtitle .subtitle-line-2 .electric {
+.header-subtitle .subtitle-line-2 .electric,
+footer .electric {
     color: #fff4a3;
     text-shadow:
         0 0 4px #fff4a3,
@@ -2630,9 +2631,28 @@ html {
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    background-image: 
-        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.03) 75%, rgba(0,0,0,0.05) 100%),
-        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="1" fill="%23000" opacity="0.05"/></svg>');
+    background-image:
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.03) 75%, rgba(0,0,0,0.05) 100%);
+}
+
+/* Rotated Lichtenstein dot overlay — matches .blurb-card */
+.feed-item::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.04) 2.5px, transparent 2.5px);
+    background-size: 8px 8px;
+    transform: rotate(-13deg);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.feed-item > * {
+    position: relative;
+    z-index: 1;
 }
 
 .feed-item:hover, .feed-item:focus {

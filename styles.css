@@ -2936,7 +2936,7 @@ html {
 /* Audio Summary Card with Animations */
 .audio-summary-card {
     background:
-        linear-gradient(rgba(10, 5, 0, 0.65), rgba(10, 5, 0, 0.65)),
+        linear-gradient(rgba(10, 5, 0, 0.325), rgba(10, 5, 0, 0.325)),
         url('images/recap-bg.webp');
     background-size: cover;
     background-position: center;

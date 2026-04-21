@@ -6,7 +6,7 @@
     --accent: #2c4f7c;
     --text: #1a1a2e;
     --neon: #00f7c2;
-    --grid: rgba(0, 247, 194, 0.15);
+    --grid: rgba(255, 185, 58, 0.15);
     --groovy-gradient1: #f76e11;
     --groovy-gradient2: #ff9e00;
     --edge-thickness: 6px;
@@ -834,8 +834,8 @@ header::after {
     width: 300%;
     height: 300%;
     background-image:
-        linear-gradient(rgba(0, 247, 194, 0.3) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.3) 1px, transparent 1px);
+        linear-gradient(rgba(255, 185, 58, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 185, 58, 0.3) 1px, transparent 1px);
     background-size: 40px 40px;
     transform-origin: 50% 70%;
     transform: perspective(400px) rotateX(45deg);
@@ -1970,8 +1970,8 @@ body:has(> main > .production-header) footer .footer-bg {
     width: 300%;
     height: 300%;
     background-image:
-        linear-gradient(rgba(0, 247, 194, 0.3) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.3) 1px, transparent 1px);
+        linear-gradient(rgba(255, 185, 58, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 185, 58, 0.3) 1px, transparent 1px);
     background-size: 40px 40px;
     transform-origin: 50% 50%;
     transform: perspective(400px) rotateX(-45deg);
@@ -6192,12 +6192,14 @@ section.production-header.alice p {
 
 /* CRT hover: warm-up flicker on enter, sustained glow while hovering, cool-down fade on leave */
 .header-title:hover {
+    color: #ffe5b5;
     animation: crt-hover-warmup 0.35s ease-out forwards;
     text-shadow:
-        0 0 10px rgba(0, 247, 194, 0.6),
-        0 0 25px rgba(0, 247, 194, 0.4),
-        0 0 50px rgba(0, 247, 194, 0.2),
-        0 0 80px rgba(0, 247, 194, 0.1);
+        0 0 10px rgba(255, 200, 80, 0.7),
+        0 0 25px rgba(255, 160, 50, 0.5),
+        0 0 50px rgba(255, 120, 30, 0.28),
+        0 0 80px rgba(255, 90, 30, 0.14);
+    transition: color 0.35s ease-out;
 }
 
 .header-title:hover::before {
@@ -6226,37 +6228,37 @@ section.production-header.alice p {
 @keyframes crt-hover-warmup {
     0% {
         text-shadow:
-            0 0 7px rgba(0, 247, 194, 0.4),
-            0 0 15px rgba(0, 247, 194, 0.2);
+            0 0 7px rgba(255, 185, 58, 0.4),
+            0 0 15px rgba(255, 185, 58, 0.2);
         filter: brightness(1);
     }
     8% {
         text-shadow:
             4px 0 #ff00ff,
-            -4px 0 var(--neon),
+            -4px 0 #ffb93a,
             0 0 20px rgba(255, 0, 255, 0.4);
         filter: brightness(1.4);
     }
     16% {
         text-shadow:
-            -3px 0 var(--neon),
+            -3px 0 #ffb93a,
             3px 0 var(--secondary),
-            0 0 15px rgba(0, 247, 194, 0.5);
+            0 0 15px rgba(255, 185, 58, 0.5);
         filter: brightness(0.85);
     }
     24% {
         text-shadow:
             2px 0 #ff6ec7,
-            -2px 0 #00f7c2,
+            -2px 0 #ffb93a,
             0 0 30px rgba(255, 110, 199, 0.3),
-            0 0 50px rgba(0, 247, 194, 0.2);
+            0 0 50px rgba(255, 185, 58, 0.2);
         filter: brightness(1.3);
     }
     35% {
         text-shadow:
-            -1px 0 var(--neon),
+            -1px 0 #ffb93a,
             1px 0 var(--secondary),
-            0 0 20px rgba(0, 247, 194, 0.4);
+            0 0 20px rgba(255, 185, 58, 0.4);
         filter: brightness(1.1);
     }
     50% {
@@ -6264,10 +6266,10 @@ section.production-header.alice p {
     }
     100% {
         text-shadow:
-            0 0 10px rgba(0, 247, 194, 0.6),
-            0 0 25px rgba(0, 247, 194, 0.4),
-            0 0 50px rgba(0, 247, 194, 0.2),
-            0 0 80px rgba(0, 247, 194, 0.1);
+            0 0 10px rgba(255, 200, 80, 0.7),
+            0 0 25px rgba(255, 160, 50, 0.5),
+            0 0 50px rgba(255, 120, 30, 0.28),
+            0 0 80px rgba(255, 90, 30, 0.14);
         filter: brightness(1);
     }
 }

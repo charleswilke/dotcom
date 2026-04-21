@@ -1380,18 +1380,18 @@ section.production-header.alice .production-details p strong {
     background: linear-gradient(180deg, rgba(18, 21, 54, 0.98), rgba(10, 13, 34, 0.98));
     box-shadow:
         0 14px 24px rgba(0, 0, 0, 0.16),
-        0 0 0 1px rgba(0, 247, 194, 0.18),
+        0 0 0 1px rgba(255, 185, 58, 0.18),
         inset 0 0 0 1px rgba(248, 233, 210, 0.08);
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    border: 1px solid rgba(0, 247, 194, 0.14);
+    border: 1px solid rgba(255, 185, 58, 0.14);
     cursor: pointer;
     isolation: isolate;
-    --showcase-accent: var(--neon);
-    --showcase-accent-soft: rgba(0, 247, 194, 0.12);
+    --showcase-accent: #ffb93a;
+    --showcase-accent-soft: rgba(255, 185, 58, 0.12);
     --showcase-panel: linear-gradient(180deg, rgba(18, 21, 54, 0.98), rgba(9, 12, 31, 0.98));
     --showcase-label: var(--light);
     --showcase-meta-color: rgba(248, 233, 210, 0.62);
-    --showcase-media-tint: rgba(0, 247, 194, 0.08);
+    --showcase-media-tint: rgba(255, 185, 58, 0.08);
 }
 
 .showcase-item:hover {
@@ -1407,8 +1407,8 @@ section.production-header.alice .production-details p strong {
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(rgba(0, 247, 194, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.04) 1px, transparent 1px);
+        linear-gradient(rgba(255, 185, 58, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 185, 58, 0.04) 1px, transparent 1px);
     background-size: 18px 18px, 18px 18px;
     pointer-events: none;
     opacity: 0.16;
@@ -1432,7 +1432,7 @@ section.production-header.alice .production-details p strong {
     aspect-ratio: 3 / 2;
     overflow: hidden;
     background: linear-gradient(180deg, rgba(26, 21, 80, 0.94), rgba(44, 79, 124, 0.86));
-    border: 1px solid rgba(0, 247, 194, 0.18);
+    border: 1px solid rgba(255, 185, 58, 0.18);
     box-shadow: inset 0 0 0 1px rgba(248, 233, 210, 0.08);
 }
 
@@ -1810,7 +1810,7 @@ section.production-header.alice .production-details p strong {
     padding: 1.5rem;
     border-radius: 0;
     border: 3px solid #000;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 0 10px rgba(0,247,194,0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 0 10px rgba(255, 185, 58, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -2661,7 +2661,7 @@ html {
     padding: 2rem;
     border-radius: 8px;
     border: 1px solid var(--primary);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 0 10px rgba(0,247,194,0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 0 10px rgba(255, 185, 58, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -2710,7 +2710,7 @@ html {
     margin-bottom: 1.5rem;
     border: 2px solid #bbb; /* neutral light gray */
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0,247,194,0.3);
+    box-shadow: 0 0 10px rgba(255, 185, 58, 0.3);
     aspect-ratio: 4 / 3; /* Reserve space to reduce CLS */
 }
 
@@ -4686,7 +4686,7 @@ html {
     border-radius: 0;
     border: 3px solid var(--primary);
     outline: 2px solid var(--groovy-gradient1);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15), 0 0 20px rgba(0,247,194,0.4);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15), 0 0 20px rgba(255, 185, 58, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -4719,7 +4719,7 @@ html {
     position: relative;
     z-index: 1;
     border: 2px solid #bbb;
-    box-shadow: 0 0 10px rgba(0,247,194,0.3);
+    box-shadow: 0 0 10px rgba(255, 185, 58, 0.3);
 }
 
 .spotlight-content {
@@ -4839,7 +4839,7 @@ html {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.5rem;
     margin: 0.5rem 0 1rem 0;
-    text-shadow: 0 0 5px var(--neon);
+    text-shadow: 0 0 5px #ffb93a;
 }
 
 .gpt-item p {
@@ -4859,12 +4859,12 @@ html {
 
 .gpt-link:hover .gpt-item {
     transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2), 0 0 15px rgba(0,247,194,0.5);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2), 0 0 15px rgba(255, 185, 58, 0.5);
 }
 
 .gpt-link:hover .gpt-item h3 {
-    color: var(--neon);
-    text-shadow: 0 0 10px var(--neon);
+    color: #ffb93a;
+    text-shadow: 0 0 10px #ffb93a;
 }
 
 /* Theatrical Projections overrides (reuse GPT card system with recently-style image ratio) */
@@ -4905,7 +4905,7 @@ html {
         0 16px 40px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(248, 233, 210, 0.2),
         0 0 30px rgba(248, 233, 210, 0.06),
-        0 0 60px rgba(0, 247, 194, 0.04);
+        0 0 60px rgba(255, 185, 58, 0.04);
 }
 
 /* Spotlight wash on hover - warm top-down light */

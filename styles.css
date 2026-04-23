@@ -6979,6 +6979,72 @@ section.production-header.alice p {
     border-radius: 0.5rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     border: 1px solid rgba(255,255,255,0.1);
+    cursor: zoom-in;
+    transition: transform 0.2s ease;
+}
+
+.mixtape-cover:hover {
+    transform: scale(1.02);
+}
+
+/* Cover Art Zoom Lightbox */
+.cover-zoom {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    padding: 2rem;
+}
+
+.cover-zoom[hidden] {
+    display: none;
+}
+
+.cover-zoom[data-open="true"] {
+    opacity: 1;
+}
+
+.cover-zoom-img {
+    max-width: min(90vw, 1200px);
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transform: scale(0.96);
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cover-zoom[data-open="true"] .cover-zoom-img {
+    transform: scale(1);
+}
+
+.cover-zoom-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 2.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    transition: background 0.15s ease;
+}
+
+.cover-zoom-close:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .mixtape-credits {

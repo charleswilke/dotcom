@@ -91,21 +91,30 @@
     </header>
 
     <section class="faq-section">
+        <div class="faq-dots-bg" aria-hidden="true"></div>
         <div class="container">
-            <div class="faq-section-header-area">
-                <h2 class="section-title">
-                  <span class="faq-full">Frequently Asked Questions</span>
-                  <span class="faq-short">FAQ</span>
-                </h2>
+            <div class="crt-screen" aria-hidden="true">
+                <div class="crt-scanlines"></div>
+                <div class="crt-vignette"></div>
+                <div class="crt-flicker-pattern"></div>
+                <div class="crt-flicker-static"></div>
             </div>
-            <nav class="faq-subnav" id="faqSubnav" aria-label="FAQ categories">
-                <div class="faq-subnav-inner">
-                    <a href="#personal" class="faq-subnav-link active" data-tab="01">Personal</a>
-                    <a href="#project" class="faq-subnav-link" data-tab="02">Project</a>
-                    <a href="#philosophy" class="faq-subnav-link" data-tab="03">Philosophy</a>
-                    <a href="#process" class="faq-subnav-link" data-tab="04">Process</a>
+            <div class="tv-card" id="faqSubnav">
+                <div class="tv-card-bars" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
                 </div>
-            </nav>
+                <div class="tv-card-screen">
+                    <div class="tv-card-marquee">
+                        <h2 class="section-title tv-card-title">Things People Ask</h2>
+                    </div>
+                    <nav class="tv-card-tabs" aria-label="FAQ categories">
+                        <a href="#personal" class="tv-card-tab active" data-tab="01">Personal</a>
+                        <a href="#project" class="tv-card-tab" data-tab="02">Project</a>
+                        <a href="#philosophy" class="tv-card-tab" data-tab="03">Philosophy</a>
+                        <a href="#process" class="tv-card-tab" data-tab="04">Process</a>
+                    </nav>
+                </div>
+            </div>
 
             <div class="faq-panel">
             <!-- About Me -->
@@ -719,7 +728,7 @@
 
         // --- Tab-based category switching ---
         var subnav = document.getElementById('faqSubnav');
-        var subnavLinks = subnav.querySelectorAll('.faq-subnav-link');
+        var subnavLinks = subnav.querySelectorAll('.tv-card-tab');
         var categories = document.querySelectorAll('.faq-category');
         var siteNav = document.getElementById('siteNav');
 
@@ -753,7 +762,7 @@
             });
         });
 
-        // --- Sticky subnav: sync with site nav hide/show ---
+        // --- Sticky TV card: sync with site nav hide/show, compress when stuck ---
         var ticking = false;
 
         function updateSubnav() {

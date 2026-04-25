@@ -3444,6 +3444,51 @@ function initDeferredHomepageEffects() {
     }, 2000);
 }
 
+function initCoverZoom() {
+    const zoom = document.getElementById('coverZoom');
+    const zoomImg = document.getElementById('coverZoomImg');
+    const zoomClose = document.getElementById('coverZoomClose');
+    if (!zoom || !zoomImg) return;
+
+    const open = (src, alt) => {
+        zoomImg.src = src;
+        zoomImg.alt = alt || '';
+        zoom.hidden = false;
+        requestAnimationFrame(() => zoom.setAttribute('data-open', 'true'));
+        document.body.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+        zoom.removeAttribute('data-open');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            zoom.hidden = true;
+            zoomImg.src = '';
+        }, 200);
+    };
+
+    document.querySelectorAll('.mixtape-cover').forEach(img => {
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            open(img.currentSrc || img.src, img.alt);
+        });
+        img.setAttribute('role', 'button');
+        img.setAttribute('tabindex', '0');
+        img.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                open(img.currentSrc || img.src, img.alt);
+            }
+        });
+    });
+
+    zoom.addEventListener('click', close);
+    if (zoomClose) zoomClose.addEventListener('click', (e) => { e.stopPropagation(); close(); });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && zoom.getAttribute('data-open') === 'true') close();
+    });
+}
+
 onReady(() => {
     initRSSFallbackFetch();
     initTimeDial();
@@ -3452,6 +3497,7 @@ onReady(() => {
     initPetLightboxLinks();
     initDeferredHomepageMedia();
     initDeferredHomepageEffects();
+    initCoverZoom();
 });
 
 // ===== STICKY NAV handled by common.js =====

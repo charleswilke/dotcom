@@ -1618,6 +1618,10 @@ section.production-header.alice .production-details p strong {
     transform: rotate(3.5deg) translateY(-0.1rem);
 }
 
+.showcase-item-jc img {
+    object-position: top;
+}
+
 .showcase-item-gwor {
     --showcase-accent: #b48eff;
     --showcase-accent-soft: rgba(180, 142, 255, 0.18);

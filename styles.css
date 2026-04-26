@@ -4872,9 +4872,14 @@ html {
 }
 
 @media (max-width: 480px) {
-    
+
     .audio-summary-content {
-        padding: 1rem;
+        padding: 0.5rem 0.3rem;
+    }
+
+    .audio-summary-card {
+        margin-left: -12px;
+        margin-right: -12px;
     }
 }
 

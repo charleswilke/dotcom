@@ -38,7 +38,8 @@
         box-shadow: 0 0 32px rgba(108, 242, 255, 0.08);
         border-radius: 8px;
         display: block;
-        max-width: min(640px, calc(100vw - 48px));
+        width: min(800px, calc(100vw - 48px));
+        max-width: 800px;
         height: auto;
         touch-action: none;
         user-select: none;
@@ -107,7 +108,7 @@
   </head>
   <body>
     <h1>CHESS BLASTER</h1>
-    <canvas id="board" width="640" height="640"></canvas>
+    <canvas id="board" width="800" height="560"></canvas>
     <div id="promotion" hidden aria-label="Choose promotion piece">
       <button type="button" data-piece="q" aria-label="Promote to queen">Q</button>
       <button type="button" data-piece="r" aria-label="Promote to rook">R</button>
@@ -123,6 +124,13 @@
           <option value="bot-vs-human">Bot vs You (Black)</option>
           <option value="human-vs-human">Human vs Human</option>
           <option value="bot-vs-bot">Bot vs Bot</option>
+        </select>
+      </label>
+      <label>
+        View
+        <select id="view" aria-label="Board view">
+          <option value="flat">Flat</option>
+          <option value="isometric">Iso</option>
         </select>
       </label>
       <button id="new-game" type="button">New Game</button>

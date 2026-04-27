@@ -14,6 +14,7 @@ import {
   drawPieceAt,
   loadPieceSprites,
   squareAt,
+  type BoardView,
   type RenderState
 } from "./renderer/board.js";
 
@@ -21,11 +22,13 @@ const canvas = document.getElementById("board") as HTMLCanvasElement;
 const statusEl = document.getElementById("status") as HTMLDivElement;
 const promotionEl = document.getElementById("promotion") as HTMLDivElement;
 const modeEl = document.getElementById("mode") as HTMLSelectElement;
+const viewEl = document.getElementById("view") as HTMLSelectElement;
 const newGameEl = document.getElementById("new-game") as HTMLButtonElement;
 
 type Mode = "human-vs-bot" | "bot-vs-human" | "human-vs-human" | "bot-vs-bot";
 
 let mode: Mode = "human-vs-bot";
+let view: BoardView = "flat";
 let position: Position = parseFen(START_FEN);
 let history: string[] = [repetitionKey(position)];
 let selected: Square | null = null;
@@ -57,6 +60,7 @@ function render(): void {
     selected,
     legalTargets: legalForSelected,
     checkSquare: checkedKingSquare(position),
+    view,
     ...(drag && drag.moved ? { hidePiece: drag.from } : {})
   };
   drawBoard(canvas, state);
@@ -67,7 +71,7 @@ function render(): void {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      drawPieceAt(canvas, piece, (drag.x - rect.left) * scaleX, (drag.y - rect.top) * scaleY);
+      drawPieceAt(canvas, piece, (drag.x - rect.left) * scaleX, (drag.y - rect.top) * scaleY, view);
     }
   }
 
@@ -181,7 +185,7 @@ async function handlePointerDown(event: PointerEvent): Promise<void> {
   event.preventDefault();
   if (promotionChoice || computerThinking || isComputerTurn()) return;
 
-  const sq = squareAt(canvas, event.clientX, event.clientY);
+  const sq = squareAt(canvas, event.clientX, event.clientY, view);
   if (sq === null) return;
 
   // If a piece is already selected and the click is on a legal target, treat as click-move.
@@ -224,7 +228,7 @@ async function handlePointerUp(event: PointerEvent): Promise<void> {
     return;
   }
   const wasDrag = drag.moved;
-  const sq = squareAt(canvas, event.clientX, event.clientY);
+  const sq = squareAt(canvas, event.clientX, event.clientY, view);
   canvas.releasePointerCapture(event.pointerId);
   drag = null;
 
@@ -264,6 +268,11 @@ window.addEventListener("keydown", (event) => {
 modeEl.addEventListener("change", () => {
   mode = modeEl.value as Mode;
   resetGame();
+});
+
+viewEl.addEventListener("change", () => {
+  view = viewEl.value as BoardView;
+  render();
 });
 
 newGameEl.addEventListener("click", () => {

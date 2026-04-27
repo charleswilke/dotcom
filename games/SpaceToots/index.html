@@ -721,7 +721,7 @@ function updateSuctionPhase(e) {
       e.suctionPhase = 'sucked'; e.speed = 0.5;
       if (!shepherdMusicTriggered) {
         shepherdMusicTriggered = true;
-        shepherdTrackChoice = Math.random() < 0.5 ? 'shepherd1' : 'shepherd2';
+        shepherdTrackChoice = shepherdTrackChoice || (Math.random() < 0.5 ? 'shepherd1' : 'shepherd2');
         crossfadeTo(shepherdTrackChoice);
       }
     }
@@ -4154,7 +4154,7 @@ function spawnMidBoss() {
   // Fallback: trigger shepherd music if the suction asteroid was destroyed before it triggered
   if (!shepherdMusicTriggered) {
     shepherdMusicTriggered = true;
-    shepherdTrackChoice = Math.random() < 0.5 ? 'shepherd1' : 'shepherd2';
+    shepherdTrackChoice = shepherdTrackChoice || (Math.random() < 0.5 ? 'shepherd1' : 'shepherd2');
     crossfadeTo(shepherdTrackChoice);
   }
   const orbData = [];
@@ -6182,13 +6182,18 @@ function updateWaves() {
     waveTimer++;
     const wave = waves[currentWave];
     // As soon as we start counting down toward the mid-boss, trigger the suction
-    if (wave.midBoss && !preMidBoss) preMidBoss = true;
+    if (wave.midBoss && !preMidBoss) {
+      preMidBoss = true;
+      const nextShepherdTrack = Math.random() < 0.5 ? 'shepherd1' : 'shepherd2';
+      shepherdTrackChoice = shepherdTrackChoice || nextShepherdTrack;
+      loadMusicByName(shepherdTrackChoice);
+    }
     if (waveTimer >= wave.delay && enemies.filter(e => !e.ambient).length <= 2) {
       if (wave.midBoss) {
         // Trigger mid-boss encounter — start shepherd music on warning
         if (!shepherdMusicTriggered) {
           shepherdMusicTriggered = true;
-          shepherdTrackChoice = Math.random() < 0.5 ? 'shepherd1' : 'shepherd2';
+          shepherdTrackChoice = shepherdTrackChoice || (Math.random() < 0.5 ? 'shepherd1' : 'shepherd2');
           crossfadeTo(shepherdTrackChoice);
         }
         gameState = 'MID_BOSS_WARNING';
@@ -8081,14 +8086,7 @@ function gameLoop(timestamp) {
     case 'TITLE':
       drawTitleScreen();
       if (keys['Enter']) {
-        ensureAudioCtx();
-        if (!musicLoaded) {
-          musicLoaded = true;
-          Promise.all([loadAllMusic(), loadAllSFX()]).then(() => { playMusic('level'); });
-        } else {
-          stopMusicImmediate();
-          playMusic('level');
-        }
+        startInitialAudio();
         resetGame();
         startStage();
       }
@@ -8422,11 +8420,18 @@ function debugShepherd() {
 // === MUSIC SYSTEM ===
 let audioCtx = null;
 const musicTracks = {};       // name → AudioBuffer
+const musicTrackLoads = {};   // name → Promise<AudioBuffer>
 let currentMusic = null;      // { source, gain, name }
 const MUSIC_VOLUME = 0.4;
 const CROSSFADE_MS = 2000;    // 2-second crossfade between tracks
 let shepherdTrackChoice = null;
 let shepherdMusicTriggered = false;
+const MUSIC_TRACK_URLS = {
+  level: 'audio/drifting-the-void.mp3',
+  level2: 'audio/drifting-the-void2.mp3',
+  shepherd1: 'audio/the-shepherd.mp3',
+  shepherd2: 'audio/the-shepherd2.mp3',
+};
 
 function ensureAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -8434,26 +8439,51 @@ function ensureAudioCtx() {
 }
 
 async function loadMusicTrack(name, url) {
-  try {
-    const resp = await fetch(url);
-    const buf = await resp.arrayBuffer();
-    musicTracks[name] = await audioCtx.decodeAudioData(buf);
-  } catch (e) {
-    console.warn('Failed to load music:', name, e);
-  }
+  if (musicTracks[name]) return musicTracks[name];
+  if (musicTrackLoads[name]) return musicTrackLoads[name];
+  musicTrackLoads[name] = (async () => {
+    try {
+      const resp = await fetch(url);
+      const buf = await resp.arrayBuffer();
+      musicTracks[name] = await audioCtx.decodeAudioData(buf);
+      return musicTracks[name];
+    } catch (e) {
+      console.warn('Failed to load music:', name, e);
+      return null;
+    } finally {
+      delete musicTrackLoads[name];
+    }
+  })();
+  return musicTrackLoads[name];
+}
+
+async function loadMusicByName(name) {
+  ensureAudioCtx();
+  const url = MUSIC_TRACK_URLS[name];
+  if (!url) return null;
+  return loadMusicTrack(name, url);
+}
+
+function preloadLaterMusic() {
+  window.setTimeout(() => {
+    loadMusicByName('level2');
+  }, 1000);
 }
 
 async function loadAllMusic() {
   ensureAudioCtx();
   await Promise.all([
-    loadMusicTrack('level',     'audio/drifting-the-void.mp3'),
-    loadMusicTrack('level2',    'audio/drifting-the-void2.mp3'),
-    loadMusicTrack('shepherd1', 'audio/the-shepherd.mp3'),
-    loadMusicTrack('shepherd2', 'audio/the-shepherd2.mp3'),
+    loadMusicByName('level'),
+    loadMusicByName('level2'),
+    loadMusicByName('shepherd1'),
+    loadMusicByName('shepherd2'),
   ]);
 }
 
-function playMusic(name, { fadeIn = CROSSFADE_MS, loop = true } = {}) {
+async function playMusic(name, { fadeIn = CROSSFADE_MS, loop = true } = {}) {
+  if (!musicTracks[name]) {
+    await loadMusicByName(name);
+  }
   if (!audioCtx || !musicTracks[name]) return;
   const buffer = musicTracks[name];
   const gain = audioCtx.createGain();
@@ -8482,8 +8512,11 @@ function stopMusic(fadeOut = CROSSFADE_MS) {
   currentMusic = null;
 }
 
-function crossfadeTo(name, duration = CROSSFADE_MS) {
+async function crossfadeTo(name, duration = CROSSFADE_MS) {
   if (currentMusic && currentMusic.name === name) return;
+  if (!musicTracks[name]) {
+    await loadMusicByName(name);
+  }
   stopMusic(duration);
   playMusic(name, { fadeIn: duration });
 }
@@ -8521,6 +8554,21 @@ async function loadAllSFX() {
     loadSFX('xp-pickup-2',  'audio/xp-shard-pickup-2.mp3'),
     loadSFX('shepherd-forms', 'audio/shepherd-forms.mp3'),
   ]);
+}
+
+function startInitialAudio() {
+  ensureAudioCtx();
+  if (!musicLoaded) {
+    musicLoaded = true;
+    Promise.all([loadMusicByName('level'), loadAllSFX()]).then(() => {
+      playMusic('level');
+      preloadLaterMusic();
+    });
+    return;
+  }
+  stopMusicImmediate();
+  playMusic('level');
+  preloadLaterMusic();
 }
 
 function playSFX(name, volume) {

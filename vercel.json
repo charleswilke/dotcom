@@ -25,7 +25,8 @@
     }
   ],
   "redirects": [
-    { "source": "/tootsjam", "destination": "/tootsjam/", "permanent": true }
+    { "source": "/tootsjam", "destination": "/tootsjam/", "permanent": true },
+    { "source": "/chessblaster", "destination": "/chessblaster/", "permanent": true }
   ],
   "rewrites": [
     { "source": "/mixtape(/?)", "destination": "/mixtape.html" },

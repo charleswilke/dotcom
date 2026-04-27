@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chess Blaster</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #07080d;
+        --panel: #0f1320;
+        --accent: #6cf2ff;
+        --text: #e6f1ff;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        background: radial-gradient(circle at 50% 0%, #131a2c 0%, var(--bg) 70%);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 24px;
+        gap: 16px;
+      }
+      h1 {
+        font-weight: 200;
+        letter-spacing: 0.3em;
+        margin: 0;
+        font-size: 22px;
+        color: var(--accent);
+        text-shadow: 0 0 12px rgba(108, 242, 255, 0.4);
+      }
+      #board {
+        background: var(--panel);
+        border: 1px solid rgba(108, 242, 255, 0.2);
+        box-shadow: 0 0 32px rgba(108, 242, 255, 0.08);
+        border-radius: 8px;
+        display: block;
+        max-width: min(640px, calc(100vw - 48px));
+        height: auto;
+        touch-action: none;
+        user-select: none;
+      }
+      #status {
+        font-size: 14px;
+        opacity: 0.8;
+        min-height: 1.4em;
+      }
+      #controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      #controls select,
+      #controls button {
+        background: #101626;
+        color: var(--text);
+        border: 1px solid rgba(108, 242, 255, 0.35);
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 13px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      #controls button:hover,
+      #controls select:hover,
+      #controls button:focus-visible,
+      #controls select:focus-visible {
+        outline: none;
+        background: #1d2740;
+        box-shadow: 0 0 12px rgba(108, 242, 255, 0.2);
+      }
+      #promotion {
+        display: flex;
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid rgba(108, 242, 255, 0.25);
+        border-radius: 8px;
+        background: rgba(15, 19, 32, 0.96);
+        box-shadow: 0 0 24px rgba(108, 242, 255, 0.12);
+      }
+      #promotion[hidden] {
+        display: none;
+      }
+      #promotion button {
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(108, 242, 255, 0.35);
+        border-radius: 6px;
+        background: #101626;
+        color: var(--accent);
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      #promotion button:hover,
+      #promotion button:focus-visible {
+        outline: none;
+        background: #1d2740;
+        box-shadow: 0 0 14px rgba(108, 242, 255, 0.22);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CHESS BLASTER</h1>
+    <canvas id="board" width="640" height="640"></canvas>
+    <div id="promotion" hidden aria-label="Choose promotion piece">
+      <button type="button" data-piece="q" aria-label="Promote to queen">Q</button>
+      <button type="button" data-piece="r" aria-label="Promote to rook">R</button>
+      <button type="button" data-piece="b" aria-label="Promote to bishop">B</button>
+      <button type="button" data-piece="n" aria-label="Promote to knight">N</button>
+    </div>
+    <div id="status"></div>
+    <div id="controls">
+      <label>
+        Mode
+        <select id="mode" aria-label="Game mode">
+          <option value="human-vs-bot">You (White) vs Bot</option>
+          <option value="bot-vs-human">Bot vs You (Black)</option>
+          <option value="human-vs-human">Human vs Human</option>
+          <option value="bot-vs-bot">Bot vs Bot</option>
+        </select>
+      </label>
+      <button id="new-game" type="button">New Game</button>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

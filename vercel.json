@@ -38,6 +38,8 @@
     { "source": "/tootsjam/:path*", "destination": "/games/TootsJam/:path*" },
     { "source": "/tootsjam/", "destination": "/games/TootsJam/tootsjam.html" },
     { "source": "/spacetoots(/?)", "destination": "/games/SpaceToots/index.html" },
-    { "source": "/spacetoots/:path*", "destination": "/games/SpaceToots/:path*" }
+    { "source": "/spacetoots/:path*", "destination": "/games/SpaceToots/:path*" },
+    { "source": "/chessblaster(/?)", "destination": "/games/ChessBlaster/dist/index.html" },
+    { "source": "/chessblaster/:path*", "destination": "/games/ChessBlaster/dist/:path*" }
   ]
 }

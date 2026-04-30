@@ -43,9 +43,20 @@ type DragState = {
   y: number;
   moved: boolean;
 };
+
+type MoveAnimation = {
+  piece: NonNullable<Position["board"][number]>;
+  from: Square;
+  to: Square;
+  startedAt: number;
+  durationMs: number;
+};
+
 let drag: DragState | null = null;
+let moveAnimation: MoveAnimation | null = null;
 const DRAG_THRESHOLD = 4;
 const COMPUTER_DELAY_MS = 350;
+const MOVE_ANIMATION_MS = 210;
 
 function isBot(color: Color): boolean {
   if (mode === "bot-vs-bot") return true;
@@ -55,13 +66,15 @@ function isBot(color: Color): boolean {
 }
 
 function render(): void {
+  const movingPiece = currentMovingPiece();
   const state: RenderState = {
     position,
     selected,
     legalTargets: legalForSelected,
     checkSquare: checkedKingSquare(position),
     view,
-    ...(drag && drag.moved ? { hidePiece: drag.from } : {})
+    ...(drag && drag.moved ? { hidePiece: drag.from } : {}),
+    ...(movingPiece ? { movingPiece } : {})
   };
   drawBoard(canvas, state);
 
@@ -116,8 +129,47 @@ async function tryMoveTo(sq: Square): Promise<boolean> {
 }
 
 function applyMove(move: Move): void {
+  const movingPiece = position.board[move.from];
   position = makeMove(position, move);
   history.push(repetitionKey(position));
+  if (movingPiece) {
+    startMoveAnimation(movingPiece, move.from, move.to);
+  }
+}
+
+function startMoveAnimation(piece: MoveAnimation["piece"], from: Square, to: Square): void {
+  moveAnimation = {
+    piece,
+    from,
+    to,
+    startedAt: performance.now(),
+    durationMs: MOVE_ANIMATION_MS
+  };
+  requestAnimationFrame(animateMove);
+}
+
+function currentMovingPiece(): RenderState["movingPiece"] | null {
+  if (!moveAnimation) return null;
+  const elapsed = performance.now() - moveAnimation.startedAt;
+  const progress = Math.min(1, elapsed / moveAnimation.durationMs);
+  if (progress >= 1) {
+    moveAnimation = null;
+    return null;
+  }
+  return {
+    piece: moveAnimation.piece,
+    from: moveAnimation.from,
+    to: moveAnimation.to,
+    progress
+  };
+}
+
+function animateMove(): void {
+  if (!moveAnimation) return;
+  render();
+  if (moveAnimation) {
+    requestAnimationFrame(animateMove);
+  }
 }
 
 function isComputerTurn(): boolean {
@@ -176,6 +228,7 @@ function resetGame(): void {
   selected = null;
   legalForSelected = [];
   drag = null;
+  moveAnimation = null;
   computerThinking = false;
   render();
   queueComputerMove();

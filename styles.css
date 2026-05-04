@@ -838,7 +838,7 @@ footer .electric {
 
 /* Showcase Section */
 .dimensional-showcase {
-    padding: 1.8rem 0 1.2rem 0;
+    padding: 0.6rem 0 0.6rem 0;
     background: linear-gradient(160deg, rgba(255, 168, 30, 0.22) 0%, rgba(247, 120, 30, 0.3) 100%);
     position: relative;
     z-index: 2;
@@ -873,8 +873,8 @@ footer .electric {
 
 /* Remove flex centering so grid works as intended */
 .dimensional-showcase > .container {
-    padding-top: 0.4rem;
-    padding-bottom: 2.8rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.8rem;
 }
 
 
@@ -1387,6 +1387,9 @@ section.production-header.alice .production-details p strong {
     color: inherit;
     --crt-cool: 28% 18%;
     --crt-warm: 82% 92%;
+    --tile-rot: 0deg;
+    --tile-y: 0px;
+    transform: rotate(var(--tile-rot)) translateY(var(--tile-y));
     background:
         repeating-linear-gradient(
             0deg,
@@ -1412,7 +1415,7 @@ section.production-header.alice .production-details p strong {
 }
 
 .showcase-item:hover {
-    transform: translateY(-8px) rotate(0deg) !important;
+    transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(1.025) !important;
     box-shadow:
         0 20px 34px rgba(0, 0, 0, 0.18),
         0 0 0 1px var(--showcase-accent-soft),
@@ -1604,7 +1607,6 @@ section.production-header.alice .production-details p strong {
     --showcase-media-tint: rgba(104, 184, 255, 0.12);
     --crt-cool: 22% 25%;
     --crt-warm: 78% 88%;
-    transform: rotate(-3deg) translateY(0.6rem);
 }
 
 .showcase-item-mixtape {
@@ -1613,7 +1615,6 @@ section.production-header.alice .production-details p strong {
     --showcase-media-tint: rgba(255, 139, 61, 0.12);
     --crt-cool: 75% 22%;
     --crt-warm: 18% 82%;
-    transform: rotate(2.5deg) translateY(-0.3rem);
 }
 
 .showcase-item-game {
@@ -1623,7 +1624,6 @@ section.production-header.alice .production-details p strong {
     --showcase-media-tint: rgba(255, 68, 204, 0.12);
     --crt-cool: 45% 88%;
     --crt-warm: 70% 15%;
-    transform: rotate(-2deg) translateY(0.8rem);
 }
 
 .showcase-item-jc {
@@ -1632,7 +1632,6 @@ section.production-header.alice .production-details p strong {
     --showcase-media-tint: rgba(194, 112, 56, 0.12);
     --crt-cool: 12% 60%;
     --crt-warm: 88% 35%;
-    transform: rotate(3.5deg) translateY(-0.1rem);
 }
 
 .showcase-item-jc img {
@@ -1645,7 +1644,6 @@ section.production-header.alice .production-details p strong {
     --showcase-media-tint: rgba(180, 142, 255, 0.12);
     --crt-cool: 88% 50%;
     --crt-warm: 12% 50%;
-    transform: rotate(-2.5deg) translateY(0.2rem);
 }
 
 .showcase-item-tootsjam {
@@ -1654,7 +1652,6 @@ section.production-header.alice .production-details p strong {
     --showcase-media-tint: rgba(68, 221, 136, 0.12);
     --crt-cool: 25% 80%;
     --crt-warm: 60% 22%;
-    transform: rotate(2deg) translateY(0.4rem);
 }
 
 /* Mixtape title styling */

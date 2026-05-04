@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Border Shape Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1f1b2e;
+      --paper: #fffdf7;
+      --wash: #f3ecd7;
+      --mint: #b8f4dd;
+      --rose: #ffd4dc;
+      --sky: #dce9ff;
+      --shadow: rgba(31, 27, 46, 0.16);
+      --line: 3px;
+
+      --site-primary: #1a1550;
+      --site-secondary: #ff5a36;
+      --site-light: #f8e9d2;
+      --site-neon: #00f7c2;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(31, 27, 46, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31, 27, 46, 0.035) 1px, transparent 1px),
+        var(--paper);
+      background-size: 28px 28px;
+      font-family: ui-rounded, "SF Pro Rounded", "Comic Sans MS", system-ui, sans-serif;
+    }
+
+    main {
+      width: min(1080px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+
+    header {
+      max-width: 760px;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2.4rem, 6vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      margin: 0;
+      font-size: 1.1rem;
+      line-height: 1.55;
+    }
+
+    .support-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 22px 0 0;
+      padding: 10px 14px;
+      border: var(--line) solid var(--ink);
+      border-radius: 999px;
+      background: var(--rose);
+      box-shadow: 4px 5px 0 var(--shadow);
+      font-weight: 800;
+    }
+
+    .support-pill::before {
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: #ff5a36;
+      content: "";
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+
+    .demo {
+      min-height: 270px;
+      padding: 22px;
+      border: var(--line) solid var(--ink);
+      border-radius: 18px;
+      background: white;
+      box-shadow: 8px 10px 0 var(--shadow);
+    }
+
+    .demo h2 {
+      margin: 0 0 14px;
+      font-size: 1.45rem;
+      letter-spacing: 0;
+    }
+
+    .demo p {
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .wobble {
+      background: var(--wash);
+    }
+
+    .bubble {
+      position: relative;
+      margin-top: 18px;
+      background: var(--mint);
+    }
+
+    .bubble::after {
+      position: absolute;
+      right: 38px;
+      bottom: -22px;
+      width: 32px;
+      height: 32px;
+      border-right: var(--line) solid var(--ink);
+      border-bottom: var(--line) solid var(--ink);
+      background: var(--mint);
+      transform: rotate(45deg);
+      content: "";
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      min-width: 112px;
+      padding: 10px 16px;
+      border: var(--line) solid var(--ink);
+      border-radius: 999px;
+      background: var(--sky);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .tab:nth-child(2) {
+      background: var(--rose);
+    }
+
+    .tab:nth-child(3) {
+      background: var(--mint);
+    }
+
+    .note-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-note {
+      padding: 14px;
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      background: #fff8bf;
+      font-weight: 750;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .squiggle {
+      position: relative;
+      z-index: 0;
+      overflow: visible;
+      border-color: transparent;
+      background: #fff;
+      animation: none;
+    }
+
+    .squiggle::before,
+    .squiggle::after {
+      position: absolute;
+      inset: -5px;
+      z-index: 0;
+      border: 2px solid rgba(31, 27, 46, 0.28);
+      border-radius: 22px;
+      content: "";
+      pointer-events: none;
+    }
+
+    .squiggle::before {
+      transform: none;
+      animation: frame-ink-a 920ms steps(1, end) infinite;
+    }
+
+    .squiggle::after {
+      transform: none;
+      animation: frame-ink-b 920ms steps(1, end) infinite;
+    }
+
+    .ink-frame {
+      position: absolute;
+      inset: -5px;
+      z-index: 0;
+      border: 2px solid rgba(31, 27, 46, 0.42);
+      border-radius: 22px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ink-frame:nth-child(1) {
+      animation: frame-ink-c 920ms steps(1, end) infinite;
+    }
+
+    .ink-frame:nth-child(2) {
+      animation: frame-ink-d 920ms steps(1, end) infinite;
+    }
+
+    .ink-frame:nth-child(3) {
+      animation: frame-ink-e 920ms steps(1, end) infinite;
+    }
+
+    .face-row {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .squiggle-face {
+      display: grid;
+      place-items: center;
+      width: 150px;
+      aspect-ratio: 1;
+      border: var(--line) solid var(--ink);
+      border-radius: 50%;
+      background: #ffe8a8;
+      box-shadow: 5px 6px 0 var(--shadow);
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 1;
+      animation: face-wobble 360ms steps(4, end) infinite;
+    }
+
+    .squiggle-copy {
+      max-width: 650px;
+    }
+
+    .crt-tile {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 30px 30px;
+      border-radius: 14px;
+      color: var(--site-light);
+      font-family: 'Space Mono', ui-monospace, monospace;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0 2px,
+          rgba(0, 0, 0, 0.22) 2px 3px
+        ),
+        radial-gradient(ellipse at 28% 18%, rgba(58, 42, 140, 0.95) 0%, transparent 55%),
+        radial-gradient(ellipse at 82% 92%, rgba(255, 90, 54, 0.55) 0%, transparent 60%),
+        linear-gradient(135deg, var(--site-primary), #0d0a35);
+      box-shadow:
+        8px 10px 0 var(--shadow),
+        0 0 30px rgba(0, 247, 194, 0.18),
+        inset 0 0 60px rgba(0, 247, 194, 0.06);
+    }
+
+    .crt-tile::before {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+      mix-blend-mode: multiply;
+      content: "";
+      pointer-events: none;
+    }
+
+    .crt-row {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 14px;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .crt-kicker {
+      color: var(--site-neon);
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(0, 247, 194, 0.55);
+    }
+
+    .crt-meta {
+      color: rgba(248, 233, 210, 0.7);
+    }
+
+    .crt-tile h2 {
+      position: relative;
+      margin: 0 0 12px;
+      font-family: 'Orbitron', 'Audiowide', sans-serif;
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--site-light);
+      text-shadow:
+        0 0 8px rgba(0, 247, 194, 0.45),
+        0 0 22px rgba(0, 247, 194, 0.18);
+    }
+
+    .crt-tile p {
+      position: relative;
+      max-width: 58ch;
+      margin: 0 0 22px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: rgba(248, 233, 210, 0.88);
+    }
+
+    .crt-cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      border: var(--line) solid var(--site-light);
+      border-radius: 999px;
+      background: var(--site-secondary);
+      color: var(--site-primary);
+      font-family: 'Space Mono', ui-monospace, monospace;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 4px 5px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .crt-cta::after {
+      content: "→";
+      font-size: 1rem;
+    }
+
+    @keyframes frame-ink-a {
+      0% {
+        opacity: 1;
+      }
+
+      20% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes frame-ink-b {
+      0% {
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      40% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes frame-ink-c {
+      0% {
+        opacity: 0;
+      }
+
+      40% {
+        opacity: 1;
+      }
+
+      60% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes frame-ink-d {
+      0% {
+        opacity: 0;
+      }
+
+      60% {
+        opacity: 1;
+      }
+
+      80% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes frame-ink-e {
+      0% {
+        opacity: 0;
+      }
+
+      80% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes ghost-line-a {
+      0% {
+        transform: rotate(-0.12deg) translate(1px, 0);
+      }
+
+      100% {
+        transform: rotate(-0.12deg) translate(1px, 0);
+      }
+    }
+
+    @keyframes face-wobble {
+      0% {
+        border-radius: 49% 51% 50% 50%;
+      }
+
+      25% {
+        border-radius: 51% 49% 49% 51%;
+      }
+
+      50% {
+        border-radius: 50% 50% 52% 48%;
+      }
+
+      75% {
+        border-radius: 48% 52% 50% 50%;
+      }
+
+      100% {
+        border-radius: 49% 51% 50% 50%;
+      }
+    }
+
+    @supports (border-shape: shape(from 0 0, hline to 100%, vline to 100%, hline to 0, close)) {
+      .support-pill {
+        background: var(--mint);
+      }
+
+      .support-pill::before {
+        background: #00c982;
+      }
+
+      .wobble {
+        border-radius: 0;
+        border-shape: shape(
+          from 3% 1%,
+          curve to 97% 0% with 34% 2% / 71% -2%,
+          curve to 99% 93% with 101% 25% / 96% 66%,
+          curve to 4% 99% with 72% 101% / 33% 98%,
+          curve to 3% 1% with -1% 74% / 2% 30%,
+          close
+        );
+      }
+
+      .bubble {
+        border-radius: 0;
+        border-shape: shape(
+          from 4% 2%,
+          curve to 96% 1% with 38% -1% / 71% 3%,
+          curve to 98% 81% with 101% 23% / 96% 58%,
+          line to 78% 82%,
+          line to 68% 100%,
+          line to 65% 82%,
+          curve to 5% 98% with 46% 84% / 22% 99%,
+          curve to 4% 2% with 1% 69% / 3% 26%,
+          close
+        );
+      }
+
+      .bubble::after {
+        display: none;
+      }
+
+      .tab {
+        border-radius: 0;
+      }
+
+      .tab:nth-child(1) {
+        border-shape: shape(
+          from 11% 7%,
+          curve to 88% 6% with 34% 1% / 62% 9%,
+          curve to 95% 49% with 99% 20% / 91% 34%,
+          curve to 87% 92% with 98% 66% / 92% 83%,
+          curve to 12% 90% with 63% 97% / 37% 86%,
+          curve to 5% 50% with 1% 72% / 8% 33%,
+          curve to 11% 7% with 7% 25% / 3% 14%,
+          close
+        );
+      }
+
+      .tab:nth-child(2) {
+        border-shape: shape(
+          from 8% 8%,
+          curve to 83% 7% with 31% 4% / 60% 9%,
+          curve to 94% 42% with 100% 14% / 89% 27%,
+          line to 100% 50%,
+          line to 94% 58%,
+          curve to 84% 92% with 90% 73% / 99% 88%,
+          curve to 13% 91% with 59% 96% / 33% 88%,
+          curve to 6% 54% with 1% 76% / 9% 66%,
+          line to 0 49%,
+          line to 6% 44%,
+          curve to 8% 8% with 7% 30% / 4% 18%,
+          close
+        );
+      }
+
+      .tab:nth-child(3) {
+        border-shape: shape(
+          from 4% 11%,
+          line to 30% 8%,
+          curve to 49% 11% with 37% 6% / 43% 13%,
+          line to 70% 8%,
+          line to 96% 11%,
+          line to 88% 49%,
+          line to 96% 89%,
+          line to 70% 92%,
+          curve to 50% 89% with 63% 94% / 56% 87%,
+          line to 30% 92%,
+          line to 4% 89%,
+          line to 12% 50%,
+          close
+        );
+      }
+
+      .mini-note {
+        border-radius: 0;
+        border-shape: shape(
+          from 2% 5%,
+          line to 98% 1%,
+          line to 96% 96%,
+          line to 3% 100%,
+          close
+        );
+      }
+
+      .squiggle {
+        border-radius: 0;
+      }
+
+      .squiggle::before,
+      .squiggle::after,
+      .ink-frame {
+        border-radius: 0;
+      }
+
+      .squiggle::before {
+        border-shape: shape(
+          from 3% 3%,
+          curve to 35% 2% with 13% 1% / 25% 3%,
+          line to 72% 3%,
+          curve to 97% 3% with 83% 4% / 91% 2%,
+          curve to 98% 35% with 99% 14% / 97% 25%,
+          line to 97% 74%,
+          curve to 97% 96% with 96% 84% / 99% 91%,
+          curve to 61% 98% with 83% 99% / 72% 97%,
+          line to 23% 97%,
+          curve to 4% 97% with 14% 96% / 8% 99%,
+          curve to 3% 58% with 2% 84% / 4% 71%,
+          curve to 3% 3% with 4% 38% / 2% 18%,
+          close
+        );
+      }
+
+      .squiggle::after {
+        border-shape: shape(
+          from 3% 4%,
+          line to 30% 3%,
+          curve to 60% 4% with 40% 2% / 50% 5%,
+          curve to 97% 3% with 74% 4% / 86% 2%,
+          line to 98% 23%,
+          curve to 97% 53% with 99% 32% / 96% 42%,
+          curve to 98% 96% with 99% 66% / 97% 82%,
+          line to 77% 98%,
+          curve to 38% 97% with 61% 99% / 51% 96%,
+          line to 6% 98%,
+          curve to 3% 73% with 3% 91% / 5% 84%,
+          line to 2% 32%,
+          curve to 3% 4% with 3% 20% / 5% 12%,
+          close
+        );
+      }
+
+      .ink-frame:nth-child(1) {
+        border-shape: shape(
+          from 4% 3%,
+          curve to 23% 3% with 10% 2% / 15% 3%,
+          curve to 50% 2% with 32% 5% / 40% 1%,
+          line to 96% 4%,
+          curve to 98% 34% with 100% 14% / 97% 23%,
+          curve to 97% 63% with 96% 44% / 99% 54%,
+          line to 98% 94%,
+          curve to 88% 97% with 98% 97% / 94% 96%,
+          line to 46% 98%,
+          curve to 5% 96% with 29% 97% / 15% 98%,
+          line to 4% 77%,
+          curve to 5% 42% with 2% 64% / 6% 52%,
+          curve to 4% 3% with 3% 28% / 2% 14%,
+          close
+        );
+      }
+
+      .ink-frame:nth-child(2) {
+        border-shape: shape(
+          from 3% 3%,
+          line to 18% 2%,
+          curve to 44% 4% with 25% 4% / 33% 3%,
+          curve to 78% 3% with 55% 5% / 66% 2%,
+          curve to 97% 4% with 88% 4% / 94% 3%,
+          line to 98% 47%,
+          curve to 97% 77% with 99% 59% / 96% 67%,
+          curve to 97% 97% with 98% 85% / 99% 92%,
+          curve to 54% 97% with 80% 98% / 66% 96%,
+          line to 18% 98%,
+          curve to 3% 95% with 8% 98% / 4% 97%,
+          line to 4% 52%,
+          curve to 3% 3% with 4% 35% / 2% 18%,
+          close
+        );
+      }
+
+      .ink-frame:nth-child(3) {
+        border-shape: shape(
+          from 4% 3%,
+          curve to 33% 3% with 14% 2% / 22% 4%,
+          line to 58% 2%,
+          curve to 96% 3% with 72% 2% / 83% 4%,
+          curve to 98% 25% with 99% 11% / 97% 17%,
+          line to 97% 59%,
+          curve to 98% 96% with 99% 74% / 97% 88%,
+          curve to 70% 98% with 90% 98% / 80% 99%,
+          curve to 31% 96% with 57% 96% / 44% 98%,
+          curve to 4% 97% with 20% 95% / 11% 98%,
+          curve to 3% 65% with 2% 86% / 5% 75%,
+          line to 4% 24%,
+          curve to 4% 3% with 5% 15% / 3% 10%,
+          close
+        );
+      }
+
+      .crt-tile {
+        border-radius: 0;
+        padding: 34px 38px 36px;
+        border-shape: shape(
+          from 8% 4%,
+          curve to 92% 4% with 35% 0% / 65% 0%,
+          line to 96% 8%,
+          curve to 96% 92% with 101% 30% / 101% 70%,
+          line to 92% 96%,
+          curve to 8% 96% with 65% 100% / 35% 100%,
+          line to 4% 92%,
+          curve to 4% 8% with -1% 70% / -1% 30%,
+          line to 8% 4%,
+          close
+        );
+      }
+
+      .crt-cta {
+        border-radius: 0;
+        padding: 11px 28px 11px 22px;
+        border-shape: shape(
+          from 4% 22%,
+          curve to 76% 10% with 22% 2% / 56% 4%,
+          line to 92% 32%,
+          line to 100% 50%,
+          line to 92% 68%,
+          curve to 4% 80% with 56% 96% / 22% 98%,
+          curve to 4% 22% with -3% 60% / -3% 40%,
+          close
+        );
+      }
+
+      .squiggle-face {
+        border-radius: 0;
+        animation: face-shape-wobble 920ms steps(5, end) infinite;
+      }
+
+      @keyframes face-shape-wobble {
+        0% {
+          border-shape: shape(
+            from 50% 0,
+            curve to 100% 48% with 76% 1% / 99% 22%,
+            curve to 53% 100% with 101% 76% / 79% 99%,
+            curve to 0 52% with 25% 101% / 0 76%,
+            curve to 50% 0 with 1% 25% / 24% 0,
+            close
+          );
+        }
+
+        25% {
+          border-shape: shape(
+            from 49% 1%,
+            curve to 99% 49% with 75% 0 / 100% 24%,
+            curve to 52% 99% with 100% 75% / 78% 100%,
+            curve to 1% 51% with 26% 100% / 1% 74%,
+            curve to 49% 1% with 1% 24% / 25% 1%,
+            close
+          );
+        }
+
+        50% {
+          border-shape: shape(
+            from 48% 1%,
+            curve to 99% 52% with 77% -1% / 100% 24%,
+            curve to 51% 99% with 98% 78% / 75% 101%,
+            curve to 1% 48% with 23% 98% / -1% 72%,
+            curve to 48% 1% with 0 21% / 26% 2%,
+            close
+          );
+        }
+
+        75% {
+          border-shape: shape(
+            from 51% 0,
+            curve to 100% 50% with 74% 1% / 99% 25%,
+            curve to 50% 100% with 99% 76% / 76% 99%,
+            curve to 0 50% with 24% 101% / 0 75%,
+            curve to 51% 0 with 0 24% / 26% 0,
+            close
+          );
+        }
+
+        100% {
+          border-shape: shape(
+            from 52% 0,
+            curve to 100% 51% with 72% 2% / 98% 27%,
+            curve to 49% 100% with 101% 72% / 78% 98%,
+            curve to 0 49% with 28% 102% / 2% 75%,
+            curve to 52% 0 with -1% 22% / 27% -1%,
+            close
+          );
+        }
+      }
+    }
+
+    @media (max-width: 820px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .demo {
+        min-height: 0;
+      }
+
+      .face-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Border Shape Lab</h1>
+      <p class="lede">Three tiny experiments for Chrome Canary: a wobbly panel, a speech bubble with a real pointer, and chevron-ish tabs. Regular browsers keep the rounded fallback styling.</p>
+      <div class="support-pill">Fallback mode unless this pill turns green</div>
+    </header>
+
+    <section class="grid" aria-label="Border shape demos">
+      <article class="demo wobble">
+        <h2>Wobbly Card</h2>
+        <p>The first thing to check: does the actual border stop being a rectangle? Shadows, fills, and border ink should follow the uneven edge.</p>
+      </article>
+
+      <article class="demo bubble">
+        <h2>Speech Bubble</h2>
+        <p>This one tests the fun part. In supporting browsers, the pointer is part of the same border shape instead of a rotated square pseudo-element.</p>
+      </article>
+
+      <article class="demo">
+        <h2>Navigation Shapes</h2>
+        <div class="tabs" aria-label="Sample tabs">
+          <button class="tab" type="button">Sketch</button>
+          <button class="tab" type="button">Bubble</button>
+          <button class="tab" type="button">Ticket</button>
+        </div>
+        <div class="note-stack">
+          <div class="mini-note">Try resizing the window.</div>
+          <div class="mini-note">Toggle the experimental flag off to compare.</div>
+        </div>
+      </article>
+
+      <article class="demo squiggle wide">
+        <span class="ink-frame" aria-hidden="true"></span>
+        <span class="ink-frame" aria-hidden="true"></span>
+        <span class="ink-frame" aria-hidden="true"></span>
+        <div class="face-row">
+          <div class="squiggle-face" aria-hidden="true">:)</div>
+          <div class="squiggle-copy">
+            <h2>Squigglevision Edge</h2>
+            <p>This one flips between five separate hand-drawn outlines. The box stays locked in place; only the ink redraw changes from frame to frame.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="demo crt-tile wide">
+        <div class="crt-row">
+          <span class="crt-kicker">Port Candidate 01</span>
+          <span class="crt-meta">Showcase Tile / CRT Edition</span>
+        </div>
+        <h2>Charles Wilke</h2>
+        <p>Main-site palette dropped into the lab: deep purple, neon mint phosphor, scanline texture, orange CTA. The whole panel bows outward like an old TV tube. Toggle the experimental flag to see the barrel border kick in.</p>
+        <a class="crt-cta" href="#" tabindex="0">Open the tile</a>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

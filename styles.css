@@ -1385,7 +1385,17 @@ section.production-header.alice .production-details p strong {
     grid-template-rows: minmax(0, 1fr) auto;
     text-decoration: none;
     color: inherit;
-    background: linear-gradient(180deg, rgba(18, 21, 54, 0.98), rgba(10, 13, 34, 0.98));
+    --crt-cool: 28% 18%;
+    --crt-warm: 82% 92%;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 2px,
+            rgba(0, 0, 0, 0.22) 2px 3px
+        ),
+        radial-gradient(ellipse at var(--crt-cool), rgba(58, 42, 140, 0.95) 0%, transparent 55%),
+        radial-gradient(ellipse at var(--crt-warm), rgba(255, 90, 54, 0.55) 0%, transparent 60%),
+        linear-gradient(135deg, #1a1550, #0d0a35);
     box-shadow:
         0 14px 24px rgba(0, 0, 0, 0.16),
         0 0 0 1px rgba(255, 185, 58, 0.18),
@@ -1396,7 +1406,6 @@ section.production-header.alice .production-details p strong {
     isolation: isolate;
     --showcase-accent: #ffb93a;
     --showcase-accent-soft: rgba(255, 185, 58, 0.12);
-    --showcase-panel: linear-gradient(180deg, rgba(18, 21, 54, 0.98), rgba(9, 12, 31, 0.98));
     --showcase-label: var(--light);
     --showcase-meta-color: rgba(248, 233, 210, 0.62);
     --showcase-media-tint: rgba(255, 185, 58, 0.08);
@@ -1506,7 +1515,7 @@ section.production-header.alice .production-details p strong {
 .showcase-caption {
     position: relative;
     z-index: 1;
-    background: var(--showcase-panel);
+    background: transparent;
     color: var(--showcase-label);
     padding: 1.1rem 1rem 1rem;
     display: grid;
@@ -1593,6 +1602,8 @@ section.production-header.alice .production-details p strong {
     --showcase-accent: #68b8ff;
     --showcase-accent-soft: rgba(104, 184, 255, 0.2);
     --showcase-media-tint: rgba(104, 184, 255, 0.12);
+    --crt-cool: 22% 25%;
+    --crt-warm: 78% 88%;
     transform: rotate(-3deg) translateY(0.6rem);
 }
 
@@ -1600,6 +1611,8 @@ section.production-header.alice .production-details p strong {
     --showcase-accent: #ff8b3d;
     --showcase-accent-soft: rgba(255, 139, 61, 0.18);
     --showcase-media-tint: rgba(255, 139, 61, 0.12);
+    --crt-cool: 75% 22%;
+    --crt-warm: 18% 82%;
     transform: rotate(2.5deg) translateY(-0.3rem);
 }
 
@@ -1608,6 +1621,8 @@ section.production-header.alice .production-details p strong {
     --showcase-accent-soft: rgba(255, 68, 204, 0.2);
     --showcase-meta-color: rgba(255, 180, 240, 0.62);
     --showcase-media-tint: rgba(255, 68, 204, 0.12);
+    --crt-cool: 45% 88%;
+    --crt-warm: 70% 15%;
     transform: rotate(-2deg) translateY(0.8rem);
 }
 
@@ -1615,6 +1630,8 @@ section.production-header.alice .production-details p strong {
     --showcase-accent: #c27038;
     --showcase-accent-soft: rgba(194, 112, 56, 0.18);
     --showcase-media-tint: rgba(194, 112, 56, 0.12);
+    --crt-cool: 12% 60%;
+    --crt-warm: 88% 35%;
     transform: rotate(3.5deg) translateY(-0.1rem);
 }
 
@@ -1626,6 +1643,8 @@ section.production-header.alice .production-details p strong {
     --showcase-accent: #b48eff;
     --showcase-accent-soft: rgba(180, 142, 255, 0.18);
     --showcase-media-tint: rgba(180, 142, 255, 0.12);
+    --crt-cool: 88% 50%;
+    --crt-warm: 12% 50%;
     transform: rotate(-2.5deg) translateY(0.2rem);
 }
 
@@ -1633,6 +1652,8 @@ section.production-header.alice .production-details p strong {
     --showcase-accent: #44dd88;
     --showcase-accent-soft: rgba(68, 221, 136, 0.18);
     --showcase-media-tint: rgba(68, 221, 136, 0.12);
+    --crt-cool: 25% 80%;
+    --crt-warm: 60% 22%;
     transform: rotate(2deg) translateY(0.4rem);
 }
 
@@ -9461,11 +9482,11 @@ section.production-header.alice p {
     font-family: 'Orbitron', sans-serif;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--nav-accent);
+    color: #c4ac75;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 6px;
-    text-shadow: 0 0 8px var(--nav-accent-glow);
+    text-shadow: 0 0 8px rgba(196, 172, 117, 0.6);
     flex-shrink: 0;
     opacity: 0;
     pointer-events: none;
@@ -9478,7 +9499,7 @@ section.production-header.alice p {
 }
 
 .nav-logo:hover {
-    text-shadow: 0 0 16px var(--nav-accent-glow), 0 0 30px var(--nav-accent-glow);
+    text-shadow: 0 0 16px rgba(196, 172, 117, 0.7), 0 0 30px rgba(196, 172, 117, 0.5);
 }
 
 .nav-links {

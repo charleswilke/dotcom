@@ -2359,6 +2359,22 @@ function setActiveTrackListItem(trackItems, activeIndex) {
     });
 }
 
+function updateNowPlayingDisplays(elements, title, metaTitle) {
+    const displayTitle = title || 'Select a track...';
+    if (elements.trackDisplay) {
+        elements.trackDisplay.textContent = displayTitle;
+    }
+    if (elements.glassTitle) {
+        elements.glassTitle.textContent = displayTitle;
+    }
+    if (elements.glassMeta && metaTitle) {
+        elements.glassMeta.textContent = metaTitle;
+    }
+    if (elements.mobileNowPlaying) {
+        elements.mobileNowPlaying.textContent = displayTitle;
+    }
+}
+
 // Mixtape Lightbox Logic
 function initMixtapeLightbox() {
     const aSideTracks = [
@@ -2414,6 +2430,9 @@ function initMixtapeLightbox() {
     const sideBLabel = document.querySelector('.side-b-label');
     const coverImg = document.getElementById('mixtapeCoverImg');
     const subtitleSpan = document.querySelector('.mixtape-subtitle');
+    const oscilloscopeTitle = document.getElementById('mixtapeOscilloscopeTitle');
+    const oscilloscopeMeta = document.getElementById('mixtapeOscilloscopeMeta');
+    const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
     
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
@@ -2557,13 +2576,12 @@ function initMixtapeLightbox() {
             audio.src = tracks[index].file;
             audio.load();
         }
-        if (trackDisplay) {
-            trackDisplay.textContent = tracks[index].title;
-        }
-        const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
-        if (mobileNowPlaying) {
-            mobileNowPlaying.textContent = tracks[index].title;
-        }
+        updateNowPlayingDisplays({
+            trackDisplay,
+            glassTitle: oscilloscopeTitle,
+            glassMeta: oscilloscopeMeta,
+            mobileNowPlaying
+        }, tracks[index].title, getMixtapeCollectionTitle());
 
         // Reset progress bar and time
         if (progressBar) {
@@ -2864,6 +2882,8 @@ function initGWORLightbox() {
     const progressContainer = document.getElementById('gworProgressContainer');
     const timeDisplay = document.getElementById('gworTime');
     const visualizerCanvas = document.getElementById('gworVisualizer');
+    const oscilloscopeTitle = document.getElementById('gworOscilloscopeTitle');
+    const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
     if (!lightbox || !tile || !audio || !trackList) return;
 
     if (playPauseIcon) {
@@ -2922,13 +2942,11 @@ function initGWORLightbox() {
         currentIndex = index;
         audio.src = tracks[index].file;
         audio.load();
-        if (trackDisplay) {
-            trackDisplay.textContent = tracks[index].title;
-        }
-        const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
-        if (mobileNowPlaying) {
-            mobileNowPlaying.textContent = tracks[index].title;
-        }
+        updateNowPlayingDisplays({
+            trackDisplay,
+            glassTitle: oscilloscopeTitle,
+            mobileNowPlaying
+        }, tracks[index].title);
 
         if (progressBar) {
             progressBar.style.width = '0%';
@@ -3127,6 +3145,8 @@ function initJCLightbox() {
     const progressContainer = document.getElementById('jcProgressContainer');
     const timeDisplay = document.getElementById('jcTime');
     const visualizerCanvas = document.getElementById('jcVisualizer');
+    const oscilloscopeTitle = document.getElementById('jcOscilloscopeTitle');
+    const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
     if (!lightbox || !tile || !audio || !trackList) return;
 
     if (playPauseIcon) {
@@ -3185,13 +3205,11 @@ function initJCLightbox() {
         currentIndex = index;
         audio.src = tracks[index].file;
         audio.load();
-        if (trackDisplay) {
-            trackDisplay.textContent = tracks[index].title;
-        }
-        const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
-        if (mobileNowPlaying) {
-            mobileNowPlaying.textContent = tracks[index].title;
-        }
+        updateNowPlayingDisplays({
+            trackDisplay,
+            glassTitle: oscilloscopeTitle,
+            mobileNowPlaying
+        }, tracks[index].title);
 
         if (progressBar) {
             progressBar.style.width = '0%';

@@ -6973,7 +6973,7 @@ section.production-header.alice p {
 .mixtape-cover-container {
     flex: 0 1 auto;
     width: 100%;
-    max-width: min(400px, 45vw);
+    max-width: min(430px, 50vw);
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -6984,7 +6984,7 @@ section.production-header.alice p {
 .mixtape-cover-container img.mixtape-cover {
     width: 100%;
     height: auto;
-    max-height: 30vh;
+    max-height: 34vh;
     object-fit: contain;
 }
 
@@ -6993,7 +6993,7 @@ section.production-header.alice p {
     .mixtape-lightbox .mixtape-content {
         flex-direction: row;
         align-items: stretch;
-        max-width: 980px;
+        max-width: 1040px;
         min-height: min(680px, 96vh);
         gap: 2rem;
     }
@@ -7001,13 +7001,13 @@ section.production-header.alice p {
     .mixtape-left-section {
         flex: 1;
         align-items: flex-start;
-        max-width: 400px;
+        max-width: 430px;
         overflow: hidden;
     }
 
     .mixtape-cover-container {
         flex: 1 1 0;
-        min-height: 120px;
+        min-height: 150px;
         width: 100%;
         max-width: 100%;
     }
@@ -8284,6 +8284,10 @@ section.production-header.alice p {
     color: #ff6b35;
 }
 
+.mixtape-player-container .mixtape-track-visualizer {
+    display: none;
+}
+
 .mixtape-audio-controls {
     margin-bottom: 0.8rem;
     /* Retro radio player style */
@@ -8784,6 +8788,39 @@ section.production-header.alice p {
     display: block;
 }
 
+.modal-oscilloscope-title,
+.modal-oscilloscope-meta {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100% - 32px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    color: rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.34);
+    pointer-events: none;
+    z-index: 3;
+    line-height: 1.15;
+    text-shadow:
+        0 0 12px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.18),
+        0 0 3px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.28);
+}
+
+.modal-oscilloscope-title {
+    top: 12px;
+    font-size: 0.94rem;
+}
+
+.modal-oscilloscope-meta {
+    bottom: 10px;
+    font-size: 0.72rem;
+    opacity: 0.82;
+}
+
 /* Per-album CRT screen tints */
 #mixtapeLightbox .modal-oscilloscope {
     background: radial-gradient(ellipse at 50% 50%,
@@ -8895,6 +8932,16 @@ section.production-header.alice p {
         min-height: 60px;
         max-height: 80px;
         height: 75px;
+    }
+
+    .modal-oscilloscope-title {
+        top: 8px;
+        font-size: 0.76rem;
+    }
+
+    .modal-oscilloscope-meta {
+        bottom: 8px;
+        font-size: 0.58rem;
     }
 }
 
@@ -9268,7 +9315,7 @@ section.production-header.alice p {
     }
 
     .mixtape-cover-container {
-        max-width: 60vw;
+        max-width: min(340px, 64vw);
         margin: 0 auto;
     }
 
@@ -9347,7 +9394,7 @@ section.production-header.alice p {
     }
 
     .mixtape-cover-container {
-        max-width: min(240px, 55vw);
+        max-width: min(260px, 60vw);
         margin: 0 auto;
     }
     

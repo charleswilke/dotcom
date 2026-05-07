@@ -1779,6 +1779,7 @@ section.production-header.alice .production-details p strong {
 .faq-panel {
     position: relative;
     width: 100%;
+    max-width: 1200px;
     background: transparent;
     border: none;
     border-radius: 0;
@@ -1931,6 +1932,7 @@ section.production-header.alice .production-details p strong {
 }
 
 .faq-section .container {
+    max-width: none;
     width: 100%;
     position: relative;
     z-index: 1;
@@ -2621,16 +2623,17 @@ html {
 
 /* About Section with Retro-Futurist Style */
 .about {
-    padding: 5rem 0 2rem 0;
+    padding: 6rem 0 2rem 0;
     background-color: var(--accent);
     color: var(--light);
     position: relative;
     overflow: hidden;
-    /* Match the footer's background pattern */
-    background-image: 
-        linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px);
-    background-size: 30px 30px;
+    background-image:
+        radial-gradient(ellipse at 18% 28%, rgba(88, 76, 139, 0.7) 0%, transparent 48%),
+        radial-gradient(ellipse at 85% 38%, rgba(19, 110, 142, 0.62) 0%, transparent 56%),
+        linear-gradient(90deg, rgba(26, 21, 80, 0.95), rgba(38, 91, 129, 0.96));
+    border-top: 1px solid rgba(255, 185, 58, 0.7);
+    box-shadow: inset 0 8px 14px -10px rgba(255, 185, 58, 0.9);
 }
 
 .about::before {
@@ -2640,13 +2643,56 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 10% 30%, rgba(255, 90, 54, 0.2) 0%, transparent 40%),
-        radial-gradient(circle at 90% 70%, rgba(0, 247, 194, 0.15) 0%, transparent 40%);
+    background-image:
+        linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        repeating-linear-gradient(
+            0deg,
+            rgba(248, 233, 210, 0.055) 0px,
+            rgba(248, 233, 210, 0.055) 1px,
+            transparent 1px,
+            transparent 4px
+        ),
+        radial-gradient(ellipse at 50% 0%, rgba(248, 233, 210, 0.18) 0%, transparent 54%),
+        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(8, 11, 33, 0.28) 100%);
+    background-size: 32px 32px, 32px 32px, auto, auto, auto;
     z-index: 0;
+    pointer-events: none;
+}
+
+.about::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-image:
+        linear-gradient(
+            90deg,
+            #d8d300 0 14%,
+            #18d8d0 14% 29%,
+            #00d922 29% 43%,
+            #e500cb 43% 58%,
+            #d50000 58% 72%,
+            #1000d7 72% 86%,
+            #0b1036 86% 100%
+        );
+    background-size: 100% 100%;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    box-shadow:
+        0 -7px 16px rgba(255, 185, 58, 0.28),
+        0 -14px 28px rgba(255, 185, 58, 0.12),
+        0 8px 18px rgba(255, 185, 58, 0.42),
+        0 16px 34px rgba(255, 185, 58, 0.26);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .about-container {
+    position: relative;
+    z-index: 2;
     display: grid;
     grid-template-columns: minmax(270px, 1.4fr) minmax(0, 1.6fr);
     grid-template-rows: auto auto;

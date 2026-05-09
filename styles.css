@@ -839,10 +839,14 @@ footer .electric {
 /* Showcase Section */
 .dimensional-showcase {
     padding: 0.6rem 0 0.6rem 0;
-    background: linear-gradient(160deg, rgba(255, 168, 30, 0.22) 0%, rgba(247, 120, 30, 0.3) 100%);
+    background:
+        radial-gradient(ellipse at 14% 0%, rgba(255, 244, 163, 0.56) 0%, transparent 42%),
+        radial-gradient(ellipse at 84% 78%, rgba(255, 90, 54, 0.28) 0%, transparent 48%),
+        linear-gradient(160deg, rgba(255, 198, 68, 0.56) 0%, rgba(247, 120, 30, 0.36) 58%, rgba(194, 112, 56, 0.32) 100%);
     position: relative;
     z-index: 2;
     overflow: hidden;
+    isolation: isolate;
     border-top: 4px solid #fff4a3;
     border-bottom: 4px solid #fff4a3;
     box-shadow:
@@ -865,9 +869,35 @@ footer .electric {
     left: -100%;
     width: 300%;
     height: 300%;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="4" fill="%23000" opacity="0.09"/></svg>');
+    background-image:
+        radial-gradient(circle, rgba(26, 21, 80, 0.12) 0 2.8px, transparent 3px),
+        radial-gradient(circle, rgba(255, 244, 163, 0.18) 0 1px, transparent 1.3px),
+        repeating-linear-gradient(
+            0deg,
+            rgba(26, 21, 80, 0.025) 0px,
+            rgba(26, 21, 80, 0.025) 1px,
+            transparent 1px,
+            transparent 5px
+        );
+    background-size: 14px 14px, 28px 28px, auto;
+    background-position: 0 0, 7px 5px, 0 0;
     transform: rotate(30deg);
     z-index: 0;
+    mix-blend-mode: multiply;
+    opacity: 0.78;
+    pointer-events: none;
+}
+
+.dimensional-showcase::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(255, 244, 163, 0.28) 0%, transparent 46%),
+        radial-gradient(ellipse at 50% 100%, rgba(255, 185, 58, 0.18) 0%, transparent 48%);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.72;
 }
 
 
@@ -1377,8 +1407,22 @@ section.production-header.alice .production-details p strong {
     perspective: 1400px;
 }
 
+.showcase-grid::before {
+    content: '';
+    position: absolute;
+    inset: 0.35rem -0.8rem 0;
+    background-image:
+        radial-gradient(ellipse at 50% 45%, rgba(255, 244, 163, 0.22) 0%, transparent 62%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    opacity: 0.34;
+    pointer-events: none;
+    z-index: 0;
+}
+
 .showcase-item {
     position: relative;
+    z-index: 1;
     border-radius: 0.35rem;
     overflow: clip;
     display: grid;
@@ -1779,6 +1823,7 @@ section.production-header.alice .production-details p strong {
 .faq-panel {
     position: relative;
     width: 100%;
+    max-width: 1200px;
     background: transparent;
     border: none;
     border-radius: 0;
@@ -1931,6 +1976,7 @@ section.production-header.alice .production-details p strong {
 }
 
 .faq-section .container {
+    max-width: none;
     width: 100%;
     position: relative;
     z-index: 1;
@@ -2621,16 +2667,17 @@ html {
 
 /* About Section with Retro-Futurist Style */
 .about {
-    padding: 5rem 0 2rem 0;
+    padding: 6rem 0 2rem 0;
     background-color: var(--accent);
     color: var(--light);
     position: relative;
     overflow: hidden;
-    /* Match the footer's background pattern */
-    background-image: 
-        linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px);
-    background-size: 30px 30px;
+    background-image:
+        radial-gradient(ellipse at 18% 28%, rgba(88, 76, 139, 0.7) 0%, transparent 48%),
+        radial-gradient(ellipse at 85% 38%, rgba(19, 110, 142, 0.62) 0%, transparent 56%),
+        linear-gradient(90deg, rgba(26, 21, 80, 0.95), rgba(38, 91, 129, 0.96));
+    border-top: 1px solid rgba(255, 185, 58, 0.7);
+    box-shadow: inset 0 8px 14px -10px rgba(255, 185, 58, 0.9);
 }
 
 .about::before {
@@ -2640,13 +2687,56 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 10% 30%, rgba(255, 90, 54, 0.2) 0%, transparent 40%),
-        radial-gradient(circle at 90% 70%, rgba(0, 247, 194, 0.15) 0%, transparent 40%);
+    background-image:
+        linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        repeating-linear-gradient(
+            0deg,
+            rgba(248, 233, 210, 0.055) 0px,
+            rgba(248, 233, 210, 0.055) 1px,
+            transparent 1px,
+            transparent 4px
+        ),
+        radial-gradient(ellipse at 50% 0%, rgba(248, 233, 210, 0.18) 0%, transparent 54%),
+        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(8, 11, 33, 0.28) 100%);
+    background-size: 32px 32px, 32px 32px, auto, auto, auto;
     z-index: 0;
+    pointer-events: none;
+}
+
+.about::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-image:
+        linear-gradient(
+            90deg,
+            #d8d300 0 14%,
+            #18d8d0 14% 29%,
+            #00d922 29% 43%,
+            #e500cb 43% 58%,
+            #d50000 58% 72%,
+            #1000d7 72% 86%,
+            #0b1036 86% 100%
+        );
+    background-size: 100% 100%;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    box-shadow:
+        0 -7px 16px rgba(255, 185, 58, 0.28),
+        0 -14px 28px rgba(255, 185, 58, 0.12),
+        0 8px 18px rgba(255, 185, 58, 0.42),
+        0 16px 34px rgba(255, 185, 58, 0.26);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .about-container {
+    position: relative;
+    z-index: 2;
     display: grid;
     grid-template-columns: minmax(270px, 1.4fr) minmax(0, 1.6fr);
     grid-template-rows: auto auto;
@@ -5071,6 +5161,71 @@ html {
     text-shadow: 0 0 10px #ffb93a;
 }
 
+/* Theatrical Projections uses the About background with inverted edge bars */
+.theatrical-projections-section {
+    background-color: var(--accent);
+    background-image:
+        radial-gradient(ellipse at 18% 28%, rgba(88, 76, 139, 0.7) 0%, transparent 48%),
+        radial-gradient(ellipse at 85% 38%, rgba(19, 110, 142, 0.62) 0%, transparent 56%),
+        linear-gradient(90deg, rgba(26, 21, 80, 0.95), rgba(38, 91, 129, 0.96));
+    background-size: 100% 100%, 100% 100%, 100% 100%;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid rgba(255, 185, 58, 0.7);
+    box-shadow: inset 0 -8px 14px -10px rgba(255, 185, 58, 0.9);
+}
+
+.theatrical-projections-section::before {
+    background-image:
+        linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        repeating-linear-gradient(
+            0deg,
+            rgba(248, 233, 210, 0.055) 0px,
+            rgba(248, 233, 210, 0.055) 1px,
+            transparent 1px,
+            transparent 4px
+        ),
+        radial-gradient(ellipse at 50% 0%, rgba(248, 233, 210, 0.18) 0%, transparent 54%),
+        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(8, 11, 33, 0.28) 100%);
+    background-size: 32px 32px, 32px 32px, auto, auto, auto;
+    pointer-events: none;
+}
+
+.theatrical-projections-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-image:
+        linear-gradient(
+            90deg,
+            #d8d300 0 14%,
+            #18d8d0 14% 29%,
+            #00d922 29% 43%,
+            #e500cb 43% 58%,
+            #d50000 58% 72%,
+            #1000d7 72% 86%,
+            #0b1036 86% 100%
+        );
+    background-size: 100% 100%;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    box-shadow:
+        0 7px 16px rgba(255, 185, 58, 0.28),
+        0 14px 28px rgba(255, 185, 58, 0.12),
+        0 -8px 18px rgba(255, 185, 58, 0.42),
+        0 -16px 34px rgba(255, 185, 58, 0.26);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.theatrical-projections-section > .container {
+    position: relative;
+    z-index: 2;
+}
+
 /* Theatrical Projections overrides (reuse GPT card system with recently-style image ratio) */
 .theatrical-projections-section .gpts-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5342,10 +5497,14 @@ html {
 /* ChatGPT Blurb Section */
 .chatgpt-blurb {
     padding: 2rem 0;
-    background: linear-gradient(140deg, rgba(255, 168, 30, 0.2) 0%, rgba(247, 120, 30, 0.26) 100%);
+    background:
+        radial-gradient(ellipse at 14% 8%, rgba(255, 244, 163, 0.4) 0%, transparent 42%),
+        radial-gradient(ellipse at 85% 80%, rgba(255, 90, 54, 0.2) 0%, transparent 52%),
+        linear-gradient(140deg, rgba(248, 233, 210, 0.62) 0%, rgba(255, 185, 58, 0.36) 46%, rgba(247, 120, 30, 0.26) 100%);
     position: relative;
     z-index: 2;
     overflow: hidden;
+    isolation: isolate;
     border-top: 4px solid #fff4a3;
     border-bottom: 4px solid #fff4a3;
     box-shadow:
@@ -5368,9 +5527,35 @@ html {
     left: -100%;
     width: 300%;
     height: 300%;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="4" fill="%23000" opacity="0.09"/></svg>');
+    background-image:
+        radial-gradient(circle, rgba(26, 21, 80, 0.08) 0 2.4px, transparent 2.7px),
+        radial-gradient(circle, rgba(197, 74, 74, 0.08) 0 1px, transparent 1.25px),
+        repeating-linear-gradient(
+            0deg,
+            rgba(26, 21, 80, 0.022) 0px,
+            rgba(26, 21, 80, 0.022) 1px,
+            transparent 1px,
+            transparent 6px
+        );
+    background-size: 14px 14px, 32px 32px, auto;
+    background-position: 0 0, 10px 8px, 0 0;
     transform: rotate(30deg);
     z-index: 0;
+    mix-blend-mode: multiply;
+    opacity: 0.64;
+    pointer-events: none;
+}
+
+.chatgpt-blurb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(ellipse at 50% 100%, rgba(255, 185, 58, 0.2) 0%, transparent 58%);
+    background-size: 100% 100%;
+    z-index: 0;
+    opacity: 0.72;
+    pointer-events: none;
 }
 
 .blurb-content {
@@ -5381,19 +5566,22 @@ html {
 }
 
 .blurb-card {
-    background: rgba(255, 255, 255, 0.95);
+    background:
+        radial-gradient(ellipse at 18% 8%, rgba(255, 244, 163, 0.32) 0%, transparent 45%),
+        radial-gradient(ellipse at 88% 94%, rgba(0, 247, 194, 0.08) 0%, transparent 40%),
+        linear-gradient(135deg, rgba(255, 253, 241, 0.97) 0%, rgba(248, 233, 210, 0.96) 100%);
     padding: 2.5rem 2.5rem 0 2.5rem;
     border-radius: 0.35rem;
-    border: 1px solid rgba(26, 21, 80, 0.15);
+    border: 1px solid rgba(26, 21, 80, 0.22);
     box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(26, 21, 80, 0.06);
+        0 14px 32px rgba(26, 21, 80, 0.16),
+        0 0 0 1px rgba(255, 244, 163, 0.28),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.45);
     position: relative;
     overflow: hidden;
     transition: box-shadow 0.3s ease;
-    background-image:
-        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.02) 80%, rgba(0,0,0,0.04) 100%);
     will-change: transform, box-shadow;
+    isolation: isolate;
 }
 
 /* Rotated Lichtenstein dot overlay */
@@ -5404,9 +5592,30 @@ html {
     left: -20%;
     width: 140%;
     height: 140%;
-    background-image: radial-gradient(circle, rgba(0,0,0,0.04) 2.5px, transparent 2.5px);
-    background-size: 8px 8px;
+    background-image:
+        radial-gradient(circle, rgba(26, 21, 80, 0.045) 0 2.5px, transparent 2.7px),
+        repeating-linear-gradient(
+            0deg,
+            rgba(26, 21, 80, 0.026) 0px,
+            rgba(26, 21, 80, 0.026) 1px,
+            transparent 1px,
+            transparent 5px
+        );
+    background-size: 8px 8px, auto;
     transform: rotate(-13deg);
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: multiply;
+}
+
+.blurb-card::after {
+    content: '';
+    position: absolute;
+    inset: 0.8rem;
+    border: 1px solid rgba(26, 21, 80, 0.08);
+    box-shadow:
+        -2px 0 0 rgba(0, 247, 194, 0.08),
+        2px 0 0 rgba(255, 90, 54, 0.08);
     pointer-events: none;
     z-index: 0;
 }
@@ -5426,8 +5635,9 @@ html {
 
 .blurb-card:hover {
     box-shadow:
-        0 16px 32px rgba(0, 0, 0, 0.12),
-        0 0 0 1px rgba(26, 21, 80, 0.1);
+        0 18px 38px rgba(26, 21, 80, 0.18),
+        0 0 0 1px rgba(26, 21, 80, 0.14),
+        0 0 26px rgba(255, 185, 58, 0.16);
 }
 
 .testimonial-carousel {
@@ -5457,7 +5667,12 @@ html {
     font-style: normal;
     font-size: 1.7rem;
     color: #f0eee6;
-    background: var(--primary);
+    background:
+        radial-gradient(ellipse at 18% 0%, rgba(255, 185, 58, 0.2) 0%, transparent 42%),
+        radial-gradient(ellipse at 88% 100%, rgba(0, 247, 194, 0.08) 0%, transparent 46%),
+        radial-gradient(circle, rgba(248, 233, 210, 0.055) 0 1px, transparent 1.2px),
+        linear-gradient(135deg, #1a1550 0%, #23184d 62%, #2c1f62 100%);
+    background-size: 100% 100%, 100% 100%, 12px 12px, 100% 100%;
     margin: -2.5rem -2.5rem 2.5rem -2.5rem;
     padding: 1.4rem 2.5rem;
     text-align: center;
@@ -5466,6 +5681,10 @@ html {
     text-shadow: none;
     border: none;
     position: relative;
+    box-shadow:
+        inset 0 -1px 0 rgba(255, 185, 58, 0.42),
+        0 1px 0 rgba(0, 247, 194, 0.12),
+        0 3px 0 rgba(255, 90, 54, 0.1);
 }
 
 .blurb-subtitle::before {
@@ -5932,6 +6151,7 @@ section.production-header.alice p {
     justify-content: center;
     gap: 0;
     margin: 3rem 0 0;
+    filter: drop-shadow(0 6px 10px rgba(26, 21, 80, 0.14));
 }
 
 .carousel-tab {
@@ -5940,9 +6160,10 @@ section.production-header.alice p {
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: rgba(26, 21, 80, 0.45);
-    background: rgba(26, 21, 80, 0.06);
-    border: 1px solid rgba(26, 21, 80, 0.12);
+    color: rgba(26, 21, 80, 0.55);
+    background:
+        linear-gradient(180deg, rgba(255, 253, 241, 0.78), rgba(248, 233, 210, 0.62));
+    border: 1px solid rgba(26, 21, 80, 0.18);
     border-bottom: none;
     border-radius: 0.25rem 0.25rem 0 0;
     cursor: pointer;
@@ -5951,6 +6172,7 @@ section.production-header.alice p {
     position: relative;
     width: auto;
     height: auto;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .carousel-tab::before {
@@ -5962,9 +6184,17 @@ section.production-header.alice p {
 
 .carousel-tab.active {
     color: #f0eee6;
-    background: var(--primary);
+    background:
+        radial-gradient(ellipse at 18% 0%, rgba(255, 185, 58, 0.22) 0%, transparent 50%),
+        radial-gradient(circle, rgba(248, 233, 210, 0.06) 0 1px, transparent 1.2px),
+        var(--primary);
+    background-size: 100% 100%, 10px 10px, 100% 100%;
     border-color: var(--primary);
     transform: none;
+    box-shadow:
+        inset 0 2px 0 rgba(255, 185, 58, 0.58),
+        -1px 0 0 rgba(0, 247, 194, 0.22),
+        1px 0 0 rgba(255, 90, 54, 0.2);
 }
 
 .carousel-tab.active::before {
@@ -5972,8 +6202,9 @@ section.production-header.alice p {
 }
 
 .carousel-tab:hover:not(.active) {
-    color: rgba(26, 21, 80, 0.7);
-    background: rgba(26, 21, 80, 0.1);
+    color: rgba(26, 21, 80, 0.78);
+    background:
+        linear-gradient(180deg, rgba(255, 253, 241, 0.9), rgba(255, 185, 58, 0.22));
     opacity: 1;
 }
 
@@ -5996,6 +6227,24 @@ section.production-header.alice p {
 
 .testimonial {
     margin-bottom: 2rem;
+    position: relative;
+    padding-left: 1.25rem;
+    border-left: 2px solid rgba(26, 21, 80, 0.16);
+}
+
+.testimonial::before {
+    content: '';
+    position: absolute;
+    top: 0.45rem;
+    left: -0.34rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    background: #f8e9d2;
+    border: 1px solid rgba(26, 21, 80, 0.28);
+    box-shadow:
+        -1px 0 0 rgba(0, 247, 194, 0.18),
+        1px 0 0 rgba(255, 90, 54, 0.18);
+    transform: rotate(45deg);
 }
 
 .testimonial:last-child {
@@ -6005,6 +6254,9 @@ section.production-header.alice p {
 .testimonial-text {
     margin-bottom: 1rem;
     /* font-style: italic; */
+    text-shadow:
+        -0.55px 0 rgba(0, 247, 194, 0.12),
+        0.55px 0 rgba(255, 90, 54, 0.1);
 }
 
 .testimonial-author {

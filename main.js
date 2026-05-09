@@ -2852,6 +2852,13 @@ function initMixtapeLightbox() {
 
 function initGWORLightbox() {
     const gworTempArticleLink = 'https://charleswilke.substack.com/p/waiting-for-something';
+    const scatteredThunderstormsVariants = [
+        'audio/grief-without-ritual/scattered-thunderstorms.mp3',
+        'audio/grief-without-ritual/scattered-thunderstorms2.mp3',
+        'audio/grief-without-ritual/scattered-thunderstorms3.mp3'
+    ];
+    const scatteredThunderstormsVariantIndex = Math.floor(Math.random() * scatteredThunderstormsVariants.length);
+    const scatteredThunderstormsFile = scatteredThunderstormsVariants[scatteredThunderstormsVariantIndex];
     const tracks = [
         { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
         { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
@@ -2860,7 +2867,7 @@ function initGWORLightbox() {
         { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'Scattered Thunderstorms', file: 'audio/grief-without-ritual/scattered-thunderstorms.mp3', article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },
+        { title: 'Scattered Thunderstorms', file: scatteredThunderstormsFile, article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },
         { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
         { title: 'Refuse the Frequency', file: 'audio/grief-without-ritual/refuse-the-frequency.mp3', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
@@ -2935,6 +2942,40 @@ function initGWORLightbox() {
             routeKey: 'gwor',
             collectionTitle: 'Grief without Ritual'
         }));
+        decorateScatteredThunderstorms();
+    }
+
+    function decorateScatteredThunderstorms() {
+        const scatteredIdx = tracks.findIndex(t => t.title === 'Scattered Thunderstorms');
+        if (scatteredIdx < 0 || !trackItems[scatteredIdx]) return;
+        const li = trackItems[scatteredIdx];
+        if (li.querySelector('.variant-lights')) return;
+        const lights = document.createElement('span');
+        lights.className = 'variant-lights';
+        const buttons = [];
+        for (let i = 0; i < scatteredThunderstormsVariants.length; i++) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'variant-light' + (i === scatteredThunderstormsVariantIndex ? ' variant-light--on' : '');
+            btn.title = `Variant ${i + 1} of ${scatteredThunderstormsVariants.length}`;
+            btn.setAttribute('aria-label', `Play Scattered Thunderstorms variant ${i + 1}`);
+            btn.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                tracks[scatteredIdx].file = scatteredThunderstormsVariants[i];
+                buttons.forEach((b, bi) => b.classList.toggle('variant-light--on', bi === i));
+                loadTrack(scatteredIdx);
+                playTrack();
+            });
+            buttons.push(btn);
+            lights.appendChild(btn);
+        }
+        const titleText = li.querySelector('.track-title-text');
+        if (titleText && titleText.parentNode) {
+            titleText.parentNode.insertBefore(lights, titleText);
+        } else {
+            li.appendChild(lights);
+        }
     }
 
     function loadTrack(index, options = {}) {

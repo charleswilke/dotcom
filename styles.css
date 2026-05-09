@@ -7567,6 +7567,75 @@ section.production-header.alice p {
         inset 0 0 10px rgba(186, 237, 226, 0.24);
 }
 
+#gworLightbox .mixtape-track-item:has(.variant-lights) .track-number {
+    margin-right: 0;
+    width: auto;
+}
+
+#gworLightbox .variant-lights {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: -0.67rem 0.25rem;
+    align-self: stretch;
+    padding: 0;
+    width: 1.5rem;
+}
+
+#gworLightbox .variant-light {
+    flex: 1 1 0;
+    width: 100%;
+    min-height: 4px;
+    padding: 0;
+    border-radius: 1px;
+    background: rgba(160, 160, 144, 0.22);
+    border: 1px solid rgba(160, 160, 144, 0.35);
+    cursor: pointer;
+    transition: background 200ms ease, box-shadow 200ms ease, border-color 200ms ease, transform 120ms ease;
+}
+
+#gworLightbox .variant-light:hover {
+    background: rgba(255, 160, 110, 0.35);
+    border-color: rgba(255, 160, 110, 0.6);
+    transform: translateX(1px);
+}
+
+#gworLightbox .variant-light:focus-visible {
+    outline: 1px solid rgba(255, 160, 110, 0.85);
+    outline-offset: 2px;
+}
+
+#gworLightbox .variant-light--on {
+    background: #ff7a4a;
+    border-color: rgba(255, 160, 110, 0.85);
+    box-shadow:
+        0 0 6px rgba(255, 122, 74, 0.85),
+        0 0 12px rgba(255, 90, 54, 0.6);
+    position: relative;
+    overflow: hidden;
+}
+
+#gworLightbox .variant-light--on::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        167deg,
+        rgba(255, 255, 255, 0.18) 0,
+        rgba(255, 255, 255, 0.18) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    mix-blend-mode: overlay;
+    animation: variantLightScan 1.4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes variantLightScan {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0%); }
+}
+
 #gworLightbox .mixtape-audio-controls {
     background: linear-gradient(180deg,
         rgba(18, 18, 18, 0.86) 0%,

@@ -5407,14 +5407,19 @@ html {
         margin: 0.2rem 0 !important;
         padding: 0.15rem 0 !important;
     }
-    
-    .spotlight-label {
-        font-size: 0.75rem !important;
+
+    .spotlight-production .production-details {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
     }
     
+    .spotlight-label {
+        font-size: 0.85rem !important;
+    }
+
     .spotlight-date,
     .spotlight-tags {
-        font-size: 0.8rem !important;
+        font-size: 1.05rem !important;
     }
     
     .spotlight-metadata .spotlight-date,

@@ -223,6 +223,308 @@ function createFeedExcerpt(item) {
     };
 }
 
+// ===== ARTICLE READER =====
+// Open Substack articles inline using the full content from the RSS feed,
+// rendered with site typography instead of jumping out to substack.com.
+
+function slugifyArticle(item) {
+    if (item && item.link) {
+        const m = item.link.match(/\/p\/([^/?#]+)/);
+        if (m) return m[1];
+    }
+    const title = (item && item.title) ? item.title : 'article';
+    return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+}
+
+const SUBSTACK_BASE = 'https://charleswilke.substack.com';
+
+function _formatScopeTime(s) {
+    if (!isFinite(s) || s < 0) return '0:00';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${String(sec).padStart(2, '0')}`;
+}
+
+function createScopePlayer(audioSrc, label) {
+    const el = document.createElement('div');
+    el.className = 'scope-player';
+    el.innerHTML = `
+        <div class="scope-controls">
+            <button type="button" class="scope-play" aria-label="Play">
+                <span class="scope-icon-play">&#9654;</span>
+                <span class="scope-icon-pause">&#10074;&#10074;</span>
+            </button>
+            <span class="scope-label">${label || 'Narration'}</span>
+            <span class="scope-time-current">0:00</span>
+            <input type="range" class="scope-scrub" min="0" max="0" value="0" step="0.1" aria-label="Seek">
+            <span class="scope-time-total">0:00</span>
+        </div>
+        <audio class="scope-audio" preload="metadata"></audio>
+    `;
+
+    const audio = el.querySelector('audio');
+    audio.src = audioSrc;
+    const playBtn = el.querySelector('.scope-play');
+    const scrub = el.querySelector('.scope-scrub');
+    const tCur = el.querySelector('.scope-time-current');
+    const tTot = el.querySelector('.scope-time-total');
+
+    playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play().catch(err => console.warn('[scope] play failed:', err));
+        } else {
+            audio.pause();
+        }
+    });
+    audio.addEventListener('play', () => {
+        // Pause sibling scope players.
+        document.querySelectorAll('.scope-player.is-playing').forEach(other => {
+            if (other !== el) {
+                const otherAudio = other.querySelector('audio');
+                if (otherAudio) otherAudio.pause();
+            }
+        });
+        el.classList.add('is-playing');
+        playBtn.setAttribute('aria-label', 'Pause');
+    });
+    audio.addEventListener('pause', () => {
+        el.classList.remove('is-playing');
+        playBtn.setAttribute('aria-label', 'Play');
+    });
+    audio.addEventListener('loadedmetadata', () => {
+        tTot.textContent = _formatScopeTime(audio.duration);
+        scrub.max = audio.duration || 0;
+    });
+    audio.addEventListener('timeupdate', () => {
+        tCur.textContent = _formatScopeTime(audio.currentTime);
+        if (!scrub.matches(':active')) scrub.value = audio.currentTime;
+    });
+    scrub.addEventListener('input', () => {
+        audio.currentTime = parseFloat(scrub.value) || 0;
+    });
+
+    return el;
+}
+
+function hydrateNativeMedia(root) {
+    // Replace Substack placeholder divs with playable elements pointed at
+    // /api/v1/{audio|video}/upload/<id>/src on the publication's domain.
+    // Audio gets the oscilloscope-glass scope player; video gets a plain element.
+    root.querySelectorAll('.native-audio-embed').forEach(el => {
+        let id = '';
+        try { id = (JSON.parse(el.getAttribute('data-attrs') || '{}') || {}).mediaUploadId; } catch (e) { /* ignore */ }
+        if (!id) { el.remove(); return; }
+        const src = `${SUBSTACK_BASE}/api/v1/audio/upload/${id}/src`;
+        el.replaceWith(createScopePlayer(src, 'Recap'));
+    });
+
+    root.querySelectorAll('.native-video-embed').forEach(el => {
+        let id = '';
+        try { id = (JSON.parse(el.getAttribute('data-attrs') || '{}') || {}).mediaUploadId; } catch (e) { /* ignore */ }
+        if (!id) { el.remove(); return; }
+        const src = `${SUBSTACK_BASE}/api/v1/video/upload/${id}/src`;
+        const v = document.createElement('video');
+        v.src = src;
+        v.controls = true;
+        v.preload = 'metadata';
+        v.setAttribute('playsinline', '');
+        v.className = 'article-reader-video';
+        el.replaceWith(v);
+    });
+}
+
+function sanitizeArticleHtml(html) {
+    const doc = document.implementation.createHTMLDocument('article');
+    doc.body.innerHTML = html || '';
+
+    // Remove Substack chrome that doesn't belong on our site.
+    const killSelectors = [
+        '.subscription-widget-wrap',
+        '.subscription-widget',
+        '.subscribe-widget',
+        '.button-wrapper',
+        '.image-link-expand',
+        '.image2-inset-overlay',
+        '.restack-image',
+        '.pencraft.pc-display-flex',
+        'img[src*="/open?"]',
+        'img[src*="/p-open?"]',
+        'img[width="1"]',
+        'img[height="1"]'
+    ];
+    killSelectors.forEach(sel => doc.body.querySelectorAll(sel).forEach(el => el.remove()));
+
+    // Normalize all links to open externally and drop tracking params.
+    doc.body.querySelectorAll('a[href]').forEach(a => {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+    });
+
+    // Drop noisy inline event handlers and styles from Substack markup.
+    doc.body.querySelectorAll('*').forEach(el => {
+        for (const attr of [...el.attributes]) {
+            if (attr.name.startsWith('on')) el.removeAttribute(attr.name);
+        }
+    });
+
+    // Make sure images lazy-load and degrade gracefully.
+    doc.body.querySelectorAll('img').forEach(img => {
+        img.setAttribute('loading', 'lazy');
+        img.setAttribute('decoding', 'async');
+    });
+
+    return doc.body.innerHTML;
+}
+
+function ensureReaderOverlay() {
+    let overlay = document.getElementById('article-reader-overlay');
+    if (overlay) return overlay;
+
+    overlay = document.createElement('div');
+    overlay.id = 'article-reader-overlay';
+    overlay.className = 'article-reader-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Article reader');
+    overlay.innerHTML = `
+        <article class="article-reader-shell" tabindex="-1">
+            <div class="article-reader-topbar">
+                <span class="reader-lead">
+                    <span class="reader-source">exploring l.ai.bor</span>
+                    <span class="reader-sep">//</span>
+                    <a class="substack-link" href="#" target="_blank" rel="noopener noreferrer">Read on Substack &rarr;</a>
+                </span>
+                <span class="reader-actions">
+                    <button type="button" class="article-reader-close" aria-label="Close article">&times;</button>
+                </span>
+            </div>
+            <header class="article-reader-header">
+                <h1 class="article-reader-title"></h1>
+                <div class="article-reader-meta-row">
+                    <p class="article-reader-subtitle"></p>
+                    <div class="article-reader-byline">
+                        <div class="byline-meta">
+                            <span class="byline-name">Charles Wilke</span>
+                            <span class="byline-date"></span>
+                        </div>
+                        <img class="byline-avatar" src="images/cw4.webp" alt="Charles Wilke" width="40" height="40" loading="lazy" decoding="async">
+                    </div>
+                </div>
+                <div class="article-reader-tags"></div>
+            </header>
+            <div class="article-reader-body"></div>
+            <footer class="article-reader-footer">
+                <p>Originally published on Substack —
+                    <a class="footer-substack-link" href="#" target="_blank" rel="noopener noreferrer">view comments &amp; subscribe</a>
+                </p>
+            </footer>
+        </article>
+    `;
+    document.body.appendChild(overlay);
+
+    // Topbar actions
+    overlay.querySelector('.article-reader-close').addEventListener('click', closeArticleReader);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeArticleReader();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+            closeArticleReader();
+        }
+    });
+
+    return overlay;
+}
+
+let _readerPrevHash = '';
+
+function openArticleReader(item) {
+    if (!item || !(item.content || item.description)) return false;
+
+    const overlay = ensureReaderOverlay();
+    const shell = overlay.querySelector('.article-reader-shell');
+    const titleEl = overlay.querySelector('.article-reader-title');
+    const subtitleEl = overlay.querySelector('.article-reader-subtitle');
+    const tagsEl = overlay.querySelector('.article-reader-tags');
+    const bylineDateEl = overlay.querySelector('.byline-date');
+    const bodyEl = overlay.querySelector('.article-reader-body');
+    const topLink = overlay.querySelector('.substack-link');
+    const footLink = overlay.querySelector('.footer-substack-link');
+
+    titleEl.textContent = decodeHtmlEntities(item.title || 'Untitled');
+
+    const subtitle = decodeHtmlEntities((item.cleanDescription || item.description || '').replace(/<[^>]*>/g, '').trim());
+    subtitleEl.textContent = subtitle;
+    subtitleEl.style.display = subtitle ? '' : 'none';
+
+    const pubDate = item.pubDate ? new Date(item.pubDate) : null;
+    const dateStr = pubDate && !isNaN(pubDate)
+        ? pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase()
+        : '';
+    bylineDateEl.textContent = dateStr;
+    tagsEl.innerHTML = '';
+
+    bodyEl.innerHTML = sanitizeArticleHtml(item.content || item.description || '');
+    hydrateNativeMedia(bodyEl);
+
+    if (item.link) {
+        topLink.href = item.link;
+        footLink.href = item.link;
+    }
+
+    if (!overlay.classList.contains('is-open')) {
+        _readerPrevHash = window.location.hash;
+        const slug = slugifyArticle(item);
+        try {
+            history.pushState({ reader: slug }, '', `#read/${slug}`);
+        } catch (e) { /* ignore */ }
+    }
+
+    overlay.classList.add('is-open');
+    document.body.classList.add('reader-open');
+    overlay.scrollTop = 0;
+    setTimeout(() => shell.focus(), 50);
+    return true;
+}
+
+function closeArticleReader() {
+    const overlay = document.getElementById('article-reader-overlay');
+    if (!overlay || !overlay.classList.contains('is-open')) return;
+    overlay.classList.remove('is-open');
+    document.body.classList.remove('reader-open');
+    if (window.location.hash.startsWith('#read/')) {
+        try {
+            history.replaceState(null, '', _readerPrevHash || window.location.pathname + window.location.search);
+        } catch (e) { /* ignore */ }
+    }
+}
+
+function findItemBySlug(slug) {
+    if (!slug || !Array.isArray(allItems)) return null;
+    return allItems.find(it => slugifyArticle(it) === slug) || null;
+}
+
+function maybeOpenReaderFromHash() {
+    const hash = window.location.hash || '';
+    const m = hash.match(/^#read\/(.+)$/);
+    if (!m) return;
+    const item = findItemBySlug(decodeURIComponent(m[1]));
+    if (item) openArticleReader(item);
+}
+
+window.addEventListener('popstate', () => {
+    const hash = window.location.hash || '';
+    if (hash.startsWith('#read/')) {
+        maybeOpenReaderFromHash();
+    } else {
+        const overlay = document.getElementById('article-reader-overlay');
+        if (overlay && overlay.classList.contains('is-open')) {
+            overlay.classList.remove('is-open');
+            document.body.classList.remove('reader-open');
+        }
+    }
+});
+
 function normalizeFeedItems(items) {
     return sortItemsByNewest(items).slice(0, TOTAL_RSS_ITEMS).map(item => {
         const excerpt = createFeedExcerpt(item);
@@ -340,6 +642,7 @@ function renderFeedItems(items, feedContent) {
 
     populateLatestArticleSpotlight();
     displayItems(ITEMS_PER_PAGE);
+    maybeOpenReaderFromHash();
 }
 
 async function fetchRSSFeed() {
@@ -440,20 +743,43 @@ async function fetchRSSFeed() {
         
         // Last resort: XML parsing
         if (!success) {
-            logFeedAttempt('xml-fallback-start');
-            const xmlItems = await fetchRssXmlFallback();
-            if (xmlItems && xmlItems.length > 0) {
-                writeCachedFeedItems(xmlItems, 'xml');
-                renderFeedItems(xmlItems, feedContent);
-                logFeedAttempt('xml-fallback-success', { itemCount: allItems.length });
-                success = true;
+            try {
+                logFeedAttempt('xml-fallback-start');
+                const xmlItems = await fetchRssXmlFallback();
+                if (xmlItems && xmlItems.length > 0) {
+                    writeCachedFeedItems(xmlItems, 'xml');
+                    renderFeedItems(xmlItems, feedContent);
+                    logFeedAttempt('xml-fallback-success', { itemCount: allItems.length });
+                    success = true;
+                }
+            } catch (xmlErr) {
+                console.warn('[RSS] XML fallback failed:', xmlErr);
             }
         }
-        
+
     } catch (error) {
         console.error('All RSS feed attempts failed:', error);
     }
-    
+
+    // Local-dev fallback: if all live sources failed, load the on-disk cache.
+    // Lets the inline reader and cards be developed without the Vercel API.
+    if (!success) {
+        try {
+            logFeedAttempt('local-cache-fallback-start');
+            const res = await fetch('/cache_substack_feed.json', { cache: 'no-store' });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && Array.isArray(data.items) && data.items.length > 0) {
+                    renderFeedItems(data.items, feedContent);
+                    logFeedAttempt('local-cache-fallback-success', { itemCount: allItems.length });
+                    success = true;
+                }
+            }
+        } catch (localErr) {
+            console.warn('[RSS] Local cache fallback failed:', localErr);
+        }
+    }
+
     // Handle complete failure
     if (!success) {
         if (feedContent) {
@@ -482,9 +808,13 @@ function populateLatestArticleSpotlight() {
     const spotlightTagsContainer = spotlight.querySelector('.spotlight-tags-container');
     const spotlightTags = spotlight.querySelector('.spotlight-tags');
     
-    // Make the entire section clickable
+    // Make the entire section clickable — open inline reader when we have content.
     spotlight.style.cursor = 'pointer';
-    spotlight.addEventListener('click', () => {
+    spotlight.addEventListener('click', (e) => {
+        if (latestItem.content && openArticleReader(latestItem)) {
+            e.preventDefault();
+            return;
+        }
         window.open(latestItem.link, '_blank', 'noopener,noreferrer');
     });
     
@@ -551,6 +881,11 @@ function displayItems(count) {
             <p>${item.shortDescription || ''}</p>
             <div class="date">${pubDate.toLocaleDateString()}</div>
         `;
+        feedItem.addEventListener('click', (e) => {
+            if (item.content && openArticleReader(item)) {
+                e.preventDefault();
+            }
+        });
 
         fragment.appendChild(feedItem);
     }

@@ -1125,6 +1125,7 @@ section.production-header.spotlight-production p {
     color: var(--light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .spotlight-date,
@@ -5047,6 +5048,7 @@ html {
     font-size: 1.15rem;
     font-weight: bold;
     text-align: left;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 @media (max-width: 767px) {

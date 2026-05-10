@@ -1091,12 +1091,16 @@ section.production-header.spotlight-production p {
 }
 
 /* Spotlight metadata styling */
+.spotlight-production .production-details {
+    margin-left: 0;
+}
+
 .spotlight-metadata {
     display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.2rem;
-    margin: 3.5rem 0 0 -1.5rem;
+    margin: 3.5rem 0 0 0;
     padding: 0;
 }
 

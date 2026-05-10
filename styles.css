@@ -1094,23 +1094,22 @@ section.production-header.spotlight-production p {
 .spotlight-metadata {
     display: inline-flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: 0.15rem;
-    margin: 2.8rem 0 0 auto;
+    align-items: flex-start;
+    gap: 0.2rem;
+    margin: 3.5rem 0 0 -1.5rem;
     padding: 0;
-    float: right;
 }
 
 .spotlight-metadata .spotlight-date,
 .spotlight-metadata .spotlight-tags {
-    text-align: right !important;
+    text-align: left !important;
     white-space: nowrap;
 }
 
 /* Extra specificity for tags */
 .spotlight-metadata .spotlight-tags {
     display: block !important;
-    text-align: right !important;
+    text-align: left !important;
     width: 100% !important;
 }
 
@@ -1132,10 +1131,10 @@ section.production-header.spotlight-production p {
 .spotlight-tags {
     font-family: 'Exo', sans-serif;
     font-weight: 400;
-    font-size: 0.85rem;
+    font-size: 1.15rem;
     color: var(--light);
     opacity: 0.9;
-    text-align: right;
+    text-align: left;
 }
 
 .spotlight-tags {
@@ -5045,9 +5044,9 @@ html {
 .spotlight-date {
     color: #ffb347;
     opacity: 0.95;
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: bold;
-    text-align: right;
+    text-align: left;
 }
 
 @media (max-width: 767px) {

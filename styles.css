@@ -10166,7 +10166,7 @@ body.reader-open {
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55),
                 0 0 0 1px rgba(46, 33, 19, 0.35),
                 inset 0 0 0 1px rgba(255, 240, 200, 0.4);
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     transform: translateY(12px);
     transition: transform 0.3s ease;
@@ -10178,7 +10178,7 @@ body.reader-open {
 .article-reader-topbar {
     position: sticky;
     top: 0;
-    z-index: 5;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -10197,6 +10197,7 @@ body.reader-open {
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    border-radius: 4px 4px 0 0;
 }
 .article-reader-topbar .reader-lead {
     display: inline-flex;
@@ -10411,8 +10412,8 @@ body.reader-open {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 260%;
-    height: 260%;
+    width: 720%;
+    height: 180%;
     background-image: radial-gradient(circle, rgba(0,0,0,0.04) 2.5px, transparent 2.5px);
     background-size: 8px 8px;
     transform: translate(-50%, -50%) rotate(-13deg);
@@ -10652,6 +10653,7 @@ body.reader-open {
     position: relative;
     isolation: isolate;
     overflow: hidden;
+    border-radius: 0 0 4px 4px;
     text-align: center;
     font-family: 'Space Mono', monospace;
     font-size: 13px;
@@ -10708,6 +10710,23 @@ body.reader-open {
         border-radius: 0;
         min-height: 100vh;
     }
+    .article-reader-topbar {
+        gap: 10px;
+        padding: 12px 18px;
+    }
+    .article-reader-topbar .reader-lead {
+        flex: 1 1 auto;
+        min-width: 0;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    .article-reader-topbar .substack-link {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+    .article-reader-close {
+        flex: 0 0 34px;
+    }
     .article-reader-shell .article-reader-header {
         padding: 26px var(--reader-gutter) 22px;
     }
@@ -10716,7 +10735,11 @@ body.reader-open {
         align-items: flex-start;
         gap: 14px;
     }
-    .article-reader-byline .byline-meta { text-align: left; }
+    .article-reader-byline {
+        align-self: flex-end;
+        justify-content: flex-end;
+    }
+    .article-reader-byline .byline-meta { text-align: right; }
     .article-reader-body { padding: 24px var(--reader-gutter) 36px; font-size: 17px; }
     .article-reader-footer { padding: 24px var(--reader-gutter) 36px; }
     .article-reader-body .captioned-image-container { margin: 1.4em -8px; }

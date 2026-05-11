@@ -10135,6 +10135,7 @@ body {
     --fiche-accent: #a85a1d;
     --fiche-walnut: #2a1d0c;
     --fiche-glow: rgba(255, 235, 170, 0.55);
+    --reader-gutter: clamp(22px, 4vw, 34px);
 
     position: fixed;
     inset: 0;
@@ -10157,7 +10158,7 @@ body.reader-open {
 }
 
 .article-reader-shell {
-    max-width: 760px;
+    max-width: 880px;
     margin: 48px auto;
     background: var(--fiche-paper);
     color: var(--fiche-ink);
@@ -10182,7 +10183,7 @@ body.reader-open {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 12px 20px;
+    padding: 12px var(--reader-gutter);
     background: linear-gradient(180deg, var(--fiche-walnut) 0%, #1d1408 100%);
     color: #e6cf95;
     border-bottom: 1px solid rgba(168, 90, 29, 0.5);
@@ -10237,7 +10238,7 @@ body.reader-open {
     height: auto;
     min-height: 0;
     position: relative;
-    padding: 22px 44px;
+    padding: 28px var(--reader-gutter) 30px;
     border-bottom: 1px solid var(--fiche-rule);
     background:
         radial-gradient(ellipse 70% 80% at 30% 40%, var(--fiche-paper-bright) 0%, transparent 65%),
@@ -10249,7 +10250,7 @@ body.reader-open {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 18px;
     margin-top: 12px;
     position: relative;
     z-index: 1;
@@ -10288,8 +10289,8 @@ body.reader-open {
     color: rgba(46, 33, 19, 0.35);
 }
 .article-reader-title {
-    font-family: 'Merriweather Sans', 'Exo', Arial, sans-serif;
-    font-weight: 700;
+    font-family: 'Madimi One', 'Merriweather Sans', 'Exo', Arial, sans-serif;
+    font-weight: 400;
     font-size: clamp(32px, 5vw, 56px);
     line-height: 1.04;
     color: var(--fiche-ink);
@@ -10311,7 +10312,7 @@ body.reader-open {
     color: var(--fiche-ink-soft);
     margin: 0;
     text-align: left;
-    max-width: 42ch;
+    max-width: 56ch;
     text-shadow:
         0 0 1px rgba(255, 248, 220, 0.85),
         0 0 12px rgba(255, 215, 135, 0.4);
@@ -10362,7 +10363,7 @@ body.reader-open {
 .article-reader-tags { display: none; }
 
 .article-reader-body {
-    padding: 56px;
+    padding: 42px var(--reader-gutter) 56px;
     font-family: Georgia, 'Times New Roman', serif;
     font-size: 18px;
     line-height: 1.72;
@@ -10372,6 +10373,18 @@ body.reader-open {
 .article-reader-body > .captioned-image-container:first-child,
 .article-reader-body > *:first-child {
     margin-top: 0;
+}
+.article-reader-body > .captioned-image-container:first-child {
+    margin-inline: calc(var(--reader-gutter) * -0.65);
+    margin-top: calc(var(--reader-gutter) * -0.65);
+    margin-bottom: 2em;
+}
+.article-reader-body > .captioned-image-container:first-child .image-link,
+.article-reader-body > .captioned-image-container:first-child .image2-inset,
+.article-reader-body > .captioned-image-container:first-child picture,
+.article-reader-body > .captioned-image-container:first-child img {
+    display: block;
+    width: 100%;
 }
 .article-reader-body > p,
 .article-reader-body > div > p {
@@ -10597,13 +10610,16 @@ body.reader-open {
 }
 
 @media (max-width: 720px) {
+    .article-reader-overlay {
+        --reader-gutter: 22px;
+    }
     .article-reader-shell {
         margin: 0;
         border-radius: 0;
         min-height: 100vh;
     }
     .article-reader-shell .article-reader-header {
-        padding: 26px 22px 22px;
+        padding: 26px var(--reader-gutter) 22px;
     }
     .article-reader-meta-row {
         flex-direction: column;
@@ -10611,8 +10627,11 @@ body.reader-open {
         gap: 14px;
     }
     .article-reader-byline .byline-meta { text-align: left; }
-    .article-reader-body { padding: 24px 22px 36px; font-size: 17px; }
-    .article-reader-footer { padding: 24px 22px 36px; }
+    .article-reader-body { padding: 24px var(--reader-gutter) 36px; font-size: 17px; }
+    .article-reader-footer { padding: 24px var(--reader-gutter) 36px; }
     .article-reader-body .captioned-image-container { margin: 1.4em -8px; }
+    .article-reader-body > .captioned-image-container:first-child {
+        margin: -16px -14px 1.6em;
+    }
 }
 /* ===== END ARTICLE READER OVERLAY ===== */

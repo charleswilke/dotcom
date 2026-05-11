@@ -10247,7 +10247,7 @@ body.reader-open {
     padding: 28px var(--reader-gutter) 30px;
     border-bottom: 1px solid var(--fiche-rule);
     background:
-        repeating-radial-gradient(ellipse at 50% -24%, transparent 0 82px, rgba(46, 33, 19, 0.11) 84px 86px, transparent 88px 158px),
+        repeating-radial-gradient(ellipse at 50% 126%, transparent 0 82px, rgba(46, 33, 19, 0.11) 84px 86px, transparent 88px 158px),
         radial-gradient(ellipse 70% 80% at 30% 40%, var(--fiche-paper-bright) 0%, transparent 65%),
         linear-gradient(180deg, #ecdcad 0%, #e2cf95 100%);
     text-align: left;
@@ -10296,8 +10296,8 @@ body.reader-open {
     color: rgba(46, 33, 19, 0.35);
 }
 .article-reader-title {
-    font-family: 'Madimi One', 'Merriweather Sans', 'Exo', Arial, sans-serif;
-    font-weight: 400;
+    font-family: 'Merriweather Sans', 'Exo', Arial, sans-serif;
+    font-weight: 700;
     font-size: clamp(32px, 5vw, 56px);
     line-height: 1.04;
     color: var(--fiche-ink);

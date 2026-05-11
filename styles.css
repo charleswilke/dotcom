@@ -10245,11 +10245,16 @@ body.reader-open {
     min-height: 0;
     position: relative;
     padding: 28px var(--reader-gutter) 30px;
-    border-bottom: 1px solid var(--fiche-rule);
-    background:
-        repeating-radial-gradient(ellipse at 50% 126%, transparent 0 82px, rgba(46, 33, 19, 0.11) 84px 86px, transparent 88px 158px),
-        radial-gradient(ellipse 70% 80% at 30% 40%, var(--fiche-paper-bright) 0%, transparent 65%),
-        linear-gradient(180deg, #ecdcad 0%, #e2cf95 100%);
+    border-bottom: 1px solid rgba(255, 185, 58, 0.58);
+    background-color: var(--accent);
+    background-image:
+        radial-gradient(ellipse at 18% 28%, rgba(88, 76, 139, 0.7) 0%, transparent 48%),
+        radial-gradient(ellipse at 85% 38%, rgba(19, 110, 142, 0.62) 0%, transparent 56%),
+        linear-gradient(90deg, rgba(26, 21, 80, 0.95), rgba(38, 91, 129, 0.96));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 235, 170, 0.2),
+        inset 0 -8px 14px -12px rgba(255, 185, 58, 0.7);
+    isolation: isolate;
     text-align: left;
     overflow: hidden;
 }
@@ -10262,7 +10267,27 @@ body.reader-open {
     position: relative;
     z-index: 1;
 }
-/* Film grain overlay */
+/* About-section grid and film grain overlays */
+.article-reader-shell .article-reader-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        repeating-linear-gradient(
+            0deg,
+            rgba(248, 233, 210, 0.055) 0px,
+            rgba(248, 233, 210, 0.055) 1px,
+            transparent 1px,
+            transparent 4px
+        ),
+        radial-gradient(ellipse at 50% 0%, rgba(248, 233, 210, 0.18) 0%, transparent 54%),
+        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(8, 11, 33, 0.28) 100%);
+    background-size: 32px 32px, 32px 32px, auto, auto, auto;
+    z-index: 0;
+}
 .article-reader-shell .article-reader-header::after {
     content: "";
     position: absolute;
@@ -10300,15 +10325,15 @@ body.reader-open {
     font-weight: 700;
     font-size: clamp(32px, 5vw, 56px);
     line-height: 1.04;
-    color: var(--fiche-ink);
+    color: var(--fiche-paper-bright);
     margin: 0;
     letter-spacing: 0;
     text-align: left;
     max-width: 100%;
     text-shadow:
-        0 0 0.5px rgba(255, 250, 230, 0.95),
-        0 0 14px rgba(255, 220, 140, 0.55),
-        0 0 32px rgba(255, 200, 110, 0.3);
+        0 2px 0 rgba(26, 21, 80, 0.55),
+        0 0 8px rgba(255, 235, 170, 0.48),
+        0 0 24px rgba(0, 247, 194, 0.2);
 }
 .article-reader-subtitle {
     flex: 1 1 auto;
@@ -10316,13 +10341,13 @@ body.reader-open {
     font-family: 'Space Mono', monospace;
     font-size: 15px;
     line-height: 1.4;
-    color: var(--fiche-ink-soft);
+    color: rgba(255, 245, 212, 0.86);
     margin: 0;
     text-align: left;
     max-width: 56ch;
     text-shadow:
-        0 0 1px rgba(255, 248, 220, 0.85),
-        0 0 12px rgba(255, 215, 135, 0.4);
+        0 1px 0 rgba(26, 21, 80, 0.45),
+        0 0 10px rgba(255, 235, 170, 0.22);
 }
 .article-reader-byline {
     display: flex;
@@ -10357,7 +10382,7 @@ body.reader-open {
     font-size: 13px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--fiche-ink);
+    color: var(--fiche-paper-bright);
     font-weight: bold;
 }
 .article-reader-byline .byline-date {
@@ -10365,7 +10390,7 @@ body.reader-open {
     font-size: 12px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--fiche-ink-mute);
+    color: rgba(255, 245, 212, 0.62);
 }
 .article-reader-tags { display: none; }
 

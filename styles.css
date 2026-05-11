@@ -10186,8 +10186,7 @@ body.reader-open {
     padding: 12px var(--reader-gutter);
     background:
         repeating-linear-gradient(0deg, rgba(255, 245, 212, 0.06) 0 1px, transparent 1px 3px),
-        repeating-radial-gradient(ellipse at 50% 118%, transparent 0 34px, rgba(230, 207, 149, 0.26) 35px 37px, transparent 38px 72px),
-        radial-gradient(ellipse 90% 240% at 50% 120%, rgba(168, 90, 29, 0.26) 0%, transparent 48%),
+        linear-gradient(90deg, rgba(168, 90, 29, 0.12) 0%, transparent 38%, rgba(230, 207, 149, 0.06) 100%),
         linear-gradient(180deg, var(--fiche-walnut) 0%, #1d1408 100%);
     color: #e6cf95;
     border-bottom: 1px solid rgba(168, 90, 29, 0.5);
@@ -10248,6 +10247,7 @@ body.reader-open {
     padding: 28px var(--reader-gutter) 30px;
     border-bottom: 1px solid var(--fiche-rule);
     background:
+        repeating-radial-gradient(ellipse at 50% -24%, transparent 0 82px, rgba(46, 33, 19, 0.11) 84px 86px, transparent 88px 158px),
         radial-gradient(ellipse 70% 80% at 30% 40%, var(--fiche-paper-bright) 0%, transparent 65%),
         linear-gradient(180deg, #ecdcad 0%, #e2cf95 100%);
     text-align: left;

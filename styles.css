@@ -10715,9 +10715,8 @@ body.reader-open {
         padding: 12px 18px;
     }
     .article-reader-topbar .reader-lead {
-        flex: 1 1 auto;
+        flex: 0 1 auto;
         min-width: 0;
-        justify-content: space-between;
         gap: 8px;
     }
     .article-reader-topbar .substack-link {

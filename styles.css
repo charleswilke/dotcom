@@ -10296,7 +10296,7 @@ body.reader-open {
     color: rgba(46, 33, 19, 0.35);
 }
 .article-reader-title {
-    font-family: 'Merriweather Sans', 'Exo', Arial, sans-serif;
+    font-family: 'IBM Plex Sans Condensed', 'Merriweather Sans', 'Exo', Arial, sans-serif;
     font-weight: 700;
     font-size: clamp(32px, 5vw, 56px);
     line-height: 1.04;

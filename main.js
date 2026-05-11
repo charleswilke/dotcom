@@ -390,9 +390,9 @@ function ensureReaderOverlay() {
         <article class="article-reader-shell" tabindex="-1">
             <div class="article-reader-topbar">
                 <span class="reader-lead">
-                    <span class="reader-source">exploring l.ai.bor</span>
+                    <span class="reader-source">exploring <span class="reader-break">l.ai.bor</span></span>
                     <span class="reader-sep">//</span>
-                    <a class="substack-link" href="#" target="_blank" rel="noopener noreferrer">Read on Substack &rarr;</a>
+                    <a class="substack-link" href="#" target="_blank" rel="noopener noreferrer">Read on <span class="link-break">Substack &rarr;</span></a>
                 </span>
                 <span class="reader-actions">
                     <button type="button" class="article-reader-close" aria-label="Close article">&times;</button>

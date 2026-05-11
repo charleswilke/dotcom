@@ -10232,6 +10232,13 @@ body.reader-open {
     color: #fff5d4;
 }
 
+@media (max-width: 480px) {
+    .article-reader-topbar .reader-break,
+    .article-reader-topbar .link-break {
+        display: block;
+    }
+}
+
 .article-reader-shell .article-reader-header {
     display: block;
     height: auto;

@@ -10184,9 +10184,16 @@ body.reader-open {
     justify-content: space-between;
     gap: 12px;
     padding: 12px var(--reader-gutter);
-    background: linear-gradient(180deg, var(--fiche-walnut) 0%, #1d1408 100%);
+    background:
+        repeating-linear-gradient(0deg, rgba(255, 245, 212, 0.06) 0 1px, transparent 1px 3px),
+        repeating-radial-gradient(ellipse at 50% 118%, transparent 0 34px, rgba(230, 207, 149, 0.26) 35px 37px, transparent 38px 72px),
+        radial-gradient(ellipse 90% 240% at 50% 120%, rgba(168, 90, 29, 0.26) 0%, transparent 48%),
+        linear-gradient(180deg, var(--fiche-walnut) 0%, #1d1408 100%);
     color: #e6cf95;
     border-bottom: 1px solid rgba(168, 90, 29, 0.5);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 235, 170, 0.08),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.35);
     font-family: 'Space Mono', monospace;
     font-size: 12px;
     letter-spacing: 0.08em;

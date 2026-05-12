@@ -23,7 +23,9 @@ if [ $# -lt 1 ]; then
 fi
 
 FILE="$1"
-VERSION="${2:-$(date +%Y%m%d)}"
+# Default to minute precision so same-day re-stamps always produce a fresh value
+# (a date-only default would no-op if you bump twice in one day).
+VERSION="${2:-$(date +%Y%m%d%H%M)}"
 
 cd "$(dirname "$0")"
 

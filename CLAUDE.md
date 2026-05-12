@@ -25,6 +25,20 @@ No build step — all files are served directly.
 
 `.htaccess` exists but is no longer active (legacy DreamHost config).
 
+## Updating cover art (cache busting)
+
+Images under `/audio/` are served with `Cache-Control: public, max-age=31536000, immutable` (see [vercel.json](vercel.json)). This is intentional for performance, but it means **if a cover file is replaced in place with the same filename, browsers and CDNs will serve the old version for up to a year.**
+
+When the user updates an album cover — or mentions they swapped/renamed/replaced one — run [bump-cover.sh](bump-cover.sh) to append a fresh `?v=YYYYMMDD` query string to every HTML reference of that cover (img tags, og:image, twitter:image, JSON-LD image, song subpages):
+
+```
+./bump-cover.sh junkyard-cabaret-cover.webp
+```
+
+Defaults to today's date; pass a second arg to override. It replaces any existing `?v=…` in place rather than appending twice. After running it, commit and push — Vercel auto-deploys from `main`.
+
+Cues to run this: "I updated the cover for X", "just replaced the album art", "swapped the cover", or any time you edit a `*-cover.webp` file in place.
+
 ## Architecture
 
 **No frameworks.** Vanilla HTML/CSS/JS throughout.

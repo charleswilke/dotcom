@@ -60,14 +60,23 @@ onReady(() => {
         const gap = getGap();
         grid.classList.add('is-masonry');
         const colHeights = new Array(cols).fill(0);
-        items.forEach(item => {
+        const placements = items.map(item => {
             item.style.width = `${colWidth}px`;
             const shortest = colHeights.indexOf(Math.min(...colHeights));
-            item.style.left = `${shortest * (colWidth + gap)}px`;
-            item.style.top = `${colHeights[shortest]}px`;
-            colHeights[shortest] = colHeights[shortest] + item.offsetHeight + gap;
+            const top = colHeights[shortest];
+            colHeights[shortest] = top + item.offsetHeight + gap;
+            return { item, col: shortest, top };
         });
-        grid.style.height = `${Math.max(...colHeights) - gap}px`;
+        // Column total heights (without trailing gap).
+        const colTotals = colHeights.map(h => Math.max(0, h - gap));
+        const maxHeight = Math.max(...colTotals);
+        // Vertically center each column's stack within the tallest column.
+        placements.forEach(({ item, col, top }) => {
+            const offset = (maxHeight - colTotals[col]) / 2;
+            item.style.left = `${col * (colWidth + gap)}px`;
+            item.style.top = `${top + offset}px`;
+        });
+        grid.style.height = `${maxHeight}px`;
     }
 
     let rafId = 0;

@@ -10429,7 +10429,7 @@ body.reader-open {
     left: 50%;
     width: 720%;
     height: 180%;
-    background-image: radial-gradient(circle, rgba(0,0,0,0.04) 2.5px, transparent 2.5px);
+    background-image: radial-gradient(circle, rgba(0,0,0,0.0232) 2.5px, transparent 2.5px);
     background-size: 8px 8px;
     transform: translate(-50%, -50%) rotate(-13deg);
     pointer-events: none;

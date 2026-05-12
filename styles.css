@@ -1405,7 +1405,8 @@ section.production-header.alice .production-details p strong {
     gap: 0.9rem;
     position: relative;
     z-index: 1;
-    margin-top: 0;
+    margin: 0 auto;
+    max-width: 1040px;
     align-items: start;
     padding: 1.2rem 0 0.8rem;
     perspective: 1400px;

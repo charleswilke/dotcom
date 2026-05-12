@@ -1411,6 +1411,18 @@ section.production-header.alice .production-details p strong {
     perspective: 1400px;
 }
 
+.showcase-grid.is-masonry {
+    display: block;
+    position: relative;
+}
+
+.showcase-grid.is-masonry > .showcase-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+}
+
 .showcase-grid::before {
     content: '';
     position: absolute;
@@ -1496,8 +1508,7 @@ section.production-header.alice .production-details p strong {
 .showcase-media {
     position: relative;
     z-index: 1;
-    margin: 0.8rem 0.8rem 0;
-    aspect-ratio: 3 / 2;
+    margin: 0.65rem 0.65rem 0;
     overflow: hidden;
     background: linear-gradient(180deg, rgba(26, 21, 80, 0.94), rgba(44, 79, 124, 0.86));
     border: 1px solid rgba(255, 185, 58, 0.18);
@@ -1542,11 +1553,9 @@ section.production-header.alice .production-details p strong {
 
 .showcase-item img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
     display: block;
     filter: saturate(1.02) contrast(1.08) brightness(0.95);
-    aspect-ratio: 3 / 2;
     transition: transform 0.35s ease, filter 0.35s ease;
 }
 
@@ -1568,9 +1577,9 @@ section.production-header.alice .production-details p strong {
     z-index: 1;
     background: transparent;
     color: var(--showcase-label);
-    padding: 1.1rem 1rem 1rem;
+    padding: 0.95rem 0.85rem 0.85rem;
     display: grid;
-    gap: 0.45rem;
+    gap: 0.4rem;
     border-top: 1px solid rgba(248, 233, 210, 0.08);
 }
 
@@ -1615,7 +1624,7 @@ section.production-header.alice .production-details p strong {
     margin: 0;
     padding-right: 2rem;
     font-family: 'Orbitron', 'Exo', sans-serif;
-    font-size: 1.38rem;
+    font-size: 1.15rem;
     font-weight: 700;
     line-height: 1.1;
     text-transform: uppercase;
@@ -1623,7 +1632,7 @@ section.production-header.alice .production-details p strong {
 }
 
 .showcase-caption p {
-    font-size: 0.86rem;
+    font-size: 0.8rem;
     line-height: 1.45;
     opacity: 0.9;
     margin: 0;
@@ -2445,15 +2454,15 @@ footer p {
     }
 
     .showcase-caption {
-        padding: 1.05rem 0.9rem 0.95rem;
+        padding: 0.9rem 0.8rem 0.8rem;
     }
 
     .showcase-caption p {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
     }
 
     .showcase-caption h3 {
-        font-size: 1.15rem;
+        font-size: 1rem;
     }
 }
 
@@ -2568,17 +2577,13 @@ footer p {
         border-left: 3px solid var(--showcase-accent);
     }
 
-    .showcase-media {
-        aspect-ratio: 16 / 11;
-    }
-
     .showcase-caption {
-        padding: 1.1rem 1rem 1rem;
+        padding: 0.95rem 0.9rem 0.9rem;
     }
 
     .showcase-caption h3,
     .showcase-item-featured .showcase-caption h3 {
-        font-size: 1.45rem;
+        font-size: 1.25rem;
     }
 
     .faq-grid {
@@ -2612,21 +2617,21 @@ footer p {
     }
 
     .showcase-media {
-        margin: 0.65rem 0.65rem 0;
+        margin: 0.55rem 0.55rem 0;
     }
 
     .showcase-caption {
-        padding: 1rem 0.85rem 0.9rem;
+        padding: 0.85rem 0.75rem 0.8rem;
     }
 
     .showcase-caption h3,
     .showcase-item-featured .showcase-caption h3 {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         padding-right: 3.5rem;
     }
 
     .showcase-caption p {
-        font-size: 0.82rem;
+        font-size: 0.76rem;
     }
     
     footer p {

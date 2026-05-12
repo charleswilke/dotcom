@@ -23,6 +23,71 @@ document.addEventListener('DOMContentLoaded', () => {
     readyCallbacks.forEach(callback => callback());
 });
 
+// Masonry layout for the showcase grid (preserves source order, packs into shortest column)
+onReady(() => {
+    const grid = document.querySelector('.showcase-grid');
+    if (!grid) return;
+    const items = Array.from(grid.querySelectorAll(':scope > .showcase-item'));
+    if (!items.length) return;
+
+    function getColumnCount() {
+        const tracks = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean);
+        return tracks.length || 1;
+    }
+
+    function getGap() {
+        const cs = getComputedStyle(grid);
+        const raw = cs.rowGap && cs.rowGap !== 'normal' ? cs.rowGap : cs.gap;
+        return parseFloat(raw) || 0;
+    }
+
+    function reset() {
+        grid.classList.remove('is-masonry');
+        grid.style.height = '';
+        items.forEach(item => {
+            item.style.width = '';
+            item.style.top = '';
+            item.style.left = '';
+        });
+    }
+
+    function layout() {
+        const cols = getColumnCount();
+        if (cols < 2) { reset(); return; }
+        // Measure before flipping to masonry so column width is from the real grid layout.
+        const probe = items[0];
+        const colWidth = probe.getBoundingClientRect().width;
+        const gap = getGap();
+        grid.classList.add('is-masonry');
+        const colHeights = new Array(cols).fill(0);
+        items.forEach(item => {
+            item.style.width = `${colWidth}px`;
+            const shortest = colHeights.indexOf(Math.min(...colHeights));
+            item.style.left = `${shortest * (colWidth + gap)}px`;
+            item.style.top = `${colHeights[shortest]}px`;
+            colHeights[shortest] = colHeights[shortest] + item.offsetHeight + gap;
+        });
+        grid.style.height = `${Math.max(...colHeights) - gap}px`;
+    }
+
+    let rafId = 0;
+    function scheduleLayout() {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(layout);
+    }
+
+    layout();
+    // Re-run once images report dimensions (natural aspect ratios can shift heights).
+    grid.querySelectorAll('img').forEach(img => {
+        if (!img.complete) img.addEventListener('load', scheduleLayout, { once: true });
+    });
+    window.addEventListener('resize', scheduleLayout);
+    if ('ResizeObserver' in window) {
+        const ro = new ResizeObserver(scheduleLayout);
+        items.forEach(item => ro.observe(item));
+    }
+});
+
 function scheduleIdleWork(callback, timeout = 2000) {
     if ('requestIdleCallback' in window) {
         window.requestIdleCallback(callback, { timeout });

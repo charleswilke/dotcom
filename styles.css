@@ -10355,8 +10355,8 @@ body.reader-open {
     font-family: 'Simonetta', 'Space Mono', monospace;
     font-weight: 900;
     font-style: italic;
-    font-size: 19px;
-    line-height: 1.35;
+    font-size: 26px;
+    line-height: 1.25;
     color: rgba(255, 245, 212, 0.86);
     margin: 0;
     text-align: left;
@@ -10413,8 +10413,8 @@ body.reader-open {
 .article-reader-body {
     padding: 42px var(--reader-gutter) 56px;
     font-family: 'Montaga', 'Space Mono', monospace;
-    font-size: 19px;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 1.65;
     color: var(--fiche-ink);
     background: rgba(255, 255, 255, 0.95);
     background-image:

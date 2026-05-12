@@ -35,7 +35,7 @@ When the user updates an album cover — or mentions they swapped/renamed/replac
 ./bump-cover.sh junkyard-cabaret-cover.webp
 ```
 
-Defaults to today's date; pass a second arg to override. It replaces any existing `?v=…` in place rather than appending twice. After running it, commit and push — Vercel auto-deploys from `main`.
+Defaults to a minute-precision timestamp (`YYYYMMDDHHMM`) so same-day re-stamps always produce a new value; pass a second arg to override. It replaces any existing `?v=…` in place rather than appending twice. After running it, commit and push — Vercel auto-deploys from `main`.
 
 Cues to run this: "I updated the cover for X", "just replaced the album art", "swapped the cover", or any time you edit a `*-cover.webp` file in place.
 

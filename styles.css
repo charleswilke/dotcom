@@ -10335,7 +10335,7 @@ body.reader-open {
     color: rgba(46, 33, 19, 0.35);
 }
 .article-reader-title {
-    font-family: 'IBM Plex Sans Condensed', 'Merriweather Sans', 'Exo', Arial, sans-serif;
+    font-family: 'Space Mono', monospace;
     font-weight: 700;
     font-size: clamp(32px, 5vw, 56px);
     line-height: 1.04;
@@ -10352,7 +10352,7 @@ body.reader-open {
 .article-reader-subtitle {
     flex: 1 1 auto;
     min-width: 0;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Simonetta', 'Space Mono', monospace;
     font-size: 15px;
     line-height: 1.4;
     color: rgba(255, 245, 212, 0.86);
@@ -10410,7 +10410,7 @@ body.reader-open {
 
 .article-reader-body {
     padding: 42px var(--reader-gutter) 56px;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Simonetta', 'Space Mono', monospace;
     font-size: 16px;
     line-height: 1.68;
     color: var(--fiche-ink);

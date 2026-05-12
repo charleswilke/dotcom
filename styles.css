@@ -10353,7 +10353,7 @@ body.reader-open {
     flex: 1 1 auto;
     min-width: 0;
     font-family: 'Simonetta', 'Space Mono', monospace;
-    font-weight: 900;
+    font-weight: 400;
     font-style: italic;
     font-size: 26px;
     line-height: 1.25;
@@ -10448,7 +10448,7 @@ body.reader-open {
 .article-reader-body > ul,
 .article-reader-body > ol,
 .article-reader-body > blockquote {
-    max-width: 640px;
+    max-width: 600px;
     margin-inline: auto;
 }
 .article-reader-body > .captioned-image-container:first-child,

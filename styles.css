@@ -10353,8 +10353,10 @@ body.reader-open {
     flex: 1 1 auto;
     min-width: 0;
     font-family: 'Simonetta', 'Space Mono', monospace;
-    font-size: 15px;
-    line-height: 1.4;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.35;
     color: rgba(255, 245, 212, 0.86);
     margin: 0;
     text-align: left;
@@ -10410,9 +10412,9 @@ body.reader-open {
 
 .article-reader-body {
     padding: 42px var(--reader-gutter) 56px;
-    font-family: 'Simonetta', 'Space Mono', monospace;
-    font-size: 16px;
-    line-height: 1.68;
+    font-family: 'Montaga', 'Space Mono', monospace;
+    font-size: 19px;
+    line-height: 1.6;
     color: var(--fiche-ink);
     background: rgba(255, 255, 255, 0.95);
     background-image:

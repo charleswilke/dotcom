@@ -3245,6 +3245,91 @@ html {
     }
 }
 
+/* Substack subscribe CTA — a slim "transmission strip" between the feed
+   and the next section. Borderless by default; just a hairline rule and
+   the section's CRT atmosphere doing the work. */
+.subscribe-cta {
+    position: relative;
+    z-index: 2;
+    margin: 1.75rem auto 0.5rem;
+    max-width: 880px;
+    padding: 1rem 0.25rem 0.5rem;
+    border-top: 1px solid rgba(0, 247, 194, 0.18);
+}
+
+.subscribe-cta-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+}
+
+.subscribe-cta-copy {
+    min-width: 0;
+}
+
+.subscribe-cta-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: 'Orbitron', 'Exo', 'Space Mono', monospace, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #ffe0a8;
+    text-shadow: 0 0 8px rgba(255, 168, 30, 0.35);
+    margin-bottom: 0.4rem;
+}
+
+/* "On Air" LED — same anatomy as the load-more button's indicator */
+.subscribe-cta-kicker::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #7dffd4 0%, #00f7c2 55%, #046b56 100%);
+    box-shadow:
+        0 0 5px rgba(0, 247, 194, 0.85),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+    animation: tuner-led-pulse 1.8s ease-in-out infinite;
+}
+
+.subscribe-cta-blurb {
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: rgba(235, 232, 255, 0.82);
+    margin: 0;
+    max-width: 32ch;
+}
+
+.subscribe-cta-embed {
+    flex-shrink: 0;
+}
+
+.subscribe-cta-embed iframe {
+    display: block;
+    width: 480px;
+    max-width: 100%;
+    height: 150px;
+    border-radius: 6px;
+}
+
+@media (max-width: 720px) {
+    .subscribe-cta-inner {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+        text-align: center;
+        justify-items: center;
+    }
+    .subscribe-cta-blurb {
+        max-width: none;
+    }
+    .subscribe-cta-embed iframe {
+        width: 100%;
+    }
+}
+
 /* Audio Summary Section - Subtle & Collapsible */
 .audio-summary-container {
     margin-top: 1rem;

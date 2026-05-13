@@ -1,5 +1,89 @@
 /** Main JavaScript for charleswilke.com index page */
 
+(() => {
+    const root = document.documentElement;
+    const THUMB_HEIGHT = 60;
+
+    let thumbEl = null;
+    const ensureThumb = () => {
+        if (thumbEl) return thumbEl;
+        thumbEl = document.createElement('div');
+        thumbEl.className = 'tuner-thumb';
+        thumbEl.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(thumbEl);
+        attachDrag(thumbEl);
+        return thumbEl;
+    };
+
+    const updateThumb = () => {
+        const el = ensureThumb();
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        if (max <= 0) { el.style.display = 'none'; return; }
+        el.style.display = '';
+        const ratio = Math.min(1, Math.max(0, window.scrollY / max));
+        const top = ratio * (window.innerHeight - THUMB_HEIGHT);
+        root.style.setProperty('--tuner-thumb-top', `${top}px`);
+    };
+
+    const attachDrag = (el) => {
+        let dragging = false;
+        let startY = 0;
+        let startScroll = 0;
+        el.addEventListener('pointerdown', (e) => {
+            dragging = true;
+            startY = e.clientY;
+            startScroll = window.scrollY;
+            el.classList.add('is-dragging');
+            el.setPointerCapture(e.pointerId);
+            e.preventDefault();
+        });
+        el.addEventListener('pointermove', (e) => {
+            if (!dragging) return;
+            const dy = e.clientY - startY;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            const trackLen = window.innerHeight - THUMB_HEIGHT;
+            if (trackLen <= 0 || max <= 0) return;
+            const newScroll = startScroll + (dy / trackLen) * max;
+            window.scrollTo(0, newScroll);
+        });
+        const stop = (e) => {
+            if (!dragging) return;
+            dragging = false;
+            el.classList.remove('is-dragging');
+            try { el.releasePointerCapture(e.pointerId); } catch (_) {}
+        };
+        el.addEventListener('pointerup', stop);
+        el.addEventListener('pointercancel', stop);
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { updateThumb(); ticking = false; });
+    };
+
+    const injectSegments = () => {
+        document.querySelectorAll('[data-tuner-theme]').forEach(sec => {
+            if (sec.querySelector(':scope > .tuner-segment')) return;
+            const seg = document.createElement('div');
+            seg.className = 'tuner-segment';
+            seg.setAttribute('aria-hidden', 'true');
+            sec.appendChild(seg);
+        });
+    };
+    const init = () => { injectSegments(); updateThumb(); };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    window.addEventListener('load', init);
+    window.addEventListener('resize', updateThumb, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+
 // Pre-computed SVG fallback placeholder (used when article images fail to load)
 const FALLBACK_SVG_B64 = btoa('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#2c4f7c;stop-opacity:1" /><stop offset="100%" style="stop-color:#1a1550;stop-opacity:1" /></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="800" height="400" fill="url(#grad)"/><g fill="#00f7c2" filter="url(#glow)"><path d="M100,200 L200,100 L300,200 L400,100 L500,200 L600,100 L700,200" stroke="#00f7c2" stroke-width="4" fill="none"/><circle cx="400" cy="200" r="50"/><text x="400" y="200" font-family="monospace" font-size="24" text-anchor="middle" dominant-baseline="middle">l.ai.bor</text></g></svg>');
 const FALLBACK_SVG = 'data:image/svg+xml;base64,' + FALLBACK_SVG_B64;

@@ -99,6 +99,73 @@
     }
 }
 
+/* Tuner tick rail — per-section, injected as .tuner-segment inside tagged sections */
+[data-tuner-theme] {
+    position: relative;
+}
+.tuner-segment {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 14px;
+    pointer-events: none;
+    z-index: 5;
+    background-color: transparent;
+    background-image:
+        repeating-linear-gradient(to bottom, rgba(255, 185, 58, 0.75) 0 2px, transparent 2px 24px),
+        repeating-linear-gradient(to bottom, rgba(255, 185, 58, 0.35) 0 1px, transparent 1px 8px);
+    background-size: 9px 24px, 4px 8px;
+    background-repeat: repeat-y, repeat-y;
+    background-position: 2px 0, center 0;
+}
+[data-tuner-theme="light"] > .tuner-segment {
+    background-image:
+        repeating-linear-gradient(to bottom, rgba(26, 21, 80, 0.9) 0 2px, transparent 2px 24px),
+        repeating-linear-gradient(to bottom, rgba(26, 21, 80, 0.5) 0 1px, transparent 1px 8px);
+}
+
+/* Tuner-knob scrollbar (custom — OS scrollbar hidden) */
+html {
+    scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+/* Custom tuner thumb — fixed-position, slides over the tick rail */
+.tuner-thumb {
+    position: fixed;
+    right: 1px;
+    width: 14px;
+    height: 60px;
+    top: var(--tuner-thumb-top, 0px);
+    z-index: 10;
+    pointer-events: auto;
+    cursor: grab;
+    border-radius: 4px;
+    border: 1px solid rgba(20, 12, 0, 0.75);
+    background:
+        linear-gradient(to right, transparent 0 30%, rgba(0, 0, 0, 0.65) 30% 32%, rgba(255, 255, 255, 0.4) 32% 34%, transparent 34% 66%, rgba(0, 0, 0, 0.65) 66% 68%, rgba(255, 255, 255, 0.4) 68% 70%, transparent 70% 100%) center / 100% 60% no-repeat,
+        linear-gradient(to bottom, #ffd067 0%, #ffb93a 50%, #c98715 100%);
+    box-shadow:
+        0 0 14px rgba(255, 185, 58, 0.75),
+        inset 0 2px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.15s ease;
+}
+.tuner-thumb:hover {
+    box-shadow:
+        0 0 18px rgba(255, 185, 58, 0.95),
+        0 0 3px rgba(255, 235, 170, 1),
+        inset 0 2px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+}
+.tuner-thumb.is-dragging {
+    cursor: grabbing;
+}
+
 /* Base Styles */
 body {
     font-family: 'Space Mono', monospace;
@@ -133,6 +200,7 @@ body::after {
 /* Header Styles */
 header {
     position: relative;
+    z-index: 11;
     height: 26vh;
     min-height: 260px;
     display: flex;
@@ -2204,6 +2272,7 @@ footer {
     color: var(--light);
     text-align: center;
     position: relative;
+    z-index: 11;
     overflow: hidden;
     height: 20vh;
     min-height: 200px;
@@ -9924,18 +9993,24 @@ section.production-header.alice p {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 185, 58, 0.3);
-    box-shadow: 0 0 20px rgba(255, 185, 58, 0.1);
+    box-shadow:
+        0 0 20px rgba(255, 185, 58, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.6),
+        0 8px 12px -6px rgba(0, 0, 0, 0.45);
     transform: translateY(0);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .site-nav.nav-hidden {
-    transform: translateY(-100%);
+    transform: translateY(calc(-100% - 18px));
 }
 
 .site-nav.nav-scrolled {
     border-bottom-color: rgba(255, 185, 58, 0.5);
-    box-shadow: 0 0 30px rgba(255, 185, 58, 0.18);
+    box-shadow:
+        0 0 30px rgba(255, 185, 58, 0.18),
+        0 4px 6px -2px rgba(0, 0, 0, 0.65),
+        0 8px 12px -6px rgba(0, 0, 0, 0.5);
 }
 
 .nav-inner {
@@ -10311,7 +10386,10 @@ body.reader-open {
     border-bottom: 1px solid rgba(168, 90, 29, 0.5);
     box-shadow:
         inset 0 1px 0 rgba(255, 235, 170, 0.08),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+        inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+        0 6px 10px -2px rgba(0, 0, 0, 0.55),
+        0 14px 22px -6px rgba(0, 0, 0, 0.45),
+        0 28px 36px -14px rgba(0, 0, 0, 0.3);
     font-family: 'Space Mono', monospace;
     font-size: 12px;
     letter-spacing: 0.08em;
@@ -10380,7 +10458,9 @@ body.reader-open {
         linear-gradient(90deg, rgba(26, 21, 80, 0.95), rgba(38, 91, 129, 0.96));
     box-shadow:
         inset 0 1px 0 rgba(255, 235, 170, 0.2),
-        inset 0 -8px 14px -12px rgba(255, 185, 58, 0.7);
+        inset 0 -8px 14px -12px rgba(255, 185, 58, 0.7),
+        inset 0 7px 8px -5px rgba(0, 0, 0, 0.75),
+        inset 0 3px 4px -2px rgba(0, 0, 0, 0.6);
     isolation: isolate;
     text-align: left;
     overflow: hidden;

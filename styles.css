@@ -3245,19 +3245,69 @@ html {
     }
 }
 
-/* Substack subscribe CTA — a slim "transmission strip" between the feed
-   and the next section. Borderless by default; just a hairline rule and
-   the section's CRT atmosphere doing the work. */
+/* Substack subscribe CTA — a single "broadcast monitor" between the feed
+   and the next section. Cyan corner brackets, soft neon halo, scanlines. */
 .subscribe-cta {
     position: relative;
     z-index: 2;
-    margin: 1.75rem auto 0.5rem;
+    margin: 2rem auto 1rem;
     max-width: 880px;
-    padding: 1rem 0.25rem 0.5rem;
-    border-top: 1px solid rgba(0, 247, 194, 0.18);
+    padding: 1.5rem 1.75rem;
+    border: 1px solid rgba(0, 247, 194, 0.28);
+    border-radius: 10px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 35%),
+        linear-gradient(180deg, rgba(20, 14, 40, 0.55) 0%, rgba(10, 6, 22, 0.7) 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 0 22px rgba(0, 0, 0, 0.4),
+        0 0 28px rgba(0, 247, 194, 0.12),
+        0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Scanlines layered across the whole monitor */
+.subscribe-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0, 247, 194, 0.05) 0px,
+        rgba(0, 247, 194, 0.05) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+/* CRT corner brackets — four L-shapes at the inset corners. */
+.subscribe-cta::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 7px;
+    pointer-events: none;
+    background:
+        linear-gradient(to right, #ffa81e 0, #ffa81e 14px, transparent 14px) top left / 14px 1px no-repeat,
+        linear-gradient(to bottom, #ffa81e 0, #ffa81e 14px, transparent 14px) top left / 1px 14px no-repeat,
+        linear-gradient(to left, #ffa81e 0, #ffa81e 14px, transparent 14px) top right / 14px 1px no-repeat,
+        linear-gradient(to bottom, #ffa81e 0, #ffa81e 14px, transparent 14px) top right / 1px 14px no-repeat,
+        linear-gradient(to right, #ffa81e 0, #ffa81e 14px, transparent 14px) bottom left / 14px 1px no-repeat,
+        linear-gradient(to top, #ffa81e 0, #ffa81e 14px, transparent 14px) bottom left / 1px 14px no-repeat,
+        linear-gradient(to left, #ffa81e 0, #ffa81e 14px, transparent 14px) bottom right / 14px 1px no-repeat,
+        linear-gradient(to top, #ffa81e 0, #ffa81e 14px, transparent 14px) bottom right / 1px 14px no-repeat;
+    filter: drop-shadow(0 0 3px rgba(255, 168, 30, 0.7));
+    opacity: 0.95;
+    z-index: 2;
 }
 
 .subscribe-cta-inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 2rem;
@@ -3303,61 +3353,8 @@ html {
     max-width: 32ch;
 }
 
-/* Broadcast monitor — hairline cyan frame, soft neon halo,
-   CRT corner brackets echoing the oscilloscope above. */
 .subscribe-cta-embed {
     flex-shrink: 0;
-    position: relative;
-    padding: 10px 12px;
-    border: 1px solid rgba(0, 247, 194, 0.28);
-    border-radius: 8px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 35%),
-        linear-gradient(180deg, rgba(20, 14, 40, 0.55) 0%, rgba(10, 6, 22, 0.7) 100%);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        inset 0 0 18px rgba(0, 0, 0, 0.4),
-        0 0 24px rgba(0, 247, 194, 0.12),
-        0 6px 22px rgba(0, 0, 0, 0.4);
-}
-
-/* Scanlines inside the monitor — same texture as .rss-feed::before */
-.subscribe-cta-embed::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background-image: repeating-linear-gradient(
-        0deg,
-        rgba(0, 247, 194, 0.05) 0px,
-        rgba(0, 247, 194, 0.05) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    pointer-events: none;
-    mix-blend-mode: screen;
-    opacity: 0.55;
-}
-
-/* CRT corner brackets — four L-shapes at the inset corners. */
-.subscribe-cta-embed::before {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    border-radius: 6px;
-    pointer-events: none;
-    background:
-        linear-gradient(to right, #00f7c2 0, #00f7c2 10px, transparent 10px) top left / 10px 1px no-repeat,
-        linear-gradient(to bottom, #00f7c2 0, #00f7c2 10px, transparent 10px) top left / 1px 10px no-repeat,
-        linear-gradient(to left, #00f7c2 0, #00f7c2 10px, transparent 10px) top right / 10px 1px no-repeat,
-        linear-gradient(to bottom, #00f7c2 0, #00f7c2 10px, transparent 10px) top right / 1px 10px no-repeat,
-        linear-gradient(to right, #00f7c2 0, #00f7c2 10px, transparent 10px) bottom left / 10px 1px no-repeat,
-        linear-gradient(to top, #00f7c2 0, #00f7c2 10px, transparent 10px) bottom left / 1px 10px no-repeat,
-        linear-gradient(to left, #00f7c2 0, #00f7c2 10px, transparent 10px) bottom right / 10px 1px no-repeat,
-        linear-gradient(to top, #00f7c2 0, #00f7c2 10px, transparent 10px) bottom right / 1px 10px no-repeat;
-    filter: drop-shadow(0 0 3px rgba(0, 247, 194, 0.6));
-    opacity: 0.9;
-    z-index: 2;
 }
 
 .subscribe-cta-embed iframe {
@@ -3365,8 +3362,6 @@ html {
     width: 480px;
     max-width: 100%;
     height: 150px;
-    position: relative;
-    z-index: 1;
 }
 
 @media (max-width: 720px) {

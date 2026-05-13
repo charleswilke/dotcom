@@ -12,6 +12,9 @@
         thumbEl.setAttribute('aria-hidden', 'true');
         document.body.appendChild(thumbEl);
         attachDrag(thumbEl);
+        thumbEl.addEventListener('animationend', () => {
+            thumbEl.classList.remove('is-settling');
+        });
         return thumbEl;
     };
 
@@ -57,7 +60,21 @@
     };
 
     let ticking = false;
+    let scrollStopTimer = null;
     const onScroll = () => {
+        const el = ensureThumb();
+        if (!el.classList.contains('is-dragging')) {
+            el.classList.remove('is-settling');
+            el.classList.add('is-scrolling');
+        }
+        clearTimeout(scrollStopTimer);
+        scrollStopTimer = setTimeout(() => {
+            if (el.classList.contains('is-dragging')) return;
+            el.classList.remove('is-scrolling');
+            el.classList.remove('is-settling');
+            void el.offsetWidth;
+            el.classList.add('is-settling');
+        }, 130);
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => { updateThumb(); ticking = false; });

@@ -10525,7 +10525,7 @@ body.reader-open {
 
 .article-reader-body {
     padding: 42px var(--reader-gutter) 56px;
-    font-family: 'Montaga', 'Space Mono', monospace;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
     line-height: 1.65;
     color: var(--fiche-ink);

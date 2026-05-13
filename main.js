@@ -540,6 +540,13 @@ function openArticleReader(item) {
 
     bodyEl.innerHTML = sanitizeArticleHtml(item.content || item.description || '');
     hydrateNativeMedia(bodyEl);
+    bodyEl.querySelectorAll('hr').forEach(hr => {
+        const row = document.createElement('div');
+        row.className = 'article-reader-signal';
+        row.setAttribute('role', 'separator');
+        for (let i = 0; i < 5; i++) row.appendChild(document.createElement('span'));
+        hr.replaceWith(row);
+    });
 
     if (item.link) {
         topLink.href = item.link;

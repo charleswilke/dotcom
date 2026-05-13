@@ -624,6 +624,12 @@ function openArticleReader(item) {
 
     bodyEl.innerHTML = sanitizeArticleHtml(item.content || item.description || '');
     hydrateNativeMedia(bodyEl);
+    bodyEl.querySelectorAll('p').forEach(p => {
+        const txt = p.textContent.replace(/\s+/g, '');
+        if (/^[-‐-―−]{3,}$/.test(txt)) {
+            p.replaceWith(document.createElement('hr'));
+        }
+    });
     bodyEl.querySelectorAll('hr').forEach(hr => {
         const row = document.createElement('div');
         row.className = 'article-reader-signal';

@@ -247,3 +247,129 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initCommonHeaderGlitch, 100);
 });
 
+// ===== TUNER SCROLLBAR =====
+(() => {
+    const root = document.documentElement;
+    const THUMB_HEIGHT = 60;
+
+    let thumbEl = null;
+    const ensureThumb = () => {
+        if (thumbEl) return thumbEl;
+        thumbEl = document.createElement('div');
+        thumbEl.className = 'tuner-thumb';
+        thumbEl.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(thumbEl);
+        attachDrag(thumbEl);
+        thumbEl.addEventListener('animationend', () => {
+            thumbEl.classList.remove('is-settling');
+            thumbEl.classList.remove('is-touch-release');
+        });
+        return thumbEl;
+    };
+
+    const updateThumb = () => {
+        const el = ensureThumb();
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        if (max <= 0) { el.style.display = 'none'; return; }
+        el.style.display = '';
+        const ratio = Math.min(1, Math.max(0, window.scrollY / max));
+        const top = ratio * (window.innerHeight - THUMB_HEIGHT);
+        root.style.setProperty('--tuner-thumb-top', `${top}px`);
+    };
+
+    const attachDrag = (el) => {
+        let dragging = false;
+        let startY = 0;
+        let startScroll = 0;
+        let primeTimer = null;
+        let primed = false;
+        let moved = false;
+        el.addEventListener('pointerdown', (e) => {
+            dragging = true;
+            primed = false;
+            moved = false;
+            startY = e.clientY;
+            startScroll = window.scrollY;
+            el.classList.add('is-dragging');
+            try { el.setPointerCapture(e.pointerId); } catch (_) {}
+            if (e.pointerType === 'touch') {
+                clearTimeout(primeTimer);
+                primeTimer = setTimeout(() => {
+                    if (!dragging) return;
+                    primed = true;
+                    el.classList.add('is-primed');
+                }, 160);
+            }
+            e.preventDefault();
+        });
+        el.addEventListener('pointermove', (e) => {
+            if (!dragging) return;
+            const dy = e.clientY - startY;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            const trackLen = window.innerHeight - THUMB_HEIGHT;
+            if (trackLen <= 0 || max <= 0) return;
+            if (!moved && Math.abs(dy) > 1) {
+                moved = true;
+                el.classList.add('is-scrolling');
+            }
+            const newScroll = startScroll + (dy / trackLen) * max;
+            window.scrollTo(0, newScroll);
+        });
+        const stop = (e) => {
+            if (!dragging) return;
+            dragging = false;
+            clearTimeout(primeTimer);
+            el.classList.remove('is-dragging');
+            el.classList.remove('is-scrolling');
+            if (primed) {
+                primed = false;
+                el.classList.remove('is-primed');
+                el.classList.remove('is-settling');
+                void el.offsetWidth;
+                el.classList.add('is-touch-release');
+            } else if (moved) {
+                el.classList.remove('is-settling');
+                el.classList.remove('is-touch-release');
+                void el.offsetWidth;
+                el.classList.add('is-settling');
+            }
+            try { el.releasePointerCapture(e.pointerId); } catch (_) {}
+        };
+        el.addEventListener('pointerup', stop);
+        el.addEventListener('pointercancel', stop);
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { updateThumb(); ticking = false; });
+    };
+
+    const injectSegments = () => {
+        document.querySelectorAll('[data-tuner-theme]').forEach(sec => {
+            if (sec.querySelector(':scope > .tuner-segment')) return;
+            const seg = document.createElement('div');
+            seg.className = 'tuner-segment';
+            seg.setAttribute('aria-hidden', 'true');
+            sec.appendChild(seg);
+        });
+    };
+    const alignSegments = () => {
+        document.querySelectorAll('[data-tuner-theme] > .tuner-segment').forEach(seg => {
+            const top = seg.parentElement.getBoundingClientRect().top + window.scrollY;
+            const offset = -(((top % 24) + 24) % 24);
+            seg.style.backgroundPositionY = `${offset}px, ${offset}px`;
+        });
+    };
+    const init = () => { injectSegments(); alignSegments(); updateThumb(); };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    window.addEventListener('load', init);
+    window.addEventListener('resize', () => { alignSegments(); updateThumb(); }, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+})();
+

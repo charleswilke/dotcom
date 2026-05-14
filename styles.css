@@ -1679,11 +1679,14 @@ section.production-header.alice .production-details p strong {
 .showcase-media::after {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: -25%;
+    right: -25%;
     background:
         linear-gradient(125deg, transparent 18%, rgba(248, 233, 210, 0.08) 34%, transparent 48%),
         linear-gradient(180deg, transparent 55%, var(--showcase-media-tint) 100%);
-    transform: translateX(-18%);
+    transform: translateX(-12%);
     transition: transform 0.35s ease, opacity 0.35s ease;
     pointer-events: none;
     z-index: 3;

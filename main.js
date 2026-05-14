@@ -35,9 +35,11 @@
         let startScroll = 0;
         let primeTimer = null;
         let primed = false;
+        let moved = false;
         el.addEventListener('pointerdown', (e) => {
             dragging = true;
             primed = false;
+            moved = false;
             startY = e.clientY;
             startScroll = window.scrollY;
             el.classList.add('is-dragging');
@@ -58,6 +60,10 @@
             const max = document.documentElement.scrollHeight - window.innerHeight;
             const trackLen = window.innerHeight - THUMB_HEIGHT;
             if (trackLen <= 0 || max <= 0) return;
+            if (!moved && Math.abs(dy) > 1) {
+                moved = true;
+                el.classList.add('is-scrolling');
+            }
             const newScroll = startScroll + (dy / trackLen) * max;
             window.scrollTo(0, newScroll);
         });
@@ -66,13 +72,18 @@
             dragging = false;
             clearTimeout(primeTimer);
             el.classList.remove('is-dragging');
+            el.classList.remove('is-scrolling');
             if (primed) {
                 primed = false;
                 el.classList.remove('is-primed');
-                el.classList.remove('is-scrolling');
                 el.classList.remove('is-settling');
                 void el.offsetWidth;
                 el.classList.add('is-touch-release');
+            } else if (moved) {
+                el.classList.remove('is-settling');
+                el.classList.remove('is-touch-release');
+                void el.offsetWidth;
+                el.classList.add('is-settling');
             }
             try { el.releasePointerCapture(e.pointerId); } catch (_) {}
         };
@@ -81,22 +92,7 @@
     };
 
     let ticking = false;
-    let scrollStopTimer = null;
     const onScroll = () => {
-        const el = ensureThumb();
-        if (!el.classList.contains('is-dragging')) {
-            el.classList.remove('is-settling');
-            el.classList.add('is-scrolling');
-        }
-        clearTimeout(scrollStopTimer);
-        scrollStopTimer = setTimeout(() => {
-            if (el.classList.contains('is-dragging')) return;
-            if (el.classList.contains('is-touch-release')) return;
-            el.classList.remove('is-scrolling');
-            el.classList.remove('is-settling');
-            void el.offsetWidth;
-            el.classList.add('is-settling');
-        }, 130);
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => { updateThumb(); ticking = false; });

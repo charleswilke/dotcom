@@ -121,8 +121,8 @@
 }
 [data-tuner-theme="light"] > .tuner-segment {
     background-image:
-        repeating-linear-gradient(to bottom, rgba(26, 21, 80, 0.9) 0 2px, transparent 2px 24px),
-        repeating-linear-gradient(to bottom, rgba(26, 21, 80, 0.5) 0 1px, transparent 1px 8px);
+        repeating-linear-gradient(to bottom, rgba(75, 29, 138, 0.55) 0 2px, transparent 2px 24px),
+        repeating-linear-gradient(to bottom, rgba(75, 29, 138, 0.28) 0 1px, transparent 1px 8px);
 }
 
 /* Tuner-knob scrollbar (custom — OS scrollbar hidden) */

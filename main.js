@@ -14,6 +14,7 @@
         attachDrag(thumbEl);
         thumbEl.addEventListener('animationend', () => {
             thumbEl.classList.remove('is-settling');
+            thumbEl.classList.remove('is-touch-release');
         });
         return thumbEl;
     };
@@ -32,12 +33,23 @@
         let dragging = false;
         let startY = 0;
         let startScroll = 0;
+        let primeTimer = null;
+        let primed = false;
         el.addEventListener('pointerdown', (e) => {
             dragging = true;
+            primed = false;
             startY = e.clientY;
             startScroll = window.scrollY;
             el.classList.add('is-dragging');
-            el.setPointerCapture(e.pointerId);
+            try { el.setPointerCapture(e.pointerId); } catch (_) {}
+            if (e.pointerType === 'touch') {
+                clearTimeout(primeTimer);
+                primeTimer = setTimeout(() => {
+                    if (!dragging) return;
+                    primed = true;
+                    el.classList.add('is-primed');
+                }, 160);
+            }
             e.preventDefault();
         });
         el.addEventListener('pointermove', (e) => {
@@ -52,7 +64,16 @@
         const stop = (e) => {
             if (!dragging) return;
             dragging = false;
+            clearTimeout(primeTimer);
             el.classList.remove('is-dragging');
+            if (primed) {
+                primed = false;
+                el.classList.remove('is-primed');
+                el.classList.remove('is-scrolling');
+                el.classList.remove('is-settling');
+                void el.offsetWidth;
+                el.classList.add('is-touch-release');
+            }
             try { el.releasePointerCapture(e.pointerId); } catch (_) {}
         };
         el.addEventListener('pointerup', stop);
@@ -70,6 +91,7 @@
         clearTimeout(scrollStopTimer);
         scrollStopTimer = setTimeout(() => {
             if (el.classList.contains('is-dragging')) return;
+            if (el.classList.contains('is-touch-release')) return;
             el.classList.remove('is-scrolling');
             el.classList.remove('is-settling');
             void el.offsetWidth;
@@ -3688,9 +3710,9 @@ function initJCLightbox() {
     const tracks = [
         { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
         { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
+        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', article: 'https://charleswilke.substack.com/p/staccato-again' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
-        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
-        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', article: 'https://charleswilke.substack.com/p/staccato-again' }
+        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

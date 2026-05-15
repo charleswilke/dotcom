@@ -30,6 +30,7 @@ function initStickyNav() {
     const navLinks = document.getElementById('navLinks');
     const allDropdownWraps = document.querySelectorAll('.nav-explore-wrap');
     const allNavLinks = document.querySelectorAll('.nav-link');
+    const sectionNavLinks = document.querySelectorAll('[data-section]');
     const navLogo = document.getElementById('navLogo');
 
     if (!nav) return;
@@ -90,8 +91,8 @@ function initStickyNav() {
         updateActiveLink();
     }
 
-    // --- Smooth scroll for anchor links (homepage only) ---
-    allNavLinks.forEach(link => {
+    // --- Smooth scroll for section links (homepage only) ---
+    sectionNavLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const target = document.getElementById(link.dataset.section);
             if (target) {
@@ -99,6 +100,7 @@ function initStickyNav() {
                 nav.classList.remove('nav-hidden');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                closeAllDropdowns();
                 const offset = nav.offsetHeight + 8;
                 const top = target.getBoundingClientRect().top + window.scrollY - offset;
                 window.scrollTo({ top, behavior: 'smooth' });

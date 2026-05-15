@@ -145,6 +145,9 @@ html::-webkit-scrollbar {
     pointer-events: auto;
     cursor: grab;
     touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    will-change: top, transform;
     border-radius: 4px;
     border: 1px solid rgba(20, 12, 0, 0.75);
     background:
@@ -235,16 +238,106 @@ html::-webkit-scrollbar {
         border-radius: 6px;
     }
 }
-/* Invisible touch hit-pad — extends the tappable area on coarse pointers */
+/* Coarse pointer mode uses the real thumb box as a generous touch target. */
 @media (hover: none) and (pointer: coarse) {
+    .tuner-thumb {
+        right: 0;
+        width: 48px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .tuner-thumb:hover,
+    .tuner-thumb.is-primed {
+        box-shadow: none;
+    }
+    .tuner-thumb::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 1px;
+        bottom: 0;
+        width: 12px;
+        border-radius: 4px;
+        border: 1px solid rgba(20, 12, 0, 0.75);
+        background:
+            linear-gradient(to right, transparent 0 30%, rgba(0, 0, 0, 0.65) 30% 32%, rgba(255, 255, 255, 0.4) 32% 34%, transparent 34% 66%, rgba(0, 0, 0, 0.65) 66% 68%, rgba(255, 255, 255, 0.4) 68% 70%, transparent 70% 100%) center / 100% 60% no-repeat,
+            linear-gradient(to bottom, #ffd067 0%, #ffb93a 50%, #c98715 100%);
+        box-shadow:
+            0 0 14px rgba(255, 185, 58, 0.75),
+            inset 0 2px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+        transform-origin: 50% 50%;
+        transition:
+            box-shadow 0.16s ease,
+            width 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+            border-radius 0.18s ease,
+            transform 0.08s ease-out;
+    }
     .tuner-thumb::after {
         content: '';
         position: absolute;
-        top: -18px;
-        bottom: -18px;
-        left: -22px;
-        right: -4px;
+        top: -24px;
+        bottom: -24px;
+        left: 0;
+        right: 0;
         background: transparent;
+    }
+    .tuner-thumb.is-touching::before,
+    .tuner-thumb.is-dragging::before {
+        width: 26px;
+        border-radius: 8px;
+        box-shadow:
+            0 0 22px rgba(255, 185, 58, 0.95),
+            0 0 6px rgba(255, 235, 170, 0.85),
+            inset 0 2px 0 rgba(255, 255, 255, 0.62),
+            inset 0 -2px 0 rgba(0, 0, 0, 0.55);
+    }
+    .tuner-thumb.is-primed {
+        width: 48px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+    }
+    .tuner-thumb.is-primed::before {
+        width: 32px;
+        border-radius: 9px;
+        box-shadow:
+            0 0 28px rgba(255, 185, 58, 1),
+            0 0 9px rgba(255, 235, 170, 0.95),
+            inset 0 2px 0 rgba(255, 255, 255, 0.65),
+            inset 0 -2px 0 rgba(0, 0, 0, 0.55);
+    }
+    .tuner-thumb.is-scrolling {
+        transform: none;
+        transition: none;
+    }
+    .tuner-thumb.is-scrolling::before {
+        transform: scaleY(1.12) scaleX(0.98);
+    }
+    .tuner-thumb.is-settling,
+    .tuner-thumb.is-touch-release {
+        animation: none;
+    }
+    .tuner-thumb.is-settling::before {
+        animation: tuner-thumb-settle 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .tuner-thumb.is-touch-release::before {
+        animation: tuner-thumb-touch-release 0.58s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+}
+@media (hover: none) and (pointer: coarse) and (max-width: 480px) {
+    .tuner-thumb::before {
+        width: 11px;
+    }
+    .tuner-thumb.is-touching::before,
+    .tuner-thumb.is-dragging::before {
+        width: 24px;
+    }
+    .tuner-thumb.is-primed::before {
+        width: 30px;
     }
 }
 

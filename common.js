@@ -284,15 +284,28 @@ document.addEventListener('DOMContentLoaded', () => {
         let primeTimer = null;
         let primed = false;
         let moved = false;
+        let touchActive = false;
+        let scrollRaf = 0;
+        let pendingScroll = 0;
+        const scheduleScroll = (top) => {
+            pendingScroll = top;
+            if (scrollRaf) return;
+            scrollRaf = requestAnimationFrame(() => {
+                window.scrollTo(0, pendingScroll);
+                scrollRaf = 0;
+            });
+        };
         el.addEventListener('pointerdown', (e) => {
             dragging = true;
             primed = false;
             moved = false;
+            touchActive = e.pointerType === 'touch';
             startY = e.clientY;
             startScroll = window.scrollY;
             el.classList.add('is-dragging');
             try { el.setPointerCapture(e.pointerId); } catch (_) {}
-            if (e.pointerType === 'touch') {
+            if (touchActive) {
+                el.classList.add('is-touching');
                 clearTimeout(primeTimer);
                 primeTimer = setTimeout(() => {
                     if (!dragging) return;
@@ -304,6 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         el.addEventListener('pointermove', (e) => {
             if (!dragging) return;
+            e.preventDefault();
             const dy = e.clientY - startY;
             const max = document.documentElement.scrollHeight - window.innerHeight;
             const trackLen = window.innerHeight - THUMB_HEIGHT;
@@ -313,13 +327,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.classList.add('is-scrolling');
             }
             const newScroll = startScroll + (dy / trackLen) * max;
-            window.scrollTo(0, newScroll);
+            scheduleScroll(newScroll);
         });
         const stop = (e) => {
             if (!dragging) return;
             dragging = false;
             clearTimeout(primeTimer);
+            if (scrollRaf) {
+                cancelAnimationFrame(scrollRaf);
+                window.scrollTo(0, pendingScroll);
+                scrollRaf = 0;
+            }
             el.classList.remove('is-dragging');
+            el.classList.remove('is-touching');
             el.classList.remove('is-scrolling');
             if (primed) {
                 primed = false;
@@ -337,6 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         el.addEventListener('pointerup', stop);
         el.addEventListener('pointercancel', stop);
+        el.addEventListener('lostpointercapture', stop);
     };
 
     let ticking = false;
@@ -372,4 +393,3 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => { alignSegments(); updateThumb(); }, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
 })();
-

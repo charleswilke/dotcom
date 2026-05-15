@@ -253,6 +253,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const THUMB_HEIGHT = 60;
 
     let thumbEl = null;
+    let thumbDragActive = false;
+    const getScrollMetrics = () => {
+        const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        const trackLen = Math.max(0, window.innerHeight - THUMB_HEIGHT);
+        return { max, trackLen };
+    };
+    const clampScroll = (scrollTop, max) => Math.min(max, Math.max(0, scrollTop));
+    const setThumbTopForScroll = (scrollTop, max, trackLen) => {
+        const clampedScroll = clampScroll(scrollTop, max);
+        const top = max > 0 ? (clampedScroll / max) * trackLen : 0;
+        root.style.setProperty('--tuner-thumb-top', `${top}px`);
+        return clampedScroll;
+    };
     const ensureThumb = () => {
         if (thumbEl) return thumbEl;
         thumbEl = document.createElement('div');
@@ -269,75 +282,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateThumb = () => {
         const el = ensureThumb();
-        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const { max, trackLen } = getScrollMetrics();
         if (max <= 0) { el.style.display = 'none'; return; }
         el.style.display = '';
-        const ratio = Math.min(1, Math.max(0, window.scrollY / max));
-        const top = ratio * (window.innerHeight - THUMB_HEIGHT);
-        root.style.setProperty('--tuner-thumb-top', `${top}px`);
+        setThumbTopForScroll(window.scrollY, max, trackLen);
     };
 
     const attachDrag = (el) => {
         let dragging = false;
+        let activePointerId = null;
         let startY = 0;
         let startScroll = 0;
         let primeTimer = null;
         let primed = false;
         let moved = false;
-        let touchActive = false;
-        let scrollRaf = 0;
-        let pendingScroll = 0;
-        const scheduleScroll = (top) => {
-            pendingScroll = top;
-            if (scrollRaf) return;
-            scrollRaf = requestAnimationFrame(() => {
-                window.scrollTo(0, pendingScroll);
-                scrollRaf = 0;
-            });
-        };
-        el.addEventListener('pointerdown', (e) => {
-            dragging = true;
-            primed = false;
-            moved = false;
-            touchActive = e.pointerType === 'touch';
-            startY = e.clientY;
-            startScroll = window.scrollY;
-            el.classList.add('is-dragging');
-            try { el.setPointerCapture(e.pointerId); } catch (_) {}
-            if (touchActive) {
-                el.classList.add('is-touching');
-                clearTimeout(primeTimer);
-                primeTimer = setTimeout(() => {
-                    if (!dragging) return;
-                    primed = true;
-                    el.classList.add('is-primed');
-                }, 160);
+        let dragRaf = 0;
+        let pendingDrag = null;
+        const applyDragFrame = () => {
+            if (pendingDrag) {
+                const { scrollTop, max, trackLen } = pendingDrag;
+                const clampedScroll = setThumbTopForScroll(scrollTop, max, trackLen);
+                window.scrollTo(0, clampedScroll);
+                pendingDrag = null;
             }
-            e.preventDefault();
-        });
-        el.addEventListener('pointermove', (e) => {
+            dragRaf = 0;
+        };
+        const scheduleDragFrame = (scrollTop, max, trackLen) => {
+            pendingDrag = { scrollTop, max, trackLen };
+            if (dragRaf) return;
+            dragRaf = requestAnimationFrame(applyDragFrame);
+        };
+        const addWindowListeners = () => {
+            window.addEventListener('pointermove', handleMove, { passive: false });
+            window.addEventListener('pointerup', stop);
+            window.addEventListener('pointercancel', stop);
+            window.addEventListener('blur', stop);
+        };
+        const removeWindowListeners = () => {
+            window.removeEventListener('pointermove', handleMove);
+            window.removeEventListener('pointerup', stop);
+            window.removeEventListener('pointercancel', stop);
+            window.removeEventListener('blur', stop);
+        };
+        const handleMove = (e) => {
             if (!dragging) return;
+            if (e.pointerId !== undefined && activePointerId !== null && e.pointerId !== activePointerId) return;
             e.preventDefault();
             const dy = e.clientY - startY;
-            const max = document.documentElement.scrollHeight - window.innerHeight;
-            const trackLen = window.innerHeight - THUMB_HEIGHT;
+            const { max, trackLen } = getScrollMetrics();
             if (trackLen <= 0 || max <= 0) return;
             if (!moved && Math.abs(dy) > 1) {
                 moved = true;
                 el.classList.add('is-scrolling');
             }
             const newScroll = startScroll + (dy / trackLen) * max;
-            scheduleScroll(newScroll);
-        });
-        const stop = (e) => {
+            scheduleDragFrame(newScroll, max, trackLen);
+        };
+        const stop = (e = {}) => {
             if (!dragging) return;
+            if (e.pointerId !== undefined && activePointerId !== null && e.pointerId !== activePointerId) return;
             dragging = false;
+            thumbDragActive = false;
             clearTimeout(primeTimer);
-            if (scrollRaf) {
-                cancelAnimationFrame(scrollRaf);
-                window.scrollTo(0, pendingScroll);
-                scrollRaf = 0;
+            if (dragRaf) {
+                cancelAnimationFrame(dragRaf);
+                applyDragFrame();
             }
+            removeWindowListeners();
             el.classList.remove('is-dragging');
             el.classList.remove('is-touching');
             el.classList.remove('is-scrolling');
@@ -353,15 +364,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 void el.offsetWidth;
                 el.classList.add('is-settling');
             }
-            try { el.releasePointerCapture(e.pointerId); } catch (_) {}
+            if (activePointerId !== null) {
+                try { el.releasePointerCapture(activePointerId); } catch (_) {}
+                activePointerId = null;
+            }
+            requestAnimationFrame(updateThumb);
         };
-        el.addEventListener('pointerup', stop);
-        el.addEventListener('pointercancel', stop);
-        el.addEventListener('lostpointercapture', stop);
+        el.addEventListener('pointerdown', (e) => {
+            if (dragging) stop();
+            dragging = true;
+            thumbDragActive = true;
+            activePointerId = e.pointerId;
+            primed = false;
+            moved = false;
+            startY = e.clientY;
+            startScroll = window.scrollY;
+            el.classList.add('is-dragging');
+            try { el.setPointerCapture(e.pointerId); } catch (_) {}
+            addWindowListeners();
+            if (e.pointerType === 'touch') {
+                el.classList.add('is-touching');
+                clearTimeout(primeTimer);
+                primeTimer = setTimeout(() => {
+                    if (!dragging) return;
+                    primed = true;
+                    el.classList.add('is-primed');
+                }, 160);
+            }
+            e.preventDefault();
+        });
     };
 
     let ticking = false;
     const onScroll = () => {
+        if (thumbDragActive) return;
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => { updateThumb(); ticking = false; });

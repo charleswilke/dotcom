@@ -1078,11 +1078,14 @@ function drawCelestial(c) {
     ctx.translate(c.x, c.y);
     ctx.rotate(c.angle);
     ctx.scale(1, c.elongation);
-    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, c.radius);
-    g.addColorStop(0, `rgba(${c.hue},0.6)`);
-    g.addColorStop(0.3, `rgba(${c.hue},0.3)`);
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g;
+    if (!c.grad) {
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, c.radius);
+      g.addColorStop(0, `rgba(${c.hue},0.6)`);
+      g.addColorStop(0.3, `rgba(${c.hue},0.3)`);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      c.grad = g;
+    }
+    ctx.fillStyle = c.grad;
     ctx.fillRect(-c.radius, -c.radius, c.radius * 2, c.radius * 2);
     // Spiral arm hints
     ctx.strokeStyle = `rgba(${c.hue},0.2)`;
@@ -1095,36 +1098,45 @@ function drawCelestial(c) {
     }
     ctx.stroke();
   } else if (c.type === 'planet') {
+    ctx.translate(c.x, c.y);
+    if (!c.atmoGrad) {
+      const ag = ctx.createRadialGradient(0, 0, c.radius * 0.8, 0, 0, c.radius * 2.5);
+      ag.addColorStop(0, c.atmoColor);
+      ag.addColorStop(1, 'rgba(0,0,0,0)');
+      c.atmoGrad = ag;
+      const bg = ctx.createRadialGradient(-c.radius * 0.3, -c.radius * 0.3, 0, 0, 0, c.radius);
+      bg.addColorStop(0, c.bodyColor);
+      bg.addColorStop(1, '#0a0a12');
+      c.bodyGrad = bg;
+    }
     // Atmosphere glow
-    const ag = ctx.createRadialGradient(c.x, c.y, c.radius * 0.8, c.x, c.y, c.radius * 2.5);
-    ag.addColorStop(0, c.atmoColor);
-    ag.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = ag;
-    ctx.fillRect(c.x - c.radius * 3, c.y - c.radius * 3, c.radius * 6, c.radius * 6);
+    ctx.fillStyle = c.atmoGrad;
+    ctx.fillRect(-c.radius * 3, -c.radius * 3, c.radius * 6, c.radius * 6);
     // Body
-    const bg = ctx.createRadialGradient(c.x - c.radius * 0.3, c.y - c.radius * 0.3, 0, c.x, c.y, c.radius);
-    bg.addColorStop(0, c.bodyColor);
-    bg.addColorStop(1, '#0a0a12');
-    ctx.fillStyle = bg;
+    ctx.fillStyle = c.bodyGrad;
     ctx.beginPath();
-    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+    ctx.arc(0, 0, c.radius, 0, Math.PI * 2);
     ctx.fill();
     // Rings
     if (c.rings) {
       ctx.strokeStyle = `rgba(180,160,200,${c.alpha * 0.6})`;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.ellipse(c.x, c.y, c.radius * 1.8, c.radius * c.ringTilt, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, c.radius * 1.8, c.radius * c.ringTilt, 0, 0, Math.PI * 2);
       ctx.stroke();
     }
   } else {
     // Moon — simple shaded circle with crater dots
-    const mg = ctx.createRadialGradient(c.x - c.radius * 0.25, c.y - c.radius * 0.25, 0, c.x, c.y, c.radius);
-    mg.addColorStop(0, `rgb(${c.shade + 30},${c.shade + 25},${c.shade + 20})`);
-    mg.addColorStop(1, `rgb(${c.shade - 10},${c.shade - 15},${c.shade - 15})`);
-    ctx.fillStyle = mg;
+    ctx.translate(c.x, c.y);
+    if (!c.grad) {
+      const mg = ctx.createRadialGradient(-c.radius * 0.25, -c.radius * 0.25, 0, 0, 0, c.radius);
+      mg.addColorStop(0, `rgb(${c.shade + 30},${c.shade + 25},${c.shade + 20})`);
+      mg.addColorStop(1, `rgb(${c.shade - 10},${c.shade - 15},${c.shade - 15})`);
+      c.grad = mg;
+    }
+    ctx.fillStyle = c.grad;
     ctx.beginPath();
-    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+    ctx.arc(0, 0, c.radius, 0, Math.PI * 2);
     ctx.fill();
     // Crater hints
     ctx.fillStyle = 'rgba(0,0,0,0.15)';
@@ -1134,7 +1146,7 @@ function drawCelestial(c) {
       const cr = c.radius * 0.4 * ((seed * (j + 1) * 0.1) % 0.6 + 0.2);
       const cdist = c.radius * 0.4 * ((seed * (j + 1) * 0.3) % 0.8 + 0.1);
       ctx.beginPath();
-      ctx.arc(c.x + Math.cos(ca) * cdist, c.y + Math.sin(ca) * cdist, cr, 0, Math.PI * 2);
+      ctx.arc(Math.cos(ca) * cdist, Math.sin(ca) * cdist, cr, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -1207,19 +1219,26 @@ function drawBackground() {
     c.x -= c.speed;
     if (c.x < -c.radius * 3) {
       Object.assign(c, makeCelestial(CONFIG.width + c.radius * 3 + Math.random() * 200));
+      c.grad = c.atmoGrad = c.bodyGrad = null;  // invalidate cached gradients after respawn
     }
     drawCelestial(c);
   }
 
-  // Layer 3: Nebula clouds
+  // Layer 3: Nebula clouds — gradient is built once per nebula and reused via translate
   for (const neb of nebulae) {
     neb.x -= neb.speed;
     if (neb.x < -neb.radius * 2) { neb.x = CONFIG.width + neb.radius * 2; neb.y = Math.random() * CONFIG.height; }
-    const grad = ctx.createRadialGradient(neb.x, neb.y, 0, neb.x, neb.y, neb.radius);
-    grad.addColorStop(0, neb.color);
-    grad.addColorStop(1, 'transparent');
-    ctx.fillStyle = grad;
-    ctx.fillRect(neb.x - neb.radius, neb.y - neb.radius, neb.radius * 2, neb.radius * 2);
+    if (!neb.grad) {
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, neb.radius);
+      g.addColorStop(0, neb.color);
+      g.addColorStop(1, 'transparent');
+      neb.grad = g;
+    }
+    ctx.save();
+    ctx.translate(neb.x, neb.y);
+    ctx.fillStyle = neb.grad;
+    ctx.fillRect(-neb.radius, -neb.radius, neb.radius * 2, neb.radius * 2);
+    ctx.restore();
   }
 
   // Layer 3.5: Moon terrain (suppressed during tunnel gauntlet)
@@ -1934,19 +1953,19 @@ function updateSecondaryProjectiles() {
 
     switch (p.type) {
       case 'homing': {
-        // Seek nearest enemy
-        let nearD = 300, nearE = null;
+        // Seek nearest enemy — compare squared distances; only sqrt the winner below
+        let nearDSq = 300 * 300, nearE = null;
         for (const e of enemies) {
-          const d = dist(p.x, p.y, e.x, e.y);
-          if (d < nearD) { nearD = d; nearE = e; }
+          const dSq = distSq(p.x, p.y, e.x, e.y);
+          if (dSq < nearDSq) { nearDSq = dSq; nearE = e; }
         }
         if (midBoss && midBoss.alive) {
-          const d = dist(p.x, p.y, midBoss.x, midBoss.y);
-          if (d < nearD) { nearD = d; nearE = midBoss; }
+          const dSq = distSq(p.x, p.y, midBoss.x, midBoss.y);
+          if (dSq < nearDSq) { nearDSq = dSq; nearE = midBoss; }
         }
         if (boss && boss.alive) {
-          const d = dist(p.x, p.y, boss.x, boss.y);
-          if (d < nearD) { nearD = d; nearE = boss; }
+          const dSq = distSq(p.x, p.y, boss.x, boss.y);
+          if (dSq < nearDSq) { nearDSq = dSq; nearE = boss; }
         }
         if (nearE) {
           const dx = nearE.x - p.x, dy = nearE.y - p.y;
@@ -1979,10 +1998,11 @@ function updateSecondaryProjectiles() {
       case 'shield':
         // Follow player
         p.x = player.x; p.y = player.y;
-        // Destroy nearby enemy bullets
+        // Destroy nearby enemy bullets (squared-distance check — no sqrt)
         for (let bi = enemyBullets.length - 1; bi >= 0; bi--) {
           const b = enemyBullets[bi];
-          if (dist(p.x, p.y, b.x, b.y) < p.radius + b.radius) {
+          const r = p.radius + b.radius;
+          if (distSq(p.x, p.y, b.x, b.y) < r * r) {
             spawnExplosion(b.x, b.y, 4, ['#44ddff', '#88eeff', '#ffffff']);
             swapRemove(enemyBullets, bi);
           }
@@ -2152,17 +2172,17 @@ function checkSecondaryCollisions() {
 function updatePlayerBullets() {
   for (let i = playerBullets.length - 1; i >= 0; i--) {
     const b = playerBullets[i];
-    // Gravitational deflection near gravwells
+    // Gravitational deflection near gravwells — gate sqrt on squared-distance range
     for (const e of enemies) {
       if (e.type !== 'gravwell') continue;
       const dx = e.x - b.x;
       const dy = e.y - b.y;
-      const distSq = dx * dx + dy * dy;
-      const dist = Math.sqrt(distSq);
-      if (dist < 160 && dist > 14) {
-        const force = 1600 / distSq;
-        b.vx += (dx / dist) * force;
-        b.vy += (dy / dist) * force;
+      const dSq = dx * dx + dy * dy;
+      if (dSq < 25600 && dSq > 196) {  // 160² and 14²
+        const d = Math.sqrt(dSq);
+        const force = 1600 / dSq;
+        b.vx += (dx / d) * force;
+        b.vy += (dy / d) * force;
         // Cap so bullets don't go supersonic
         const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
         if (spd > CONFIG.bulletSpeed * 1.7) {
@@ -2171,36 +2191,34 @@ function updatePlayerBullets() {
         }
       }
     }
-    // Grav Lock — steer bullets toward nearest enemy
+    // Grav Lock — steer bullets toward nearest enemy (squared-distance search, sqrt only the winner)
     if (player.gravLock.radius > 0) {
-      let nearDist = player.gravLock.radius;
+      let nearDistSq = player.gravLock.radius * player.gravLock.radius;
       let nearDx = 0, nearDy = 0;
       let found = false;
       for (const e of enemies) {
         const dx = e.x - b.x;
         const dy = e.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < nearDist) {
-          nearDist = dist;
-          nearDx = dx / dist;
-          nearDy = dy / dist;
-          found = true;
-        }
+        const dSq = dx * dx + dy * dy;
+        if (dSq < nearDistSq) { nearDistSq = dSq; nearDx = dx; nearDy = dy; found = true; }
       }
       // Also check mid-boss and boss
       if (midBoss && midBoss.alive) {
         const dx = midBoss.x - b.x, dy = midBoss.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < nearDist) { nearDist = dist; nearDx = dx / dist; nearDy = dy / dist; found = true; }
+        const dSq = dx * dx + dy * dy;
+        if (dSq < nearDistSq) { nearDistSq = dSq; nearDx = dx; nearDy = dy; found = true; }
       }
       if (boss && boss.alive) {
         const dx = boss.x - b.x, dy = boss.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < nearDist) { nearDist = dist; nearDx = dx / dist; nearDy = dy / dist; found = true; }
+        const dSq = dx * dx + dy * dy;
+        if (dSq < nearDistSq) { nearDistSq = dSq; nearDx = dx; nearDy = dy; found = true; }
       }
       if (found) {
-        b.vx += nearDx * player.gravLock.force;
-        b.vy += nearDy * player.gravLock.force;
+        const d = Math.sqrt(nearDistSq);
+        if (d > 0) {
+          b.vx += (nearDx / d) * player.gravLock.force;
+          b.vy += (nearDy / d) * player.gravLock.force;
+        }
         // Maintain bullet speed — normalize to original speed
         const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
         const targetSpd = CONFIG.bulletSpeed;
@@ -8246,8 +8264,33 @@ function gameLoop(timestamp) {
 }
 
 // === CRT POST-PROCESSING ===
+// CRT overlay gradients depend only on viewport size — build once and reuse.
+const crtGradients = { vignette: null, topEdge: null, botEdge: null, bloom: null };
+function buildCRTGradients() {
+  const w = CONFIG.width, h = CONFIG.height;
+  const edgeFade = 30;
+  const g1 = ctx.createRadialGradient(w / 2, h / 2, h * 0.35, w / 2, h / 2, h * 0.85);
+  g1.addColorStop(0, 'rgba(0,0,0,0)');
+  g1.addColorStop(0.6, 'rgba(0,0,0,0.04)');
+  g1.addColorStop(0.8, 'rgba(0,0,0,0.10)');
+  g1.addColorStop(1, 'rgba(0,0,0,0.25)');
+  crtGradients.vignette = g1;
+  const g2 = ctx.createLinearGradient(0, 0, 0, edgeFade);
+  g2.addColorStop(0, 'rgba(0,0,0,0.12)');
+  g2.addColorStop(1, 'rgba(0,0,0,0)');
+  crtGradients.topEdge = g2;
+  const g3 = ctx.createLinearGradient(0, h, 0, h - edgeFade);
+  g3.addColorStop(0, 'rgba(0,0,0,0.12)');
+  g3.addColorStop(1, 'rgba(0,0,0,0)');
+  crtGradients.botEdge = g3;
+  const g4 = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, h * 0.45);
+  g4.addColorStop(0, 'rgba(180,200,255,0.03)');
+  g4.addColorStop(1, 'rgba(0,0,0,0)');
+  crtGradients.bloom = g4;
+}
 function drawCRT() {
   const w = CONFIG.width, h = CONFIG.height;
+  if (!crtGradients.vignette) buildCRTGradients();
 
   // --- Scanlines ---
   ctx.save();
@@ -8269,33 +8312,18 @@ function drawCRT() {
   ctx.globalCompositeOperation = 'source-over';
 
   // --- Convex CRT curvature vignette ---
-  // Gentle darkening toward edges — enough to feel convex without obscuring HUD
-  const grd = ctx.createRadialGradient(w / 2, h / 2, h * 0.35, w / 2, h / 2, h * 0.85);
-  grd.addColorStop(0, 'rgba(0,0,0,0)');
-  grd.addColorStop(0.6, 'rgba(0,0,0,0.04)');
-  grd.addColorStop(0.8, 'rgba(0,0,0,0.10)');
-  grd.addColorStop(1, 'rgba(0,0,0,0.25)');
-  ctx.fillStyle = grd;
+  ctx.fillStyle = crtGradients.vignette;
   ctx.fillRect(0, 0, w, h);
 
   // Soft edge darkening — lighter so HUD cuts through
   const edgeFade = 30;
-  const topG = ctx.createLinearGradient(0, 0, 0, edgeFade);
-  topG.addColorStop(0, 'rgba(0,0,0,0.12)');
-  topG.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = topG;
+  ctx.fillStyle = crtGradients.topEdge;
   ctx.fillRect(0, 0, w, edgeFade);
-  const botG = ctx.createLinearGradient(0, h, 0, h - edgeFade);
-  botG.addColorStop(0, 'rgba(0,0,0,0.12)');
-  botG.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = botG;
+  ctx.fillStyle = crtGradients.botEdge;
   ctx.fillRect(0, h - edgeFade, w, edgeFade);
 
   // Subtle bright highlight in center (CRT phosphor bloom)
-  const bloom = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, h * 0.45);
-  bloom.addColorStop(0, 'rgba(180,200,255,0.03)');
-  bloom.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = bloom;
+  ctx.fillStyle = crtGradients.bloom;
   ctx.fillRect(0, 0, w, h);
 
   // Corner shadow curves — fully opaque so no game content leaks through

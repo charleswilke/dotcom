@@ -3548,7 +3548,8 @@ function initJCLightbox() {
         { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
         { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', article: 'https://charleswilke.substack.com/p/staccato-again' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
-        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' }
+        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
+        { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3', article: 'https://charleswilke.substack.com/p/the-new-survivalism' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

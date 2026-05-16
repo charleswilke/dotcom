@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1200">
 <title>OG Image Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@1,700;1,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -64,9 +64,9 @@ body {
         repeating-radial-gradient(
             circle at -180px 230px,
             transparent 0px,
-            transparent 70px,
-            rgba(0, 247, 194, 0.85) 70px,
-            rgba(0, 247, 194, 0.85) 74px
+            transparent 96px,
+            rgba(0, 247, 194, 0.10) 96px,
+            rgba(0, 247, 194, 0.10) 98px
         );
     pointer-events: none;
     z-index: 1;
@@ -90,10 +90,10 @@ body {
 
 /* SMPTE colorbar accent strip across the bottom */
 .og-colorbar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
+    z-index: 3;
+    width: 420px;
+    margin-bottom: 28px;
     height: 6px;
     background:
         repeating-linear-gradient(
@@ -117,23 +117,27 @@ body {
 }
 
 
-.og-content > * {
+.og-name,
+.og-divider,
+.og-subtitle {
     position: relative;
     z-index: 3;
 }
 
 .og-name {
-    font-size: 52px;
-    font-weight: 700;
+    font-family: 'Exo', 'Arial Black', sans-serif;
+    font-size: 96px;
+    font-weight: 800;
+    font-style: italic;
     color: #f0eee6;
-    letter-spacing: 8px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     text-shadow:
-        0 0 10px rgba(0, 247, 194, 0.3),
-        0 0 30px rgba(0, 247, 194, 0.15),
-        0 0 60px rgba(0, 247, 194, 0.08);
+        3px 3px 0 #1a1550,
+        0 0 24px rgba(0, 247, 194, 0.25),
+        0 0 60px rgba(0, 247, 194, 0.10);
     margin-bottom: 24px;
-    line-height: 1.1;
+    line-height: 0.95;
 }
 
 .og-divider {
@@ -154,8 +158,30 @@ body {
     line-height: 1.6;
 }
 
-.og-subtitle span {
+.og-subtitle > span {
     display: block;
+}
+
+.og-subtitle-laibor {
+    text-transform: lowercase !important;
+    color: #fff3d7;
+}
+
+.og-amber {
+    color: #fff3d7;
+    text-shadow:
+        0 0 8px rgba(255, 214, 122, 0.9),
+        0 0 18px rgba(255, 168, 30, 0.65),
+        0 0 36px rgba(247, 120, 30, 0.45),
+        0 0 60px rgba(255, 90, 54, 0.28);
+}
+
+.og-name-small {
+    font-size: 52px;
+    letter-spacing: 11px;
+    display: inline-block;
+    margin-left: 14px;
+    margin-bottom: -4px;
 }
 
 .og-slash {
@@ -182,14 +208,13 @@ body {
     </div>
     <div class="og-content">
         <div class="og-radar"></div>
-        <div class="og-name">Charles<br>Wilke</div>
-        <div class="og-divider"></div>
+        <div class="og-name"><span class="og-name-small">Charles</span><br>Wilke</div>
+        <div class="og-colorbar"></div>
         <div class="og-subtitle">
             <span><span class="og-slash">//</span> product designer - writer - builder</span>
-            <span><span class="og-slash">//</span> exploring ai co-creation across mediums</span>
+            <span class="og-subtitle-laibor"><span class="og-slash">//</span> exploring <span class="og-amber">ai co-creation</span> across mediums</span>
         </div>
         <div class="og-url">charleswilke.com</div>
-        <div class="og-colorbar"></div>
     </div>
 </div>
 </body>

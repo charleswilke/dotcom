@@ -128,6 +128,14 @@
 /* Tuner-knob scrollbar (custom — OS scrollbar hidden) */
 html {
     scrollbar-width: none;
+    /* Mac elastic overscroll reveals the html background past the body edges.
+       Match the header/footer purple + grid lines so the bounce feels like the
+       perspective grid continues off-page. */
+    background-color: var(--primary);
+    background-image:
+        linear-gradient(rgba(255, 185, 58, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 185, 58, 0.3) 1px, transparent 1px);
+    background-size: 40px 40px;
 }
 html::-webkit-scrollbar {
     width: 0;

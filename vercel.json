@@ -38,6 +38,8 @@
     { "source": "/chessblaster", "destination": "/chessblaster/", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/read/:slug", "destination": "/api/article-preview?slug=:slug" },
+    { "source": "/read/:slug/", "destination": "/api/article-preview?slug=:slug" },
     { "source": "/mixtape(/?)", "destination": "/mixtape.html" },
     { "source": "/bsides(/?)", "destination": "/bsides.html" },
     { "source": "/side-two(/?)", "destination": "/side-two.html" },

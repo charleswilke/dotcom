@@ -311,6 +311,42 @@ function slugifyArticle(item) {
 }
 
 const SUBSTACK_BASE = 'https://charleswilke.substack.com';
+const ARTICLE_READER_PATH_PREFIX = '/read/';
+
+function getArticleSharePath(itemOrSlug) {
+    const slug = typeof itemOrSlug === 'string' ? itemOrSlug : slugifyArticle(itemOrSlug);
+    return `${ARTICLE_READER_PATH_PREFIX}${encodeURIComponent(slug)}`;
+}
+
+function getCurrentRelativeUrl() {
+    return `${window.location.pathname}${window.location.search}${window.location.hash}` || '/';
+}
+
+function decodeArticleSlug(value) {
+    try {
+        return decodeURIComponent(value);
+    } catch (e) {
+        return value;
+    }
+}
+
+function getArticleRouteFromLocation() {
+    const pathMatch = window.location.pathname.match(/^\/read\/([^/?#]+)/);
+    if (pathMatch) {
+        return { slug: decodeArticleSlug(pathMatch[1]), source: 'path' };
+    }
+
+    const hashMatch = (window.location.hash || '').match(/^#read\/(.+)$/);
+    if (hashMatch) {
+        return { slug: decodeArticleSlug(hashMatch[1]), source: 'hash' };
+    }
+
+    return null;
+}
+
+function getArticleReaderReturnUrl() {
+    return getArticleRouteFromLocation() ? '/#writing' : getCurrentRelativeUrl();
+}
 
 function _formatScopeTime(s) {
     if (!isFinite(s) || s < 0) return '0:00';
@@ -481,7 +517,7 @@ function ensureReaderOverlay() {
                             <span class="byline-name">Charles Wilke</span>
                             <span class="byline-date"></span>
                         </div>
-                        <img class="byline-avatar" src="images/cw4.webp" alt="Charles Wilke" width="40" height="40" loading="lazy" decoding="async">
+                        <img class="byline-avatar" src="/images/cw4.webp" alt="Charles Wilke" width="40" height="40" loading="lazy" decoding="async">
                     </div>
                 </div>
                 <div class="article-reader-tags"></div>
@@ -510,12 +546,13 @@ function ensureReaderOverlay() {
     return overlay;
 }
 
-let _readerPrevHash = '';
+let _readerPrevUrl = '';
 
-function openArticleReader(item) {
+function openArticleReader(item, options = {}) {
     if (!item || !(item.content || item.description)) return false;
 
     const overlay = ensureReaderOverlay();
+    const wasOpen = overlay.classList.contains('is-open');
     const shell = overlay.querySelector('.article-reader-shell');
     const titleEl = overlay.querySelector('.article-reader-title');
     const subtitleEl = overlay.querySelector('.article-reader-subtitle');
@@ -559,11 +596,19 @@ function openArticleReader(item) {
         footLink.href = item.link;
     }
 
-    if (!overlay.classList.contains('is-open')) {
-        _readerPrevHash = window.location.hash;
-        const slug = slugifyArticle(item);
+    const slug = slugifyArticle(item);
+    if (!wasOpen) {
+        _readerPrevUrl = getArticleReaderReturnUrl();
+    }
+
+    if (options.syncUrl !== false) {
+        const sharePath = getArticleSharePath(slug);
+        const currentUrl = getCurrentRelativeUrl();
+        const method = options.replaceUrl ? 'replaceState' : 'pushState';
         try {
-            history.pushState({ reader: slug }, '', `#read/${slug}`);
+            if (currentUrl !== sharePath) {
+                history[method]({ reader: slug }, '', sharePath);
+            }
         } catch (e) { /* ignore */ }
     }
 
@@ -579,11 +624,12 @@ function closeArticleReader() {
     if (!overlay || !overlay.classList.contains('is-open')) return;
     overlay.classList.remove('is-open');
     document.body.classList.remove('reader-open');
-    if (window.location.hash.startsWith('#read/')) {
+    if (getArticleRouteFromLocation()) {
         try {
-            history.replaceState(null, '', _readerPrevHash || window.location.pathname + window.location.search);
+            history.replaceState(null, '', _readerPrevUrl || '/#writing');
         } catch (e) { /* ignore */ }
     }
+    _readerPrevUrl = '';
 }
 
 function findItemBySlug(slug) {
@@ -591,23 +637,25 @@ function findItemBySlug(slug) {
     return allItems.find(it => slugifyArticle(it) === slug) || null;
 }
 
-function maybeOpenReaderFromHash() {
-    const hash = window.location.hash || '';
-    const m = hash.match(/^#read\/(.+)$/);
-    if (!m) return;
-    const item = findItemBySlug(decodeURIComponent(m[1]));
-    if (item) openArticleReader(item);
+function maybeOpenReaderFromLocation() {
+    const route = getArticleRouteFromLocation();
+    if (!route) return;
+
+    const item = findItemBySlug(route.slug);
+    if (item) {
+        openArticleReader(item, { replaceUrl: route.source === 'hash' });
+    }
 }
 
 window.addEventListener('popstate', () => {
-    const hash = window.location.hash || '';
-    if (hash.startsWith('#read/')) {
-        maybeOpenReaderFromHash();
+    if (getArticleRouteFromLocation()) {
+        maybeOpenReaderFromLocation();
     } else {
         const overlay = document.getElementById('article-reader-overlay');
         if (overlay && overlay.classList.contains('is-open')) {
             overlay.classList.remove('is-open');
             document.body.classList.remove('reader-open');
+            _readerPrevUrl = '';
         }
     }
 });
@@ -729,7 +777,7 @@ function renderFeedItems(items, feedContent) {
 
     populateLatestArticleSpotlight();
     displayItems(ITEMS_PER_PAGE);
-    maybeOpenReaderFromHash();
+    maybeOpenReaderFromLocation();
 }
 
 async function fetchRSSFeed() {
@@ -954,7 +1002,7 @@ function displayItems(count) {
     for (let i = startIndex; i < endIndex; i++) {
         const item = allItems[i];
         const title = item.title;
-        const link = item.link;
+        const link = item.content ? getArticleSharePath(item) : item.link;
         const pubDate = new Date(item.pubDate);
         
         const feedItem = document.createElement('a');
@@ -1068,6 +1116,11 @@ function initRSSFallbackFetch() {
             fetchRSSFeed();
         }
     };
+
+    if (getArticleRouteFromLocation()) {
+        loadFeed();
+        return;
+    }
 
     rssIntersectionObserver = new IntersectionObserver((entries) => {
         if (entries.some(entry => entry.isIntersecting)) {

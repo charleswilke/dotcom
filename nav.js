@@ -37,6 +37,7 @@
         '                </button>\n' +
         '                <div class="nav-dropdown" id="navDropdown" role="menu">\n' +
         '                    <a href="' + p + '#about" class="nav-dropdown-item" role="menuitem"' + ds('about') + '>About <span class="nav-tag">this guy</span></a>\n' +
+        '                    <a href="/before-times.html" class="nav-dropdown-item" role="menuitem">Before Times <span class="nav-tag">archive</span></a>\n' +
         '                    <a href="' + p + '#projections" class="nav-dropdown-item" role="menuitem"' + ds('projections') + '>Theatrical <span class="nav-tag">Projections</span></a>\n' +
         '                    <a href="https://fellowvector.com" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Fellow Vector <span class="nav-tag">consulting</span></a>\n' +
         '                    <a href="/faq.html" class="nav-dropdown-item" role="menuitem">FAQ <span class="nav-tag">ama</span></a>\n' +

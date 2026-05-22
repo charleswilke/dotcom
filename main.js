@@ -508,26 +508,32 @@ function ensureReaderOverlay() {
                     <button type="button" class="article-reader-close" aria-label="Close article">&times;</button>
                 </span>
             </div>
-            <header class="article-reader-header">
-                <h1 class="article-reader-title"></h1>
-                <div class="article-reader-meta-row">
-                    <p class="article-reader-subtitle"></p>
-                    <div class="article-reader-byline">
-                        <div class="byline-meta">
-                            <span class="byline-name">Charles Wilke</span>
-                            <span class="byline-date"></span>
+            <div class="article-reader-scroll-wrap">
+                <div class="article-reader-scroll-area">
+                    <header class="article-reader-header">
+                        <h1 class="article-reader-title"></h1>
+                        <div class="article-reader-meta-row">
+                            <p class="article-reader-subtitle"></p>
+                            <div class="article-reader-byline">
+                                <div class="byline-meta">
+                                    <span class="byline-name">Charles Wilke</span>
+                                    <span class="byline-date"></span>
+                                </div>
+                                <img class="byline-avatar" src="/images/cw4.webp" alt="Charles Wilke" width="40" height="40" loading="lazy" decoding="async">
+                            </div>
                         </div>
-                        <img class="byline-avatar" src="/images/cw4.webp" alt="Charles Wilke" width="40" height="40" loading="lazy" decoding="async">
-                    </div>
+                        <div class="article-reader-tags"></div>
+                    </header>
+                    <div class="article-reader-body"></div>
+                    <footer class="article-reader-footer">
+                        <p>Originally published on Substack —
+                            <a class="footer-substack-link" href="#" target="_blank" rel="noopener noreferrer">view comments &amp; subscribe</a>
+                        </p>
+                    </footer>
                 </div>
-                <div class="article-reader-tags"></div>
-            </header>
-            <div class="article-reader-body"></div>
-            <footer class="article-reader-footer">
-                <p>Originally published on Substack —
-                    <a class="footer-substack-link" href="#" target="_blank" rel="noopener noreferrer">view comments &amp; subscribe</a>
-                </p>
-            </footer>
+                <div class="article-reader-rail" aria-hidden="true"></div>
+                <div class="article-reader-thumb" aria-hidden="true"></div>
+            </div>
         </article>
     `;
     document.body.appendChild(overlay);
@@ -543,7 +549,195 @@ function ensureReaderOverlay() {
         }
     });
 
+    // Swap the "exploring l.ai.bor" topbar text for the article title once the
+    // header scrolls behind the topbar. The inner scroll-area is the scroll root.
+    const titleEl = overlay.querySelector('.article-reader-title');
+    const scrollArea = overlay.querySelector('.article-reader-scroll-area');
+    if (titleEl && scrollArea && typeof IntersectionObserver !== 'undefined') {
+        const titleObserver = new IntersectionObserver((entries) => {
+            if (!overlay.classList.contains('is-open')) return;
+            for (const entry of entries) {
+                const rootTop = entry.rootBounds ? entry.rootBounds.top : 0;
+                const aboveTopbar = !entry.isIntersecting && entry.boundingClientRect.bottom < rootTop;
+                setReaderHeaderMode(overlay, aboveTopbar ? 'title' : 'brand');
+            }
+        }, {
+            root: scrollArea,
+            threshold: 0,
+        });
+        titleObserver.observe(titleEl);
+    }
+
+    // Custom scroll thumb with tick rail behind: native scrollbar is hidden so
+    // the article header and featured image render full-bleed. Header z-index
+    // covers the thumb at the top; the thumb emerges as content scrolls past.
+    const thumbEl = overlay.querySelector('.article-reader-thumb');
+    const railEl = overlay.querySelector('.article-reader-rail');
+    if (scrollArea && thumbEl) {
+        const THUMB_MIN = 60;
+        let thumbDragActive = false;
+        const updateThumb = () => {
+            const sh = scrollArea.scrollHeight;
+            const ch = scrollArea.clientHeight;
+            if (sh <= ch) {
+                thumbEl.style.display = 'none';
+                if (railEl) railEl.style.backgroundPositionY = '';
+                return;
+            }
+            thumbEl.style.display = '';
+            const thumbH = Math.max(THUMB_MIN, ch * (ch / sh));
+            const trackLen = ch - thumbH;
+            const maxScroll = sh - ch;
+            const top = (scrollArea.scrollTop / maxScroll) * trackLen;
+            thumbEl.style.height = thumbH + 'px';
+            thumbEl.style.top = top + 'px';
+            if (railEl) {
+                const offset = -(scrollArea.scrollTop % 24);
+                railEl.style.backgroundPositionY = `${offset}px, ${offset}px`;
+            }
+        };
+        let raf = 0;
+        scrollArea.addEventListener('scroll', () => {
+            if (thumbDragActive) return;
+            if (raf) return;
+            raf = requestAnimationFrame(() => { raf = 0; updateThumb(); });
+        }, { passive: true });
+        if (typeof ResizeObserver !== 'undefined') {
+            new ResizeObserver(updateThumb).observe(scrollArea);
+        }
+        overlay._updateReaderThumb = updateThumb;
+
+        // Drag to scroll, with squash/stretch & touch-prime animations (ported
+        // from common.js .tuner-thumb).
+        const attachDrag = (el) => {
+            let dragging = false;
+            let activePointerId = null;
+            let startY = 0;
+            let startScroll = 0;
+            let primeTimer = null;
+            let primed = false;
+            let moved = false;
+            let dragRaf = 0;
+            let pendingScroll = 0;
+            const applyDragFrame = () => {
+                const maxScroll = scrollArea.scrollHeight - scrollArea.clientHeight;
+                scrollArea.scrollTop = Math.max(0, Math.min(maxScroll, pendingScroll));
+                updateThumb();
+                dragRaf = 0;
+            };
+            const scheduleDragFrame = (scrollTop) => {
+                pendingScroll = scrollTop;
+                if (dragRaf) return;
+                dragRaf = requestAnimationFrame(applyDragFrame);
+            };
+            const handleMove = (e) => {
+                if (!dragging) return;
+                if (e.pointerId !== undefined && activePointerId !== null && e.pointerId !== activePointerId) return;
+                e.preventDefault();
+                const dy = e.clientY - startY;
+                const ch = scrollArea.clientHeight;
+                const sh = scrollArea.scrollHeight;
+                const thumbH = el.offsetHeight;
+                const trackLen = ch - thumbH;
+                const maxScroll = sh - ch;
+                if (trackLen <= 0 || maxScroll <= 0) return;
+                if (!moved && Math.abs(dy) > 1) {
+                    moved = true;
+                    el.classList.add('is-scrolling');
+                }
+                scheduleDragFrame(startScroll + (dy / trackLen) * maxScroll);
+            };
+            const stop = (e = {}) => {
+                if (!dragging) return;
+                if (e.pointerId !== undefined && activePointerId !== null && e.pointerId !== activePointerId) return;
+                dragging = false;
+                thumbDragActive = false;
+                clearTimeout(primeTimer);
+                if (dragRaf) { cancelAnimationFrame(dragRaf); applyDragFrame(); }
+                window.removeEventListener('pointermove', handleMove);
+                window.removeEventListener('pointerup', stop);
+                window.removeEventListener('pointercancel', stop);
+                window.removeEventListener('blur', stop);
+                el.classList.remove('is-dragging');
+                el.classList.remove('is-touching');
+                el.classList.remove('is-scrolling');
+                if (primed) {
+                    primed = false;
+                    el.classList.remove('is-primed');
+                    el.classList.remove('is-settling');
+                    void el.offsetWidth;
+                    el.classList.add('is-touch-release');
+                } else if (moved) {
+                    el.classList.remove('is-settling');
+                    el.classList.remove('is-touch-release');
+                    void el.offsetWidth;
+                    el.classList.add('is-settling');
+                }
+                if (activePointerId !== null) {
+                    try { el.releasePointerCapture(activePointerId); } catch (_) {}
+                    activePointerId = null;
+                }
+                requestAnimationFrame(updateThumb);
+            };
+            el.addEventListener('pointerdown', (e) => {
+                if (dragging) stop();
+                dragging = true;
+                thumbDragActive = true;
+                activePointerId = e.pointerId;
+                primed = false;
+                moved = false;
+                startY = e.clientY;
+                startScroll = scrollArea.scrollTop;
+                el.classList.add('is-dragging');
+                try { el.setPointerCapture(e.pointerId); } catch (_) {}
+                window.addEventListener('pointermove', handleMove, { passive: false });
+                window.addEventListener('pointerup', stop);
+                window.addEventListener('pointercancel', stop);
+                window.addEventListener('blur', stop);
+                if (e.pointerType === 'touch') {
+                    el.classList.add('is-touching');
+                    clearTimeout(primeTimer);
+                    primeTimer = setTimeout(() => {
+                        if (!dragging) return;
+                        primed = true;
+                        el.classList.add('is-primed');
+                    }, 160);
+                }
+                e.preventDefault();
+            });
+            el.addEventListener('animationend', () => {
+                el.classList.remove('is-settling');
+                el.classList.remove('is-touch-release');
+            });
+        };
+        attachDrag(thumbEl);
+    }
+
+
     return overlay;
+}
+
+function setReaderHeaderMode(overlay, mode) {
+    const topbar = overlay.querySelector('.article-reader-topbar');
+    const sourceEl = overlay.querySelector('.reader-source');
+    if (!topbar || !sourceEl) return;
+    if (topbar.dataset.headerMode === mode) return;
+    topbar.dataset.headerMode = mode;
+    topbar.classList.toggle('is-title-mode', mode === 'title');
+
+    sourceEl.classList.add('is-fading');
+    setTimeout(() => {
+        if (topbar.dataset.headerMode !== mode) return;
+        if (mode === 'title') {
+            const titleEl = overlay.querySelector('.article-reader-title');
+            sourceEl.textContent = titleEl ? titleEl.textContent : '';
+        } else {
+            sourceEl.innerHTML = 'exploring <span class="reader-break">l.ai.bor</span>';
+        }
+        requestAnimationFrame(() => {
+            sourceEl.classList.remove('is-fading');
+        });
+    }, 180);
 }
 
 let _readerPrevUrl = '';
@@ -615,6 +809,22 @@ function openArticleReader(item, options = {}) {
     overlay.classList.add('is-open');
     document.body.classList.add('reader-open');
     overlay.scrollTop = 0;
+    const scrollArea = overlay.querySelector('.article-reader-scroll-area');
+    if (scrollArea) scrollArea.scrollTop = 0;
+    if (typeof overlay._updateReaderThumb === 'function') {
+        requestAnimationFrame(overlay._updateReaderThumb);
+    }
+    // Force brand state on (re)open so the prior article's title doesn't briefly linger.
+    const topbar = overlay.querySelector('.article-reader-topbar');
+    if (topbar) {
+        delete topbar.dataset.headerMode;
+        topbar.classList.remove('is-title-mode');
+        const sourceEl = overlay.querySelector('.reader-source');
+        if (sourceEl) {
+            sourceEl.classList.remove('is-fading');
+            sourceEl.innerHTML = 'exploring <span class="reader-break">l.ai.bor</span>';
+        }
+    }
     setTimeout(() => shell.focus(), 50);
     return true;
 }

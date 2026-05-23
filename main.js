@@ -378,6 +378,12 @@ function createScopePlayer(audioSrc, label) {
     const scrub = el.querySelector('.scope-scrub');
     const tCur = el.querySelector('.scope-time-current');
     const tTot = el.querySelector('.scope-time-total');
+    const updateScrubProgress = () => {
+        const max = parseFloat(scrub.max) || 0;
+        const value = parseFloat(scrub.value) || 0;
+        const progress = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
+        scrub.style.setProperty('--scope-progress', `${progress}%`);
+    };
 
     playBtn.addEventListener('click', () => {
         if (audio.paused) {
@@ -404,13 +410,18 @@ function createScopePlayer(audioSrc, label) {
     audio.addEventListener('loadedmetadata', () => {
         tTot.textContent = _formatScopeTime(audio.duration);
         scrub.max = audio.duration || 0;
+        updateScrubProgress();
     });
     audio.addEventListener('timeupdate', () => {
         tCur.textContent = _formatScopeTime(audio.currentTime);
-        if (!scrub.matches(':active')) scrub.value = audio.currentTime;
+        if (!scrub.matches(':active')) {
+            scrub.value = audio.currentTime;
+            updateScrubProgress();
+        }
     });
     scrub.addEventListener('input', () => {
         audio.currentTime = parseFloat(scrub.value) || 0;
+        updateScrubProgress();
     });
 
     return el;

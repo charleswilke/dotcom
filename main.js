@@ -1634,42 +1634,8 @@ function initTimeDial() {
         }
     }
     
-    // Set up scroll/touch interactions on tuner glass
-    if (tunerGlass) {
-        tunerGlass.addEventListener('wheel', handleScroll, { passive: false });
-
-        let touchStartY = 0;
-        let touchAccumulator = 0;
-
-        tunerGlass.addEventListener('touchstart', function(e) {
-            touchStartY = e.touches[0].clientY;
-            touchAccumulator = 0;
-        }, { passive: true });
-
-        tunerGlass.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-            const touchY = e.touches[0].clientY;
-            const delta = touchStartY - touchY;
-            touchStartY = touchY;
-
-            touchAccumulator += delta;
-
-            if (Math.abs(touchAccumulator) >= SCROLL_THRESHOLD) {
-                const direction = touchAccumulator > 0 ? 1 : -1;
-                let newStation = currentStation + direction;
-                if (newStation < 0) newStation = recapStations.length - 1;
-                if (newStation >= recapStations.length) newStation = 0;
-
-                updateStation(newStation);
-
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(15);
-                }
-
-                touchAccumulator = touchAccumulator % SCROLL_THRESHOLD;
-            }
-        }, { passive: false });
-    }
+    // Scroll/swipe tuning removed — was hijacking page scroll when crossing the dial.
+    // Stations are selected via the period markers (click/touch) below.
 
     // Oscilloscope visualizer
     (function initOscilloscope() {

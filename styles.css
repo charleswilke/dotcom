@@ -10987,57 +10987,94 @@ body.reader-open {
     filter: sepia(0.18) saturate(0.95);
 }
 
-/* Sepia-microfiche audio player bar for article-embedded audio. */
+/* Warm ivory audio player bar for article-embedded audio. */
 .article-reader-body .scope-player {
-    margin: 1.8em 0;
+    margin: 2em auto;
+    max-width: 760px;
+    --scope-ivory: #fff8e8;
+    --scope-ivory-deep: #f2dfb8;
+    --scope-ink: #30200f;
+    --scope-brass: #b47b22;
+    --scope-ember: #e7982c;
 }
 .scope-player .scope-controls {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 6px;
-    background: linear-gradient(180deg, #2a1d0c 0%, #1d1408 100%);
+    gap: 14px;
+    padding: 12px 16px;
+    border: 1px solid rgba(122, 76, 21, 0.22);
+    border-radius: 8px;
+    background:
+        radial-gradient(circle at 7% 50%, rgba(255, 255, 255, 0.9) 0 2px, transparent 3px),
+        radial-gradient(circle at 93% 50%, rgba(122, 76, 21, 0.18) 0 1px, transparent 2px),
+        linear-gradient(180deg, var(--scope-ivory) 0%, #fbefcf 100%);
+    background-size: auto, 12px 12px, auto;
     box-shadow:
-        0 0 0 1px rgba(168, 90, 29, 0.35),
-        0 6px 18px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 220, 140, 0.1);
+        0 18px 32px rgba(74, 38, 8, 0.14),
+        0 3px 8px rgba(74, 38, 8, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 0 rgba(122, 76, 21, 0.12);
     font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: rgba(230, 207, 149, 0.85);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: rgba(48, 32, 15, 0.72);
+    overflow: hidden;
+}
+.scope-player .scope-controls::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(90deg, rgba(180, 123, 34, 0.18), transparent 18%, transparent 82%, rgba(180, 123, 34, 0.16)),
+        repeating-linear-gradient(0deg, rgba(48, 32, 15, 0.025) 0 1px, transparent 1px 4px);
+    mix-blend-mode: multiply;
 }
 .scope-player .scope-label {
     text-transform: uppercase;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     font-size: 10px;
-    color: rgba(255, 200, 110, 0.55);
-    text-shadow: 0 0 6px rgba(255, 200, 110, 0.4);
+    color: rgba(99, 61, 15, 0.64);
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
 }
 .scope-player .scope-play {
     appearance: none;
-    background: rgba(255, 200, 110, 0.06);
-    border: 1px solid rgba(255, 200, 110, 0.35);
-    color: #ffc94a;
-    width: 32px;
-    height: 32px;
+    background:
+        radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.92), transparent 34%),
+        linear-gradient(180deg, #fff3cc 0%, #d99832 100%);
+    border: 1px solid rgba(122, 76, 21, 0.36);
+    color: #43270a;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 10px;
     line-height: 1;
-    transition: background 0.15s ease, transform 0.1s ease;
-    text-shadow: 0 0 8px rgba(255, 200, 110, 0.7);
+    transition: transform 0.12s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    box-shadow:
+        0 5px 12px rgba(122, 76, 21, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.78),
+        inset 0 -2px 4px rgba(96, 50, 5, 0.18);
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
 }
 .scope-player .scope-play:hover {
-    background: rgba(255, 200, 110, 0.18);
+    filter: brightness(1.05) saturate(1.06);
+    box-shadow:
+        0 7px 16px rgba(122, 76, 21, 0.28),
+        0 0 0 4px rgba(231, 152, 44, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82),
+        inset 0 -2px 4px rgba(96, 50, 5, 0.18);
 }
 .scope-player .scope-play:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
 }
 .scope-player .scope-icon-pause { display: none; }
 .scope-player.is-playing .scope-icon-play { display: none; }
@@ -11045,39 +11082,50 @@ body.reader-open {
 .scope-player .scope-time-current,
 .scope-player .scope-time-total {
     font-variant-numeric: tabular-nums;
-    color: rgba(255, 200, 110, 0.75);
-    text-shadow: 0 0 6px rgba(255, 200, 110, 0.3);
+    color: rgba(48, 32, 15, 0.68);
     min-width: 38px;
     text-align: center;
+    position: relative;
+    z-index: 1;
 }
 .scope-player .scope-scrub {
     flex: 1;
     -webkit-appearance: none;
     appearance: none;
-    height: 2px;
-    background: rgba(255, 200, 110, 0.18);
-    border-radius: 2px;
+    height: 4px;
+    background:
+        linear-gradient(90deg, var(--scope-brass) 0 var(--scope-progress, 0%), rgba(122, 76, 21, 0.16) var(--scope-progress, 0%) 100%);
+    border-radius: 999px;
     outline: none;
     cursor: pointer;
+    box-shadow:
+        inset 0 1px 2px rgba(48, 32, 15, 0.22),
+        0 1px 0 rgba(255, 255, 255, 0.72);
+    position: relative;
+    z-index: 1;
 }
 .scope-player .scope-scrub::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: #ffc94a;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 8px rgba(255, 200, 110, 0.7);
+    background: radial-gradient(circle at 34% 28%, #fff7db 0 16%, var(--scope-ember) 48%, #9f5f12 100%);
+    border: 1px solid rgba(94, 52, 8, 0.42);
+    box-shadow:
+        0 2px 8px rgba(122, 76, 21, 0.28),
+        0 0 0 4px rgba(231, 152, 44, 0.13);
     cursor: pointer;
 }
 .scope-player .scope-scrub::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: #ffc94a;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 8px rgba(255, 200, 110, 0.7);
+    background: radial-gradient(circle at 34% 28%, #fff7db 0 16%, var(--scope-ember) 48%, #9f5f12 100%);
+    border: 1px solid rgba(94, 52, 8, 0.42);
+    box-shadow:
+        0 2px 8px rgba(122, 76, 21, 0.28),
+        0 0 0 4px rgba(231, 152, 44, 0.13);
     cursor: pointer;
 }
 
@@ -11189,6 +11237,24 @@ body.reader-open {
     .article-reader-body .captioned-image-container { margin: 1.4em -8px; }
     .article-reader-body > .captioned-image-container:first-child {
         margin: -24px calc(var(--reader-gutter) * -1) 1.6em;
+    }
+    .scope-player .scope-controls {
+        display: grid;
+        grid-template-columns: 36px 1fr auto;
+        gap: 10px 12px;
+        padding: 12px;
+    }
+    .scope-player .scope-label {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .scope-player .scope-time-current {
+        text-align: right;
+    }
+    .scope-player .scope-scrub {
+        grid-column: 1 / -2;
     }
 }
 /* ===== END ARTICLE READER OVERLAY ===== */

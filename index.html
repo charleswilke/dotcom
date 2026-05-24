@@ -355,13 +355,13 @@
 
     <section class="gpts-section blue-section theatrical-projections-section" id="projections" data-tuner-theme="dark">
         <div class="container">
-            <div class="playbill-broadcast-header">
-                <span class="broadcast-tag" aria-hidden="true"><span class="rec-dot"></span>CH 03 &middot; NOW SHOWING</span>
-                <h2 class="section-title crt-mellow" data-text="Theatrical Projections">Theatrical Projections</h2>
-            </div>
+            <h2 class="broadcast-title" id="projections-title">
+                <span class="broadcast-prefix" aria-hidden="true"><span class="rec-dot"></span>CH 03 <span class="broadcast-sep">&middot;</span> Now Showing <span class="broadcast-sep">&middot;</span></span>
+                <span class="broadcast-section">Theatrical Projections</span>
+            </h2>
 
-            <div class="playbill-fan" role="group" aria-label="Theatrical projection productions. Click a playbill to bring it forward.">
-                <a href="alice-in-wonderland.html" class="playbill playbill--back" data-playbill="aiw">
+            <div class="playbill-fan" role="group" aria-label="Theatrical projection productions">
+                <a href="alice-in-wonderland.html" class="playbill" data-playbill="aiw">
                     <article class="playbill-paper">
                         <div class="playbill-cap">
                             <div class="playbill-cap-wordmark">PLAYBILL</div>
@@ -379,7 +379,7 @@
                         <div class="playbill-scan" aria-hidden="true"></div>
                     </article>
                 </a>
-                <a href="jersey-boys.html" class="playbill playbill--front" data-playbill="jb">
+                <a href="jersey-boys.html" class="playbill" data-playbill="jb">
                     <article class="playbill-paper">
                         <div class="playbill-cap">
                             <div class="playbill-cap-wordmark">PLAYBILL</div>
@@ -397,7 +397,6 @@
                         <div class="playbill-scan" aria-hidden="true"></div>
                     </article>
                 </a>
-                <button class="playbill-flip-hint" type="button" aria-hidden="true">Click a playbill to flip &rarr;</button>
             </div>
 
             <figure class="playbill-chyron">
@@ -405,48 +404,6 @@
                 <figcaption>&mdash; Betsie Freeman, <cite>Omaha World-Herald</cite></figcaption>
             </figure>
         </div>
-        <script>
-            (function () {
-                const fan = document.querySelector('.playbill-fan');
-                if (!fan) return;
-                const front = fan.querySelector('.playbill--front');
-                const back = fan.querySelector('.playbill--back');
-                if (!front || !back) return;
-
-                const mobileQuery = window.matchMedia('(max-width: 600px)');
-                const LOCK_MS = 900;
-                let locked = false;
-
-                function isFront(el) {
-                    return fan.classList.contains('is-flipped') ? el === back : el === front;
-                }
-
-                function swap() {
-                    if (locked) return;
-                    locked = true;
-                    fan.classList.toggle('is-flipped');
-                    fan.classList.add('has-flipped', 'is-input-locked');
-                    setTimeout(function () {
-                        locked = false;
-                        fan.classList.remove('is-input-locked');
-                    }, LOCK_MS);
-                }
-
-                [front, back].forEach(function (card) {
-                    card.addEventListener('mouseenter', function () {
-                        if (mobileQuery.matches) return;
-                        if (!isFront(card)) swap();
-                    });
-                    card.addEventListener('click', function (e) {
-                        if (mobileQuery.matches) return;
-                        if (!isFront(card)) {
-                            e.preventDefault();
-                            swap();
-                        }
-                    });
-                });
-            })();
-        </script>
     </section>
     
     <section class="chatgpt-blurb" data-tuner-theme="light">

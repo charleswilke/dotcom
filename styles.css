@@ -5583,37 +5583,61 @@ html {
    Theatrical Projections — Playbill broadcast / CRT fan
    ───────────────────────────────────────────────────────── */
 
-.playbill-broadcast-header {
-    position: relative;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.broadcast-tag {
-    display: inline-flex;
+/* Broadcast-style section title — a station ID that doubles as the heading */
+.broadcast-title {
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.55rem 0.9rem;
+    margin: 0 auto 2.4rem;
+    padding: 0.65rem 1.4rem 0.7rem;
+    max-width: max-content;
     font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', sans-serif;
     font-weight: 700;
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    color: rgba(248, 233, 210, 0.85);
     text-transform: uppercase;
-    padding: 0.3rem 0.75rem;
+    color: rgba(248, 233, 210, 0.92);
+    background: rgba(10, 8, 40, 0.55);
     border: 1px solid rgba(248, 233, 210, 0.35);
-    border-radius: 2px;
-    background: rgba(10, 8, 40, 0.45);
-    margin-bottom: 0.8rem;
-    text-shadow: 0 0 6px rgba(0, 247, 194, 0.35);
+    border-radius: 3px;
+    box-shadow:
+        0 0 0 1px rgba(0, 247, 194, 0.06) inset,
+        0 6px 18px rgba(0, 0, 0, 0.35),
+        0 0 24px rgba(0, 247, 194, 0.08);
+    text-shadow:
+        0 0 6px rgba(0, 247, 194, 0.35),
+        0 0 1px rgba(255, 90, 54, 0.5);
 }
 
-.broadcast-tag .rec-dot {
-    width: 8px;
-    height: 8px;
+.broadcast-title .rec-dot {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
     border-radius: 50%;
     background: #ff3a3a;
-    box-shadow: 0 0 8px #ff3a3a;
+    box-shadow: 0 0 10px #ff3a3a, 0 0 2px #fff inset;
     animation: rec-blink 1.6s ease-in-out infinite;
+    vertical-align: 0.05em;
+    margin-right: 0.55em;
+}
+
+.broadcast-prefix {
+    font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+    letter-spacing: 0.22em;
+    color: rgba(248, 233, 210, 0.7);
+    white-space: nowrap;
+}
+
+.broadcast-prefix .broadcast-sep {
+    display: inline-block;
+    margin: 0 0.2em;
+    color: rgba(0, 247, 194, 0.55);
+}
+
+.broadcast-section {
+    font-size: clamp(1.1rem, 2.4vw, 1.55rem);
+    letter-spacing: 0.18em;
+    color: #fff;
 }
 
 @keyframes rec-blink {
@@ -5621,69 +5645,44 @@ html {
     70%, 100% { opacity: 0.25; }
 }
 
+/* On narrow screens, stack prefix above the section name */
+@media (max-width: 600px) {
+    .broadcast-title {
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 0.6rem 1rem 0.7rem;
+        text-align: center;
+    }
+    .broadcast-prefix { font-size: 0.72rem; }
+    .broadcast-section { font-size: 1.1rem; }
+}
+
 /* The fan stage */
 .playbill-fan {
-    position: relative;
-    height: 640px;
-    padding: 3rem 0 3.5rem;
-    perspective: 1400px;
-    isolation: isolate;
+    display: flex;
+    gap: 2rem;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1rem 0 2rem;
+    align-items: flex-start;
 }
 
-/* Each playbill is anchored to a shared point near the bottom of the fan and
-   splays from that pivot, like a hand of cards held at the bottom. */
 .playbill {
-    --pivot-x: -50%;
-    --rot: 0deg;
-    --lift: 0px;
-    position: absolute;
-    left: 50%;
-    bottom: 2.5rem;
-    width: min(340px, 38vw);
+    flex: 1 1 0;
+    min-width: 0;
     text-decoration: none;
     color: inherit;
-    transform: translateX(var(--pivot-x)) translateY(var(--lift)) rotate(var(--rot));
-    transform-origin: 50% 100%;
-    transition:
-        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 0.4s ease,
-        z-index 0s linear 0.275s;
-    will-change: transform;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     cursor: pointer;
+    transform-origin: 50% 100%;
 }
 
-/* Default fan: back (alice) leans left, front (jb) leans right, both pivot near bottom-center */
-.playbill--back {
-    --pivot-x: calc(-50% - 95px);
-    --rot: -10deg;
-    z-index: 2;
-    filter: brightness(0.82) saturate(0.85);
-}
+.playbill[data-playbill="aiw"] { transform: rotate(-2.5deg); }
+.playbill[data-playbill="jb"]  { transform: rotate(2.5deg); }
 
-.playbill--front {
-    --pivot-x: calc(-50% + 95px);
-    --rot: 8deg;
-    --lift: -8px;
-    z-index: 3;
-}
-
-/* Flipped state: alice gets the lift + full saturation, jb falls back */
-.playbill-fan.is-flipped .playbill--back {
-    --lift: -8px;
-    z-index: 3;
-    filter: none;
-}
-
-.playbill-fan.is-flipped .playbill--front {
-    --lift: 0px;
-    z-index: 2;
-    filter: brightness(0.82) saturate(0.85);
-}
-
-/* During a swap, ignore pointer events on the cards so the cursor crossing
-   the moving boundary can't re-trigger another swap mid-transition. */
-.playbill-fan.is-input-locked .playbill {
-    pointer-events: none;
+@media (hover: hover) {
+    .playbill[data-playbill="aiw"]:hover { transform: rotate(-1deg) translateY(-6px); }
+    .playbill[data-playbill="jb"]:hover  { transform: rotate(1deg) translateY(-6px); }
 }
 
 /* The paper itself */
@@ -5854,37 +5853,6 @@ html {
     100% { background-position: 0 200%; }
 }
 
-/* Flip hint — fades out after first interaction */
-.playbill-flip-hint {
-    position: absolute;
-    bottom: 0.4rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(10, 8, 40, 0.55);
-    border: 1px solid rgba(248, 233, 210, 0.3);
-    color: rgba(248, 233, 210, 0.8);
-    font-family: 'IBM Plex Sans Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.7rem;
-    border-radius: 2px;
-    pointer-events: none;
-    opacity: 0.85;
-    transition: opacity 0.4s ease;
-    animation: hint-pulse 2.4s ease-in-out infinite;
-}
-
-.playbill-fan.has-flipped .playbill-flip-hint {
-    opacity: 0;
-}
-
-@keyframes hint-pulse {
-    0%, 100% { opacity: 0.55; }
-    50% { opacity: 0.95; }
-}
-
 /* Chyron — OWH critic quote as a lower-third */
 .playbill-chyron {
     margin: 1.5rem auto 0;
@@ -5943,39 +5911,22 @@ html {
     letter-spacing: 0.04em;
 }
 
-/* Tablet */
-@media (max-width: 900px) {
-    .playbill-fan { height: 560px; }
-    .playbill { width: min(300px, 44vw); }
-    .playbill--back { --pivot-x: calc(-50% - 65px); }
-    .playbill--front { --pivot-x: calc(-50% + 65px); }
-}
-
-/* Mobile — stack vertically, no fan */
+/* Mobile — stack vertically */
 @media (max-width: 600px) {
     .playbill-fan {
-        display: flex;
         flex-direction: column;
         align-items: center;
-        height: auto;
-        min-height: 0;
-        padding: 0.5rem 0 1rem;
         gap: 1.5rem;
-        perspective: none;
+        max-width: 320px;
+        padding: 0.5rem 0 1rem;
     }
     .playbill,
-    .playbill--front,
-    .playbill--back,
-    .playbill-fan.is-flipped .playbill--front,
-    .playbill-fan.is-flipped .playbill--back {
-        position: static;
-        width: min(85vw, 320px);
+    .playbill[data-playbill="aiw"],
+    .playbill[data-playbill="jb"] {
+        flex: 0 0 auto;
+        width: 100%;
         transform: none;
-        margin: 0;
-        filter: none;
-        z-index: auto;
     }
-    .playbill-flip-hint { display: none; }
     .playbill-cap-wordmark { font-size: 2.25rem; }
     .playbill-title { font-size: 1.4rem; }
     .playbill-cap-venue { font-size: 0.65rem; }
@@ -5984,8 +5935,7 @@ html {
 @media (prefers-reduced-motion: reduce) {
     .playbill,
     .playbill-scan::after,
-    .broadcast-tag .rec-dot,
-    .playbill-flip-hint {
+    .broadcast-title .rec-dot {
         transition: none !important;
         animation: none !important;
     }

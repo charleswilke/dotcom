@@ -5579,125 +5579,416 @@ html {
     z-index: 2;
 }
 
-/* Theatrical Projections overrides (reuse GPT card system with recently-style image ratio) */
-.theatrical-projections-section .gpts-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
+/* ─────────────────────────────────────────────────────────
+   Theatrical Projections — Playbill broadcast / CRT fan
+   ───────────────────────────────────────────────────────── */
 
-.theatrical-projections-section .gpt-item {
-    display: block;
+.playbill-broadcast-header {
     position: relative;
-    overflow: hidden;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.broadcast-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    color: rgba(248, 233, 210, 0.85);
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid rgba(248, 233, 210, 0.35);
     border-radius: 2px;
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(248, 233, 210, 0.1),
-        inset 0 0 0 1px rgba(0, 0, 0, 0.4);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    border: none;
-    outline: none;
-    transform: none;
-    animation: none;
-    padding: 0;
-    backdrop-filter: none;
-    background: #0a0828;
+    background: rgba(10, 8, 40, 0.45);
+    margin-bottom: 0.8rem;
+    text-shadow: 0 0 6px rgba(0, 247, 194, 0.35);
 }
 
-.theatrical-projections-section .gpt-link {
-    transition: transform 0.4s ease;
+.broadcast-tag .rec-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff3a3a;
+    box-shadow: 0 0 8px #ff3a3a;
+    animation: rec-blink 1.6s ease-in-out infinite;
 }
 
-.theatrical-projections-section .gpt-link:hover {
-    transform: translateY(-6px);
+@keyframes rec-blink {
+    0%, 60% { opacity: 1; }
+    70%, 100% { opacity: 0.25; }
 }
 
-.theatrical-projections-section .gpt-item:hover,
-.theatrical-projections-section .gpt-link:hover .gpt-item {
-    box-shadow:
-        0 16px 40px rgba(0, 0, 0, 0.4),
-        0 0 0 1px rgba(248, 233, 210, 0.2),
-        0 0 30px rgba(248, 233, 210, 0.06),
-        0 0 60px rgba(255, 185, 58, 0.04);
+/* The fan stage */
+.playbill-fan {
+    position: relative;
+    height: 640px;
+    padding: 3rem 0 3.5rem;
+    perspective: 1400px;
+    isolation: isolate;
 }
 
-/* Spotlight wash on hover - warm top-down light */
-.theatrical-projections-section .gpt-item::before {
-    content: '';
+/* Each playbill is anchored to a shared point near the bottom of the fan and
+   splays from that pivot, like a hand of cards held at the bottom. */
+.playbill {
+    --pivot-x: -50%;
+    --rot: 0deg;
+    --lift: 0px;
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        180deg,
-        rgba(248, 233, 210, 0.08) 0%,
-        rgba(248, 233, 210, 0.03) 30%,
-        transparent 60%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
+    left: 50%;
+    bottom: 2.5rem;
+    width: min(340px, 38vw);
+    text-decoration: none;
+    color: inherit;
+    transform: translateX(var(--pivot-x)) translateY(var(--lift)) rotate(var(--rot));
+    transform-origin: 50% 100%;
+    transition:
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.4s ease,
+        z-index 0s linear 0.275s;
+    will-change: transform;
+    cursor: pointer;
+}
+
+/* Default fan: back (alice) leans left, front (jb) leans right, both pivot near bottom-center */
+.playbill--back {
+    --pivot-x: calc(-50% - 28px);
+    --rot: -13deg;
     z-index: 2;
+    filter: brightness(0.82) saturate(0.85);
 }
 
-.theatrical-projections-section .gpt-item:hover::before {
-    opacity: 1;
-    animation: none;
-}
-
-.theatrical-projections-section .gpt-item img {
-    width: 100%;
-    max-width: none;
-    height: 340px;
-    aspect-ratio: unset;
-    object-fit: cover;
-    object-position: center;
-    filter: saturate(1.1) contrast(1.05);
-    border: none;
-    box-shadow: none;
-    margin: 0;
-    border-radius: 0;
-    display: block;
-    transition: filter 0.4s ease;
-}
-
-.theatrical-projections-section .gpt-item:hover img {
-    filter: saturate(1.25) contrast(1.1) brightness(1.05);
-}
-
-/* Per-show image framing */
-.theatrical-projections-section .gpts-grid .gpt-link:nth-child(1) .gpt-item img {
-    object-position: center top;
-}
-
-.theatrical-projections-section .gpts-grid .gpt-link:nth-child(2) .gpt-item img {
-    object-position: center 30%;
-}
-
-.theatrical-projections-section .showcase-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(10, 8, 40, 0.92) 0%, rgba(10, 8, 40, 0.7) 60%, transparent 100%);
-    border-top: none;
-    padding: 2rem 1.2rem 1rem;
+.playbill--front {
+    --pivot-x: calc(-50% + 28px);
+    --rot: 11deg;
+    --lift: -8px;
     z-index: 3;
 }
 
-.theatrical-projections-section .showcase-caption::before {
-    display: none;
+/* Flipped state: alice gets the lift + full saturation, jb falls back */
+.playbill-fan.is-flipped .playbill--back {
+    --lift: -8px;
+    z-index: 3;
+    filter: none;
 }
 
-.theatrical-projections-section .gpt-item h3,
-.theatrical-projections-section .gpt-item p {
-    max-width: none;
+.playbill-fan.is-flipped .playbill--front {
+    --lift: 0px;
+    z-index: 2;
+    filter: brightness(0.82) saturate(0.85);
+}
+
+/* During a swap, ignore pointer events on the cards so the cursor crossing
+   the moving boundary can't re-trigger another swap mid-transition. */
+.playbill-fan.is-input-locked .playbill {
+    pointer-events: none;
+}
+
+/* The paper itself */
+.playbill-paper {
+    position: relative;
+    background: #f4e9cf;
+    background-image:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 250, 235, 0.6), transparent 60%),
+        radial-gradient(ellipse at 70% 90%, rgba(180, 150, 110, 0.18), transparent 55%);
+    color: #1a1010;
+    padding: 1.2rem 1.1rem 1.3rem;
+    border-radius: 2px 2px 3px 3px;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.5) inset,
+        0 -2px 0 rgba(120, 95, 60, 0.15) inset,
+        0 14px 32px rgba(0, 0, 0, 0.45),
+        0 28px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    aspect-ratio: 5 / 7;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Subtle paper grain */
+.playbill-paper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            rgba(120, 95, 60, 0.04) 0 1px,
+            transparent 1px 3px
+        );
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Iconic yellow Playbill cap — wordmark + venue */
+.playbill-cap {
+    background: #ffd400;
+    color: #1a1010;
+    text-align: center;
+    padding: 0.55rem 0.7rem 0.6rem;
+    margin: -1.2rem -1.1rem 0.55rem;
+    border-bottom: 2px solid #1a1010;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;
+}
+
+.playbill-cap-wordmark {
+    font-family: 'Fascinate', 'Bookman Old Style', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(2rem, 4.4vw, 2.75rem);
+    letter-spacing: 0.22em;
+    line-height: 1;
+    text-transform: uppercase;
+    /* Trim the trailing letter-spacing on the right so the wordmark stays optically centered */
+    padding-left: 0.22em;
+}
+
+.playbill-cap-venue {
+    font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', sans-serif;
+    font-weight: 700;
+    font-size: clamp(0.62rem, 1.1vw, 0.72rem);
+    letter-spacing: 0.18em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    margin-top: 0.35rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid rgba(26, 16, 16, 0.55);
+}
+
+.playbill-header {
+    text-align: center;
+    padding: 0.6rem 0.2rem 0.65rem;
+}
+
+.playbill-art {
+    flex: 1 1 auto;
+    margin: 0.55rem 0 0.75rem;
+    overflow: hidden;
+    background: #0a0828;
+    border: 1px solid rgba(26, 16, 16, 0.35);
+    position: relative;
+    min-height: 0;
+}
+
+.playbill-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    filter: saturate(1.1) contrast(1.05);
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+.playbill[data-playbill="jb"] .playbill-art img { object-position: center top; }
+.playbill[data-playbill="aiw"] .playbill-art img { object-position: center 30%; }
+
+.playbill-footer {
+    text-align: center;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(26, 16, 16, 0.55);
+}
+
+.playbill-title {
+    font-family: 'Simonetta', 'Bodoni Moda', Georgia, serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(1.85rem, 3.6vw, 2.4rem);
+    line-height: 1.0;
+    color: #1a1010;
+    margin: 0;
+    letter-spacing: -0.005em;
+}
+
+.playbill-meta {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #5a3a1a;
     margin: 0;
 }
 
-.theatrical-projections-section .gpt-link:hover .gpt-item h3 {
-    color: #fff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+/* The CRT layer — restrained, sits over the paper */
+.playbill-scan {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.06) 0 1px,
+            transparent 1px 3px
+        ),
+        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.25) 100%);
+    mix-blend-mode: multiply;
+    border-radius: inherit;
+}
+
+.playbill-scan::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(0, 247, 194, 0.07) 50%,
+        transparent 100%
+    );
+    background-size: 100% 200%;
+    animation: playbill-scanline 7s linear infinite;
+    mix-blend-mode: screen;
+    opacity: 0.6;
+}
+
+@keyframes playbill-scanline {
+    0% { background-position: 0 -100%; }
+    100% { background-position: 0 200%; }
+}
+
+/* Flip hint — fades out after first interaction */
+.playbill-flip-hint {
+    position: absolute;
+    bottom: 0.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 8, 40, 0.55);
+    border: 1px solid rgba(248, 233, 210, 0.3);
+    color: rgba(248, 233, 210, 0.8);
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+    pointer-events: none;
+    opacity: 0.85;
+    transition: opacity 0.4s ease;
+    animation: hint-pulse 2.4s ease-in-out infinite;
+}
+
+.playbill-fan.has-flipped .playbill-flip-hint {
+    opacity: 0;
+}
+
+@keyframes hint-pulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 0.95; }
+}
+
+/* Chyron — OWH critic quote as a lower-third */
+.playbill-chyron {
+    margin: 1.5rem auto 0;
+    max-width: 720px;
+    background: linear-gradient(
+        90deg,
+        rgba(10, 8, 40, 0.9) 0%,
+        rgba(38, 91, 129, 0.78) 100%
+    );
+    border-left: 4px solid #ffb33a;
+    border-top: 1px solid rgba(248, 233, 210, 0.15);
+    padding: 0.9rem 1.2rem 0.95rem 1.3rem;
+    position: relative;
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.35),
+        0 0 30px rgba(0, 247, 194, 0.05) inset;
+}
+
+.playbill-chyron::before {
+    content: 'HOT OFF THE PRESSES';
+    position: absolute;
+    top: -10px;
+    left: 1rem;
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    color: #0a0828;
+    background: #ffb33a;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+}
+
+.playbill-chyron blockquote {
+    margin: 0 0 0.4rem;
+    font-family: 'Montaga', Georgia, serif;
+    font-size: clamp(0.95rem, 1.6vw, 1.08rem);
+    line-height: 1.45;
+    color: #f4e9cf;
+    font-style: italic;
+}
+
+.playbill-chyron figcaption {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(248, 233, 210, 0.75);
+}
+
+.playbill-chyron figcaption cite {
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.04em;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .playbill-fan { height: 560px; }
+    .playbill { width: min(300px, 44vw); }
+    .playbill--back { --pivot-x: calc(-50% - 22px); }
+    .playbill--front { --pivot-x: calc(-50% + 22px); }
+}
+
+/* Mobile — stack vertically, no fan */
+@media (max-width: 600px) {
+    .playbill-fan {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        min-height: 0;
+        padding: 0.5rem 0 1rem;
+        gap: 1.5rem;
+        perspective: none;
+    }
+    .playbill,
+    .playbill--front,
+    .playbill--back,
+    .playbill-fan.is-flipped .playbill--front,
+    .playbill-fan.is-flipped .playbill--back {
+        position: static;
+        width: min(85vw, 320px);
+        transform: none;
+        margin: 0;
+        filter: none;
+        z-index: auto;
+    }
+    .playbill-flip-hint { display: none; }
+    .playbill-cap-wordmark { font-size: 1.5rem; }
+    .playbill-title { font-size: 1.4rem; }
+    .playbill-cap-venue { font-size: 0.65rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .playbill,
+    .playbill-scan::after,
+    .broadcast-tag .rec-dot,
+    .playbill-flip-hint {
+        transition: none !important;
+        animation: none !important;
+    }
 }
 
 /* Mobile spotlight card with blue styling */

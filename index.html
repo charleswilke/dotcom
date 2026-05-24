@@ -36,7 +36,7 @@
     <!-- Fonts: prefer link+preconnect over CSS @import for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Caveat:wght@500;700&family=Exo:wght@400;700&family=IBM+Plex+Sans+Condensed:wght@700&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montaga&family=Simonetta:ital,wght@0,400;0,900;1,400;1,900&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Fascinate&family=Caveat:wght@500;700&family=Exo:wght@400;700&family=IBM+Plex+Sans+Condensed:wght@700&family=Marcellus&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montaga&family=Simonetta:ital,wght@0,400;0,900;1,400;1,900&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="images/ToastIQ.webp" fetchpriority="high">
     
     <!-- RSS Feed Performance Optimization -->
@@ -355,28 +355,98 @@
 
     <section class="gpts-section blue-section theatrical-projections-section" id="projections" data-tuner-theme="dark">
         <div class="container">
-            <h2 class="section-title crt-mellow" data-text="Theatrical Projections">Theatrical Projections</h2>
-            <div class="gpts-grid">
-                <a href="jersey-boys.html" class="gpt-link">
-                    <div class="gpt-item">
-                        <img src="images/jb/jb1.webp" alt="Jersey Boys Projection" loading="lazy" decoding="async" width="1280" height="960">
-                        <div class="showcase-caption">
-                            <h3>Jersey Boys</h3>
-                            <p>Omaha Community Playhouse &bull; 2024</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="alice-in-wonderland.html" class="gpt-link">
-                    <div class="gpt-item">
-                        <img src="images/aiw/aiw1.webp" alt="Alice in Wonderland Projection" loading="lazy" decoding="async" width="600" height="800">
-                        <div class="showcase-caption">
-                            <h3>Alice in Wonderland</h3>
-                            <p>UNO Theater &bull; 2025</p>
-                        </div>
-                    </div>
-                </a>
+            <div class="playbill-broadcast-header">
+                <span class="broadcast-tag" aria-hidden="true"><span class="rec-dot"></span>CH 03 &middot; NOW SHOWING</span>
+                <h2 class="section-title crt-mellow" data-text="Theatrical Projections">Theatrical Projections</h2>
             </div>
+
+            <div class="playbill-fan" role="group" aria-label="Theatrical projection productions. Click a playbill to bring it forward.">
+                <a href="alice-in-wonderland.html" class="playbill playbill--back" data-playbill="aiw">
+                    <article class="playbill-paper">
+                        <div class="playbill-cap">
+                            <div class="playbill-cap-wordmark">PLAYBILL</div>
+                            <div class="playbill-cap-venue">University of Nebraska Omaha</div>
+                        </div>
+                        <div class="playbill-header">
+                            <h3 class="playbill-title">Alice in Wonderland</h3>
+                        </div>
+                        <div class="playbill-art">
+                            <img src="images/aiw/aiw1.webp" alt="Alice in Wonderland projection" loading="lazy" decoding="async" width="600" height="800">
+                        </div>
+                        <div class="playbill-footer">
+                            <p class="playbill-meta">Projection Design &middot; 2025</p>
+                        </div>
+                        <div class="playbill-scan" aria-hidden="true"></div>
+                    </article>
+                </a>
+                <a href="jersey-boys.html" class="playbill playbill--front" data-playbill="jb">
+                    <article class="playbill-paper">
+                        <div class="playbill-cap">
+                            <div class="playbill-cap-wordmark">PLAYBILL</div>
+                            <div class="playbill-cap-venue">Omaha Community Playhouse</div>
+                        </div>
+                        <div class="playbill-header">
+                            <h3 class="playbill-title">Jersey Boys</h3>
+                        </div>
+                        <div class="playbill-art">
+                            <img src="images/jb/jb1.webp" alt="Jersey Boys projection" loading="lazy" decoding="async" width="1280" height="960">
+                        </div>
+                        <div class="playbill-footer">
+                            <p class="playbill-meta">Projection Design &middot; 2024</p>
+                        </div>
+                        <div class="playbill-scan" aria-hidden="true"></div>
+                    </article>
+                </a>
+                <button class="playbill-flip-hint" type="button" aria-hidden="true">Click a playbill to flip &rarr;</button>
+            </div>
+
+            <figure class="playbill-chyron">
+                <blockquote>&ldquo;High-tech and high-quality projections&hellip; take the audience from the Playhouse to New Jersey streets, the Las Vegas strip and other sites with an abundance of dazzle.&rdquo;</blockquote>
+                <figcaption>&mdash; Betsie Freeman, <cite>Omaha World-Herald</cite></figcaption>
+            </figure>
         </div>
+        <script>
+            (function () {
+                const fan = document.querySelector('.playbill-fan');
+                if (!fan) return;
+                const front = fan.querySelector('.playbill--front');
+                const back = fan.querySelector('.playbill--back');
+                if (!front || !back) return;
+
+                const mobileQuery = window.matchMedia('(max-width: 600px)');
+                const LOCK_MS = 900;
+                let locked = false;
+
+                function isFront(el) {
+                    return fan.classList.contains('is-flipped') ? el === back : el === front;
+                }
+
+                function swap() {
+                    if (locked) return;
+                    locked = true;
+                    fan.classList.toggle('is-flipped');
+                    fan.classList.add('has-flipped', 'is-input-locked');
+                    setTimeout(function () {
+                        locked = false;
+                        fan.classList.remove('is-input-locked');
+                    }, LOCK_MS);
+                }
+
+                [front, back].forEach(function (card) {
+                    card.addEventListener('mouseenter', function () {
+                        if (mobileQuery.matches) return;
+                        if (!isFront(card)) swap();
+                    });
+                    card.addEventListener('click', function (e) {
+                        if (mobileQuery.matches) return;
+                        if (!isFront(card)) {
+                            e.preventDefault();
+                            swap();
+                        }
+                    });
+                });
+            })();
+        </script>
     </section>
     
     <section class="chatgpt-blurb" data-tuner-theme="light">

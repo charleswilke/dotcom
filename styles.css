@@ -11002,8 +11002,8 @@ body.reader-open {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
+    gap: 12px;
+    padding: 8px 14px;
     border: 1px solid rgba(255, 255, 255, 0.72);
     border-radius: 8px;
     background:
@@ -11047,7 +11047,7 @@ body.reader-open {
 .scope-player .scope-label {
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    font-size: 10px;
+    font-size: 9px;
     color: rgba(76, 67, 56, 0.62);
     flex-shrink: 0;
     position: relative;
@@ -11059,8 +11059,8 @@ body.reader-open {
         linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(247, 239, 222, 0.54));
     border: 1px solid rgba(112, 99, 80, 0.18);
     color: #4a4034;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 7px;
     cursor: pointer;
     display: inline-flex;
@@ -11254,10 +11254,9 @@ body.reader-open {
         margin: -24px calc(var(--reader-gutter) * -1) 1.6em;
     }
     .scope-player .scope-controls {
-        display: grid;
-        grid-template-columns: 36px 1fr auto;
-        gap: 10px 12px;
-        padding: 12px;
+        display: flex;
+        gap: 8px;
+        padding: 8px 10px;
     }
     .scope-player .scope-label {
         min-width: 0;
@@ -11265,11 +11264,15 @@ body.reader-open {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+    .scope-player .scope-time-current,
+    .scope-player .scope-time-total {
+        min-width: 34px;
+    }
     .scope-player .scope-time-current {
         text-align: right;
     }
     .scope-player .scope-scrub {
-        grid-column: 1 / -2;
+        min-width: 64px;
     }
 }
 /* ===== END ARTICLE READER OVERLAY ===== */

@@ -5654,15 +5654,15 @@ html {
 
 /* Default fan: back (alice) leans left, front (jb) leans right, both pivot near bottom-center */
 .playbill--back {
-    --pivot-x: calc(-50% - 28px);
-    --rot: -13deg;
+    --pivot-x: calc(-50% - 95px);
+    --rot: -10deg;
     z-index: 2;
     filter: brightness(0.82) saturate(0.85);
 }
 
 .playbill--front {
-    --pivot-x: calc(-50% + 28px);
-    --rot: 11deg;
+    --pivot-x: calc(-50% + 95px);
+    --rot: 8deg;
     --lift: -8px;
     z-index: 3;
 }
@@ -5737,8 +5737,8 @@ html {
 }
 
 .playbill-cap-wordmark {
-    font-family: 'Fascinate', 'Bookman Old Style', Georgia, serif;
-    font-weight: 400;
+    font-family: 'Cinzel', 'Trajan Pro', 'Times New Roman', Georgia, serif;
+    font-weight: 600;
     font-size: clamp(2rem, 4.4vw, 2.75rem);
     letter-spacing: 0.22em;
     line-height: 1;
@@ -5761,15 +5761,16 @@ html {
 
 .playbill-header {
     text-align: center;
-    padding: 0.6rem 0.2rem 0.65rem;
+    padding: 0.55rem 0.2rem 0.7rem;
 }
 
 .playbill-art {
     flex: 1 1 auto;
-    margin: 0.55rem 0 0.75rem;
+    margin: 0 -1.1rem;
     overflow: hidden;
     background: #0a0828;
-    border: 1px solid rgba(26, 16, 16, 0.35);
+    border-top: none;
+    border-bottom: none;
     position: relative;
     min-height: 0;
 }
@@ -5792,8 +5793,7 @@ html {
 
 .playbill-footer {
     text-align: center;
-    padding-top: 0.4rem;
-    border-top: 1px solid rgba(26, 16, 16, 0.55);
+    padding: 0.7rem 0.2rem 0.4rem;
 }
 
 .playbill-title {
@@ -5947,8 +5947,8 @@ html {
 @media (max-width: 900px) {
     .playbill-fan { height: 560px; }
     .playbill { width: min(300px, 44vw); }
-    .playbill--back { --pivot-x: calc(-50% - 22px); }
-    .playbill--front { --pivot-x: calc(-50% + 22px); }
+    .playbill--back { --pivot-x: calc(-50% - 65px); }
+    .playbill--front { --pivot-x: calc(-50% + 65px); }
 }
 
 /* Mobile — stack vertically, no fan */
@@ -5976,7 +5976,7 @@ html {
         z-index: auto;
     }
     .playbill-flip-hint { display: none; }
-    .playbill-cap-wordmark { font-size: 1.5rem; }
+    .playbill-cap-wordmark { font-size: 2.25rem; }
     .playbill-title { font-size: 1.4rem; }
     .playbill-cap-venue { font-size: 0.65rem; }
 }

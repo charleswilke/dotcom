@@ -25,19 +25,20 @@ No build step — all files are served directly.
 
 `.htaccess` exists but is no longer active (legacy DreamHost config).
 
-## Updating cover art (cache busting)
+## Cache busting for in-place asset replacements
 
-Images under `/audio/` are served with `Cache-Control: public, max-age=31536000, immutable` (see [vercel.json](vercel.json)). This is intentional for performance, but it means **if a cover file is replaced in place with the same filename, browsers and CDNs will serve the old version for up to a year.**
+Everything under `/audio/`, `/images/`, `/games/` and any `.webp/.png/.jpg/.jpeg/.gif/.ico/.mp3/.mp4/.mov` is served with `Cache-Control: public, max-age=31536000, immutable` (see [vercel.json](vercel.json)). This is intentional for performance, but it means **if an asset is replaced in place with the same filename, browsers and CDNs will serve the old version for up to a year.**
 
-When the user updates an album cover — or mentions they swapped/renamed/replaced one — run [bump-cover.sh](bump-cover.sh) to append a fresh `?v=YYYYMMDD` query string to every HTML reference of that cover (img tags, og:image, twitter:image, JSON-LD image, song subpages):
+When the user updates an asset — cover art, song title art, an mp3, etc. — run [bump-cover.sh](bump-cover.sh) to append a fresh `?v=YYYYMMDDHHMM` query string to every reference across `*.html`, `*.js`, and `*.css` (img tags, og:image, twitter:image, JSON-LD image, song subpages, and JS playlist data like `main.js`'s JC track list):
 
 ```
 ./bump-cover.sh junkyard-cabaret-cover.webp
+./bump-cover.sh the-new-survivalism.mp3
 ```
 
 Defaults to a minute-precision timestamp (`YYYYMMDDHHMM`) so same-day re-stamps always produce a new value; pass a second arg to override. It replaces any existing `?v=…` in place rather than appending twice. After running it, commit and push — Vercel auto-deploys from `main`.
 
-Cues to run this: "I updated the cover for X", "just replaced the album art", "swapped the cover", or any time you edit a `*-cover.webp` file in place.
+Cues to run this: "I updated the cover for X", "just replaced the album art", "swapped the cover", "updated the mp3", or any time the user mentions editing a cached asset in place.
 
 ## Architecture
 

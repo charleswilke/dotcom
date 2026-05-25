@@ -3866,15 +3866,37 @@ function initJCLightbox() {
         }));
     }
 
+    function showAlbumCover() {
+        if (!coverImg) return;
+        if (coverImg.src !== albumCoverSrc) {
+            coverImg.src = albumCoverSrc;
+        }
+        coverImg.alt = 'Junkyard Cabaret Cover';
+    }
+
+    function showTrackCover(index) {
+        if (!coverImg) return;
+        const track = tracks[index];
+        if (!track || !track.cover) {
+            showAlbumCover();
+            return;
+        }
+        const trackCoverUrl = new URL(track.cover, window.location.href).href;
+        if (coverImg.src !== trackCoverUrl) {
+            coverImg.src = track.cover;
+        }
+        coverImg.alt = `${track.title} title art`;
+    }
+
     function loadTrack(index, options = {}) {
         const { syncHash = true } = options;
         currentIndex = index;
         audio.src = tracks[index].file;
         audio.load();
-        if (coverImg) {
-            const nextCover = tracks[index].cover || albumCoverSrc;
-            coverImg.src = nextCover;
-            coverImg.alt = tracks[index].cover ? `${tracks[index].title} title art` : 'Junkyard Cabaret Cover';
+        if (audio.paused) {
+            showAlbumCover();
+        } else {
+            showTrackCover(index);
         }
         updateNowPlayingDisplays({
             trackDisplay,
@@ -4001,6 +4023,7 @@ function initJCLightbox() {
             playPauseIcon.textContent = PAUSE_ICON;
         }
         visualizer.start();
+        showTrackCover(currentIndex);
     });
 
     audio.addEventListener('pause', function() {
@@ -4008,12 +4031,17 @@ function initJCLightbox() {
             playPauseIcon.textContent = PLAY_ICON;
         }
         visualizer.stop();
+        if (!audio.ended) {
+            showAlbumCover();
+        }
     });
 
     audio.addEventListener('ended', () => {
         if (currentIndex < tracks.length - 1) {
             loadTrack(currentIndex + 1);
             playTrack();
+        } else {
+            showAlbumCover();
         }
     });
 

@@ -3784,13 +3784,13 @@ function initGWORLightbox() {
 
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
-        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
-        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', article: 'https://charleswilke.substack.com/p/staccato-again' },
-        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
-        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
-        { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3?v=20260523a', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
-        { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', article: 'https://charleswilke.substack.com/p/know-thyself' }
+        { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', cover: 'audio/junkyard-cabaret/why-this-way-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
+        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', cover: 'audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
+        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', cover: 'audio/junkyard-cabaret/pauses-gone-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/staccato-again' },
+        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
+        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', cover: 'audio/junkyard-cabaret/house-lights-title.webp?v=202605242122', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
+        { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3?v=20260523a', cover: 'audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
+        { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/know-thyself' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');
@@ -3811,6 +3811,8 @@ function initJCLightbox() {
     const visualizerCanvas = document.getElementById('jcVisualizer');
     const oscilloscopeTitle = document.getElementById('jcOscilloscopeTitle');
     const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
+    const coverImg = document.getElementById('jcCoverImg');
+    const albumCoverSrc = coverImg ? coverImg.src : '';
     if (!lightbox || !tile || !audio || !trackList) return;
 
     if (playPauseIcon) {
@@ -3869,6 +3871,11 @@ function initJCLightbox() {
         currentIndex = index;
         audio.src = tracks[index].file;
         audio.load();
+        if (coverImg) {
+            const nextCover = tracks[index].cover || albumCoverSrc;
+            coverImg.src = nextCover;
+            coverImg.alt = tracks[index].cover ? `${tracks[index].title} title art` : 'Junkyard Cabaret Cover';
+        }
         updateNowPlayingDisplays({
             trackDisplay,
             glassTitle: oscilloscopeTitle,
@@ -3927,7 +3934,6 @@ function initJCLightbox() {
 
         const mini = getMiniPlayer();
         if (audio && !audio.paused && mini) {
-            const coverImg = document.getElementById('jcCoverImg');
             mini.attach({
                 audio,
                 coverSrc: coverImg ? coverImg.src : '',

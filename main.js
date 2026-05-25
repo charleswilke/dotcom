@@ -3784,10 +3784,10 @@ function initGWORLightbox() {
 
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', cover: 'audio/junkyard-cabaret/why-this-way-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
-        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', cover: 'audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
-        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', cover: 'audio/junkyard-cabaret/pauses-gone-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/staccato-again' },
-        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
+        { title: 'Why This Way', file: 'audio/junkyard-cabaret/why-this-way.mp3', cover: 'audio/junkyard-cabaret/why-this-way-title.webp?v=202605251048', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
+        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', cover: 'audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202605251048', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
+        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', cover: 'audio/junkyard-cabaret/pauses-gone-title.webp?v=202605251048', article: 'https://charleswilke.substack.com/p/staccato-again' },
+        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202605251048', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
         { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', cover: 'audio/junkyard-cabaret/house-lights-title.webp?v=202605242122', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
         { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3?v=20260523a', cover: 'audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
         { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202605242122', article: 'https://charleswilke.substack.com/p/know-thyself' }
@@ -3822,6 +3822,7 @@ function initJCLightbox() {
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
     let trackItems = [];
+    let isChangingTrack = false;
 
     function resolveTrackIndex(trackSlug) {
         const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
@@ -3890,13 +3891,15 @@ function initJCLightbox() {
 
     function loadTrack(index, options = {}) {
         const { syncHash = true } = options;
+        const wasPlaying = !audio.paused;
+        isChangingTrack = wasPlaying;
         currentIndex = index;
         audio.src = tracks[index].file;
         audio.load();
-        if (audio.paused) {
-            showAlbumCover();
-        } else {
+        if (wasPlaying) {
             showTrackCover(index);
+        } else {
+            showAlbumCover();
         }
         updateNowPlayingDisplays({
             trackDisplay,
@@ -4019,6 +4022,7 @@ function initJCLightbox() {
     });
 
     audio.addEventListener('play', function() {
+        isChangingTrack = false;
         if (playPauseIcon) {
             playPauseIcon.textContent = PAUSE_ICON;
         }
@@ -4031,7 +4035,7 @@ function initJCLightbox() {
             playPauseIcon.textContent = PLAY_ICON;
         }
         visualizer.stop();
-        if (!audio.ended) {
+        if (!audio.ended && !isChangingTrack) {
             showAlbumCover();
         }
     });

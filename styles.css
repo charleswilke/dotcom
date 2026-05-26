@@ -6095,16 +6095,26 @@ html {
 
 /* ChatGPT Blurb Section */
 .chatgpt-blurb {
-    padding: 2rem 0;
+    --fiche-case: #15111d;
+    --fiche-case-dark: #07060b;
+    --fiche-case-mid: #282133;
+    --fiche-paper: #ead89e;
+    --fiche-paper-bright: #fff1b9;
+    --fiche-ink: #261c10;
+    --fiche-rule: rgba(38, 28, 16, 0.25);
+    --fiche-glow: rgba(255, 219, 122, 0.45);
+    padding: 4.5rem 0 5rem;
     background:
-        radial-gradient(ellipse at 14% 8%, rgba(255, 244, 163, 0.4) 0%, transparent 42%),
-        radial-gradient(ellipse at 85% 80%, rgba(255, 90, 54, 0.2) 0%, transparent 52%),
-        linear-gradient(140deg, rgba(248, 233, 210, 0.62) 0%, rgba(255, 185, 58, 0.36) 46%, rgba(247, 120, 30, 0.26) 100%);
+        radial-gradient(ellipse at 20% 8%, rgba(0, 247, 194, 0.16) 0%, transparent 34%),
+        radial-gradient(ellipse at 82% 85%, rgba(255, 90, 54, 0.24) 0%, transparent 44%),
+        linear-gradient(180deg, #100f18 0%, #241b32 48%, #09070d 100%);
     position: relative;
     z-index: 2;
     overflow: hidden;
     isolation: isolate;
-    box-shadow: inset 0 -4px 3px -1px rgba(0, 0, 0, 0.85);
+    box-shadow:
+        inset 0 8px 24px rgba(255, 219, 122, 0.08),
+        inset 0 -4px 3px -1px rgba(0, 0, 0, 0.9);
 }
 
 .chatgpt-blurb::before {
@@ -6115,14 +6125,14 @@ html {
     width: 300%;
     height: 300%;
     background-image:
-        radial-gradient(circle, rgba(26, 21, 80, 0.08) 0 2.4px, transparent 2.7px),
-        radial-gradient(circle, rgba(197, 74, 74, 0.08) 0 1px, transparent 1.25px);
-    background-size: 14px 14px, 32px 32px;
-    background-position: 0 0, 10px 8px;
+        radial-gradient(circle, rgba(255, 241, 185, 0.08) 0 1px, transparent 1.25px),
+        radial-gradient(circle, rgba(0, 247, 194, 0.055) 0 1.5px, transparent 1.8px);
+    background-size: 34px 34px, 11px 11px;
+    background-position: 0 0, 7px 5px;
     transform: rotate(30deg);
     z-index: 0;
-    mix-blend-mode: multiply;
-    opacity: 0.64;
+    mix-blend-mode: screen;
+    opacity: 0.5;
     pointer-events: none;
 }
 
@@ -6130,92 +6140,102 @@ html {
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-        radial-gradient(ellipse at 50% 100%, rgba(255, 185, 58, 0.2) 0%, transparent 58%);
-    background-size: 100% 100%;
+    background:
+        linear-gradient(90deg, rgba(255, 185, 58, 0.05), transparent 18%, transparent 82%, rgba(0, 247, 194, 0.05)),
+        radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.58) 0%, transparent 62%);
     z-index: 0;
-    opacity: 0.72;
     pointer-events: none;
 }
 
 .blurb-content {
     position: relative;
     z-index: 1;
-    max-width: 800px;
+    max-width: 1040px;
     margin: 0 auto;
 }
 
-.blurb-card {
+.microfiche-viewer {
     background:
-        radial-gradient(ellipse at 18% 8%, rgba(255, 244, 163, 0.32) 0%, transparent 45%),
-        radial-gradient(ellipse at 88% 94%, rgba(0, 247, 194, 0.08) 0%, transparent 40%),
-        linear-gradient(135deg, rgba(255, 253, 241, 0.97) 0%, rgba(248, 233, 210, 0.96) 100%);
-    padding: 2.5rem 2.5rem 0 2.5rem;
-    border-radius: 0.35rem;
-    border: 1px solid rgba(26, 21, 80, 0.22);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 12%),
+        linear-gradient(145deg, var(--fiche-case-mid) 0%, var(--fiche-case) 38%, var(--fiche-case-dark) 100%);
+    border: 1px solid rgba(255, 241, 185, 0.18);
+    border-radius: 8px 8px 4px 4px;
+    padding: 0.9rem;
     box-shadow:
-        0 14px 32px rgba(26, 21, 80, 0.16),
-        0 0 0 1px rgba(255, 244, 163, 0.28),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+        0 28px 70px rgba(0, 0, 0, 0.58),
+        0 0 0 1px rgba(0, 247, 194, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -24px 34px rgba(0, 0, 0, 0.28);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.microfiche-viewer:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 34px 82px rgba(0, 0, 0, 0.62),
+        0 0 0 1px rgba(255, 219, 122, 0.2),
+        0 0 36px rgba(255, 219, 122, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        inset 0 -24px 34px rgba(0, 0, 0, 0.28);
+}
+
+.microfiche-screen {
     position: relative;
     overflow: hidden;
-    transition: box-shadow 0.3s ease;
-    will-change: transform, box-shadow;
-    isolation: isolate;
+    border-radius: 6px 6px 3px 3px;
+    padding: 1.1rem;
+    background:
+        radial-gradient(ellipse at 50% 32%, rgba(255, 241, 185, 0.28) 0%, rgba(255, 219, 122, 0.12) 35%, transparent 72%),
+        linear-gradient(180deg, rgba(218, 246, 214, 0.24) 0%, rgba(122, 154, 102, 0.18) 55%, rgba(40, 32, 18, 0.32) 100%);
+    border: 1px solid rgba(255, 241, 185, 0.28);
+    box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.45),
+        inset 0 0 42px rgba(255, 219, 122, 0.24),
+        inset 0 0 120px rgba(0, 0, 0, 0.28);
 }
 
-/* Rotated Lichtenstein dot overlay */
-.blurb-card::before {
+.microfiche-screen::before {
     content: '';
     position: absolute;
-    top: -20%;
-    left: -20%;
-    width: 140%;
-    height: 140%;
+    inset: 0.7rem;
+    border: 1px solid rgba(255, 241, 185, 0.22);
     background-image:
-        radial-gradient(circle, rgba(26, 21, 80, 0.045) 0 2.5px, transparent 2.7px);
-    background-size: 8px 8px;
-    transform: rotate(-13deg);
+        linear-gradient(rgba(38, 28, 16, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38, 28, 16, 0.08) 1px, transparent 1px);
+    background-size: 42px 42px;
+    box-shadow:
+        inset 0 0 34px rgba(255, 241, 185, 0.18),
+        0 0 18px rgba(255, 219, 122, 0.12);
     pointer-events: none;
     z-index: 0;
-    mix-blend-mode: multiply;
 }
 
-.blurb-card::after {
+.microfiche-screen::after {
     content: '';
     position: absolute;
-    inset: 0.8rem;
-    border: 1px solid rgba(26, 21, 80, 0.08);
-    box-shadow:
-        -2px 0 0 rgba(0, 247, 194, 0.08),
-        2px 0 0 rgba(255, 90, 54, 0.08);
+    inset: 0;
+    background:
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 6px),
+        radial-gradient(ellipse at center, transparent 0%, transparent 58%, rgba(0, 0, 0, 0.34) 100%);
+    pointer-events: none;
+    z-index: 4;
+    mix-blend-mode: soft-light;
+}
+
+.microfiche-lamp {
+    position: absolute;
+    inset: 2.4rem 2rem auto;
+    height: 46%;
+    background: radial-gradient(ellipse at 50% 35%, rgba(255, 245, 198, 0.46) 0%, rgba(255, 219, 122, 0.18) 44%, transparent 74%);
+    filter: blur(10px);
     pointer-events: none;
     z-index: 0;
-}
-
-.blurb-card > * {
-    position: relative;
-    z-index: 1;
-}
-
-.blurb-content {
-    transition: transform 0.3s ease;
-}
-
-.blurb-content:hover {
-    transform: scale(1.02);
-}
-
-.blurb-card:hover {
-    box-shadow:
-        0 18px 38px rgba(26, 21, 80, 0.18),
-        0 0 0 1px rgba(26, 21, 80, 0.14),
-        0 0 26px rgba(255, 185, 58, 0.16);
 }
 
 .testimonial-carousel {
     position: relative;
     width: 100%;
+    z-index: 1;
 }
 
 .testimonial-carousel .blurb-card {
@@ -6225,51 +6245,83 @@ html {
     width: 100%;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+    transform: translateY(8px) scale(0.985);
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
 
 .testimonial-carousel .blurb-card.active {
     position: relative;
     opacity: 1;
     visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.testimonial-carousel .blurb-card.leaving {
+    transform: translateY(-7px) scale(0.99);
+}
+
+.blurb-card {
+    background:
+        radial-gradient(ellipse at 24% 5%, rgba(255, 255, 255, 0.54) 0%, transparent 36%),
+        radial-gradient(ellipse at 78% 94%, rgba(0, 247, 194, 0.1) 0%, transparent 34%),
+        repeating-linear-gradient(90deg, transparent 0 53px, rgba(38, 28, 16, 0.055) 53px 54px),
+        repeating-linear-gradient(0deg, transparent 0 39px, rgba(38, 28, 16, 0.055) 39px 40px),
+        linear-gradient(135deg, rgba(255, 241, 185, 0.95) 0%, rgba(223, 207, 150, 0.92) 100%);
+    color: var(--fiche-ink);
+    padding: 3.2rem 3.2rem 2.4rem;
+    border-radius: 2px;
+    border: 1px solid rgba(255, 241, 185, 0.72);
+    box-shadow:
+        0 20px 42px rgba(0, 0, 0, 0.32),
+        0 0 34px rgba(255, 219, 122, 0.22),
+        inset 0 0 0 1px rgba(38, 28, 16, 0.08),
+        inset 0 0 64px rgba(38, 28, 16, 0.12);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.blurb-card::before {
+    content: '';
+    position: absolute;
+    inset: 0.75rem;
+    border: 1px solid rgba(38, 28, 16, 0.18);
+    background-image:
+        linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(38, 28, 16, 0.11) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        linear-gradient(0deg, transparent calc(50% - 0.5px), rgba(38, 28, 16, 0.09) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        radial-gradient(circle, rgba(38, 28, 16, 0.08) 0 1px, transparent 1.25px);
+    background-size: 100% 100%, 100% 100%, 9px 9px;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: multiply;
+}
+
+.blurb-card > * {
+    position: relative;
+    z-index: 2;
 }
 
 .blurb-subtitle {
     font-family: 'Space Mono', 'Courier New', monospace;
     font-weight: 700;
     font-style: normal;
-    font-size: 1.7rem;
-    color: #f0eee6;
-    background:
-        radial-gradient(ellipse at 18% 0%, rgba(255, 185, 58, 0.2) 0%, transparent 42%),
-        radial-gradient(ellipse at 88% 100%, rgba(0, 247, 194, 0.08) 0%, transparent 46%),
-        radial-gradient(circle, rgba(248, 233, 210, 0.055) 0 1px, transparent 1.2px),
-        linear-gradient(135deg, #1a1550 0%, #23184d 62%, #2c1f62 100%);
-    background-size: 100% 100%, 100% 100%, 12px 12px, 100% 100%;
-    margin: -2.5rem -2.5rem 2.5rem -2.5rem;
-    padding: 1.4rem 2.5rem;
-    text-align: center;
+    font-size: 1.4rem;
+    line-height: 1.18;
+    color: #24170b;
+    background: transparent;
+    margin: 0 0 1.7rem;
+    padding: 0 0 0.8rem;
+    text-align: left;
     text-transform: uppercase;
-    letter-spacing: 4px;
-    text-shadow: none;
-    border: none;
+    letter-spacing: 0;
+    text-shadow: 0 1px 0 rgba(255, 241, 185, 0.48);
+    border-bottom: 1px solid rgba(38, 28, 16, 0.24);
     position: relative;
-    box-shadow:
-        inset 0 -1px 0 rgba(255, 185, 58, 0.42),
-        0 1px 0 rgba(0, 247, 194, 0.12),
-        0 3px 0 rgba(255, 90, 54, 0.1);
 }
 
 .blurb-subtitle::before {
-    content: '//';
-    margin-right: 0.5em;
-    color: #f0eee6;
-    font-weight: 700;
-    letter-spacing: -2px;
-    opacity: 0.55;
-    transform: rotate(-2deg) translateY(-1px);
-    display: inline-block;
-    filter: blur(0.3px);
+    content: '';
+    display: none;
 }
 
 @keyframes blink-cursor {
@@ -6278,104 +6330,116 @@ html {
 }
 
 .blurb-subtitle::after {
-    content: '_';
-    display: inline-block;
-    margin-left: 0.15em;
-    color: #f0eee6;
-    opacity: 0.7;
-    animation: blink-cursor 1s step-end infinite;
+    content: '';
+    display: none;
 }
 
 .blurb-card p {
-    color: var(--text);
-    font-size: 1.1rem;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
+    color: var(--fiche-ink);
+    font-size: 1.02rem;
+    line-height: 1.66;
+    margin-bottom: 1.35rem;
+    text-shadow: 0 1px 0 rgba(255, 241, 185, 0.32);
 }
 
 .blurb-card p:last-child {
     margin-bottom: 0;
-    padding-bottom: 2.5rem;
+    padding-bottom: 0;
 }
 
 .blurb-tldr {
     font-family: 'Space Mono', monospace;
     font-weight: 700;
-    color: #f0eee6 !important;
-    font-size: 1.2rem !important;
+    color: #24170b !important;
+    font-size: 1.05rem !important;
+    line-height: 1.5 !important;
     text-align: center;
-    background: var(--primary);
-    margin: 2rem -2.5rem 0 -2.5rem !important;
-    padding: 1.2rem 2.5rem 1.4rem !important;
-    border-top: none;
+    background: rgba(38, 28, 16, 0.08);
+    margin: 2rem 0 0 !important;
+    padding: 1rem 1.2rem !important;
+    border: 1px solid rgba(38, 28, 16, 0.18);
+    box-shadow: inset 0 0 18px rgba(255, 241, 185, 0.18);
 }
 
 .blurb-card .blurb-audio {
-    background: var(--primary);
-    margin: 0 -2.5rem;
+    background: transparent;
+    margin: 0;
     padding: 0;
 }
 
 /* Responsive adjustments for ChatGPT Blurb */
 @media (max-width: 767px) {
+    .chatgpt-blurb {
+        padding: 3rem 0 3.5rem;
+    }
+
+    .chatgpt-blurb > .container {
+        padding: 0 0.65rem;
+    }
+
+    .microfiche-viewer {
+        padding: 0.55rem;
+        border-radius: 6px;
+    }
+
+    .microfiche-screen {
+        padding: 0.85rem;
+    }
+
+    .microfiche-screen::before {
+        inset: 0.45rem;
+        background-size: 30px 30px;
+    }
+
     .blurb-card {
-        padding: 2rem 2rem 0 2rem;
+        padding: 3.1rem 0.9rem 1.3rem;
         margin: 0;
     }
 
     .blurb-subtitle {
-        font-size: 1.8rem;
-        margin: -2rem -2rem 1.5rem -2rem;
-        padding: 1.1rem 2rem;
+        font-size: 1.12rem;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.65rem;
     }
 
     .blurb-card p {
-        font-size: 1rem;
+        font-size: 0.98rem;
+        line-height: 1.6;
     }
 
-    .blurb-card p:last-child {
-        padding-bottom: 2rem;
+    .testimonial {
+        padding-left: 0.85rem;
     }
 
     .blurb-tldr {
-        font-size: 1.1rem !important;
-        margin: 2rem -2rem 0 -2rem !important;
-        padding: 1.1rem 2rem 0.8rem !important;
+        font-size: 0.96rem !important;
+        margin-top: 1.5rem !important;
+        padding: 0.9rem !important;
     }
 
-    .blurb-card .blurb-audio {
-        margin: 0 -2rem;
-    }
 }
 
 @media (max-width: 480px) {
+    .microfiche-screen {
+        padding: 0.5rem;
+    }
+
     .blurb-card {
-        padding: 1.5rem 1.5rem 0 1.5rem;
+        padding: 3rem 0.75rem 1.1rem;
         margin: 0;
     }
 
     .blurb-subtitle {
-        font-size: 1.5rem;
-        margin: -1.5rem -1.5rem 1.5rem -1.5rem;
-        padding: 1rem 1.5rem;
+        font-size: 1rem;
     }
 
     .blurb-card p {
-        font-size: 0.95rem;
-    }
-
-    .blurb-card p:last-child {
-        padding-bottom: 1.5rem;
+        font-size: 0.94rem;
     }
 
     .blurb-tldr {
-        font-size: 1rem !important;
-        margin: 2rem -1.5rem 0 -1.5rem !important;
-        padding: 1rem 1.5rem 0.8rem !important;
-    }
-
-    .blurb-card .blurb-audio {
-        margin: 0 -1.5rem;
+        font-size: 0.9rem !important;
+        padding: 0.8rem !important;
     }
 }
 
@@ -6716,107 +6780,182 @@ section.production-header.alice p {
 
 .carousel-nav {
     text-align: center;
-    margin-bottom: 0;
+    margin-bottom: 0.85rem;
+    position: relative;
+    z-index: 2;
 }
 
 .carousel-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    margin: 3rem 0 0;
-    filter: drop-shadow(0 6px 10px rgba(26, 21, 80, 0.14));
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0.38rem;
+    background:
+        linear-gradient(180deg, rgba(255, 241, 185, 0.12), transparent 45%),
+        rgba(6, 5, 11, 0.78);
+    border: 1px solid rgba(255, 241, 185, 0.18);
+    border-radius: 4px;
+    box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.38),
+        0 10px 20px rgba(0, 0, 0, 0.28);
 }
 
 .carousel-tab {
     font-family: 'Space Mono', 'Courier New', monospace;
-    font-size: 0.75rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0;
+    line-height: 1.2;
     text-transform: uppercase;
-    color: rgba(26, 21, 80, 0.55);
+    color: rgba(39, 35, 27, 0.66);
     background:
-        linear-gradient(180deg, rgba(255, 253, 241, 0.78), rgba(248, 233, 210, 0.62));
-    border: 1px solid rgba(26, 21, 80, 0.18);
-    border-bottom: none;
-    border-radius: 0.25rem 0.25rem 0 0;
+        radial-gradient(circle at 18% 26%, rgba(39, 35, 27, 0.1) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 76% 64%, rgba(39, 35, 27, 0.08) 0 1.4px, transparent 1.6px),
+        repeating-linear-gradient(88deg, transparent 0 9px, rgba(39, 35, 27, 0.05) 9px 10px),
+        linear-gradient(180deg, rgba(236, 229, 197, 0.62) 0%, rgba(181, 172, 137, 0.5) 100%);
+    background-size: 17px 17px, 23px 23px, 100% 100%, 100% 100%;
+    border: 1px solid rgba(236, 229, 197, 0.28);
+    border-radius: 2px;
     cursor: pointer;
-    padding: 0.5rem 1.2rem;
-    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.65rem;
+    padding: 0.58rem 0.7rem;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     position: relative;
-    width: auto;
+    width: 100%;
     height: auto;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    overflow: hidden;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        inset 0 -8px 12px rgba(39, 35, 27, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.18);
+    text-shadow:
+        0.8px 0 rgba(39, 35, 27, 0.2),
+        -1px 0.6px rgba(39, 35, 27, 0.12),
+        0 0 2px rgba(39, 35, 27, 0.24);
+}
+
+.carousel-tab-label {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    transform: rotate(var(--label-angle, 0deg)) translateY(var(--label-drift-y, 0));
+    transform-origin: 50% 55%;
+    will-change: transform;
+}
+
+.carousel-tab:nth-child(1) .carousel-tab-label {
+    --label-angle: -3.2deg;
+    --label-drift-y: 1px;
+}
+
+.carousel-tab:nth-child(2) .carousel-tab-label {
+    --label-angle: 2.4deg;
+    --label-drift-y: -1px;
+}
+
+.carousel-tab:nth-child(3) .carousel-tab-label {
+    --label-angle: -1.4deg;
+    --label-drift-y: 0;
+}
+
+.carousel-tab:nth-child(4) .carousel-tab-label {
+    --label-angle: 3.6deg;
+    --label-drift-y: 1px;
 }
 
 .carousel-tab::before {
-    content: attr(data-tab) ' //';
-    margin-right: 0.4em;
-    opacity: 0.5;
-    font-weight: 400;
+    content: '';
+    display: none;
+}
+
+.carousel-tab::after {
+    content: '';
+    position: absolute;
+    inset: -12%;
+    background:
+        radial-gradient(circle at 16% 30%, rgba(39, 35, 27, 0.16) 0 1px, transparent 1.4px),
+        radial-gradient(circle at 58% 72%, rgba(39, 35, 27, 0.12) 0 1px, transparent 1.3px),
+        linear-gradient(92deg, transparent 0 18%, rgba(39, 35, 27, 0.08) 18% 20%, transparent 20% 100%),
+        repeating-linear-gradient(0deg, transparent 0 5px, rgba(255, 255, 255, 0.08) 5px 6px);
+    background-size: 19px 19px, 29px 29px, 100% 100%, 100% 100%;
+    mix-blend-mode: multiply;
+    opacity: 0.58;
+    pointer-events: none;
+    transform: rotate(-1.2deg);
 }
 
 .carousel-tab.active {
-    color: #f0eee6;
+    color: rgba(21, 18, 14, 0.84);
     background:
-        radial-gradient(ellipse at 18% 0%, rgba(255, 185, 58, 0.22) 0%, transparent 50%),
-        radial-gradient(circle, rgba(248, 233, 210, 0.06) 0 1px, transparent 1.2px),
-        var(--primary);
-    background-size: 100% 100%, 10px 10px, 100% 100%;
-    border-color: var(--primary);
-    transform: none;
+        radial-gradient(ellipse at 28% 16%, rgba(255, 255, 255, 0.62) 0%, transparent 46%),
+        radial-gradient(circle at 74% 62%, rgba(39, 35, 27, 0.12) 0 1.4px, transparent 1.6px),
+        repeating-linear-gradient(88deg, transparent 0 8px, rgba(39, 35, 27, 0.08) 8px 9px),
+        linear-gradient(180deg, rgba(255, 244, 202, 0.92) 0%, rgba(216, 199, 139, 0.78) 100%);
+    background-size: 100% 100%, 21px 21px, 100% 100%, 100% 100%;
+    border-color: rgba(255, 241, 185, 0.62);
+    transform: translateY(-1px);
     box-shadow:
-        inset 0 2px 0 rgba(255, 185, 58, 0.58),
-        -1px 0 0 rgba(0, 247, 194, 0.22),
-        1px 0 0 rgba(255, 90, 54, 0.2);
+        0 0 16px rgba(255, 219, 122, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -10px 14px rgba(39, 35, 27, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.24);
 }
 
 .carousel-tab.active::before {
-    opacity: 0.6;
+    display: none;
+}
+
+.carousel-tab.active::after {
+    opacity: 0.72;
 }
 
 .carousel-tab:hover:not(.active) {
-    color: rgba(26, 21, 80, 0.78);
+    color: rgba(21, 18, 14, 0.74);
     background:
-        linear-gradient(180deg, rgba(255, 253, 241, 0.9), rgba(255, 185, 58, 0.22));
+        radial-gradient(circle at 20% 26%, rgba(39, 35, 27, 0.12) 0 1px, transparent 1.2px),
+        repeating-linear-gradient(88deg, transparent 0 9px, rgba(39, 35, 27, 0.07) 9px 10px),
+        linear-gradient(180deg, rgba(244, 235, 198, 0.72), rgba(194, 181, 135, 0.58));
+    border-color: rgba(255, 241, 185, 0.4);
     opacity: 1;
 }
 
 @media (max-width: 767px) {
     .carousel-tabs {
-        flex-wrap: wrap;
-        justify-content: center;
-        width: calc(100% - 1rem);
-        margin-left: auto;
-        margin-right: auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
     }
     .carousel-tab {
-        flex: 1 1 calc(50% - 1px);
         text-align: center;
-        font-size: 0.65rem;
-        padding: 0.4rem 0.8rem;
-        letter-spacing: 0.5px;
+        font-size: 0.88rem;
+        min-height: 3.2rem;
+        padding: 0.48rem 0.5rem;
+        letter-spacing: 0;
     }
 }
 
 .testimonial {
-    margin-bottom: 2rem;
+    margin-bottom: 1.7rem;
     position: relative;
-    padding-left: 1.25rem;
-    border-left: 2px solid rgba(26, 21, 80, 0.16);
+    padding-left: 1.15rem;
+    border-left: 1px solid rgba(38, 28, 16, 0.24);
 }
 
 .testimonial::before {
     content: '';
     position: absolute;
-    top: 0.45rem;
-    left: -0.34rem;
-    width: 0.55rem;
-    height: 0.55rem;
-    background: #f8e9d2;
-    border: 1px solid rgba(26, 21, 80, 0.28);
+    top: 0.5rem;
+    left: -0.26rem;
+    width: 0.46rem;
+    height: 0.46rem;
+    background: #24170b;
+    border: 1px solid rgba(255, 241, 185, 0.58);
     box-shadow:
-        -1px 0 0 rgba(0, 247, 194, 0.18),
-        1px 0 0 rgba(255, 90, 54, 0.18);
+        0 0 0 2px rgba(255, 241, 185, 0.28),
+        0 0 10px rgba(255, 219, 122, 0.32);
     transform: rotate(45deg);
 }
 
@@ -6828,12 +6967,12 @@ section.production-header.alice p {
     margin-bottom: 1rem;
     /* font-style: italic; */
     text-shadow:
-        -0.55px 0 rgba(0, 247, 194, 0.12),
-        0.55px 0 rgba(255, 90, 54, 0.1);
+        -0.5px 0 rgba(0, 247, 194, 0.08),
+        0.5px 0 rgba(255, 90, 54, 0.08);
 }
 
 .testimonial-author {
-    color: var(--groovy-gradient1);
+    color: rgba(84, 48, 16, 0.86);
     font-family: 'Space Mono', monospace;
     font-size: 0.9rem;
     line-height: 1.4;
@@ -6850,13 +6989,13 @@ section.production-header.alice p {
 }
 
 .testimonial-author a {
-    color: var(--groovy-gradient2);
+    color: #7d4c14;
     text-decoration: none;
     transition: all 0.3s ease;
 }
 
 .testimonial-author a:hover {
-    color: var(--groovy-gradient1);
+    color: #4d2b09;
     text-decoration: underline;
 }
 
@@ -7676,15 +7815,17 @@ section.production-header.alice p {
 
 /* Variant: Blurb Audio Player (AI describes me card) */
 .blurb-audio-player {
-  background: #fffbe7 !important;
-  box-shadow: 0 2px 8px rgba(255, 200, 80, 0.10);
-  border: 1.5px solid #ffd580;
-  padding: 0.12rem 0.5rem;
+  background: rgba(38, 28, 16, 0.08) !important;
+  box-shadow:
+    inset 0 0 14px rgba(255, 241, 185, 0.18),
+    0 1px 0 rgba(255, 241, 185, 0.3);
+  border: 1px solid rgba(38, 28, 16, 0.2);
+  padding: 0.24rem 0.5rem;
   margin-bottom: 1.2rem;
-  min-height: 1.7rem;
+  min-height: 2rem;
 }
 .blurb-audio-player .audio-btn {
-  color: #ffb347;
+  color: #543010;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -7697,29 +7838,29 @@ section.production-header.alice p {
   top: -1px;
 }
 .blurb-audio-player .audio-btn:hover, .blurb-audio-player .audio-btn:focus {
-  color: #fffbe7;
+  color: #24170b;
   background: transparent;
   border: none;
 }
 .blurb-audio-player .audio-icon {
-  color: #ffb347;
+  color: #543010;
 }
 .blurb-audio-player .audio-progress-container {
   min-width: 30px;
   height: 0.22rem;
 }
 .blurb-audio-player .audio-progress-bar {
-  background: linear-gradient(90deg, #ffd580 0%, #ffe29a 100%);
+  background: linear-gradient(90deg, rgba(38, 28, 16, 0.22) 0%, rgba(84, 48, 16, 0.16) 100%);
   box-shadow: none;
   height: 0.22rem;
 }
 .blurb-audio-player .audio-progress {
-  background: #ffb347;
+  background: #543010;
   box-shadow: none;
   height: 100%;
 }
 .blurb-audio-player .audio-time, .blurb-audio-player .audioCurrent {
-  color: #b88a3d;
+  color: rgba(38, 28, 16, 0.78);
   text-shadow: none;
   font-size: 0.95rem;
   min-width: 36px;

@@ -2021,6 +2021,7 @@ function updateCarousel(newIndex) {
     // Update dots
     dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === newIndex);
+        dot.setAttribute('aria-pressed', index === newIndex ? 'true' : 'false');
     });
     
     currentIndex = newIndex;

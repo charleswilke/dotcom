@@ -2636,15 +2636,17 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         ctx.save();
         [0.25, 0.75].forEach(function (frac) {
             var qy = h * frac;
+            // Tube: thickens and blooms hard on a kick.
             ctx.shadowColor = currentColors.glow;
-            ctx.shadowBlur = 14 + pulse * 20;
-            ctx.strokeStyle = gc.replace(/[\d.]+\)$/, (0.8 + pulse * 0.2).toFixed(2) + ')');
-            ctx.lineWidth = 1.5 + pulse * 1.4;
+            ctx.shadowBlur = 10 + pulse * 34;
+            ctx.strokeStyle = gc.replace(/[\d.]+\)$/, (0.7 + pulse * 0.3).toFixed(2) + ')');
+            ctx.lineWidth = 1.4 + pulse * 4.2;
             ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke(); // double pass to intensify the bloom
-            ctx.shadowBlur = 4 + pulse * 8;
-            ctx.strokeStyle = 'rgba(255, 250, 235, ' + (0.85 + pulse * 0.15).toFixed(2) + ')';
-            ctx.lineWidth = 0.8 + pulse * 0.7;
+            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke(); // double pass intensifies the bloom
+            // Hot near-white core that flares to full white on the beat.
+            ctx.shadowBlur = 3 + pulse * 12;
+            ctx.strokeStyle = 'rgba(255, 250, 235, ' + (0.8 + pulse * 0.2).toFixed(2) + ')';
+            ctx.lineWidth = 0.7 + pulse * 1.8;
             ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
         });
         ctx.restore();
@@ -2825,10 +2827,10 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
             var bassSum = 0, bassBins = Math.min(6, bassFreq.length - 1);
             for (var bb = 1; bb <= bassBins; bb++) bassSum += bassFreq[bb];
             var bassAvg = bassSum / bassBins;
-            bassTarget = Math.max(0, Math.min(1, (bassAvg - 50) / 150)); // floor + saturate
+            bassTarget = Math.max(0, Math.min(1, (bassAvg - 28) / 80)); // low floor, easy saturation → reactive
         }
         // Fast attack, slow decay → snaps on a kick, eases back to the baseline.
-        bassPulse += (bassTarget - bassPulse) * (bassTarget > bassPulse ? 0.5 : 0.12);
+        bassPulse += (bassTarget - bassPulse) * (bassTarget > bassPulse ? 0.55 : 0.14);
 
         ctx.clearRect(0, 0, w, h);
         drawGraticule(w, h);

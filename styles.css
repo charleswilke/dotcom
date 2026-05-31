@@ -5911,6 +5911,20 @@ html {
     letter-spacing: 0.04em;
 }
 
+.playbill-chyron figcaption cite a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(248, 233, 210, 0.4);
+    text-underline-offset: 2px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.playbill-chyron figcaption cite a:hover,
+.playbill-chyron figcaption cite a:focus-visible {
+    color: #ffd9a0;
+    text-decoration-color: currentColor;
+}
+
 /* Mobile — stack vertically */
 @media (max-width: 600px) {
     .playbill-fan {

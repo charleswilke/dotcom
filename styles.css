@@ -7957,12 +7957,13 @@ section.production-header.alice p {
     .mixtape-left-section {
         flex: 1;
         align-items: flex-start;
+        justify-content: center;
         max-width: 480px;
         overflow: hidden;
     }
 
     .mixtape-cover-container {
-        flex: 1 1 0;
+        flex: 0 1 auto;
         min-height: 150px;
         width: 100%;
         max-width: 100%;
@@ -8095,7 +8096,12 @@ section.production-header.alice p {
     text-align: center;
     font-family: 'Space Mono', monospace;
     font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.5);
+    /* Lives in the negative space between the cover and the player as a
+       difference-blend layer — maximally contrasted against whatever is behind
+       it, so it reads crisply against the dark deck (and adapts if it meets the
+       artwork edge). */
+    color: #fff;
+    mix-blend-mode: difference;
     letter-spacing: 0.05em;
     margin: 0;
     line-height: 1.3;

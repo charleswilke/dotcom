@@ -541,24 +541,17 @@
                         <div class="mixtape-current-track">Select a track...</div>
                     </div>
                     
-                    <div class="custom-audio-player mixtape-audio-controls">
-                        <button id="mixtapePrev" class="mixtape-nav-btn" aria-label="Previous Track"><span class="track-skip prev"></span></button>
-                        <button id="mixtapePlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
-                        <button id="mixtapeNext" class="mixtape-nav-btn" aria-label="Next Track"><span class="track-skip next"></span></button>
-                        <div class="audio-progress-container" id="mixtapeProgressContainer">
-                            <div class="audio-progress-bar">
-                                <div class="audio-progress" id="mixtapeProgressBar"></div>
-                            </div>
-                        </div>
-                        <span class="audio-time"><span id="mixtapeTime">0:00</span></span>
-                    </div>
                     <audio id="mixtapeAudio" class="custom-audio" preload="metadata"></audio>
-                    
+
                     <!-- Modal Oscilloscope -->
                     <div class="modal-oscilloscope-frame" id="mixtapeOscilloscopeFrame">
                         <canvas class="modal-oscilloscope" id="mixtapeOscilloscope"></canvas>
+                        <button id="mixtapePlayPause" class="audio-btn osc-play-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
                         <span class="modal-oscilloscope-title" id="mixtapeOscilloscopeTitle" aria-live="polite">Select a track...</span>
                         <span class="modal-oscilloscope-meta" id="mixtapeOscilloscopeMeta">Exploring L.ai.bor Mixtape</span>
+                        <div class="time-vial" id="mixtapeVial" role="progressbar" aria-label="Playback progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <canvas class="time-vial-canvas" id="mixtapeTime"></canvas>
+                        </div>
                     </div>
 
                 </div>
@@ -594,24 +587,17 @@
                         <div class="mixtape-current-track" id="jcCurrentTrack">Select a track...</div>
                     </div>
 
-                    <div class="custom-audio-player mixtape-audio-controls">
-                        <button id="jcPrev" class="mixtape-nav-btn" aria-label="Previous Track"><span class="track-skip prev"></span></button>
-                        <button id="jcPlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">&#9654;</span></button>
-                        <button id="jcNext" class="mixtape-nav-btn" aria-label="Next Track"><span class="track-skip next"></span></button>
-                        <div class="audio-progress-container" id="jcProgressContainer">
-                            <div class="audio-progress-bar">
-                                <div class="audio-progress" id="jcProgressBar"></div>
-                            </div>
-                        </div>
-                        <span class="audio-time"><span id="jcTime">0:00</span></span>
-                    </div>
                     <audio id="jcAudio" class="custom-audio" preload="metadata"></audio>
 
                     <!-- Modal Oscilloscope -->
                     <div class="modal-oscilloscope-frame" id="jcOscilloscopeFrame">
                         <canvas class="modal-oscilloscope" id="jcOscilloscope"></canvas>
+                        <button id="jcPlayPause" class="audio-btn osc-play-btn" aria-label="Play/Pause"><span class="audio-icon">&#9654;</span></button>
                         <span class="modal-oscilloscope-title" id="jcOscilloscopeTitle" aria-live="polite">Select a track...</span>
                         <span class="modal-oscilloscope-meta">Junkyard Cabaret</span>
+                        <div class="time-vial" id="jcVial" role="progressbar" aria-label="Playback progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <canvas class="time-vial-canvas" id="jcTime"></canvas>
+                        </div>
                     </div>
 
                 </div>
@@ -647,24 +633,17 @@
                         <div class="mixtape-current-track" id="gworCurrentTrack">Select a track...</div>
                     </div>
 
-                    <div class="custom-audio-player mixtape-audio-controls">
-                        <button id="gworPrev" class="mixtape-nav-btn" aria-label="Previous Track"><span class="track-skip prev"></span></button>
-                        <button id="gworPlayPause" class="audio-btn" aria-label="Play/Pause"><span class="audio-icon">&#9654;</span></button>
-                        <button id="gworNext" class="mixtape-nav-btn" aria-label="Next Track"><span class="track-skip next"></span></button>
-                        <div class="audio-progress-container" id="gworProgressContainer">
-                            <div class="audio-progress-bar">
-                                <div class="audio-progress" id="gworProgressBar"></div>
-                            </div>
-                        </div>
-                        <span class="audio-time"><span id="gworTime">0:00</span></span>
-                    </div>
                     <audio id="gworAudio" class="custom-audio" preload="metadata"></audio>
 
                     <!-- Modal Oscilloscope -->
                     <div class="modal-oscilloscope-frame" id="gworOscilloscopeFrame">
                         <canvas class="modal-oscilloscope" id="gworOscilloscope"></canvas>
+                        <button id="gworPlayPause" class="audio-btn osc-play-btn" aria-label="Play/Pause"><span class="audio-icon">&#9654;</span></button>
                         <span class="modal-oscilloscope-title" id="gworOscilloscopeTitle" aria-live="polite">Select a track...</span>
                         <span class="modal-oscilloscope-meta">Grief without Ritual</span>
+                        <div class="time-vial" id="gworVial" role="progressbar" aria-label="Playback progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <canvas class="time-vial-canvas" id="gworTime"></canvas>
+                        </div>
                     </div>
 
                 </div>

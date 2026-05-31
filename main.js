@@ -2499,15 +2499,90 @@ function createVisualizerController(options) {
 function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     if (!canvas) return null;
     const ctx = canvas.getContext('2d');
+    // Offscreen buffer holds the trace so it can decay like CRT phosphor.
+    const persistCanvas = document.createElement('canvas');
+    const persistCtx = persistCanvas.getContext('2d');
     let oscAnimId = null;
     let currentColors = Object.assign({}, colors);
+    let dpr = window.devicePixelRatio || 1;
+
+    // Pull the r,g,b out of the graticule rgba() so the vial + glow can be
+    // tinted to match each album. `tint` is a let so updateColors() can re-derive
+    // it (e.g. the Mixtape A→B side swap), keeping the colour change complete.
+    function parseRGB(str) {
+        const m = /(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/.exec(str || '');
+        return m ? [m[1], m[2], m[3]] : [0, 247, 194];
+    }
+    let tint = parseRGB(currentColors.graticule);
+    const rgba = (a) => 'rgba(' + tint[0] + ',' + tint[1] + ',' + tint[2] + ',' + a + ')';
+
+    const frame = canvas.parentElement;
+    const vial = frame ? frame.querySelector('.time-vial') : null;
+
+    // Clicking the scope toggles play/pause — scrubbing lives on the vial.
+    canvas.addEventListener('click', function () {
+        pauseManagedAudioExcept(audioEl);
+        if (audioEl.paused) audioEl.play().catch(function () {});
+        else audioEl.pause();
+    });
+
+    // The vial IS the scrubber: drag it vertically (bottom = start, top = end),
+    // mirroring the filling metaphor.
+    if (vial) {
+        const seekVial = function (clientY) {
+            const rect = vial.getBoundingClientRect();
+            if (!audioEl.duration || !isFinite(audioEl.duration) || !rect.height) return;
+            const pct = Math.max(0, Math.min(1, 1 - (clientY - rect.top) / rect.height));
+            audioEl.currentTime = pct * audioEl.duration;
+        };
+        vial.addEventListener('pointerdown', function (e) {
+            e.preventDefault();
+            try { vial.setPointerCapture(e.pointerId); } catch (err) {}
+            const wasPlaying = !audioEl.paused;
+            if (wasPlaying) audioEl.pause();
+            seekVial(e.clientY);
+            const move = function (ev) { seekVial(ev.clientY); };
+            const up = function () {
+                vial.removeEventListener('pointermove', move);
+                vial.removeEventListener('pointerup', up);
+                vial.removeEventListener('pointercancel', up);
+                if (wasPlaying) setTimeout(function () { audioEl.play().catch(function () {}); }, 50);
+            };
+            vial.addEventListener('pointermove', move);
+            vial.addEventListener('pointerup', up);
+            vial.addEventListener('pointercancel', up);
+        });
+    }
+
+    // Vial gauge: a tiny canvas drawn with real drop physics — drops fall from
+    // the top, splash into the surface, and the pool collects toward progress.
+    const vialCanvas = vial ? vial.querySelector('.time-vial-canvas') : null;
+    const vialCtx = vialCanvas ? vialCanvas.getContext('2d') : null;
+    let vialLevel = 0;      // displayed fill (0..1), eases toward progress
+    let vialDrops = [];     // in-flight droplets
+    let vialRipple = 0;     // surface ripple amplitude, decays after each splash
+    let vialDropTimer = 0;  // countdown to next drop spawn
+    let vialBubbles = [];   // carbonation rising through the liquid
+    let vialBubbleTimer = 0;
+    let vialSpecks = null;  // fixed condensation flecks on the glass
+    let vialLastT = (typeof performance !== 'undefined' ? performance.now() : 0);
 
     function resizeCanvas() {
-        const dpr = window.devicePixelRatio || 1;
+        dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
         canvas.width = rect.width * dpr;
         canvas.height = rect.height * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        persistCanvas.width = canvas.width;
+        persistCanvas.height = canvas.height;
+        persistCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        if (vialCanvas && vialCtx) {
+            const vr = vialCanvas.getBoundingClientRect();
+            vialCanvas.width = Math.max(1, vr.width * dpr);
+            vialCanvas.height = Math.max(1, vr.height * dpr);
+            vialCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            vialSpecks = null; // regenerate condensation for the new size
+        }
     }
 
     function drawGraticule(w, h) {
@@ -2550,19 +2625,190 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, h); ctx.stroke();
     }
 
-    function drawFrame() {
+    function drawVial(now) {
+        if (!vialCtx) return;
+        var rect = vialCanvas.getBoundingClientRect();
+        var vw = rect.width, vh = rect.height;
+        if (!vw || !vh) return;
+
+        var dt = Math.min(0.05, Math.max(0, (now - vialLastT) / 1000));
+        vialLastT = now;
+
+        var dur = audioEl.duration;
+        var target = (dur && isFinite(dur) && dur > 0) ? Math.max(0, Math.min(1, audioEl.currentTime / dur)) : 0;
+        var playing = !audioEl.paused;
+
+        // Big jumps (scrubs, track changes) snap; otherwise the pool eases up.
+        if (Math.abs(target - vialLevel) > 0.3) vialLevel = target;
+        else vialLevel += (target - vialLevel) * Math.min(1, dt * 2.5);
+
+        var surfaceY = (1 - vialLevel) * vh;
+
+        // Spawn a drop from the top now and then while playing.
+        vialDropTimer -= dt;
+        if (playing && vialDropTimer <= 0) {
+            vialDrops.push({
+                x: vw / 2 + (Math.random() - 0.5) * vw * 0.32,
+                y: 1,
+                vy: 8 + Math.random() * 10,
+                r: 1.2 + Math.random() * 0.7
+            });
+            vialDropTimer = 0.92; // steady cadence — soothing and predictable
+        }
+
+        // Integrate drops under gravity; splash into the surface on contact.
+        var grav = vh * 6;
+        for (var i = vialDrops.length - 1; i >= 0; i--) {
+            var d = vialDrops[i];
+            d.vy += grav * dt;
+            d.y += d.vy * dt;
+            if (d.y >= surfaceY - d.r) {
+                vialRipple = Math.min(4.5, vialRipple + 2.4);
+                vialDrops.splice(i, 1);
+            }
+        }
+        vialRipple *= Math.exp(-dt * 4.5);
+
+        // Carbonation: small bubbles seep up from the bottom and pop at the top.
+        vialBubbleTimer -= dt;
+        if (playing && vialLevel > 0.04 && vialBubbleTimer <= 0) {
+            vialBubbles.push({
+                x: 1.5 + Math.random() * (vw - 3),
+                y: vh - 1,
+                r: 0.5 + Math.random() * 0.9,
+                vy: 26 + Math.random() * 30,
+                ph: Math.random() * 6.283
+            });
+            vialBubbleTimer = 0.18 + Math.random() * 0.3;
+        }
+        for (var bi = vialBubbles.length - 1; bi >= 0; bi--) {
+            var bub = vialBubbles[bi];
+            bub.y -= bub.vy * dt;
+            if (bub.y <= surfaceY + 1) vialBubbles.splice(bi, 1);
+        }
+
+        // ---- draw ----
+        vialCtx.clearRect(0, 0, vw, vh);
+
+        // The surface is two independent "floorboards" (à la Prince of Persia's
+        // loose tiles) that quiver while the vial fills and jolt on each splash.
+        var quiver = vialRipple + (playing ? 1.3 : 0);
+        var midX = vw / 2;
+        var sy = function (freq, phase) {
+            return Math.max(0, Math.min(vh, surfaceY + Math.sin(now * freq + phase) * quiver));
+        };
+        var yLo = sy(0.052, 0.0);   // left board — outer edge (x = 0)
+        var yLi = sy(0.061, 1.7);   // left board — inner edge (x = mid)
+        var yRi = sy(0.058, 3.1);   // right board — inner edge (x = mid)
+        var yRo = sy(0.049, 4.6);   // right board — outer edge (x = vw)
+
+        if (vialLevel > 0.002) {
+            var grad = vialCtx.createLinearGradient(0, surfaceY, 0, vh);
+            grad.addColorStop(0, rgba(0.58)); // translucent — waveform shows through
+            grad.addColorStop(1, rgba(0.4));
+            vialCtx.fillStyle = grad;
+            vialCtx.shadowColor = currentColors.glow;
+            vialCtx.shadowBlur = 8;
+            vialCtx.beginPath();
+            vialCtx.moveTo(0, yLo);
+            vialCtx.lineTo(midX, yLi);
+            vialCtx.lineTo(midX, yRi);
+            vialCtx.lineTo(vw, yRo);
+            vialCtx.lineTo(vw, vh);
+            vialCtx.lineTo(0, vh);
+            vialCtx.closePath();
+            vialCtx.fill();
+            vialCtx.shadowBlur = 0;
+
+            // Two bright meniscus boards with a seam down the middle.
+            vialCtx.strokeStyle = 'rgba(255, 250, 240, 0.95)';
+            vialCtx.lineWidth = 1.4;
+            vialCtx.shadowColor = currentColors.glow;
+            vialCtx.shadowBlur = 7;
+            vialCtx.beginPath();
+            vialCtx.moveTo(0, yLo); vialCtx.lineTo(midX, yLi);
+            vialCtx.moveTo(midX, yRi); vialCtx.lineTo(vw, yRo);
+            vialCtx.stroke();
+            vialCtx.shadowBlur = 0;
+
+            // Carbonation bubbles drifting up through the liquid.
+            vialCtx.strokeStyle = 'rgba(255, 250, 240, 0.4)';
+            vialCtx.lineWidth = 0.6;
+            for (var k = 0; k < vialBubbles.length; k++) {
+                var bd = vialBubbles[k];
+                var bx = bd.x + Math.sin(now * 0.004 + bd.ph) * 0.8;
+                vialCtx.beginPath();
+                vialCtx.arc(bx, bd.y, bd.r, 0, Math.PI * 2);
+                vialCtx.stroke();
+            }
+        }
+
+        // Falling drops, stretched by speed into little teardrops.
+        vialCtx.fillStyle = rgba(0.95);
+        vialCtx.shadowColor = currentColors.glow;
+        vialCtx.shadowBlur = 6;
+        for (var j = 0; j < vialDrops.length; j++) {
+            var dr = vialDrops[j];
+            var stretch = Math.min(2.4, 1 + dr.vy / 60);
+            vialCtx.save();
+            vialCtx.translate(dr.x, dr.y);
+            vialCtx.scale(1, stretch);
+            vialCtx.beginPath();
+            vialCtx.arc(0, 0, dr.r, 0, Math.PI * 2);
+            vialCtx.fill();
+            vialCtx.restore();
+        }
+        vialCtx.shadowBlur = 0;
+
+        // Condensation: a fixed sprinkle of faint flecks on the glass.
+        if (!vialSpecks) {
+            vialSpecks = [];
+            var count = Math.round(vw * vh / 120);
+            for (var s = 0; s < count; s++) {
+                vialSpecks.push({
+                    x: Math.random() * vw,
+                    y: Math.random() * vh,
+                    r: 0.35 + Math.random() * 0.6,
+                    a: 0.03 + Math.random() * 0.06
+                });
+            }
+        }
+        for (var si = 0; si < vialSpecks.length; si++) {
+            var sp = vialSpecks[si];
+            vialCtx.beginPath();
+            vialCtx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+            vialCtx.fillStyle = 'rgba(255, 250, 235, ' + sp.a + ')';
+            vialCtx.fill();
+        }
+    }
+
+    function render() {
+        if (vialCtx) drawVial(typeof performance !== 'undefined' ? performance.now() : 0);
         var w = canvas.getBoundingClientRect().width;
         var h = canvas.getBoundingClientRect().height;
+        if (!w || !h) return;
+        if (!canvas.width) resizeCanvas();
         var isPlaying = !audioEl.paused;
+        var mid = h / 2;
 
         ctx.clearRect(0, 0, w, h);
         drawGraticule(w, h);
 
-        ctx.beginPath();
-        ctx.strokeStyle = currentColors.trace;
-        ctx.lineWidth = 2;
-        ctx.shadowColor = currentColors.glow;
-        ctx.shadowBlur = 10;
+        // (Progress now lives in the vial gauge — the scope shows live signal
+        // plus a grab handle, so there's no played-region wash here.)
+
+        // Fade the persistence buffer (phosphor decay), then draw the new trace
+        // onto it so previous frames linger as a ghost behind the live trace.
+        persistCtx.globalCompositeOperation = 'destination-out';
+        persistCtx.fillStyle = 'rgba(0,0,0,0.22)';
+        persistCtx.fillRect(0, 0, w, h);
+        persistCtx.globalCompositeOperation = 'source-over';
+
+        persistCtx.beginPath();
+        persistCtx.strokeStyle = currentColors.trace;
+        persistCtx.lineWidth = 2;
+        persistCtx.shadowColor = currentColors.glow;
+        persistCtx.shadowBlur = 10;
 
         var analyser = getAnalyser();
         if (isPlaying && analyser) {
@@ -2571,28 +2817,43 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
             var sliceWidth = w / timeData.length;
             var x = 0;
             var gain = 3.0;
-            var mid = h / 2;
             for (var i = 0; i < timeData.length; i++) {
                 var v = (timeData[i] / 128.0) - 1.0;
                 var y = mid + (v * mid * gain);
                 y = Math.max(2, Math.min(h - 2, y));
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+                if (i === 0) persistCtx.moveTo(x, y);
+                else persistCtx.lineTo(x, y);
                 x += sliceWidth;
             }
         } else {
-            var mid = h / 2;
             for (var x = 0; x < w; x++) {
                 var noise = (Math.random() - 0.5) * 1.5;
-                if (x === 0) ctx.moveTo(x, mid + noise);
-                else ctx.lineTo(x, mid + noise);
+                if (x === 0) persistCtx.moveTo(x, mid + noise);
+                else persistCtx.lineTo(x, mid + noise);
             }
         }
+        persistCtx.stroke();
+        persistCtx.shadowBlur = 0;
 
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+        // Composite the phosphor buffer over the graticule.
+        ctx.drawImage(persistCanvas, 0, 0, w, h);
+
+        // (No playhead marker on the scope — progress lives in the vial gauge.
+        // The trace still brightens while scrubbing for tactile feedback, and
+        // the canvas remains click/drag-seekable.)
+    }
+
+    function drawFrame() {
+        render();
         oscAnimId = requestAnimationFrame(drawFrame);
     }
+
+    // Keep the cursor responsive to seeks/scrubs while paused (no RAF running).
+    function renderIfIdle() {
+        if (!oscAnimId) render();
+    }
+    audioEl.addEventListener('seeked', renderIfIdle);
+    audioEl.addEventListener('timeupdate', renderIfIdle);
 
     function start() {
         resizeCanvas();
@@ -2604,10 +2865,12 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
             cancelAnimationFrame(oscAnimId);
             oscAnimId = null;
         }
+        render();
     }
 
     function updateColors(newColors) {
         Object.assign(currentColors, newColors);
+        tint = parseRGB(currentColors.graticule);
     }
 
     window.addEventListener('resize', function() {
@@ -2777,6 +3040,23 @@ function formatAudioTime(sec) {
     const m = Math.floor(sec / 60);
     const s = Math.floor(sec % 60);
     return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+// Keep the vial's ARIA progress value in sync. The liquid itself is rendered
+// on a canvas by createModalOscilloscope (see drawVial), which reads the audio
+// directly — so this only maintains the accessibility value.
+function setAudioTimeReadout(el, audio) {
+    if (!el) return;
+    const dur = audio.duration;
+    const pct = (dur && isFinite(dur)) ? Math.max(0, Math.min(1, audio.currentTime / dur)) : 0;
+    const vial = el.closest('.time-vial');
+    if (vial) vial.setAttribute('aria-valuenow', Math.round(pct * 100));
+}
+
+function resetAudioTimeReadout(el) {
+    if (!el) return;
+    const vial = el.closest('.time-vial');
+    if (vial) vial.setAttribute('aria-valuenow', 0);
 }
 
 function slugifyTrackSegment(value) {
@@ -3251,7 +3531,7 @@ function initMixtapeLightbox() {
             progressBar.style.width = '0%';
         }
         if (timeDisplay) {
-            timeDisplay.textContent = '0:00';
+            resetAudioTimeReadout(timeDisplay);
         }
 
         setActiveTrackListItem(trackItems, index);
@@ -3615,7 +3895,7 @@ function initGWORLightbox() {
             progressBar.style.width = '0%';
         }
         if (timeDisplay) {
-            timeDisplay.textContent = '0:00';
+            resetAudioTimeReadout(timeDisplay);
         }
 
         setActiveTrackListItem(trackItems, index);
@@ -3722,7 +4002,7 @@ function initGWORLightbox() {
             progressBar.style.width = progress + '%';
         }
         if (timeDisplay) {
-            timeDisplay.textContent = formatAudioTime(audio.currentTime);
+            setAudioTimeReadout(timeDisplay, audio);
         }
     });
 
@@ -3913,7 +4193,7 @@ function initJCLightbox() {
             progressBar.style.width = '0%';
         }
         if (timeDisplay) {
-            timeDisplay.textContent = '0:00';
+            resetAudioTimeReadout(timeDisplay);
         }
 
         setActiveTrackListItem(trackItems, index);
@@ -4019,7 +4299,7 @@ function initJCLightbox() {
             progressBar.style.width = progress + '%';
         }
         if (timeDisplay) {
-            timeDisplay.textContent = formatAudioTime(audio.currentTime);
+            setAudioTimeReadout(timeDisplay, audio);
         }
     });
 

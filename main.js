@@ -2624,20 +2624,22 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, h); ctx.stroke();
 
-        // Neon, self-emitting marker at the start of the bottom quarter (75% down):
+        // Neon, self-emitting markers at the quarter lines (25% and 75% down):
         // a glowing colored tube with a hot near-white core.
-        var quarterY = h * 0.75;
         ctx.save();
-        ctx.shadowColor = currentColors.glow;
-        ctx.shadowBlur = 14;
-        ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.85)');
-        ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.moveTo(0, quarterY); ctx.lineTo(w, quarterY); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, quarterY); ctx.lineTo(w, quarterY); ctx.stroke(); // double pass to intensify the bloom
-        ctx.shadowBlur = 4;
-        ctx.strokeStyle = 'rgba(255, 250, 235, 0.85)';
-        ctx.lineWidth = 0.8;
-        ctx.beginPath(); ctx.moveTo(0, quarterY); ctx.lineTo(w, quarterY); ctx.stroke();
+        [0.25, 0.75].forEach(function (frac) {
+            var qy = h * frac;
+            ctx.shadowColor = currentColors.glow;
+            ctx.shadowBlur = 14;
+            ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.85)');
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke(); // double pass to intensify the bloom
+            ctx.shadowBlur = 4;
+            ctx.strokeStyle = 'rgba(255, 250, 235, 0.85)';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
+        });
         ctx.restore();
     }
 

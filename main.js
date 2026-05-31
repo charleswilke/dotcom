@@ -3399,11 +3399,15 @@ function initMixtapeLightbox() {
     // actual playback state.
     const MIX_PLAY_ICON = '▶';
     const MIX_PAUSE_ICON = '❚❚';
+    const oscFrame = document.getElementById('mixtapeOscilloscopeFrame');
     let scopeHovering = false;
     function refreshPlayGlyph() {
         if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? MIX_PAUSE_ICON : MIX_PLAY_ICON;
+        if (oscFrame && !audio.paused) oscFrame.classList.remove('awaiting-tap');
     }
-    const oscFrame = document.getElementById('mixtapeOscilloscopeFrame');
+    function armTapToPlay() {
+        if (oscFrame) oscFrame.classList.add('awaiting-tap');
+    }
     if (oscFrame) {
         oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
         oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
@@ -3734,7 +3738,10 @@ function initMixtapeLightbox() {
                 initialMixtapeRoute.trackSlug,
                 'replaceState'
             );
-            if (initialMixtapeRoute.trackSlug) playTrack(); // direct song link → play on load
+            if (initialMixtapeRoute.trackSlug) { // direct song link → play on load
+                pauseManagedAudioExcept(audio);
+                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
+            }
         }, 100);
     }
     
@@ -3865,11 +3872,15 @@ function initGWORLightbox() {
 
     // Hovering anywhere on the scope shows the pause glyph; otherwise it reflects
     // actual playback state.
+    const oscFrame = document.getElementById('gworOscilloscopeFrame');
     let scopeHovering = false;
     function refreshPlayGlyph() {
         if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? PAUSE_ICON : PLAY_ICON;
+        if (oscFrame && !audio.paused) oscFrame.classList.remove('awaiting-tap');
     }
-    const oscFrame = document.getElementById('gworOscilloscopeFrame');
+    function armTapToPlay() {
+        if (oscFrame) oscFrame.classList.add('awaiting-tap');
+    }
     if (oscFrame) {
         oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
         oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
@@ -4083,7 +4094,10 @@ function initGWORLightbox() {
     if (initialGWORRoute && initialGWORRoute.player === 'gwor') {
         setTimeout(() => {
             openGWOR(initialGWORRoute.trackSlug, 'replaceState');
-            if (initialGWORRoute.trackSlug) playTrack(); // direct song link → play on load
+            if (initialGWORRoute.trackSlug) { // direct song link → play on load
+                pauseManagedAudioExcept(audio);
+                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
+            }
         }, 100);
     }
 
@@ -4144,11 +4158,15 @@ function initJCLightbox() {
 
     // Hovering anywhere on the scope shows the pause glyph; otherwise the glyph
     // reflects actual playback state. Single source of truth for the glyph.
+    const oscFrame = document.getElementById('jcOscilloscopeFrame');
     let scopeHovering = false;
     function refreshPlayGlyph() {
         if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? PAUSE_ICON : PLAY_ICON;
+        if (oscFrame && !audio.paused) oscFrame.classList.remove('awaiting-tap');
     }
-    const oscFrame = document.getElementById('jcOscilloscopeFrame');
+    function armTapToPlay() {
+        if (oscFrame) oscFrame.classList.add('awaiting-tap');
+    }
     if (oscFrame) {
         oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
         oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
@@ -4398,7 +4416,10 @@ function initJCLightbox() {
     if (initialJCRoute && initialJCRoute.player === 'junkyard-cabaret') {
         setTimeout(() => {
             openJC(initialJCRoute.trackSlug, 'replaceState');
-            if (initialJCRoute.trackSlug) playTrack(); // direct song link → play on load
+            if (initialJCRoute.trackSlug) { // direct song link → play on load
+                pauseManagedAudioExcept(audio);
+                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
+            }
         }, 100);
     }
 

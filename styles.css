@@ -7950,7 +7950,7 @@ section.production-header.alice p {
         flex-direction: row;
         align-items: stretch;
         max-width: 1100px;
-        min-height: min(840px, 96vh);
+        min-height: min(880px, 96vh);
         gap: 2rem;
     }
 
@@ -7958,8 +7958,14 @@ section.production-header.alice p {
         flex: 1;
         align-items: flex-start;
         justify-content: center;
+        gap: 1.5rem;
         max-width: 480px;
         overflow: hidden;
+    }
+
+    /* Even, generous breathing room around the credits (no extra top margin). */
+    .mixtape-left-section .mixtape-side-toggle-container {
+        margin-top: 0;
     }
 
     .mixtape-cover-container {

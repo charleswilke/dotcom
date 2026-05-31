@@ -2567,6 +2567,11 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     let vialSpecks = null;  // fixed condensation flecks on the glass
     let vialLastT = (typeof performance !== 'undefined' ? performance.now() : 0);
 
+    // Bass energy (0..1) drives the quarter-line neon pulse — fast attack on a
+    // kick, slow decay back to the calm neon baseline.
+    let bassPulse = 0;
+    let bassFreq = null;
+
     function resizeCanvas() {
         dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
@@ -2625,19 +2630,21 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, h); ctx.stroke();
 
         // Neon, self-emitting markers at the quarter lines (25% and 75% down):
-        // a glowing colored tube with a hot near-white core.
+        // a glowing colored tube with a hot near-white core that throbs with the
+        // bass (bassPulse, 0..1) so the markers keep rhythm with the track.
+        var pulse = bassPulse;
         ctx.save();
         [0.25, 0.75].forEach(function (frac) {
             var qy = h * frac;
             ctx.shadowColor = currentColors.glow;
-            ctx.shadowBlur = 14;
-            ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.85)');
-            ctx.lineWidth = 1.5;
+            ctx.shadowBlur = 14 + pulse * 20;
+            ctx.strokeStyle = gc.replace(/[\d.]+\)$/, (0.8 + pulse * 0.2).toFixed(2) + ')');
+            ctx.lineWidth = 1.5 + pulse * 1.4;
             ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke(); // double pass to intensify the bloom
-            ctx.shadowBlur = 4;
-            ctx.strokeStyle = 'rgba(255, 250, 235, 0.85)';
-            ctx.lineWidth = 0.8;
+            ctx.shadowBlur = 4 + pulse * 8;
+            ctx.strokeStyle = 'rgba(255, 250, 235, ' + (0.85 + pulse * 0.15).toFixed(2) + ')';
+            ctx.lineWidth = 0.8 + pulse * 0.7;
             ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
         });
         ctx.restore();
@@ -2808,6 +2815,20 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         if (!canvas.width) resizeCanvas();
         var isPlaying = !audioEl.paused;
         var mid = h / 2;
+
+        // Sample bass energy from the low FFT bins to drive the quarter-line pulse.
+        var bassAnalyser = getAnalyser();
+        var bassTarget = 0;
+        if (isPlaying && bassAnalyser) {
+            if (!bassFreq) bassFreq = new Uint8Array(bassAnalyser.frequencyBinCount);
+            bassAnalyser.getByteFrequencyData(bassFreq);
+            var bassSum = 0, bassBins = Math.min(6, bassFreq.length - 1);
+            for (var bb = 1; bb <= bassBins; bb++) bassSum += bassFreq[bb];
+            var bassAvg = bassSum / bassBins;
+            bassTarget = Math.max(0, Math.min(1, (bassAvg - 50) / 150)); // floor + saturate
+        }
+        // Fast attack, slow decay → snaps on a kick, eases back to the baseline.
+        bassPulse += (bassTarget - bassPulse) * (bassTarget > bassPulse ? 0.5 : 0.12);
 
         ctx.clearRect(0, 0, w, h);
         drawGraticule(w, h);

@@ -3394,9 +3394,24 @@ function initMixtapeLightbox() {
     const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
     
     const audioEl = registerManagedAudio(audio);
+
+    // Hovering anywhere on the scope shows the pause glyph; otherwise it reflects
+    // actual playback state.
+    const MIX_PLAY_ICON = '▶';
+    const MIX_PAUSE_ICON = '❚❚';
+    let scopeHovering = false;
+    function refreshPlayGlyph() {
+        if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? MIX_PAUSE_ICON : MIX_PLAY_ICON;
+    }
+    const oscFrame = document.getElementById('mixtapeOscilloscopeFrame');
+    if (oscFrame) {
+        oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
+        oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
+    }
+
     let currentIndex = 0;
     let trackItems = [];
-    
+
     function getCurrentRouteKey() {
         return isBSide ? 'mixtape-side-two' : 'mixtape';
     }
@@ -3713,11 +3728,14 @@ function initMixtapeLightbox() {
     
     const initialMixtapeRoute = parseMusicHash();
     if (initialMixtapeRoute && initialMixtapeRoute.player === 'mixtape') {
-        setTimeout(() => openMixtape(
-            initialMixtapeRoute.isBSide,
-            initialMixtapeRoute.trackSlug,
-            'replaceState'
-        ), 100);
+        setTimeout(() => {
+            openMixtape(
+                initialMixtapeRoute.isBSide,
+                initialMixtapeRoute.trackSlug,
+                'replaceState'
+            );
+            if (initialMixtapeRoute.trackSlug) playTrack(); // direct song link → play on load
+        }, 100);
     }
     
     // Handle browser back/forward buttons
@@ -3765,16 +3783,12 @@ function initMixtapeLightbox() {
 
         // Update play/pause icon and visualizer
         audio.addEventListener('play', function() {
-            if (playPauseIcon) {
-                playPauseIcon.textContent = '❚❚';
-            }
+            refreshPlayGlyph();
             visualizer.start();
         });
 
         audio.addEventListener('pause', function() {
-            if (playPauseIcon) {
-                playPauseIcon.textContent = '▶';
-            }
+            refreshPlayGlyph();
             visualizer.stop();
         });
 
@@ -3849,10 +3863,22 @@ function initGWORLightbox() {
         playPauseIcon.textContent = PLAY_ICON;
     }
 
+    // Hovering anywhere on the scope shows the pause glyph; otherwise it reflects
+    // actual playback state.
+    let scopeHovering = false;
+    function refreshPlayGlyph() {
+        if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? PAUSE_ICON : PLAY_ICON;
+    }
+    const oscFrame = document.getElementById('gworOscilloscopeFrame');
+    if (oscFrame) {
+        oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
+        oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
+    }
+
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
     let trackItems = [];
-    
+
     function resolveTrackIndex(trackSlug) {
         const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
         return matchedIndex === -1 ? 0 : matchedIndex;
@@ -4023,16 +4049,12 @@ function initGWORLightbox() {
     });
 
     audio.addEventListener('play', function() {
-        if (playPauseIcon) {
-            playPauseIcon.textContent = PAUSE_ICON;
-        }
+        refreshPlayGlyph();
         visualizer.start();
     });
 
     audio.addEventListener('pause', function() {
-        if (playPauseIcon) {
-            playPauseIcon.textContent = PLAY_ICON;
-        }
+        refreshPlayGlyph();
         visualizer.stop();
     });
 
@@ -4059,7 +4081,10 @@ function initGWORLightbox() {
 
     const initialGWORRoute = parseMusicHash();
     if (initialGWORRoute && initialGWORRoute.player === 'gwor') {
-        setTimeout(() => openGWOR(initialGWORRoute.trackSlug, 'replaceState'), 100);
+        setTimeout(() => {
+            openGWOR(initialGWORRoute.trackSlug, 'replaceState');
+            if (initialGWORRoute.trackSlug) playTrack(); // direct song link → play on load
+        }, 100);
     }
 
     window.addEventListener('popstate', () => {
@@ -4115,6 +4140,18 @@ function initJCLightbox() {
 
     if (playPauseIcon) {
         playPauseIcon.textContent = PLAY_ICON;
+    }
+
+    // Hovering anywhere on the scope shows the pause glyph; otherwise the glyph
+    // reflects actual playback state. Single source of truth for the glyph.
+    let scopeHovering = false;
+    function refreshPlayGlyph() {
+        if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? PAUSE_ICON : PLAY_ICON;
+    }
+    const oscFrame = document.getElementById('jcOscilloscopeFrame');
+    if (oscFrame) {
+        oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
+        oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
     }
 
     const audioEl = registerManagedAudio(audio);
@@ -4321,17 +4358,13 @@ function initJCLightbox() {
 
     audio.addEventListener('play', function() {
         isChangingTrack = false;
-        if (playPauseIcon) {
-            playPauseIcon.textContent = PAUSE_ICON;
-        }
+        refreshPlayGlyph();
         visualizer.start();
         showTrackCover(currentIndex);
     });
 
     audio.addEventListener('pause', function() {
-        if (playPauseIcon) {
-            playPauseIcon.textContent = PLAY_ICON;
-        }
+        refreshPlayGlyph();
         visualizer.stop();
         if (!audio.ended && !isChangingTrack) {
             showAlbumCover();
@@ -4363,7 +4396,10 @@ function initJCLightbox() {
 
     const initialJCRoute = parseMusicHash();
     if (initialJCRoute && initialJCRoute.player === 'junkyard-cabaret') {
-        setTimeout(() => openJC(initialJCRoute.trackSlug, 'replaceState'), 100);
+        setTimeout(() => {
+            openJC(initialJCRoute.trackSlug, 'replaceState');
+            if (initialJCRoute.trackSlug) playTrack(); // direct song link → play on load
+        }, 100);
     }
 
     window.addEventListener('popstate', () => {

@@ -2573,6 +2573,19 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     let bassFreq = null;
     let bassBaseline = 0;   // slow-tracking sustained bass level; pulse responds to kicks above it
 
+    // Live tempo tracking — detect kick onsets (rising edge of bassPulse) and
+    // measure the gaps between them. The median of a rolling window of recent
+    // gaps gives a jitter-resistant beat interval that drives the vial's drip
+    // cadence: one drop per beat. Until enough beats are seen, we fall back to a
+    // steady default. (Median, not mean, so syncopated/missed kicks don't skew it.)
+    let beatLastOnset = 0;      // timestamp (s) of the last detected onset
+    let beatIntervals = [];     // rolling window of recent inter-onset gaps (s)
+    let beatInterval = 0;       // current smoothed estimate (s); 0 = not locked yet
+    let beatArmed = true;       // gate so one kick fires a single onset
+    const BEAT_MIN = 0.32;      // ~188 BPM ceiling — reject double-triggers
+    const BEAT_MAX = 1.10;      // ~55 BPM floor — reject dropped beats / gaps
+    const BEAT_DEFAULT = 0.92;  // fallback cadence before the tempo locks
+
     function resizeCanvas() {
         dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
@@ -2604,6 +2617,7 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
             ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
         }
         for (var iy = 1; iy < divY; iy++) {
+            if (iy === divY / 2) continue; // skip the center horizontal line entirely
             var y = iy * cellH;
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
@@ -2611,12 +2625,8 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.18)');
         ctx.lineWidth = 0.5;
         var midY = h / 2;
-        for (var ix = 0; ix < divX; ix++) {
-            for (var s = 1; s < subTicks; s++) {
-                var sx = ix * cellW + s * (cellW / subTicks);
-                ctx.beginPath(); ctx.moveTo(sx, midY - tickLen); ctx.lineTo(sx, midY + tickLen); ctx.stroke();
-            }
-        }
+        // (Center horizontal-axis subticks removed — they massed into a standing
+        // bright band at the center line. The vertical-axis ticks below stay.)
         var midX = w / 2;
         for (var iy = 0; iy < divY; iy++) {
             for (var s = 1; s < subTicks; s++) {
@@ -2625,9 +2635,11 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
             }
         }
 
+        // Vertical center crosshair only (the scope's trigger line). The
+        // horizontal center is left to the major grid so it matches the other
+        // non-reactive horizontal lines instead of standing out brighter.
         ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.2)');
         ctx.lineWidth = 0.7;
-        ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, h); ctx.stroke();
 
         // Neon, self-emitting markers at the quarter lines (25% and 75% down):
@@ -2698,7 +2710,9 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
                 vy: 8 + Math.random() * 10,
                 r: 1.2 + Math.random() * 0.7
             });
-            vialDropTimer = 0.92; // steady cadence — soothing and predictable
+            // One drop per beat once the tempo has locked; until then, the steady
+            // default keeps the soothing, predictable cadence.
+            vialDropTimer = beatInterval > 0 ? beatInterval : BEAT_DEFAULT;
         }
 
         // Integrate drops under gravity; splash into the surface on contact.
@@ -2832,7 +2846,17 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         var w = canvas.getBoundingClientRect().width;
         var h = canvas.getBoundingClientRect().height;
         if (!w || !h) return;
-        if (!canvas.width) resizeCanvas();
+        // Re-sync the backing store whenever the displayed box (or DPR) no longer
+        // matches it. The resize listener only fires resizeCanvas() while playing,
+        // so without this a breakpoint change leaves a stale coordinate space and
+        // mid = h/2 lands off-center — the trace drifts upward. Keeping the backing
+        // store == rect * dpr guarantees a centered trace at every breakpoint.
+        var curDpr = window.devicePixelRatio || 1;
+        if (!canvas.width ||
+            Math.abs(canvas.width - w * curDpr) > 1 ||
+            Math.abs(canvas.height - h * curDpr) > 1) {
+            resizeCanvas();
+        }
         var isPlaying = !audioEl.paused;
         var mid = h / 2;
 
@@ -2855,27 +2879,58 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         // Fast attack, slow decay → snaps on a kick, eases back to the baseline.
         bassPulse += (bassTarget - bassPulse) * (bassTarget > bassPulse ? 0.55 : 0.14);
 
+        // Tempo tracking: treat a strong rising edge of bassPulse as a beat onset.
+        // Arm/disarm with hysteresis (fire above 0.55, re-arm below 0.22) so one
+        // kick yields exactly one onset. Record the gap since the last onset, keep
+        // a rolling window in the valid tempo band, and take the median as the beat.
+        if (isPlaying) {
+            var nowSec = (typeof performance !== 'undefined' ? performance.now() : 0) / 1000;
+            if (beatArmed && bassPulse > 0.55) {
+                beatArmed = false;
+                if (beatLastOnset > 0) {
+                    var gap = nowSec - beatLastOnset;
+                    if (gap >= BEAT_MIN && gap <= BEAT_MAX) {
+                        beatIntervals.push(gap);
+                        if (beatIntervals.length > 8) beatIntervals.shift();
+                        var sorted = beatIntervals.slice().sort(function (a, b) { return a - b; });
+                        var med = sorted[sorted.length >> 1];
+                        // Ease toward the new estimate so the cadence drifts smoothly.
+                        beatInterval = beatInterval > 0 ? beatInterval + (med - beatInterval) * 0.4 : med;
+                    }
+                }
+                beatLastOnset = nowSec;
+            } else if (!beatArmed && bassPulse < 0.22) {
+                beatArmed = true;
+            }
+        } else {
+            // Reset on pause so a resumed/changed track re-locks from scratch.
+            beatIntervals.length = 0;
+            beatInterval = 0;
+            beatLastOnset = 0;
+            beatArmed = true;
+        }
+
         ctx.clearRect(0, 0, w, h);
         drawGraticule(w, h);
 
         // (Progress now lives in the vial gauge — the scope shows live signal
         // plus a grab handle, so there's no played-region wash here.)
 
-        // Fade the persistence buffer (phosphor decay), then draw the new trace
-        // onto it so previous frames linger as a ghost behind the live trace.
-        persistCtx.globalCompositeOperation = 'destination-out';
-        persistCtx.fillStyle = 'rgba(0,0,0,0.22)';
-        persistCtx.fillRect(0, 0, w, h);
-        persistCtx.globalCompositeOperation = 'source-over';
-
-        persistCtx.beginPath();
-        persistCtx.strokeStyle = currentColors.trace;
-        persistCtx.lineWidth = 2;
-        persistCtx.shadowColor = currentColors.glow;
-        persistCtx.shadowBlur = 10;
-
         var analyser = getAnalyser();
         if (isPlaying && analyser) {
+            // Fade the persistence buffer (phosphor decay), then draw the new
+            // trace onto it so previous frames linger as a ghost behind it.
+            persistCtx.globalCompositeOperation = 'destination-out';
+            persistCtx.fillStyle = 'rgba(0,0,0,0.22)';
+            persistCtx.fillRect(0, 0, w, h);
+            persistCtx.globalCompositeOperation = 'source-over';
+
+            persistCtx.beginPath();
+            persistCtx.strokeStyle = currentColors.trace;
+            persistCtx.lineWidth = 2;
+            persistCtx.shadowColor = currentColors.glow;
+            persistCtx.shadowBlur = 10;
+
             var timeData = new Uint8Array(analyser.fftSize);
             analyser.getByteTimeDomainData(timeData);
             var sliceWidth = w / timeData.length;
@@ -2889,15 +2944,13 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
                 else persistCtx.lineTo(x, y);
                 x += sliceWidth;
             }
+            persistCtx.stroke();
+            persistCtx.shadowBlur = 0;
         } else {
-            for (var x = 0; x < w; x++) {
-                var noise = (Math.random() - 0.5) * 1.5;
-                if (x === 0) persistCtx.moveTo(x, mid + noise);
-                else persistCtx.lineTo(x, mid + noise);
-            }
+            // Idle (paused/stopped): no trace at all — clear the buffer so the
+            // scope rests on its graticule instead of drawing a flat center line.
+            persistCtx.clearRect(0, 0, w, h);
         }
-        persistCtx.stroke();
-        persistCtx.shadowBlur = 0;
 
         // Composite the phosphor buffer over the graticule.
         ctx.drawImage(persistCanvas, 0, 0, w, h);
@@ -2938,7 +2991,10 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     }
 
     window.addEventListener('resize', function() {
-        if (oscAnimId) resizeCanvas();
+        resizeCanvas();
+        // While playing, the RAF loop repaints; while paused it's idle, so repaint
+        // once here to keep the trace centered after a breakpoint change.
+        if (!oscAnimId) render();
     });
 
     return { start, stop, updateColors, resizeCanvas };

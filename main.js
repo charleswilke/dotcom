@@ -3443,23 +3443,20 @@ function initMixtapeLightbox() {
     
     const audioEl = registerManagedAudio(audio);
 
-    // Hovering anywhere on the scope shows the pause glyph; otherwise it reflects
-    // actual playback state.
+    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
+    // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
+    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
     const MIX_PLAY_ICON = '▶';
     const MIX_PAUSE_ICON = '❚❚';
     const oscFrame = document.getElementById('mixtapeOscilloscopeFrame');
-    let scopeHovering = false;
     function refreshPlayGlyph() {
-        if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? MIX_PAUSE_ICON : MIX_PLAY_ICON;
-        if (oscFrame && !audio.paused) oscFrame.classList.remove('awaiting-tap');
+        if (playPauseIcon) playPauseIcon.textContent = audio.paused ? MIX_PLAY_ICON : MIX_PAUSE_ICON;
+        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', audio.paused);
     }
     function armTapToPlay() {
         if (oscFrame) oscFrame.classList.add('awaiting-tap');
     }
-    if (oscFrame) {
-        oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
-        oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
-    }
+    refreshPlayGlyph();
 
     let currentIndex = 0;
     let trackItems = [];
@@ -3918,21 +3915,18 @@ function initGWORLightbox() {
         playPauseIcon.textContent = PLAY_ICON;
     }
 
-    // Hovering anywhere on the scope shows the pause glyph; otherwise it reflects
-    // actual playback state.
+    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
+    // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
+    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
     const oscFrame = document.getElementById('gworOscilloscopeFrame');
-    let scopeHovering = false;
     function refreshPlayGlyph() {
-        if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? PAUSE_ICON : PLAY_ICON;
-        if (oscFrame && !audio.paused) oscFrame.classList.remove('awaiting-tap');
+        if (playPauseIcon) playPauseIcon.textContent = audio.paused ? PLAY_ICON : PAUSE_ICON;
+        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', audio.paused);
     }
     function armTapToPlay() {
         if (oscFrame) oscFrame.classList.add('awaiting-tap');
     }
-    if (oscFrame) {
-        oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
-        oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
-    }
+    refreshPlayGlyph();
 
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
@@ -4204,21 +4198,18 @@ function initJCLightbox() {
         playPauseIcon.textContent = PLAY_ICON;
     }
 
-    // Hovering anywhere on the scope shows the pause glyph; otherwise the glyph
-    // reflects actual playback state. Single source of truth for the glyph.
+    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
+    // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
+    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
     const oscFrame = document.getElementById('jcOscilloscopeFrame');
-    let scopeHovering = false;
     function refreshPlayGlyph() {
-        if (playPauseIcon) playPauseIcon.textContent = (scopeHovering || !audio.paused) ? PAUSE_ICON : PLAY_ICON;
-        if (oscFrame && !audio.paused) oscFrame.classList.remove('awaiting-tap');
+        if (playPauseIcon) playPauseIcon.textContent = audio.paused ? PLAY_ICON : PAUSE_ICON;
+        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', audio.paused);
     }
     function armTapToPlay() {
         if (oscFrame) oscFrame.classList.add('awaiting-tap');
     }
-    if (oscFrame) {
-        oscFrame.addEventListener('mouseenter', function () { scopeHovering = true; refreshPlayGlyph(); });
-        oscFrame.addEventListener('mouseleave', function () { scopeHovering = false; refreshPlayGlyph(); });
-    }
+    refreshPlayGlyph();
 
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;

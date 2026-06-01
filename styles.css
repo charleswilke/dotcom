@@ -9494,8 +9494,12 @@ section.production-header.alice p {
     width: auto;
 }
 
-/* Play/pause is now a simple glowing glyph in the top-left of the scope —
-   no chrome, just light. Overrides the old beveled circular button. */
+/* Play/pause is a simple glowing glyph in the top-left of the scope — no chrome,
+   just light. Simplified presentation:
+     • Paused (.awaiting-tap): play glyph + "tap to play" hint, visible at rest,
+       pulsing/glowing on hover.
+     • Playing: no glyph at rest; on hover the scope reveals a glowing, pulsing
+       pause glyph. */
 .modal-oscilloscope-frame .osc-play-btn {
     position: absolute;
     top: 9px;
@@ -9514,7 +9518,9 @@ section.production-header.alice p {
     color: rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.85);
     cursor: pointer;
     line-height: 1;
-    transition: color 0.18s ease, text-shadow 0.18s ease, transform 0.12s ease;
+    /* Hidden by default — only the paused state or a scope hover reveals it. */
+    opacity: 0;
+    transition: color 0.18s ease, text-shadow 0.18s ease, transform 0.12s ease, opacity 0.18s ease;
     text-shadow:
         0 0 7px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.85),
         0 0 14px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.4);
@@ -9522,32 +9528,41 @@ section.production-header.alice p {
 .modal-oscilloscope-frame .osc-play-btn .audio-icon {
     display: block;
     font-size: 1.2rem;
+    /* Pulse from the top edge so the glyph settles downward into the screen
+       rather than drifting up toward the glass. */
+    transform-origin: center top;
 }
-.modal-oscilloscope-frame .osc-play-btn:hover {
-    color: rgba(255, 250, 240, 0.98);
-    text-shadow:
-        0 0 10px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 1),
-        0 0 20px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.6);
-    transform: scale(1.1);
+/* Reveal the glyph while paused (the play glyph) or while hovering (the pause
+   glyph during playback). */
+.modal-oscilloscope-frame.awaiting-tap .osc-play-btn,
+.modal-oscilloscope-frame:hover .osc-play-btn {
+    opacity: 1;
 }
 .modal-oscilloscope-frame .osc-play-btn:active {
     transform: scale(0.92);
 }
 
-/* Tap-to-play affordance: shown when autoplay is blocked on a direct song link.
-   The glyph pulses + glows and a small hint appears; tapping the scope plays. */
+/* Warm-tube pulse: an uneven swell with a glow flutter rather than a clean sine,
+   so it breathes like an analog lamp settling behind glass. brightness() also
+   modulates the inherited text-shadow, so the halo flickers with the swell. */
 @keyframes osc-tap-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.25); }
+    0%   { transform: scale(1);     filter: brightness(0.92); }
+    16%  { transform: scale(1.085); filter: brightness(1.32); }
+    30%  { transform: scale(1.04);  filter: brightness(1.05); }
+    48%  { transform: scale(1.11);  filter: brightness(1.4); }
+    63%  { transform: scale(1.03);  filter: brightness(1.02); }
+    80%  { transform: scale(1.055); filter: brightness(1.18); }
+    100% { transform: scale(1);     filter: brightness(0.92); }
 }
-.modal-oscilloscope-frame.awaiting-tap .osc-play-btn {
+/* Hover anywhere on the scope brightens + pulses whichever glyph is showing. */
+.modal-oscilloscope-frame:hover .osc-play-btn {
     color: rgba(255, 250, 240, 0.98);
     text-shadow:
         0 0 10px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 1),
         0 0 22px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.7);
 }
-.modal-oscilloscope-frame.awaiting-tap .osc-play-btn .audio-icon {
-    animation: osc-tap-pulse 1.15s ease-in-out infinite;
+.modal-oscilloscope-frame:hover .osc-play-btn .audio-icon {
+    animation: osc-tap-pulse 1.55s ease-in-out infinite;
 }
 .modal-oscilloscope-frame.awaiting-tap .osc-play-btn::after {
     content: 'tap to play';
@@ -9567,7 +9582,7 @@ section.production-header.alice p {
     pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
-    .modal-oscilloscope-frame.awaiting-tap .osc-play-btn .audio-icon { animation: none; }
+    .modal-oscilloscope-frame:hover .osc-play-btn .audio-icon { animation: none; }
 }
 
 /* The "vial": a slim glowing vessel mounted beside the scope that fills as the

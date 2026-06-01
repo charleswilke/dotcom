@@ -2571,6 +2571,7 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     // kick, slow decay back to the calm neon baseline.
     let bassPulse = 0;
     let bassFreq = null;
+    let bassBaseline = 0;   // slow-tracking sustained bass level; pulse responds to kicks above it
 
     function resizeCanvas() {
         dpr = window.devicePixelRatio || 1;
@@ -2631,23 +2632,40 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
 
         // Neon, self-emitting markers at the quarter lines (25% and 75% down):
         // a glowing colored tube with a hot near-white core that throbs with the
-        // bass (bassPulse, 0..1) so the markers keep rhythm with the track.
+        // bass (bassPulse, 0..1) so the markers keep rhythm with the track. Dim and
+        // staticky at rest, bold and bloomed on a kick.
         var pulse = bassPulse;
+        // Per-frame flicker gives a staticky CRT shimmer; livelier on the beat.
+        var flicker = (Math.random() - 0.5) * (0.1 + pulse * 0.4);
+        var lit = Math.max(0, Math.min(1, pulse + flicker));
+        // Walk the line in short segments with tiny random vertical offsets so the
+        // trace crackles with static — amplitude grows with the beat.
+        function strokeStatic(qy, jitterAmp) {
+            var step = 13;
+            ctx.beginPath();
+            ctx.moveTo(0, qy + (Math.random() - 0.5) * jitterAmp);
+            for (var sx = step; sx < w; sx += step) {
+                ctx.lineTo(sx, qy + (Math.random() - 0.5) * jitterAmp);
+            }
+            ctx.lineTo(w, qy + (Math.random() - 0.5) * jitterAmp);
+            ctx.stroke();
+        }
         ctx.save();
         [0.25, 0.75].forEach(function (frac) {
             var qy = h * frac;
-            // Tube: thickens and blooms hard on a kick.
+            var jitter = 0.35 + lit * 2.2;
+            // Tube: near-invisible at rest, thickens and blooms hard on a kick.
             ctx.shadowColor = currentColors.glow;
-            ctx.shadowBlur = 10 + pulse * 34;
-            ctx.strokeStyle = gc.replace(/[\d.]+\)$/, (0.7 + pulse * 0.3).toFixed(2) + ')');
-            ctx.lineWidth = 1.4 + pulse * 4.2;
-            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke(); // double pass intensifies the bloom
+            ctx.shadowBlur = 4 + lit * 50;
+            ctx.strokeStyle = gc.replace(/[\d.]+\)$/, (0.28 + lit * 0.72).toFixed(2) + ')');
+            ctx.lineWidth = 0.9 + lit * 6;
+            strokeStatic(qy, jitter);
+            strokeStatic(qy, jitter); // double pass intensifies the bloom
             // Hot near-white core that flares to full white on the beat.
-            ctx.shadowBlur = 3 + pulse * 12;
-            ctx.strokeStyle = 'rgba(255, 250, 235, ' + (0.8 + pulse * 0.2).toFixed(2) + ')';
-            ctx.lineWidth = 0.7 + pulse * 1.8;
-            ctx.beginPath(); ctx.moveTo(0, qy); ctx.lineTo(w, qy); ctx.stroke();
+            ctx.shadowBlur = 2 + lit * 16;
+            ctx.strokeStyle = 'rgba(255, 250, 235, ' + (0.35 + lit * 0.65).toFixed(2) + ')';
+            ctx.lineWidth = 0.5 + lit * 2.4;
+            strokeStatic(qy, jitter * 0.6);
         });
         ctx.restore();
     }
@@ -2824,10 +2842,15 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         if (isPlaying && bassAnalyser) {
             if (!bassFreq) bassFreq = new Uint8Array(bassAnalyser.frequencyBinCount);
             bassAnalyser.getByteFrequencyData(bassFreq);
-            var bassSum = 0, bassBins = Math.min(6, bassFreq.length - 1);
+            // Only the lowest 3 bins (~170-520 Hz) — the kick/sub band, not low-mids.
+            var bassSum = 0, bassBins = Math.min(3, bassFreq.length - 1);
             for (var bb = 1; bb <= bassBins; bb++) bassSum += bassFreq[bb];
             var bassAvg = bassSum / bassBins;
-            bassTarget = Math.max(0, Math.min(1, (bassAvg - 28) / 80)); // low floor, easy saturation → reactive
+            // Slow baseline tracks the sustained bass level so the pulse blooms on
+            // transients (kicks) above it rather than pinning to max during loud passages.
+            bassBaseline += (bassAvg - bassBaseline) * 0.03;
+            var bassExcess = bassAvg - bassBaseline;
+            bassTarget = Math.max(0, Math.min(1, (bassExcess - 8) / 55)); // ignore baseline, bloom on the punch
         }
         // Fast attack, slow decay → snaps on a kick, eases back to the baseline.
         bassPulse += (bassTarget - bassPulse) * (bassTarget > bassPulse ? 0.55 : 0.14);

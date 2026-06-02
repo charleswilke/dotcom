@@ -2605,25 +2605,43 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     }
 
     function drawGraticule(w, h) {
-        var divX = 10, divY = 8;
-        var cellW = w / divX, cellH = h / divY;
+        // Fixed pixel cell size so the graticule reads as a stable CRT texture
+        // pinned to the screen's center, rather than a fixed division count that
+        // stretches/squashes (and makes the center appear to drift) as the canvas
+        // is resized. Lines are walked outward from the exact center in both
+        // directions; partial cells simply fall off the edges.
+        var cellW = 46, cellH = 26;
+        var midX = w / 2, midY = h / 2;
         var gc = currentColors.graticule;
 
         ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.12)');
         ctx.lineWidth = 0.5;
-        for (var ix = 1; ix < divX; ix++) {
-            var x = ix * cellW;
+        // Vertical grid lines, mirrored around the center (center itself is the
+        // brighter crosshair drawn below).
+        for (var x = midX - cellW; x > 0; x -= cellW) {
             ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
         }
-        for (var iy = 1; iy < divY; iy++) {
-            if (iy === divY / 2) continue; // skip the center horizontal line entirely
-            var y = iy * cellH;
+        for (var x = midX + cellW; x < w; x += cellW) {
+            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        // Horizontal grid lines, mirrored around the center. The center line is
+        // intentionally skipped (the trace sits there).
+        for (var y = midY - cellH; y > 0; y -= cellH) {
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+        for (var y = midY + cellH; y < h; y += cellH) {
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
 
-        var midX = w / 2;
-        // Keep the center trigger line clean; the little horizontal calibration
-        // ticks read as an unwanted center mark in the album modal scope.
+        // Faint horizontal baseline at the exact vertical center. Because the
+        // center grid cell is intentionally empty (and the trace is absent while
+        // paused), the eye otherwise latches onto the nearest grid line above and
+        // misreads the center as sitting high. A whisper-faint anchor here — well
+        // below the 0.12 grid lines — fixes that read without reintroducing a
+        // bold center mark.
+        ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.07)');
+        ctx.lineWidth = 0.5;
+        ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
 
         // Vertical center crosshair only (the scope's trigger line).
         ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.2)');

@@ -2607,7 +2607,6 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     function drawGraticule(w, h) {
         var divX = 10, divY = 8;
         var cellW = w / divX, cellH = h / divY;
-        var tickLen = 3, subTicks = 5;
         var gc = currentColors.graticule;
 
         ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.12)');
@@ -2622,30 +2621,22 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
 
-        ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.18)');
-        ctx.lineWidth = 0.5;
-        var midY = h / 2;
-        // (Center horizontal-axis subticks removed — they massed into a standing
-        // bright band at the center line. The vertical-axis ticks below stay.)
         var midX = w / 2;
-        for (var iy = 0; iy < divY; iy++) {
-            for (var s = 1; s < subTicks; s++) {
-                var sy = iy * cellH + s * (cellH / subTicks);
-                ctx.beginPath(); ctx.moveTo(midX - tickLen, sy); ctx.lineTo(midX + tickLen, sy); ctx.stroke();
-            }
-        }
+        // Keep the center trigger line clean; the little horizontal calibration
+        // ticks read as an unwanted center mark in the album modal scope.
 
-        // Vertical center crosshair only (the scope's trigger line). The
-        // horizontal center is left to the major grid so it matches the other
-        // non-reactive horizontal lines instead of standing out brighter.
+        // Vertical center crosshair only (the scope's trigger line).
         ctx.strokeStyle = gc.replace(/[\d.]+\)$/, '0.2)');
         ctx.lineWidth = 0.7;
         ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, h); ctx.stroke();
 
         // Neon, self-emitting markers at the quarter lines (25% and 75% down):
         // a glowing colored tube with a hot near-white core that throbs with the
-        // bass (bassPulse, 0..1) so the markers keep rhythm with the track. Dim and
-        // staticky at rest, bold and bloomed on a kick.
+        // bass (bassPulse, 0..1) so the markers keep rhythm with the track.
+        // At rest, leave the glass clean so they do not read as a false center line.
+        if (audioEl.paused && bassPulse < 0.02) {
+            return;
+        }
         var pulse = bassPulse;
         // Per-frame flicker gives a staticky CRT shimmer; livelier on the beat.
         var flicker = (Math.random() - 0.5) * (0.1 + pulse * 0.4);

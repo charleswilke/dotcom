@@ -97,6 +97,141 @@ onReady(() => {
     }
 });
 
+// Warp starfield for the games section — stars fly outward from a central
+// vanishing point so it reads as accelerating toward the horizon.
+onReady(() => {
+    const section = document.getElementById('game-cartridges');
+    const canvas = section && section.querySelector('.cartridge-starfield');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const STAR_COLORS = ['255, 255, 255', '255, 255, 255', '255, 255, 255', '0, 247, 194', '229, 0, 203'];
+    const SPEED = 0.084;       // depth units per second (gentle drift)
+    const MAX_TRAIL = 6;       // cap streak length so a fresh star never draws across the screen
+
+    let w = 0, h = 0, cx = 0, cy = 0, dpr = 1;
+    let stars = [];
+    let rafId = 0;
+    let lastTs = 0;
+    let running = false;
+
+    function spawn(star) {
+        star.x = (Math.random() * 2 - 1);
+        star.y = (Math.random() * 2 - 1);
+        star.z = Math.random() * 0.7 + 0.3;
+        star.color = STAR_COLORS[(Math.random() * STAR_COLORS.length) | 0];
+        star.px = null;
+        star.py = null;
+        return star;
+    }
+
+    function resize() {
+        const rect = canvas.getBoundingClientRect();
+        w = rect.width;
+        h = rect.height;
+        if (!w || !h) return;
+        cx = w / 2;
+        cy = h / 2;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const target = Math.min(320, Math.round((w * h) / 5200));
+        if (stars.length < target) {
+            while (stars.length < target) stars.push(spawn({}));
+        } else {
+            stars.length = target;
+        }
+    }
+
+    function project(star) {
+        return { sx: cx + (star.x / star.z) * cx, sy: cy + (star.y / star.z) * cy };
+    }
+
+    function render(dt) {
+        ctx.clearRect(0, 0, w, h);
+        for (const star of stars) {
+            star.z -= SPEED * dt;
+            if (star.z <= 0.02) {
+                spawn(star);
+                star.z = 1;
+            }
+            const { sx, sy } = project(star);
+            const depth = 1 - star.z;            // 0 (far) → 1 (near)
+            const size = depth * 1.8 + 0.4;
+            const alpha = Math.min(1, depth * 1.1 + 0.1);
+            if (star.px !== null) {
+                let dx = sx - star.px;
+                let dy = sy - star.py;
+                const len = Math.hypot(dx, dy);
+                if (len > MAX_TRAIL) {
+                    const s = MAX_TRAIL / len;
+                    dx *= s; dy *= s;
+                }
+                ctx.strokeStyle = `rgba(${star.color}, ${alpha * 0.55})`;
+                ctx.lineWidth = size;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(sx - dx, sy - dy);
+                ctx.lineTo(sx, sy);
+                ctx.stroke();
+            }
+            ctx.fillStyle = `rgba(${star.color}, ${alpha})`;
+            ctx.beginPath();
+            ctx.arc(sx, sy, size, 0, Math.PI * 2);
+            ctx.fill();
+            star.px = sx;
+            star.py = sy;
+        }
+    }
+
+    function frame(ts) {
+        if (!running) return;
+        const dt = Math.min(0.05, (ts - lastTs) / 1000 || 0);
+        lastTs = ts;
+        render(dt);
+        rafId = requestAnimationFrame(frame);
+    }
+
+    function start() {
+        if (running || !w || !h) return;
+        running = true;
+        lastTs = performance.now();
+        rafId = requestAnimationFrame(frame);
+    }
+
+    function stop() {
+        running = false;
+        cancelAnimationFrame(rafId);
+    }
+
+    resize();
+    window.addEventListener('resize', () => {
+        resize();
+        if (reduceMotion) render(0);
+    });
+
+    if (reduceMotion) {
+        // Static frame: nudge stars apart once so it isn't an empty void.
+        for (const star of stars) star.z = Math.random() * 0.7 + 0.3;
+        render(0);
+        return;
+    }
+
+    if (typeof IntersectionObserver !== 'undefined') {
+        const io = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) start(); else stop();
+            }
+        }, { threshold: 0 });
+        io.observe(section);
+    } else {
+        start();
+    }
+});
+
 function scheduleIdleWork(callback, timeout = 2000) {
     if ('requestIdleCallback' in window) {
         window.requestIdleCallback(callback, { timeout });

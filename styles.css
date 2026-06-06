@@ -5509,6 +5509,8 @@ html {
 
 /* Theatrical Projections uses the About background with inverted edge bars */
 .theatrical-projections-section {
+    padding-top: clamp(4.25rem, 6vw, 5.25rem);
+    scroll-margin-top: 72px;
     background-color: var(--accent);
     background-image:
         radial-gradient(ellipse at 18% 28%, rgba(88, 76, 139, 0.7) 0%, transparent 48%),
@@ -5580,81 +5582,239 @@ html {
 }
 
 /* ─────────────────────────────────────────────────────────
-   Theatrical Projections — Playbill broadcast / CRT fan
+   Theatrical Projections — Playbill / CRT fan
    ───────────────────────────────────────────────────────── */
 
-/* Broadcast-style section title — a station ID that doubles as the heading */
-.broadcast-title {
-    display: flex;
+/* Section prefaces: shared structure, distinct material language per section */
+.work-section-title {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    width: min(100%, 760px);
+    margin: 0 auto 2.4rem;
+    padding: 0.7rem 1rem 0.85rem;
+    font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', sans-serif;
+    color: rgba(248, 233, 210, 0.96);
+    text-align: center;
+    isolation: isolate;
+}
+
+.work-section-kicker {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.work-section-name {
+    display: block;
+    font-size: 2.35rem;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    line-height: 1.05;
+    color: #fff5df;
+}
+
+.projections-section-title {
+    --draft-blue: #176aa5;
+    --draft-blue-deep: #0d477c;
+    --draft-blue-soft: rgba(23, 106, 165, 0.16);
+    --draft-paper: #f7f1dc;
+    --draft-paper-warm: #ead89a;
+    width: min(100%, 720px);
+    margin-bottom: 2.2rem;
+    padding: clamp(0.78rem, 1.8vw, 1rem) clamp(0.9rem, 3.2vw, 1.75rem) clamp(0.88rem, 1.9vw, 1.12rem);
+    color: var(--draft-blue-deep);
+    background:
+        linear-gradient(104deg, transparent 0 9%, rgba(255, 235, 160, 0.46) 9% 88%, transparent 88%) 1.75rem -0.14rem / 5.8rem 0.88rem no-repeat,
+        linear-gradient(104deg, transparent 0 9%, rgba(255, 235, 160, 0.32) 9% 88%, transparent 88%) calc(100% - 7rem) calc(100% + 0.18rem) / 5.6rem 0.84rem no-repeat,
+        linear-gradient(172deg, transparent 0 48%, rgba(13, 71, 124, 0.055) 48.4% 49.2%, rgba(255, 255, 255, 0.32) 49.3% 49.9%, transparent 50.2%),
+        radial-gradient(circle at 12% 22%, rgba(207, 178, 82, 0.28) 0 0.08rem, transparent 0.1rem) 0 0 / 1.1rem 1.1rem,
+        radial-gradient(ellipse at 18% 20%, rgba(234, 216, 154, 0.44), transparent 46%),
+        radial-gradient(ellipse at 86% 74%, rgba(23, 106, 165, 0.08), transparent 50%),
+        linear-gradient(var(--draft-blue-soft) 1px, transparent 1px) 0 0 / 24px 24px,
+        linear-gradient(90deg, var(--draft-blue-soft) 1px, transparent 1px) 0 0 / 24px 24px,
+        linear-gradient(180deg, rgba(255, 252, 238, 0.98), rgba(247, 241, 220, 0.96) 58%, rgba(232, 219, 174, 0.94));
+    border: 0;
+    box-shadow:
+        0 0 0 1px rgba(23, 106, 165, 0.28) inset,
+        0 0 0 2px rgba(255, 255, 255, 0.28) inset,
+        0 14px 28px rgba(8, 11, 33, 0.24),
+        5px 8px 16px rgba(8, 11, 33, 0.13),
+        0 0 26px rgba(255, 207, 101, 0.12);
+    justify-items: stretch;
+    overflow: visible;
+    text-align: center;
+    text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.54),
+        0 0 1px rgba(23, 106, 165, 0.3);
+    transform: rotate(-0.82deg);
+    transform-origin: 52% 48%;
+}
+
+.projections-section-title::before,
+.projections-section-title::after,
+.games-section-title::before,
+.games-section-title::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+}
+
+.projections-section-title::before {
+    inset: 0;
+    background:
+        radial-gradient(circle, transparent 0 0.25rem, rgba(23, 106, 165, 0.38) 0.27rem 0.31rem, transparent 0.33rem) 1.45rem 50% / 0.82rem 0.82rem no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) 1.18rem 50% / 1.28rem 1px no-repeat,
+        linear-gradient(90deg, var(--draft-blue), var(--draft-blue)) 1.85rem calc(50% - 0.62rem) / 1px 1.28rem no-repeat,
+        radial-gradient(circle, transparent 0 0.25rem, rgba(23, 106, 165, 0.38) 0.27rem 0.31rem, transparent 0.33rem) calc(100% - 1.45rem) 50% / 0.82rem 0.82rem no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) calc(100% - 2.45rem) 50% / 1.28rem 1px no-repeat,
+        linear-gradient(90deg, var(--draft-blue), var(--draft-blue)) calc(100% - 1.85rem) calc(50% - 0.62rem) / 1px 1.28rem no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) left top / 3rem 1px no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) left top / 1px 1.45rem no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) right top / 3rem 1px no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) right top / 1px 1.45rem no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) left bottom / 3rem 1px no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) left bottom / 1px 1.45rem no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) right bottom / 3rem 1px no-repeat,
+        linear-gradient(var(--draft-blue), var(--draft-blue)) right bottom / 1px 1.45rem no-repeat;
+    opacity: 0.84;
+    filter: drop-shadow(0 0 5px rgba(23, 106, 165, 0.18));
+    z-index: 1;
+}
+
+.projections-section-title::after {
+    left: clamp(0.8rem, 3vw, 1.75rem);
+    right: clamp(0.8rem, 3vw, 1.75rem);
+    bottom: 0.5rem;
+    height: 0.36rem;
+    background:
+        linear-gradient(90deg, transparent, rgba(23, 106, 165, 0.5), transparent) 0 50% / 100% 1px no-repeat,
+        repeating-linear-gradient(90deg, transparent 0 0.86rem, rgba(23, 106, 165, 0.46) 0.86rem calc(0.86rem + 1px), transparent calc(0.86rem + 1px) 1.32rem);
+    opacity: 0.82;
+    z-index: 1;
+}
+
+.projections-section-title .work-section-name {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.08rem 0 0.16rem;
+    border: 0;
+    font-family: 'IBM Plex Sans Condensed', 'Exo', sans-serif;
+    font-size: clamp(1.55rem, 3.25vw, 2.38rem);
+    font-weight: 700;
+    letter-spacing: 0.055em;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1.12px rgba(13, 71, 124, 0.9);
+    paint-order: stroke fill;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow:
+        0.025em 0 rgba(23, 106, 165, 0.18),
+        -0.018em 0.015em rgba(13, 71, 124, 0.16),
+        0 1px 0 rgba(255, 255, 255, 0.52);
+    z-index: 2;
+}
+
+.projections-section-title .work-section-name::before,
+.projections-section-title .work-section-name::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+}
+
+.projections-section-title .work-section-name::before {
+    -webkit-text-stroke: 0.54px rgba(23, 106, 165, 0.36);
+    clip-path: polygon(0 8%, 100% 0, 100% 31%, 0 40%, 0 55%, 100% 48%, 100% 100%, 0 92%);
+    transform: translate(0.035em, -0.018em);
+}
+
+.projections-section-title .work-section-name::after {
+    -webkit-text-stroke: 0.38px rgba(13, 71, 124, 0.28);
+    clip-path: polygon(0 0, 100% 6%, 100% 18%, 0 12%, 0 44%, 100% 39%, 100% 62%, 0 69%, 0 100%, 100% 94%, 100% 100%, 0 100%);
+    transform: translate(-0.022em, 0.02em);
+}
+
+.games-section-title {
+    --game-cyan: #00f7c2;
+    --game-magenta: #e500cb;
+    --game-amber: #ffb93a;
+    width: min(100%, 420px);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    clip-path: none;
+}
+
+.games-section-title::before,
+.games-section-title::after {
+    content: none;
+}
+
+.games-section-title .work-section-name {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.55rem 0.9rem;
-    margin: 0 auto 2.4rem;
-    padding: 0.65rem 1.4rem 0.7rem;
-    max-width: max-content;
-    font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', sans-serif;
+    padding: 0.4rem 1.02rem 0.38rem;
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.9rem, 2.1vw, 1.18rem);
     font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    color: #061019;
     text-transform: uppercase;
-    color: rgba(248, 233, 210, 0.92);
-    background: rgba(10, 8, 40, 0.55);
-    border: 1px solid rgba(248, 233, 210, 0.35);
-    border-radius: 3px;
+    background:
+        linear-gradient(90deg, rgba(0, 247, 194, 0.95), rgba(255, 185, 58, 0.94));
+    border: 1px solid rgba(255, 243, 216, 0.52);
     box-shadow:
-        0 0 0 1px rgba(0, 247, 194, 0.06) inset,
-        0 6px 18px rgba(0, 0, 0, 0.35),
-        0 0 24px rgba(0, 247, 194, 0.08);
-    text-shadow:
-        0 0 6px rgba(0, 247, 194, 0.35),
-        0 0 1px rgba(255, 90, 54, 0.5);
+        0 0 12px rgba(0, 247, 194, 0.32),
+        0 0 0 1px rgba(6, 16, 25, 0.34) inset,
+        0 8px 18px rgba(0, 0, 0, 0.28);
+    clip-path: polygon(0.62rem 0, 100% 0, calc(100% - 0.62rem) 100%, 0 100%);
 }
 
-.broadcast-title .rec-dot {
-    display: inline-block;
-    width: 0.7em;
-    height: 0.7em;
-    border-radius: 50%;
-    background: #ff3a3a;
-    box-shadow: 0 0 10px #ff3a3a, 0 0 2px #fff inset;
-    animation: rec-blink 1.6s ease-in-out infinite;
-    vertical-align: 0.05em;
-    margin-right: 0.55em;
-}
-
-.broadcast-prefix {
-    font-size: clamp(0.78rem, 1.4vw, 0.95rem);
-    letter-spacing: 0.22em;
-    color: rgba(248, 233, 210, 0.7);
-    white-space: nowrap;
-}
-
-.broadcast-prefix .broadcast-sep {
-    display: inline-block;
-    margin: 0 0.2em;
-    color: rgba(0, 247, 194, 0.55);
-}
-
-.broadcast-section {
-    font-size: clamp(1.1rem, 2.4vw, 1.55rem);
-    letter-spacing: 0.18em;
-    color: #fff;
-}
-
-@keyframes rec-blink {
-    0%, 60% { opacity: 1; }
-    70%, 100% { opacity: 0.25; }
-}
-
-/* On narrow screens, stack prefix above the section name */
 @media (max-width: 600px) {
-    .broadcast-title {
-        flex-direction: column;
-        gap: 0.4rem;
-        padding: 0.6rem 1rem 0.7rem;
-        text-align: center;
+    .work-section-title {
+        gap: 0.35rem;
+        margin-bottom: 1.9rem;
+        padding-inline: 0.4rem;
     }
-    .broadcast-prefix { font-size: 0.72rem; }
-    .broadcast-section { font-size: 1.1rem; }
+
+    .work-section-kicker {
+        font-size: 0.7rem;
+    }
+
+    .work-section-name {
+        letter-spacing: 0.025em;
+    }
+
+    .projections-section-title {
+        padding: 0.62rem 0.62rem 0.74rem;
+        transform: rotate(-0.45deg);
+    }
+
+    .projections-section-title .work-section-name {
+        font-size: clamp(1.18rem, 6.7vw, 1.55rem);
+    }
+
+    .games-section-title .work-section-name {
+        font-size: clamp(0.82rem, 4vw, 1rem);
+    }
+
+    .games-section-title {
+        width: min(100%, 330px);
+    }
 }
 
 /* The fan stage */
@@ -5948,8 +6108,7 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
     .playbill,
-    .playbill-scan::after,
-    .broadcast-title .rec-dot {
+    .playbill-scan::after {
         transition: none !important;
         animation: none !important;
     }
@@ -5958,7 +6117,8 @@ html {
 /* Game cards - TurboGrafx/HuCard-inspired playable links */
 .game-cartridges-section {
     --cart-ink: #121018;
-    padding: 3rem 0 4.6rem;
+    padding: clamp(4.25rem, 6vw, 5.25rem) 0 4.6rem;
+    scroll-margin-top: 72px;
     color: var(--light);
     position: relative;
     overflow: hidden;
@@ -6023,6 +6183,10 @@ html {
 }
 
 .cartridge-deck::before {
+    content: none;
+}
+
+.cartridge-deck::after {
     content: none;
 }
 

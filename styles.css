@@ -9971,6 +9971,42 @@ section.production-header.alice p {
     text-shadow: 0 0 8px rgba(194, 112, 56, 0.28);
 }
 
+#jcLightbox .mixtape-act-divider {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.55rem 0 0.3rem;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: default;
+    pointer-events: none;
+}
+
+#jcLightbox .mixtape-act-divider:first-child {
+    margin-top: 0;
+}
+
+#jcLightbox .mixtape-act-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg,
+        rgba(194, 112, 56, 0.55) 0%,
+        rgba(194, 112, 56, 0) 100%);
+}
+
+#jcLightbox .act-divider-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #c27038;
+    text-shadow: 0 0 10px rgba(194, 112, 56, 0.35);
+    white-space: nowrap;
+}
+
 #jcLightbox .track-number {
     color: rgba(210, 190, 160, 0.78);
 }

@@ -1945,13 +1945,16 @@ section.production-header.alice .production-details p strong {
    mobile the cards reset to transform: none, so JC must behave like the rest
    (no resting scale, no shrunk hover, no compensating font bump). */
 @media (min-width: 768px) {
+    /* The square JC art is taller than the 16:9 neighbours, so masonry pins it to
+       the top of the row and the scale(0.88) (anchored center-top) lifts it further.
+       Nudge it down a touch so it sits level with the cards on either side. */
     .showcase-item-jc {
-        transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(0.88);
+        transform: rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) scale(0.88);
         transform-origin: center top;
     }
 
     .showcase-item-jc:hover {
-        transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(0.902) !important;
+        transform: rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) scale(0.902) !important;
     }
 
     /* Card is scaled to 0.88; bump caption text by 1/0.88 so it renders at the

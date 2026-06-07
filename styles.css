@@ -1899,6 +1899,54 @@ section.production-header.alice .production-details p strong {
     object-position: top;
 }
 
+/* The 88% card shrink only applies in the multi-column desktop layout. On
+   mobile the cards reset to transform: none, so JC must behave like the rest
+   (no resting scale, no shrunk hover, no compensating font bump). */
+@media (min-width: 768px) {
+    .showcase-item-jc {
+        transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(0.88);
+        transform-origin: center top;
+    }
+
+    .showcase-item-jc:hover {
+        transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(0.902) !important;
+    }
+
+    /* Card is scaled to 0.88; bump caption text by 1/0.88 so it renders at the
+       same visual size as the neighboring full-size cards. */
+    .showcase-item-jc .showcase-kicker,
+    .showcase-item-jc .showcase-meta,
+    .showcase-item-jc .showcase-cta {
+        font-size: calc(0.68rem / 0.88);
+    }
+
+    /* "Junkyard Cabaret" is the longest title and the column is narrow, so
+       nudge it down slightly (and drop the badge gutter) to keep it on one
+       line. The description stays full-size and wraps like the other cards. */
+    .showcase-item-jc .showcase-caption h3 {
+        font-size: calc(1.05rem / 0.88);
+        padding-right: 0;
+        white-space: nowrap;
+    }
+
+    .showcase-item-jc .showcase-caption p {
+        font-size: calc(0.8rem / 0.88);
+    }
+}
+
+/* Keep the Junkyard title and description on a single line each on mobile.
+   The featured-card badge gutter (h3 padding-right) is the main wrap culprit. */
+@media (max-width: 767px) {
+    .showcase-item-jc .showcase-caption h3 {
+        padding-right: 0;
+        white-space: nowrap;
+    }
+
+    .showcase-item-jc .showcase-caption p {
+        white-space: nowrap;
+    }
+}
+
 .showcase-item-gwor {
     --showcase-accent: #b48eff;
     --showcase-accent-soft: rgba(180, 142, 255, 0.18);
@@ -5667,12 +5715,6 @@ html {
 .projections-section-title::before {
     inset: 0;
     background:
-        radial-gradient(circle, transparent 0 0.25rem, rgba(23, 106, 165, 0.38) 0.27rem 0.31rem, transparent 0.33rem) 1.45rem 50% / 0.82rem 0.82rem no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) 1.18rem 50% / 1.28rem 1px no-repeat,
-        linear-gradient(90deg, var(--draft-blue), var(--draft-blue)) 1.85rem calc(50% - 0.62rem) / 1px 1.28rem no-repeat,
-        radial-gradient(circle, transparent 0 0.25rem, rgba(23, 106, 165, 0.38) 0.27rem 0.31rem, transparent 0.33rem) calc(100% - 1.45rem) 50% / 0.82rem 0.82rem no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) calc(100% - 2.45rem) 50% / 1.28rem 1px no-repeat,
-        linear-gradient(90deg, var(--draft-blue), var(--draft-blue)) calc(100% - 1.85rem) calc(50% - 0.62rem) / 1px 1.28rem no-repeat,
         linear-gradient(var(--draft-blue), var(--draft-blue)) left top / 3rem 1px no-repeat,
         linear-gradient(var(--draft-blue), var(--draft-blue)) left top / 1px 1.45rem no-repeat,
         linear-gradient(var(--draft-blue), var(--draft-blue)) right top / 3rem 1px no-repeat,
@@ -6652,6 +6694,459 @@ html {
         0 0 0 3px rgba(0, 247, 194, 0.82),
         0 0 0 7px rgba(255, 185, 58, 0.45),
         0 6px 14px rgba(0, 0, 0, 0.28);
+}
+
+/* =========================================================
+   Original Albums — CD jewel cases with iridescent discs
+   ========================================================= */
+.album-cases-section {
+    position: relative;
+    padding: clamp(4.25rem, 6vw, 5.25rem) 0 4.6rem;
+    scroll-margin-top: 72px;
+    color: var(--light);
+    overflow: hidden;
+    background-color: #160d06;
+    /* Dimly-lit wood-paneled listening-lounge wall: the honey-oak grain is
+       knocked back with a warm vignette so the neon sign reads as the light
+       source and the iridescent discs still pop off their cases. */
+    background-image:
+        radial-gradient(ellipse 95% 75% at 50% 30%, rgba(20, 11, 4, 0) 28%, rgba(8, 4, 1, 0.88) 100%),
+        linear-gradient(180deg, rgba(14, 8, 3, 0.62) 0%, rgba(9, 5, 2, 0.58) 55%, rgba(7, 4, 1, 0.7) 100%),
+        url('images/recap-bg.webp');
+    background-size: cover, cover, cover;
+    background-position: center, center, center;
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.6);
+}
+
+/* Thin holographic strip along the top edge. */
+.album-cases-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        #ff5a8a, #ffb93a, #5affc2, #44b0ff, #c06aff, #ff5a8a);
+    background-size: 200% 100%;
+    opacity: 0.55;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* A single amber glow beam across the boundary, spilling warm light up into the
+   wood and down toward the microfiche archive below. */
+.album-cases-section::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 210, 122, 0.85) 18%,
+        #ffe6ad 50%,
+        rgba(255, 210, 122, 0.85) 82%,
+        transparent 100%);
+    box-shadow:
+        0 0 8px 1px rgba(255, 200, 110, 0.6),
+        0 0 26px 4px rgba(255, 180, 80, 0.38),
+        0 0 60px 12px rgba(255, 170, 70, 0.2);
+}
+
+.album-cases-section > .container {
+    position: relative;
+    z-index: 1;
+}
+
+.albums-section-title {
+    margin-bottom: clamp(2.4rem, 4vw, 3.4rem);
+}
+
+/* Hot-pink neon sign mounted on the wood — warm tube glow that softly buzzes,
+   distinct from the Games section's cyan neon and the walnut microfiche below. */
+.albums-section-title .work-section-name {
+    position: relative;
+    font-family: 'Neonderthaw', cursive;
+    font-weight: 400;
+    font-size: clamp(3.4rem, 8vw, 5.2rem);
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+    color: #fff1f7;
+    -webkit-text-fill-color: #fff1f7;
+    text-shadow:
+        0 0 3px rgba(255, 255, 255, 0.95),
+        0 0 8px #ff7ac0,
+        0 0 16px #ff3d97,
+        0 0 30px #ff1f86,
+        0 0 52px #d4006e,
+        0 0 80px #a8005a;
+    animation: album-neon-buzz 6.5s infinite;
+}
+
+/* Subtle, irregular flicker so the tube feels alive without strobing. */
+@keyframes album-neon-buzz {
+    0%, 100%   { opacity: 1; }
+    2%         { opacity: 0.62; }
+    4%         { opacity: 1; }
+    72%        { opacity: 1; }
+    73%        { opacity: 0.78; }
+    74%        { opacity: 1; }
+    77%        { opacity: 0.86; }
+    79%        { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .albums-section-title .work-section-name {
+        animation: none;
+    }
+}
+
+.cd-rack {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(240px, 340px));
+    gap: clamp(1.4rem, 4vw, 3rem);
+    justify-content: center;
+    align-items: start;
+    padding: 0 clamp(0rem, 3vw, 2rem);
+}
+
+.album-case {
+    position: relative;
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* The jewel case proper — a glossy plastic case sized by its contents
+   (hinge spine + a true-square cover insert). */
+.jewel-case {
+    position: relative;
+    margin: 0;
+    isolation: isolate;
+}
+
+/* Iridescent disc, hidden behind the case, peeks out to the right on hover. */
+.jewel-disc {
+    position: absolute;
+    top: 50%;
+    right: 6%;
+    width: 86%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    z-index: 0;
+    transform: translate(0, -50%) scale(0.94);
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    /* Metallic platter: data-track rings + center hub + hole. Kept dark toward
+       the rim so the rainbow sheen reads vividly under the screen blend. */
+    background:
+        radial-gradient(circle at 50% 50%, #15151c 0 7.5%, transparent 7.7% 14%),
+        radial-gradient(circle at 50% 50%, #d6d9e2 0 14.5%, #9498a3 15% 16.5%, transparent 16.7%),
+        repeating-radial-gradient(circle at 50% 50%,
+            rgba(255, 255, 255, 0.06) 0 1px,
+            rgba(0, 0, 0, 0.08) 1px 2.4px),
+        radial-gradient(circle at 50% 50%, #eef0f5 16%, #c2c6d0 50%, #9398a4 78%, #747986 100%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Rainbow diffraction sheen — rotates on hover to shift the colours. */
+.jewel-disc::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    /* Tight, fully-saturated spectral bands repeating around the platter, plus
+       a faint concentric refraction so light breaks both radially and angularly. */
+    background:
+        repeating-radial-gradient(circle at 50% 50%,
+            rgba(255, 255, 255, 0.18) 0 1.5px,
+            transparent 1.5px 7px),
+        repeating-conic-gradient(from 0deg,
+            #ff0040 0deg,
+            #ff8a00 7deg,
+            #ffe600 14deg,
+            #2bff6a 21deg,
+            #00e0ff 28deg,
+            #3a5bff 35deg,
+            #c000ff 42deg,
+            #ff0040 50deg);
+    mix-blend-mode: overlay;
+    opacity: 0.4;
+    -webkit-mask: radial-gradient(circle at 50% 50%, transparent 14%, #000 16% 99%, transparent 100%);
+            mask: radial-gradient(circle at 50% 50%, transparent 14%, #000 16% 99%, transparent 100%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+}
+
+/* The clear plastic case: hinge spine column + a square cover insert that sits
+   inset behind the glassy front lid, leaving a thin plastic lip around the art. */
+.jewel-shell {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 7% 1fr;
+    /* Pale-plastic lip runs continuously across the top and bottom of the whole
+       case, so the dark hinge sits above it with clear plastic showing above and
+       below — like the single molded frame on a real jewel case. */
+    padding: 2.5px 0;
+    overflow: hidden;
+    /* Pale, glassy clear-plastic body — shows as the lip around the inset art. */
+    background:
+        linear-gradient(125deg,
+            rgba(255, 255, 255, 0.34) 0%,
+            rgba(255, 255, 255, 0.07) 18%,
+            transparent 42%,
+            transparent 68%,
+            rgba(255, 255, 255, 0.14) 100%),
+        linear-gradient(180deg, #a9aeb8 0%, #82868f 100%);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+        0 14px 30px rgba(0, 0, 0, 0.45);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.45s ease;
+}
+
+/* The molded hinge spine — its own full-height column, solid black so the pale
+   case body never bleeds through. Fine vertical ribs combed along its length. */
+.jewel-hinge {
+    position: relative;
+    z-index: 3;
+    background:
+        linear-gradient(90deg,
+            rgba(255, 255, 255, 0.22) 0%,
+            rgba(255, 255, 255, 0.04) 30%,
+            rgba(0, 0, 0, 0.32) 60%,
+            rgba(0, 0, 0, 0.12) 100%),
+        repeating-linear-gradient(90deg,
+            rgba(255, 255, 255, 0.14) 0 0.5px,
+            rgba(0, 0, 0, 0.4) 0.5px 2px),
+        linear-gradient(#0e0e13, #0e0e13);
+    border-right: 1px solid rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+
+/* True-square cover art. The shell's top/bottom padding supplies the continuous
+   plastic lip above and below; here we only add the lip on the right. No lip on
+   the hinge side so the art meets the spine directly. */
+.jewel-insert {
+    position: relative;
+    margin: 0 2.5px 0 0;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.jewel-insert img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Crisp plastic edge where the lid meets the print: a bright inner line, a soft
+   recess shadow, and a thin dark separation from the surrounding lip. */
+.jewel-insert::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+        inset 0 2px 3px rgba(0, 0, 0, 0.28),
+        0 0 0 1px rgba(0, 0, 0, 0.22);
+}
+
+/* Glossy plastic glare sweeping across the front of the case. */
+.jewel-glare {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    background: linear-gradient(125deg,
+        rgba(255, 255, 255, 0.32) 0%,
+        rgba(255, 255, 255, 0.06) 18%,
+        transparent 38%,
+        transparent 62%,
+        rgba(255, 255, 255, 0.05) 86%,
+        rgba(255, 255, 255, 0.16) 100%);
+    transition: opacity 0.45s ease;
+}
+
+/* The whole blurb is one manila dossier card — typewritten on aged file stock,
+   a lead-in to the microfiche archive in the next section. */
+.jewel-caption {
+    margin-top: 1.1rem;
+    text-align: left;
+    padding: 0.85rem 0.95rem 0.8rem;
+    background: linear-gradient(180deg, #ecdcab 0%, #dcc890 100%);
+    border: 1px solid rgba(46, 33, 19, 0.4);
+    border-radius: 1px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 245, 210, 0.3),
+        0 8px 20px rgba(0, 0, 0, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Dashed rust coding strip across the top, echoing microfilm edge perforations. */
+.jewel-caption::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 3px;
+    background: repeating-linear-gradient(90deg,
+        rgba(122, 46, 22, 0.85) 0 7px,
+        transparent 7px 12px);
+}
+
+.jewel-caption-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.55rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1.5px solid rgba(46, 33, 19, 0.4);
+}
+
+/* Rubber-stamped classification label. */
+.jewel-kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7a2e16;
+    border: 1.5px solid rgba(122, 46, 22, 0.6);
+    border-radius: 1px;
+    padding: 0.16rem 0.42rem;
+}
+
+.jewel-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #3a2c18;
+    white-space: nowrap;
+}
+
+.jewel-caption h3 {
+    margin: 0 0 0.32rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.14;
+    letter-spacing: 0.01em;
+    color: #241a0e;
+}
+
+.jewel-caption p {
+    margin: 0 0 0.7rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #4a371f;
+}
+
+/* CTA — a stamped file button in typewriter mono. */
+.jewel-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7a2e16;
+    border: 1.5px solid rgba(122, 46, 22, 0.6);
+    border-radius: 1px;
+    padding: 0.34rem 0.6rem;
+    transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.jewel-cta::after {
+    content: '\2192';
+    transition: transform 0.3s ease;
+}
+
+/* ---- Hover / focus: disc peeks out + sheen shifts ---- */
+.album-case:hover .jewel-disc,
+.album-case:focus-visible .jewel-disc {
+    transform: translate(34%, -50%) scale(1) rotate(8deg);
+}
+
+.album-case:hover .jewel-disc::before,
+.album-case:focus-visible .jewel-disc::before {
+    transform: rotate(150deg);
+    opacity: 0.55;
+}
+
+.album-case:hover .jewel-shell,
+.album-case:focus-visible .jewel-shell {
+    transform: translateY(-4px);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.22) inset,
+        0 20px 38px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(90, 255, 194, 0.18);
+}
+
+.album-case:hover .jewel-cta,
+.album-case:focus-visible .jewel-cta {
+    color: #f0e0b0;
+    background-color: #7a2e16;
+    border-color: #7a2e16;
+}
+
+.album-case:hover .jewel-cta::after,
+.album-case:focus-visible .jewel-cta::after {
+    transform: translateX(3px);
+}
+
+.album-case:focus-visible {
+    outline: none;
+}
+
+.album-case:focus-visible .jewel-shell {
+    box-shadow:
+        0 0 0 3px rgba(90, 255, 194, 0.82),
+        0 0 0 7px rgba(68, 176, 255, 0.4),
+        0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .jewel-disc,
+    .jewel-disc::before,
+    .jewel-shell,
+    .jewel-cta,
+    .jewel-cta::after {
+        transition: none;
+    }
+}
+
+@media (max-width: 860px) {
+    .cd-rack {
+        grid-template-columns: repeat(2, minmax(220px, 340px));
+        gap: 1.8rem 1.5rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .cd-rack {
+        grid-template-columns: minmax(240px, 360px);
+    }
 }
 
 @media (max-width: 820px) {

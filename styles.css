@@ -1683,6 +1683,48 @@ section.production-header.alice .production-details p strong {
         inset 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
+/* Weightless float for the "Recently" cards, mirroring the game cartridges below.
+   Registering the tile vars lets keyframes interpolate them, so the float drives
+   the same --tile-rot/--tile-y the base + hover transforms already read — the
+   hover-scale composes on top instead of snapping the bob off. Each card runs a
+   different period + negative delay so they drift out of phase. */
+@property --tile-rot {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@property --tile-y {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+}
+
+.showcase-item-toast { animation: showcase-float-a 7s ease-in-out infinite; }
+.showcase-item-jc    { animation: showcase-float-b 8.4s ease-in-out -2.6s infinite; }
+.showcase-item-game  { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
+
+@keyframes showcase-float-a {
+    0%, 100% { --tile-y: 0px;   --tile-rot: -0.4deg; }
+    50%      { --tile-y: -9px;  --tile-rot: 0.4deg; }
+}
+
+@keyframes showcase-float-b {
+    0%, 100% { --tile-y: -7px;  --tile-rot: 0.5deg; }
+    50%      { --tile-y: 4px;   --tile-rot: -0.3deg; }
+}
+
+@keyframes showcase-float-c {
+    0%, 100% { --tile-y: 3px;   --tile-rot: -0.3deg; }
+    50%      { --tile-y: -8px;  --tile-rot: 0.45deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .showcase-item-toast,
+    .showcase-item-jc,
+    .showcase-item-game { animation: none; }
+}
+
 .showcase-item::before {
     content: '';
     position: absolute;

@@ -55,8 +55,11 @@ onReady(() => {
         const cols = getColumnCount();
         if (cols < 2) { reset(); return; }
         // Measure before flipping to masonry so column width is from the real grid layout.
+        // Use offsetWidth (not getBoundingClientRect) so the float animation's rotation
+        // doesn't inflate the reading — otherwise the baked-in width feeds the
+        // ResizeObserver and the cards grow a little on every layout pass.
         const probe = items[0];
-        const colWidth = probe.getBoundingClientRect().width;
+        const colWidth = probe.offsetWidth;
         const gap = getGap();
         grid.classList.add('is-masonry');
         const colHeights = new Array(cols).fill(0);

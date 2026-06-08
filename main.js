@@ -1565,6 +1565,12 @@ function initTimeDial() {
             date: 'April 2026',
             file: 'audio/april-2026-substack-recap.mp3',
             label: 'APR \'26'
+        },
+        {
+            angle: 80,
+            date: 'May 2026',
+            file: 'audio/may-2026-substack-recap.mp3',
+            label: 'MAY \'26'
         }
     ];
     
@@ -1581,7 +1587,7 @@ function initTimeDial() {
         'audio/radio_tuning9.mp3'
     ];
     
-    let currentStation = 11; // Start at station 11 (Apr '26)
+    let currentStation = 12; // Start at station 12 (May '26)
     const oscilloscopeCanvas = document.getElementById('recap-oscilloscope');
     const dateDisplay = document.getElementById('current-recap-date');
     const recapAudio = document.getElementById('recap-audio');
@@ -1952,11 +1958,11 @@ function initTimeDial() {
     window.addEventListener('resize', cacheTunerMarkerPositions);
     
     // Initialize station (date display, audio source, etc.)
-    updateStation(11);
+    updateStation(12);
 
     // Initialize tuner indicator position
     setTimeout(() => {
-        updateTunerIndicator(11);
+        updateTunerIndicator(12);
     }, 100);
     
     // Add click handlers to clickable scale markers

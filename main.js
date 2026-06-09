@@ -3941,48 +3941,6 @@ function initMixtapeLightbox() {
         });
     }
     
-    // Red Button - Mixtape Trigger with CRT Effects
-    const redButtonWrapper = document.getElementById('redButtonWrapper');
-    const crtStaticOverlay = document.getElementById('crtStaticOverlay');
-    
-    // Sound effect for mixtape discovery
-    const mixtapeFoundSound = new Audio('audio/mixtape-found.mp3');
-    mixtapeFoundSound.volume = 0.6;
-    
-    if (redButtonWrapper) {
-        redButtonWrapper.addEventListener('click', (e) => {
-            // Add pressed class for LED burst animation
-            redButtonWrapper.classList.add('pressed');
-            
-            // Play the discovery sound
-            mixtapeFoundSound.currentTime = 0;
-            mixtapeFoundSound.play().catch(err => console.log('Audio play prevented:', err));
-            
-            // Open mixtape with CRT power-on effect
-            setTimeout(() => {
-                redButtonWrapper.classList.remove('pressed');
-                
-                // Trigger static flash overlay at moment of lightbox reveal
-                if (crtStaticOverlay) {
-                    crtStaticOverlay.classList.add('active');
-                    setTimeout(() => crtStaticOverlay.classList.remove('active'), 400);
-                }
-                
-                // Add CRT power-on class before opening
-                if (lightbox) {
-                    lightbox.classList.add('crt-power-on');
-                    
-                    // Remove the class after animation completes
-                    setTimeout(() => {
-                        lightbox.classList.remove('crt-power-on');
-                    }, 600);
-                }
-                
-                openMixtape();
-            }, 400);
-        });
-    }
-    
     // Resize canvas on window resize
     window.addEventListener('resize', resizeCanvas);
 
@@ -4727,18 +4685,10 @@ function initDeferredHomepageMedia() {
     const mixtapeTile = document.getElementById('mixtapeTile');
     const gworTile = document.getElementById('gworTile');
     const jcTile = document.getElementById('jcTile');
-    const redButtonWrapper = document.getElementById('redButtonWrapper');
-    const gworButtonWrapper = document.getElementById('gworButtonWrapper');
     const initialRoute = parseMusicHash();
 
     bindLazyMediaTrigger(mixtapeTile, ensureMixtapeLightbox, (instance) => {
         instance.open(false);
-    });
-
-    bindLazyMediaTrigger(redButtonWrapper, ensureMixtapeLightbox, (instance) => {
-        window.setTimeout(() => {
-            redButtonWrapper.click();
-        }, 0);
     });
 
     bindLazyMediaTrigger(gworTile, ensureGWORLightbox, (instance) => {
@@ -4748,24 +4698,6 @@ function initDeferredHomepageMedia() {
     bindLazyMediaTrigger(jcTile, ensureJCLightbox, (instance) => {
         instance.open();
     });
-
-    // GWOR grey LED — persistent click handler (bindLazyMediaTrigger is once-only)
-    if (gworButtonWrapper) {
-        const gworFoundSound = new Audio('audio/mixtape-found.mp3');
-        gworFoundSound.volume = 0.6;
-
-        gworButtonWrapper.addEventListener('click', () => {
-            gworButtonWrapper.classList.add('pressed');
-            gworFoundSound.currentTime = 0;
-            gworFoundSound.play().catch(() => {});
-
-            setTimeout(() => {
-                gworButtonWrapper.classList.remove('pressed');
-                const instance = ensureGWORLightbox();
-                if (instance) instance.open();
-            }, 300);
-        });
-    }
 
     if (initialRoute && initialRoute.player === 'mixtape') {
         ensureMixtapeLightbox();

@@ -3108,9 +3108,21 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
             persistCtx.stroke();
             persistCtx.shadowBlur = 0;
         } else {
-            // Idle (paused/stopped): no trace at all — clear the buffer so the
-            // scope rests on its graticule instead of drawing a flat center line.
+            // Idle (paused/stopped): rest on a faint jittering static line at the
+            // center, like a powered-on scope with no input signal.
             persistCtx.clearRect(0, 0, w, h);
+            persistCtx.beginPath();
+            persistCtx.strokeStyle = currentColors.trace;
+            persistCtx.lineWidth = 2;
+            persistCtx.shadowColor = currentColors.glow;
+            persistCtx.shadowBlur = 10;
+            for (var x = 0; x < w; x++) {
+                var noise = (Math.random() - 0.5) * 1.5;
+                if (x === 0) persistCtx.moveTo(x, mid + noise);
+                else persistCtx.lineTo(x, mid + noise);
+            }
+            persistCtx.stroke();
+            persistCtx.shadowBlur = 0;
         }
 
         // Composite the phosphor buffer over the graticule.

@@ -4433,12 +4433,13 @@ html {
 }
 
 .scale-marker.scale-clickable:hover .marker-label {
-    color: #ffc94a;
-    text-shadow: 
-        0 0 8px rgba(255, 190, 60, 0.9),
-        0 0 14px rgba(255, 190, 60, 0.5),
+    color: #fff3d4;
+    text-shadow:
+        0 0 10px rgba(255, 190, 60, 1),
+        0 0 18px rgba(255, 190, 60, 0.7),
+        0 0 28px rgba(255, 190, 60, 0.4),
         0 0 3px rgba(255, 190, 60, 1);
-    transform: scale(1.05);
+    transform: scale(1.12);
 }
 
 .scale-marker::before {
@@ -4467,7 +4468,7 @@ html {
     font-family: 'Space Mono', monospace;
     font-size: 0.55rem;
     font-weight: 700;
-    color: #ffc94a;
+    color: rgba(255, 201, 74, 0.42);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     position: absolute;
@@ -4475,9 +4476,8 @@ html {
     line-height: 1.1;
     text-align: center;
     text-shadow:
-        0 0 6px rgba(255, 190, 60, 0.8),
-        0 0 12px rgba(255, 190, 60, 0.4),
-        0 0 2px rgba(255, 190, 60, 1);
+        0 0 3px rgba(255, 190, 60, 0.25),
+        0 0 1px rgba(255, 190, 60, 0.5);
     transition: all 0.3s ease;
     pointer-events: auto;
     cursor: pointer;
@@ -4490,8 +4490,9 @@ html {
 }
 
 .scale-marker.scale-major.active .marker-label {
-    color: #ffc94a;
-    text-shadow: 
+    color: #fff3d4;
+    transform: scale(1.18);
+    text-shadow:
         0 0 8px rgba(255, 190, 60, 1),
         0 0 16px rgba(255, 190, 60, 0.6),
         0 0 3px rgba(255, 190, 60, 1);
@@ -5006,13 +5007,13 @@ html {
 }
 
 @keyframes vu-breathe {
-    0%, 100% { 
+    0%, 100% {
         height: 28px;
-        opacity: 0.7;
+        opacity: 0.4;
     }
-    50% { 
+    50% {
         height: 34px;
-        opacity: 0.85;
+        opacity: 0.52;
     }
 }
 

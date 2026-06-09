@@ -1957,8 +1957,16 @@ function initTimeDial() {
     cacheTunerMarkerPositions();
     window.addEventListener('resize', cacheTunerMarkerPositions);
     
-    // Initialize station (date display, audio source, etc.)
-    updateStation(12);
+    // Sync displayed dates from the initial station's data.
+    // updateStation() early-returns when the index already equals currentStation,
+    // so the HTML defaults would otherwise never get reconciled on load.
+    (function syncInitialStation() {
+        const station = recapStations[currentStation];
+        if (!station) return;
+        if (dateDisplay) dateDisplay.textContent = station.date;
+        const oscDate = document.getElementById('oscilloscope-recap-date');
+        if (oscDate) oscDate.textContent = station.date;
+    })();
 
     // Initialize tuner indicator position
     setTimeout(() => {

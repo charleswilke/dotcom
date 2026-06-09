@@ -1,168 +1,147 @@
-# Audio Recap Time Dial - User Guide
+# Audio Recap Time Dial - Guide
 
 ## Overview
-The Time Dial feature allows visitors to "turn back time" and listen to past audio recaps of your Substack articles. It features a vintage radio dial aesthetic with an interactive rotating needle.
+The Time Dial lets visitors browse and play past audio recaps of the Substack
+articles. It's styled as a vintage radio tuner inside a wood cabinet, with a
+live oscilloscope "CRT" and a horizontal station dial.
 
-## How It Works
+It lives in the **Writing** section of the main site
+(`index.html` + `main.js`), just above the article grid.
 
-### Current Implementation
-- **October 2024** - Latest recap at the top (0° position)
-- **Aug-Sept 2024** - Previous recap at the bottom (180° position)
+## How It Works (current implementation)
 
-### User Interactions
-1. **Click/Tap** - Cycles to the next recap
-2. **Drag** - Rotate the dial to any position; it will snap to the nearest recap
-3. **Mobile Swipe** - Touch and drag to rotate the dial
+### Layout
+- **Oscilloscope CRT (top):** a `<canvas>` (`#recap-oscilloscope`) that draws a
+  live amber waveform of whatever recap is playing. Two faded labels are baked
+  into the glass: a title (`RECENTLY ON EXPLORING L.AI.BOR`) and a meta line
+  (`RECAP PODCAST • <month>`, id `#oscilloscope-recap-date`).
+- **Station dial (middle):** a horizontal amber scale. Each recap is a clickable
+  major marker (`.scale-marker.scale-major.scale-clickable`) with a `.marker-label`;
+  short minor ticks sit between them. A red vertical needle (`#tuner-indicator`)
+  slides to the active station.
+- **Player (bottom/right):** a minimal custom audio player — play/pause button,
+  progress bar, and current-time readout — driven by `<audio id="recap-audio">`.
 
-### Visual Feedback
-- The needle rotates smoothly to the selected position
-- Date display updates with a fade effect
-- Dial glows when a new station is selected
-- Audio automatically switches to the selected recap
-- If audio was playing, it continues playing the new selection
+### Interaction
+- **Click/tap a station marker** to switch recaps. (Scroll/swipe tuning was
+  removed; it hijacked page scroll when the cursor crossed the dial.)
+- On change, the dates fade-update, the audio source swaps, and playback resumes
+  if it was already playing.
 
-## Adding New Recaps
+### Visual feedback
+- **Active station is spotlighted:** bright near-white amber (`#fff3d4`), scaled
+  up ~18%. **Inactive stations are dimmed** (~42% opacity, low glow blur) so they
+  recede but stay legible.
+- **Hover** lifts an inactive label with a neon glow + slight scale.
+- CRT flavor (in `styles.css`, ~line 4876+): scanlines, static noise during
+  tuning, phosphor decay on the old marker, vacuum-tube warmup + signal-lock
+  pulse on the new one, subtle screen flicker, plus a random radio-tuning sound
+  effect from `audio/radio_tuning1–9.mp3`.
 
-When you create a new monthly/periodic recap, follow these steps:
+## Where things live
+- **Station data:** `main.js`, inside `initTimeDial()` → the `recapStations`
+  array (~line 1496).
+- **Selected-on-load station:** `currentStation` in `main.js` (~line 1590).
+- **Date sync on load:** `syncInitialStation()` in `main.js` (~line 1961) copies
+  the current station's date into both date displays, so the HTML date defaults
+  don't need to be kept in sync by hand.
+- **Dial markup:** `index.html`, the `.tuner-scale` block (~line 193).
+- **Default audio source:** `index.html`, `<audio id="recap-audio" src="…">`
+  (~line 233).
 
-### 1. Add the Audio File
-Place your new MP3 file in the `/audio/` directory:
-```
-audio/
-  ├── nov-substack-recap.mp3  (new file)
-  ├── oct-substack-recap.mp3
-  └── aug-sept-substack-summary.mp3
-```
-
-### 2. Update the JavaScript Configuration
-Open `index.html` and find the `recapStations` array (around line 838):
-
+### Station data shape
 ```javascript
 const recapStations = [
+    // ...
     {
-        angle: 0,        // Top position (most recent)
-        date: 'November 2024',
-        file: 'audio/nov-substack-recap.mp3',
-        label: 'NOV \'24'
-    },
-    {
-        angle: 90,       // Right position
-        date: 'October 2024',
-        file: 'audio/oct-substack-recap.mp3',
-        label: 'OCT \'24'
-    },
-    {
-        angle: 180,      // Bottom position
-        date: 'Aug-Sept 2024',
-        file: 'audio/aug-sept-substack-summary.mp3',
-        label: 'AUG-SEP \'24'
+        angle: 80,                              // legacy/unused — see note below
+        date: 'May 2026',                       // shown in displays
+        file: 'audio/may-2026-substack-recap.mp3',
+        label: 'MAY \'26'                       // not rendered; HTML holds the visible label
     }
 ];
 ```
 
-**Angle Guidelines:**
-- `0°` = Top (12 o'clock) - Most recent
-- `90°` = Right (3 o'clock)
-- `180°` = Bottom (6 o'clock)
-- `270°` = Left (9 o'clock)
-- For 2 items: Use 0° and 180°
-- For 3 items: Use 0°, 120°, and 240°
-- For 4 items: Use 0°, 90°, 180°, and 270°
+**Array order is the source of truth.** The array index equals the station index
+(`data-station` in the HTML) and the left-to-right position on the dial. Append
+new recaps to the **end** to make them the newest (right-most) station.
 
-### 3. Update the SVG Tick Marks
-In the same file, update the dial visual tick marks (around line 191):
+> **Note on `angle` and `label`:** the `angle` field and the helper
+> `updateTunerIndicatorByAngle()` are leftovers from the old rotating-needle
+> design and are no longer read — the needle is positioned by the marker's DOM
+> index, not by angle. `label` is likewise not rendered (the visible label text
+> lives in the HTML `.marker-label`). They're kept for now to avoid churn; safe
+> to ignore when adding stations.
 
-```html
-<g id="dial-ticks">
-    <!-- November 2024 at 0° (top) -->
-    <line x1="100" y1="30" x2="100" y2="40" 
-          stroke="#00f7c2" stroke-width="2.5" stroke-linecap="round"/>
-    
-    <!-- October 2024 at 90° (right) -->
-    <line x1="170" y1="100" x2="160" y2="100" 
-          stroke="#00f7c2" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-    
-    <!-- Aug-Sept 2024 at 180° (bottom) -->
-    <line x1="100" y1="170" x2="100" y2="160" 
-          stroke="#00f7c2" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-</g>
-```
+## Adding a new recap
 
-**Tick Mark Positions (for 200x200 viewBox, center at 100,100):**
-- 0° (top): `x1="100" y1="30" x2="100" y2="40"`
-- 90° (right): `x1="170" y1="100" x2="160" y2="100"`
-- 180° (bottom): `x1="100" y1="170" x2="100" y2="160"`
-- 270° (left): `x1="30" y1="100" x2="40" y2="100"`
+### 1. Add the audio file
+Drop the MP3 in `/audio/` (e.g. `audio/jun-2026-substack-recap.mp3`). Use a
+consistent, chronological name.
 
-### 4. Update the Dial Labels
-Update the label divs (around line 220):
-
-```html
-<div class="dial-label dial-label-top">NOV '24</div>
-<div class="dial-label dial-label-right">OCT '24</div>
-<div class="dial-label dial-label-bottom">AUG-SEP '24</div>
-```
-
-Add corresponding CSS classes if needed for right/left positions:
-
-```css
-.dial-label-right {
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.7;
-}
-
-.dial-label-left {
-    left: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.7;
+### 2. Add the station to `main.js`
+Append an entry to the **end** of `recapStations` (~line 1496):
+```javascript
+{
+    angle: 0,                                   // value doesn't matter (unused)
+    date: 'June 2026',
+    file: 'audio/jun-2026-substack-recap.mp3',
+    label: 'JUN \'26'
 }
 ```
 
-### 5. Update Default Display
-Change the default date shown (around line 179):
-
-```html
-<span class="summary-date" id="current-recap-date">November 2024</span>
+### 3. Point `currentStation` at the new newest station
+Update `currentStation` (~line 1590) to the new last index so it loads selected:
+```javascript
+let currentStation = 13; // Start at the newest station
 ```
 
-And update the default audio source (around line 228):
-
+### 4. Add the marker to `index.html`
+In the `.tuner-scale` block (~line 193): add a `.scale-marker.scale-minor` spacer,
+then the new major marker. Move the `active` class onto the new (newest) marker,
+and alternate `label-top` so labels keep staggering above/below the line:
 ```html
-<audio id="recap-audio" class="custom-audio" 
-       src="audio/nov-substack-recap.mp3" preload="metadata" style="display:none;">
-</audio>
+<div class="scale-marker scale-minor"></div>
+<div class="scale-marker scale-major scale-clickable active" data-period="Jun '26" data-station="13">
+    <span class="marker-label">JUN<br>2026</span>
+</div>
+```
+Remove `active` from the previous newest marker.
+
+### 5. Update the default audio source
+Set the `<audio id="recap-audio">` `src` (~line 233) to the newest MP3 so the
+right station is cued before JS runs:
+```html
+<audio id="recap-audio" class="custom-audio"
+       src="audio/jun-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
 ```
 
-## Design Philosophy
+### 6. (Optional) Extend the animation stagger
+`styles.css` has a `--marker-index` list keyed by `:nth-child` (~line 5142) that
+staggers the idle "breathing" animation. It currently covers the first 19
+markers; add another `:nth-child` rule only if you've grown past that and want
+the new marker's animation staggered. Purely cosmetic.
 
-The Time Dial embraces a retro-futuristic aesthetic that matches your site's overall design:
-- **Neon cyan (#00f7c2)** - Your signature neon color
-- **Glowing effects** - Subtle shadows and filters for depth
-- **Smooth animations** - Cubic bezier easing for satisfying interactions
-- **Responsive** - Works on desktop, tablet, and mobile
+### What you do *not* need to touch
+The date displays auto-sync from the station data on load (`syncInitialStation`),
+so you don't have to hand-edit the right-side date or the oscilloscope meta date.
 
-## Tips for Best Experience
+## Design notes
+- **Palette:** amber/gold dial (`#ffc94a` / `rgba(255, 190, 60, …)`), red needle.
+  This is a deliberate vintage-radio look, distinct from the site's neon-cyan
+  (`--neon: #00f7c2`).
+- **Spotlight model:** the active station is the focal point; everything else
+  recedes. If you tune the dim level, the inactive label color is set in
+  `.marker-label` and the active treatment in
+  `.scale-marker.scale-major.active .marker-label` (`styles.css`).
 
-1. **Keep recaps organized** - Name files chronologically (e.g., `2024-11-recap.mp3`)
-2. **Limit quantity** - 4-6 recaps works best visually
-3. **Archive old recaps** - Consider removing very old entries or creating an archive page
-4. **Consistent naming** - Use a consistent date format in labels
-
-## Future Enhancements
-
-Potential ideas for expanding the feature:
-- Add year rings for multi-year archives
-- Include episode thumbnails
-- Add playback speed controls
-- Show duration badges on each station
-- Animate static/noise effects between stations
-- Add keyboard shortcuts (arrow keys to navigate)
+## Tips
+1. Keep file names chronological and consistent.
+2. The dial is getting dense (13+ stations on one line). If it gets too tight,
+   consider grouping by year, abbreviating labels, or paginating.
+3. If you replace an existing recap MP3 **in place** (same filename), run
+   `./bump-cover.sh <file>.mp3` to cache-bust it — assets are served `immutable`.
 
 ---
 
-Created: October 27, 2024
-Last Updated: October 27, 2024
-
+Last updated: 2026-06-08

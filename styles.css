@@ -10890,6 +10890,15 @@ section.production-header.alice p {
 .modal-oscilloscope-frame .osc-play-btn:active {
     transform: scale(0.92);
 }
+/* Touch displays can't hover. Without this the pause glyph stays at opacity 0
+   while playing, so the first tap only synthesizes a hover (revealing the glyph)
+   and the click is swallowed — it takes a second tap to pause. Keeping the glyph
+   visible at rest removes the visibility change, so the first tap toggles play. */
+@media (hover: none) {
+    .modal-oscilloscope-frame .osc-play-btn {
+        opacity: 1;
+    }
+}
 
 /* Warm-tube pulse: an uneven swell with a glow flutter rather than a clean sine,
    so it breathes like an analog lamp settling behind glass. brightness() also

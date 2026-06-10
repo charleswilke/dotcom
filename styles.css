@@ -1650,7 +1650,8 @@ section.production-header.alice .production-details p strong {
     --crt-warm: 82% 92%;
     --tile-rot: 0deg;
     --tile-y: 0px;
-    transform: rotate(var(--tile-rot)) translateY(var(--tile-y));
+    --tile-scale: 1;
+    transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(var(--tile-scale));
     background:
         repeating-linear-gradient(
             0deg,
@@ -1664,7 +1665,7 @@ section.production-header.alice .production-details p strong {
         0 14px 24px rgba(0, 0, 0, 0.16),
         0 0 0 1px rgba(255, 185, 58, 0.18),
         inset 0 0 0 1px rgba(248, 233, 210, 0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: --tile-scale 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     border: 1px solid rgba(255, 185, 58, 0.14);
     cursor: pointer;
     isolation: isolate;
@@ -1676,7 +1677,7 @@ section.production-header.alice .production-details p strong {
 }
 
 .showcase-item:hover {
-    transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(1.025) !important;
+    --tile-scale: 1.025;
     box-shadow:
         0 20px 34px rgba(0, 0, 0, 0.18),
         0 0 0 1px var(--showcase-accent-soft),
@@ -1698,6 +1699,12 @@ section.production-header.alice .production-details p strong {
     syntax: "<length>";
     inherits: false;
     initial-value: 0px;
+}
+
+@property --tile-scale {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 1;
 }
 
 .showcase-item-toast { animation: showcase-float-a 7s ease-in-out infinite; }
@@ -1949,12 +1956,8 @@ section.production-header.alice .production-details p strong {
        the top of the row and the scale(0.88) (anchored center-top) lifts it further.
        Nudge it down a touch so it sits level with the cards on either side. */
     .showcase-item-jc {
-        transform: rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) scale(0.88);
+        transform: rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) scale(calc(0.88 * var(--tile-scale)));
         transform-origin: center top;
-    }
-
-    .showcase-item-jc:hover {
-        transform: rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) scale(0.902) !important;
     }
 
     /* Card is scaled to 0.88; bump caption text by 1/0.88 so it renders at the
@@ -1965,13 +1968,14 @@ section.production-header.alice .production-details p strong {
         font-size: calc(0.68rem / 0.88);
     }
 
-    /* "Junkyard Cabaret" is the longest title and the column is narrow, so
-       nudge it down slightly (and drop the badge gutter) to keep it on one
-       line. The description stays full-size and wraps like the other cards. */
+    /* "Junkyard Cabaret" is the longest title. Drop the badge gutter so it sits
+       on one line where the column is wide enough, but let it wrap rather than
+       force nowrap — at narrow desktop widths the bumped (1/0.88) title is wider
+       than the scaled-down column, and nowrap stretched the whole caption past
+       the card's clip box, cropping the title and meta on the right edge. */
     .showcase-item-jc .showcase-caption h3 {
         font-size: calc(1.05rem / 0.88);
         padding-right: 0;
-        white-space: nowrap;
     }
 
     .showcase-item-jc .showcase-caption p {

@@ -1059,9 +1059,9 @@ footer .electric {
 .dimensional-showcase {
     padding: 0.6rem 0 0.6rem 0;
     background:
-        radial-gradient(ellipse at 14% 0%, rgba(255, 244, 163, 0.56) 0%, transparent 42%),
-        radial-gradient(ellipse at 84% 78%, rgba(255, 90, 54, 0.28) 0%, transparent 48%),
-        linear-gradient(160deg, rgba(255, 198, 68, 0.56) 0%, rgba(247, 120, 30, 0.36) 58%, rgba(194, 112, 56, 0.32) 100%);
+        radial-gradient(ellipse at 20% 8%, rgba(0, 247, 194, 0.16) 0%, transparent 34%),
+        radial-gradient(ellipse at 82% 85%, rgba(255, 90, 54, 0.24) 0%, transparent 44%),
+        linear-gradient(180deg, #100f18 0%, #241b32 48%, #09070d 100%);
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -1077,14 +1077,14 @@ footer .electric {
     width: 300%;
     height: 300%;
     background-image:
-        radial-gradient(circle, rgba(26, 21, 80, 0.12) 0 2.8px, transparent 3px),
-        radial-gradient(circle, rgba(255, 244, 163, 0.18) 0 1px, transparent 1.3px);
-    background-size: 14px 14px, 28px 28px;
+        radial-gradient(circle, rgba(255, 241, 185, 0.08) 0 1px, transparent 1.25px),
+        radial-gradient(circle, rgba(0, 247, 194, 0.055) 0 1.5px, transparent 1.8px);
+    background-size: 34px 34px, 11px 11px;
     background-position: 0 0, 7px 5px;
     transform: rotate(30deg);
     z-index: 0;
-    mix-blend-mode: multiply;
-    opacity: 0.78;
+    mix-blend-mode: screen;
+    opacity: 0.5;
     pointer-events: none;
 }
 
@@ -1092,12 +1092,11 @@ footer .electric {
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-        radial-gradient(ellipse at 50% 0%, rgba(255, 244, 163, 0.28) 0%, transparent 46%),
-        radial-gradient(ellipse at 50% 100%, rgba(255, 185, 58, 0.18) 0%, transparent 48%);
+    background:
+        linear-gradient(90deg, rgba(255, 185, 58, 0.05), transparent 18%, transparent 82%, rgba(0, 247, 194, 0.05)),
+        radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.58) 0%, transparent 62%);
     z-index: 0;
     pointer-events: none;
-    opacity: 0.72;
 }
 
 
@@ -1663,6 +1662,7 @@ section.production-header.alice .production-details p strong {
         linear-gradient(135deg, #1a1550, #0d0a35);
     box-shadow:
         0 14px 24px rgba(0, 0, 0, 0.16),
+        0 0 12px rgba(255, 185, 58, 0.38),
         0 0 0 1px rgba(255, 185, 58, 0.18),
         inset 0 0 0 1px rgba(248, 233, 210, 0.08);
     transition: --tile-scale 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -1680,6 +1680,7 @@ section.production-header.alice .production-details p strong {
     --tile-scale: 1.025;
     box-shadow:
         0 20px 34px rgba(0, 0, 0, 0.18),
+        0 0 16px rgba(255, 185, 58, 0.5),
         0 0 0 1px var(--showcase-accent-soft),
         inset 0 0 0 1px rgba(255, 255, 255, 0.25);
 }

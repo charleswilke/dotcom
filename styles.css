@@ -10244,23 +10244,6 @@ section.production-header.alice p {
     pointer-events: none;
 }
 
-.mixtape-player-container::after {
-    content: '';
-    position: absolute;
-    left: 15px;
-    right: 15px;
-    top: 73px;
-    height: 1px;
-    z-index: 5;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(var(--deck-r, 0), var(--deck-g, 247), var(--deck-b, 194), 0.24),
-        rgba(255, 244, 222, 0.3),
-        rgba(var(--deck-r, 0), var(--deck-g, 247), var(--deck-b, 194), 0.24),
-        transparent);
-    pointer-events: none;
-}
-
 #mixtapeLightbox .mixtape-player-container {
     --deck-r: 0; --deck-g: 247; --deck-b: 194;
 }

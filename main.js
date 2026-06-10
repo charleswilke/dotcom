@@ -2648,7 +2648,7 @@ function createVisualizerController(options) {
     return { start, stop, resize, getAnalyser: () => analyser, getAudioContext: () => audioContext };
 }
 
-function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
+function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options = {}) {
     if (!canvas) return null;
     const ctx = canvas.getContext('2d');
     // Offscreen buffer holds the trace so it can decay like CRT phosphor.
@@ -2672,11 +2672,16 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
     const vial = frame ? frame.querySelector('.time-vial') : null;
 
     // Clicking the scope toggles play/pause — scrubbing lives on the vial.
-    canvas.addEventListener('click', function () {
+    // The mini player opts out (clickToToggle: false): there the whole frame is
+    // an "expand" button, and a toggle here would pause the song mid-expand.
+    function onCanvasClick() {
         pauseManagedAudioExcept(audioEl);
         if (audioEl.paused) audioEl.play().catch(function () {});
         else audioEl.pause();
-    });
+    }
+    if (options.clickToToggle !== false) {
+        canvas.addEventListener('click', onCanvasClick);
+    }
 
     // The vial IS the scrubber: drag it vertically (bottom = start, top = end),
     // mirroring the filling metaphor.
@@ -3163,14 +3168,25 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors) {
         tint = parseRGB(currentColors.graticule);
     }
 
-    window.addEventListener('resize', function() {
+    function onWindowResize() {
         resizeCanvas();
         // While playing, the RAF loop repaints; while paused it's idle, so repaint
         // once here to keep the trace centered after a breakpoint change.
         if (!oscAnimId) render();
-    });
+    }
+    window.addEventListener('resize', onWindowResize);
 
-    return { start, stop, updateColors, resizeCanvas };
+    // Full unbind for hosts that rebuild the scope on the same canvas (the mini
+    // player re-attaches per song) — without this, click/audio listeners stack.
+    function destroy() {
+        stop();
+        canvas.removeEventListener('click', onCanvasClick);
+        audioEl.removeEventListener('seeked', renderIfIdle);
+        audioEl.removeEventListener('timeupdate', renderIfIdle);
+        window.removeEventListener('resize', onWindowResize);
+    }
+
+    return { start, stop, updateColors, resizeCanvas, destroy };
 }
 
 function createMiniPlayer() {
@@ -3200,7 +3216,7 @@ function createMiniPlayer() {
 
     function teardown(stopAudio) {
         if (!current) return;
-        if (current.oscilloscope) current.oscilloscope.stop();
+        if (current.oscilloscope) current.oscilloscope.destroy();
         if (stopAudio && current.audio) current.audio.pause();
         detachListeners();
         root.classList.remove('active');
@@ -3251,7 +3267,7 @@ function createMiniPlayer() {
         const oscilloscope = oscCanvas && getAnalyser
             ? createModalOscilloscope(oscCanvas, audio, getAnalyser, oscColors || {
                 trace: '#00f7c2', glow: 'rgba(0,247,194,0.9)', graticule: 'rgba(0,247,194,1)'
-            })
+            }, { clickToToggle: false }) // the frame is the expand button; a toggle here would pause mid-expand
             : null;
 
         const listeners = [];

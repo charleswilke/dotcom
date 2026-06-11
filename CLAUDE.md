@@ -69,6 +69,8 @@ Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a3
 
 **SpaceToots** (`games/SpaceToots/`): Single-file Canvas game (all code inline in `index.html`). Read `SPACE_TOOTS_SPEC.md` for the full design doc before modifying.
 
+**Toots Quest** (`games/TootsQuest/`): Top-down Zelda-style adventure, in development (M0 renderer proof complete). Canvas 2D, ES modules, **zero image assets** — everything procedurally drawn ("Living Ink" style). Read `TOOTS_QUEST_PRD.md` (design) and `SESSION_HANDOFF.md` (current state, gotchas, debug handle) before making changes. Must be served over HTTP — ES modules fail silently on file://. Not yet routed in vercel.json or linked from the portfolio.
+
 ### API
 `/api/substack-feed.js` — Vercel serverless function that fetches the Substack RSS feed and returns JSON. Response is cached; `cache_substack_feed.json` holds a local copy.
 
@@ -76,6 +78,7 @@ Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a3
 - **Time Dial audio system:** `AUDIO_RECAP_GUIDE.md`
 - **TootsJam game:** `games/TootsJam/SESSION_HANDOFF.md`, `REGRESSION_CHECKLIST.md`
 - **SpaceToots:** `games/SpaceToots/SPACE_TOOTS_SPEC.md`
+- **Toots Quest:** `games/TootsQuest/TOOTS_QUEST_PRD.md`, `games/TootsQuest/SESSION_HANDOFF.md`
 - **Adding GWOR songs:** `adding-a-gwor-song.md`
 - **RSS caching:** `RSS_OPTIMIZATION_README.md`
 - **SEO & performance:** `SEO_PERFORMANCE_PLAYBOOK.md` — checklist for WebP conversion, sitemap, structured data, robots.txt

@@ -1,0 +1,95 @@
+// Living Ink — shared drawing primitives and utilities.
+// Everything in Toots Quest is drawn by code. No image assets, ever.
+
+export const TAU = Math.PI * 2;
+
+export const PALETTE = {
+  ink: '#221a56',
+  cream: '#f8e9d2',
+  orange: '#f76e11',
+  hotOrange: '#ff5a36',
+  neon: '#00f7c2',
+  slate: '#2c4f7c',
+  grass: '#a9ba64',
+  grassDark: '#8d9e4e',
+  grassLight: '#c2cf7e',
+  path: '#e7c98f',
+  pathDark: '#d2b070',
+  water: '#3f6ea5',
+  waterDeep: '#2c4f7c',
+  rock: '#a89a8a',
+  rockDark: '#8d7f70',
+  trunk: '#8a5a3a',
+  canopy: '#6e9c4f',
+  canopyLight: '#8ab864',
+  dogBody: '#c98a4b',
+  dogChest: '#f3e2c0',
+  skin: '#f2c89b',
+  rust: '#b06a3a',
+  rustDark: '#8c5128',
+};
+
+// Deterministic PRNG — seeded detail never flickers between frames.
+export function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function lerp(a, b, t) { return a + (b - a) * t; }
+export function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+export function dist(ax, ay, bx, by) { return Math.hypot(bx - ax, by - ay); }
+export function easeOutCubic(t) { const u = 1 - t; return 1 - u * u * u; }
+
+// Smallest signed angle from a to b.
+export function angleDiff(a, b) {
+  let d = (b - a) % TAU;
+  if (d > Math.PI) d -= TAU;
+  if (d < -Math.PI) d += TAU;
+  return d;
+}
+
+// A rounded thick line — the basic limb/body unit of every character.
+export function capsule(ctx, x1, y1, x2, y2, w, fill, inkColor, inkW = 2.2) {
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  if (inkColor) {
+    ctx.strokeStyle = inkColor;
+    ctx.lineWidth = w + inkW * 2;
+    ctx.stroke();
+  }
+  ctx.strokeStyle = fill;
+  ctx.lineWidth = w;
+  ctx.stroke();
+}
+
+export function inkCircle(ctx, x, y, r, fill, inkColor, inkW = 2.2) {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, TAU);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  if (inkColor) {
+    ctx.strokeStyle = inkColor;
+    ctx.lineWidth = inkW;
+    ctx.stroke();
+  }
+}
+
+export function inkEllipse(ctx, x, y, rx, ry, rot, fill, inkColor, inkW = 2) {
+  ctx.beginPath();
+  ctx.ellipse(x, y, rx, ry, rot, 0, TAU);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  if (inkColor) {
+    ctx.strokeStyle = inkColor;
+    ctx.lineWidth = inkW;
+    ctx.stroke();
+  }
+}

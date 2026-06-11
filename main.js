@@ -4126,7 +4126,7 @@ function initGWORLightbox() {
     const visualizerCanvas = document.getElementById('gworVisualizer');
     const oscilloscopeTitle = document.getElementById('gworOscilloscopeTitle');
     const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
-    if (!lightbox || !tile || !audio || !trackList) return;
+    if (!lightbox || !audio || !trackList) return;
 
     if (playPauseIcon) {
         playPauseIcon.textContent = PLAY_ICON;
@@ -4274,10 +4274,12 @@ function initGWORLightbox() {
 
     populatePlaylist();
 
-    tile.addEventListener('click', (e) => {
-        e.preventDefault();
-        openGWOR();
-    });
+    if (tile) {
+        tile.addEventListener('click', (e) => {
+            e.preventDefault();
+            openGWOR();
+        });
+    }
 
     if (closeBtn) {
         closeBtn.addEventListener('click', closeGWOR);

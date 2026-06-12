@@ -4737,6 +4737,21 @@ function initDeferredHomepageMedia() {
         instance.open();
     });
 
+    // Original Albums CD-rack cards: open the player in place instead of
+    // navigating to the standalone page and reloading at the top. The href
+    // stays as a fallback for no-JS, SEO, and direct/shared links.
+    bindLazyMediaTrigger(document.querySelector('.album-case-mixtape'), ensureMixtapeLightbox, (instance) => {
+        instance.open(false);
+    });
+
+    bindLazyMediaTrigger(document.querySelector('.album-case-gwor'), ensureGWORLightbox, (instance) => {
+        instance.open();
+    });
+
+    bindLazyMediaTrigger(document.querySelector('.album-case-jc'), ensureJCLightbox, (instance) => {
+        instance.open();
+    });
+
     if (initialRoute && initialRoute.player === 'mixtape') {
         ensureMixtapeLightbox();
     }

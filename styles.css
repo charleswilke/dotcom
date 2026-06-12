@@ -6874,6 +6874,14 @@ html {
     text-decoration: none;
 }
 
+/* Lift the hovered card's whole stacking context above its neighbours so the
+   disc that pops out to the right rides on top of the adjacent case rather
+   than slipping behind it. */
+.album-case:hover,
+.album-case:focus-visible {
+    z-index: 5;
+}
+
 /* The jewel case proper — a glossy plastic case sized by its contents
    (hinge spine + a true-square cover insert). */
 .jewel-case {

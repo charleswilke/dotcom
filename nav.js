@@ -12,25 +12,8 @@
         '        <a href="/" class="nav-logo" id="navLogo" aria-label="Home">Charles Wilke</a>\n' +
         '        <div class="nav-links" id="navLinks">\n' +
         '            <a href="' + p + '#writing" class="nav-link"' + ds('writing') + '>Writing</a>\n' +
-        '            <div class="nav-explore-wrap">\n' +
-        '                <button class="nav-explore-btn nav-link-btn" id="navGamesBtn" aria-haspopup="true" aria-expanded="false">\n' +
-        '                    Games <span class="nav-explore-arrow">&#9662;</span>\n' +
-        '                </button>\n' +
-        '                <div class="nav-dropdown" id="navGamesDropdown" role="menu">\n' +
-        '                    <a href="/tootsjam/" class="nav-dropdown-item" role="menuitem">TootsJam <span class="nav-tag">arcade</span></a>\n' +
-        '                    <a href="/spacetoots/" class="nav-dropdown-item" role="menuitem">SpaceToots <span class="nav-tag">shooter</span></a>\n' +
-        '                </div>\n' +
-        '            </div>\n' +
-        '            <div class="nav-explore-wrap">\n' +
-        '                <button class="nav-explore-btn nav-link-btn" id="navMusicBtn" aria-haspopup="true" aria-expanded="false">\n' +
-        '                    Music <span class="nav-explore-arrow">&#9662;</span>\n' +
-        '                </button>\n' +
-        '                <div class="nav-dropdown" id="navMusicDropdown" role="menu">\n' +
-        '                    <a href="/mixtape.html" class="nav-dropdown-item nav-dropdown-item--wrap" role="menuitem">Exploring<br>L.ai.bor <span class="nav-tag">mixtape</span></a>\n' +
-        '                    <a href="/gwor.html" class="nav-dropdown-item nav-dropdown-item--wrap" role="menuitem">Grief without<br>Ritual <span class="nav-tag">album</span></a>\n' +
-        '                    <a href="#" class="nav-dropdown-item" role="menuitem">Junkyard Cabaret <span class="nav-tag">album</span></a>\n' +
-        '                </div>\n' +
-        '            </div>\n' +
+        '            <a href="' + p + '#game-cartridges" class="nav-link"' + ds('game-cartridges') + '>Games</a>\n' +
+        '            <a href="' + p + '#albums" class="nav-link"' + ds('albums') + '>Music</a>\n' +
         '            <div class="nav-explore-wrap">\n' +
         '                <button class="nav-explore-btn" id="navExploreBtn" aria-haspopup="true" aria-expanded="false">\n' +
         '                    Explore <span class="nav-explore-arrow">&#9662;</span>\n' +

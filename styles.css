@@ -6945,8 +6945,10 @@ html {
     z-index: 0;
     transform: translate(0, -50%) scale(0.94);
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-    /* Metallic platter: center hub + hole over a smooth silver surface. Kept dark
-       toward the rim so the rainbow sheen reads vividly under the screen blend. */
+    /* Metallic platter: dark center hub + hole and clamping ring over a smooth
+       silver surface. The disc slides far enough on hover that a hint of the hub
+       peeks out from behind the cover. Kept dark toward the rim so the rainbow
+       sheen reads vividly under the screen blend. */
     background:
         radial-gradient(circle at 50% 50%, #15151c 0 7.5%, transparent 7.7% 14%),
         radial-gradient(circle at 50% 50%, #d6d9e2 0 14.5%, #9498a3 15% 16.5%, transparent 16.7%),
@@ -7182,7 +7184,7 @@ html {
 /* ---- Hover / focus: disc peeks out + sheen shifts ---- */
 .album-case:hover .jewel-disc,
 .album-case:focus-visible .jewel-disc {
-    transform: translate(34%, -50%) scale(1) rotate(8deg);
+    transform: translate(48%, -50%) scale(1) rotate(8deg);
 }
 
 .album-case:hover .jewel-disc::before,

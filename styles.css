@@ -6926,14 +6926,11 @@ html {
     z-index: 0;
     transform: translate(0, -50%) scale(0.94);
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-    /* Metallic platter: data-track rings + center hub + hole. Kept dark toward
-       the rim so the rainbow sheen reads vividly under the screen blend. */
+    /* Metallic platter: center hub + hole over a smooth silver surface. Kept dark
+       toward the rim so the rainbow sheen reads vividly under the screen blend. */
     background:
         radial-gradient(circle at 50% 50%, #15151c 0 7.5%, transparent 7.7% 14%),
         radial-gradient(circle at 50% 50%, #d6d9e2 0 14.5%, #9498a3 15% 16.5%, transparent 16.7%),
-        repeating-radial-gradient(circle at 50% 50%,
-            rgba(255, 255, 255, 0.06) 0 1px,
-            rgba(0, 0, 0, 0.08) 1px 2.4px),
         radial-gradient(circle at 50% 50%, #eef0f5 16%, #c2c6d0 50%, #9398a4 78%, #747986 100%);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
@@ -6944,12 +6941,9 @@ html {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    /* Tight, fully-saturated spectral bands repeating around the platter, plus
-       a faint concentric refraction so light breaks both radially and angularly. */
+    /* Tight, fully-saturated spectral bands repeating around the platter so light
+       breaks angularly across the surface. */
     background:
-        repeating-radial-gradient(circle at 50% 50%,
-            rgba(255, 255, 255, 0.18) 0 1.5px,
-            transparent 1.5px 7px),
         repeating-conic-gradient(from 0deg,
             #ff0040 0deg,
             #ff8a00 7deg,

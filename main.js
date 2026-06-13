@@ -4389,7 +4389,8 @@ function initJCLightbox() {
         { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
         { title: 'How Dare It Rise', file: 'audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: 'audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
         { title: 'Everything Must Go', act: 'Act II', file: 'audio/junkyard-cabaret/everything-must-go.mp3', cover: 'audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
-        { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' }
+        { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
+        { title: 'Fits and Starts', file: 'audio/junkyard-cabaret/fits-and-starts.mp3', cover: 'audio/junkyard-cabaret/fits-and-starts-title.webp', article: 'https://charleswilke.substack.com/p/fits-and-starts' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

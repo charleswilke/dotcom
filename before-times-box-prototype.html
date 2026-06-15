@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Before Times — Box Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Space+Mono:wght@400;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --kraft:#c2a06b; --kraft-dark:#9c7c4a; --kraft-light:#d8bd8a;
+  --manila:#e7d49f; --manila-edge:#cdb677; --manila-tab:#ecd9a4;
+  --paper:#f6f1e4; --ink:#2b2620; --sharpie:#1c1b1a;
+  --desk:#3b342b; --desk2:#473d31;
+  --shadow:rgba(40,30,15,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Space Mono',monospace;
+  background:
+    radial-gradient(120% 90% at 50% 0%, var(--desk2), var(--desk) 70%);
+  color:var(--paper);
+  min-height:100vh; overflow:hidden;
+}
+.wood{
+  position:fixed; inset:0; pointer-events:none; opacity:.5;
+  background:repeating-linear-gradient(92deg, rgba(0,0,0,.10) 0 2px, transparent 2px 26px);
+  mix-blend-mode:multiply;
+}
+.stage{position:relative; width:100vw; height:100vh; display:grid; place-items:center; perspective:1400px}
+
+/* ---------- HUD ---------- */
+.hud{position:fixed; top:18px; left:0; right:0; display:flex; justify-content:center; gap:10px; z-index:60; pointer-events:none}
+.crumb{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(246,241,228,.55)}
+.back-btn{
+  position:fixed; top:16px; left:18px; z-index:60;
+  font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.05em;
+  background:rgba(0,0,0,.25); color:var(--paper); border:1px solid rgba(246,241,228,.25);
+  padding:8px 14px; border-radius:6px; cursor:pointer; opacity:0; pointer-events:none;
+  transition:opacity .35s, background .2s;
+}
+.back-btn:hover{background:rgba(0,0,0,.5)}
+.stage:not([data-state="closed"]) .back-btn{opacity:1; pointer-events:auto}
+
+/* ============ BOX ============ */
+.box-scene{
+  position:relative; width:560px; height:430px;
+  transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.2,.8,.2,1), opacity .6s, filter .6s;
+  cursor:pointer;
+}
+.stage[data-state="folder"] .box-scene,
+.stage[data-state="spill"] .box-scene,
+.stage[data-state="inspect"] .box-scene{
+  transform:translateY(70px) scale(.62); opacity:.34; filter:blur(3px) brightness(.7); cursor:default;
+}
+
+/* box top rim (we look slightly down into it) */
+.box-rim{
+  position:absolute; left:36px; right:36px; top:96px; height:120px;
+  background:linear-gradient(180deg,#2a2118,#19130c);
+  border-radius:10px 10px 6px 6px;
+  transform:perspective(700px) rotateX(52deg);
+  transform-origin:bottom; box-shadow:inset 0 8px 22px rgba(0,0,0,.8);
+}
+.box-rim::after{ /* inner cardboard wall */
+  content:""; position:absolute; inset:6px 6px auto 6px; height:34px;
+  background:linear-gradient(180deg,var(--kraft-dark),#5e4a2c);
+}
+
+/* folders living inside the box (browse state) */
+.box-folders{
+  position:absolute; left:0; right:0; top:24px; height:200px;
+  display:flex; align-items:flex-end; justify-content:center;
+  pointer-events:none; opacity:0; transition:opacity .5s .15s;
+}
+.stage[data-state="browsing"] .box-folders{opacity:1; pointer-events:auto}
+.tab{
+  position:relative; width:118px; height:150px; margin:0 -20px;
+  background:linear-gradient(180deg,var(--manila-tab),var(--manila));
+  border:1px solid var(--manila-edge); border-bottom:none;
+  border-radius:12px 12px 0 0;
+  transform-origin:bottom center;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), filter .35s, margin .35s;
+  cursor:pointer; box-shadow:0 -3px 10px rgba(0,0,0,.25);
+  filter:brightness(.8);
+}
+.tab .tab-top{
+  position:absolute; top:-16px; left:20px; width:66px; height:20px;
+  background:var(--manila-tab); border:1px solid var(--manila-edge); border-bottom:none;
+  border-radius:7px 7px 0 0;
+}
+.tab .tab-label{
+  position:absolute; top:18px; left:0; right:0; text-align:center;
+  font-family:'Special Elite',monospace; font-size:11px; color:#5a4a28; line-height:1.3; padding:0 8px;
+}
+.tab .tab-years{font-family:'Space Mono'; font-size:9px; color:#8a7340; display:block; margin-top:4px}
+.tab.is-active{transform:translateY(-58px) scale(1.06); filter:brightness(1.08); z-index:5; box-shadow:0 14px 30px rgba(0,0,0,.4)}
+.tab:hover{filter:brightness(1)}
+
+/* box front face */
+.box-front{
+  position:absolute; left:30px; right:30px; bottom:8px; height:250px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.025) 0 3px, transparent 3px 7px),
+    linear-gradient(180deg,var(--kraft-light),var(--kraft) 30%,var(--kraft-dark));
+  border-radius:8px 8px 12px 12px;
+  box-shadow:0 26px 50px var(--shadow), inset 0 2px 0 rgba(255,255,255,.18), inset 0 -10px 26px rgba(0,0,0,.22);
+  z-index:10;
+}
+.box-front::before{ /* corrugated bottom lip */
+  content:""; position:absolute; left:0; right:0; bottom:0; height:18px;
+  background:repeating-linear-gradient(90deg,var(--kraft-dark) 0 4px,#8a6c3e 4px 8px);
+  border-radius:0 0 12px 12px; opacity:.55;
+}
+.handhole{
+  position:absolute; left:50%; top:30px; transform:translateX(-50%);
+  width:120px; height:34px; border-radius:50%;
+  background:radial-gradient(120% 140% at 50% 30%, #16110a, #2a2014);
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.9), 0 1px 0 rgba(255,255,255,.15);
+}
+.label{
+  position:absolute; left:50%; bottom:34px; transform:translateX(-50%) rotate(-1.6deg);
+  width:300px; text-align:center;
+}
+.label .sharpie{font-family:'Caveat',cursive; font-weight:700; font-size:40px; color:var(--sharpie); line-height:.9; letter-spacing:.5px}
+.label .sub{font-family:'Caveat',cursive; font-weight:500; font-size:22px; color:#33291c; margin-top:2px}
+.label .warn{font-family:'Caveat',cursive; font-size:18px; color:#7a2418; transform:rotate(.8deg); display:inline-block; margin-top:4px; border:2px solid #7a2418; border-radius:4px; padding:0 8px}
+.coffee{
+  position:absolute; right:54px; top:118px; width:78px; height:78px; border-radius:50%;
+  border:7px solid rgba(86,52,20,.28); box-shadow:inset 0 0 0 3px rgba(86,52,20,.14);
+  transform:rotate(8deg); z-index:11;
+}
+.tape{
+  position:absolute; left:50%; top:80px; transform:translateX(-50%);
+  width:90px; height:180px;
+  background:linear-gradient(100deg, rgba(225,210,170,.42), rgba(240,228,196,.30) 45%, rgba(210,194,150,.42));
+  border-left:1px solid rgba(255,255,255,.25); border-right:1px solid rgba(120,100,60,.3);
+  z-index:12;
+}
+
+/* box lid */
+.box-lid{
+  position:absolute; left:18px; right:18px; top:60px; height:120px;
+  background:linear-gradient(180deg,var(--kraft-light),var(--kraft-dark));
+  border-radius:10px 10px 6px 6px; z-index:30;
+  box-shadow:0 18px 30px rgba(0,0,0,.4), inset 0 2px 0 rgba(255,255,255,.2);
+  transition:transform 1s cubic-bezier(.5,0,.1,1), opacity .8s;
+  transform-origin:top center;
+}
+.box-lid::after{content:""; position:absolute; left:0; right:0; bottom:-12px; height:14px; background:var(--kraft-dark); border-radius:0 0 8px 8px}
+.stage:not([data-state="closed"]) .box-lid{
+  transform:translateY(-280px) rotateX(46deg) scale(.92); opacity:0;
+}
+.lift-hint{
+  position:absolute; left:0; right:0; bottom:-44px; text-align:center;
+  font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:rgba(246,241,228,.5);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+.stage:not([data-state="closed"]) .lift-hint{opacity:0; transition:opacity .3s}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.75}}
+
+/* ============ PULLED FOLDER + SPILL ============ */
+.folder-stage{
+  position:absolute; inset:0; display:grid; place-items:center;
+  opacity:0; pointer-events:none; transition:opacity .5s; z-index:40;
+}
+.stage[data-state="folder"] .folder-stage,
+.stage[data-state="spill"] .folder-stage,
+.stage[data-state="inspect"] .folder-stage{opacity:1; pointer-events:auto}
+
+.folder{
+  position:relative; width:520px; height:360px;
+  transform-style:preserve-3d;
+  animation:pullUp .7s cubic-bezier(.2,.85,.25,1);
+}
+@keyframes pullUp{from{transform:translateY(160px) scale(.7); opacity:0}to{transform:none; opacity:1}}
+
+.folder-back{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,var(--manila),var(--manila-edge));
+  border-radius:6px 14px 10px 10px;
+  box-shadow:0 30px 60px rgba(0,0,0,.5);
+}
+.folder-back .ftab{
+  position:absolute; top:-22px; left:40px; width:160px; height:26px;
+  background:var(--manila-tab); border-radius:8px 8px 0 0;
+  font-family:'Special Elite'; font-size:12px; color:#5a4a28; text-align:center; line-height:26px;
+  box-shadow:0 -2px 6px rgba(0,0,0,.2);
+}
+.folder-back .stamp{
+  position:absolute; right:28px; top:30px; transform:rotate(-12deg);
+  font-family:'Special Elite'; font-size:15px; color:#8a2c1e; border:3px double #8a2c1e;
+  padding:4px 12px; border-radius:4px; opacity:.78; letter-spacing:.05em;
+}
+.paperclip{position:absolute; top:-10px; right:90px; width:22px; height:54px; border:3px solid #b9bcc4; border-radius:11px; box-shadow:0 1px 2px rgba(0,0,0,.4); z-index:6}
+
+/* docs container */
+.docs{position:absolute; inset:0; pointer-events:none}
+.doc{
+  position:absolute; left:50%; top:50%;
+  width:200px; min-height:130px;
+  transform:translate(-50%,-50%) rotate(0deg);
+  transition:transform .6s cubic-bezier(.2,.8,.2,1), box-shadow .25s;
+  cursor:pointer; pointer-events:auto;
+  background:var(--paper); border-radius:3px;
+  box-shadow:0 6px 16px rgba(0,0,0,.4);
+  padding:14px;
+}
+.doc:hover{box-shadow:0 14px 30px rgba(0,0,0,.55); filter:brightness(1.04); z-index:30!important}
+.doc .doc-kind{font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:#a8895a; margin-bottom:6px}
+.doc .doc-title{font-family:'Courier Prime',monospace; font-weight:700; font-size:14px; color:var(--ink); line-height:1.2}
+.doc .doc-lines{margin-top:10px}
+.doc .doc-lines i{display:block; height:5px; background:#d9cfb6; border-radius:2px; margin:5px 0}
+.doc .doc-lines i:nth-child(2){width:88%}
+.doc .doc-lines i:nth-child(3){width:74%}
+.doc .doc-lines i:nth-child(4){width:92%}
+.doc .doc-tag{
+  margin-top:10px; font-family:'Space Mono'; font-size:8.5px; color:#9a7c4c;
+  border-top:1px dashed #cdbb8e; padding-top:6px;
+}
+/* doc variants */
+.doc.t-disc{width:150px; min-height:150px; border-radius:50%; display:grid; place-items:center; text-align:center;
+  background:repeating-conic-gradient(from 0deg,#d7d9de 0deg 6deg,#c6c8cf 6deg 12deg);}
+.doc.t-disc .inner{width:124px;height:124px;border-radius:50%;background:repeating-radial-gradient(circle,#cfd2d8 0 2px,#c2c5cc 2px 4px);display:grid;place-items:center;position:relative}
+.doc.t-disc .hub{position:absolute;width:34px;height:34px;border-radius:50%;background:var(--desk);box-shadow:inset 0 0 0 6px #b7b9c0}
+.doc.t-disc .doc-title{font-family:'Caveat';font-weight:700;font-size:17px;color:#222;transform:rotate(-8deg);z-index:2;max-width:110px}
+.doc.t-disc .doc-kind,.doc.t-disc .doc-tag{display:none}
+.doc.t-photo{width:180px; background:#fff; padding:12px 12px 34px; transform-origin:center}
+.doc.t-photo .shot{height:120px; background:linear-gradient(135deg,#6d7f8c,#9fae9a); border-radius:1px}
+.doc.t-photo .doc-title{font-family:'Caveat';font-weight:700;font-size:18px;text-align:center;margin-top:8px;color:#333}
+.doc.t-photo .doc-kind,.doc.t-photo .doc-lines{display:none}
+.doc.t-photo .doc-tag{text-align:center;border:none;margin-top:2px}
+
+/* when closed (folder state) docs are stacked & hidden behind cover */
+.stage[data-state="folder"] .doc{transform:translate(-50%,-46%) rotate(0deg)!important; opacity:0}
+
+/* folder cover (front flap) */
+.folder-cover{
+  position:absolute; inset:0; z-index:20; transform-origin:bottom center;
+  background:linear-gradient(180deg,var(--manila-tab),var(--manila) 60%,var(--manila-edge));
+  border-radius:6px 14px 10px 10px;
+  box-shadow:0 -4px 16px rgba(0,0,0,.25) inset, 0 10px 24px rgba(0,0,0,.3);
+  transition:transform .7s cubic-bezier(.4,0,.2,1);
+  display:grid; place-items:center;
+}
+.folder-cover .cover-note{font-family:'Special Elite'; color:#7a6438; font-size:13px; letter-spacing:.05em; opacity:.7}
+.stage[data-state="spill"] .folder-cover,
+.stage[data-state="inspect"] .folder-cover{transform:rotateX(-118deg) translateY(40px)}
+
+.open-hint{
+  position:absolute; bottom:-40px; left:0; right:0; text-align:center;
+  font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:rgba(246,241,228,.55);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+.stage[data-state="spill"] .open-hint,.stage[data-state="inspect"] .open-hint{opacity:0;transition:.3s}
+
+/* ============ INSPECTOR ============ */
+.inspector{
+  position:absolute; inset:0; z-index:80; display:grid; place-items:center;
+  background:rgba(20,14,6,.72); opacity:0; pointer-events:none; transition:opacity .35s;
+}
+.stage[data-state="inspect"] .inspector{opacity:1; pointer-events:auto}
+.sheet{
+  width:min(560px,86vw); max-height:80vh; overflow:auto; background:var(--paper); color:var(--ink);
+  border-radius:5px; padding:34px 38px; box-shadow:0 30px 80px rgba(0,0,0,.6);
+  font-family:'Courier Prime',monospace; transform:scale(.9); transition:transform .35s;
+}
+.stage[data-state="inspect"] .sheet{transform:scale(1)}
+.sheet h3{font-size:20px; margin-bottom:4px}
+.sheet .meta{font-family:'Space Mono'; font-size:11px; color:#9a7c4c; letter-spacing:.1em; text-transform:uppercase; margin-bottom:18px}
+.sheet p{font-size:14px; line-height:1.7; margin-bottom:12px}
+.sheet .prov{margin-top:22px; border-top:1px dashed #cdbb8e; padding-top:14px; font-family:'Special Elite'; color:#8a2c1e; font-size:13px; transform:rotate(-1deg)}
+.sheet .close{position:absolute}
+.x{position:absolute; top:24px; right:30px; z-index:90; font-size:24px; color:var(--paper); cursor:pointer; opacity:0; pointer-events:none}
+.stage[data-state="inspect"] .x{opacity:.8; pointer-events:auto}
+
+@media(prefers-reduced-motion:reduce){*{transition-duration:.001s!important;animation-duration:.001s!important}}
+</style>
+</head>
+<body>
+<div class="wood"></div>
+<div class="stage" data-state="closed" id="stage">
+
+  <div class="hud"><span class="crumb" id="crumb">A box from before the prompt box</span></div>
+  <button class="back-btn" id="back">← back to the box</button>
+
+  <!-- BOX -->
+  <div class="box-scene" id="boxScene">
+    <div class="box-rim"></div>
+    <div class="box-folders" id="boxFolders"></div>
+    <div class="box-front">
+      <div class="handhole"></div>
+      <div class="tape"></div>
+      <div class="coffee"></div>
+      <div class="label">
+        <div class="sharpie">Before Times</div>
+        <div class="sub">2005 – 2021</div>
+        <div class="warn">do not shred</div>
+      </div>
+    </div>
+    <div class="box-lid"><div class="lift-hint">click to lift the lid</div></div>
+  </div>
+
+  <!-- PULLED FOLDER -->
+  <div class="folder-stage" id="folderStage"></div>
+
+  <!-- INSPECTOR -->
+  <div class="inspector" id="inspector"><div class="sheet" id="sheet"></div></div>
+  <div class="x" id="x">✕</div>
+
+</div>
+
+<script>
+const FOLDERS = [
+  { id:'insomniac', tab:'Insomniac Games', years:"'09–'13", stamp:'AAA',
+    cover:'Cinematic Scripter', docs:[
+    {type:'script', kind:'Cinematic script pages', title:'Ratchet & Clank Future:\nA Crack in Time', tag:'2009 · carbon-dated · no AI was harmed',
+      body:'INT. CLANK — THE GREAT CLOCK\n\nScripted cinematics + the narrative tooling that fed the animators. Spearheaded creative pipelines for AAA titles.', meta:'Insomniac Games · 2009'},
+    {type:'script', kind:'Narrative tool docs', title:'Resistance 3', tag:'2011 · best-practices binder',
+      body:'Drafted technical documentation on best practices and use cases for emerging narrative tool sets and engine, written for animators.', meta:'Insomniac Games · 2011'},
+    {type:'script', kind:'Printout', title:'Sunset Overdrive', tag:'2013 · the last one before LA wrapped',
+      body:'Creative pipelines and cinematic scripting for the studio’s irreverent open-world shooter.', meta:'Insomniac Games · 2013'},
+    {type:'disc', kind:'CD-R', title:'MOCAP\nDELIVERY', tag:'MotionBuilder → Maya',
+      body:'Cleaned motion-capture data in MotionBuilder, applied to character rigs in Maya, then handed to animators for final polish.', meta:'Burned to disc · ~2012'},
+  ]},
+  { id:'alchemy', tab:'Absurd Alchemy', years:"'13–'17", stamp:'35mm',
+    cover:'Writer / Producer', docs:[
+    {type:'photo', kind:'Still', title:'French Kitty', tag:'w/ Chloe Fineman · via Troma',
+      body:'Released a short film starring Chloe Fineman through Troma Entertainment. One of 25 end-to-end productions — web series and short films.', meta:'Short film · 2015'},
+    {type:'script', kind:'Producer binder', title:'25 Projects', tag:'web series + shorts · end-to-end',
+      body:'Managed end-to-end production of 25 projects: writing, producing, scheduling, and shipping web series and short films.', meta:'Absurd Alchemy · 2013–2017'},
+  ]},
+  { id:'copy', tab:'The Copy Mines', years:"'13–'22", stamp:'B2B',
+    cover:'Content Writer', docs:[
+    {type:'script', kind:'Printout ream', title:'Hundreds of pages', tag:'WordPress · Drupal · the grind',
+      body:'Produced hundreds of content pieces — blogs, landing pages, ad copy — across personal finance, mortgage, solar, and home automation.', meta:'D&D Marketing · 2013–2015'},
+    {type:'script', kind:'SEO ticket', title:'+240% organic traffic', tag:'2021 · before the robots wrote it for you',
+      body:'Boosted organic traffic 240% through strategic SEO content, finding the right voice and tone for each market served.', meta:'FieldEdge · 2021–2022'},
+  ]},
+  { id:'origin', tab:'Origin Story', years:"'05–'09", stamp:'NIU',
+    cover:'Where it started', docs:[
+    {type:'photo', kind:'Yearly retrospective', title:'Training videos', tag:'wrote · filmed · edited',
+      body:'Wrote, filmed, and edited a dozen internal training and yearly-retrospective videos; laid out print-ready business directories in InDesign.', meta:'American Marketing & Publishing · 2005–2007'},
+    {type:'script', kind:'Diploma', title:'B.A., Media Studies', tag:'Northern Illinois University',
+      body:'Bachelor of Arts in Communication Theory (Media Studies). The first messy operating system — make a thing, learn why it broke, make the next one stranger.', meta:'NIU'},
+    {type:'script', kind:'Class card', title:'Groundlings (Core)', tag:'2013–2015 · improv as muscle',
+      body:'Intermediate Core Track at the Groundlings Improv School — advanced public speaking and improvisation.', meta:'Groundlings'},
+  ]},
+];
+
+// deterministic scatter so the spill feels organic but stable
+const SCATTER=[
+  {x:-150,y:-40,r:-13},{x:140,y:-58,r:10},{x:-92,y:78,r:-6},
+  {x:120,y:74,r:14},{x:6,y:-12,r:-2},{x:-10,y:120,r:7},
+];
+
+const stage=document.getElementById('stage');
+const boxFolders=document.getElementById('boxFolders');
+const folderStage=document.getElementById('folderStage');
+const crumb=document.getElementById('crumb');
+let activeIdx=1;
+
+function setState(s){stage.dataset.state=s}
+
+// render folder tabs inside the box
+FOLDERS.forEach((f,i)=>{
+  const t=document.createElement('div');
+  t.className='tab'+(i===activeIdx?' is-active':'');
+  t.innerHTML=`<div class="tab-top"></div><div class="tab-label">${f.tab}<span class="tab-years">${f.years}</span></div>`;
+  t.onclick=(e)=>{e.stopPropagation();
+    if(i===activeIdx){pullFolder(i)} else {activeIdx=i; refreshTabs()}};
+  boxFolders.appendChild(t);
+});
+function refreshTabs(){[...boxFolders.children].forEach((t,i)=>t.classList.toggle('is-active',i===activeIdx))}
+
+// box click: closed -> browsing
+document.getElementById('boxScene').onclick=()=>{
+  if(stage.dataset.state==='closed'){setState('browsing'); crumb.textContent='Flip through the folders · click one to pull it'}
+};
+
+function pullFolder(i){
+  activeIdx=i; const f=FOLDERS[i];
+  crumb.textContent=`${f.tab}  ·  open the folder`;
+  folderStage.innerHTML=`
+    <div class="folder">
+      <div class="folder-back">
+        <div class="ftab">${f.tab}</div>
+        <div class="stamp">${f.stamp}</div>
+      </div>
+      <div class="paperclip"></div>
+      <div class="docs">${f.docs.map((d,n)=>docHTML(d,n)).join('')}</div>
+      <div class="folder-cover"><div class="cover-note">${f.cover}</div></div>
+      <div class="open-hint">click to open</div>
+    </div>`;
+  setState('folder');
+  const folderEl=folderStage.querySelector('.folder');
+  folderEl.querySelector('.folder-cover').onclick=(e)=>{e.stopPropagation(); spill(i)};
+  folderEl.querySelector('.open-hint').onclick=(e)=>{e.stopPropagation(); spill(i)};
+}
+
+function docHTML(d,n){
+  const s=SCATTER[n%SCATTER.length];
+  const transform=`--x:${s.x}px;--y:${s.y}px;--r:${s.r}deg`;
+  if(d.type==='disc') return `<div class="doc t-disc" data-n="${n}" style="${transform}"><div class="inner"><div class="hub"></div><div class="doc-title">${d.title.replace(/\n/g,'<br>')}</div></div></div>`;
+  if(d.type==='photo') return `<div class="doc t-photo" data-n="${n}" style="${transform}"><div class="shot"></div><div class="doc-title">${d.title}</div><div class="doc-tag">${d.tag}</div></div>`;
+  return `<div class="doc" data-n="${n}" style="${transform}"><div class="doc-kind">${d.kind}</div><div class="doc-title">${d.title.replace(/\n/g,'<br>')}</div><div class="doc-lines"><i></i><i></i><i></i><i></i></div><div class="doc-tag">${d.tag}</div></div>`;
+}
+
+function spill(i){
+  setState('spill');
+  crumb.textContent=`${FOLDERS[i].tab}  ·  pick up a document`;
+  const docs=folderStage.querySelectorAll('.doc');
+  docs.forEach(el=>{
+    const st=el.getAttribute('style');
+    const x=st.match(/--x:(-?\d+)px/)[1], y=st.match(/--y:(-?\d+)px/)[1], r=st.match(/--r:(-?\d+)deg/)[1];
+    requestAnimationFrame(()=>{el.style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${r}deg)`; el.style.opacity='1'; el.style.zIndex=10+ +el.dataset.n;});
+    el.onclick=()=>inspect(i, +el.dataset.n);
+  });
+}
+
+function inspect(i,n){
+  const d=FOLDERS[i].docs[n];
+  document.getElementById('sheet').innerHTML=`
+    <h3>${d.title.replace(/\n/g,' ')}</h3>
+    <div class="meta">${d.kind} · ${d.meta}</div>
+    <p>${d.body.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</p>
+    <div class="prov">Provenance — ${d.tag}</div>`;
+  setState('inspect');
+}
+document.getElementById('x').onclick=()=>setState('spill');
+document.getElementById('inspector').onclick=(e)=>{if(e.target.id==='inspector')setState('spill')};
+
+document.getElementById('back').onclick=()=>{
+  const s=stage.dataset.state;
+  if(s==='inspect'){setState('spill')}
+  else if(s==='spill'||s==='folder'){setState('browsing'); crumb.textContent='Flip through the folders · click one to pull it'}
+  else {setState('closed'); crumb.textContent='A box from before the prompt box'}
+};
+</script>
+</body>
+</html>

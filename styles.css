@@ -6983,17 +6983,18 @@ html {
     inset: 0;
     border-radius: 50%;
     /* Tight, fully-saturated spectral bands repeating around the platter so light
-       breaks angularly across the surface. */
+       breaks angularly across the surface. The 45° period divides evenly into 360°
+       (8 repeats), so the pattern tiles seamlessly — no hard discontinuity line. */
     background:
         repeating-conic-gradient(from 0deg,
             #ff0040 0deg,
-            #ff8a00 7deg,
-            #ffe600 14deg,
-            #2bff6a 21deg,
-            #00e0ff 28deg,
-            #3a5bff 35deg,
-            #c000ff 42deg,
-            #ff0040 50deg);
+            #ff8a00 6.3deg,
+            #ffe600 12.6deg,
+            #2bff6a 18.9deg,
+            #00e0ff 25.2deg,
+            #3a5bff 31.5deg,
+            #c000ff 37.8deg,
+            #ff0040 45deg);
     mix-blend-mode: overlay;
     opacity: 0.4;
     -webkit-mask: radial-gradient(circle at 50% 50%, transparent 14%, #000 16% 99%, transparent 100%);

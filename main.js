@@ -1363,7 +1363,9 @@ function displayItems(count) {
         const title = item.title;
         const link = item.content ? getArticleSharePath(item) : item.link;
         const pubDate = new Date(item.pubDate);
-        
+        // Spelled-out date for the printed caption block, e.g. "August 23, 2025".
+        const stampDate = pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
         const feedItem = document.createElement('a');
         feedItem.className = 'feed-item';
         feedItem.href = link;
@@ -1371,9 +1373,13 @@ function displayItems(count) {
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
             <img src="${item.displayImage || FALLBACK_SVG}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml;base64,${FALLBACK_SVG_B64}'">
-            <h3>${title}</h3>
-            <p>${item.shortDescription || ''}</p>
-            <div class="date">${pubDate.toLocaleDateString()}</div>
+            <div class="feed-item-body">
+                <h3>${title}</h3>
+                <p>${item.shortDescription || ''}</p>
+                <div class="feed-item-meta">
+                    <span class="date">${stampDate}</span>
+                </div>
+            </div>
         `;
         feedItem.addEventListener('click', (e) => {
             if (item.content && openArticleReader(item)) {

@@ -1363,7 +1363,9 @@ function displayItems(count) {
         const title = item.title;
         const link = item.content ? getArticleSharePath(item) : item.link;
         const pubDate = new Date(item.pubDate);
-        
+        // Spelled-out date for the printed caption block, e.g. "August 23, 2025".
+        const stampDate = pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
         const feedItem = document.createElement('a');
         feedItem.className = 'feed-item';
         feedItem.href = link;
@@ -1371,9 +1373,13 @@ function displayItems(count) {
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
             <img src="${item.displayImage || FALLBACK_SVG}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml;base64,${FALLBACK_SVG_B64}'">
-            <h3>${title}</h3>
-            <p>${item.shortDescription || ''}</p>
-            <div class="date">${pubDate.toLocaleDateString()}</div>
+            <div class="feed-item-body">
+                <h3>${title}</h3>
+                <p>${item.shortDescription || ''}</p>
+                <div class="feed-item-meta">
+                    <span class="date">${stampDate}</span>
+                </div>
+            </div>
         `;
         feedItem.addEventListener('click', (e) => {
             if (item.content && openArticleReader(item)) {
@@ -4388,7 +4394,7 @@ function initJCLightbox() {
         { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
         { title: 'How Dare It Rise', file: 'audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: 'audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
         { title: 'Everything Must Go', act: 'Act II', file: 'audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: 'audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
-        { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606161037', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
+        { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606190959', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
         { title: 'Fits and Starts', file: 'audio/junkyard-cabaret/fits-and-starts.mp3?v=202606141646', cover: 'audio/junkyard-cabaret/fits-and-starts-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/fits-and-starts' }
     ];

@@ -3428,6 +3428,7 @@ html {
     flex-grow: 1;
     padding: 1.35rem 1.4rem 1.15rem;
     background: var(--primary);
+    border-top: 2px solid var(--light); /* printed rule on the image/navy seam */
     border-radius: 0 0 4px 4px; /* nests flush under the image above */
     overflow: hidden;
 }

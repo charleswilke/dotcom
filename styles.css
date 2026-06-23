@@ -12484,7 +12484,7 @@ body {
 .article-reader-scroll-area {
     overflow-y: auto;
     overscroll-behavior: contain;
-    max-height: calc(100vh - 156px);
+    max-height: calc(100vh - 60px);
     scrollbar-width: none;
 }
 .article-reader-scroll-area::-webkit-scrollbar {
@@ -12589,7 +12589,8 @@ body.reader-open {
 
 .article-reader-shell {
     max-width: 880px;
-    margin: 48px auto;
+    margin: 0 auto;
+    min-height: 100vh;
     background: var(--fiche-paper);
     color: var(--fiche-ink);
     border-radius: 4px;

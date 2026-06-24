@@ -57,6 +57,19 @@
       opacity: 0; pointer-events: none; transition: opacity .15s ease; }
     #blackout.on { opacity: 1; }
 
+    /* Back-to-home X — only after the presentation starts and out of fullscreen */
+    #exitHome {
+      position: fixed; top: 14px; right: 16px; z-index: 25; display: none;
+      width: 36px; height: 36px; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,.22); border-radius: 999px;
+      background: rgba(0,0,0,.4); color: rgba(255,255,255,.72);
+      font-size: 22px; line-height: 1; cursor: pointer; padding: 0;
+      backdrop-filter: blur(6px); transition: background .2s ease, color .2s ease, border-color .2s ease;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    #exitHome:hover { background: rgba(0,0,0,.62); color: #fff; border-color: rgba(255,255,255,.55); }
+    body.started:not(.fullscreen) #exitHome { display: flex; }
+
     /* Start screen — letterpress cream paper to match the deck */
     #start {
       position: fixed; inset: 0; z-index: 30; display: flex; flex-direction: column;
@@ -106,6 +119,7 @@
   <div class="zone prev" data-dir="-1"></div>
   <div class="zone next" data-dir="1"></div>
   <div id="counter">— / —</div>
+  <button id="exitHome" aria-label="Back to homepage" title="Back to homepage">×</button>
 
   <div id="start">
     <div class="eyebrow">OMA × AI 2026 · A Talk in Four Movements</div>
@@ -132,6 +146,7 @@
     const startEl  = document.getElementById('start');
     const goBtn    = document.getElementById('go');
     const loadingEl= document.getElementById('loading');
+    const exitHome = document.getElementById('exitHome');
 
     // Resolve the slides folder regardless of how the page is opened:
     // direct file://, local http server, or the /s2i clean-URL rewrite.
@@ -177,6 +192,17 @@
         (document.exitFullscreen || document.webkitExitFullscreen || (()=>{})).call(document);
       } else enterFullscreen();
     }
+    // Reflect fullscreen state on <body> so the back-to-home X only shows when
+    // the presentation has started AND we've dropped out of fullscreen.
+    function syncFullscreen() {
+      const fs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      document.body.classList.toggle('fullscreen', fs);
+    }
+    document.addEventListener('fullscreenchange', syncFullscreen);
+    document.addEventListener('webkitfullscreenchange', syncFullscreen);
+
+    // ---- Back to homepage ----
+    exitHome.addEventListener('click', () => { location.href = '/'; });
 
     // ---- Black-out ----
     let blacked = false;
@@ -241,6 +267,7 @@
     goBtn.addEventListener('click', () => {
       enterFullscreen();
       startEl.classList.add('hidden');
+      document.body.classList.add('started');
       i = 0; render(); wake();
     });
 

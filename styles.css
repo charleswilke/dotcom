@@ -1076,7 +1076,7 @@ footer .electric {
 
 /* Showcase Section */
 .dimensional-showcase {
-    padding: 0.6rem 0 0.6rem 0;
+    padding: 2rem 0 0.6rem 0;
     background:
         radial-gradient(ellipse at 20% 8%, rgba(0, 247, 194, 0.16) 0%, transparent 34%),
         radial-gradient(ellipse at 82% 85%, rgba(255, 90, 54, 0.24) 0%, transparent 44%),
@@ -1645,6 +1645,30 @@ section.production-header.alice .production-details p strong {
     margin: 0;
 }
 
+/* Two-column layout (data-layout="columns") — the JS packer (main.js) places
+   each card in its declared column (data-col) at the natural aspect ratio of
+   its image: Toast/Spectator left, Junkyard/Space Toots right. */
+@media (min-width: 768px) {
+    .showcase-grid[data-layout="columns"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 780px;
+        /* Match the breathing room above the cards (section padding-top: 2rem)
+           between them too — the packer reads this gap for column + row spacing. */
+        gap: 2rem;
+    }
+    /* Neutralize the masonry-era 0.88 shrink so JC's square cover fills its
+       column at full size like the other cards. */
+    .showcase-grid[data-layout="columns"] .showcase-item-jc {
+        transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(var(--tile-scale));
+        transform-origin: center center;
+    }
+    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-kicker,
+    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-meta,
+    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-cta { font-size: 0.68rem; }
+    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-caption h3 { font-size: 1.05rem; }
+    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-caption p { font-size: 0.8rem; }
+}
+
 .showcase-grid::before {
     content: '';
     position: absolute;
@@ -1733,6 +1757,7 @@ section.production-header.alice .production-details p strong {
 .showcase-item-toast { animation: showcase-float-a 7s ease-in-out infinite; }
 .showcase-item-jc    { animation: showcase-float-b 8.4s ease-in-out -2.6s infinite; }
 .showcase-item-game  { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
+.showcase-item-s2i   { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
 
 @keyframes showcase-float-a {
     0%, 100% { --tile-y: 0px;   --tile-rot: -0.4deg; }
@@ -1752,7 +1777,8 @@ section.production-header.alice .production-details p strong {
 @media (prefers-reduced-motion: reduce) {
     .showcase-item-toast,
     .showcase-item-jc,
-    .showcase-item-game { animation: none; }
+    .showcase-item-game,
+    .showcase-item-s2i { animation: none; }
 }
 
 .showcase-item::before {
@@ -3031,7 +3057,7 @@ html {
 
 /* About Section with Retro-Futurist Style */
 .about {
-    padding: 6rem 0 2rem 0;
+    padding: 3rem 0 2rem 0;
     background-color: var(--accent);
     color: var(--light);
     position: relative;

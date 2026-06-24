@@ -29,6 +29,10 @@ onReady(() => {
     if (!grid) return;
     const items = Array.from(grid.querySelectorAll(':scope > .showcase-item'));
     if (!items.length) return;
+    // data-layout="columns": place each card in its declared column (data-col)
+    // at its natural image height and top-align the columns, instead of packing
+    // into the shortest column and vertically centering.
+    const explicitCols = grid.dataset.layout === 'columns';
 
     function getColumnCount() {
         const tracks = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean);
@@ -65,17 +69,20 @@ onReady(() => {
         const colHeights = new Array(cols).fill(0);
         const placements = items.map(item => {
             item.style.width = `${colWidth}px`;
-            const shortest = colHeights.indexOf(Math.min(...colHeights));
-            const top = colHeights[shortest];
-            colHeights[shortest] = top + item.offsetHeight + gap;
-            return { item, col: shortest, top };
+            const col = explicitCols && item.dataset.col != null
+                ? Math.min(cols - 1, Number(item.dataset.col))
+                : colHeights.indexOf(Math.min(...colHeights));
+            const top = colHeights[col];
+            colHeights[col] = top + item.offsetHeight + gap;
+            return { item, col, top };
         });
         // Column total heights (without trailing gap).
         const colTotals = colHeights.map(h => Math.max(0, h - gap));
         const maxHeight = Math.max(...colTotals);
-        // Vertically center each column's stack within the tallest column.
+        // Explicit columns top-align; the shortest-column packer centers each
+        // column's stack within the tallest column.
         placements.forEach(({ item, col, top }) => {
-            const offset = (maxHeight - colTotals[col]) / 2;
+            const offset = explicitCols ? 0 : (maxHeight - colTotals[col]) / 2;
             item.style.left = `${col * (colWidth + gap)}px`;
             item.style.top = `${top + offset}px`;
         });

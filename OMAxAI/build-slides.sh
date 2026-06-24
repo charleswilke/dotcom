@@ -4,19 +4,22 @@
 # for the full-screen viewer at /s2i.
 #
 # Usage:
-#   ./build-slides.sh WIP/S2I-WIP3.pdf        # default: 1600px tall, quality 82
-#   ./build-slides.sh WIP/S2I-WIP3.pdf 2000 85
+#   ./build-slides.sh                          # default: spectator-to-initiator.pdf, 1600px tall, quality 82
+#   ./build-slides.sh spectator-to-initiator.pdf 2000 85
+#   ./build-slides.sh WIP/S2I-WIP3.pdf         # override with any other PDF
 #
 # Requires: pdftoppm (poppler), cwebp (webp).
 # Output:   viewer/slides/01.webp ... NN.webp  (overwrites previous run)
 
 set -euo pipefail
 
-PDF="${1:?Usage: ./build-slides.sh <pdf> [px-height] [quality]}"
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Default to the canonical talk deck that lives alongside this script.
+PDF="${1:-$DIR/spectator-to-initiator.pdf}"
 HEIGHT="${2:-1600}"
 QUALITY="${3:-82}"
 
-DIR="$(cd "$(dirname "$0")" && pwd)"
 OUT="$DIR/viewer/slides"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT

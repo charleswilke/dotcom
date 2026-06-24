@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Spectator to Initiator — OMA × AI 2026</title>
+  <meta name="robots" content="noindex">
+  <meta property="og:title" content="Spectator to Initiator">
+  <meta property="og:description" content="Retaining human agency in the AI age — a talk in four movements by Charles Wilke.">
+  <meta property="og:image" content="/OMAxAI/viewer/slides/01.webp">
+  <style>
+    :root { color-scheme: dark; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: #0a0a0a; overflow: hidden; }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      cursor: default;
+    }
+    body.idle { cursor: none; }
+
+    /* Stage */
+    #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+    #slide {
+      max-width: 100vw; max-height: 100vh;
+      width: auto; height: auto;
+      object-fit: contain;
+      user-select: none; -webkit-user-drag: none;
+      transition: opacity .12s ease;
+    }
+    #slide.swapping { opacity: 0; }
+
+    /* Click zones (invisible) */
+    .zone { position: fixed; top: 0; bottom: 0; width: 40%; z-index: 5; }
+    .zone.prev { left: 0; cursor: w-resize; }
+    .zone.next { right: 0; cursor: e-resize; }
+    body.idle .zone { cursor: none; }
+
+    /* HUD counter */
+    #counter {
+      position: fixed; bottom: 18px; right: 22px; z-index: 8;
+      font-variant-numeric: tabular-nums; font-size: 13px; letter-spacing: .08em;
+      color: rgba(255,255,255,.55); background: rgba(0,0,0,.35);
+      padding: 5px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+      transition: opacity .25s ease; pointer-events: none;
+    }
+    body.idle #counter { opacity: 0; }
+
+    /* Progress bar */
+    #progress { position: fixed; top: 0; left: 0; height: 3px; z-index: 8;
+      background: #e8a33d; width: 0; transition: width .2s ease; box-shadow: 0 0 8px rgba(232,163,61,.8); }
+    body.idle #progress { opacity: 0; }
+
+    /* Black-out overlay (B key) */
+    #blackout { position: fixed; inset: 0; background: #000; z-index: 20;
+      opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+    #blackout.on { opacity: 1; }
+
+    /* Start screen */
+    #start {
+      position: fixed; inset: 0; z-index: 30; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 26px; text-align: center;
+      background: radial-gradient(circle at 50% 38%, #3a2510 0%, #1a1106 45%, #0a0805 75%);
+      padding: 40px;
+    }
+    #start.hidden { display: none; }
+    #start h1 { color: #f6efdf; font-size: clamp(28px, 5vw, 54px); font-weight: 800;
+      letter-spacing: -.01em; line-height: 1.05; }
+    #start h1 em { color: #e8a33d; font-style: italic; font-weight: 500; }
+    #start p { color: rgba(246,239,223,.62); font-size: 15px; letter-spacing: .04em; max-width: 30ch; }
+    #go {
+      margin-top: 6px; border: 1px solid rgba(232,163,61,.55); background: rgba(232,163,61,.1);
+      color: #f0b452; font-size: 16px; letter-spacing: .12em; text-transform: uppercase;
+      padding: 15px 38px; border-radius: 999px; cursor: pointer; transition: all .2s ease;
+      font-weight: 600;
+    }
+    #go:hover { background: rgba(232,163,61,.2); border-color: rgba(232,163,61,.8); transform: translateY(-1px); }
+    #keys { color: rgba(246,241,228,.38); font-size: 12px; letter-spacing: .05em; line-height: 1.9; }
+    #keys kbd { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+      border-radius: 4px; padding: 1px 7px; font-family: ui-monospace, monospace; font-size: 11px; }
+
+    #loading { color: rgba(246,241,228,.5); font-size: 13px; letter-spacing: .08em; height: 16px; }
+  </style>
+</head>
+<body>
+  <div id="blackout"></div>
+  <div id="progress"></div>
+  <div id="stage"><img id="slide" alt="Slide"></div>
+  <div class="zone prev" data-dir="-1"></div>
+  <div class="zone next" data-dir="1"></div>
+  <div id="counter">— / —</div>
+
+  <div id="start">
+    <h1>Spectator <em>to</em> Initiator</h1>
+    <p>Retaining human agency in the AI age</p>
+    <button id="go">Begin Presentation</button>
+    <div id="loading">Loading slides…</div>
+    <div id="keys">
+      <kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd> next &nbsp;·&nbsp;
+      <kbd>←</kbd> <kbd>PgUp</kbd> back &nbsp;·&nbsp;
+      <kbd>F</kbd> fullscreen &nbsp;·&nbsp;
+      <kbd>B</kbd> black &nbsp;·&nbsp;
+      <kbd>Esc</kbd> exit
+    </div>
+  </div>
+
+  <script>
+  (() => {
+    const slide    = document.getElementById('slide');
+    const counter  = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const blackout = document.getElementById('blackout');
+    const startEl  = document.getElementById('start');
+    const goBtn    = document.getElementById('go');
+    const loadingEl= document.getElementById('loading');
+
+    // Resolve the slides folder regardless of how the page is opened:
+    // direct file://, local http server, or the /s2i clean-URL rewrite.
+    const BASE = (() => {
+      const p = location.pathname;
+      const marker = '/viewer/';
+      const idx = p.indexOf(marker);
+      if (idx !== -1) return p.slice(0, idx + marker.length) + 'slides/';
+      return '/OMAxAI/viewer/slides/'; // clean URL (/s2i) — absolute path
+    })();
+    let count = 0;
+    let build = '';       // cache-bust stamp from manifest
+    let i = 0;            // current index, 0-based
+    const cache = [];     // preloaded Image objects
+
+    const pad = n => String(n + 1).padStart(2, '0');
+    const src = n => `${BASE}${pad(n)}.webp${build ? `?v=${build}` : ''}`;
+
+    function render() {
+      slide.classList.add('swapping');
+      // swap source; cache guarantees it's already decoded
+      slide.src = src(i);
+      requestAnimationFrame(() => slide.classList.remove('swapping'));
+      counter.textContent = `${i + 1} / ${count}`;
+      progress.style.width = `${((i + 1) / count) * 100}%`;
+    }
+
+    function go(delta) {
+      const next = Math.min(count - 1, Math.max(0, i + delta));
+      if (next === i) return;
+      i = next;
+      render();
+    }
+    function jump(n) { i = Math.min(count - 1, Math.max(0, n)); render(); }
+
+    // ---- Fullscreen ----
+    function enterFullscreen() {
+      const el = document.documentElement;
+      (el.requestFullscreen || el.webkitRequestFullscreen || (()=>{})).call(el);
+    }
+    function toggleFullscreen() {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        (document.exitFullscreen || document.webkitExitFullscreen || (()=>{})).call(document);
+      } else enterFullscreen();
+    }
+
+    // ---- Black-out ----
+    let blacked = false;
+    function toggleBlack() { blacked = !blacked; blackout.classList.toggle('on', blacked); }
+
+    // ---- Idle cursor hiding ----
+    let idleTimer;
+    function wake() {
+      document.body.classList.remove('idle');
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => document.body.classList.add('idle'), 2800);
+    }
+
+    // ---- Keyboard (covers the Lenovo remote + standard keys) ----
+    window.addEventListener('keydown', (e) => {
+      wake();
+      switch (e.key) {
+        case 'ArrowRight': case 'ArrowDown': case 'PageDown':
+        case ' ': case 'Spacebar': case 'Enter':
+          e.preventDefault(); go(1); break;
+        case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace':
+          e.preventDefault(); go(-1); break;
+        case 'Home': e.preventDefault(); jump(0); break;
+        case 'End':  e.preventDefault(); jump(count - 1); break;
+        case 'f': case 'F': e.preventDefault(); toggleFullscreen(); break;
+        case 'b': case 'B': case '.': e.preventDefault(); toggleBlack(); break;
+        // Esc is handled natively to exit fullscreen
+      }
+    });
+
+    // ---- Click zones ----
+    document.querySelectorAll('.zone').forEach(z =>
+      z.addEventListener('click', () => { wake(); go(Number(z.dataset.dir)); }));
+
+    window.addEventListener('mousemove', wake);
+
+    // ---- Boot: load manifest, preload all slides, then enable Start ----
+    async function boot() {
+      try {
+        const res = await fetch(`${BASE}manifest.json`, { cache: 'no-cache' });
+        const m = await res.json();
+        count = m.count; build = m.build || '';
+      } catch { count = 35; } // fallback to known count
+
+      let loaded = 0;
+      await Promise.all(Array.from({ length: count }, (_, n) => new Promise(resolve => {
+        const img = new Image();
+        img.onload = img.onerror = () => {
+          loaded++;
+          loadingEl.textContent = `Loaded ${loaded} / ${count}`;
+          resolve();
+        };
+        img.src = src(n);
+        cache[n] = img;
+      })));
+
+      loadingEl.textContent = `${count} slides ready`;
+      goBtn.textContent = 'Begin Presentation';
+      goBtn.disabled = false;
+    }
+
+    goBtn.addEventListener('click', () => {
+      enterFullscreen();
+      startEl.classList.add('hidden');
+      i = 0; render(); wake();
+    });
+
+    // Resume support: if URL has #N, start there after Begin.
+    const hashStart = parseInt(location.hash.slice(1), 10);
+    if (!Number.isNaN(hashStart)) i = Math.max(0, hashStart - 1);
+
+    boot();
+  })();
+  </script>
+</body>
+</html>

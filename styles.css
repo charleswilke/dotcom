@@ -1650,8 +1650,8 @@ section.production-header.alice .production-details p strong {
    its image: Toast/Spectator left, Junkyard/Space Toots right. */
 @media (min-width: 768px) {
     .showcase-grid[data-layout="columns"] {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: 780px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        max-width: 960px;
         /* Match the breathing room above the cards (section padding-top: 2rem)
            between them too — the packer reads this gap for column + row spacing. */
         gap: 2rem;

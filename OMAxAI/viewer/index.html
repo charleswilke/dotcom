@@ -18,7 +18,7 @@
       -webkit-tap-highlight-color: transparent;
       cursor: default;
     }
-    body.idle { cursor: none; }
+    body.cursor-hidden { cursor: none; }
 
     /* Stage */
     #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
@@ -35,7 +35,7 @@
     .zone { position: fixed; top: 0; bottom: 0; width: 40%; z-index: 5; }
     .zone.prev { left: 0; cursor: w-resize; }
     .zone.next { right: 0; cursor: e-resize; }
-    body.idle .zone { cursor: none; }
+    body.cursor-hidden .zone { cursor: none; }
 
     /* HUD counter */
     #counter {
@@ -45,7 +45,7 @@
       padding: 5px 11px; border-radius: 999px; backdrop-filter: blur(6px);
       transition: opacity .25s ease; pointer-events: none;
     }
-    body.idle #counter { opacity: 0; }
+    body.cursor-hidden #counter { opacity: 0; }
 
     /* Progress bar */
     #progress { position: fixed; top: 0; left: 0; height: 3px; z-index: 8;
@@ -208,17 +208,29 @@
     let blacked = false;
     function toggleBlack() { blacked = !blacked; blackout.classList.toggle('on', blacked); }
 
-    // ---- Idle cursor hiding ----
+    // ---- Idle chrome (counter / progress) ----
+    // Woken by any navigation, including the presenter remote.
     let idleTimer;
-    function wake() {
+    function wakeChrome() {
       document.body.classList.remove('idle');
       clearTimeout(idleTimer);
       idleTimer = setTimeout(() => document.body.classList.add('idle'), 2800);
     }
 
+    // ---- Cursor ----
+    // Hidden during the show and shown ONLY on real mouse movement, never on
+    // slide advance. Hides again quickly once the mouse stops.
+    let cursorTimer;
+    function showCursor() {
+      document.body.classList.remove('cursor-hidden');
+      clearTimeout(cursorTimer);
+      if (!document.body.classList.contains('started')) return;
+      cursorTimer = setTimeout(() => document.body.classList.add('cursor-hidden'), 1200);
+    }
+
     // ---- Keyboard (covers the Lenovo remote + standard keys) ----
     window.addEventListener('keydown', (e) => {
-      wake();
+      wakeChrome();
       switch (e.key) {
         case 'ArrowRight': case 'ArrowDown': case 'PageDown':
         case ' ': case 'Spacebar': case 'Enter':
@@ -235,9 +247,9 @@
 
     // ---- Click zones ----
     document.querySelectorAll('.zone').forEach(z =>
-      z.addEventListener('click', () => { wake(); go(Number(z.dataset.dir)); }));
+      z.addEventListener('click', () => { wakeChrome(); go(Number(z.dataset.dir)); }));
 
-    window.addEventListener('mousemove', wake);
+    window.addEventListener('mousemove', () => { showCursor(); wakeChrome(); });
 
     // ---- Boot: load manifest, preload all slides, then enable Start ----
     async function boot() {
@@ -267,8 +279,8 @@
     goBtn.addEventListener('click', () => {
       enterFullscreen();
       startEl.classList.add('hidden');
-      document.body.classList.add('started');
-      i = 0; render(); wake();
+      document.body.classList.add('started', 'cursor-hidden');
+      i = 0; render(); wakeChrome();
     });
 
     // Resume support: if URL has #N, start there after Begin.

@@ -3543,23 +3543,22 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
     if (!trackList) return [];
 
     trackList.innerHTML = '';
-    return tracks.map((track, index) => {
-        // Optional act divider: a track with an `act` label gets a non-interactive
-        // header row inserted above it. Dividers are appended straight to the list and
-        // kept out of the returned array so track indices stay aligned.
-        if (track.act) {
-            const divider = document.createElement('li');
-            divider.className = 'mixtape-act-divider';
-            divider.setAttribute('aria-hidden', 'true');
-            const dividerLabel = document.createElement('span');
-            dividerLabel.className = 'act-divider-label';
-            dividerLabel.textContent = track.act;
-            divider.appendChild(dividerLabel);
-            trackList.appendChild(divider);
-        }
 
+    // Build a single track row. Container acts (Act I / Act II) get their label from
+    // the wrapping container, so only inline acts (the Intermission) carry a pill here.
+    function buildTrackLi(track, index) {
         const li = document.createElement('li');
         li.className = 'mixtape-track-item';
+
+        let actMarker = null;
+        if (track.act && track.actInline) {
+            li.classList.add('mixtape-track-item--act-start');
+            actMarker = document.createElement('span');
+            actMarker.className = 'track-act-marker';
+            actMarker.textContent = track.act;
+            actMarker.setAttribute('aria-hidden', 'true');
+        }
+
         const trackNumber = document.createElement('span');
         trackNumber.className = 'track-number';
         trackNumber.textContent = index + 1;
@@ -3593,43 +3592,90 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
             actionGroup.appendChild(articleLink);
         }
 
-        const shareButton = document.createElement('button');
-        shareButton.type = 'button';
-        shareButton.className = 'track-share-button';
-        shareButton.title = `Share link to ${track.title}`;
-        shareButton.setAttribute('aria-label', `Share link to ${track.title}`);
-        shareButton.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="18" cy="5" r="3"></circle>
-                <circle cx="6" cy="12" r="3"></circle>
-                <circle cx="18" cy="19" r="3"></circle>
-                <line x1="8.6" y1="10.7" x2="15.4" y2="6.3"></line>
-                <line x1="8.6" y1="13.3" x2="15.4" y2="17.7"></line>
-            </svg>
-            <span class="track-share-label">share</span>
-        `;
-        shareButton.addEventListener('click', async (event) => {
-            event.preventDefault();
-            event.stopPropagation();
+        // Tracks flagged `noShare` (e.g. interstitial/intermission cuts with no
+        // dedicated song page) render without a share button.
+        if (!track.noShare) {
+            const shareButton = document.createElement('button');
+            shareButton.type = 'button';
+            shareButton.className = 'track-share-button';
+            shareButton.title = `Share link to ${track.title}`;
+            shareButton.setAttribute('aria-label', `Share link to ${track.title}`);
+            shareButton.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.6" y1="10.7" x2="15.4" y2="6.3"></line>
+                    <line x1="8.6" y1="13.3" x2="15.4" y2="17.7"></line>
+                </svg>
+                <span class="track-share-label">share</span>
+            `;
+            shareButton.addEventListener('click', async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
 
-            const shareData = typeof getShareData === 'function' ? getShareData(track, index) : null;
-            if (!shareData || !shareData.routeKey) return;
+                const shareData = typeof getShareData === 'function' ? getShareData(track, index) : null;
+                if (!shareData || !shareData.routeKey) return;
 
-            await shareTrackLink(shareButton, {
-                routeKey: shareData.routeKey,
-                track,
-                collectionTitle: shareData.collectionTitle || document.title
+                await shareTrackLink(shareButton, {
+                    routeKey: shareData.routeKey,
+                    track,
+                    collectionTitle: shareData.collectionTitle || document.title
+                });
             });
-        });
-        actionGroup.appendChild(shareButton);
+            actionGroup.appendChild(shareButton);
+        }
 
         li.appendChild(trackNumber);
         li.appendChild(titleText);
+        if (actMarker) li.appendChild(actMarker);
         li.appendChild(actionGroup);
         li.addEventListener('click', () => onSelect(index));
-        trackList.appendChild(li);
         return li;
-    });
+    }
+
+    // Group tracks into sections. A track with `act` starts a new section; a non-inline
+    // act (Act I / Act II) becomes a bordered container with its name running vertically
+    // down the left edge, wrapping every track up to the next act. Inline acts (the
+    // Intermission) and act-less tracks render as plain rows directly in the list.
+    const trackItems = new Array(tracks.length);
+    let i = 0;
+    while (i < tracks.length) {
+        const track = tracks[i];
+
+        if (track.act && !track.actInline) {
+            const group = document.createElement('li');
+            group.className = 'mixtape-act-group';
+
+            const label = document.createElement('span');
+            label.className = 'act-group-label';
+            label.textContent = track.act;
+            label.setAttribute('aria-hidden', 'true');
+
+            const groupTracks = document.createElement('ul');
+            groupTracks.className = 'act-group-tracks';
+
+            let j = i;
+            do {
+                const li = buildTrackLi(tracks[j], j);
+                trackItems[j] = li;
+                groupTracks.appendChild(li);
+                j++;
+            } while (j < tracks.length && !tracks[j].act);
+
+            group.appendChild(label);
+            group.appendChild(groupTracks);
+            trackList.appendChild(group);
+            i = j;
+        } else {
+            const li = buildTrackLi(track, i);
+            trackItems[i] = li;
+            trackList.appendChild(li);
+            i++;
+        }
+    }
+
+    return trackItems;
 }
 
 function setActiveTrackListItem(trackItems, activeIndex) {
@@ -4400,6 +4446,7 @@ function initJCLightbox() {
         { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: 'audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
         { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
         { title: 'How Dare It Rise', file: 'audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: 'audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
+        { title: 'Take Your Time', act: 'Intermission', actInline: true, file: 'audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: 'audio/junkyard-cabaret/junkyard-cabaret-cover.webp?v=202605120946', noShare: true },
         { title: 'Everything Must Go', act: 'Act II', file: 'audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: 'audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
         { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606190959', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },

@@ -9484,6 +9484,34 @@ section.production-header.alice p {
     }
 }
 
+/* Junkyard Cabaret: give the (width-constrained) album art more room by trimming
+   the playlist column. */
+@media (min-width: 768px) {
+    #jcLightbox .mixtape-left-section {
+        flex: 1.2;
+        max-width: 560px;
+    }
+
+    #jcLightbox .mixtape-right-section {
+        flex: 0.95;
+    }
+}
+
+/* Tighten the JC track rows horizontally so the narrower column stays comfortable
+   and the title gets the reclaimed room. */
+#jcLightbox .mixtape-act-group {
+    gap: 0.15rem;
+}
+
+#jcLightbox .mixtape-track-item {
+    padding-left: 0.3rem;
+    padding-right: 0.9rem;
+}
+
+#jcLightbox .track-number {
+    margin-right: 0.25rem;
+}
+
 .mixtape-cover-container::after {
     content: '';
     position: absolute;
@@ -10158,6 +10186,8 @@ section.production-header.alice p {
 #jcLightbox .mixtape-playlist {
     background: rgba(16, 10, 6, 0.55);
     border-color: rgba(194, 112, 56, 0.2);
+    /* Pull the act containers nearly flush with the playlist's left gutter. */
+    padding-left: 2px;
 }
 
 #jcLightbox .mixtape-track-item:hover {
@@ -10175,40 +10205,26 @@ section.production-header.alice p {
     text-shadow: 0 0 8px rgba(194, 112, 56, 0.28);
 }
 
-#jcLightbox .mixtape-act-divider {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 0.55rem 0 0.3rem;
-    padding: 0;
-    border: none;
-    background: none;
-    cursor: default;
-    pointer-events: none;
+#jcLightbox .track-act-marker {
+    color: rgba(194, 112, 56, 0.85);
+    border-color: rgba(194, 112, 56, 0.32);
+    text-shadow: 0 0 10px rgba(194, 112, 56, 0.3);
 }
 
-#jcLightbox .mixtape-act-divider:first-child {
-    margin-top: 0;
+/* Indent the inline Intermission row so its number/title line up with the tracks
+   inside the Act I / Act II containers (which are offset by the vertical label). */
+#jcLightbox .mixtape-track-item--act-start {
+    padding-left: 1.75rem;
 }
 
-#jcLightbox .mixtape-act-divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg,
-        rgba(194, 112, 56, 0.55) 0%,
-        rgba(194, 112, 56, 0) 100%);
+#jcLightbox .mixtape-act-group {
+    border-color: rgba(194, 112, 56, 0.28);
+    background: rgba(194, 112, 56, 0.045);
 }
 
-#jcLightbox .act-divider-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
+#jcLightbox .act-group-label {
     color: #c27038;
-    text-shadow: 0 0 10px rgba(194, 112, 56, 0.35);
-    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(194, 112, 56, 0.3);
 }
 
 #jcLightbox .track-number {
@@ -11196,6 +11212,62 @@ section.production-header.alice p {
 .track-title-text {
     flex: 1;
     min-width: 0;
+}
+
+/* Inline act marker — rides on the first track row of an act instead of a
+   separate header row, so it adds no vertical height to the list. */
+.track-act-marker {
+    flex-shrink: 0;
+    margin-left: 0.6rem;
+    padding: 0.13rem 0.5rem;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+}
+
+/* Act container — wraps a whole act, with its name running vertically down the
+   left edge (to the left of the track numbers). */
+.mixtape-act-group {
+    list-style: none;
+    display: flex;
+    align-items: stretch;
+    gap: 0.55rem;
+    margin: 0.5rem 0;
+    padding: 0.15rem 0.4rem 0.15rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.act-group-label {
+    flex-shrink: 0;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.45rem;
+    padding: 0.25rem 0.05rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.act-group-tracks {
+    flex: 1;
+    min-width: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .track-action-group {

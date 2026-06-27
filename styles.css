@@ -1628,7 +1628,7 @@ section.production-header.alice .production-details p strong {
     z-index: 1;
     margin: 0 auto;
     max-width: 1040px;
-    align-items: start;
+    align-items: center;
     padding: 1.2rem 0 0.8rem;
     perspective: 1400px;
 }

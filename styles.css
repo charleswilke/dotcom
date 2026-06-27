@@ -10532,19 +10532,101 @@ section.production-header.alice p {
         0 0 18px rgba(255, 168, 30, 0.45);
 }
 
+/* Transmission line — flanking tuner rails around the L.AI.BOR wordmark.
+   Rails are real spans (not pseudo-elements) because rss-title-main's
+   ::before/::after are reserved for the chromatic glitch effect. */
+.rss-title-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.85rem, 2.2vw, 1.6rem);
+    width: min(660px, 90vw);
+    margin: 0.04rem auto 0;
+}
+
+.rss-title-rail {
+    flex: 1 1 0;
+    min-width: 30px;
+    height: 2px;
+    position: relative;
+    border-radius: 2px;
+}
+
+.rss-title-rail-left {
+    background: linear-gradient(90deg, rgba(255, 214, 122, 0) 0%, rgba(255, 184, 82, 0.5) 68%, rgba(255, 224, 150, 0.9) 100%);
+}
+
+.rss-title-rail-right {
+    background: linear-gradient(270deg, rgba(255, 214, 122, 0) 0%, rgba(255, 184, 82, 0.5) 68%, rgba(255, 224, 150, 0.9) 100%);
+}
+
+/* Subtle tuner ticks along each rail, fading out toward the edges */
+.rss-title-rail::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 8px;
+    transform: translateY(-50%);
+    background-image: repeating-linear-gradient(90deg, rgba(255, 224, 150, 0.5) 0 1px, transparent 1px 14px);
+    opacity: 0.55;
+}
+
+.rss-title-rail-left::before {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 85%);
+    mask-image: linear-gradient(90deg, transparent, #000 85%);
+}
+
+.rss-title-rail-right::before {
+    -webkit-mask-image: linear-gradient(270deg, transparent, #000 85%);
+    mask-image: linear-gradient(270deg, transparent, #000 85%);
+}
+
+/* Glowing lamp at the inner end of each rail, beside the wordmark */
+.rss-title-rail::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle, #fff3d7 0%, #ffb84f 55%, rgba(255, 140, 40, 0) 78%);
+    box-shadow: 0 0 8px rgba(255, 184, 82, 0.95), 0 0 18px rgba(247, 120, 30, 0.6);
+}
+
+.rss-title-rail-left::after { right: -3px; }
+.rss-title-rail-right::after { left: -3px; }
+
+/* Station descriptor beneath the wordmark */
+.rss-title-tagline {
+    display: block;
+    margin: 0.55rem auto 0;
+    font-size: 0.2em;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    line-height: 1.35;
+    white-space: nowrap;
+    color: rgba(255, 243, 215, 0.74);
+    text-shadow:
+        1px 1px 0 rgba(17, 28, 44, 0.85),
+        0 0 10px rgba(255, 214, 122, 0.3);
+}
+
 .rss-title-main {
     position: relative;
+    flex: 0 0 auto;
     margin-top: 0.08rem;
     color: #fff3d7;
-    font-size: 1.5em;
+    font-size: 1.64em;
     letter-spacing: 0.09em;
     text-shadow:
         3px 3px 0 rgba(17, 28, 44, 0.95),
         0 1px 0 rgba(255, 248, 229, 0.3),
-        0 0 8px rgba(255, 214, 122, 0.9),
-        0 0 18px rgba(255, 168, 30, 0.65),
-        0 0 36px rgba(247, 120, 30, 0.45),
-        0 0 60px rgba(255, 90, 54, 0.28);
+        0 0 5px rgba(255, 214, 122, 0.9),
+        0 0 11px rgba(255, 168, 30, 0.6),
+        0 0 20px rgba(247, 120, 30, 0.35);
     transition: text-shadow 0.6s ease-out;
 }
 
@@ -12129,9 +12211,26 @@ section.production-header.alice p {
     }
 
     .rss-title-main {
-        font-size: 1.2em;
+        font-size: 1.3em;
     }
-    
+
+    .rss-title-line {
+        width: 100%;
+        gap: 0.55rem;
+    }
+
+    .rss-title-rail {
+        display: none;
+    }
+
+    .rss-title-tagline {
+        font-size: 0.34em;
+        letter-spacing: 0.16em;
+        margin-top: 0.45rem;
+        white-space: normal;
+        max-width: 28ch;
+    }
+
     .mixtape-left-section {
         flex-shrink: 0;
         gap: .5rem;

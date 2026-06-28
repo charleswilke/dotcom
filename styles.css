@@ -3419,20 +3419,20 @@ html {
 
 .feed-item img {
     width: 100%;
-    height: 300px;
+    height: auto;
     object-fit: cover;
     margin-bottom: 0; /* sits flush on top of the navy block */
     border: 2px solid var(--primary);
     border-bottom: none;
     border-radius: 4px 4px 0 0; /* nests with the navy block below */
-    aspect-ratio: 4 / 3; /* Reserve space to reduce CLS */
+    aspect-ratio: 16 / 9; /* landscape image space; also reserves space to reduce CLS */
 }
 
 .feed-item h3 {
     color: var(--primary);
     font-size: 1.5rem;
-    margin-bottom: 0.85rem;
-    line-height: 1.35;
+    margin-bottom: 0.28rem;
+    line-height: 1.2;
     font-weight: 700;
     letter-spacing: 0.3px;
 }
@@ -3456,7 +3456,7 @@ html {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 1.35rem 1.4rem 1.15rem;
+    padding: 0.65rem 1.4rem 0.6rem;
     background: var(--primary);
     border-top: 2px solid var(--light); /* printed rule on the image/navy seam */
     border-radius: 0 0 4px 4px; /* nests flush under the image above */
@@ -3504,7 +3504,7 @@ html {
 /* Footer line inside the panel: the spelled-out date, tucked close under
    the subtitle */
 .feed-item-meta {
-    margin-top: 0.6rem;
+    margin-top: 0.25rem;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -7520,7 +7520,7 @@ html {
     }
     
     .feed-item img {
-        height: 200px;
+        height: auto;
     }
 
     .feed-item h3 {
@@ -7552,7 +7552,7 @@ html {
     }
 
     .feed-item img {
-        height: 180px;
+        height: auto;
     }
 
     .feed-item h3 {

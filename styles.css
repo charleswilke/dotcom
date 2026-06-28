@@ -2979,7 +2979,10 @@ footer p {
 
 @media (max-width: 480px) {
     .header-title {
-        font-size: 2.3rem;
+        /* 2.6rem keeps "CHARLES WILKE" too wide for a single line up to ~450px
+           viewport, so it wraps to two centered lines on iPhone 16 Pro (402px)
+           and Pro Max (440px), not just the narrowest phones. */
+        font-size: 2.6rem;
         line-height: 1.1;
     }
     

@@ -1327,7 +1327,7 @@ function populateLatestArticleSpotlight() {
     spotlightImg.onload = function() {
         const aspectRatio = this.naturalWidth / this.naturalHeight;
         // More generous height calculation to prevent cropping - increased range for taller card
-        const baseHeight = Math.max(420, Math.min(580, 480 / aspectRatio));
+        const baseHeight = Math.max(365, Math.min(520, 480 / aspectRatio));
         spotlightSection.style.height = baseHeight + 'px';
     };
     
@@ -1338,13 +1338,11 @@ function populateLatestArticleSpotlight() {
     // First decode HTML entities properly, then strip HTML tags
     spotlightDescription.textContent = latestItem.shortDescription || '';
     
-    // Set the date
+    // Set the date — same freshness-stamp format as the grid cards (MM-DD-YY),
+    // rendered as the glowing "fresh" stamp on the featured card.
     const pubDate = new Date(latestItem.pubDate);
-    spotlightDate.textContent = pubDate.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
+    const pad = (n) => String(n).padStart(2, '0');
+    spotlightDate.textContent = `${pad(pubDate.getMonth() + 1)}-${pad(pubDate.getDate())}-${pad(pubDate.getFullYear() % 100)}`;
     
     // Show the spotlight
     spotlight.style.display = 'block';
@@ -1370,8 +1368,9 @@ function displayItems(count) {
         const title = item.title;
         const link = item.content ? getArticleSharePath(item) : item.link;
         const pubDate = new Date(item.pubDate);
-        // Spelled-out date for the printed caption block, e.g. "August 23, 2025".
-        const stampDate = pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        // Freshness-stamp date for the printed panel, e.g. "06-06-26" (MM-DD-YY).
+        const pad = (n) => String(n).padStart(2, '0');
+        const stampDate = `${pad(pubDate.getMonth() + 1)}-${pad(pubDate.getDate())}-${pad(pubDate.getFullYear() % 100)}`;
 
         const feedItem = document.createElement('a');
         feedItem.className = 'feed-item';

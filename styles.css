@@ -1254,8 +1254,6 @@ section.production-header.spotlight-production h1 {
     margin-bottom: 0.75rem;
     font-size: 2.2rem;
     line-height: 1.2;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(255, 179, 71, 0.45);
 }
 
 section.production-header.spotlight-production p {
@@ -5642,6 +5640,15 @@ html {
     margin-bottom: 1.5rem;
     color: var(--text);
     opacity: 0.9;
+}
+
+/* Desktop hero: right-justify the title and subtitle so they align with the
+   right-edge dateline stamp (mobile keeps the left-aligned grid-card layout). */
+@media (min-width: 768px) {
+    .spotlight-title,
+    .spotlight-description {
+        text-align: right;
+    }
 }
 
 /* Featured-card dateline — the whole "PUBLISHED / date" block is one rubber

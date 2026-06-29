@@ -3645,6 +3645,7 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
         if (track.act && !track.actInline) {
             const group = document.createElement('li');
             group.className = 'mixtape-act-group';
+            if (track.actClass) group.classList.add(track.actClass);
 
             const label = document.createElement('span');
             label.className = 'act-group-label';
@@ -3681,6 +3682,39 @@ function setActiveTrackListItem(trackItems, activeIndex) {
     trackItems.forEach((item, index) => {
         item.classList.toggle('active', index === activeIndex);
     });
+    scrollTrackItemIntoView(trackItems[activeIndex]);
+}
+
+// Keep the playing track visible: scroll its row into view within the playlist's
+// own scroll container. We compute the scroll manually (rather than
+// element.scrollIntoView, which is unreliable with nested scroll containers) and
+// only move when the row is actually off-screen — so it never fights a user who is
+// browsing the list. Most impactful on mobile, where the list is the scroll area
+// and a track can auto-advance from Side A into Side B.
+function scrollTrackItemIntoView(item) {
+    if (!item) return;
+
+    let container = item.parentElement;
+    while (container && container !== document.body) {
+        const overflowY = getComputedStyle(container).overflowY;
+        if (/(auto|scroll)/.test(overflowY) && container.scrollHeight > container.clientHeight + 2) break;
+        container = container.parentElement;
+    }
+    if (!container || container === document.body) return;
+
+    const margin = 12;
+    const cRect = container.getBoundingClientRect();
+    const iRect = item.getBoundingClientRect();
+    let delta = 0;
+    if (iRect.top < cRect.top + margin) {
+        delta = iRect.top - cRect.top - margin;          // row above the fold → scroll up
+    } else if (iRect.bottom > cRect.bottom - margin) {
+        delta = iRect.bottom - cRect.bottom + margin;     // row below the fold → scroll down
+    } else {
+        return;                                           // already comfortably visible
+    }
+
+    container.scrollTop += delta;
 }
 
 function updateNowPlayingDisplays(elements, title, metaTitle) {
@@ -3732,8 +3766,19 @@ function initMixtapeLightbox() {
     const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.webp';
     const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover.webp';
     
-    let tracks = aSideTracks;
-    let isBSide = false;
+    // Both sides live in one continuous playlist. The first track of each side
+    // carries an `act` label (the vertical container label) plus an `actClass`
+    // (drives the per-side container color); every track carries `side` so the
+    // player chrome can recolor based on which side is currently playing.
+    const tracks = [
+        ...aSideTracks.map((t, i) => i === 0
+            ? { ...t, side: 'a', act: 'Side A', actClass: 'mixtape-act-group--side-a' }
+            : { ...t, side: 'a' }),
+        ...bSideTracks.map((t, i) => i === 0
+            ? { ...t, side: 'b', act: 'Side B', actClass: 'mixtape-act-group--side-b' }
+            : { ...t, side: 'b' })
+    ];
+    const firstBSideIndex = aSideTracks.length;
 
     const lightbox = document.getElementById('mixtapeLightbox');
     const tile = document.getElementById('mixtapeTile');
@@ -3749,9 +3794,6 @@ function initMixtapeLightbox() {
     const progressContainer = document.getElementById('mixtapeProgressContainer');
     const timeDisplay = document.getElementById('mixtapeTime');
     const visualizerCanvas = document.getElementById('mixtapeVisualizer');
-    const sideToggle = document.getElementById('sideToggleSwitch');
-    const sideALabel = document.querySelector('.side-a-label');
-    const sideBLabel = document.querySelector('.side-b-label');
     const coverImg = document.getElementById('mixtapeCoverImg');
     const subtitleSpan = document.querySelector('.mixtape-subtitle');
     const oscilloscopeTitle = document.getElementById('mixtapeOscilloscopeTitle');
@@ -3778,12 +3820,16 @@ function initMixtapeLightbox() {
     let currentIndex = 0;
     let trackItems = [];
 
+    function currentIsBSide() {
+        return !!(tracks[currentIndex] && tracks[currentIndex].side === 'b');
+    }
+
     function getCurrentRouteKey() {
-        return isBSide ? 'mixtape-side-two' : 'mixtape';
+        return currentIsBSide() ? 'mixtape-side-two' : 'mixtape';
     }
 
     function getMixtapeCollectionTitle() {
-        return isBSide ? 'Exploring L.ai.bor Side Two' : 'Exploring L.ai.bor Mixtape';
+        return currentIsBSide() ? 'Exploring L.ai.bor Side Two' : 'Exploring L.ai.bor Mixtape';
     }
 
     function resolveTrackIndex(trackSlug) {
@@ -3800,8 +3846,9 @@ function initMixtapeLightbox() {
         audio: audioEl,
         visualizerCanvas,
         getPalette: (index, barCount, intensity) => {
-            const baseHue = isBSide ? 38 : 168;
-            const hueVariance = isBSide ? 15 : 25;
+            const isB = currentIsBSide();
+            const baseHue = isB ? 283 : 168;
+            const hueVariance = isB ? 20 : 25;
             const hue = baseHue - ((barCount - 1 - index) / barCount) * hueVariance;
             const saturation = 75 + intensity * 25;
             const lightness = 40 + intensity * 20;
@@ -3814,7 +3861,7 @@ function initMixtapeLightbox() {
 
     const MIXTAPE_OSC_COLORS = {
         a: { trace: '#00f7c2', glow: 'rgba(0, 247, 194, 0.9)', graticule: 'rgba(0, 247, 194, 1)' },
-        b: { trace: '#f7a800', glow: 'rgba(247, 168, 0, 0.9)', graticule: 'rgba(247, 168, 0, 1)' }
+        b: { trace: '#b97fe0', glow: 'rgba(155, 89, 182, 0.9)', graticule: 'rgba(155, 89, 182, 0.9)' }
     };
     const mixtapeOscilloscope = createModalOscilloscope(
         document.getElementById('mixtapeOscilloscope'),
@@ -3833,77 +3880,16 @@ function initMixtapeLightbox() {
         }));
     }
     
-    // Toggle sound effect
-    const toggleSound = new Audio('audio/mixtape-found.mp3');
-    toggleSound.volume = 0.5;
-    
-    // Toggle between A-side and B-side
-    function toggleSide(options = {}) {
-        const {
-            nextIsBSide = !isBSide,
-            requestedTrackSlug = '',
-            suppressHashUpdate = false
-        } = options;
-        const previousIsBSide = isBSide;
-        const didChangeSide = nextIsBSide !== previousIsBSide;
-
-        if (!didChangeSide && !requestedTrackSlug) return;
-
-        isBSide = nextIsBSide;
-
-        if (didChangeSide) {
-            toggleSound.currentTime = 0;
-            toggleSound.play().catch(e => console.log("Toggle sound:", e));
-        }
-        
-        // Stop current playback
-        if (audio) {
-            audio.pause();
-            audio.src = '';
-        }
-        // Update play button
-        if (playPauseIcon) {
-            playPauseIcon.textContent = '▶';
-        }
-        visualizer.stop();
-
-        // Update oscilloscope colors for A/B side
+    // Apply the visual theme for whichever side the current track belongs to:
+    // cover art, subtitle, oscilloscope colors, and the `.b-side-active` chrome
+    // recolor. The player's color follows playback rather than a manual toggle.
+    function applySideTheme(isB) {
+        if (lightbox) lightbox.classList.toggle('b-side-active', isB);
+        if (coverImg) coverImg.src = isB ? bSideCover : aSideCover;
+        if (subtitleSpan) subtitleSpan.textContent = isB ? 'Side Two' : 'Mixtape';
         if (mixtapeOscilloscope) {
-            mixtapeOscilloscope.updateColors(nextIsBSide ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a);
+            mixtapeOscilloscope.updateColors(isB ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a);
         }
-
-        // Switch tracks and cover
-        if (isBSide) {
-            tracks = bSideTracks;
-            lightbox.classList.add('b-side-active');
-            if (coverImg) coverImg.src = bSideCover;
-            if (subtitleSpan) subtitleSpan.textContent = 'Side Two';
-            if (sideALabel) sideALabel.classList.remove('active');
-            if (sideBLabel) sideBLabel.classList.add('active');
-        } else {
-            tracks = aSideTracks;
-            lightbox.classList.remove('b-side-active');
-            if (coverImg) coverImg.src = aSideCover;
-            if (subtitleSpan) subtitleSpan.textContent = 'Mixtape';
-            if (sideALabel) sideALabel.classList.add('active');
-            if (sideBLabel) sideBLabel.classList.remove('active');
-        }
-        
-        // Reset and repopulate
-        currentIndex = 0;
-        populatePlaylist();
-        
-        // Load requested track if present, otherwise default to the first track
-        loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: !suppressHashUpdate });
-
-        if (!suppressHashUpdate) {
-            syncMixtapeHash('replaceState');
-        }
-    }
-    
-    // Side toggle event listener
-    if (sideToggle) {
-        sideToggle.addEventListener('click', toggleSide);
     }
     
     // Initial playlist population
@@ -3912,6 +3898,7 @@ function initMixtapeLightbox() {
     function loadTrack(index, options = {}) {
         const { syncHash = true } = options;
         currentIndex = index;
+        applySideTheme(!!(tracks[index] && tracks[index].side === 'b'));
         if (audio) {
             audio.src = tracks[index].file;
             audio.load();
@@ -3962,26 +3949,14 @@ function initMixtapeLightbox() {
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
             
-            // Switch to B-side if requested and not already there
-            if (openBSide && !isBSide) {
-                toggleSide({
-                    nextIsBSide: true,
-                    requestedTrackSlug,
-                    suppressHashUpdate: true
-                });
-            } else if (!openBSide && isBSide) {
-                // Switch back to A-side if opening A-side
-                toggleSide({
-                    nextIsBSide: false,
-                    requestedTrackSlug,
-                    suppressHashUpdate: true
-                });
-            } else if (requestedTrackSlug) {
+            // Resolve which track to open. An explicit slug wins (it can live on
+            // either side); a bare side-two link jumps to the first B-side track;
+            // otherwise a fresh open starts at the top.
+            if (requestedTrackSlug) {
                 loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
-            }
-            
-            // Load first track if empty
-            if (audio && !audio.src) {
+            } else if (openBSide && !currentIsBSide()) {
+                loadTrack(firstBSideIndex, { syncHash: false });
+            } else if (audio && !audio.src) {
                 loadTrack(0, { syncHash: false });
             }
             // Size the visualizer canvas and start oscilloscope
@@ -4014,11 +3989,11 @@ function initMixtapeLightbox() {
                     audio,
                     coverSrc: coverImg ? coverImg.src : '',
                     albumTitle: 'Exploring L.ai.bor',
-                    theme: isBSide ? 'mixtape-b' : 'mixtape-a',
-                    oscColors: isBSide ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a,
+                    theme: currentIsBSide() ? 'mixtape-b' : 'mixtape-a',
+                    oscColors: currentIsBSide() ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a,
                     getAnalyser: () => visualizer.getAnalyser(),
                     getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
-                    onExpand: () => openMixtape(isBSide, '', 'pushState'),
+                    onExpand: () => openMixtape(currentIsBSide(), '', 'pushState'),
                     onClose: () => {}
                 });
             } else if (audio) {

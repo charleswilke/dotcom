@@ -107,7 +107,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="/s2i" class="showcase-item showcase-item-s2i" data-col="2">
+                <a href="/s2i" id="s2iTile" class="showcase-item showcase-item-s2i" data-col="2">
                     <div class="showcase-media">
                         <img src="images/s2i-title2.webp" alt="Spectator to Initiator — a talk on retaining human agency in the AI age" width="1280" height="832" loading="lazy" decoding="async">
                     </div>
@@ -591,6 +591,17 @@
                 <button class="next-btn" aria-label="Next image">❯</button>
             </div>
         </div>
+    </div>
+
+    <!-- Spectator to Initiator deck lightbox -->
+    <div class="lightbox s2i-lightbox" id="s2iLightbox" aria-hidden="true">
+        <button class="lightbox-close" id="s2iClose" aria-label="Close deck">&times;</button>
+        <div class="s2i-stage">
+            <button class="s2i-arrow s2i-prev" id="s2iPrev" aria-label="Previous slide">❮</button>
+            <img id="s2iSlide" class="s2i-slide" alt="Spectator to Initiator — slide" draggable="false" decoding="async">
+            <button class="s2i-arrow s2i-next" id="s2iNext" aria-label="Next slide">❯</button>
+        </div>
+        <div class="s2i-counter" id="s2iCounter">— / —</div>
     </div>
 
     <!-- Mixtape Lightbox -->

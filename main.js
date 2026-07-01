@@ -4735,6 +4735,129 @@ function initJCLightbox() {
     };
 }
 
+function initS2ILightbox() {
+    const lightbox = document.getElementById('s2iLightbox');
+    const slide    = document.getElementById('s2iSlide');
+    const counter  = document.getElementById('s2iCounter');
+    const prevBtn  = document.getElementById('s2iPrev');
+    const nextBtn  = document.getElementById('s2iNext');
+    const closeBtn = document.getElementById('s2iClose');
+    const tile     = document.getElementById('s2iTile');
+    if (!lightbox || !slide) return null;
+
+    const BASE = '/OMAxAI/viewer/slides/';
+    let count = 0;
+    let build = '';
+    let i = 0;
+    let loaded = false;   // manifest fetched + preload kicked off
+    const cache = [];
+
+    const pad = n => String(n + 1).padStart(2, '0');
+    const src = n => `${BASE}${pad(n)}.webp${build ? `?v=${build}` : ''}`;
+
+    function render() {
+        if (!count) return;
+        slide.classList.add('swapping');
+        slide.src = src(i);
+        requestAnimationFrame(() => slide.classList.remove('swapping'));
+        counter.textContent = `${i + 1} / ${count}`;
+        prevBtn.disabled = (i === 0);
+        nextBtn.disabled = (i === count - 1);
+    }
+
+    function go(delta) {
+        const next = Math.min(count - 1, Math.max(0, i + delta));
+        if (next === i) return;
+        i = next;
+        render();
+    }
+
+    async function loadSlides() {
+        if (loaded) return;
+        loaded = true;
+        try {
+            const res = await fetch(`${BASE}manifest.json`, { cache: 'no-cache' });
+            const m = await res.json();
+            count = m.count; build = m.build || '';
+        } catch { count = 42; } // fallback to known count
+        // Preload every slide in the background so navigation is instant.
+        for (let n = 0; n < count; n++) {
+            const img = new Image();
+            img.src = src(n);
+            cache[n] = img;
+        }
+        render();
+    }
+
+    function open(index = 0) {
+        i = Math.max(0, index);
+        if (count) i = Math.min(i, count - 1);
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+        if (loaded) render(); else loadSlides();
+        if (window.location.hash !== '#s2i') {
+            history.pushState(null, '', '#s2i');
+        }
+    }
+
+    function close() {
+        if (!lightbox.classList.contains('active')) return;
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        if (window.location.hash === '#s2i') {
+            history.pushState(null, '', window.location.pathname + window.location.search);
+        }
+    }
+
+    prevBtn.addEventListener('click', () => go(-1));
+    nextBtn.addEventListener('click', () => go(1));
+    closeBtn.addEventListener('click', close);
+
+    // Persistent tile handler for every click after the lazy-init first click.
+    if (tile) {
+        tile.addEventListener('click', (e) => { e.preventDefault(); open(0); });
+    }
+
+    // Click the dimmed backdrop (but not the slide or arrows) to close.
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target.classList.contains('s2i-stage')) close();
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        switch (e.key) {
+            case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': case 'Spacebar':
+                e.preventDefault(); go(1); break;
+            case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
+                e.preventDefault(); go(-1); break;
+            case 'Home': e.preventDefault(); i = 0; render(); break;
+            case 'End':  e.preventDefault(); i = count - 1; render(); break;
+            case 'Escape': e.preventDefault(); close(); break;
+        }
+    });
+
+    window.addEventListener('popstate', () => {
+        if (window.location.hash === '#s2i') {
+            if (!lightbox.classList.contains('active')) open(i);
+        } else if (lightbox.classList.contains('active')) {
+            lightbox.classList.remove('active');
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        }
+    });
+
+    // Warm the manifest + first slides as soon as the module initializes
+    // (on hover/focus/touch, before the click actually opens the deck).
+    loadSlides();
+
+    return { open, close };
+}
+
 function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
     if (!element) return;
 
@@ -4756,13 +4879,19 @@ function initDeferredHomepageMedia() {
     const ensureMixtapeLightbox = createLazyInitializer(initMixtapeLightbox);
     const ensureGWORLightbox = createLazyInitializer(initGWORLightbox);
     const ensureJCLightbox = createLazyInitializer(initJCLightbox);
+    const ensureS2ILightbox = createLazyInitializer(initS2ILightbox);
     const mixtapeTile = document.getElementById('mixtapeTile');
     const gworTile = document.getElementById('gworTile');
     const jcTile = document.getElementById('jcTile');
+    const s2iTile = document.getElementById('s2iTile');
     const initialRoute = parseMusicHash();
 
     bindLazyMediaTrigger(mixtapeTile, ensureMixtapeLightbox, (instance) => {
         instance.open(false);
+    });
+
+    bindLazyMediaTrigger(s2iTile, ensureS2ILightbox, (instance) => {
+        instance.open(0);
     });
 
     bindLazyMediaTrigger(gworTile, ensureGWORLightbox, (instance) => {
@@ -4798,6 +4927,11 @@ function initDeferredHomepageMedia() {
 
     if (initialRoute && initialRoute.player === 'junkyard-cabaret') {
         ensureJCLightbox();
+    }
+
+    if (window.location.hash === '#s2i') {
+        const s2i = ensureS2ILightbox();
+        if (s2i) s2i.open(0);
     }
 }
 

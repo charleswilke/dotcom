@@ -91,10 +91,13 @@ Append an entry to the **end** of `recapStations` (~line 1496):
 ```
 
 ### 3. Point `currentStation` at the new newest station
-Update `currentStation` (~line 1590) to the new last index so it loads selected:
+Update `currentStation` (~line 1602) to the new last index so it loads selected:
 ```javascript
 let currentStation = 13; // Start at the newest station
 ```
+This one value now drives both the displayed dates *and* the initial needle/active
+marker position — the load-time `updateTunerIndicator(currentStation)` call (~line 1991)
+derives from it, so there's no separate hardcoded index to bump.
 
 ### 4. Add the marker to `index.html`
 In the `.tuner-scale` block (~line 193): add a `.scale-marker.scale-minor` spacer,
@@ -144,4 +147,4 @@ so you don't have to hand-edit the right-side date or the oscilloscope meta date
 
 ---
 
-Last updated: 2026-06-08
+Last updated: 2026-07-01

@@ -165,10 +165,35 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 
 ## Next session: M1 vertical slice (PRD §6)
 
-Hearthside (4–6 rooms — the room system + gutter transitions now exist, so
-this is mostly room data), 2 NPCs with flag-reactive dialogue (consider comic
-speech balloons — they fit Sunday Ink), one Tuning Stone, 3 Archive
-mirror-rooms (phosphor/amber palette + scanlines), Clear as Day spell,
-localStorage save. Remaining open questions at the end of PRD §6: gamepad
-timing, loudness of real-life references, whether the Archive keeps the
-gutter or fades.
+The room system + gutter transitions now exist, so most of M1 is room data
+plus three new systems. Queue, roughly in order:
+
+1. **Onomatopoeia combat bursts** — warm-up task, ~cheap. A hand-lettered
+   "KRAK!" on the combo-3 finisher (procedural text on a jittered starburst
+   polygon, synced to the existing hitstop + shake). Maybe a small "thok" on
+   hits 1–2. Sunday Ink language, but consider it in both styles.
+2. **NPC + dialogue as comic speech balloons.** 2 NPCs with flag-reactive
+   lines. Balloons are rounded blobs with tails pointing at the speaker —
+   exactly the shape grammar the renderer already speaks, and they replace
+   the need for a bottom dialogue box. Flag-conditional lines per PRD §2.5
+   (one flag, one alternate line).
+3. **Hearthside rooms (4–6)** — room data modules; the meadow shows the
+   pattern. Haus of Toots shop interior is the anchor (Jessie NPC = one of
+   the 2 NPCs?).
+4. **Tuning Stone + 3 Archive mirror-rooms** — phosphor/amber palette,
+   scanlines, darkness-first lighting (light.js's pass, tuned harder).
+   Decide: does the Archive keep the paper gutter, or transition differently
+   (microfiche frames? fade)? — open question from PRD §6.
+5. **Clear as Day spell** (88.3) + the frequency-dial HUD seed.
+6. **localStorage save** (`tootsquest_save_v1`): worldState flags, room id,
+   autosave on gutter crossings (natural save point).
+
+Also queued from session 3 playtests, lower priority:
+- Ink-weight / per-instance treatment for characters (Toots, Doc, mites
+  still have uniform outlines and identical-per-class shapes — mites would
+  benefit most since there are many).
+- Scale tree collision radius with visual scale if scale variance ever
+  exceeds the current 0.85–1.2×.
+
+Remaining open questions (PRD §6): gamepad timing, loudness of real-life
+references, Archive transition style (see item 4).

@@ -108,6 +108,13 @@ Backed by a single global `worldState` flags object (see §5), cheap to add to:
   system with a mind of its own). The dogs ARE the quality-of-life features.
   (M0 code has Doc pointing at the demo secret; that role migrates to Astro
   when he's added at M1+.)
+- **Doc's Pest Mode** (from the real Doc, July 2026): go too long without
+  feeding him or resting at a hoop and Doc escalates into full gremlin —
+  underfoot during combat, barking that aggros nearby enemies, standing on
+  the exact thing you're trying to pick up. Not a punishment bar: a comedy
+  pressure system that makes save points and snacks feel like caring for
+  the dog rather than menuing. Feed him or rest and he's instantly comfy
+  again. (Design hook only — tune at M2+ so it never frustrates.)
 
 ### 2.6 Haus of Toots (needlepoint as a game system)
 

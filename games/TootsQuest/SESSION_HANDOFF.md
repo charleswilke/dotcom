@@ -189,6 +189,11 @@ plus three new systems. Queue, roughly in order:
    autosave on gutter crossings (natural save point).
 
 Also queued from session 3 playtests, lower priority:
+- **Dog canon corrected to the real dogs (PRD §2.5):** Doc = cream-gray,
+  grumpy, points to rest/food → in-game he should point at hoop save points
+  and hearts, not secrets. Astro = charcoal, happy, explorer → secrets and
+  dig spots are his. Migrate M0's Doc-points-at-secret behavior to Astro
+  when he's added, and retune dog colors/params (both are tan today).
 - Ink-weight / per-instance treatment for characters (Toots, Doc, mites
   still have uniform outlines and identical-per-class shapes — mites would
   benefit most since there are many).

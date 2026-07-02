@@ -100,9 +100,14 @@ Backed by a single global `worldState` flags object (see §5), cheap to add to:
   alternate dialogue line — high perceived depth per unit of work.
 - **Persistent world edits:** burned bushes stay burned this session; unlocked
   shortcuts stay open forever (saved).
-- **Doc & Astro as systems:** Doc trails you and *points* (sits and stares) toward
-  nearby secrets — a diegetic hint system. Astro digs up buried items at marked
-  spots. The dogs ARE the quality-of-life features.
+- **Doc & Astro as systems** (corrected July 2026 to match the real dogs):
+  **Doc points toward rest and food** — he sits and stares at nearby hoop save
+  points, hearts, and the inn; the comfy dog guides you to the comfy spots.
+  **Astro is the explorer** — he finds secrets and buried items at dig spots,
+  and occasionally wanders off toward something interesting (a diegetic hint
+  system with a mind of its own). The dogs ARE the quality-of-life features.
+  (M0 code has Doc pointing at the demo secret; that role migrates to Astro
+  when he's added at M1+.)
 
 ### 2.6 Haus of Toots (needlepoint as a game system)
 

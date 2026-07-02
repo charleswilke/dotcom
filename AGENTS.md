@@ -4,15 +4,15 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Development
 
-**Local server:** `python -m http.server 8080` — serves the site at http://localhost:8080
+**Local server:** `python3 -m http.server 8080` (or `npx serve` — see .claude/launch.json) — serves the site at http://localhost:8080
 
 **TootsJam leaderboard server** (optional): `cd games/TootsJam && npm start`
 
 **Audio transcription tools** (require Python env with faster-whisper):
 ```
 cd tools && pip install -r requirements.txt
-python transcribe.py <audio-file>
-python verify-lyrics.py
+python3 transcribe.py <audio-file>
+python3 verify-lyrics.py
 ```
 
 No build step — all files are served directly.

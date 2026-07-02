@@ -3,7 +3,7 @@
 // parameters driving the same draw code.
 
 import {
-  TAU, PALETTE, lerp, clamp, dist, easeOutCubic, capsule, inkCircle, inkEllipse,
+  TAU, PALETTE, PRINT, lerp, clamp, dist, easeOutCubic, capsule, inkCircle, inkEllipse,
 } from './ink.js';
 import { moveCircle, circleBlocked } from './terrain.js';
 
@@ -77,6 +77,26 @@ const COMBO = [
   { dur: 0.46, range: 54, sweep: 2.5, width: 6 },
 ];
 
+// A swing is not a wiper blade: it pulls back, whips through, and settles.
+// p = attack time / duration; returns arc progress (0=start angle, 1=end;
+// briefly negative during the windup as the blade cocks behind the start).
+const SWING_WIND = 0.16;    // anticipation ends
+const SWING_STRIKE = 0.52;  // whip ends; follow-through after
+
+function swingProgress(p) {
+  if (p < SWING_WIND) return -0.10 * easeOutCubic(p / SWING_WIND);
+  if (p < SWING_STRIKE) {
+    const u = (p - SWING_WIND) / (SWING_STRIKE - SWING_WIND);
+    return -0.10 + 1.10 * (1 - Math.pow(1 - u, 4));   // violent, then settling
+  }
+  return 1;
+}
+
+// The whole slash lives in the ground plane of the 3/4 view: the same
+// vertical squash the shadows use. An unflattened arc pivots like a wheel
+// and reads as an uppercut; a flattened one reads as a cut *across*.
+const SWING_FLAT = 0.55;
+
 export class Player {
   constructor(x, y) {
     this.x = x; this.y = y;
@@ -147,8 +167,10 @@ export class Player {
     if (this.attack) {
       const c = COMBO[this.attack.combo];
       this.attack.t += dt;
-      // Small forward push at the start of each swing.
-      const push = this.attack.t < 0.12 ? 90 : 0;
+      // Forward push synced to the whip, not the windup — the step and the
+      // cut land together.
+      const pp = this.attack.t / c.dur;
+      const push = (pp >= SWING_WIND && pp < SWING_WIND + 0.16) ? 130 : 0;
       moveCircle(this, Math.cos(this.attack.dir) * push * dt,
         Math.sin(this.attack.dir) * push * dt, this.r);
       if (this.attackQueued && this.attack.t > c.dur * 0.55 && this.attack.combo < 2) {
@@ -189,11 +211,12 @@ export class Player {
   }
 
   // Current swing state for combat checks: {dir, range, progress} or null.
+  // Active only while the blade is actually whipping (not windup/recovery).
   swing() {
     if (!this.attack) return null;
     const c = COMBO[this.attack.combo];
     const p = this.attack.t / c.dur;
-    if (p < 0.1 || p > 0.62) return null;
+    if (p < SWING_WIND || p > SWING_STRIKE + 0.06) return null;
     return { dir: this.attack.dir, range: c.range, combo: this.attack.combo, hitSet: this.attack.hitSet };
   }
 
@@ -224,7 +247,22 @@ export class Player {
     ctx.save();
     ctx.translate(this.x, this.y - bob);
     const lean = this.moving ? 0.09 : 0;
-    ctx.rotate(fx * lean);
+    // Body English: cock back during the windup, throw the torso through
+    // the whip, settle during follow-through. This is most of the "swing".
+    let twist = 0;
+    if (this.attack) {
+      const c = COMBO[this.attack.combo];
+      const ap = clamp(this.attack.t / c.dur, 0, 1);
+      const s = this.attack.sign;
+      if (ap < SWING_WIND) {
+        twist = -0.18 * s * easeOutCubic(ap / SWING_WIND);
+      } else if (ap < SWING_STRIKE) {
+        twist = lerp(-0.18, 0.26, (ap - SWING_WIND) / (SWING_STRIKE - SWING_WIND)) * s;
+      } else {
+        twist = 0.26 * s * (1 - (ap - SWING_STRIKE) / (1 - SWING_STRIKE));
+      }
+    }
+    ctx.rotate(fx * lean + twist);
 
     // Sword on back when not swinging.
     if (!this.attack) {
@@ -266,34 +304,67 @@ export class Player {
 
     ctx.restore();
 
-    // Active swing: glowing trail sector plus the blade.
+    // Active swing: windup → whip (crescent smear + ghost blades) → settle.
     if (this.attack) {
       const c = COMBO[this.attack.combo];
-      const p = clamp(this.attack.t / c.dur / 0.7, 0, 1);
-      const ease = easeOutCubic(p);
-      const start = this.attack.dir - c.sweep * this.attack.sign;
-      const cur = start + 2 * c.sweep * this.attack.sign * ease;
+      const sign = this.attack.sign;
+      const p = clamp(this.attack.t / c.dur, 0, 1);
+      const prog = swingProgress(p);
+      const start = this.attack.dir - c.sweep * sign;
+      const total = 2 * c.sweep * sign;
+      const cur = start + total * prog;
       const cx = this.x, cy = this.y - 12;
+      const whipping = p >= SWING_WIND && p <= SWING_STRIKE + 0.14;
 
-      ctx.save();
-      ctx.globalCompositeOperation = 'lighter';
-      const grad = ctx.createRadialGradient(cx, cy, 8, cx, cy, c.range);
-      grad.addColorStop(0, 'rgba(0,247,194,0)');
-      grad.addColorStop(0.75, `rgba(0,247,194,${0.30 * (1 - p * 0.6)})`);
-      grad.addColorStop(1, 'rgba(0,247,194,0)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      this.attack.sign > 0
-        ? ctx.arc(cx, cy, c.range, start, cur)
-        : ctx.arc(cx, cy, c.range, start, cur, true);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
+      if (whipping) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(1, SWING_FLAT);   // the slash lives in the ground plane
 
-      const bx = cx + Math.cos(cur) * c.range * 0.9;
-      const by = cy + Math.sin(cur) * c.range * 0.8;
-      capsule(ctx, cx + Math.cos(cur) * 8, cy + Math.sin(cur) * 7, bx, by,
+        // Crescent smear from a trailing angle to the blade.
+        const a0 = start + total * Math.max(-0.1, prog - 0.55);
+        const fade = p > SWING_STRIKE ? Math.max(0, 1 - (p - SWING_STRIKE) / 0.14) : 1;
+        ctx.globalCompositeOperation = 'lighter';
+        const grad = ctx.createRadialGradient(0, 0, c.range * 0.3, 0, 0, c.range);
+        grad.addColorStop(0, 'rgba(0,247,194,0)');
+        grad.addColorStop(0.7, `rgba(0,247,194,${0.35 * fade})`);
+        grad.addColorStop(1, `rgba(248,233,210,${0.45 * fade})`);
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(0, 0, c.range, a0, cur, sign < 0);
+        ctx.arc(0, 0, c.range * 0.45, cur, a0, sign > 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+
+        // Sunday Ink: comic action lines chasing the blade.
+        if (PRINT.on) {
+          ctx.strokeStyle = `rgba(34,26,86,${0.55 * fade})`;
+          ctx.lineWidth = 1.7;
+          for (const rr of [0.76, 0.93]) {
+            ctx.beginPath();
+            ctx.arc(0, 0, c.range * rr, cur - sign * 0.85, cur - sign * 0.28, sign < 0);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+
+        // Ghost blades — the motion smear of the blade itself.
+        for (const [d, a] of [[0.30, 0.30], [0.58, 0.14]]) {
+          const ga = cur - sign * d;
+          ctx.globalAlpha = a * fade;
+          capsule(ctx,
+            cx + Math.cos(ga) * 12, cy + Math.sin(ga) * 12 * SWING_FLAT,
+            cx + Math.cos(ga) * c.range * 0.92, cy + Math.sin(ga) * c.range * 0.92 * SWING_FLAT,
+            c.width, PALETTE.cream, null);
+          ctx.globalAlpha = 1;
+        }
+      }
+
+      // The blade, tip tracing the flattened arc.
+      capsule(ctx,
+        cx + Math.cos(cur) * 10, cy + Math.sin(cur) * 10 * SWING_FLAT,
+        cx + Math.cos(cur) * c.range * 0.95, cy + Math.sin(cur) * c.range * 0.95 * SWING_FLAT,
         c.width, PALETTE.cream, PALETTE.ink, 1.8);
     }
   }

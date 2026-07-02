@@ -5,9 +5,11 @@ overworld; a darker mirrored underworld; dungeons, swordplay, and spellcasting �
 woven through with the real mythology of this site: the songs, the dogs, the radios,
 the junk, the frequencies.
 
-**Status:** M0 (Living Ink renderer proof) is BUILT and PASSED its gate —
-see §6 and `SESSION_HANDOFF.md` for implementation notes. Next milestone: M1
-vertical slice.
+**Status:** M0 (Living Ink renderer proof) is BUILT and PASSED its gate.
+**M0.5 (Sunday Ink)** added a second, toggleable visual style — newsprint
+misregistration + halftone screens (§3.4) — plus a two-room world with
+panel-gutter transitions (§3.4a). See §6 and `SESSION_HANDOFF.md` for
+implementation notes. Next milestone: M1 vertical slice.
 
 ---
 
@@ -164,6 +166,21 @@ Concretely:
   procedural detail* (the TootsJam speckle trick — seeded positions so nothing
   flickers): grass flecks as short strokes, dirt speckles, stone cracks as jittered
   polylines. Cheap, infinite, and on-palette by construction.
+- **Variable line weight (added session 3).** Uniform outlines feel sterile;
+  real inking has nib pressure. Three techniques, all in both styles:
+  terrain blob outlines dilate *directionally* (stamp radius varies with
+  angle — thin on top, pooling along the underside); rock outlines are
+  stroked facet-by-facet with seeded per-edge widths, heavier downhill;
+  canopy outlines get a second down-shifted stroke that the refill masks
+  everywhere but the bottom edge. Same ink color throughout — it's pressure,
+  not shadow.
+- **Per-instance identity (added session 3).** No two trees or rocks are
+  alike: every instance seeds its own parameters from its coordinates
+  (trees: canopy blob layout incl. occasional 4th lobe, scale, trunk
+  height/width/lean, one of three green tints, outline weight, wind phase;
+  rocks: size, squash, tone, cell jitter, 0–2 cracks). Deterministic — a
+  tree is always the same tree — and cached, so it costs nothing per frame.
+  This is the shape-grammar promise (§3.1, characters) applied to flora.
 - **Painted light as composite ops.** A dedicated lighting pass using
   `globalCompositeOperation`:
   - Overworld: a full-canvas time-of-day tint (`multiply` rect whose color lerps
@@ -204,7 +221,43 @@ all proven in this repo or standard practice:
    (SpaceToots' canvas size), CSS-scaled.
 5. Budget: ≤ ~60 dynamic entities on screen; profile with a frame-time HUD from day one.
 
-### 3.4 Palette law
+### 3.4 Sunday Ink — the newsprint sibling style
+
+**Added at M0.5.** The second visual identity, layered on Living Ink rather than
+replacing it: the Hollow as a **Sunday newspaper comic strip**. The thematic rhyme
+that earns it: the Archive is the site's microfiche aesthetic — and microfiche is
+literally how newspapers were archived. The two worlds become the same document at
+two moments of its life: the page as printed, and the page as preserved.
+
+Concretely (all procedural, all live in the M0.5 build, toggled with `P`):
+
+- **Plate misregistration.** Every primitive prints its color plate slightly
+  off-register from its ink plate (`PRINT.mx/my`; terrain plates drift 1.6×
+  more). The ink outline never moves; only the color drifts. Ink-colored
+  fills are exempt — they ARE the ink plate. **The drift is horizontal-only**
+  (playtest, session 3): a vertical offset reads as a drop shadow — fake
+  elevation — in the 3/4 view; sideways drift has no gravity story, so it
+  reads as print. Future hook: drive drift up where the Static has un-tuned
+  the world — a diegetic "reality misprint" meter.
+- **Halftone screens on select elements** (not a whole-screen filter): canopy
+  under-shading, deep water, boulder shading. 45° dot lattices built as tiny
+  repeating canvas tiles (`print.js`); patterns are page-anchored, so shapes
+  sway *through* the dots — exactly how a real print screen behaves.
+- **Panel structure.** Rooms are comic panels. Sunday Ink frames the view with
+  a paper-margin + ink border; room-to-room movement is a **gutter transition**
+  in both styles (see §4.1a).
+
+Both styles are first-class and cheap to keep: grounds bake once per
+(room, style) and everything else is parameter reads at draw time.
+
+### 3.4a Room transitions: crossing the gutter
+
+Walking off an open edge slides both rooms across the screen as framed panels
+separated by a cream paper gutter, and Toots visibly *crosses the gutter* from
+the old panel to the new one (0.8s, eased). This resolves the old open question
+"scroll vs. fade": the answer was **panels**.
+
+### 3.5 Palette law
 
 Two palettes, both already on the site, enforced as constants:
 
@@ -229,9 +282,17 @@ per-room baking (§3.3) and keeps world-building modular.
 
 ### 4.2 Swordplay
 
-- **Slash:** 3-hit combo, each swing an animated arc (the swing itself is a glowing
-  vector arc — procedural rendering makes weapon trails gorgeous for free).
-  Hitbox = sector test (angle + radius), not pixel collision.
+- **Slash:** 3-hit combo. Each swing is **windup → whip → follow-through**
+  (reworked session 3 — a constant-speed arc felt like a windshield wiper):
+  the blade cocks back ~10% past the start angle, whips through the full arc
+  in about a third of the swing's duration, then settles. The forward step is
+  synced to the whip, not the buttonpress. Toots' body twists against the
+  windup and throws into the whip.
+  **The slash is drawn in the ground plane**: the arc is vertically squashed
+  to the same ~0.55 the shadows use, so it reads as a cut *across* in the 3/4
+  view (unflattened arcs pivot like a wheel and read as uppercuts). Whip
+  frames get a crescent smear + ghost blades; Sunday Ink adds comic action
+  lines. Hitbox = sector test (angle + radius) active only during the whip.
 - **Hold-charge spin** (classic, earned, satisfying).
 - **Knockback + hitstop** (2–3 frames of freeze on contact) — the cheap juice that
   makes vanilla combat feel expensive.
@@ -373,8 +434,10 @@ polish pass (screen shake, transitions, ambient audio), share page, portfolio ca
 
 1. ~~Who is the hero?~~ **Resolved: the hero is Toots — Charles himself**, rendered
    as a small warm-orange figure with headphones. Doc and Astro remain the co-stars.
-2. Scroll-between-rooms vs. fade transitions for the Archive (scroll feels modern;
-   fade is cheaper and moodier — could differ per world).
+2. ~~Scroll-between-rooms vs. fade transitions?~~ **Resolved at M0.5: panel-gutter
+   transitions** (§3.4a) — rooms slide as comic panels across a paper gutter.
+   Whether the Archive keeps the gutter (microfiche frames?) or fades is still
+   open.
 3. Gamepad support at launch or post-launch? (Input module should abstract for it
    either way.)
 4. How loud should the real-life references be — ambient flavor (recommended) or

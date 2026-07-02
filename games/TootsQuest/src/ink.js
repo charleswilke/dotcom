@@ -29,6 +29,23 @@ export const PALETTE = {
   rustDark: '#8c5128',
 };
 
+// Sunday Ink print mode — a global switch the whole renderer reads.
+// When on, every primitive prints its color "plate" slightly off-register
+// from its ink plate, like a cheaply printed Sunday comic. The ink outline
+// never moves; only the color drifts. mx/my is the plate drift in pixels.
+// The drift is HORIZONTAL-ONLY: a vertical offset reads as a drop shadow,
+// i.e. fake elevation, in the 3/4 view. Sideways drift has no gravity
+// story, so it reads as print. (Playtest finding, session 3.)
+export const PRINT = { on: false, mx: 2.2, my: 0 };
+
+export function setPrintMode(v) { PRINT.on = !!v; }
+
+// Ink-colored fills ARE the ink plate — they must stay registered.
+function plateOffset(fill) {
+  if (!PRINT.on || fill === PALETTE.ink) return null;
+  return [PRINT.mx, PRINT.my];
+}
+
 // Deterministic PRNG — seeded detail never flickers between frames.
 export function mulberry32(seed) {
   let a = seed >>> 0;
@@ -57,25 +74,36 @@ export function angleDiff(a, b) {
 export function capsule(ctx, x1, y1, x2, y2, w, fill, inkColor, inkW = 2.2) {
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
   if (inkColor) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
     ctx.strokeStyle = inkColor;
     ctx.lineWidth = w + inkW * 2;
     ctx.stroke();
   }
+  const off = plateOffset(fill);
+  const [ox, oy] = off || [0, 0];
+  ctx.beginPath();
+  ctx.moveTo(x1 + ox, y1 + oy);
+  ctx.lineTo(x2 + ox, y2 + oy);
   ctx.strokeStyle = fill;
   ctx.lineWidth = w;
   ctx.stroke();
 }
 
 export function inkCircle(ctx, x, y, r, fill, inkColor, inkW = 2.2) {
+  const off = plateOffset(fill);
+  const [ox, oy] = off || [0, 0];
   ctx.beginPath();
-  ctx.arc(x, y, r, 0, TAU);
+  ctx.arc(x + ox, y + oy, r, 0, TAU);
   ctx.fillStyle = fill;
   ctx.fill();
   if (inkColor) {
+    if (off) {
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, TAU);
+    }
     ctx.strokeStyle = inkColor;
     ctx.lineWidth = inkW;
     ctx.stroke();
@@ -83,11 +111,17 @@ export function inkCircle(ctx, x, y, r, fill, inkColor, inkW = 2.2) {
 }
 
 export function inkEllipse(ctx, x, y, rx, ry, rot, fill, inkColor, inkW = 2) {
+  const off = plateOffset(fill);
+  const [ox, oy] = off || [0, 0];
   ctx.beginPath();
-  ctx.ellipse(x, y, rx, ry, rot, 0, TAU);
+  ctx.ellipse(x + ox, y + oy, rx, ry, rot, 0, TAU);
   ctx.fillStyle = fill;
   ctx.fill();
   if (inkColor) {
+    if (off) {
+      ctx.beginPath();
+      ctx.ellipse(x, y, rx, ry, rot, 0, TAU);
+    }
     ctx.strokeStyle = inkColor;
     ctx.lineWidth = inkW;
     ctx.stroke();

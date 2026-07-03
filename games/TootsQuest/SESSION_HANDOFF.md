@@ -121,13 +121,23 @@ games/TootsQuest/
 - **ES modules, no build step**, served directly.
 - **Toots' look is the cover art** (session 4, from Charles' renders): an
   ink-black figure — head, arm nubs, feet all `PALETTE.ink` — with big cream
-  eyes (pupils track facing), a chunky cream headphone band + cups with neon
-  dots, a hair tuft poking OVER the band, an orange poncho with a ragged,
-  swaying hem and the cream X chest stitch, and a NEON blade (palette law:
-  neon = magic/interactive; the sword is the player's magic). Reasoning: the
+  eyes (pupils track facing), cream headphones with neon dots, a hair tuft
+  poking OVER the band, an orange poncho with a ragged, swaying hem and the
+  cream X chest stitch, and a NEON blade (palette law: neon =
+  magic/interactive; the sword is the player's magic). Reasoning: the
   black figure IS the ink plate, so in Sunday Ink he stays registered while
   his poncho and eye-whites drift — the misregistration system flatters him
   for free (see gotcha 6).
+- **The headphones are a facing telegraph, not a hat** (Charles' revision,
+  session 4: "too bulky, should telegraph which way Toots is facing").
+  Slimmed (band 3.2 cream over 5.6 ink at r 10.8, cups r ~3.4) and rigged
+  parametrically: the band slides with the look (`fx*3.2`), cups shift a
+  little (`fx*2.2`) while the NEAR cup grows and the FAR cup shrinks
+  (`3.4 + s*fx*0.9`, min 2.4) and stays tucked at the head's silhouette
+  edge — cheap parallax that reads as the head turning. Facing north
+  additionally shrinks the eye whites continuously
+  (`eyeK = 1 + min(0, fy)*0.5`) so N reads as the back of the head; all of
+  it is continuous, no pose snapping, per the parametric-animation rule.
 - **Speech is comic balloons, not a dialogue box** (session 4): rounded-rect
   bubble + tail triangle in one path, drawn with fill–fat-stroke–refill so
   the tail/bubble seam vanishes; lettering is ALL-CAPS Chalkboard/Comic Sans,
@@ -260,6 +270,10 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 - Body types: Astro visibly lanky standing AND sitting (sits tall, topknot
   clears the head); Doc unchanged. Both dogs sit within ~3.5s of Toots
   idling (frame 210 from a cold approach), Doc first.
+- Headphone facing rig, screenshot-verified in all four cardinals: E/W
+  swing the band + near/far cup split, S is symmetric with full eyes, N
+  shrinks the eyes to back-of-head. Continuous on diagonals by
+  construction (all lerps off fx/fy).
 
 ## Regression baseline (sessions 1–3, re-verified where touched)
 

@@ -340,31 +340,46 @@ export class Player {
     inkCircle(ctx, 0, hy, 10, PALETTE.ink, null);
 
     // Big cover-art eyes: cream whites nearly half the face, tiny ink
-    // pupils chasing the facing direction.
+    // pupils chasing the facing direction. Facing north shows the back of
+    // the head, so the whites shrink away continuously as fy goes negative.
     const ex = fx * 1.6, ey = fy * 1.1;
-    inkCircle(ctx, -3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2, PALETTE.cream, null);
-    inkCircle(ctx, 3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2, PALETTE.cream, null);
+    const eyeK = 1 + Math.min(0, fy) * 0.5;
+    inkCircle(ctx, -3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2 * eyeK, PALETTE.cream, null);
+    inkCircle(ctx, 3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2 * eyeK, PALETTE.cream, null);
     ctx.fillStyle = PALETTE.ink;
-    ctx.beginPath(); ctx.arc(-3.8 + ex, hy - 0.5 + ey, 1.7, 0, TAU); ctx.fill();
-    ctx.beginPath(); ctx.arc(3.8 + ex, hy - 0.5 + ey, 1.7, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(-3.8 + ex, hy - 0.5 + ey, 1.7 * eyeK, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(3.8 + ex, hy - 0.5 + ey, 1.7 * eyeK, 0, TAU); ctx.fill();
 
-    // Chunky cream headphones — the signature, now sized like the cover.
+    // Cream headphones — slimmer than the cover's, and they EARN their
+    // place by telegraphing facing: the whole rig slides around the head
+    // with the look direction (stronger than the eyes' shift), and the
+    // near-side cup grows while the far one shrinks — cheap parallax that
+    // reads as the head actually turning.
+    const hpx = fx * 3.2, hpy = fy * 1.5;
     ctx.lineCap = 'round';
     ctx.strokeStyle = PALETTE.ink;
-    ctx.lineWidth = 8;
+    ctx.lineWidth = 5.6;
     ctx.beginPath();
-    ctx.arc(0, hy, 11.5, Math.PI * 1.12, Math.PI * 1.88);
+    ctx.arc(hpx, hy + hpy * 0.5, 10.8, Math.PI * 1.16, Math.PI * 1.84);
     ctx.stroke();
     ctx.strokeStyle = PALETTE.cream;
-    ctx.lineWidth = 4.4;
+    ctx.lineWidth = 3.2;
     ctx.beginPath();
-    ctx.arc(0, hy, 11.5, Math.PI * 1.12, Math.PI * 1.88);
+    ctx.arc(hpx, hy + hpy * 0.5, 10.8, Math.PI * 1.16, Math.PI * 1.84);
     ctx.stroke();
-    inkCircle(ctx, -11, hy + 2.5, 4.2, PALETTE.cream, PALETTE.ink, 2.2);
-    inkCircle(ctx, 11, hy + 2.5, 4.2, PALETTE.cream, PALETTE.ink, 2.2);
-    ctx.fillStyle = PALETTE.neon;
-    ctx.beginPath(); ctx.arc(-11, hy + 2.5, 1.5, 0, TAU); ctx.fill();
-    ctx.beginPath(); ctx.arc(11, hy + 2.5, 1.5, 0, TAU); ctx.fill();
+    for (const s of [-1, 1]) {
+      // Cups slide a little with the look, but the real telegraph is the
+      // near/far split: the leading cup grows, the trailing one shrinks
+      // and stays tucked at the head's silhouette edge.
+      const cupX = s * 10 + fx * 2.2;
+      const cupY = hy + 2.5 + hpy;
+      const cupR = Math.max(2.4, 3.4 + s * fx * 0.9);
+      inkCircle(ctx, cupX, cupY, cupR, PALETTE.cream, PALETTE.ink, 2);
+      ctx.fillStyle = PALETTE.neon;
+      ctx.beginPath();
+      ctx.arc(cupX, cupY, 1.2, 0, TAU);
+      ctx.fill();
+    }
 
     // Hair tuft poking over the band.
     ctx.strokeStyle = PALETTE.ink;

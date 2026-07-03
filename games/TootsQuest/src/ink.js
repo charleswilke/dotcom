@@ -24,6 +24,13 @@ export const PALETTE = {
   canopyLight: '#8ab864',
   dogBody: '#c98a4b',
   dogChest: '#f3e2c0',
+  // The real dogs (cover-art model sheets, session 4): Doc is cream-gray
+  // scruff, Astro is charcoal with an ink undertone so he sits well on
+  // the outlines.
+  dogDoc: '#d8cbb6',
+  dogDocChest: '#f3e6cd',
+  dogAstro: '#57506a',
+  dogAstroChest: '#867e9a',
   skin: '#f2c89b',
   rust: '#b06a3a',
   rustDark: '#8c5128',

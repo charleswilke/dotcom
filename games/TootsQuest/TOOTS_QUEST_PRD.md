@@ -118,8 +118,9 @@ Backed by a single global `worldState` flags object (see §5), cheap to add to:
   **Astro is the explorer** — he finds secrets and buried items at dig spots,
   and occasionally wanders off toward something interesting (a diegetic hint
   system with a mind of its own). The dogs ARE the quality-of-life features.
-  (M0 code has Doc pointing at the demo secret; that role migrates to Astro
-  when he's added at M1+.)
+  **(Built session 4: both dogs are in-game, canon-correct — Doc heels and
+  sits, Astro scouts and finds the room secret. Doc's comfy-pointing awaits
+  hoops/hearts to point at; Astro's dig spots are an M3 system.)**
 - **Doc's Pest Mode** (from the real Doc, July 2026): go too long without
   feeding him or resting at a hoop and Doc escalates into full gremlin —
   underfoot during combat, barking that aggros nearby enemies, standing on

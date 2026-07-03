@@ -444,7 +444,12 @@ export class Player {
 }
 
 // ---------------------------------------------------------------------------
-// Dog — one grammar, any dog. Doc points at secrets; Astro (later) digs.
+// Dog — one grammar, any dog (canon). Two personalities ride the params:
+// behavior 'heel' (Doc: sticks behind Toots, sits early and often, scowls)
+// and 'scout' (Astro: orbits wide, wanders off to investigate, finds the
+// secret and points it out with the "!"). Session 4 migrated secret-finding
+// from Doc to Astro per the corrected dog canon (PRD §2.5) — the real Doc
+// points at food and naps, not treasure.
 // ---------------------------------------------------------------------------
 
 export class Dog {
@@ -456,50 +461,141 @@ export class Dog {
     this.moving = false;
     this.sitting = false;
     this.sitT = 0;
+    this.pointing = false;
+    this.sniffing = false;
+    this.target = null;        // scout wander target
+    this.wanderClock = 0;
     this.p = {
-      body: PALETTE.dogBody, chest: PALETTE.dogChest,
-      earLen: 9, tailFreq: 9, size: 1, ...params,
+      body: PALETTE.dogBody, chest: PALETTE.dogChest, collar: null,
+      earLen: 9, tailFreq: 9, size: 1,
+      mood: 'happy',           // 'happy' | 'grumpy' — the face
+      behavior: 'heel',        // 'heel' | 'scout' — the brain
+      ...params,
     };
   }
 
+  // Move toward a point with wall-shove detection. When a dog has been
+  // pushing a wall for ~half a second he swerves perpendicular for a beat
+  // (whichever side is open) — no pathfinding, just wiggling, and chained
+  // swerves walk him around boulder corners. Returns true on a stuck event.
+  seek(tx, ty, sp, dt) {
+    if (this.detourT > 0) {
+      this.detourT -= dt;
+      tx = this.detour.x;
+      ty = this.detour.y;
+    }
+    const a = Math.atan2(ty - this.y, tx - this.x);
+    const px = this.x, py = this.y;
+    moveCircle(this, Math.cos(a) * sp * dt, Math.sin(a) * sp * dt, this.r);
+    this.face = a;
+    this.trot += dt * (sp / 15);
+    this.moving = true;
+    this.sitting = false;
+    this.sitT = 0;
+    const moved = dist(px, py, this.x, this.y);
+    this.stuckT = moved < sp * dt * 0.3 ? (this.stuckT || 0) + dt : 0;
+    if (this.stuckT > 0.45) {
+      this.stuckT = 0;
+      for (const da of [a + Math.PI / 2, a - Math.PI / 2]) {
+        const wx = this.x + Math.cos(da) * 55;
+        const wy = this.y + Math.sin(da) * 55;
+        if (!circleBlocked(wx, wy, this.r)) {
+          this.detour = { x: wx, y: wy };
+          this.detourT = 0.55;
+          break;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
   update(dt, player, secret) {
+    if (this.p.behavior === 'scout') return this.updateScout(dt, player, secret);
+
+    // Heel: stay behind Toots; sit as soon as he settles.
     const behind = 32;
     const tx = player.x - Math.cos(player.face) * behind;
     const ty = player.y - Math.sin(player.face) * behind * 0.6;
     const d = dist(this.x, this.y, tx, ty);
 
     if (d > 26) {
-      const sp = clamp((d - 20) * 4, 60, 230);
-      const a = Math.atan2(ty - this.y, tx - this.x);
-      moveCircle(this, Math.cos(a) * sp * dt, Math.sin(a) * sp * dt, this.r);
-      this.face = a;
-      this.trot += dt * (sp / 16);
-      this.moving = true;
-      this.sitting = false;
-      this.sitT = 0;
+      this.seek(tx, ty, clamp((d - 20) * 4, 60, 230), dt);
     } else {
       this.moving = false;
       this.sitT += dt;
-      if (player.idleT > 1.2 && this.sitT > 0.8) {
-        this.sitting = true;
-        // Doc's nose knows: when sitting near a secret, he stares at it.
-        if (secret && dist(this.x, this.y, secret.x, secret.y) < 190) {
-          this.face = Math.atan2(secret.y - this.y, secret.x - this.x);
-          this.pointing = true;
-        } else {
-          this.pointing = false;
-        }
-      } else {
-        this.sitting = false;
-        this.pointing = false;
+      // Doc sits sooner than old-Doc did — resting is his whole thing.
+      this.sitting = player.idleT > 0.9 && this.sitT > 0.6;
+    }
+  }
+
+  // Scout: orbit Toots loosely, pick things to go look at, and if the
+  // room's secret is anywhere near, beeline to it, sniff, and point.
+  // No pathfinding — instead, a dog-honest unstick: if he's been shoving
+  // into a wall for half a second he loses interest for a few seconds and
+  // goes back to orbiting (the hearth secret sits behind boulders, which
+  // pinned him permanently before this).
+  updateScout(dt, player, secret) {
+    this.sniffing = false;
+    this.pointing = false;
+    this.secretCooldown = Math.max(0, (this.secretCooldown || 0) - dt);
+    const dp = dist(this.x, this.y, player.x, player.y);
+    let tx, ty, arrive = 14;
+
+    const nearSecret = secret && this.secretCooldown <= 0 &&
+      dist(this.x, this.y, secret.x, secret.y) < 170 && dp < 260;
+    if (nearSecret) {
+      // Sniff from whichever side he's coming from.
+      const sa = Math.atan2(this.y - secret.y, this.x - secret.x);
+      tx = secret.x + Math.cos(sa) * 16;
+      ty = secret.y + Math.sin(sa) * 10;
+      arrive = 5;
+      if (dist(this.x, this.y, secret.x, secret.y) < 30) {
+        this.face = Math.atan2(secret.y - this.y, secret.x - this.x);
+        this.sniffing = true;
+        this.pointing = true;
       }
+    } else if (dp > 175) {
+      tx = player.x; ty = player.y;   // don't lose the pack
+      this.target = null;
+    } else {
+      this.wanderClock -= dt;
+      if (this.wanderClock <= 0 || !this.target) {
+        this.wanderClock = 1 + Math.random() * 1.6;
+        const a = Math.random() * TAU;
+        this.target = {
+          x: player.x + Math.cos(a) * (50 + Math.random() * 70),
+          y: player.y + Math.sin(a) * (35 + Math.random() * 45),
+        };
+      }
+      tx = this.target.x; ty = this.target.y;
+    }
+
+    const d = dist(this.x, this.y, tx, ty);
+    if (d > arrive && !this.sniffing) {
+      const sp = clamp(dp > 175 ? 240 : d * 2.4, 70, 240);
+      if (this.seek(tx, ty, sp, dt) && nearSecret) {
+        // Shoved a wall on the way to the secret: lose interest for a few
+        // seconds and go back to orbiting; he'll re-catch the scent from an
+        // open angle later.
+        this.secretCooldown = 4;
+        this.target = null;
+        this.wanderClock = 0;
+      }
+    } else {
+      this.moving = false;
+      this.sitT += dt;
+      // Even the explorer flops down eventually — but it takes longer.
+      this.sitting = !this.sniffing && player.idleT > 3 && this.sitT > 2;
     }
   }
 
   draw(ctx, t) {
     const p = this.p;
     const sx = Math.cos(this.face) >= 0 ? 1 : -1;
-    const wag = Math.sin(t * p.tailFreq) * (this.sitting ? 2 : 3.5);
+    // Doc's tail barely bothers; Astro's never stops.
+    const wagAmp = this.sitting ? (p.mood === 'grumpy' ? 1 : 2.5) : 3.5;
+    const wag = Math.sin(t * p.tailFreq) * wagAmp;
     const bob = this.moving ? Math.abs(Math.sin(this.trot)) * 1.6 : 0;
 
     inkEllipse(ctx, this.x, this.y + 1, 11, 4.5, 0, 'rgba(34,26,86,0.22)', null);
@@ -516,27 +612,47 @@ export class Dog {
       capsule(ctx, 2, -10, 2, -2, 3.5, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6, -10, 6, -2, 3.5, p.body, PALETTE.ink, 1.8);
       inkEllipse(ctx, 4, -12, 4, 5, 0, p.chest, null);
+      this.drawScruff(ctx, -6, -19, 4, -19, t);
       this.drawHead(ctx, 7, -22, t);
     } else {
       const l1 = this.moving ? Math.sin(this.trot) * 3 : 0;
       const l2 = this.moving ? Math.sin(this.trot + Math.PI) * 3 : 0;
+      // Nose-to-the-ground sniffing drops the whole front half.
+      const sniff = this.sniffing ? 3 + Math.sin(t * 9) * 1.5 : 0;
       capsule(ctx, -11, -9, -17 + wag, -14, 4, p.body, PALETTE.ink, 1.8);
       capsule(ctx, -8 + l1, -8, -8 + l1 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6 + l2, -8, 6 + l2 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
-      capsule(ctx, -10, -10, 7, -10, 12, p.body, PALETTE.ink, 2.2);
+      capsule(ctx, -10, -10, 7, -10 + sniff * 0.4, 12, p.body, PALETTE.ink, 2.2);
       capsule(ctx, -8 + l2, -8, -8 + l2 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6 + l1, -8, 6 + l1 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
       inkEllipse(ctx, 6, -8, 4, 4.5, 0, p.chest, null);
-      this.drawHead(ctx, 12, -16, t);
+      this.drawScruff(ctx, -8, -16, 4, -16, t);
+      this.drawHead(ctx, 12, -16 + sniff, t);
     }
 
     ctx.restore();
 
-    // A puzzled, attentive "?" of pure love when pointing at a secret.
+    // The explorer's "!" when he's found something worth digging at.
     if (this.pointing && Math.sin(t * 2.5) > 0.3) {
       ctx.fillStyle = PALETTE.neon;
       ctx.font = 'bold 11px monospace';
       ctx.fillText('!', this.x - 2, this.y - 34);
+    }
+  }
+
+  // A few fur ticks along the back — both real dogs are scruffy.
+  drawScruff(ctx, x0, y0, x1, y1, t) {
+    ctx.strokeStyle = PALETTE.ink;
+    ctx.lineWidth = 1.3;
+    ctx.lineCap = 'round';
+    for (let i = 0; i < 3; i++) {
+      const u = i / 2;
+      const x = x0 + (x1 - x0) * u;
+      const y = y0 + (y1 - y0) * u;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - 1.5, y - 2.5 - Math.sin(t * 2 + i) * 0.4);
+      ctx.stroke();
     }
   }
 
@@ -550,10 +666,32 @@ export class Dog {
     // Snout and nose.
     inkEllipse(ctx, hx + 6, hy + 2, 4.5, 3.2, 0, p.chest, PALETTE.ink, 1.6);
     inkCircle(ctx, hx + 8.5, hy + 1.5, 1.6, PALETTE.ink, null);
+    // Collar peeking at the neck.
+    if (p.collar) {
+      capsule(ctx, hx - 6.5, hy + 5.5, hx - 2, hy + 6.5, 2.4, p.collar, null);
+    }
+    // The face is the personality.
     ctx.fillStyle = PALETTE.ink;
     ctx.beginPath();
     ctx.arc(hx + 1.5, hy - 1, 1.4, 0, TAU);
     ctx.fill();
+    if (p.mood === 'grumpy') {
+      // Doc: a furrowed brow slanting down at the world, and a dour little
+      // downturn behind the snout.
+      ctx.strokeStyle = PALETTE.ink;
+      ctx.lineWidth = 1.6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(hx - 1.5, hy - 4.5);
+      ctx.lineTo(hx + 3.8, hy - 3);
+      ctx.moveTo(hx + 7.5, hy + 4.4);
+      ctx.lineTo(hx + 4.8, hy + 5.4);
+      ctx.stroke();
+    } else {
+      // Astro: mouth open, tongue out, forever delighted.
+      inkEllipse(ctx, hx + 4.6, hy + 4.8, 2.8, 2, 0.2, PALETTE.ink, null);
+      inkEllipse(ctx, hx + 4.4, hy + 5.6, 1.6, 1.2, 0.2, PALETTE.hotOrange, null);
+    }
   }
 }
 

@@ -41,7 +41,16 @@ const DAY_LENGTH = 150;       // seconds per full day — fast, for the demo
 let tDay = 0.56;              // start in the warm afternoon
 
 const player = new Player(room.decor.playerSpawn.x, room.decor.playerSpawn.y);
-const doc = new Dog(player.x - 40, player.y + 10, { earLen: 10, tailFreq: 9 });
+// The real dogs (PRD §2.5, cover-art model sheets): Doc heels and scowls,
+// Astro scouts and grins. Same grammar, different souls.
+const doc = new Dog(player.x - 40, player.y + 10, {
+  body: PALETTE.dogDoc, chest: PALETTE.dogDocChest, collar: PALETTE.slate,
+  earLen: 11, tailFreq: 6, size: 1.05, mood: 'grumpy', behavior: 'heel',
+});
+const astro = new Dog(player.x + 34, player.y + 22, {
+  body: PALETTE.dogAstro, chest: PALETTE.dogAstroChest, collar: PALETTE.orange,
+  earLen: 8.5, tailFreq: 13, size: 0.95, mood: 'happy', behavior: 'scout',
+});
 
 function roomMites(r) {
   if (!r.mites) r.mites = r.decor.miteSpawns.map(s => new Mite(s.x, s.y));
@@ -140,12 +149,20 @@ function finishTransition() {
   setRoom(tr.toRoom.id);
   player.x = tr.entryX;
   player.y = tr.y;
-  // Doc arrives beside Toots — clamped inside the walkable bounds, or the
-  // collision edge strands him out of the world forever.
+  // The dogs arrive beside Toots — clamped inside the walkable bounds, or
+  // the collision edge strands them out of the world forever (gotcha 5).
   doc.x = clamp(player.x + (tr.dir === 'E' ? -34 : 34), 18, WORLD_W - 18);
   doc.y = player.y + 8;
   doc.sitting = false;
   doc.pointing = false;
+  astro.x = clamp(player.x + (tr.dir === 'E' ? -52 : 52), 18, WORLD_W - 18);
+  astro.y = player.y + 20;
+  astro.sitting = false;
+  astro.pointing = false;
+  astro.sniffing = false;
+  astro.target = null;   // stale wander targets point at the old room
+  doc.detourT = astro.detourT = 0;
+  doc.stuckT = astro.stuckT = 0;
   mites = roomMites(room);
   npcs = roomNpcs(room);
   particles.length = 0;
@@ -199,7 +216,8 @@ function update(dt, time) {
   // Talking locks Toots' input but the world keeps living (pillar 1):
   // mites still wander, Doc still settles, torches still spit embers.
   player.update(dt, dialogue.active ? EMPTY_KEYS : keys, game);
-  doc.update(dt, player, room.decor.secret);
+  doc.update(dt, player);
+  astro.update(dt, player, room.decor.secret);
   for (const n of npcs) n.update(dt, player);
   for (const m of mites) m.update(dt, player, game);
   // A lunge that lands mid-sentence breaks off the conversation — hurt()
@@ -259,8 +277,8 @@ function update(dt, time) {
     }
   }
 
-  // Doc marks the secret with a glint while he's pointing.
-  if (doc.pointing && room.decor.secret && Math.random() < dt * 1.5) {
+  // Astro marks the secret with a glint while he's pointing at it.
+  if (astro.pointing && room.decor.secret && Math.random() < dt * 1.5) {
     spawnParticle({
       x: room.decor.secret.x + (Math.random() - 0.5) * 10,
       y: room.decor.secret.y - 4,
@@ -519,7 +537,7 @@ function drawPanelFrame(px = 0) {
 // One room drawn as a comic panel at screen offset px: ground, static decor,
 // its mites (and optionally Doc), then the sky tint — all clipped to the
 // panel so nothing bleeds into the gutter.
-function drawRoomPanel(r, px, time, withDoc) {
+function drawRoomPanel(r, px, time, withDogs) {
   ctx.save();
   ctx.beginPath();
   ctx.rect(px, 0, WORLD_W, WORLD_H);
@@ -534,7 +552,10 @@ function drawRoomPanel(r, px, time, withDoc) {
   if (r.decor.banner) list.push({ y: r.decor.banner.y, fn: () => drawBanner(r.decor.banner, time) });
   if (r.npcs) for (const n of r.npcs) list.push({ y: n.y, fn: () => n.draw(ctx, time) });
   if (r.mites) for (const m of r.mites) list.push({ y: m.y, fn: () => m.draw(ctx, time) });
-  if (withDoc) list.push({ y: doc.y, fn: () => doc.draw(ctx, time) });
+  if (withDogs) {
+    list.push({ y: doc.y, fn: () => doc.draw(ctx, time) });
+    list.push({ y: astro.y, fn: () => astro.draw(ctx, time) });
+  }
   list.sort((a, b) => a.y - b.y);
   for (const d of list) d.fn();
   const [tr, tg, tb, ta] = skyState(tDay).tint;
@@ -603,6 +624,7 @@ function render(time) {
     ...room.decor.torches.map(to => ({ y: to.y, fn: () => drawTorch(to, time) })),
     { y: player.y, fn: () => player.draw(ctx, time) },
     { y: doc.y, fn: () => doc.draw(ctx, time) },
+    { y: astro.y, fn: () => astro.draw(ctx, time) },
     ...npcs.map(n => ({ y: n.y, fn: () => n.draw(ctx, time) })),
     ...mites.map(m => ({ y: m.y, fn: () => m.draw(ctx, time) })),
   ];
@@ -726,7 +748,7 @@ requestAnimationFrame(frame);
 // Debug handle for the M0 gate — harmless to ship, handy in the console.
 let debugClock = performance.now() / 1000;
 window.__TQ = {
-  player, doc, game,
+  player, doc, astro, game,
   get mites() { return mites; },
   get npcs() { return npcs; },
   get room() { return room; },

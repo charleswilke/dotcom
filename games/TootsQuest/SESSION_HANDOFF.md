@@ -16,10 +16,13 @@ whip → follow-through, drawn flattened into the ground plane so it reads as
 a horizontal cut (PRD §4.2). **Session 4 started M1 proper:** onomatopoeia
 combat bursts (THOK!/POK!/KRAK!/OOF!), the first two NPCs (Jessie, Old Wren)
 with flag-reactive dialogue in comic speech balloons, the `worldState` flags
-object, and a full player-character redesign to match the cover art (ink-black
-figure, big cream eyes, chunky headphones, ragged orange poncho, neon blade).
-Remaining M1: more Hearthside rooms, Tuning Stone, Archive mirror-rooms,
-Clear as Day spell, save/load.
+object, a full player-character redesign to match the cover art (ink-black
+figure, big cream eyes, chunky headphones, ragged orange poncho, neon blade),
+and **both real dogs**: Astro joined Doc, the corrected dog canon is now
+implemented (Doc heels/sits/scowls; Astro scouts, finds the secret, points),
+and dogs got a wiggle-based unstick so boulders can't pin them. Remaining
+M1: more Hearthside rooms, Tuning Stone, Archive mirror-rooms, Clear as Day
+spell, save/load.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -53,7 +56,8 @@ games/TootsQuest/
                 # (30×17, 32px: G/P/W/R), decor, neighbors; live `room` export,
                 # setRoom/getRoom; collision (circleBlocked/moveCircle); blob
                 # baking, print-aware, cached per (room, style) via groundFor()
-    entities.js # Player (Toots), Dog (Doc — one grammar, any dog), Mite,
+    entities.js # Player (Toots), Dog (one grammar, two souls: Doc heel /
+                # Astro scout, mood faces, seek() wiggle-unstick), Mite,
                 # particle system; session 4: cover-art Toots redesign,
                 # dash/footfall dust puffs
     light.js    # day/night keyframes (skyState), darkness pass (drawLighting)
@@ -69,6 +73,24 @@ games/TootsQuest/
 
 - **Hero is Toots = Charles.** Orange tunic, headphones with neon dots, sword on
   back, cross-stitch chest charm. Doc & Astro are co-stars, not the player.
+- **Both dogs are in, canon-correct** (session 4, PRD §2.5): one Dog grammar,
+  two personalities via params. **Doc** = cream-gray (`PALETTE.dogDoc`),
+  slate collar, chunkier (size 1.05), slow tail (freq 6), grumpy face
+  (furrowed brow + downturned mouth), behavior `heel` — sticks behind Toots
+  and sits almost immediately when he stops. **Astro** = charcoal
+  (`PALETTE.dogAstro`), orange collar, smaller (0.95), manic tail (freq 13),
+  happy face (open mouth + tongue), behavior `scout` — orbits the player at
+  50–120px picking random things to investigate, and when the room's secret
+  is within 170px he beelines, sniffs (head-down bob), and blinks the neon
+  "!". The secret glint in main.js keys off `astro.pointing` now, NOT doc —
+  the old Doc-points-at-secret behavior is gone per canon (Doc's future
+  pointing targets are hoops/hearts/food when those exist).
+- **Dogs unstick by wiggling, not pathfinding** (`Dog.seek()`): if a dog
+  moves less than 30% of its intended speed for ~0.45s it swerves
+  perpendicular (whichever side is open) for ~0.55s; chained swerves walk
+  it around boulder corners. Scout additionally drops a 4s `secretCooldown`
+  if the wall was on the way to the secret, so he orbits and re-approaches
+  from an open angle later. This reads as dog behavior, which is the point.
 - **Haus of Toots is a game system** (PRD §2.6): embroidery-hoop save points,
   collectible patterns, stitched charm buffs.
 - **Renderer is Canvas 2D procedural vector ("Living Ink"), zero image assets.**
@@ -168,11 +190,17 @@ games/TootsQuest/
    floated over the canopy. Check new NPC spots against tree positions
    (canopy spans roughly ±35px, centered above the trunk), not just the
    collision grid.
+13. **A bare moveCircle chase pins entities on walls.** Axis-separated
+   movement only slides if the free axis has a component; a dead-on
+   approach (dy≈0 into a vertical rock face) sticks forever. Both dogs hit
+   this on the hearth boulders at (672–736, 224–288) chasing targets east
+   of them. Anything that chases a point needs an unstick — dogs use
+   `seek()`'s perpendicular wiggle; reuse it for future followers.
 
 ## Debug handle (window.__TQ)
 
 ```js
-__TQ.player / .doc / .game        // live objects
+__TQ.player / .doc / .astro / .game   // live objects
 __TQ.mites                        // getter — current room's mites
 __TQ.npcs                         // getter — current room's NPC instances
 __TQ.room                         // getter — current room ({id, decor, neighbors, ...})
@@ -209,6 +237,13 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 - New Toots reads at gameplay zoom and 3× zoom, in both styles; pupils
   track facing (up at Jessie when talking north); tuft clears the band;
   print mode keeps the black figure registered while poncho/eyes drift.
+- Both dogs, scripted + screenshot-verified: Doc heels across the map and
+  sits (grumpy) when Toots idles; Astro orbits, then finds the hearth
+  secret from an open angle and sniffs/points (frame ~355 from a cold
+  start); secret glint follows `astro.pointing`. The boulder trap that
+  pinned both dogs is fixed by `seek()` — re-tested the exact pinning
+  scenario (player at 800,230, dogs west of the rocks) and both arrive.
+  Gutter crossings carry both dogs, clamped in-bounds, both ways.
 
 ## Regression baseline (sessions 1–3, re-verified where touched)
 
@@ -277,14 +312,10 @@ speech balloons) plus an unplanned player redesign to the cover art. Queue:
    crossings (natural save point).
 
 Also queued, lower priority:
-- **Dog canon corrected to the real dogs (PRD §2.5):** Doc = cream-gray,
-  grumpy, points to rest/food → in-game he should point at hoop save points
-  and hearts, not secrets. Astro = charcoal, happy, explorer → secrets and
-  dig spots are his. Migrate M0's Doc-points-at-secret behavior to Astro
-  when he's added, and retune dog colors/params (both are tan today).
-  Charles' cover renders show both dogs — use them as the model sheets
-  (Astro: shaggy charcoal, huge grin; Doc: scruffy cream-gray, permanent
-  scowl, chunkier).
+- **Dog follow-ups** (canon migration itself is DONE — both dogs are in):
+  Doc's pointing-at-comfy behavior needs targets — wire it to hoop save
+  points / hearts / the inn when those exist. Astro's dig spots are an M3
+  system. Doc's Pest Mode (PRD §2.5) is a design hook for M2+.
 - **Mite render-style pass:** the cover renders give mites spring antennae
   with bolt tips, visible rivets/patch seams, and rounder rustier bodies.
   Combine with the queued per-instance identity pass (mites benefit most —

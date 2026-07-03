@@ -117,6 +117,29 @@ export function inkCircle(ctx, x, y, r, fill, inkColor, inkW = 2.2) {
   }
 }
 
+// A capsule bent along a quadratic curve — for bodies that aren't straight
+// (the shih tzu bean). Same plate rules as capsule.
+export function curvedCapsule(ctx, x1, y1, cx, cy, x2, y2, w, fill, inkColor, inkW = 2.2) {
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  if (inkColor) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.quadraticCurveTo(cx, cy, x2, y2);
+    ctx.strokeStyle = inkColor;
+    ctx.lineWidth = w + inkW * 2;
+    ctx.stroke();
+  }
+  const off = plateOffset(fill);
+  const [ox, oy] = off || [0, 0];
+  ctx.beginPath();
+  ctx.moveTo(x1 + ox, y1 + oy);
+  ctx.quadraticCurveTo(cx + ox, cy + oy, x2 + ox, y2 + oy);
+  ctx.strokeStyle = fill;
+  ctx.lineWidth = w;
+  ctx.stroke();
+}
+
 // Arbitrary closed shape with the same plate rules as the primitives:
 // fill drifts in print mode, ink outline stays registered. buildPath must
 // begin its own path and be safe to call twice.

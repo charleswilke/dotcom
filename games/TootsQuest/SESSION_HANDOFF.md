@@ -85,12 +85,15 @@ games/TootsQuest/
   "!". The secret glint in main.js keys off `astro.pointing` now, NOT doc —
   the old Doc-points-at-secret behavior is gone per canon (Doc's future
   pointing targets are hoops/hearts/food when those exist).
-- **Body types are dials on the one grammar** (Charles' correction, session
+- **Body types are dials on the one grammar** (Charles' corrections, session
   4): `lift` (barrel height off the ground — legs lengthen, head carries
-  higher at 1.3×, sit pose stretches tall), `bodyW`, `legW`, `topknot`.
-  **Doc is full shih tzu = all defaults untouched (lift 0, bodyW 12) — he
-  was signed off as-is; don't "improve" him.** Astro is the poodle: lift
-  4.5, bodyW 9, legW 2.5, topknot true.
+  higher at 1.3×, sit pose stretches tall), `bodyW`, `legW`, `topknot`, and
+  `bean` (sags the barrel midline along a quadratic — belly rounds down,
+  chest/rump ride up; the sit pose puffs the chest on the same curve; the
+  scruff ticks and head follow). **Doc is full shih tzu: defaults + bean
+  3.5** — per Charles, "that signature curve to their midsection." Astro is
+  the poodle: lift 4.5, bodyW 9, legW 2.5, topknot, bean 0. Curved barrels
+  use the `curvedCapsule` primitive in ink.js (same plate rules as capsule).
 - **The scout stops inventing adventures when Toots settles** (player.idleT
   > 2.5 stops wander re-targeting). Without this the ~1.5s wander clock
   re-targets forever and Astro can never accrue the 2s of stillness his

@@ -3,7 +3,8 @@
 // parameters driving the same draw code.
 
 import {
-  TAU, PALETTE, PRINT, lerp, clamp, dist, easeOutCubic, capsule, inkCircle, inkEllipse, inkShape,
+  TAU, PALETTE, PRINT, lerp, clamp, dist, easeOutCubic, capsule, curvedCapsule,
+  inkCircle, inkEllipse, inkShape,
 } from './ink.js';
 import { moveCircle, circleBlocked } from './terrain.js';
 import { spawnWord } from './fx.js';
@@ -472,8 +473,10 @@ export class Dog {
       behavior: 'heel',        // 'heel' | 'scout' — the brain
       // Body type dials (the real dogs differ): lift raises the barrel off
       // the ground on longer legs (poodle), bodyW is barrel thickness,
-      // legW leg thickness, topknot adds the poodle head-pouf.
-      lift: 0, bodyW: 12, legW: 3.5, topknot: false,
+      // legW leg thickness, topknot adds the poodle head-pouf, bean sags
+      // the midline into the shih tzu curved-bean silhouette (belly rounds
+      // down, chest and rump ride up).
+      lift: 0, bodyW: 12, legW: 3.5, topknot: false, bean: 0,
       ...params,
     };
   }
@@ -620,7 +623,12 @@ export class Dog {
       // tall — the torso stretches with the lift; haunches stay grounded.
       capsule(ctx, -9, -7, -16 + wag, -3, 4, p.body, PALETTE.ink, 1.8);
       inkEllipse(ctx, -7, -7, 8 - L * 0.2, 7, 0, p.body, PALETTE.ink, 2.2);
-      capsule(ctx, -6, -8, 4, -15 - L * 0.8, bw - 1, p.body, PALETTE.ink, 2.2);
+      // Bean dogs sit with the chest puffed out on that curved front.
+      if (p.bean) {
+        curvedCapsule(ctx, -6, -8, 2 + p.bean * 0.4, -9.5, 4, -15 - L * 0.8, bw - 1, p.body, PALETTE.ink, 2.2);
+      } else {
+        capsule(ctx, -6, -8, 4, -15 - L * 0.8, bw - 1, p.body, PALETTE.ink, 2.2);
+      }
       capsule(ctx, 2, -10 - L * 0.8, 2, -2, lw, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6, -10 - L * 0.8, 6, -2, lw, p.body, PALETTE.ink, 1.8);
       inkEllipse(ctx, 4, -12 - L * 0.5, 4, 5, 0, p.chest, null);
@@ -635,13 +643,24 @@ export class Dog {
       capsule(ctx, -11, by + 1, -17 + wag, by - 4, 4, p.body, PALETTE.ink, 1.8);
       capsule(ctx, -8 + l1, by + 2, -8 + l1 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6 + l2, by + 2, 6 + l2 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
-      capsule(ctx, -10, by, 7, by + sniff * 0.4, bw, p.body, PALETTE.ink, 2.2);
+      // The barrel: straight, or the shih tzu bean — rump and chest up a
+      // touch, belly sagging through the middle.
+      if (p.bean) {
+        curvedCapsule(ctx,
+          -10, by - p.bean * 0.5,
+          -1.5, by + p.bean,
+          7, by - p.bean * 0.4 + sniff * 0.4,
+          bw, p.body, PALETTE.ink, 2.2);
+      } else {
+        capsule(ctx, -10, by, 7, by + sniff * 0.4, bw, p.body, PALETTE.ink, 2.2);
+      }
       capsule(ctx, -8 + l2, by + 2, -8 + l2 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6 + l1, by + 2, 6 + l1 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
       inkEllipse(ctx, 6, by + 2, 4, 4.5, 0, p.chest, null);
-      this.drawScruff(ctx, -8, by - bw / 2, 4, by - bw / 2, t);
-      // A leggy dog carries its head high.
-      this.drawHead(ctx, 12, -16 - L * 1.3 + sniff, t);
+      // Scruff rides the back — which dips with the bean.
+      this.drawScruff(ctx, -8, by - bw / 2 + p.bean * 0.5, 4, by - bw / 2 + p.bean * 0.5, t);
+      // A leggy dog carries its head high; a bean dog's chest-up adds a bit.
+      this.drawHead(ctx, 12, -16 - L * 1.3 - p.bean * 0.35 + sniff, t);
     }
 
     ctx.restore();

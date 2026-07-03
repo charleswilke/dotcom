@@ -470,6 +470,10 @@ export class Dog {
       earLen: 9, tailFreq: 9, size: 1,
       mood: 'happy',           // 'happy' | 'grumpy' — the face
       behavior: 'heel',        // 'heel' | 'scout' — the brain
+      // Body type dials (the real dogs differ): lift raises the barrel off
+      // the ground on longer legs (poodle), bodyW is barrel thickness,
+      // legW leg thickness, topknot adds the poodle head-pouf.
+      lift: 0, bodyW: 12, legW: 3.5, topknot: false,
       ...params,
     };
   }
@@ -560,7 +564,10 @@ export class Dog {
       this.target = null;
     } else {
       this.wanderClock -= dt;
-      if (this.wanderClock <= 0 || !this.target) {
+      // Stop inventing new adventures once Toots has settled — otherwise
+      // the wander clock re-targets every ~1.5s and Astro can never rest
+      // long enough to sit.
+      if ((this.wanderClock <= 0 && player.idleT < 2.5) || !this.target) {
         this.wanderClock = 1 + Math.random() * 1.6;
         const a = Math.random() * TAU;
         this.target = {
@@ -604,30 +611,37 @@ export class Dog {
     ctx.translate(this.x, this.y - bob);
     ctx.scale(sx * p.size, p.size);
 
+    const L = p.lift;              // barrel height off the ground
+    const bw = p.bodyW;
+    const lw = p.legW;
+
     if (this.sitting) {
-      // Haunches down, chest up, tail sweeping the grass.
+      // Haunches down, chest up, tail sweeping the grass. A lanky dog sits
+      // tall — the torso stretches with the lift; haunches stay grounded.
       capsule(ctx, -9, -7, -16 + wag, -3, 4, p.body, PALETTE.ink, 1.8);
-      inkEllipse(ctx, -7, -7, 8, 7, 0, p.body, PALETTE.ink, 2.2);
-      capsule(ctx, -6, -8, 4, -15, 11, p.body, PALETTE.ink, 2.2);
-      capsule(ctx, 2, -10, 2, -2, 3.5, p.body, PALETTE.ink, 1.8);
-      capsule(ctx, 6, -10, 6, -2, 3.5, p.body, PALETTE.ink, 1.8);
-      inkEllipse(ctx, 4, -12, 4, 5, 0, p.chest, null);
-      this.drawScruff(ctx, -6, -19, 4, -19, t);
-      this.drawHead(ctx, 7, -22, t);
+      inkEllipse(ctx, -7, -7, 8 - L * 0.2, 7, 0, p.body, PALETTE.ink, 2.2);
+      capsule(ctx, -6, -8, 4, -15 - L * 0.8, bw - 1, p.body, PALETTE.ink, 2.2);
+      capsule(ctx, 2, -10 - L * 0.8, 2, -2, lw, p.body, PALETTE.ink, 1.8);
+      capsule(ctx, 6, -10 - L * 0.8, 6, -2, lw, p.body, PALETTE.ink, 1.8);
+      inkEllipse(ctx, 4, -12 - L * 0.5, 4, 5, 0, p.chest, null);
+      this.drawScruff(ctx, -6, -19 - L * 0.7, 4, -19 - L * 0.7, t);
+      this.drawHead(ctx, 7, -22 - L, t);
     } else {
       const l1 = this.moving ? Math.sin(this.trot) * 3 : 0;
       const l2 = this.moving ? Math.sin(this.trot + Math.PI) * 3 : 0;
       // Nose-to-the-ground sniffing drops the whole front half.
       const sniff = this.sniffing ? 3 + Math.sin(t * 9) * 1.5 : 0;
-      capsule(ctx, -11, -9, -17 + wag, -14, 4, p.body, PALETTE.ink, 1.8);
-      capsule(ctx, -8 + l1, -8, -8 + l1 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
-      capsule(ctx, 6 + l2, -8, 6 + l2 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
-      capsule(ctx, -10, -10, 7, -10 + sniff * 0.4, 12, p.body, PALETTE.ink, 2.2);
-      capsule(ctx, -8 + l2, -8, -8 + l2 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
-      capsule(ctx, 6 + l1, -8, 6 + l1 * 1.4, -1, 3.5, p.body, PALETTE.ink, 1.8);
-      inkEllipse(ctx, 6, -8, 4, 4.5, 0, p.chest, null);
-      this.drawScruff(ctx, -8, -16, 4, -16, t);
-      this.drawHead(ctx, 12, -16 + sniff, t);
+      const by = -10 - L;          // barrel centerline
+      capsule(ctx, -11, by + 1, -17 + wag, by - 4, 4, p.body, PALETTE.ink, 1.8);
+      capsule(ctx, -8 + l1, by + 2, -8 + l1 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
+      capsule(ctx, 6 + l2, by + 2, 6 + l2 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
+      capsule(ctx, -10, by, 7, by + sniff * 0.4, bw, p.body, PALETTE.ink, 2.2);
+      capsule(ctx, -8 + l2, by + 2, -8 + l2 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
+      capsule(ctx, 6 + l1, by + 2, 6 + l1 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
+      inkEllipse(ctx, 6, by + 2, 4, 4.5, 0, p.chest, null);
+      this.drawScruff(ctx, -8, by - bw / 2, 4, by - bw / 2, t);
+      // A leggy dog carries its head high.
+      this.drawHead(ctx, 12, -16 - L * 1.3 + sniff, t);
     }
 
     ctx.restore();
@@ -659,6 +673,10 @@ export class Dog {
   drawHead(ctx, hx, hy, t) {
     const p = this.p;
     const earSwing = this.moving ? Math.sin(this.trot) * 1.6 : Math.sin(t * 1.4) * 0.6;
+    // The poodle topknot goes on first so the head overlaps its base.
+    if (p.topknot) {
+      inkCircle(ctx, hx - 1, hy - 8, 3.6, p.body, PALETTE.ink, 1.8);
+    }
     inkCircle(ctx, hx, hy, 7, p.body, PALETTE.ink, 2.2);
     // Floppy ears.
     capsule(ctx, hx - 3, hy - 6, hx - 6 - earSwing, hy - 6 + p.earLen, 4.5, p.body, PALETTE.ink, 1.8);

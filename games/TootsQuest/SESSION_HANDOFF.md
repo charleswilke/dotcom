@@ -85,6 +85,16 @@ games/TootsQuest/
   "!". The secret glint in main.js keys off `astro.pointing` now, NOT doc —
   the old Doc-points-at-secret behavior is gone per canon (Doc's future
   pointing targets are hoops/hearts/food when those exist).
+- **Body types are dials on the one grammar** (Charles' correction, session
+  4): `lift` (barrel height off the ground — legs lengthen, head carries
+  higher at 1.3×, sit pose stretches tall), `bodyW`, `legW`, `topknot`.
+  **Doc is full shih tzu = all defaults untouched (lift 0, bodyW 12) — he
+  was signed off as-is; don't "improve" him.** Astro is the poodle: lift
+  4.5, bodyW 9, legW 2.5, topknot true.
+- **The scout stops inventing adventures when Toots settles** (player.idleT
+  > 2.5 stops wander re-targeting). Without this the ~1.5s wander clock
+  re-targets forever and Astro can never accrue the 2s of stillness his
+  sit requires — he literally could not sit until this fix.
 - **Dogs unstick by wiggling, not pathfinding** (`Dog.seek()`): if a dog
   moves less than 30% of its intended speed for ~0.45s it swerves
   perpendicular (whichever side is open) for ~0.55s; chained swerves walk
@@ -244,6 +254,9 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
   pinned both dogs is fixed by `seek()` — re-tested the exact pinning
   scenario (player at 800,230, dogs west of the rocks) and both arrive.
   Gutter crossings carry both dogs, clamped in-bounds, both ways.
+- Body types: Astro visibly lanky standing AND sitting (sits tall, topknot
+  clears the head); Doc unchanged. Both dogs sit within ~3.5s of Toots
+  idling (frame 210 from a cold approach), Doc first.
 
 ## Regression baseline (sessions 1–3, re-verified where touched)
 

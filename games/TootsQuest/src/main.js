@@ -49,7 +49,9 @@ const doc = new Dog(player.x - 40, player.y + 10, {
 });
 const astro = new Dog(player.x + 34, player.y + 22, {
   body: PALETTE.dogAstro, chest: PALETTE.dogAstroChest, collar: PALETTE.orange,
-  earLen: 8.5, tailFreq: 13, size: 0.95, mood: 'happy', behavior: 'scout',
+  earLen: 8.5, tailFreq: 13, size: 1, mood: 'happy', behavior: 'scout',
+  // Poodle build: up on long thin legs, slim barrel, head high, topknot.
+  lift: 4.5, bodyW: 9, legW: 2.5, topknot: true,
 });
 
 function roomMites(r) {

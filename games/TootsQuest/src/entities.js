@@ -350,45 +350,18 @@ export class Player {
     ctx.beginPath(); ctx.arc(-3.8 + ex, hy - 0.5 + ey, 1.7 * eyeK, 0, TAU); ctx.fill();
     ctx.beginPath(); ctx.arc(3.8 + ex, hy - 0.5 + ey, 1.7 * eyeK, 0, TAU); ctx.fill();
 
-    // Cream headphones — slimmer than the cover's, and they EARN their
-    // place by telegraphing facing: the whole rig slides around the head
-    // with the look direction (stronger than the eyes' shift), and the
-    // near-side cup grows while the far one shrinks — cheap parallax that
-    // reads as the head actually turning.
-    const hpx = fx * 3.2, hpy = fy * 1.5;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = PALETTE.ink;
-    ctx.lineWidth = 5.6;
-    ctx.beginPath();
-    ctx.arc(hpx, hy + hpy * 0.5, 10.8, Math.PI * 1.16, Math.PI * 1.84);
-    ctx.stroke();
-    ctx.strokeStyle = PALETTE.cream;
-    ctx.lineWidth = 3.2;
-    ctx.beginPath();
-    ctx.arc(hpx, hy + hpy * 0.5, 10.8, Math.PI * 1.16, Math.PI * 1.84);
-    ctx.stroke();
-    for (const s of [-1, 1]) {
-      // Cups slide a little with the look, but the real telegraph is the
-      // near/far split: the leading cup grows, the trailing one shrinks
-      // and stays tucked at the head's silhouette edge.
-      const cupX = s * 10 + fx * 2.2;
-      const cupY = hy + 2.5 + hpy;
-      const cupR = Math.max(2.4, 3.4 + s * fx * 0.9);
-      inkCircle(ctx, cupX, cupY, cupR, PALETTE.cream, PALETTE.ink, 2);
-      ctx.fillStyle = PALETTE.neon;
-      ctx.beginPath();
-      ctx.arc(cupX, cupY, 1.2, 0, TAU);
-      ctx.fill();
-    }
+    // Headphones ditched for now (Charles, session 4) — the eyes carry the
+    // facing telegraph. They're still canon on the cover; if they return,
+    // git has the slim facing-rig version (commit 6c188ad).
 
-    // Hair tuft poking over the band.
+    // Hair tuft.
     ctx.strokeStyle = PALETTE.ink;
     ctx.lineWidth = 2.6;
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(-2.5, hy - 11); ctx.lineTo(-4, hy - 16);
-    ctx.moveTo(0.8, hy - 12); ctx.lineTo(0.8, hy - 17);
-    ctx.moveTo(3.8, hy - 11); ctx.lineTo(5.3, hy - 15.5);
+    ctx.moveTo(-2.5, hy - 8.5); ctx.lineTo(-4, hy - 14);
+    ctx.moveTo(0.8, hy - 9.5); ctx.lineTo(0.8, hy - 15);
+    ctx.moveTo(3.8, hy - 8.5); ctx.lineTo(5.3, hy - 13.5);
     ctx.stroke();
 
     ctx.restore();
@@ -490,8 +463,9 @@ export class Dog {
       // the ground on longer legs (poodle), bodyW is barrel thickness,
       // legW leg thickness, topknot adds the poodle head-pouf, bean sags
       // the midline into the shih tzu curved-bean silhouette (belly rounds
-      // down, chest and rump ride up).
-      lift: 0, bodyW: 12, legW: 3.5, topknot: false, bean: 0,
+      // down, chest and rump ride up), tailCurl plumes the tail up over
+      // the back instead of swinging it out behind.
+      lift: 0, bodyW: 12, legW: 3.5, topknot: false, bean: 0, tailCurl: false,
       ...params,
     };
   }
@@ -634,9 +608,14 @@ export class Dog {
     const lw = p.legW;
 
     if (this.sitting) {
-      // Haunches down, chest up, tail sweeping the grass. A lanky dog sits
-      // tall — the torso stretches with the lift; haunches stay grounded.
-      capsule(ctx, -9, -7, -16 + wag, -3, 4, p.body, PALETTE.ink, 1.8);
+      // Haunches down, chest up, tail sweeping the grass — or, for the
+      // shih tzu, pluming up over the back. A lanky dog sits tall — the
+      // torso stretches with the lift; haunches stay grounded.
+      if (p.tailCurl) {
+        curvedCapsule(ctx, -11, -8, -18, -18, -8 + wag, -17, 4.5, p.body, PALETTE.ink, 1.8);
+      } else {
+        capsule(ctx, -9, -7, -16 + wag, -3, 4, p.body, PALETTE.ink, 1.8);
+      }
       inkEllipse(ctx, -7, -7, 8 - L * 0.2, 7, 0, p.body, PALETTE.ink, 2.2);
       // Bean dogs sit with the chest puffed out on that curved front.
       if (p.bean) {
@@ -655,7 +634,13 @@ export class Dog {
       // Nose-to-the-ground sniffing drops the whole front half.
       const sniff = this.sniffing ? 3 + Math.sin(t * 9) * 1.5 : 0;
       const by = -10 - L;          // barrel centerline
-      capsule(ctx, -11, by + 1, -17 + wag, by - 4, 4, p.body, PALETTE.ink, 1.8);
+      if (p.tailCurl) {
+        // The plume: base at the rump, curling up and forward so the tip
+        // sways over the back.
+        curvedCapsule(ctx, -10, by - 2, -17, by - 12, -8 + wag, by - bw / 2 - 3.5, 4.5, p.body, PALETTE.ink, 1.8);
+      } else {
+        capsule(ctx, -11, by + 1, -17 + wag, by - 4, 4, p.body, PALETTE.ink, 1.8);
+      }
       capsule(ctx, -8 + l1, by + 2, -8 + l1 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6 + l2, by + 2, 6 + l2 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
       // The barrel: straight, or the shih tzu bean — rump and chest up a

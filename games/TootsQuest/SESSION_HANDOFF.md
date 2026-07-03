@@ -90,10 +90,13 @@ games/TootsQuest/
   higher at 1.3×, sit pose stretches tall), `bodyW`, `legW`, `topknot`, and
   `bean` (sags the barrel midline along a quadratic — belly rounds down,
   chest/rump ride up; the sit pose puffs the chest on the same curve; the
-  scruff ticks and head follow). **Doc is full shih tzu: defaults + bean
-  3.5** — per Charles, "that signature curve to their midsection." Astro is
-  the poodle: lift 4.5, bodyW 9, legW 2.5, topknot, bean 0. Curved barrels
-  use the `curvedCapsule` primitive in ink.js (same plate rules as capsule).
+  scruff ticks and head follow), and `tailCurl` (the tail plumes up over
+  the back instead of swinging out behind — tip sways over the rump with
+  the wag, in both poses). **Doc is full shih tzu: defaults + bean 3.5 +
+  tailCurl** — per Charles, "that signature curve to their midsection" and
+  the curl over the back. Astro is the poodle: lift 4.5, bodyW 9, legW 2.5,
+  topknot, straight tail. Curved barrels and curled tails use the
+  `curvedCapsule` primitive in ink.js (same plate rules as capsule).
 - **The scout stops inventing adventures when Toots settles** (player.idleT
   > 2.5 stops wander re-targeting). Without this the ~1.5s wander clock
   re-targets forever and Astro can never accrue the 2s of stillness his
@@ -119,25 +122,24 @@ games/TootsQuest/
   merged rounded blobs baked once per (room, style) to offscreen canvases.
 - **Animation is parametric, never frame-based.**
 - **ES modules, no build step**, served directly.
-- **Toots' look is the cover art** (session 4, from Charles' renders): an
-  ink-black figure — head, arm nubs, feet all `PALETTE.ink` — with big cream
-  eyes (pupils track facing), cream headphones with neon dots, a hair tuft
-  poking OVER the band, an orange poncho with a ragged, swaying hem and the
-  cream X chest stitch, and a NEON blade (palette law: neon =
-  magic/interactive; the sword is the player's magic). Reasoning: the
-  black figure IS the ink plate, so in Sunday Ink he stays registered while
-  his poncho and eye-whites drift — the misregistration system flatters him
-  for free (see gotcha 6).
-- **The headphones are a facing telegraph, not a hat** (Charles' revision,
-  session 4: "too bulky, should telegraph which way Toots is facing").
-  Slimmed (band 3.2 cream over 5.6 ink at r 10.8, cups r ~3.4) and rigged
-  parametrically: the band slides with the look (`fx*3.2`), cups shift a
-  little (`fx*2.2`) while the NEAR cup grows and the FAR cup shrinks
-  (`3.4 + s*fx*0.9`, min 2.4) and stays tucked at the head's silhouette
-  edge — cheap parallax that reads as the head turning. Facing north
-  additionally shrinks the eye whites continuously
-  (`eyeK = 1 + min(0, fy)*0.5`) so N reads as the back of the head; all of
-  it is continuous, no pose snapping, per the parametric-animation rule.
+- **Toots' look is the cover art, minus headphones** (session 4, from
+  Charles' renders + revisions): an ink-black figure — head, arm nubs, feet
+  all `PALETTE.ink` — with big cream eyes (pupils track facing), a hair
+  tuft, an orange poncho with a ragged, swaying hem and the cream X chest
+  stitch, and a NEON blade (palette law: neon = magic/interactive; the
+  sword is the player's magic). Reasoning: the black figure IS the ink
+  plate, so in Sunday Ink he stays registered while his poncho and
+  eye-whites drift — the misregistration system flatters him for free (see
+  gotcha 6).
+- **Headphones are DITCHED for now** (Charles, session 4). History: first
+  built cover-chunky, then slimmed + rigged as a parametric facing
+  telegraph (band slides with look, near cup grows / far cup shrinks —
+  commit 6c188ad has that version if they return; they're still canon on
+  the cover art). Charles cut them anyway — the in-game head reads cleaner
+  bare. **The facing telegraph survives in the eyes:** pupils track facing
+  (`fx*1.6, fy*1.1`) and the whites shrink continuously toward north
+  (`eyeK = 1 + min(0, fy)*0.5`) so N reads as the back of the head. All
+  continuous, no pose snapping, per the parametric-animation rule.
 - **Speech is comic balloons, not a dialogue box** (session 4): rounded-rect
   bubble + tail triangle in one path, drawn with fill–fat-stroke–refill so
   the tail/bubble seam vanishes; lettering is ALL-CAPS Chalkboard/Comic Sans,
@@ -270,10 +272,11 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 - Body types: Astro visibly lanky standing AND sitting (sits tall, topknot
   clears the head); Doc unchanged. Both dogs sit within ~3.5s of Toots
   idling (frame 210 from a cold approach), Doc first.
-- Headphone facing rig, screenshot-verified in all four cardinals: E/W
-  swing the band + near/far cup split, S is symmetric with full eyes, N
-  shrinks the eyes to back-of-head. Continuous on diagonals by
-  construction (all lerps off fx/fy).
+- Facing telegraph (post-headphone-removal), screenshot-verified: pupils
+  track E/S, whites shrink to back-of-head at N. Continuous on diagonals
+  by construction (all lerps off fx/fy).
+- Doc's tail curl: plume arcs over the back standing AND sitting, tip
+  sways with the wag; Astro's straight tail unchanged.
 
 ## Regression baseline (sessions 1–3, re-verified where touched)
 

@@ -91,10 +91,12 @@ ears, sword on his back, dogs **Doc** and **Astro** at his side.
 
 > **Toots' canon look (locked session 4, from the cover-art renders):** an
 > ink-black figure — the black IS the ink plate — with big cream eyes and
-> tiny tracking pupils, a chunky cream headphone rig with neon dots, a hair
-> tuft poking over the band, an orange poncho with a ragged hem and cream
-> X chest stitch, and a **neon blade** (neon = magic/interactive, §3.5 —
-> the sword is the player's magic made visible).
+> tiny tracking pupils, a hair tuft, an orange poncho with a ragged hem and
+> cream X chest stitch, and a **neon blade** (neon = magic/interactive,
+> §3.5 — the sword is the player's magic made visible). Headphones remain
+> canon on the cover art but are OFF the in-game model for now (session 4
+> revision; a slim facing-telegraph version lives in git if they return).
+> Facing reads through the eyes: pupils track, whites shrink toward north.
 
 He learns the world
 has a memory — the Archive —

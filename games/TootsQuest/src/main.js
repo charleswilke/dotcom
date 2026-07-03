@@ -46,7 +46,8 @@ const player = new Player(room.decor.playerSpawn.x, room.decor.playerSpawn.y);
 const doc = new Dog(player.x - 40, player.y + 10, {
   body: PALETTE.dogDoc, chest: PALETTE.dogDocChest, collar: PALETTE.slate,
   earLen: 11, tailFreq: 6, size: 1.05, mood: 'grumpy', behavior: 'heel',
-  bean: 3.5,   // the shih tzu curved-bean midsection
+  bean: 3.5,       // the shih tzu curved-bean midsection
+  tailCurl: true,  // plume over the back — the other shih tzu signature
 });
 const astro = new Dog(player.x + 34, player.y + 22, {
   body: PALETTE.dogAstro, chest: PALETTE.dogAstroChest, collar: PALETTE.orange,

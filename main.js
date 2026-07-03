@@ -4139,6 +4139,7 @@ function initGWORLightbox() {
         { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
         { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
         { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
         { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'Scattered Thunderstorms', file: 'audio/grief-without-ritual/scattered-thunderstorms.mp3', article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },

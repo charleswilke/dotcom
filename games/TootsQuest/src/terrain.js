@@ -54,6 +54,8 @@ const ROOM_DEFS = {
         { x: 305, y: 242 }, { x: 625, y: 370 },
       ],
       banner: { x: 348, y: 170 },
+      // Who stands where is room data; who they are lives in npc.js.
+      npcs: [{ id: 'jessie', x: 392, y: 208 }],
       secret: { x: 762, y: 252 },
       miteSpawns: [
         { x: 505, y: 300 }, { x: 245, y: 425 }, { x: 805, y: 425 },
@@ -97,6 +99,9 @@ const ROOM_DEFS = {
       torches: [
         { x: 270, y: 230 }, { x: 600, y: 372 },
       ],
+      // Clear of the tree at (660,240): its canopy y-sorts over anything
+      // standing above it. NPCs need open sky, not just open ground.
+      npcs: [{ id: 'wren', x: 585, y: 190 }],
       secret: { x: 875, y: 210 },
       miteSpawns: [
         { x: 700, y: 350 }, { x: 380, y: 230 }, { x: 150, y: 420 },
@@ -126,6 +131,9 @@ function buildRoom(id, def) {
   if (def.decor.banner) {
     staticColliders.push({ x: def.decor.banner.x, y: def.decor.banner.y, r: 7 });
   }
+  for (const n of def.decor.npcs || []) {
+    staticColliders.push({ x: n.x, y: n.y, r: 8 });
+  }
   return {
     id,
     seed: def.seed,
@@ -135,6 +143,7 @@ function buildRoom(id, def) {
     waterCells,
     staticColliders,
     mites: null,       // created lazily on first entry (main.js)
+    npcs: null,        // ditto — NPC instances built from decor.npcs
     grounds: {},       // baked ground per style: {paint, print}
   };
 }

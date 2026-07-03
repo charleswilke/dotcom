@@ -3,9 +3,11 @@
 // parameters driving the same draw code.
 
 import {
-  TAU, PALETTE, PRINT, lerp, clamp, dist, easeOutCubic, capsule, inkCircle, inkEllipse,
+  TAU, PALETTE, PRINT, lerp, clamp, dist, easeOutCubic, capsule, inkCircle, inkEllipse, inkShape,
 } from './ink.js';
 import { moveCircle, circleBlocked } from './terrain.js';
+import { spawnWord } from './fx.js';
+import { setFlag } from './state.js';
 
 // ---------------------------------------------------------------------------
 // Particles
@@ -135,6 +137,7 @@ export class Player {
     game.shake(4, 0.18);
     game.hitstop(0.06);
     burst(this.x, this.y - 12, 10, { color: [PALETTE.hotOrange, PALETTE.cream], speed: 130 });
+    spawnWord(this.x, this.y - 38, 'OOF!', { color: PALETTE.hotOrange });
   }
 
   update(dt, input, game) {
@@ -157,6 +160,14 @@ export class Player {
       if (this.ghostClock <= 0) {
         this.ghosts.push({ x: this.x, y: this.y, face: this.face, t: 0.22 });
         this.ghostClock = 0.028;
+        // Dust kicked out behind the dash (render-style pass, session 4).
+        spawnParticle({
+          x: this.x - Math.cos(this.dashDir) * 9 + (Math.random() - 0.5) * 5,
+          y: this.y + (Math.random() - 0.5) * 3,
+          vx: -Math.cos(this.dashDir) * 24,
+          vy: -8 - Math.random() * 10,
+          g: -26, life: 0.4, size: 2.6, color: 'rgba(248,233,210,0.75)',
+        });
       }
       this.moving = true;
       this.walkPhase += dt * 18;
@@ -199,6 +210,17 @@ export class Player {
       this.face = Math.atan2(my, mx);
       moveCircle(this, mx * WALK_SPEED * dt, my * WALK_SPEED * dt, this.r);
       this.walkPhase += dt * 11;
+      // A footfall puff each time the stride sine crosses zero.
+      const stride = Math.sin(this.walkPhase);
+      if (this._lastStride !== undefined && Math.sign(stride) !== Math.sign(this._lastStride)) {
+        spawnParticle({
+          x: this.x - mx * 6 + (Math.random() - 0.5) * 4,
+          y: this.y + 1,
+          vx: -mx * 10, vy: -10 - Math.random() * 6,
+          g: -22, life: 0.28, size: 1.8, color: 'rgba(248,233,210,0.55)',
+        });
+      }
+      this._lastStride = stride;
       this.idleT = 0;
     } else {
       this.idleT += dt;
@@ -221,11 +243,11 @@ export class Player {
   }
 
   draw(ctx, t) {
-    // Dash afterimages, neon-tinted.
+    // Dash afterimages, neon-tinted, roughly the new silhouette.
     for (const g of this.ghosts) {
       ctx.globalAlpha = (g.t / 0.22) * 0.3;
-      capsule(ctx, g.x, g.y - 9, g.x, g.y - 20, 13, PALETTE.neon, null);
-      inkCircle(ctx, g.x, g.y - 27, 8, PALETTE.neon, null);
+      capsule(ctx, g.x, g.y - 8, g.x, g.y - 19, 14, PALETTE.neon, null);
+      inkCircle(ctx, g.x, g.y - 28.5, 9, PALETTE.neon, null);
       ctx.globalAlpha = 1;
     }
 
@@ -264,43 +286,94 @@ export class Player {
     }
     ctx.rotate(fx * lean + twist);
 
-    // Sword on back when not swinging.
+    // Sword on back when not swinging: neon blade, cream grip. Neon means
+    // magic/interactable in both worlds — the blade is the player's magic.
     if (!this.attack) {
-      capsule(ctx, -8, -26, 5, -13, 4, PALETTE.cream, PALETTE.ink, 1.8);
-      inkCircle(ctx, -9, -27, 2.4, PALETTE.neon, PALETTE.ink, 1.5);
+      capsule(ctx, -7.5, -27, 4, -14, 3.6, PALETTE.neon, PALETTE.ink, 1.8);
+      capsule(ctx, -11, -30.5, -8, -27.5, 3, PALETTE.cream, PALETTE.ink, 1.6);
     }
 
-    // Body — the warm orange tunic.
+    // --- The cover-art Toots (redesigned session 4): an ink-black figure
+    // in an orange poncho with a ragged hem, big cream eyes, chunky cream
+    // headphones. The black IS the ink plate, so in print mode the figure
+    // stays registered while his poncho and eye-whites drift (gotcha 6,
+    // working for us on purpose).
     const breathe = this.moving ? 0 : Math.sin(t * 2.1) * 0.4;
-    capsule(ctx, 0, -9, 0, -20 - breathe, 14, PALETTE.orange, PALETTE.ink, 2.4);
-    // Chest stitch detail (a tiny Haus of Toots charm).
+    const neckY = -22 - breathe;
+    const hemSway = this.moving ? Math.sin(this.walkPhase * 0.5) * 1.3 : Math.sin(t * 1.3) * 0.5;
+
+    // Arm nubs peeking from under the poncho, swinging opposite the feet.
+    const armSwing = this.moving ? Math.sin(this.walkPhase) * 2.5 : 0;
+    inkCircle(ctx, -10, -11 + armSwing, 2.6, PALETTE.ink, null);
+    inkCircle(ctx, 10, -11 - armSwing, 2.6, PALETTE.ink, null);
+
+    // Poncho: flares from the neck, hem torn into notches that sway.
+    const poncho = (c) => {
+      c.beginPath();
+      c.moveTo(-4.5, neckY);
+      c.quadraticCurveTo(-11.5, neckY + 5, -10.5, -8.5);
+      c.lineTo(-9.5 + hemSway * 0.4, -5.5);
+      c.lineTo(-5.5 + hemSway * 0.6, -7.8);
+      c.lineTo(-2 + hemSway * 0.8, -5);
+      c.lineTo(2 + hemSway * 0.8, -7.5);
+      c.lineTo(5.5 + hemSway * 0.6, -5.2);
+      c.lineTo(9.5 + hemSway * 0.4, -7);
+      c.lineTo(10.5, -8.5);
+      c.quadraticCurveTo(11.5, neckY + 5, 4.5, neckY);
+      c.quadraticCurveTo(0, neckY - 2.5, -4.5, neckY);
+      c.closePath();
+    };
+    inkShape(ctx, poncho, PALETTE.orange, PALETTE.ink, 2.4);
+    // Chest stitch (the Haus of Toots charm), cream on orange.
     ctx.strokeStyle = PALETTE.cream;
     ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.moveTo(-2.5, -15.5); ctx.lineTo(0.5, -12.5);
-    ctx.moveTo(0.5, -15.5); ctx.lineTo(-2.5, -12.5);
-    ctx.stroke();
-
-    // Head, eyes follow facing.
-    const hy = -28 - breathe;
-    inkCircle(ctx, 0, hy, 8.5, PALETTE.skin, PALETTE.ink, 2.4);
-    const ex = fx * 3, ey = fy * 1.8;
-    ctx.fillStyle = PALETTE.ink;
-    ctx.beginPath(); ctx.arc(-2.6 + ex, hy - 0.5 + ey, 1.3, 0, TAU); ctx.fill();
-    ctx.beginPath(); ctx.arc(2.6 + ex, hy - 0.5 + ey, 1.3, 0, TAU); ctx.fill();
-
-    // Headphones — Toots' signature.
-    ctx.strokeStyle = PALETTE.ink;
-    ctx.lineWidth = 3;
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.arc(0, hy, 9.5, Math.PI * 1.15, Math.PI * 1.85);
+    ctx.moveTo(-1.6, neckY + 5); ctx.lineTo(1.6, neckY + 8.2);
+    ctx.moveTo(1.6, neckY + 5); ctx.lineTo(-1.6, neckY + 8.2);
     ctx.stroke();
-    inkCircle(ctx, -8.5, hy + 1, 3.2, PALETTE.ink, null);
-    inkCircle(ctx, 8.5, hy + 1, 3.2, PALETTE.ink, null);
+
+    // Ink-black head. The tuft draws AFTER the headphones so it pokes
+    // over the band, like the cover.
+    const hy = neckY - 6.5;
+    inkCircle(ctx, 0, hy, 10, PALETTE.ink, null);
+
+    // Big cover-art eyes: cream whites nearly half the face, tiny ink
+    // pupils chasing the facing direction.
+    const ex = fx * 1.6, ey = fy * 1.1;
+    inkCircle(ctx, -3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2, PALETTE.cream, null);
+    inkCircle(ctx, 3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2, PALETTE.cream, null);
+    ctx.fillStyle = PALETTE.ink;
+    ctx.beginPath(); ctx.arc(-3.8 + ex, hy - 0.5 + ey, 1.7, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(3.8 + ex, hy - 0.5 + ey, 1.7, 0, TAU); ctx.fill();
+
+    // Chunky cream headphones — the signature, now sized like the cover.
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = PALETTE.ink;
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.arc(0, hy, 11.5, Math.PI * 1.12, Math.PI * 1.88);
+    ctx.stroke();
+    ctx.strokeStyle = PALETTE.cream;
+    ctx.lineWidth = 4.4;
+    ctx.beginPath();
+    ctx.arc(0, hy, 11.5, Math.PI * 1.12, Math.PI * 1.88);
+    ctx.stroke();
+    inkCircle(ctx, -11, hy + 2.5, 4.2, PALETTE.cream, PALETTE.ink, 2.2);
+    inkCircle(ctx, 11, hy + 2.5, 4.2, PALETTE.cream, PALETTE.ink, 2.2);
     ctx.fillStyle = PALETTE.neon;
-    ctx.beginPath(); ctx.arc(-8.5, hy + 1, 1.2, 0, TAU); ctx.fill();
-    ctx.beginPath(); ctx.arc(8.5, hy + 1, 1.2, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(-11, hy + 2.5, 1.5, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(11, hy + 2.5, 1.5, 0, TAU); ctx.fill();
+
+    // Hair tuft poking over the band.
+    ctx.strokeStyle = PALETTE.ink;
+    ctx.lineWidth = 2.6;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(-2.5, hy - 11); ctx.lineTo(-4, hy - 16);
+    ctx.moveTo(0.8, hy - 12); ctx.lineTo(0.8, hy - 17);
+    ctx.moveTo(3.8, hy - 11); ctx.lineTo(5.3, hy - 15.5);
+    ctx.stroke();
 
     ctx.restore();
 
@@ -356,16 +429,16 @@ export class Player {
           capsule(ctx,
             cx + Math.cos(ga) * 12, cy + Math.sin(ga) * 12 * SWING_FLAT,
             cx + Math.cos(ga) * c.range * 0.92, cy + Math.sin(ga) * c.range * 0.92 * SWING_FLAT,
-            c.width, PALETTE.cream, null);
+            c.width, PALETTE.neon, null);
           ctx.globalAlpha = 1;
         }
       }
 
-      // The blade, tip tracing the flattened arc.
+      // The blade, tip tracing the flattened arc — neon, like the cover.
       capsule(ctx,
         cx + Math.cos(cur) * 10, cy + Math.sin(cur) * 10 * SWING_FLAT,
         cx + Math.cos(cur) * c.range * 0.95, cy + Math.sin(cur) * c.range * 0.95 * SWING_FLAT,
-        c.width, PALETTE.cream, PALETTE.ink, 1.8);
+        c.width, PALETTE.neon, PALETTE.ink, 1.8);
     }
   }
 }
@@ -524,6 +597,7 @@ export class Mite {
       this.dead = true;
       this.respawnT = 6;
       this.state = 'wander';
+      setFlag('slain_mite');   // NPCs notice (PRD §2.5)
       burst(this.x, this.y - 6, 18, {
         color: [PALETTE.rust, PALETTE.rustDark, PALETTE.hotOrange, PALETTE.cream],
         speed: 170, life: 0.6, size: 3,

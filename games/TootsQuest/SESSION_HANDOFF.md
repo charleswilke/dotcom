@@ -3,7 +3,7 @@
 Read this (and `TOOTS_QUEST_PRD.md`) before touching the code. The PRD is the
 *what and why*; this file is the *what exists right now and what bit us*.
 
-## Current state (end of session 3, July 2026)
+## Current state (end of session 4, July 2026)
 
 **M0 (Living Ink renderer proof) passed its gate in session 1. M0.5 (Sunday
 Ink) was added in session 2:** a second, toggleable visual style — Sunday
@@ -13,8 +13,13 @@ both (PRD §3.4). **Session 3 tuned both from playtest feedback:** plate
 misregistration is now horizontal-only (vertical drift read as fake
 elevation), and the sword swing was rebuilt around sensation — windup →
 whip → follow-through, drawn flattened into the ground plane so it reads as
-a horizontal cut (PRD §4.2). M1 (vertical slice: Hearthside rooms, NPCs,
-Tuning Stone, Archive mirror-rooms, save/load) is next.
+a horizontal cut (PRD §4.2). **Session 4 started M1 proper:** onomatopoeia
+combat bursts (THOK!/POK!/KRAK!/OOF!), the first two NPCs (Jessie, Old Wren)
+with flag-reactive dialogue in comic speech balloons, the `worldState` flags
+object, and a full player-character redesign to match the cover art (ink-black
+figure, big cream eyes, chunky headphones, ragged orange poncho, neon blade).
+Remaining M1: more Hearthside rooms, Tuning Stone, Archive mirror-rooms,
+Clear as Day spell, save/load.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -25,7 +30,9 @@ boot within 1.5 s. This burned us once already.
 
 **Controls:** WASD/arrows move · Space/J attack (3-hit combo) · Shift/K dash ·
 N skip time of day · **P toggle Sunday Ink print style** · walk off the east/west
-edge to cross to the next room.
+edge to cross to the next room. **Near an NPC, Space/E talks instead of
+attacking; J always attacks** (the escape hatch). During dialogue any of
+Space/E/J advances: finish the typewriter → next page → close.
 
 ## File map
 
@@ -47,8 +54,15 @@ games/TootsQuest/
                 # setRoom/getRoom; collision (circleBlocked/moveCircle); blob
                 # baking, print-aware, cached per (room, style) via groundFor()
     entities.js # Player (Toots), Dog (Doc — one grammar, any dog), Mite,
-                # particle system  (unchanged in session 2)
+                # particle system; session 4: cover-art Toots redesign,
+                # dash/footfall dust puffs
     light.js    # day/night keyframes (skyState), darkness pass (drawLighting)
+    fx.js       # session 4: onomatopoeia word bursts (spawnWord/update/draw),
+                # seeded per-letter jitter, starburst polygon for big words
+    npc.js      # session 4: NPC defs + entity (Jessie, Old Wren), dialogue
+                # state machine, speech-balloon + talk-hint rendering
+    state.js    # session 4: worldState flags (setFlag/getFlag) — grows into
+                # the localStorage save at M1
 ```
 
 ## Decisions made across sessions (now canon)
@@ -70,6 +84,43 @@ games/TootsQuest/
   merged rounded blobs baked once per (room, style) to offscreen canvases.
 - **Animation is parametric, never frame-based.**
 - **ES modules, no build step**, served directly.
+- **Toots' look is the cover art** (session 4, from Charles' renders): an
+  ink-black figure — head, arm nubs, feet all `PALETTE.ink` — with big cream
+  eyes (pupils track facing), a chunky cream headphone band + cups with neon
+  dots, a hair tuft poking OVER the band, an orange poncho with a ragged,
+  swaying hem and the cream X chest stitch, and a NEON blade (palette law:
+  neon = magic/interactive; the sword is the player's magic). Reasoning: the
+  black figure IS the ink plate, so in Sunday Ink he stays registered while
+  his poncho and eye-whites drift — the misregistration system flatters him
+  for free (see gotcha 6).
+- **Speech is comic balloons, not a dialogue box** (session 4): rounded-rect
+  bubble + tail triangle in one path, drawn with fill–fat-stroke–refill so
+  the tail/bubble seam vanishes; lettering is ALL-CAPS Chalkboard/Comic Sans,
+  ink-colored so it stays registered in print mode while the bubble's cream
+  plate drifts. Name tag rides the top edge like a tiny caption box. Balloons
+  draw AFTER lighting/tint/panel-frame — lettering must stay readable at
+  midnight.
+- **Dialogue does not pause the world** (pillar 1). The player is input-locked
+  (fed an empty key set) but everything else keeps simulating; if something
+  hurts Toots mid-sentence the conversation breaks off (main.js checks
+  `invuln > 0.85` right after mite updates). NPCs are placed in calm spots so
+  this is rare, not annoying.
+- **Input routing** (session 4): near an NPC, Space/E talk, J always attacks.
+  One contextual button matches Zelda muscle memory; keeping J as pure attack
+  means combat is never hijacked by an accidental conversation.
+- **NPC placement is room data, NPC identity is code.** `decor.npcs` in
+  terrain.js says who stands where (and feeds staticColliders, r=8); NPC_DEFS
+  in npc.js owns names, lines(flags), and draw functions. Same split as the
+  PRD's "rooms as data modules" rule.
+- **Flag-reactive lines are cheap and already live** (PRD §2.5): killing any
+  mite sets `slain_mite` (Jessie comments on the rust flecks); finishing a
+  conversation sets `talked_<id>` (Wren's last line changes if you've met
+  Jessie). One flag, one alternate line — keep using this shape.
+- **Onomatopoeia words spawn at full impact size and settle**, never grow in:
+  hitstop freezes updates but not rendering, so the word spawned on the hit
+  tick IS the freeze-frame. Letter jitter is seeded per word (mulberry32) and
+  re-derived each draw — crooked but stable. KRAK! spawns high (y−52) so the
+  starburst doesn't swallow Toots and the blade.
 
 ## Hard-won gotchas (do not re-learn these)
 
@@ -104,14 +155,33 @@ games/TootsQuest/
 10. **Vertical plate drift reads as elevation, not misprint.** PRINT.my is 0
    on purpose; keep misregistration horizontal (see PRD §3.4). Tune live
    with `__TQ.setMisreg(mx, my)` — it invalidates the baked grounds for you.
+11. **Zero combat state before scripted `__TQ.step` tests.** The live rAF
+   loop keeps running between console/eval calls, so leftover hitstop, a
+   buffered attack, knockback, or a live mite will corrupt the next scripted
+   sequence in confusing ways (a "failed" combo that never started, phantom
+   flags). Preamble that works: `game.hitstopT=0; player.attack=null;
+   player.attackQueued=false; player.kvx=player.kvy=0; player.invuln=0;
+   player.dashT=0`, and pin/reset any mite you're using as a target.
+12. **NPCs need open sky, not just open ground.** Y-sorting draws a tree
+   over anyone standing above (north of) it — Wren at (648,208) vanished
+   completely behind the meadow tree at (660,240); only his talk hint
+   floated over the canopy. Check new NPC spots against tree positions
+   (canopy spans roughly ±35px, centered above the trunk), not just the
+   collision grid.
 
 ## Debug handle (window.__TQ)
 
 ```js
 __TQ.player / .doc / .game        // live objects
 __TQ.mites                        // getter — current room's mites
+__TQ.npcs                         // getter — current room's NPC instances
 __TQ.room                         // getter — current room ({id, decor, neighbors, ...})
 __TQ.transition                   // getter — active gutter transition or null
+__TQ.dialogue                     // getter — active conversation or null
+__TQ.flags                        // getter — worldState.flags (live object)
+__TQ.talk('jessie'|'wren')        // force-start a conversation
+__TQ.advance()                    // advance dialogue (finish page → next → close)
+__TQ.say(x, y, 'BAM!', {big:true})// spawn an onomatopoeia word anywhere
 __TQ.setPrint(true|false)         // toggle Sunday Ink
 __TQ.setMisreg(mx, my=0)          // live-tune plate drift (rebakes grounds)
 __TQ.setTime(0.96)                // 0=midnight, 0.5=noon, 0.72=golden hour
@@ -119,7 +189,28 @@ __TQ.getTime()
 __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 ```
 
-## Verified this session (regression baseline)
+## Verified in session 4
+
+- Boot clean, 60 fps, ~0.9 ms painted / ~1.2 ms print at full scene (budget
+  ~16 ms) — the new systems cost roughly nothing per frame.
+- 3-hit combo end-to-end via scripted `__TQ.step`: hp 3→2→1→0, hitstop on
+  every hit, KRAK! + starburst on the finisher (screenshot-verified in both
+  styles), THOK!/POK! on hits 1–2, OOF! on player hurt, `slain_mite` set on
+  the kill.
+- Dialogue: talk-hint "…" bubble in range; balloon with name tag, tail to
+  the speaker, typewriter reveal, page-turn cue; player and NPC face each
+  other on start; Space/E/J all advance; finishing sets `talked_<id>`.
+- Flag reactivity chain: killed a mite → Jessie's rust-flecks variant;
+  finished Jessie → crossed the gutter → Wren's last page switched to the
+  "You've met Jessie?" line. Flags survive room transitions (they're global).
+- Gutter crossings with NPCs: both rooms' NPCs draw inside their panels
+  during the slide; dialogue force-closes on transition start; words clear
+  on arrival (they're positioned in room space and would be stale).
+- New Toots reads at gameplay zoom and 3× zoom, in both styles; pupils
+  track facing (up at Jessie when talking north); tuft clears the band;
+  print mode keeps the black figure registered while poncho/eyes drift.
+
+## Regression baseline (sessions 1–3, re-verified where touched)
 
 - Everything from the M0 baseline still passes: sword combo (3 hits kill a
   mite, hitstop each hit, shake on combo 3), mite telegraph→lunge→contact
@@ -156,49 +247,52 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 - No hearts/death for the player (knockback only).
 - No save/load, no spells, no Archive rooms yet.
 - Only E/W gutter transitions; N/S gutters unbuilt (same pattern when needed).
-- Onomatopoeia combat bursts ("KRAK!" on hit) discussed for Sunday Ink,
-  not built — cheap juice candidate for next session.
+- Dialogue is linear pages only — no choices, no quest hooks yet.
+- Jessie/Wren still use skin-tone faces; only Toots got the ink-figure
+  treatment (he's unique on the cover art too — probably correct, but
+  revisit when more NPCs exist).
+- Wren's sprite is serviceable, not lovable — his cap/beard read muddy at
+  1×. Candidate for a polish pass.
 - Diagonal path stair-stepping (see gotcha 2).
 - `__TQ` debug handle ships in the page (intentional for now).
 - Not wired into the site: no `/tootsquest` rewrite in vercel.json, no share
   page, no portfolio card. Do this at M1 or M2, not before.
 
-## Next session: M1 vertical slice (PRD §6)
+## Next session: continue M1 (PRD §6)
 
-The room system + gutter transitions now exist, so most of M1 is room data
-plus three new systems. Queue, roughly in order:
+Session 4 knocked out the first two queue items (onomatopoeia bursts, NPCs +
+speech balloons) plus an unplanned player redesign to the cover art. Queue:
 
-1. **Onomatopoeia combat bursts** — warm-up task, ~cheap. A hand-lettered
-   "KRAK!" on the combo-3 finisher (procedural text on a jittered starburst
-   polygon, synced to the existing hitstop + shake). Maybe a small "thok" on
-   hits 1–2. Sunday Ink language, but consider it in both styles.
-2. **NPC + dialogue as comic speech balloons.** 2 NPCs with flag-reactive
-   lines. Balloons are rounded blobs with tails pointing at the speaker —
-   exactly the shape grammar the renderer already speaks, and they replace
-   the need for a bottom dialogue box. Flag-conditional lines per PRD §2.5
-   (one flag, one alternate line).
-3. **Hearthside rooms (4–6)** — room data modules; the meadow shows the
-   pattern. Haus of Toots shop interior is the anchor (Jessie NPC = one of
-   the 2 NPCs?).
-4. **Tuning Stone + 3 Archive mirror-rooms** — phosphor/amber palette,
+1. **Hearthside rooms (4–6)** — room data modules; the meadow shows the
+   pattern. Haus of Toots shop interior is the anchor (Jessie already stands
+   at the banner outside; she moves inside, or the shop is her second spot).
+   Remember gotcha 12 when placing anyone.
+2. **Tuning Stone + 3 Archive mirror-rooms** — phosphor/amber palette,
    scanlines, darkness-first lighting (light.js's pass, tuned harder).
    Decide: does the Archive keep the paper gutter, or transition differently
    (microfiche frames? fade)? — open question from PRD §6.
-5. **Clear as Day spell** (88.3) + the frequency-dial HUD seed.
-6. **localStorage save** (`tootsquest_save_v1`): worldState flags, room id,
-   autosave on gutter crossings (natural save point).
+3. **Clear as Day spell** (88.3) + the frequency-dial HUD seed.
+4. **localStorage save** (`tootsquest_save_v1`): worldState flags (already
+   the single source of truth in state.js), room id, autosave on gutter
+   crossings (natural save point).
 
-Also queued from session 3 playtests, lower priority:
+Also queued, lower priority:
 - **Dog canon corrected to the real dogs (PRD §2.5):** Doc = cream-gray,
   grumpy, points to rest/food → in-game he should point at hoop save points
   and hearts, not secrets. Astro = charcoal, happy, explorer → secrets and
   dig spots are his. Migrate M0's Doc-points-at-secret behavior to Astro
   when he's added, and retune dog colors/params (both are tan today).
-- Ink-weight / per-instance treatment for characters (Toots, Doc, mites
-  still have uniform outlines and identical-per-class shapes — mites would
-  benefit most since there are many).
+  Charles' cover renders show both dogs — use them as the model sheets
+  (Astro: shaggy charcoal, huge grin; Doc: scruffy cream-gray, permanent
+  scowl, chunkier).
+- **Mite render-style pass:** the cover renders give mites spring antennae
+  with bolt tips, visible rivets/patch seams, and rounder rustier bodies.
+  Combine with the queued per-instance identity pass (mites benefit most —
+  there are many of them).
+- Ink-weight / per-instance treatment for characters generally (uniform
+  outlines today).
 - Scale tree collision radius with visual scale if scale variance ever
   exceeds the current 0.85–1.2×.
 
 Remaining open questions (PRD §6): gamepad timing, loudness of real-life
-references, Archive transition style (see item 4).
+references, Archive transition style (see item 2).

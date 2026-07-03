@@ -14,6 +14,12 @@ import { WORLD_W, WORLD_H, TILE, room, setRoom, getRoom, groundFor, invalidateGr
 import { Player, Dog, Mite, particles, spawnParticle, burst, updateParticles, drawParticles } from './entities.js';
 import { skyState, timeLabel, drawLighting } from './light.js';
 import { halftone } from './print.js';
+import { spawnWord, updateWords, drawWords, clearWords } from './fx.js';
+import {
+  NPC, TALK_RADIUS, dialogue, startDialogue, advanceDialogue, closeDialogue,
+  updateDialogue, drawDialogue, drawTalkHint,
+} from './npc.js';
+import { worldState } from './state.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -42,6 +48,23 @@ function roomMites(r) {
   return r.mites;
 }
 let mites = roomMites(room);
+
+function roomNpcs(r) {
+  if (!r.npcs) r.npcs = (r.decor.npcs || []).map(n => new NPC(n.id, n.x, n.y));
+  return r.npcs;
+}
+let npcs = roomNpcs(room);
+
+// Nearest townsperson close enough to talk to, or null.
+function npcInTalkRange() {
+  let best = null;
+  let bd = TALK_RADIUS;
+  for (const n of npcs) {
+    const d = dist(player.x, player.y, n.x, n.y);
+    if (d < bd) { bd = d; best = n; }
+  }
+  return best;
+}
 
 const game = {
   hitstopT: 0,
@@ -95,6 +118,8 @@ function easeInOut(t) {
 function startTransition(dir) {
   const toRoom = getRoom(room.neighbors[dir]);
   roomMites(toRoom);          // populate the next panel before it slides in
+  roomNpcs(toRoom);
+  closeDialogue();
   player.attack = null;
   player.attackQueued = false;
   player.kvx = player.kvy = 0;
@@ -122,7 +147,9 @@ function finishTransition() {
   doc.sitting = false;
   doc.pointing = false;
   mites = roomMites(room);
+  npcs = roomNpcs(room);
   particles.length = 0;
+  clearWords();
   buildAmbient();
 }
 
@@ -135,8 +162,21 @@ addEventListener('keydown', (e) => {
   }
   if (e.repeat) return;
   keys.add(e.code);
-  if (e.code === 'Space' || e.code === 'KeyJ') player.bufferAttack();
-  if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.code === 'KeyK') player.tryDash();
+  // Action routing: Space is contextual (talk when a townsperson is in
+  // range, attack otherwise); E only talks; J always attacks — the escape
+  // hatch if you want to swing right next to someone.
+  if (e.code === 'Space' || e.code === 'KeyJ' || e.code === 'KeyE') {
+    if (dialogue.active) {
+      advanceDialogue();
+    } else if (!transition) {
+      const n = e.code === 'KeyJ' ? null : npcInTalkRange();
+      if (n) startDialogue(n, player);
+      else if (e.code !== 'KeyE') player.bufferAttack();
+    }
+  }
+  if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.code === 'KeyK') {
+    if (!dialogue.active) player.tryDash();
+  }
   if (e.code === 'KeyN') tDay = (tDay + 0.08) % 1;
   if (e.code === 'KeyP') setPrintMode(!PRINT.on);
 });
@@ -145,6 +185,7 @@ addEventListener('keyup', (e) => keys.delete(e.code));
 // --- Update ----------------------------------------------------------------
 
 let emberClock = 0;
+const EMPTY_KEYS = new Set();   // what the player "presses" while talking
 
 function update(dt, time) {
   tDay = (tDay + dt / DAY_LENGTH) % 1;
@@ -155,10 +196,18 @@ function update(dt, time) {
     return;
   }
 
-  player.update(dt, keys, game);
+  // Talking locks Toots' input but the world keeps living (pillar 1):
+  // mites still wander, Doc still settles, torches still spit embers.
+  player.update(dt, dialogue.active ? EMPTY_KEYS : keys, game);
   doc.update(dt, player, room.decor.secret);
+  for (const n of npcs) n.update(dt, player);
   for (const m of mites) m.update(dt, player, game);
+  // A lunge that lands mid-sentence breaks off the conversation — hurt()
+  // just set invuln to 0.9 and it hasn't decayed yet this frame.
+  if (dialogue.active && player.invuln > 0.85) closeDialogue();
   updateParticles(dt);
+  updateWords(dt);
+  updateDialogue(dt);
 
   // Walked off an open edge? Slide to the neighboring panel.
   if (player.x > WORLD_W - 12.5 && room.neighbors.E) { startTransition('E'); return; }
@@ -176,7 +225,14 @@ function update(dt, time) {
       m.hurt(m.x - player.x, m.y - player.y, game);
       game.hitstop(sw.combo === 2 ? 0.09 : 0.05);
       if (sw.combo === 2) game.shake(3, 0.12);
-      burst((player.x + m.x) / 2, (player.y + m.y) / 2 - 8, 6, {
+      const wx = (player.x + m.x) / 2;
+      const wy = (player.y + m.y) / 2;
+      // Onomatopoeia, spawned the same tick as the hitstop so the word's
+      // impact frame is what the freeze holds on screen. The big burst
+      // rides high so it doesn't swallow Toots and the swing.
+      if (sw.combo === 2) spawnWord(wx, wy - 52, 'KRAK!', { big: true });
+      else spawnWord(wx, wy - 32, sw.combo === 0 ? 'THOK!' : 'POK!');
+      burst(wx, wy - 8, 6, {
         color: PALETTE.neon, speed: 150, life: 0.3, add: true, g: 0,
       });
     }
@@ -476,6 +532,7 @@ function drawRoomPanel(r, px, time, withDoc) {
     ...r.decor.torches.map(to => ({ y: to.y, fn: () => drawTorch(to, time) })),
   ];
   if (r.decor.banner) list.push({ y: r.decor.banner.y, fn: () => drawBanner(r.decor.banner, time) });
+  if (r.npcs) for (const n of r.npcs) list.push({ y: n.y, fn: () => n.draw(ctx, time) });
   if (r.mites) for (const m of r.mites) list.push({ y: m.y, fn: () => m.draw(ctx, time) });
   if (withDoc) list.push({ y: doc.y, fn: () => doc.draw(ctx, time) });
   list.sort((a, b) => a.y - b.y);
@@ -546,6 +603,7 @@ function render(time) {
     ...room.decor.torches.map(to => ({ y: to.y, fn: () => drawTorch(to, time) })),
     { y: player.y, fn: () => player.draw(ctx, time) },
     { y: doc.y, fn: () => doc.draw(ctx, time) },
+    ...npcs.map(n => ({ y: n.y, fn: () => n.draw(ctx, time) })),
     ...mites.map(m => ({ y: m.y, fn: () => m.draw(ctx, time) })),
   ];
   if (room.decor.banner) {
@@ -555,6 +613,7 @@ function render(time) {
   for (const d of drawList) d.fn();
 
   drawParticles(ctx);
+  drawWords(ctx);
 
   // Warm additive glow around each torch flame, day or night.
   ctx.globalCompositeOperation = 'lighter';
@@ -590,6 +649,15 @@ function render(time) {
   // Sunday Ink frames the whole view as a strip panel.
   if (PRINT.on) drawPanelFrame(0);
 
+  // Speech lives above the lighting and the panel frame: balloons are
+  // lettering, and lettering must stay readable at midnight.
+  if (dialogue.active) {
+    drawDialogue(ctx, WORLD_W, time);
+  } else {
+    const n = npcInTalkRange();
+    if (n) drawTalkHint(ctx, n, time);
+  }
+
   drawHud(time);
 }
 
@@ -624,7 +692,7 @@ function drawHud(time) {
   ctx.textAlign = 'left';
 
   ctx.fillStyle = 'rgba(248,233,210,0.55)';
-  ctx.fillText('WASD move · SPACE attack · SHIFT dash · N time · P print style', 14, WORLD_H - 18);
+  ctx.fillText('WASD move · SPACE attack/talk · SHIFT dash · N time · P print style', 14, WORLD_H - 18);
 }
 
 // --- Loop: fixed-step update, hitstop freezes simulation but not rendering --
@@ -660,8 +728,19 @@ let debugClock = performance.now() / 1000;
 window.__TQ = {
   player, doc, game,
   get mites() { return mites; },
+  get npcs() { return npcs; },
   get room() { return room; },
   get transition() { return transition; },
+  get dialogue() { return dialogue.active; },
+  get flags() { return worldState.flags; },
+  // Force a conversation from the console: __TQ.talk('jessie').
+  talk: (id) => {
+    const n = npcs.find(x => x.id === id) || npcs[0];
+    if (n) startDialogue(n, player);
+    return n;
+  },
+  advance: () => advanceDialogue(),
+  say: (x, y, text, opts) => spawnWord(x, y, text, opts),
   setPrint: (v) => setPrintMode(v),
   // Live-tune the plate drift, e.g. setMisreg(2) or setMisreg(0) to kill it.
   setMisreg: (mx, my = 0) => { PRINT.mx = mx; PRINT.my = my; invalidateGrounds(); },

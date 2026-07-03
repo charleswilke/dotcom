@@ -8,8 +8,11 @@ the junk, the frequencies.
 **Status:** M0 (Living Ink renderer proof) is BUILT and PASSED its gate.
 **M0.5 (Sunday Ink)** added a second, toggleable visual style — newsprint
 misregistration + halftone screens (§3.4) — plus a two-room world with
-panel-gutter transitions (§3.4a). See §6 and `SESSION_HANDOFF.md` for
-implementation notes. Next milestone: M1 vertical slice.
+panel-gutter transitions (§3.4a). **M1 is IN PROGRESS** (session 4):
+onomatopoeia combat bursts (§4.2), the first two NPCs with flag-reactive
+speech-balloon dialogue (§4.6), the `worldState` flags object (§2.5, §5),
+and the hero redesigned to the cover art (§2.4). See §6 and
+`SESSION_HANDOFF.md` for implementation notes.
 
 ---
 
@@ -84,7 +87,16 @@ cross down there.
 
 A creeping **Static** is un-tuning the Hollow — colors desaturating, NPCs forgetting
 things, songs going missing. The player is **Toots himself** — headphones around his
-ears, sword on his back, dogs **Doc** and **Astro** at his side. He learns the world
+ears, sword on his back, dogs **Doc** and **Astro** at his side.
+
+> **Toots' canon look (locked session 4, from the cover-art renders):** an
+> ink-black figure — the black IS the ink plate — with big cream eyes and
+> tiny tracking pupils, a chunky cream headphone rig with neon dots, a hair
+> tuft poking over the band, an orange poncho with a ragged hem and cream
+> X chest stitch, and a **neon blade** (neon = magic/interactive, §3.5 —
+> the sword is the player's magic made visible).
+
+He learns the world
 has a memory — the Archive —
 and that something down there has stopped *refusing the frequency*. Restore the four
 regional signals, then descend to silence the source. Final line of the game,
@@ -308,6 +320,12 @@ per-room baking (§3.3) and keeps world-building modular.
 - **Hold-charge spin** (classic, earned, satisfying).
 - **Knockback + hitstop** (2–3 frames of freeze on contact) — the cheap juice that
   makes vanilla combat feel expensive.
+- **Onomatopoeia bursts** (built session 4): THOK!/POK! on combo hits 1–2,
+  KRAK! on a jittered starburst polygon for the finisher, OOF! when Toots
+  takes a hit. Hand-lettered procedurally (per-letter seeded tilt/drop),
+  spawned at full impact size on the hit tick so the hitstop freeze-frames
+  them. Present in both styles — it's Sunday-strip language, but the Hollow
+  is always a comic.
 - Enemies telegraph with shape language: they *inflate/lean back* before attacking
   (parametric animation again — no telegraph frames to draw).
 
@@ -344,6 +362,24 @@ Hearts + sword tiers via dungeon completion; spells via dungeons/quests; **Salva
 (currency, naturally) from enemies and digging (Astro). Side-quests gate cosmetic
 *and* reactive rewards (the inn gets a new room; the band at the cabaret gains a
 member per quest line — the world visibly thrives, per pillar 1).
+
+### 4.6 Dialogue: comic speech balloons (built session 4)
+
+NPC speech is **comic balloons above the speaker**, not a bottom dialogue
+box — rooms are comic panels, so speech goes where comics put it. A balloon
+is a rounded rect + tail triangle in one path (fill–fat-stroke–refill kills
+the seam), ALL-CAPS comic lettering with a typewriter reveal, a name tag
+riding the top edge like a caption box, and a bouncing page-turn cue.
+Balloons draw above lighting so they stay readable at night; in Sunday Ink
+the bubble's color plate drifts while the ink lettering stays registered.
+
+Interaction: **Space/E talk near an NPC (Space is contextual), J always
+attacks**; any action key advances (finish typewriter → next page → close).
+Talking input-locks Toots but does not pause the world (§2.5, pillar 1);
+getting hurt breaks off the conversation. Finishing a conversation sets
+`talked_<npc>`; NPC `lines(flags)` functions pick pages off `worldState`
+flags — the first two live examples are Jessie (reacts to `slain_mite`) and
+Old Wren (reacts to `talked_jessie`).
 
 ---
 

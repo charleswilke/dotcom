@@ -110,6 +110,27 @@ export function inkCircle(ctx, x, y, r, fill, inkColor, inkW = 2.2) {
   }
 }
 
+// Arbitrary closed shape with the same plate rules as the primitives:
+// fill drifts in print mode, ink outline stays registered. buildPath must
+// begin its own path and be safe to call twice.
+export function inkShape(ctx, buildPath, fill, inkColor, inkW = 2.2) {
+  const off = plateOffset(fill);
+  const [ox, oy] = off || [0, 0];
+  ctx.save();
+  ctx.translate(ox, oy);
+  buildPath(ctx);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.restore();
+  if (inkColor) {
+    if (off) buildPath(ctx);
+    ctx.strokeStyle = inkColor;
+    ctx.lineWidth = inkW;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+}
+
 export function inkEllipse(ctx, x, y, rx, ry, rot, fill, inkColor, inkW = 2) {
   const off = plateOffset(fill);
   const [ox, oy] = off || [0, 0];

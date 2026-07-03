@@ -4143,8 +4143,7 @@ function initGWORLightbox() {
         { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'Scattered Thunderstorms', file: 'audio/grief-without-ritual/scattered-thunderstorms.mp3', article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },
-        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: 'Cherish Your Confident Ire', file: 'audio/grief-without-ritual/cherish-your-confident-ire.mp3', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
+        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');
@@ -4432,7 +4431,8 @@ function initJCLightbox() {
         { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606190959', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
         { title: 'Fits and Starts', file: 'audio/junkyard-cabaret/fits-and-starts.mp3?v=202607031021', cover: 'audio/junkyard-cabaret/fits-and-starts-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
-        { title: 'Mind the Drop', file: 'audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: 'audio/junkyard-cabaret/mind-the-drop-title.webp?v=202606201513', article: 'https://charleswilke.substack.com/p/creative-spirits' }
+        { title: 'Mind the Drop', file: 'audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: 'audio/junkyard-cabaret/mind-the-drop-title.webp?v=202606201513', article: 'https://charleswilke.substack.com/p/creative-spirits' },
+        { title: "Morning's Flood", file: 'audio/junkyard-cabaret/mornings-flood.mp3', cover: 'audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

@@ -3246,7 +3246,7 @@ html {
 
     .about-name {
         padding: 0.35em 1em 0.5em;
-        font-size: 1.7rem;
+        font-size: 1.3rem;
     }
 }
 
@@ -3254,7 +3254,7 @@ html {
 
     .about-name {
         padding: 0.4em 0.8em 0.55em;
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
 }
 
@@ -9003,9 +9003,9 @@ section.production-header.alice p {
     position: relative;
     z-index: 1100;
     text-align: center;
-    font-family: 'Caveat', 'Space Mono', cursive;
-    font-weight: 700;
-    font-size: 1.9rem;
+    font-family: 'Rock Salt', 'Caveat', cursive;
+    font-weight: 400;
+    font-size: 1.5rem;
     line-height: 1;
     color: #1a1550;
     background: #f5e9d0;

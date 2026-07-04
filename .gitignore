@@ -2,5 +2,11 @@
 .DS_Store
 .vercel
 .env*.local
-OMAxAI/spectator-to-initiator.pdf
-OMAxAI/slide-candidates/follow-the-thread.jpg
+node_modules/
+
+# OMAxAI talk working files stay local; only viewer/ (served at /s2i-present)
+# and the small .md notes are tracked.
+OMAxAI/WIP/
+OMAxAI/slide-candidates/
+OMAxAI/*.pptx
+OMAxAI/*.pdf

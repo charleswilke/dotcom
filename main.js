@@ -3740,6 +3740,305 @@ function updateNowPlayingDisplays(elements, title, metaTitle) {
 }
 
 // Mixtape Lightbox Logic
+// ── Album player factory ────────────────────────────────────────────────────
+// The three album lightboxes (Mixtape, GWOR, Junkyard Cabaret) are one shared
+// implementation. Per-album differences plug in via config:
+//   - playerKey / getRouteKey drive the URL hash routing (mixtape's key differs
+//     per side of the tape)
+//   - timeReadout: 'text' updates a mm:ss readout, 'vial' syncs the liquid
+//     vial's ARIA value
+//   - hooks.afterLoadTrack / onPlay / onPause / onEndedAtEnd cover the mixtape
+//     side-theme swap and JC's per-track cover-art choreography
+function createAlbumPlayer(config) {
+    const {
+        tracks,
+        els,
+        playerKey,
+        getRouteKey,
+        getCollectionTitle,
+        passMetaTitle = false,
+        albumTitle,
+        getMiniTheme,
+        getOscColors,
+        getPalette,
+        timeReadout = 'vial',
+        getOpenIndex,
+        getExpandExtra,
+        hooks = {}
+    } = config;
+
+    const {
+        lightbox, tile, closeBtn, audio, trackList, trackDisplay,
+        prevBtn, nextBtn, playPauseBtn, progressBar, progressContainer,
+        timeDisplay, visualizerCanvas, oscCanvas, oscFrame,
+        oscilloscopeTitle, oscilloscopeMeta, coverImg
+    } = els;
+    const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
+
+    const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
+    const PLAY_ICON = '▶';
+    const PAUSE_ICON = '❚❚';
+
+    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
+    // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
+    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
+    function refreshPlayGlyph() {
+        if (playPauseIcon) playPauseIcon.textContent = (!audio || audio.paused) ? PLAY_ICON : PAUSE_ICON;
+        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', !audio || audio.paused);
+    }
+    function armTapToPlay() {
+        if (oscFrame) oscFrame.classList.add('awaiting-tap');
+    }
+    refreshPlayGlyph();
+
+    const audioEl = registerManagedAudio(audio);
+    let currentIndex = 0;
+    let trackItems = [];
+
+    function resolveTrackIndex(trackSlug) {
+        const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
+        return matchedIndex === -1 ? 0 : matchedIndex;
+    }
+
+    function syncPlayerHash(method = 'replaceState') {
+        if (!lightbox || !lightbox.classList.contains('active') || !tracks[currentIndex]) return;
+        updateHistoryHash(buildMusicHash(getRouteKey(currentIndex), tracks[currentIndex]), method);
+    }
+
+    const visualizer = createVisualizerController({ audio: audioEl, visualizerCanvas, getPalette });
+
+    const oscilloscope = createModalOscilloscope(
+        oscCanvas,
+        audioEl,
+        () => visualizer.getAnalyser(),
+        getOscColors(0)
+    );
+
+    function populatePlaylist() {
+        trackItems = renderTrackList(trackList, tracks, (index) => {
+            loadTrack(index);
+            playTrack();
+        }, () => ({
+            routeKey: getRouteKey(currentIndex),
+            collectionTitle: getCollectionTitle(currentIndex)
+        }));
+    }
+
+    function loadTrack(index, options = {}) {
+        const { syncHash = true } = options;
+        const wasPlaying = !!(audio && !audio.paused);
+        currentIndex = index;
+        if (audio) {
+            audio.src = tracks[index].file;
+            audio.load();
+        }
+        if (hooks.afterLoadTrack) hooks.afterLoadTrack(index, { wasPlaying, oscilloscope });
+        updateNowPlayingDisplays({
+            trackDisplay,
+            glassTitle: oscilloscopeTitle,
+            glassMeta: oscilloscopeMeta,
+            mobileNowPlaying
+        }, tracks[index].title, passMetaTitle ? getCollectionTitle(index) : undefined);
+
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        if (timeDisplay) {
+            resetAudioTimeReadout(timeDisplay);
+        }
+
+        setActiveTrackListItem(trackItems, index);
+
+        if (syncHash) {
+            syncPlayerHash('replaceState');
+        }
+    }
+
+    function playTrack() {
+        pauseManagedAudioExcept(audio);
+        if (audio) {
+            audio.play().catch(e => console.error('Play error:', e));
+        }
+    }
+
+    function resizeCanvas() {
+        visualizer.resize();
+    }
+
+    function openPlayer(requestedTrackSlug = '', historyMethod = 'pushState', extra = {}) {
+        if (!lightbox) return;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
+
+        // Resolve which track to open. An explicit slug wins; otherwise the
+        // per-player getOpenIndex decides (mixtape's B-side jump), falling back
+        // to track 0 on a fresh open. -1 leaves the current track alone.
+        if (requestedTrackSlug) {
+            loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
+        } else {
+            const idx = getOpenIndex
+                ? getOpenIndex(extra, currentIndex)
+                : ((audio && !audio.src) ? 0 : -1);
+            if (idx !== -1 && idx != null) loadTrack(idx, { syncHash: false });
+        }
+        setTimeout(resizeCanvas, 50);
+        if (oscilloscope) setTimeout(() => oscilloscope.start(), 50);
+        syncPlayerHash(historyMethod);
+
+        // If the mini-player is holding our audio, dismiss it — full player takes over
+        const mini = getMiniPlayer();
+        if (mini && mini.isActive() && mini.getAudio() === audio) {
+            mini.detach(false);
+        }
+    }
+
+    function closePlayer() {
+        if (!lightbox) return;
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+        if (oscilloscope) oscilloscope.stop();
+        const currentRoute = parseMusicHash();
+        if (currentRoute && currentRoute.player === playerKey) {
+            history.pushState(null, '', window.location.pathname);
+        }
+
+        const mini = getMiniPlayer();
+        if (audio && !audio.paused && mini) {
+            mini.attach({
+                audio,
+                coverSrc: coverImg ? coverImg.src : '',
+                albumTitle,
+                theme: getMiniTheme(currentIndex),
+                oscColors: getOscColors(currentIndex),
+                getAnalyser: () => visualizer.getAnalyser(),
+                getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
+                onExpand: () => openPlayer('', 'pushState', getExpandExtra ? getExpandExtra(currentIndex) : {}),
+                onClose: () => {}
+            });
+        } else if (audio) {
+            audio.pause();
+        }
+    }
+
+    populatePlaylist();
+
+    if (tile) {
+        tile.addEventListener('click', (e) => {
+            e.preventDefault();
+            openPlayer();
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closePlayer);
+    }
+
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closePlayer();
+            }
+        });
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            let newIndex = currentIndex - 1;
+            if (newIndex < 0) newIndex = tracks.length - 1;
+            loadTrack(newIndex);
+            playTrack();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            loadTrack((currentIndex + 1) % tracks.length);
+            playTrack();
+        });
+    }
+
+    if (audio) {
+        audio.addEventListener('timeupdate', () => {
+            if (progressBar && audio.duration) {
+                progressBar.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
+            }
+            if (timeDisplay) {
+                if (timeReadout === 'text') {
+                    timeDisplay.textContent = formatAudioTime(audio.currentTime);
+                } else {
+                    setAudioTimeReadout(timeDisplay, audio);
+                }
+            }
+        });
+
+        audio.addEventListener('play', () => {
+            refreshPlayGlyph();
+            visualizer.start();
+            if (hooks.onPlay) hooks.onPlay(currentIndex);
+        });
+
+        audio.addEventListener('pause', () => {
+            refreshPlayGlyph();
+            visualizer.stop();
+            if (hooks.onPause) hooks.onPause();
+        });
+
+        audio.addEventListener('ended', () => {
+            // Only advance to the next track if not at the end; never loop back.
+            if (currentIndex < tracks.length - 1) {
+                loadTrack(currentIndex + 1);
+                playTrack();
+            } else if (hooks.onEndedAtEnd) {
+                hooks.onEndedAtEnd();
+            }
+        });
+    }
+
+    if (playPauseBtn && audio) {
+        playPauseBtn.addEventListener('click', () => {
+            pauseManagedAudioExcept(audio);
+
+            if (audio.paused) {
+                audio.play().catch(e => console.error('Play error:', e));
+            } else {
+                audio.pause();
+            }
+        });
+    }
+
+    setupProgressScrubbing(progressContainer, audio);
+
+    const initialRoute = parseMusicHash();
+    if (initialRoute && initialRoute.player === playerKey) {
+        setTimeout(() => {
+            openPlayer(initialRoute.trackSlug, 'replaceState', { openBSide: initialRoute.isBSide });
+            if (initialRoute.trackSlug && audio) { // direct song link → play on load
+                pauseManagedAudioExcept(audio);
+                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
+            }
+        }, 100);
+    }
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', () => {
+        const route = parseMusicHash();
+        if (route && route.player === playerKey) {
+            openPlayer(route.trackSlug, 'replaceState', { openBSide: route.isBSide });
+        } else if (lightbox && lightbox.classList.contains('active')) {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+            if (audio) audio.pause();
+        }
+    });
+
+    return {
+        open: openPlayer,
+        close: closePlayer
+    };
+}
+
 function initMixtapeLightbox() {
     const aSideTracks = [
         { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
@@ -3754,7 +4053,7 @@ function initMixtapeLightbox() {
         { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4', article: 'https://charleswilke.substack.com/p/gave-it-away' },
         { title: 'Value is Myth', file: 'audio/exploring-laibor-mixtape/value-is-myth.mp3', video: 'audio/exploring-laibor-mixtape/value-is-myth.mp4', article: 'https://charleswilke.substack.com/p/value-is-myth' }
     ];
-    
+
     const bSideTracks = [
         { title: 'Clear as Day', file: 'audio/exploring-laibor-mixtape/clear-as-day.mp3', video: 'audio/exploring-laibor-mixtape/clear-as-day.mp4', article: 'https://www.theguardian.com/us-news/2026/jan/24/alex-pretti-minneapolis-minnesota-shooting' },
         { title: 'Permission to Ache', file: 'audio/exploring-laibor-mixtape/permission-to-ache.mp3', video: 'audio/exploring-laibor-mixtape/permission-to-ache.mp4', article: 'https://charleswilke.substack.com/p/whats-next' },
@@ -3768,10 +4067,10 @@ function initMixtapeLightbox() {
         { title: 'What We Carry', file: 'audio/exploring-laibor-mixtape/what-we-carry.mp3', video: 'audio/exploring-laibor-mixtape/what-we-carry.mp4', article: 'https://charleswilke.substack.com/p/our-loss-of-discernment' },
         { title: 'After Normal', file: 'audio/exploring-laibor-mixtape/after-normal.mp3', video: 'audio/exploring-laibor-mixtape/after-normal.mp4', article: 'https://charleswilke.substack.com/p/after-normal' }
     ];
-    
+
     const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.webp';
     const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover.webp';
-    
+
     // Both sides live in one continuous playlist. The first track of each side
     // carries an `act` label (the vertical container label) plus an `actClass`
     // (drives the per-side container color); every track carries `side` so the
@@ -3785,76 +4084,53 @@ function initMixtapeLightbox() {
             : { ...t, side: 'b' })
     ];
     const firstBSideIndex = aSideTracks.length;
+    const isBSideTrack = (index) => !!(tracks[index] && tracks[index].side === 'b');
 
     const lightbox = document.getElementById('mixtapeLightbox');
-    const tile = document.getElementById('mixtapeTile');
-    const closeBtn = document.getElementById('mixtapeClose');
     const audio = document.getElementById('mixtapeAudio');
-    const trackList = document.getElementById('mixtapeTrackList');
-    const trackDisplay = document.querySelector('.mixtape-current-track');
-    const prevBtn = document.getElementById('mixtapePrev');
-    const nextBtn = document.getElementById('mixtapeNext');
-    const playPauseBtn = document.getElementById('mixtapePlayPause');
-    const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
-    const progressBar = document.getElementById('mixtapeProgressBar');
-    const progressContainer = document.getElementById('mixtapeProgressContainer');
-    const timeDisplay = document.getElementById('mixtapeTime');
-    const visualizerCanvas = document.getElementById('mixtapeVisualizer');
     const coverImg = document.getElementById('mixtapeCoverImg');
     const subtitleSpan = document.querySelector('.mixtape-subtitle');
-    const oscilloscopeTitle = document.getElementById('mixtapeOscilloscopeTitle');
-    const oscilloscopeMeta = document.getElementById('mixtapeOscilloscopeMeta');
-    const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
-    
-    const audioEl = registerManagedAudio(audio);
 
-    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
-    // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
-    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
-    const MIX_PLAY_ICON = '▶';
-    const MIX_PAUSE_ICON = '❚❚';
-    const oscFrame = document.getElementById('mixtapeOscilloscopeFrame');
-    function refreshPlayGlyph() {
-        if (playPauseIcon) playPauseIcon.textContent = audio.paused ? MIX_PLAY_ICON : MIX_PAUSE_ICON;
-        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', audio.paused);
-    }
-    function armTapToPlay() {
-        if (oscFrame) oscFrame.classList.add('awaiting-tap');
-    }
-    refreshPlayGlyph();
+    const OSC_COLORS = {
+        a: { trace: '#00f7c2', glow: 'rgba(0, 247, 194, 0.9)', graticule: 'rgba(0, 247, 194, 1)' },
+        b: { trace: '#b97fe0', glow: 'rgba(155, 89, 182, 0.9)', graticule: 'rgba(155, 89, 182, 0.9)' }
+    };
 
-    let currentIndex = 0;
-    let trackItems = [];
+    // The visualizer palette follows whichever side is currently loaded.
+    let currentSideB = false;
 
-    function currentIsBSide() {
-        return !!(tracks[currentIndex] && tracks[currentIndex].side === 'b');
-    }
-
-    function getCurrentRouteKey() {
-        return currentIsBSide() ? 'mixtape-side-two' : 'mixtape';
-    }
-
-    function getMixtapeCollectionTitle() {
-        return currentIsBSide() ? 'Exploring L.ai.bor Side Two' : 'Exploring L.ai.bor Mixtape';
-    }
-
-    function resolveTrackIndex(trackSlug) {
-        const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
-        return matchedIndex === -1 ? 0 : matchedIndex;
-    }
-
-    function syncMixtapeHash(method = 'replaceState') {
-        if (!lightbox || !lightbox.classList.contains('active') || !tracks[currentIndex]) return;
-        updateHistoryHash(buildMusicHash(getCurrentRouteKey(), tracks[currentIndex]), method);
-    }
-
-    const visualizer = createVisualizerController({
-        audio: audioEl,
-        visualizerCanvas,
+    const player = createAlbumPlayer({
+        tracks,
+        els: {
+            lightbox,
+            audio,
+            coverImg,
+            tile: document.getElementById('mixtapeTile'),
+            closeBtn: document.getElementById('mixtapeClose'),
+            trackList: document.getElementById('mixtapeTrackList'),
+            trackDisplay: document.querySelector('.mixtape-current-track'),
+            prevBtn: document.getElementById('mixtapePrev'),
+            nextBtn: document.getElementById('mixtapeNext'),
+            playPauseBtn: document.getElementById('mixtapePlayPause'),
+            progressBar: document.getElementById('mixtapeProgressBar'),
+            progressContainer: document.getElementById('mixtapeProgressContainer'),
+            timeDisplay: document.getElementById('mixtapeTime'),
+            visualizerCanvas: document.getElementById('mixtapeVisualizer'),
+            oscCanvas: document.getElementById('mixtapeOscilloscope'),
+            oscFrame: document.getElementById('mixtapeOscilloscopeFrame'),
+            oscilloscopeTitle: document.getElementById('mixtapeOscilloscopeTitle'),
+            oscilloscopeMeta: document.getElementById('mixtapeOscilloscopeMeta')
+        },
+        playerKey: 'mixtape',
+        getRouteKey: (index) => isBSideTrack(index) ? 'mixtape-side-two' : 'mixtape',
+        getCollectionTitle: (index) => isBSideTrack(index) ? 'Exploring L.ai.bor Side Two' : 'Exploring L.ai.bor Mixtape',
+        passMetaTitle: true,
+        albumTitle: 'Exploring L.ai.bor',
+        getMiniTheme: (index) => isBSideTrack(index) ? 'mixtape-b' : 'mixtape-a',
+        getOscColors: (index) => isBSideTrack(index) ? OSC_COLORS.b : OSC_COLORS.a,
         getPalette: (index, barCount, intensity) => {
-            const isB = currentIsBSide();
-            const baseHue = isB ? 283 : 168;
-            const hueVariance = isB ? 20 : 25;
+            const baseHue = currentSideB ? 283 : 168;
+            const hueVariance = currentSideB ? 20 : 25;
             const hue = baseHue - ((barCount - 1 - index) / barCount) * hueVariance;
             const saturation = 75 + intensity * 25;
             const lightness = 40 + intensity * 20;
@@ -3862,277 +4138,39 @@ function initMixtapeLightbox() {
                 fillStyle: `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`,
                 shadowColor: `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`
             };
-        }
-    });
-
-    const MIXTAPE_OSC_COLORS = {
-        a: { trace: '#00f7c2', glow: 'rgba(0, 247, 194, 0.9)', graticule: 'rgba(0, 247, 194, 1)' },
-        b: { trace: '#b97fe0', glow: 'rgba(155, 89, 182, 0.9)', graticule: 'rgba(155, 89, 182, 0.9)' }
-    };
-    const mixtapeOscilloscope = createModalOscilloscope(
-        document.getElementById('mixtapeOscilloscope'),
-        audioEl,
-        () => visualizer.getAnalyser(),
-        MIXTAPE_OSC_COLORS.a
-    );
-
-    function populatePlaylist() {
-        trackItems = renderTrackList(trackList, tracks, (index) => {
-            loadTrack(index);
-            playTrack();
-        }, () => ({
-            routeKey: getCurrentRouteKey(),
-            collectionTitle: getMixtapeCollectionTitle()
-        }));
-    }
-    
-    // Apply the visual theme for whichever side the current track belongs to:
-    // cover art, subtitle, oscilloscope colors, and the `.b-side-active` chrome
-    // recolor. The player's color follows playback rather than a manual toggle.
-    function applySideTheme(isB) {
-        if (lightbox) lightbox.classList.toggle('b-side-active', isB);
-        if (coverImg) coverImg.src = isB ? bSideCover : aSideCover;
-        if (subtitleSpan) subtitleSpan.textContent = isB ? 'Side Two' : 'Mixtape';
-        if (mixtapeOscilloscope) {
-            mixtapeOscilloscope.updateColors(isB ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a);
-        }
-    }
-    
-    // Initial playlist population
-    populatePlaylist();
-
-    function loadTrack(index, options = {}) {
-        const { syncHash = true } = options;
-        currentIndex = index;
-        applySideTheme(!!(tracks[index] && tracks[index].side === 'b'));
-        if (audio) {
-            audio.src = tracks[index].file;
-            audio.load();
-        }
-        updateNowPlayingDisplays({
-            trackDisplay,
-            glassTitle: oscilloscopeTitle,
-            glassMeta: oscilloscopeMeta,
-            mobileNowPlaying
-        }, tracks[index].title, getMixtapeCollectionTitle());
-
-        // Reset progress bar and time
-        if (progressBar) {
-            progressBar.style.width = '0%';
-        }
-        if (timeDisplay) {
-            resetAudioTimeReadout(timeDisplay);
-        }
-
-        setActiveTrackListItem(trackItems, index);
-
-        if (syncHash) {
-            syncMixtapeHash('replaceState');
-        }
-    }
-
-    function playTrack() {
-        pauseManagedAudioExcept(audio);
-        if (audio) {
-            audio.play().catch(e => console.error("Play error:", e));
-        }
-    }
-    
-    function pauseTrack() {
-        if (audio) {
-            audio.pause();
-        }
-    }
-
-    // Set canvas dimensions
-    function resizeCanvas() {
-        visualizer.resize();
-    }
-    
-    // Open/Close Mixtape functions (also handles URL hash)
-    function openMixtape(openBSide = false, requestedTrackSlug = '', historyMethod = 'pushState') {
-        if (lightbox) {
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
-            
-            // Resolve which track to open. An explicit slug wins (it can live on
-            // either side); a bare side-two link jumps to the first B-side track;
-            // otherwise a fresh open starts at the top.
-            if (requestedTrackSlug) {
-                loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
-            } else if (openBSide && !currentIsBSide()) {
-                loadTrack(firstBSideIndex, { syncHash: false });
-            } else if (audio && !audio.src) {
-                loadTrack(0, { syncHash: false });
-            }
-            // Size the visualizer canvas and start oscilloscope
-            setTimeout(resizeCanvas, 50);
-            if (mixtapeOscilloscope) setTimeout(() => mixtapeOscilloscope.start(), 50);
-            syncMixtapeHash(historyMethod);
-
-            // If the mini-player is holding our audio, dismiss it — full player takes over
-            const mini = getMiniPlayer();
-            if (mini && mini.isActive() && mini.getAudio() === audio) {
-                mini.detach(false);
-            }
-        }
-    }
-
-    function closeMixtape() {
-        if (lightbox) {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-            if (mixtapeOscilloscope) mixtapeOscilloscope.stop();
-            const currentRoute = parseMusicHash();
-            if (currentRoute && currentRoute.player === 'mixtape') {
-                history.pushState(null, '', window.location.pathname);
-            }
-
-            const mini = getMiniPlayer();
-            if (audio && !audio.paused && mini) {
-                const coverImg = document.getElementById('mixtapeCoverImg');
-                mini.attach({
-                    audio,
-                    coverSrc: coverImg ? coverImg.src : '',
-                    albumTitle: 'Exploring L.ai.bor',
-                    theme: currentIsBSide() ? 'mixtape-b' : 'mixtape-a',
-                    oscColors: currentIsBSide() ? MIXTAPE_OSC_COLORS.b : MIXTAPE_OSC_COLORS.a,
-                    getAnalyser: () => visualizer.getAnalyser(),
-                    getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
-                    onExpand: () => openMixtape(currentIsBSide(), '', 'pushState'),
-                    onClose: () => {}
-                });
-            } else if (audio) {
-                audio.pause();
-            }
-        }
-    }
-    
-    // Event Listeners
-    if (tile) {
-        tile.addEventListener('click', (e) => {
-            e.preventDefault();
-            openMixtape();
-        });
-    }
-    
-    // Resize canvas on window resize
-    window.addEventListener('resize', resizeCanvas);
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeMixtape);
-    }
-    
-    if (lightbox) {
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeMixtape();
-            }
-        });
-    }
-    
-    const initialMixtapeRoute = parseMusicHash();
-    if (initialMixtapeRoute && initialMixtapeRoute.player === 'mixtape') {
-        setTimeout(() => {
-            openMixtape(
-                initialMixtapeRoute.isBSide,
-                initialMixtapeRoute.trackSlug,
-                'replaceState'
-            );
-            if (initialMixtapeRoute.trackSlug) { // direct song link → play on load
-                pauseManagedAudioExcept(audio);
-                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
-            }
-        }, 100);
-    }
-    
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', () => {
-        const route = parseMusicHash();
-        if (route && route.player === 'mixtape') {
-            openMixtape(route.isBSide, route.trackSlug, 'replaceState');
-        } else {
-            if (lightbox && lightbox.classList.contains('active')) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-                if (audio) audio.pause();
+        },
+        timeReadout: 'text',
+        // A bare side-two link jumps to the first B-side track; otherwise a
+        // fresh open starts at the top and a reopen keeps the current track.
+        getOpenIndex: (extra, currentIdx) => {
+            if (extra.openBSide && !isBSideTrack(currentIdx)) return firstBSideIndex;
+            return (audio && !audio.src) ? 0 : -1;
+        },
+        getExpandExtra: (index) => ({ openBSide: isBSideTrack(index) }),
+        hooks: {
+            // Apply the visual theme for whichever side the current track belongs
+            // to: cover art, subtitle, oscilloscope colors, and the
+            // `.b-side-active` chrome recolor. The player's color follows
+            // playback rather than a manual toggle.
+            afterLoadTrack: (index, { oscilloscope }) => {
+                const isB = isBSideTrack(index);
+                currentSideB = isB;
+                if (lightbox) lightbox.classList.toggle('b-side-active', isB);
+                if (coverImg) coverImg.src = isB ? bSideCover : aSideCover;
+                if (subtitleSpan) subtitleSpan.textContent = isB ? 'Side Two' : 'Mixtape';
+                if (oscilloscope) oscilloscope.updateColors(isB ? OSC_COLORS.b : OSC_COLORS.a);
             }
         }
     });
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            let newIndex = currentIndex - 1;
-            if (newIndex < 0) newIndex = tracks.length - 1;
-            loadTrack(newIndex);
-            playTrack();
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            let newIndex = (currentIndex + 1) % tracks.length;
-            loadTrack(newIndex);
-            playTrack();
-        });
-    }
-
-    if (audio) {
-        // Update progress bar and time on timeupdate
-        audio.addEventListener('timeupdate', function() {
-            if (progressBar && audio.duration) {
-                const progress = (audio.currentTime / audio.duration) * 100;
-                progressBar.style.width = progress + '%';
-            }
-            if (timeDisplay) {
-                timeDisplay.textContent = formatAudioTime(audio.currentTime);
-            }
-        });
-
-        // Update play/pause icon and visualizer
-        audio.addEventListener('play', function() {
-            refreshPlayGlyph();
-            visualizer.start();
-        });
-
-        audio.addEventListener('pause', function() {
-            refreshPlayGlyph();
-            visualizer.stop();
-        });
-
-        audio.addEventListener('ended', () => {
-            // Only advance to next track if not at the end
-            if (currentIndex < tracks.length - 1) {
-                loadTrack(currentIndex + 1);
-                playTrack();
-            }
-            // Otherwise, just stop (don't loop back to first track)
-        });
-    }
-
-    // Play/Pause button
-    if (playPauseBtn && audio) {
-        playPauseBtn.addEventListener('click', function() {
-            pauseManagedAudioExcept(audio);
-            
-            if (audio.paused) {
-                audio.play().catch(e => console.error("Play error:", e));
-            } else {
-                audio.pause();
-            }
-        });
-    }
-
-    setupProgressScrubbing(progressContainer, audio);
 
     return {
-        open: openMixtape,
-        close: closeMixtape
+        open: (openBSide = false, requestedTrackSlug = '', historyMethod = 'pushState') =>
+            player.open(requestedTrackSlug, historyMethod, { openBSide }),
+        close: player.close
     };
 }
 
 function initGWORLightbox() {
-    const gworTempArticleLink = 'https://charleswilke.substack.com/p/waiting-for-something';
     const tracks = [
         { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
         { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
@@ -4147,59 +4185,39 @@ function initGWORLightbox() {
     ];
 
     const lightbox = document.getElementById('gworLightbox');
-    const tile = document.getElementById('gworTile');
-    const closeBtn = document.getElementById('gworClose');
     const audio = document.getElementById('gworAudio');
     const trackList = document.getElementById('gworTrackList');
-    const trackDisplay = document.getElementById('gworCurrentTrack');
-    const prevBtn = document.getElementById('gworPrev');
-    const nextBtn = document.getElementById('gworNext');
-    const playPauseBtn = document.getElementById('gworPlayPause');
-    const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
-    const PLAY_ICON = '\u25B6';
-    const PAUSE_ICON = '\u275A\u275A';
-    const progressBar = document.getElementById('gworProgressBar');
-    const progressContainer = document.getElementById('gworProgressContainer');
-    const timeDisplay = document.getElementById('gworTime');
-    const visualizerCanvas = document.getElementById('gworVisualizer');
-    const oscilloscopeTitle = document.getElementById('gworOscilloscopeTitle');
-    const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
     if (!lightbox || !audio || !trackList) return;
 
-    if (playPauseIcon) {
-        playPauseIcon.textContent = PLAY_ICON;
-    }
+    const GWOR_OSC_COLORS = { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' };
 
-    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
-    // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
-    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
-    const oscFrame = document.getElementById('gworOscilloscopeFrame');
-    function refreshPlayGlyph() {
-        if (playPauseIcon) playPauseIcon.textContent = audio.paused ? PLAY_ICON : PAUSE_ICON;
-        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', audio.paused);
-    }
-    function armTapToPlay() {
-        if (oscFrame) oscFrame.classList.add('awaiting-tap');
-    }
-    refreshPlayGlyph();
-
-    const audioEl = registerManagedAudio(audio);
-    let currentIndex = 0;
-    let trackItems = [];
-
-    function resolveTrackIndex(trackSlug) {
-        const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
-        return matchedIndex === -1 ? 0 : matchedIndex;
-    }
-
-    function syncGWORHash(method = 'replaceState') {
-        if (!lightbox || !lightbox.classList.contains('active') || !tracks[currentIndex]) return;
-        updateHistoryHash(buildMusicHash('gwor', tracks[currentIndex]), method);
-    }
-
-    const visualizer = createVisualizerController({
-        audio: audioEl,
-        visualizerCanvas,
+    return createAlbumPlayer({
+        tracks,
+        els: {
+            lightbox,
+            audio,
+            trackList,
+            coverImg: document.getElementById('gworCoverImg'),
+            tile: document.getElementById('gworTile'),
+            closeBtn: document.getElementById('gworClose'),
+            trackDisplay: document.getElementById('gworCurrentTrack'),
+            prevBtn: document.getElementById('gworPrev'),
+            nextBtn: document.getElementById('gworNext'),
+            playPauseBtn: document.getElementById('gworPlayPause'),
+            progressBar: document.getElementById('gworProgressBar'),
+            progressContainer: document.getElementById('gworProgressContainer'),
+            timeDisplay: document.getElementById('gworTime'),
+            visualizerCanvas: document.getElementById('gworVisualizer'),
+            oscCanvas: document.getElementById('gworOscilloscope'),
+            oscFrame: document.getElementById('gworOscilloscopeFrame'),
+            oscilloscopeTitle: document.getElementById('gworOscilloscopeTitle')
+        },
+        playerKey: 'gwor',
+        getRouteKey: () => 'gwor',
+        getCollectionTitle: () => 'Grief without Ritual',
+        albumTitle: 'Grief without Ritual',
+        getMiniTheme: () => 'gwor',
+        getOscColors: () => GWOR_OSC_COLORS,
         getPalette: (index, barCount, intensity) => {
             const baseHue = 6;
             const hueVariance = 12;
@@ -4212,209 +4230,6 @@ function initGWORLightbox() {
             };
         }
     });
-
-    const gworOscilloscope = createModalOscilloscope(
-        document.getElementById('gworOscilloscope'),
-        audioEl,
-        () => visualizer.getAnalyser(),
-        { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' }
-    );
-
-    function populatePlaylist() {
-        trackItems = renderTrackList(trackList, tracks, (index) => {
-            loadTrack(index);
-            playTrack();
-        }, () => ({
-            routeKey: 'gwor',
-            collectionTitle: 'Grief without Ritual'
-        }));
-    }
-
-    function loadTrack(index, options = {}) {
-        const { syncHash = true } = options;
-        currentIndex = index;
-        audio.src = tracks[index].file;
-        audio.load();
-        updateNowPlayingDisplays({
-            trackDisplay,
-            glassTitle: oscilloscopeTitle,
-            mobileNowPlaying
-        }, tracks[index].title);
-
-        if (progressBar) {
-            progressBar.style.width = '0%';
-        }
-        if (timeDisplay) {
-            resetAudioTimeReadout(timeDisplay);
-        }
-
-        setActiveTrackListItem(trackItems, index);
-
-        if (syncHash) {
-            syncGWORHash('replaceState');
-        }
-    }
-
-    function playTrack() {
-        pauseManagedAudioExcept(audio);
-        audio.play().catch(e => console.error('Play error:', e));
-    }
-
-    function resizeCanvas() {
-        visualizer.resize();
-    }
-
-    function openGWOR(requestedTrackSlug = '', historyMethod = 'pushState') {
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
-        if (requestedTrackSlug) {
-            loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
-        } else if (!audio.src) {
-            loadTrack(0, { syncHash: false });
-        }
-        setTimeout(resizeCanvas, 50);
-        if (gworOscilloscope) setTimeout(() => gworOscilloscope.start(), 50);
-        syncGWORHash(historyMethod);
-
-        const mini = getMiniPlayer();
-        if (mini && mini.isActive() && mini.getAudio() === audio) {
-            mini.detach(false);
-        }
-    }
-
-    function closeGWOR() {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-        if (gworOscilloscope) gworOscilloscope.stop();
-        const currentRoute = parseMusicHash();
-        if (currentRoute && currentRoute.player === 'gwor') {
-            history.pushState(null, '', window.location.pathname);
-        }
-
-        const mini = getMiniPlayer();
-        if (audio && !audio.paused && mini) {
-            const coverImg = document.getElementById('gworCoverImg');
-            mini.attach({
-                audio,
-                coverSrc: coverImg ? coverImg.src : '',
-                albumTitle: 'Grief without Ritual',
-                theme: 'gwor',
-                oscColors: { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' },
-                getAnalyser: () => visualizer.getAnalyser(),
-                getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
-                onExpand: () => openGWOR('', 'pushState'),
-                onClose: () => {}
-            });
-        } else if (audio) {
-            audio.pause();
-        }
-    }
-
-    populatePlaylist();
-
-    if (tile) {
-        tile.addEventListener('click', (e) => {
-            e.preventDefault();
-            openGWOR();
-        });
-    }
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeGWOR);
-    }
-
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            closeGWOR();
-        }
-    });
-
-    window.addEventListener('resize', resizeCanvas);
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            let newIndex = currentIndex - 1;
-            if (newIndex < 0) newIndex = tracks.length - 1;
-            loadTrack(newIndex);
-            playTrack();
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            let newIndex = (currentIndex + 1) % tracks.length;
-            loadTrack(newIndex);
-            playTrack();
-        });
-    }
-
-    audio.addEventListener('timeupdate', function() {
-        if (progressBar && audio.duration) {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = progress + '%';
-        }
-        if (timeDisplay) {
-            setAudioTimeReadout(timeDisplay, audio);
-        }
-    });
-
-    audio.addEventListener('play', function() {
-        refreshPlayGlyph();
-        visualizer.start();
-    });
-
-    audio.addEventListener('pause', function() {
-        refreshPlayGlyph();
-        visualizer.stop();
-    });
-
-    audio.addEventListener('ended', () => {
-        if (currentIndex < tracks.length - 1) {
-            loadTrack(currentIndex + 1);
-            playTrack();
-        }
-    });
-
-    if (playPauseBtn) {
-        playPauseBtn.addEventListener('click', function() {
-            pauseManagedAudioExcept(audio);
-
-            if (audio.paused) {
-                audio.play().catch(e => console.error('Play error:', e));
-            } else {
-                audio.pause();
-            }
-        });
-    }
-
-    setupProgressScrubbing(progressContainer, audio);
-
-    const initialGWORRoute = parseMusicHash();
-    if (initialGWORRoute && initialGWORRoute.player === 'gwor') {
-        setTimeout(() => {
-            openGWOR(initialGWORRoute.trackSlug, 'replaceState');
-            if (initialGWORRoute.trackSlug) { // direct song link → play on load
-                pauseManagedAudioExcept(audio);
-                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
-            }
-        }, 100);
-    }
-
-    window.addEventListener('popstate', () => {
-        const route = parseMusicHash();
-        if (route && route.player === 'gwor') {
-            openGWOR(route.trackSlug, 'replaceState');
-        } else if (lightbox.classList.contains('active')) {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-            audio.pause();
-        }
-    });
-
-    return {
-        open: openGWOR,
-        close: closeGWOR
-    };
 }
 
 function initJCLightbox() {
@@ -4437,90 +4252,18 @@ function initJCLightbox() {
 
     const lightbox = document.getElementById('jcLightbox');
     const tile = document.getElementById('jcTile');
-    const closeBtn = document.getElementById('jcClose');
     const audio = document.getElementById('jcAudio');
     const trackList = document.getElementById('jcTrackList');
-    const trackDisplay = document.getElementById('jcCurrentTrack');
-    const prevBtn = document.getElementById('jcPrev');
-    const nextBtn = document.getElementById('jcNext');
-    const playPauseBtn = document.getElementById('jcPlayPause');
-    const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
-    const PLAY_ICON = '\u25B6';
-    const PAUSE_ICON = '\u275A\u275A';
-    const progressBar = document.getElementById('jcProgressBar');
-    const progressContainer = document.getElementById('jcProgressContainer');
-    const timeDisplay = document.getElementById('jcTime');
-    const visualizerCanvas = document.getElementById('jcVisualizer');
-    const oscilloscopeTitle = document.getElementById('jcOscilloscopeTitle');
-    const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
     const coverImg = document.getElementById('jcCoverImg');
     const albumCoverSrc = coverImg ? coverImg.src : '';
     if (!lightbox || !tile || !audio || !trackList) return;
 
-    if (playPauseIcon) {
-        playPauseIcon.textContent = PLAY_ICON;
-    }
+    const JC_OSC_COLORS = { trace: '#c27038', glow: 'rgba(194, 112, 56, 0.9)', graticule: 'rgba(194, 112, 56, 1)' };
 
-    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
-    // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
-    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
-    const oscFrame = document.getElementById('jcOscilloscopeFrame');
-    function refreshPlayGlyph() {
-        if (playPauseIcon) playPauseIcon.textContent = audio.paused ? PLAY_ICON : PAUSE_ICON;
-        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', audio.paused);
-    }
-    function armTapToPlay() {
-        if (oscFrame) oscFrame.classList.add('awaiting-tap');
-    }
-    refreshPlayGlyph();
-
-    const audioEl = registerManagedAudio(audio);
-    let currentIndex = 0;
-    let trackItems = [];
+    // Cover art choreography: the album cover shows at rest, each track's title
+    // art shows while it plays. isChangingTrack keeps the pause fired by a
+    // track switch from flashing the album cover mid-transition.
     let isChangingTrack = false;
-
-    function resolveTrackIndex(trackSlug) {
-        const matchedIndex = findTrackIndexBySlug(tracks, trackSlug);
-        return matchedIndex === -1 ? 0 : matchedIndex;
-    }
-
-    function syncJCHash(method = 'replaceState') {
-        if (!lightbox || !lightbox.classList.contains('active') || !tracks[currentIndex]) return;
-        updateHistoryHash(buildMusicHash('junkyard-cabaret', tracks[currentIndex]), method);
-    }
-
-    const visualizer = createVisualizerController({
-        audio: audioEl,
-        visualizerCanvas,
-        getPalette: (index, barCount, intensity) => {
-            const baseHue = 22;
-            const hueVariance = 16;
-            const hue = baseHue - ((barCount - 1 - index) / barCount) * hueVariance;
-            const saturation = 55 + intensity * 20;
-            const lightness = 38 + intensity * 18;
-            return {
-                fillStyle: `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`,
-                shadowColor: `hsla(${hue}, 100%, 50%, ${0.4 + intensity * 0.4})`
-            };
-        }
-    });
-
-    const jcOscilloscope = createModalOscilloscope(
-        document.getElementById('jcOscilloscope'),
-        audioEl,
-        () => visualizer.getAnalyser(),
-        { trace: '#c27038', glow: 'rgba(194, 112, 56, 0.9)', graticule: 'rgba(194, 112, 56, 1)' }
-    );
-
-    function populatePlaylist() {
-        trackItems = renderTrackList(trackList, tracks, (index) => {
-            loadTrack(index);
-            playTrack();
-        }, () => ({
-            routeKey: 'junkyard-cabaret',
-            collectionTitle: 'Junkyard Cabaret'
-        }));
-    }
 
     function showAlbumCover() {
         if (!coverImg) return;
@@ -4544,202 +4287,65 @@ function initJCLightbox() {
         coverImg.alt = `${track.title} title art`;
     }
 
-    function loadTrack(index, options = {}) {
-        const { syncHash = true } = options;
-        const wasPlaying = !audio.paused;
-        isChangingTrack = wasPlaying;
-        currentIndex = index;
-        audio.src = tracks[index].file;
-        audio.load();
-        if (wasPlaying) {
-            showTrackCover(index);
-        } else {
-            showAlbumCover();
-        }
-        updateNowPlayingDisplays({
-            trackDisplay,
-            glassTitle: oscilloscopeTitle,
-            mobileNowPlaying
-        }, tracks[index].title);
-
-        if (progressBar) {
-            progressBar.style.width = '0%';
-        }
-        if (timeDisplay) {
-            resetAudioTimeReadout(timeDisplay);
-        }
-
-        setActiveTrackListItem(trackItems, index);
-
-        if (syncHash) {
-            syncJCHash('replaceState');
-        }
-    }
-
-    function playTrack() {
-        pauseManagedAudioExcept(audio);
-        audio.play().catch(e => console.error('Play error:', e));
-    }
-
-    function resizeCanvas() {
-        visualizer.resize();
-    }
-
-    function openJC(requestedTrackSlug = '', historyMethod = 'pushState') {
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
-        if (requestedTrackSlug) {
-            loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
-        } else if (!audio.src) {
-            loadTrack(0, { syncHash: false });
-        }
-        setTimeout(resizeCanvas, 50);
-        if (jcOscilloscope) setTimeout(() => jcOscilloscope.start(), 50);
-        syncJCHash(historyMethod);
-
-        const mini = getMiniPlayer();
-        if (mini && mini.isActive() && mini.getAudio() === audio) {
-            mini.detach(false);
-        }
-    }
-
-    function closeJC() {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-        if (jcOscilloscope) jcOscilloscope.stop();
-        const currentRoute = parseMusicHash();
-        if (currentRoute && currentRoute.player === 'junkyard-cabaret') {
-            history.pushState(null, '', window.location.pathname);
-        }
-
-        const mini = getMiniPlayer();
-        if (audio && !audio.paused && mini) {
-            mini.attach({
-                audio,
-                coverSrc: coverImg ? coverImg.src : '',
-                albumTitle: 'Junkyard Cabaret',
-                theme: 'jc',
-                oscColors: { trace: '#c27038', glow: 'rgba(194, 112, 56, 0.9)', graticule: 'rgba(194, 112, 56, 1)' },
-                getAnalyser: () => visualizer.getAnalyser(),
-                getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
-                onExpand: () => openJC('', 'pushState'),
-                onClose: () => {}
-            });
-        } else if (audio) {
-            audio.pause();
-        }
-    }
-
-    populatePlaylist();
-
-    tile.addEventListener('click', (e) => {
-        e.preventDefault();
-        openJC();
-    });
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeJC);
-    }
-
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            closeJC();
+    return createAlbumPlayer({
+        tracks,
+        els: {
+            lightbox,
+            tile,
+            audio,
+            trackList,
+            coverImg,
+            closeBtn: document.getElementById('jcClose'),
+            trackDisplay: document.getElementById('jcCurrentTrack'),
+            prevBtn: document.getElementById('jcPrev'),
+            nextBtn: document.getElementById('jcNext'),
+            playPauseBtn: document.getElementById('jcPlayPause'),
+            progressBar: document.getElementById('jcProgressBar'),
+            progressContainer: document.getElementById('jcProgressContainer'),
+            timeDisplay: document.getElementById('jcTime'),
+            visualizerCanvas: document.getElementById('jcVisualizer'),
+            oscCanvas: document.getElementById('jcOscilloscope'),
+            oscFrame: document.getElementById('jcOscilloscopeFrame'),
+            oscilloscopeTitle: document.getElementById('jcOscilloscopeTitle')
+        },
+        playerKey: 'junkyard-cabaret',
+        getRouteKey: () => 'junkyard-cabaret',
+        getCollectionTitle: () => 'Junkyard Cabaret',
+        albumTitle: 'Junkyard Cabaret',
+        getMiniTheme: () => 'jc',
+        getOscColors: () => JC_OSC_COLORS,
+        getPalette: (index, barCount, intensity) => {
+            const baseHue = 22;
+            const hueVariance = 16;
+            const hue = baseHue - ((barCount - 1 - index) / barCount) * hueVariance;
+            const saturation = 55 + intensity * 20;
+            const lightness = 38 + intensity * 18;
+            return {
+                fillStyle: `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`,
+                shadowColor: `hsla(${hue}, 100%, 50%, ${0.4 + intensity * 0.4})`
+            };
+        },
+        hooks: {
+            afterLoadTrack: (index, { wasPlaying }) => {
+                isChangingTrack = wasPlaying;
+                if (wasPlaying) {
+                    showTrackCover(index);
+                } else {
+                    showAlbumCover();
+                }
+            },
+            onPlay: (index) => {
+                isChangingTrack = false;
+                showTrackCover(index);
+            },
+            onPause: () => {
+                if (!audio.ended && !isChangingTrack) {
+                    showAlbumCover();
+                }
+            },
+            onEndedAtEnd: showAlbumCover
         }
     });
-
-    window.addEventListener('resize', resizeCanvas);
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            let newIndex = currentIndex - 1;
-            if (newIndex < 0) newIndex = tracks.length - 1;
-            loadTrack(newIndex);
-            playTrack();
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            let newIndex = (currentIndex + 1) % tracks.length;
-            loadTrack(newIndex);
-            playTrack();
-        });
-    }
-
-    audio.addEventListener('timeupdate', function() {
-        if (progressBar && audio.duration) {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = progress + '%';
-        }
-        if (timeDisplay) {
-            setAudioTimeReadout(timeDisplay, audio);
-        }
-    });
-
-    audio.addEventListener('play', function() {
-        isChangingTrack = false;
-        refreshPlayGlyph();
-        visualizer.start();
-        showTrackCover(currentIndex);
-    });
-
-    audio.addEventListener('pause', function() {
-        refreshPlayGlyph();
-        visualizer.stop();
-        if (!audio.ended && !isChangingTrack) {
-            showAlbumCover();
-        }
-    });
-
-    audio.addEventListener('ended', () => {
-        if (currentIndex < tracks.length - 1) {
-            loadTrack(currentIndex + 1);
-            playTrack();
-        } else {
-            showAlbumCover();
-        }
-    });
-
-    if (playPauseBtn) {
-        playPauseBtn.addEventListener('click', function() {
-            pauseManagedAudioExcept(audio);
-
-            if (audio.paused) {
-                audio.play().catch(e => console.error('Play error:', e));
-            } else {
-                audio.pause();
-            }
-        });
-    }
-
-    setupProgressScrubbing(progressContainer, audio);
-
-    const initialJCRoute = parseMusicHash();
-    if (initialJCRoute && initialJCRoute.player === 'junkyard-cabaret') {
-        setTimeout(() => {
-            openJC(initialJCRoute.trackSlug, 'replaceState');
-            if (initialJCRoute.trackSlug) { // direct song link → play on load
-                pauseManagedAudioExcept(audio);
-                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
-            }
-        }, 100);
-    }
-
-    window.addEventListener('popstate', () => {
-        const route = parseMusicHash();
-        if (route && route.player === 'junkyard-cabaret') {
-            openJC(route.trackSlug, 'replaceState');
-        } else if (lightbox.classList.contains('active')) {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-            audio.pause();
-        }
-    });
-
-    return {
-        open: openJC,
-        close: closeJC
-    };
 }
 
 function initS2ILightbox() {

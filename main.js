@@ -3549,6 +3549,11 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
 
     trackList.innerHTML = '';
 
+    // Tracks flagged `noNumber` (e.g. the Intermission) render an empty number
+    // cell and don't advance the count, so Act II picks up where Act I left off.
+    let numbered = 0;
+    const displayNumbers = tracks.map(track => (track.noNumber ? '' : String(++numbered)));
+
     // Build a single track row. Container acts (Act I / Act II) get their label from
     // the wrapping container, so only inline acts (the Intermission) carry a pill here.
     function buildTrackLi(track, index) {
@@ -3566,7 +3571,7 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
 
         const trackNumber = document.createElement('span');
         trackNumber.className = 'track-number';
-        trackNumber.textContent = index + 1;
+        trackNumber.textContent = displayNumbers[index];
 
         const titleText = document.createElement('span');
         titleText.className = 'track-title-text';
@@ -4241,7 +4246,7 @@ function initJCLightbox() {
         { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: 'audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
         { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
         { title: 'How Dare It Rise', file: 'audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: 'audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
-        { title: 'Take Your Time', act: 'Intermission', actInline: true, file: 'audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: 'audio/junkyard-cabaret/junkyard-cabaret-cover.webp?v=202605120946', noShare: true },
+        { title: 'Take Your Time', act: 'Intermission', actInline: true, file: 'audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: 'audio/junkyard-cabaret/junkyard-cabaret-cover.webp?v=202605120946', noShare: true, noNumber: true },
         { title: 'Everything Must Go', act: 'Act II', file: 'audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: 'audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
         { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606190959', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },

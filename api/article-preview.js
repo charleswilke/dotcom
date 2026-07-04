@@ -6,7 +6,7 @@ const {
 } = require('../lib/substack-utils');
 
 const SITE_URL = 'https://charleswilke.com';
-const DEFAULT_IMAGE = `${SITE_URL}/images/og-image.png?v=202605161341`;
+const DEFAULT_IMAGE = `${SITE_URL}/images/og-image.jpg?v=202607032147`;
 const DEFAULT_TITLE = 'Exploring L.ai.bor | Charles Wilke';
 const DEFAULT_DESCRIPTION = 'Essays on capitalism, humanity, and AI from Charles Wilke.';
 
@@ -93,7 +93,7 @@ function renderPage({ item, slug, statusCode = 200 }) {
     <meta name="twitter:description" content="${escapeHtml(description)}">
     <meta name="twitter:image" content="${escapeHtml(image)}">
     <meta name="twitter:image:alt" content="${escapeHtml(title)}">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=202607032147">
     <meta http-equiv="refresh" content="0;url=${escapeHtml(readerHash)}">
     <script>window.location.replace(${JSON.stringify(readerHash)});</script>
 </head>

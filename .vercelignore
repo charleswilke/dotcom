@@ -1,0 +1,36 @@
+# Keep private working material and dev tooling out of the public deploy.
+# Syntax follows .gitignore rules; !patterns re-include.
+
+# Talk decks & WIP material — only viewer/ is served (via /s2i-present rewrite)
+OMAxAI/*
+!OMAxAI/viewer
+
+# Dependencies & dev tooling (no build step runs on Vercel)
+node_modules
+**/node_modules
+package.json
+package-lock.json
+tools/
+transcripts/
+.lighthouse/
+*.sh
+*.code-workspace
+tsconfig.json
+
+# Docs, prototypes, legacy config
+*.md
+.htaccess
+og-image.html
+border-shape-lab.html
+before-times-box-prototype.html
+
+# Game source (ChessBlaster serves from dist/ only)
+games/ChessBlaster/src
+games/ChessBlaster/build
+games/ChessBlaster/public
+games/ChessBlaster/vite.config.ts
+
+# Unused archives & OS noise
+images/archive/
+.DS_Store
+**/.DS_Store

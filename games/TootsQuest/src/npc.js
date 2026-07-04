@@ -36,11 +36,13 @@ const NPC_DEFS = {
       ? [
         "Rust flecks on your tunic. You've been scrapping with the junk mites, haven't you?",
         "Careful out there. Even little things come apart when the static gets in them.",
+        "See the standing hoops around town? They hold your place in the pattern. Rest by one when the road's been rough.",
         "Bring me a lost pattern from your travels and I'll stitch you something with a little luck in it.",
       ]
       : [
         "Welcome to the Haus of Toots! Every stitch remembers something.",
         "The world's gone a bit fuzzy at the edges lately... so I stitch harder.",
+        "See the standing hoops around town? They hold your place in the pattern. Rest by one when the road's been rough.",
         "If you find a lost pattern out there, bring it home to me.",
       ],
     draw(ctx, n, t) {

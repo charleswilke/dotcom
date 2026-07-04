@@ -20,9 +20,19 @@ object, a full player-character redesign to match the cover art (ink-black
 figure, big cream eyes, chunky headphones, ragged orange poncho, neon blade),
 and **both real dogs**: Astro joined Doc, the corrected dog canon is now
 implemented (Doc heels/sits/scowls; Astro scouts, finds the secret, points),
-and dogs got a wiggle-based unstick so boulders can't pin them. Remaining
-M1: more Hearthside rooms, Tuning Stone, Archive mirror-rooms, Clear as Day
-spell, save/load.
+and dogs got a wiggle-based unstick so boulders can't pin them. **Session 5
+built out Hearthside (M1 queue item 1):** the world is now SIX rooms —
+`lane` (Toots' house) ← `hearth` (square + Haus of Toots shop building) →
+`meadow`, `green` (stone-ring grove, the future Tuning Stone site) north of
+hearth, plus two interiors (`shopInterior`, `homeInterior`) entered through
+doors. That required N/S gutter transitions (E/W-only before), door
+transitions (same panel slide, explicit entry points), a building shape
+grammar (shop + home), interior rooms (new tiles F/B/V, plank floors,
+timber walls on paper void), rect colliders, furniture grammars, standing
+embroidery-hoop save-point scenery (PRD §2.6 — scenery only until the save
+system lands), and Doc's comfy compass wired to hoops and dog beds.
+Jessie moved inside her shop. Remaining M1: Tuning Stone, Archive
+mirror-rooms, Clear as Day spell, save/load.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -52,10 +62,13 @@ games/TootsQuest/
                 # PRINT state + plate misregistration, mulberry32, angle helpers
     print.js    # Sunday Ink: halftone dot screens as repeating canvas tiles,
                 # per-context pattern cache (halftone(ctx, key), halftoneTile(key))
-    terrain.js  # ROOM system: ROOM_DEFS (hearth, meadow) with layout grids
-                # (30×17, 32px: G/P/W/R), decor, neighbors; live `room` export,
-                # setRoom/getRoom; collision (circleBlocked/moveCircle); blob
-                # baking, print-aware, cached per (room, style) via groundFor()
+    terrain.js  # ROOM system: ROOM_DEFS (hearth, meadow, lane, green,
+                # shopInterior, homeInterior) with layout grids (30×17, 32px:
+                # G/P/W/R outdoors, F/B/V interiors), decor (incl. buildings,
+                # doors, hoops, furniture), neighbors; live `room` export,
+                # setRoom/getRoom; collision (circleBlocked/moveCircle, circle
+                # + rect colliders, FURN_COLLIDERS); blob baking incl.
+                # bakeInterior, print-aware, cached per (room, style)
     entities.js # Player (Toots), Dog (one grammar, two souls: Doc heel /
                 # Astro scout, mood faces, seek() wiggle-unstick), Mite,
                 # particle system; session 4: cover-art Toots redesign,
@@ -168,6 +181,31 @@ games/TootsQuest/
   tick IS the freeze-frame. Letter jitter is seeded per word (mulberry32) and
   re-derived each draw — crooked but stable. KRAK! spawns high (y−52) so the
   starburst doesn't swallow Toots and the blade.
+- **Doors are triggers, not holes** (session 5): building wall rects stay
+  solid; the door trigger point sits on the wall face (radius 15) and the
+  transition teleports to an explicit entry point placed >30px from the
+  return trigger so crossings never re-fire. Interiors' door gaps in the
+  B-tile wall ring are walkable F cells so the player can stand in the
+  threshold.
+- **Door/N/S crossings reuse the one gutter transition** (session 5):
+  entering a building is dir 'N', exiting is 'S' — an interior is just the
+  next panel down the strip. `startTransition(dir, toId, entry)` covers
+  edges (derived entry) and doors (explicit entry) alike.
+- **Dogs land safely after any crossing via `placeDog`** (session 5): the
+  trailing spot is clamped to bounds AND checked with circleBlocked — door
+  arrivals put the trailing spot inside a wall, so blocked dogs pop in at
+  Toots' feet and heel/scout walks them apart. Reuse for anything that
+  teleports with the player.
+- **Doc's comfy compass is live** (session 5, PRD §2.5): heel dogs take
+  `room.comfy` (hoops + dog beds, built in buildRoom) as update()'s third
+  arg; once sitting, Doc turns and stares at the nearest one within 170px
+  and main.js drips warm-orange motes there (orange, not neon — rest isn't
+  magic). Scouts still take the room's secret in the same slot.
+- **Jessie stands beside her counter, not behind it** — TALK_RADIUS is 52
+  and the counter is 26 deep plus both body radii; putting an NPC across a
+  counter puts them out of talk range. Keep NPCs reachable, not staged.
+- **Interior HUD flips to ink** — the HUD text is cream and interiors are
+  mostly cream paper; drawHud picks ink when room.interior.
 
 ## Hard-won gotchas (do not re-learn these)
 
@@ -233,6 +271,7 @@ __TQ.transition                   // getter — active gutter transition or null
 __TQ.dialogue                     // getter — active conversation or null
 __TQ.flags                        // getter — worldState.flags (live object)
 __TQ.talk('jessie'|'wren')        // force-start a conversation
+__TQ.goto('shopInterior')         // jump to any room's spawn point (testing)
 __TQ.advance()                    // advance dialogue (finish page → next → close)
 __TQ.say(x, y, 'BAM!', {big:true})// spawn an onomatopoeia word anywhere
 __TQ.setPrint(true|false)         // toggle Sunday Ink
@@ -278,6 +317,29 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 - Doc's tail curl: plume arcs over the back standing AND sitting, tip
   sways with the wag; Astro's straight tail unchanged.
 
+## Verified in session 5 (scripted __TQ.step + screenshots, both styles)
+
+- All six rooms bake and populate in both styles, no console errors;
+  perf 0.4–1.3 ms across exteriors, interiors, night, and print mode.
+- All six edge crossings (hearth↔meadow, hearth↔green N/S, hearth↔lane)
+  land at correct entry points with both dogs in-bounds. NOTE for future
+  scripted tests: the edge trigger needs x/y strictly past the 12.5px
+  threshold — place the player at 10/950/534, not 14/946/530.
+- All four door crossings (shop in/out, home in/out) work with no
+  re-trigger; dogs arrive via placeDog (wall-blocked spots fall back to
+  Toots' feet).
+- Doc's comfy compass: sits and faces the lane hoop (face angle verified);
+  at home he stares at his own dog bed. First test failed because Toots
+  idled next to a mite spawn and kept getting knocked — park test subjects
+  away from mites.
+- Astro finds the shop's loose-floorboard secret (~90 frames) and the
+  green's stone-ring secret through the ring's south gap (~220 frames —
+  seek() gets him around the stones).
+- Jessie in the shop: 4 pages incl. the new hoop line, talked_jessie set;
+  3-hit combo kill regression passes (hp 3→2→1→0, slain_mite set).
+- Night: lit windows spill light onto the street (per-building window
+  lights), lamps keep interiors livable, torch pools unchanged.
+
 ## Regression baseline (sessions 1–3, re-verified where touched)
 
 - Everything from the M0 baseline still passes: sword combo (3 hits kill a
@@ -313,8 +375,9 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 
 - No audio (WebAudio oscillator SFX planned — fits the frequency theme).
 - No hearts/death for the player (knockback only).
-- No save/load, no spells, no Archive rooms yet.
-- Only E/W gutter transitions; N/S gutters unbuilt (same pattern when needed).
+- No save/load, no spells, no Archive rooms yet. Hoops are scenery until
+  the save system lands (M1 item 4) — their neon stitch already promises
+  interactivity.
 - Dialogue is linear pages only — no choices, no quest hooks yet.
 - Jessie/Wren still use skin-tone faces; only Toots got the ink-figure
   treatment (he's unique on the cover art too — probably correct, but
@@ -328,31 +391,40 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 
 ## Next session: continue M1 (PRD §6)
 
-Session 4 knocked out the first two queue items (onomatopoeia bursts, NPCs +
-speech balloons) plus an unplanned player redesign to the cover art. Queue:
+Session 5 knocked out queue item 1 (Hearthside rooms — six rooms, two of
+them interiors, plus buildings/doors/hoops/comfy-compass). Queue:
 
-1. **Hearthside rooms (4–6)** — room data modules; the meadow shows the
-   pattern. Haus of Toots shop interior is the anchor (Jessie already stands
-   at the banner outside; she moves inside, or the shop is her second spot).
-   Remember gotcha 12 when placing anyone.
-2. **Tuning Stone + 3 Archive mirror-rooms** — phosphor/amber palette,
+1. **Tuning Stone + 3 Archive mirror-rooms** — phosphor/amber palette,
    scanlines, darkness-first lighting (light.js's pass, tuned harder).
-   Decide: does the Archive keep the paper gutter, or transition differently
-   (microfiche frames? fade)? — open question from PRD §6.
-3. **Clear as Day spell** (88.3) + the frequency-dial HUD seed.
-4. **localStorage save** (`tootsquest_save_v1`): worldState flags (already
+   The green's stone ring (secret at its center) is the Tuning Stone's
+   intended site. Decide: does the Archive keep the paper gutter, or
+   transition differently (microfiche frames? fade)? — open question from
+   PRD §6.
+2. **Clear as Day spell** (88.3) + the frequency-dial HUD seed.
+3. **localStorage save** (`tootsquest_save_v1`): worldState flags (already
    the single source of truth in state.js), room id, autosave on gutter
-   crossings (natural save point).
+   crossings (natural save point). Wire it to the hoops: saving at a hoop
+   is the fiction (PRD §2.6), autosave on crossings is the safety net.
 
 Also queued, lower priority:
 - **Dog follow-ups** (canon migration itself is DONE — both dogs are in):
   Doc's pointing-at-comfy behavior needs targets — wire it to hoop save
   points / hearts / the inn when those exist. Astro's dig spots are an M3
-  system. Doc's Pest Mode (PRD §2.5) is a design hook for M2+.
+  system. Doc's Pest Mode (PRD §2.5) is a design hook for M2+. **Combat
+  roles decided July 2026 (PRD §2.5, M2+ hook): Doc harasses/staggers
+  (fully autonomous, no commands) and his failure state is being taken
+  hostage — no dog HP ever; captured Doc nags via nonstop §4.2
+  onomatopoeia barks, grabbers can drag him one screen away for a brief
+  rescue aside, and Pest Mode Doc gets grabbed more (care loop = combat
+  prep). Astro never fights and can't be grabbed; he digs mid-combat.**
 - **Mite render-style pass:** the cover renders give mites spring antennae
   with bolt tips, visible rivets/patch seams, and rounder rustier bodies.
   Combine with the queued per-instance identity pass (mites benefit most —
   there are many of them).
+- **Physics-rope tails/ears** (idea borrowed from a 3D SDF-blend-shell
+  write-up, July 2026): render dog tails/ears as 2–3 segment rope chains of
+  curvedCapsules — parametric (no frames), floppy juice, and the future
+  gull-airlifts-Doc hostage animation basically requires a dangling dog.
 - Ink-weight / per-instance treatment for characters generally (uniform
   outlines today).
 - Scale tree collision radius with visual scale if scale variance ever

@@ -452,6 +452,7 @@ export class Dog {
     this.sitT = 0;
     this.pointing = false;
     this.sniffing = false;
+    this.comfy = null;         // heel: the comfy spot Doc is staring at
     this.target = null;        // scout wander target
     this.wanderClock = 0;
     this.p = {
@@ -506,8 +507,10 @@ export class Dog {
     return false;
   }
 
-  update(dt, player, secret) {
-    if (this.p.behavior === 'scout') return this.updateScout(dt, player, secret);
+  // Heel dogs take the room's comfy spots (hoops, dog beds) as their third
+  // argument; scouts take the room's secret. Same slot, different noses.
+  update(dt, player, poi) {
+    if (this.p.behavior === 'scout') return this.updateScout(dt, player, poi);
 
     // Heel: stay behind Toots; sit as soon as he settles.
     const behind = 32;
@@ -516,12 +519,29 @@ export class Dog {
     const d = dist(this.x, this.y, tx, ty);
 
     if (d > 26) {
+      this.comfy = null;
       this.seek(tx, ty, clamp((d - 20) * 4, 60, 230), dt);
     } else {
       this.moving = false;
       this.sitT += dt;
       // Doc sits sooner than old-Doc did — resting is his whole thing.
       this.sitting = player.idleT > 0.9 && this.sitT > 0.6;
+      // The comfy compass (PRD §2.5): once he's settled, Doc turns and
+      // stares at the nearest resting spot. The grump points at rest the
+      // way Astro points at secrets.
+      this.comfy = null;
+      if (this.sitting && poi && poi.length) {
+        let best = null;
+        let bd = 170;
+        for (const h of poi) {
+          const hd = dist(this.x, this.y, h.x, h.y);
+          if (hd < bd) { bd = hd; best = h; }
+        }
+        if (best) {
+          this.comfy = best;
+          this.face = Math.atan2(best.y - this.y, best.x - this.x);
+        }
+      }
     }
   }
 

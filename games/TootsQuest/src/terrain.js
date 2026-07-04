@@ -46,7 +46,7 @@ const ROOM_DEFS = {
     ],
     decor: {
       trees: [
-        { x: 70, y: 95 }, { x: 185, y: 58 }, { x: 340, y: 78 }, { x: 560, y: 62 },
+        { x: 70, y: 95 }, { x: 185, y: 58 }, { x: 560, y: 62 },
         { x: 645, y: 110 }, { x: 905, y: 195 }, { x: 80, y: 360 }, { x: 52, y: 448 },
         { x: 175, y: 505 }, { x: 430, y: 512 }, { x: 880, y: 320 }, { x: 735, y: 520 },
       ],
@@ -54,15 +54,26 @@ const ROOM_DEFS = {
         { x: 305, y: 242 }, { x: 625, y: 370 },
       ],
       banner: { x: 348, y: 170 },
-      // Who stands where is room data; who they are lives in npc.js.
-      npcs: [{ id: 'jessie', x: 392, y: 208 }],
+      // Haus of Toots — the shop itself. The vertical path leads to its door.
+      // Toots can slip behind the roof along the top rows; the y-sort hides
+      // him back there, which is classic and correct.
+      buildings: [
+        { x: 292, y: 162, w: 168, h: 92, kind: 'shop', doorX: 384 },
+      ],
+      doors: [
+        { x: 384, y: 166, to: 'shopInterior', dir: 'N', entry: { x: 480, y: 400 } },
+      ],
+      // The town square's embroidery-hoop save point (PRD §2.6). No save
+      // system yet — scenery + Doc's comfy target until M1 item 4 lands.
+      hoops: [{ x: 444, y: 252 }],
+      npcs: [],   // Jessie moved inside her shop (session 5)
       secret: { x: 762, y: 252 },
       miteSpawns: [
         { x: 505, y: 300 }, { x: 245, y: 425 }, { x: 805, y: 425 },
       ],
       playerSpawn: { x: 330, y: 320 },
     },
-    neighbors: { E: 'meadow' },
+    neighbors: { E: 'meadow', W: 'lane', N: 'green' },
   },
 
   // The meadow east of Hearthside — the road continues out of frame and
@@ -110,6 +121,198 @@ const ROOM_DEFS = {
     },
     neighbors: { W: 'hearth' },
   },
+
+  // The lane west of the square — Toots' own house at the end of the road.
+  // Quieter than the square: fewer mites, a pond to the south, a hoop by
+  // the porch. The road continues east into hearth at rows 8–9.
+  lane: {
+    seed: 173,
+    layout: [
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GRRGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GRGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGPPGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGPPGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGPPPPPPPPPPPPPPPPPPPPPPPP',
+      'GGGGGGPPPPPPPPPPPPPPPPPPPPPPPP',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGWWWWGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGWWWWWWGGGGG',
+      'GGGGGGGGGGGGGGGGGGGWWWWWGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGWWWGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+    ],
+    decor: {
+      trees: [
+        { x: 80, y: 120 }, { x: 150, y: 60 }, { x: 500, y: 120 },
+        { x: 700, y: 80 }, { x: 870, y: 150 }, { x: 100, y: 480 },
+        { x: 300, y: 470 }, { x: 650, y: 330 }, { x: 862, y: 430 },
+      ],
+      torches: [
+        { x: 280, y: 205 }, { x: 620, y: 350 },
+      ],
+      buildings: [
+        { x: 240, y: 186, w: 150, h: 96, kind: 'home', doorX: 315 },
+      ],
+      doors: [
+        { x: 315, y: 190, to: 'homeInterior', dir: 'N', entry: { x: 480, y: 344 } },
+      ],
+      hoops: [{ x: 356, y: 214 }],
+      npcs: [],
+      secret: { x: 226, y: 140 },
+      miteSpawns: [
+        { x: 560, y: 430 }, { x: 820, y: 240 },
+      ],
+      playerSpawn: { x: 70, y: 290 },
+    },
+    neighbors: { E: 'hearth' },
+  },
+
+  // The green north of the square — a quiet grove with a ring of standing
+  // stones. The Tuning Stone will rise at its center (M1 item 2); for now
+  // Astro already smells something in there.
+  green: {
+    seed: 211,
+    layout: [
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGWWWWWGGGGGGGGGGGGGGGGGGGGGGG',
+      'GWWWWWWWGGGGGGGGGGGGGGGGGGGGGG',
+      'GGWWWWWGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGWWGGGGGGGGGGGGGRRRRGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGRGGGGRGGGGGGG',
+      'GGGGGGGGGGGGGGGGGRGGGGRGGGGGGG',
+      'GGGGGGGGGGGGGGGGGRGGGGRGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGRGGRGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
+    ],
+    decor: {
+      trees: [
+        { x: 60, y: 200 }, { x: 170, y: 190 }, { x: 420, y: 90 },
+        { x: 560, y: 160 }, { x: 870, y: 90 }, { x: 910, y: 260 },
+        { x: 300, y: 300 }, { x: 520, y: 400 }, { x: 820, y: 440 },
+      ],
+      torches: [{ x: 230, y: 420 }],
+      npcs: [],
+      // Dead center of the stone ring. Something is buried here.
+      secret: { x: 640, y: 200 },
+      miteSpawns: [
+        { x: 200, y: 300 }, { x: 500, y: 430 }, { x: 780, y: 140 },
+      ],
+      playerSpawn: { x: 250, y: 470 },
+    },
+    neighbors: { S: 'hearth' },
+  },
+
+  // Haus of Toots, inside (PRD §2.6): Jessie's counter, the gallery wall
+  // waiting for found patterns, the shelf of thread, and a standing hoop
+  // by the door. Interior rooms sit as a smaller panel on the paper void.
+  shopInterior: {
+    seed: 305,
+    interior: true,
+    layout: [
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVBBBBBBBBBBBBBBBBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBFFFFFFFFFFFFFFBVVVVVVV',
+      'VVVVVVVBBBBBBBFFBBBBBBBVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+    ],
+    decor: {
+      furniture: [
+        { kind: 'gallery', x: 330, y: 132 },
+        { kind: 'shelf', x: 660, y: 140 },
+        { kind: 'counter', x: 500, y: 230 },
+        { kind: 'lamp', x: 610, y: 300 },
+        { kind: 'rug', x: 440, y: 330 },
+      ],
+      hoops: [{ x: 300, y: 404 }],
+      npcs: [{ id: 'jessie', x: 394, y: 256 }],
+      // A loose floorboard in the corner. Astro knows.
+      secret: { x: 656, y: 180 },
+      playerSpawn: { x: 480, y: 380 },
+      doors: [
+        { x: 480, y: 436, to: 'hearth', dir: 'S', entry: { x: 384, y: 200 } },
+      ],
+    },
+    neighbors: {},
+  },
+
+  // Toots' house, inside. A bed, a rug, the radio — and two dog beds,
+  // because of course. Doc's comfy compass points here too.
+  homeInterior: {
+    seed: 421,
+    interior: true,
+    layout: [
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVBBBBBBBBBBBBVVVVVVVVV',
+      'VVVVVVVVVBFFFFFFFFFFBVVVVVVVVV',
+      'VVVVVVVVVBFFFFFFFFFFBVVVVVVVVV',
+      'VVVVVVVVVBFFFFFFFFFFBVVVVVVVVV',
+      'VVVVVVVVVBFFFFFFFFFFBVVVVVVVVV',
+      'VVVVVVVVVBFFFFFFFFFFBVVVVVVVVV',
+      'VVVVVVVVVBFFFFFFFFFFBVVVVVVVVV',
+      'VVVVVVVVVBFFFFFFFFFFBVVVVVVVVV',
+      'VVVVVVVVVBBBBBFFBBBBBVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+      'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV',
+    ],
+    decor: {
+      furniture: [
+        { kind: 'bed', x: 380, y: 230 },
+        { kind: 'table', x: 590, y: 230 },
+        { kind: 'lamp', x: 530, y: 210 },
+        { kind: 'rug', x: 480, y: 310 },
+        { kind: 'dogbed', x: 400, y: 340 },
+        { kind: 'dogbed', x: 448, y: 356 },
+      ],
+      npcs: [],
+      // Under the rug's corner — the floorboard every dog knows about.
+      secret: { x: 530, y: 330 },
+      playerSpawn: { x: 480, y: 330 },
+      doors: [
+        { x: 480, y: 404, to: 'lane', dir: 'S', entry: { x: 315, y: 226 } },
+      ],
+    },
+    neighbors: {},
+  },
+};
+
+// Furniture collision footprints, by kind. Draw code lives in main.js;
+// keep these in sync with the shapes drawn there. `rect` is centered on
+// the furniture point; `r` is a circle; absent = walkable (rug, gallery,
+// wall shelf, dog beds — dogs stand on their beds, that's the point).
+const FURN_COLLIDERS = {
+  counter: { rect: [170, 26] },
+  bed: { rect: [64, 84] },
+  table: { r: 20 },
+  lamp: { r: 5 },
 };
 
 function buildRoom(id, def) {
@@ -123,25 +326,52 @@ function buildRoom(id, def) {
       if (tileAt(cx, cy) === 'W') waterCells.push({ cx, cy });
     }
   }
-  // Static circular blockers (tree trunks, posts).
+  const d = def.decor;
+  // Static circular blockers (tree trunks, posts, hoops, table legs).
   const staticColliders = [
-    ...def.decor.trees.map(t => ({ x: t.x, y: t.y, r: 9 })),
-    ...def.decor.torches.map(t => ({ x: t.x, y: t.y, r: 6 })),
+    ...(d.trees || []).map(t => ({ x: t.x, y: t.y, r: 9 })),
+    ...(d.torches || []).map(t => ({ x: t.x, y: t.y, r: 6 })),
+    ...(d.hoops || []).map(h => ({ x: h.x, y: h.y, r: 6 })),
   ];
-  if (def.decor.banner) {
-    staticColliders.push({ x: def.decor.banner.x, y: def.decor.banner.y, r: 7 });
+  if (d.banner) {
+    staticColliders.push({ x: d.banner.x, y: d.banner.y, r: 7 });
   }
-  for (const n of def.decor.npcs || []) {
+  for (const n of d.npcs || []) {
     staticColliders.push({ x: n.x, y: n.y, r: 8 });
+  }
+  // Rect blockers: building wall bands and boxy furniture. Doors need no
+  // hole in the wall — the door trigger sits on the wall face and the
+  // transition teleports; nobody ever walks *through* the rect.
+  const rectColliders = (d.buildings || []).map(b => ({
+    x0: b.x, y0: b.y - b.h, x1: b.x + b.w, y1: b.y,
+  }));
+  for (const f of d.furniture || []) {
+    const fc = FURN_COLLIDERS[f.kind];
+    if (!fc) continue;
+    if (fc.rect) {
+      rectColliders.push({
+        x0: f.x - fc.rect[0] / 2, y0: f.y - fc.rect[1] / 2,
+        x1: f.x + fc.rect[0] / 2, y1: f.y + fc.rect[1] / 2,
+      });
+    } else if (fc.r) {
+      staticColliders.push({ x: f.x, y: f.y, r: fc.r });
+    }
   }
   return {
     id,
     seed: def.seed,
-    decor: def.decor,
+    interior: !!def.interior,
+    decor: d,
     neighbors: def.neighbors || {},
     tileAt,
     waterCells,
     staticColliders,
+    rectColliders,
+    // Doc's comfy compass targets (PRD §2.5): hoops, and the dog beds.
+    comfy: [
+      ...(d.hoops || []),
+      ...(d.furniture || []).filter(f => f.kind === 'dogbed'),
+    ],
     mites: null,       // created lazily on first entry (main.js)
     npcs: null,        // ditto — NPC instances built from decor.npcs
     grounds: {},       // baked ground per style: {paint, print}
@@ -168,7 +398,7 @@ export function setRoom(id) {
 
 export function solidAt(x, y) {
   const c = room.tileAt(Math.floor(x / TILE), Math.floor(y / TILE));
-  return c === 'W' || c === 'R';
+  return c === 'W' || c === 'R' || c === 'B' || c === 'V';
 }
 
 export function circleBlocked(x, y, r) {
@@ -181,6 +411,11 @@ export function circleBlocked(x, y, r) {
   for (const [px, py] of pts) if (solidAt(px, py)) return true;
   for (const c of room.staticColliders) {
     if (Math.hypot(x - c.x, y - c.y) < r + c.r) return true;
+  }
+  for (const rc of room.rectColliders) {
+    const nx = Math.max(rc.x0, Math.min(x, rc.x1));
+    const ny = Math.max(rc.y0, Math.min(y, rc.y1));
+    if (Math.hypot(x - nx, y - ny) < r) return true;
   }
   return false;
 }
@@ -281,7 +516,82 @@ function stampBlob(ctx, test, fill, inkW = 2.5, radius = 14) {
   return mask;
 }
 
+// Interior rooms: the walkable world is a small walled panel floating on
+// the cream paper void — the comic's paper showing through around a tight
+// interior panel. Floor is planked wood; walls are a timber band with the
+// same stamped ink outline as every other blob.
+function bakeInterior(r) {
+  const c = document.createElement('canvas');
+  c.width = WORLD_W;
+  c.height = WORLD_H;
+  const g = c.getContext('2d');
+  const rnd = mulberry32(r.seed);
+  const tileAt = r.tileAt;
+
+  g.fillStyle = PALETTE.cream;
+  g.fillRect(0, 0, WORLD_W, WORLD_H);
+
+  // Floor: one blob, then plank seams and the odd knot — texture without
+  // textures, same trick as the grass flecks.
+  const isFloor = (cx, cy) => tileAt(cx, cy) === 'F';
+  stampBlob(g, isFloor, PALETTE.path, 2.5, 8);
+  g.strokeStyle = 'rgba(169,126,82,0.5)';
+  g.lineWidth = 1.4;
+  g.lineCap = 'round';
+  for (let cy = 0; cy < ROWS; cy++) {
+    for (let cx = 0; cx < COLS; cx++) {
+      if (!isFloor(cx, cy)) continue;
+      // Horizontal plank seam per cell row, staggered like real boards.
+      const y = cy * TILE + (cy % 2 ? 10 : 22);
+      g.beginPath();
+      g.moveTo(cx * TILE + 2, y);
+      g.lineTo((cx + 1) * TILE - 2, y);
+      g.stroke();
+      // Board-end joints, offset every other row.
+      if ((cx + cy) % 3 === 0) {
+        g.beginPath();
+        g.moveTo(cx * TILE + 16, y);
+        g.lineTo(cx * TILE + 16, y + 10);
+        g.stroke();
+      }
+      if (rnd() < 0.12) {
+        g.beginPath();
+        g.arc(cx * TILE + 6 + rnd() * 20, cy * TILE + 6 + rnd() * 20, 1.3, 0, TAU);
+        g.fillStyle = 'rgba(169,126,82,0.55)';
+        g.fill();
+      }
+    }
+  }
+
+  // Walls: a timber band. In print mode its underside gets a halftone
+  // screen, like the boulders do.
+  const isWall = (cx, cy) => tileAt(cx, cy) === 'B';
+  const wallMask = stampBlob(g, isWall, PALETTE.timber, 3, 6);
+  if (PRINT.on) {
+    g.save();
+    g.globalAlpha = 0.4;
+    g.drawImage(tintMaskPattern(wallMask, halftoneTile('shade')), 0, 2);
+    g.restore();
+  }
+  // Wainscot line along the wall band for a hand-drawn interior read.
+  g.strokeStyle = 'rgba(34,26,86,0.35)';
+  g.lineWidth = 1.6;
+  for (let cy = 0; cy < ROWS; cy++) {
+    for (let cx = 0; cx < COLS; cx++) {
+      if (!isWall(cx, cy) || isWall(cx, cy + 1)) continue;
+      // Bottom edge of a wall run: a second seam just above the floor.
+      g.beginPath();
+      g.moveTo(cx * TILE, (cy + 1) * TILE - 7);
+      g.lineTo((cx + 1) * TILE, (cy + 1) * TILE - 7);
+      g.stroke();
+    }
+  }
+
+  return c;
+}
+
 function bakeGround(r) {
+  if (r.interior) return bakeInterior(r);
   const c = document.createElement('canvas');
   c.width = WORLD_W;
   c.height = WORLD_H;

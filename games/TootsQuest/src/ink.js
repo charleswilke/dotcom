@@ -34,6 +34,7 @@ export const PALETTE = {
   skin: '#f2c89b',
   rust: '#b06a3a',
   rustDark: '#8c5128',
+  timber: '#a97e52',
 };
 
 // Sunday Ink print mode — a global switch the whole renderer reads.

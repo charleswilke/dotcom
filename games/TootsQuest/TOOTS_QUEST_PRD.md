@@ -121,8 +121,10 @@ Backed by a single global `worldState` flags object (see §5), cheap to add to:
   and occasionally wanders off toward something interesting (a diegetic hint
   system with a mind of its own). The dogs ARE the quality-of-life features.
   **(Built session 4: both dogs are in-game, canon-correct — Doc heels and
-  sits, Astro scouts and finds the room secret. Doc's comfy-pointing awaits
-  hoops/hearts to point at; Astro's dig spots are an M3 system.)**
+  sits, Astro scouts and finds the room secret. Built session 5: Doc's
+  comfy compass is live — once settled he stares at the nearest hoop or
+  dog bed and warm motes mark the spot. Astro's dig spots are an M3
+  system.)**
 - **Doc's Pest Mode** (from the real Doc, July 2026): go too long without
   feeding him or resting at a hoop and Doc escalates into full gremlin —
   underfoot during combat, barking that aggros nearby enemies, standing on
@@ -130,6 +132,45 @@ Backed by a single global `worldState` flags object (see §5), cheap to add to:
   pressure system that makes save points and snacks feel like caring for
   the dog rather than menuing. Feed him or rest and he's instantly comfy
   again. (Design hook only — tune at M2+ so it never frustrates.)
+- **Doc fights; Astro digs** (combat roles, decided July 2026 — design hook,
+  M2+ alongside Pest Mode). **Both dogs are fully autonomous in combat: no
+  whistle, no commands, no party-member menu.** They read as dogs precisely
+  because you can't drive them.
+  - **Doc's combat role is harassment, not damage.** He latches onto an
+    ankle and staggers the enemy, interrupts a telegraph, pins one baddie
+    in place for a beat so Toots can line up the finisher. He is not a war
+    dog; he is a small dog with opinions who commits anyway. Toots stays
+    the star (§2.4 — the dogs are co-stars). Out of combat he remains the
+    comfy compass; same grumpy soul in both modes.
+  - **Hostage is Doc's failure state.** The dogs have no HP and can never
+    die or take damage. Instead, when Doc overcommits (or gets swarmed),
+    an enemy *grabs him*. Grabs are enemy-specific comic beats that double
+    as mechanic tutorials: a **Gull Bomber airlifts him** (knock it down),
+    a **Rust Golem tucks him under one arm** and fights one-handed, a
+    **Redaction swallows him whole** — a grumpy Doc-shaped glow inside the
+    ink blob; Clear as Day forces the spit-out.
+  - **Stakes, v1: the nag.** A captured Doc emits *nonstop onomatopoeia
+    barks and hollers* (YIP! RRRF! AROO!) through the §4.2 burst system —
+    a diegetic, escalating nag rather than a stat penalty. No timer, no
+    permanent loss. You rescue him because you cannot stand it, and
+    because he's Doc.
+  - **The drag-away.** A grabber can haul Doc through a gutter to an
+    adjacent screen, turning the rescue into a brief aside mission — a
+    fun detour, one room deep at most, never a chore. His barks carry
+    through the gutter so you always know which way he went.
+  - **Pest Mode is combat prep.** A fed, rested Doc is disciplined and
+    rarely grabbed; a Pest Mode Doc is reckless — lunges too far, barks
+    himself into trouble, gets snatched far more often. Caring for the
+    dog and preparing for combat become the same loop: the two systems
+    are one system.
+  - **Astro is a conscientious objector.** He doesn't flee combat; he
+    just *doesn't care*. He drifts to the edge of the fight, enemies
+    ignore him and he ignores them, and **he can never be taken hostage**
+    (enemies grab the dog biting their ankles, not the one sniffing a
+    fence post — rescue drama stays exclusively Doc-flavored). If a dig
+    spot is near the fight he works it while you brawl, occasionally
+    trotting a heart or salvage into the fray at a clutch moment: the
+    aloof dog saves your life and doesn't even look at you.
 
 ### 2.6 Haus of Toots (needlepoint as a game system)
 
@@ -139,6 +180,9 @@ and needlepoint becomes the game's craft/collection layer:
 - **Save points are embroidery hoops.** Standing hoops scattered through the world;
   saving plays a quick "stitching" animation that literally stitches your progress.
   (Thematically perfect: the Archive *records*, Jessie *preserves*.)
+  *(Session 5: hoops stand in the square, by the house, and in the shop —
+  scenery + Doc's comfy targets; save wiring comes with M1's save item.
+  The shop interior exists, gallery wall and all, waiting for patterns.)*
 - **Patterns are collectibles.** Hidden throughout the world are lost needlepoint
   patterns (each a tiny procedural cross-stitch rendering of a song, place, or
   character). Return them to Haus of Toots and Jessie stitches them; finished

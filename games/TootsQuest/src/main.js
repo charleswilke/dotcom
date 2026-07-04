@@ -8,9 +8,12 @@
 
 import {
   TAU, PALETTE, PRINT, setPrintMode, clamp, lerp, dist, angleDiff,
-  mulberry32, capsule, inkCircle, inkEllipse,
+  mulberry32, capsule, inkCircle, inkEllipse, inkShape,
 } from './ink.js';
-import { WORLD_W, WORLD_H, TILE, room, setRoom, getRoom, groundFor, invalidateGrounds } from './terrain.js';
+import {
+  WORLD_W, WORLD_H, TILE, room, setRoom, getRoom, groundFor,
+  invalidateGrounds, circleBlocked,
+} from './terrain.js';
 import { Player, Dog, Mite, particles, spawnParticle, burst, updateParticles, drawParticles } from './entities.js';
 import { skyState, timeLabel, drawLighting } from './light.js';
 import { halftone } from './print.js';
@@ -57,7 +60,7 @@ const astro = new Dog(player.x + 34, player.y + 22, {
 });
 
 function roomMites(r) {
-  if (!r.mites) r.mites = r.decor.miteSpawns.map(s => new Mite(s.x, s.y));
+  if (!r.mites) r.mites = (r.decor.miteSpawns || []).map(s => new Mite(s.x, s.y));
   return r.mites;
 }
 let mites = roomMites(room);
@@ -95,8 +98,10 @@ let tufts = [];
 let ripples = [];
 
 function buildAmbient() {
-  const rnd = mulberry32(room.seed);
   tufts = [];
+  ripples = [];
+  if (room.interior) return;   // no overgrowth on the floorboards
+  const rnd = mulberry32(room.seed);
   let guard = 0;
   while (tufts.length < 95 && guard++ < 2000) {
     const x = rnd() * WORLD_W;
@@ -105,7 +110,6 @@ function buildAmbient() {
     if (room.waterCells.some(c => c.cx === Math.floor(x / TILE) && c.cy === Math.floor(y / TILE))) continue;
     tufts.push({ x, y, h: 5 + rnd() * 5, tone: rnd() });
   }
-  ripples = [];
   if (room.waterCells.length) {
     for (let i = 0; i < 12; i++) {
       const cell = room.waterCells[Math.floor(rnd() * room.waterCells.length)];
@@ -122,14 +126,22 @@ buildAmbient();
 // --- Panel transitions (the Sunday-strip gutter) ----------------------------
 
 const GUTTER = 44;            // paper between panels, px
-let transition = null;        // {dir, t, dur, fromRoom, toRoom, exitX, entryX, y}
+let transition = null;        // {dir, t, dur, fromRoom, toRoom, exit:{x,y}, entry:{x,y}}
+
+const DIRVEC = {
+  E: { x: 1, y: 0 }, W: { x: -1, y: 0 },
+  N: { x: 0, y: -1 }, S: { x: 0, y: 1 },
+};
 
 function easeInOut(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-function startTransition(dir) {
-  const toRoom = getRoom(room.neighbors[dir]);
+// dir is the direction of travel; E/W slide horizontally, N/S vertically.
+// Edge crossings derive their entry point from the exit; door crossings
+// (into interiors) pass an explicit one.
+function startTransition(dir, toId, entry) {
+  const toRoom = getRoom(toId || room.neighbors[dir]);
   roomMites(toRoom);          // populate the next panel before it slides in
   roomNpcs(toRoom);
   closeDialogue();
@@ -141,32 +153,43 @@ function startTransition(dir) {
   transition = {
     dir, t: 0, dur: 0.8,
     fromRoom: room, toRoom,
-    exitX: player.x,
-    entryX: dir === 'E' ? 22 : WORLD_W - 22,
-    y: player.y,
+    exit: { x: player.x, y: player.y },
+    entry: entry || {
+      x: dir === 'E' ? 22 : dir === 'W' ? WORLD_W - 22 : player.x,
+      y: dir === 'S' ? 22 : dir === 'N' ? WORLD_H - 22 : player.y,
+    },
   };
+}
+
+// Dogs arrive trailing behind the direction of travel, clamped inside the
+// walkable bounds (gotcha 5) — and if the trailing spot is inside a wall
+// (door crossings land right next to one), they pop in at Toots' feet and
+// sort themselves out; heel/scout immediately walks them apart.
+function placeDog(dog, px, py) {
+  dog.x = clamp(px, 18, WORLD_W - 18);
+  dog.y = clamp(py, 18, WORLD_H - 18);
+  if (circleBlocked(dog.x, dog.y, dog.r)) {
+    dog.x = player.x;
+    dog.y = player.y;
+  }
+  dog.sitting = false;
+  dog.pointing = false;
+  dog.sniffing = false;
+  dog.comfy = null;
+  dog.target = null;   // stale wander targets point at the old room
+  dog.detourT = 0;
+  dog.stuckT = 0;
 }
 
 function finishTransition() {
   const tr = transition;
   transition = null;
   setRoom(tr.toRoom.id);
-  player.x = tr.entryX;
-  player.y = tr.y;
-  // The dogs arrive beside Toots — clamped inside the walkable bounds, or
-  // the collision edge strands them out of the world forever (gotcha 5).
-  doc.x = clamp(player.x + (tr.dir === 'E' ? -34 : 34), 18, WORLD_W - 18);
-  doc.y = player.y + 8;
-  doc.sitting = false;
-  doc.pointing = false;
-  astro.x = clamp(player.x + (tr.dir === 'E' ? -52 : 52), 18, WORLD_W - 18);
-  astro.y = player.y + 20;
-  astro.sitting = false;
-  astro.pointing = false;
-  astro.sniffing = false;
-  astro.target = null;   // stale wander targets point at the old room
-  doc.detourT = astro.detourT = 0;
-  doc.stuckT = astro.stuckT = 0;
+  player.x = tr.entry.x;
+  player.y = tr.entry.y;
+  const dv = DIRVEC[tr.dir];
+  placeDog(doc, player.x - dv.x * 34 + dv.y * 8, player.y - dv.y * 34 + dv.x * 8);
+  placeDog(astro, player.x - dv.x * 52 + dv.y * 20, player.y - dv.y * 52 + dv.x * 20);
   mites = roomMites(room);
   npcs = roomNpcs(room);
   particles.length = 0;
@@ -220,7 +243,7 @@ function update(dt, time) {
   // Talking locks Toots' input but the world keeps living (pillar 1):
   // mites still wander, Doc still settles, torches still spit embers.
   player.update(dt, dialogue.active ? EMPTY_KEYS : keys, game);
-  doc.update(dt, player);
+  doc.update(dt, player, room.comfy);
   astro.update(dt, player, room.decor.secret);
   for (const n of npcs) n.update(dt, player);
   for (const m of mites) m.update(dt, player, game);
@@ -234,6 +257,15 @@ function update(dt, time) {
   // Walked off an open edge? Slide to the neighboring panel.
   if (player.x > WORLD_W - 12.5 && room.neighbors.E) { startTransition('E'); return; }
   if (player.x < 12.5 && room.neighbors.W) { startTransition('W'); return; }
+  if (player.y > WORLD_H - 12.5 && room.neighbors.S) { startTransition('S'); return; }
+  if (player.y < 12.5 && room.neighbors.N) { startTransition('N'); return; }
+  // Stepped onto a door threshold? Cross into that panel instead.
+  for (const dr of room.decor.doors || []) {
+    if (dist(player.x, player.y, dr.x, dr.y) < 15) {
+      startTransition(dr.dir, dr.to, { x: dr.entry.x, y: dr.entry.y });
+      return;
+    }
+  }
 
   // Sword connects: sector test against each live mite, once per swing.
   const sw = player.swing();
@@ -264,7 +296,7 @@ function update(dt, time) {
   emberClock -= dt;
   if (emberClock <= 0) {
     emberClock = 0.12;
-    for (const t of room.decor.torches) {
+    for (const t of room.decor.torches || []) {
       if (Math.random() < 0.7) {
         spawnParticle({
           x: t.x + (Math.random() - 0.5) * 4,
@@ -287,6 +319,17 @@ function update(dt, time) {
       x: room.decor.secret.x + (Math.random() - 0.5) * 10,
       y: room.decor.secret.y - 4,
       vy: -18, g: 0, life: 0.8, size: 1.8, color: PALETTE.neon, add: true,
+    });
+  }
+
+  // Doc's stare gets a soft cue at the comfy spot he means — warm orange,
+  // not neon: rest isn't magic, it's home. (PRD §2.5 comfy compass.)
+  if (doc.comfy && Math.random() < dt * 1.2) {
+    const cy = doc.comfy.kind === 'dogbed' ? -8 : -44;
+    spawnParticle({
+      x: doc.comfy.x + (Math.random() - 0.5) * 10,
+      y: doc.comfy.y + cy,
+      vy: -12, g: 0, life: 0.9, size: 1.8, color: PALETTE.orange, add: true,
     });
   }
 
@@ -485,10 +528,305 @@ function drawBanner(b, time) {
   }
 }
 
-function drawSecret(s, time) {
+function drawSecret(s, time, interior) {
+  if (interior) {
+    // Indoors the tell is a loose floorboard, not pebbles.
+    ctx.strokeStyle = 'rgba(34,26,86,0.5)';
+    ctx.lineWidth = 1.4;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(s.x - 7, s.y - 2); ctx.lineTo(s.x + 6, s.y - 3);
+    ctx.moveTo(s.x - 5, s.y + 3); ctx.lineTo(s.x + 7, s.y + 2);
+    ctx.stroke();
+    inkCircle(ctx, s.x + 1, s.y, 1.6, PALETTE.timber, PALETTE.ink, 1);
+    return;
+  }
   inkCircle(ctx, s.x - 5, s.y, 2.5, PALETTE.rock, PALETTE.ink, 1.4);
   inkCircle(ctx, s.x + 4, s.y + 2, 2, PALETTE.rock, PALETTE.ink, 1.4);
   inkCircle(ctx, s.x, s.y - 3, 1.6, PALETTE.rockDark, null);
+}
+
+// A Hearthside building: timber-framed cream walls under a gabled roof.
+// One grammar, two kinds — the shop wears orange and hangs a hoop sign,
+// the house wears slate and smokes a chimney. Windows warm up after dark.
+function drawBuilding(b, time) {
+  const { x, y, w, h } = b;
+  const shop = b.kind === 'shop';
+  const dark = skyState(tDay).dark;
+  inkEllipse(ctx, x + w / 2, y + 3, w * 0.55, 7, 0, 'rgba(34,26,86,0.15)', null);
+
+  // Wall + timber framing.
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.roundRect(x, y - h, w, h, 4);
+  }, PALETTE.cream, PALETTE.ink, 3);
+  ctx.strokeStyle = PALETTE.timber;
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x + 6, y - 4); ctx.lineTo(x + 6, y - h + 8);
+  ctx.moveTo(x + w - 6, y - 4); ctx.lineTo(x + w - 6, y - h + 8);
+  ctx.moveTo(x + 4, y - h + 9); ctx.lineTo(x + w - 4, y - h + 9);
+  ctx.stroke();
+
+  // Gabled roof with an overhang and a couple of shingle seams.
+  const ridgeY = y - h - 34;
+  const rlx = x + w / 2 - 26;
+  const rrx = x + w / 2 + 26;
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.moveTo(x - 12, y - h + 2);
+    c.lineTo(rlx, ridgeY);
+    c.lineTo(rrx, ridgeY);
+    c.lineTo(x + w + 12, y - h + 2);
+    c.closePath();
+  }, shop ? PALETTE.orange : PALETTE.slate, PALETTE.ink, 3.5);
+  ctx.strokeStyle = 'rgba(34,26,86,0.45)';
+  ctx.lineWidth = 1.6;
+  for (const t2 of [0.38, 0.72]) {
+    const yy = ridgeY + (y - h + 2 - ridgeY) * t2;
+    ctx.beginPath();
+    ctx.moveTo(lerp(rlx, x - 12, t2) + 4, yy);
+    ctx.lineTo(lerp(rrx, x + w + 12, t2) - 4, yy);
+    ctx.stroke();
+  }
+  if (!shop) {
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x + w - 46, ridgeY + 4, 15, 24, 2);
+    }, PALETTE.rust, PALETTE.ink, 2.2);
+  }
+
+  // Windows — slate by day, lamplight after dark.
+  for (const wx of [x + w * 0.22, x + w * 0.78]) {
+    const wy = y - h * 0.52;
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(wx - 9, wy - 8, 18, 16, 2);
+    }, dark > 0.25 ? '#ffca7a' : PALETTE.slate, PALETTE.ink, 2.2);
+    ctx.strokeStyle = PALETTE.ink;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(wx, wy - 7); ctx.lineTo(wx, wy + 7);
+    ctx.moveTo(wx - 8, wy); ctx.lineTo(wx + 8, wy);
+    ctx.stroke();
+  }
+
+  // The door, on its own x so it can meet the path.
+  const dx = b.doorX ?? x + w / 2;
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.roundRect(dx - 12, y - 31, 24, 31, [10, 10, 0, 0]);
+  }, PALETTE.timber, PALETTE.ink, 2.5);
+  inkCircle(ctx, dx + 6, y - 14, 1.7, PALETTE.ink, null);
+
+  // The shop hangs a little hoop sign over its door.
+  if (shop) {
+    const sway = Math.sin(time * 1.9 + 2) * 1.5;
+    ctx.strokeStyle = PALETTE.ink;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(dx, y - h + 10);
+    ctx.lineTo(dx + sway, y - h + 22);
+    ctx.stroke();
+    inkCircle(ctx, dx + sway, y - h + 30, 8.5, PALETTE.timber, PALETTE.ink, 2);
+    inkCircle(ctx, dx + sway, y - h + 30, 6, PALETTE.cream, PALETTE.ink, 1.4);
+    ctx.strokeStyle = PALETTE.orange;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(dx + sway - 2.5, y - h + 27.5); ctx.lineTo(dx + sway + 2.5, y - h + 32.5);
+    ctx.moveTo(dx + sway + 2.5, y - h + 27.5); ctx.lineTo(dx + sway - 2.5, y - h + 32.5);
+    ctx.stroke();
+  }
+}
+
+// A standing embroidery hoop — the save point (PRD §2.6), waiting for the
+// save system. The one neon stitch is the promise: neon = interactive.
+function drawHoop(hp, time) {
+  const { x, y } = hp;
+  inkEllipse(ctx, x, y + 1, 10, 4, 0, 'rgba(34,26,86,0.18)', null);
+  capsule(ctx, x - 7, y, x - 2, y - 22, 3, PALETTE.timber, PALETTE.ink, 1.8);
+  capsule(ctx, x + 7, y, x + 2, y - 22, 3, PALETTE.timber, PALETTE.ink, 1.8);
+  capsule(ctx, x, y - 20, x, y - 30, 3.5, PALETTE.timber, PALETTE.ink, 1.8);
+  inkCircle(ctx, x, y - 44, 15, PALETTE.timber, PALETTE.ink, 2.4);
+  inkCircle(ctx, x, y - 44, 11.5, PALETTE.cream, PALETTE.ink, 1.6);
+  inkCircle(ctx, x, y - 60.5, 2.2, PALETTE.timber, PALETTE.ink, 1.6);
+  const cell = 5;
+  ctx.lineWidth = 1.5;
+  ctx.lineCap = 'round';
+  for (const [gx, gy, neon] of [[-1, 0, 0], [1, 0, 0], [0, -1, 0], [0, 1, 0], [0, 0, 1]]) {
+    const cx2 = x + gx * cell;
+    const cy2 = y - 44 + gy * cell;
+    if (neon) {
+      ctx.globalAlpha = 0.55 + Math.sin(time * 2.2 + x) * 0.45;
+      ctx.strokeStyle = PALETTE.neon;
+    } else {
+      ctx.strokeStyle = PALETTE.orange;
+    }
+    ctx.beginPath();
+    ctx.moveTo(cx2 - 2, cy2 - 2); ctx.lineTo(cx2 + 2, cy2 + 2);
+    ctx.moveTo(cx2 + 2, cy2 - 2); ctx.lineTo(cx2 - 2, cy2 + 2);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+}
+
+// Interior furniture — small shape grammars, one per kind. Collision
+// footprints for the boxy ones live in terrain.js (FURN_COLLIDERS);
+// keep the drawn sizes in sync.
+function drawFurniture(f, time) {
+  const { x, y } = f;
+  if (f.kind === 'counter') {
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x - 85, y - 13, 170, 26, 5);
+    }, PALETTE.timber, PALETTE.ink, 2.6);
+    ctx.strokeStyle = 'rgba(248,233,210,0.35)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(x - 80, y - 6); ctx.lineTo(x + 80, y - 6);
+    ctx.stroke();
+    // A folded canvas and a spool, mid-commission.
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x - 34, y - 10, 26, 13, 2);
+    }, PALETTE.cream, PALETTE.ink, 1.8);
+    inkCircle(ctx, x + 34, y - 7, 3.6, PALETTE.orange, PALETTE.ink, 1.6);
+    ctx.strokeStyle = PALETTE.orange;
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.moveTo(x + 31, y - 7);
+    ctx.quadraticCurveTo(x + 8, y - 2, x - 12, y - 5);
+    ctx.stroke();
+  } else if (f.kind === 'gallery') {
+    // The pattern gallery (PRD §2.6): one finished canvas, the rest
+    // waiting for what Toots brings home. This wall fills in over the game.
+    for (let i = 0; i < 4; i++) {
+      const fx2 = x + i * 46;
+      const fy2 = y - 24;
+      inkShape(ctx, (c) => {
+        c.beginPath();
+        c.roundRect(fx2 - 13, fy2 - 11, 26, 22, 2);
+      }, PALETTE.timber, PALETTE.ink, 2);
+      inkShape(ctx, (c) => {
+        c.beginPath();
+        c.roundRect(fx2 - 10, fy2 - 8, 20, 16, 1);
+      }, PALETTE.cream, null);
+      if (i === 0) {
+        inkCircle(ctx, fx2 - 3, fy2 - 3, 3.2, PALETTE.orange, null);
+        inkCircle(ctx, fx2 + 3, fy2 - 3, 3.2, PALETTE.orange, null);
+        inkShape(ctx, (c) => {
+          c.beginPath();
+          c.moveTo(fx2 - 5.5, fy2 - 1.5);
+          c.lineTo(fx2 + 5.5, fy2 - 1.5);
+          c.lineTo(fx2, fy2 + 5);
+          c.closePath();
+        }, PALETTE.orange, null);
+      } else {
+        ctx.strokeStyle = 'rgba(210,176,112,0.55)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(fx2 - 8, fy2 - 3); ctx.lineTo(fx2 + 8, fy2 - 3);
+        ctx.moveTo(fx2 - 8, fy2 + 3); ctx.lineTo(fx2 + 8, fy2 + 3);
+        ctx.stroke();
+      }
+    }
+  } else if (f.kind === 'shelf') {
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x - 55, y - 4, 110, 9, 2);
+    }, PALETTE.timber, PALETTE.ink, 2);
+    const spools = [PALETTE.orange, PALETTE.neon, PALETTE.slate, PALETTE.rust, PALETTE.cream];
+    spools.forEach((col, i) => {
+      const sx2 = x - 40 + i * 20;
+      capsule(ctx, sx2, y - 14, sx2, y - 8, 7, col, PALETTE.ink, 1.6);
+    });
+  } else if (f.kind === 'rug') {
+    // Braided oval rug, ring by ring.
+    inkEllipse(ctx, x, y, 72, 36, 0, PALETTE.rust, PALETTE.ink, 2.4);
+    inkEllipse(ctx, x, y, 56, 27, 0, PALETTE.cream, null);
+    inkEllipse(ctx, x, y, 40, 19, 0, PALETTE.orange, null);
+    inkEllipse(ctx, x, y, 24, 11, 0, PALETTE.cream, null);
+    ctx.strokeStyle = 'rgba(34,26,86,0.3)';
+    ctx.lineWidth = 1.1;
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * TAU;
+      ctx.beginPath();
+      ctx.moveTo(x + Math.cos(a) * 64, y + Math.sin(a) * 31);
+      ctx.lineTo(x + Math.cos(a) * 70, y + Math.sin(a) * 35);
+      ctx.stroke();
+    }
+  } else if (f.kind === 'bed') {
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x - 32, y - 42, 64, 84, 6);
+    }, PALETTE.timber, PALETTE.ink, 2.6);
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x - 27, y - 37, 54, 74, 5);
+    }, PALETTE.cream, PALETTE.ink, 1.6);
+    inkEllipse(ctx, x, y - 26, 19, 9, 0, PALETTE.cream, PALETTE.ink, 1.8);
+    // The quilt — cross-stitched, of course.
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x - 27, y - 12, 54, 49, 5);
+    }, PALETTE.orange, PALETTE.ink, 1.8);
+    ctx.strokeStyle = PALETTE.cream;
+    ctx.lineWidth = 1.3;
+    ctx.lineCap = 'round';
+    for (let r2 = 0; r2 < 3; r2++) {
+      for (let c2 = 0; c2 < 3; c2++) {
+        const qx = x - 14 + c2 * 14;
+        const qy = y - 2 + r2 * 13;
+        ctx.beginPath();
+        ctx.moveTo(qx - 2.5, qy - 2.5); ctx.lineTo(qx + 2.5, qy + 2.5);
+        ctx.moveTo(qx + 2.5, qy - 2.5); ctx.lineTo(qx - 2.5, qy + 2.5);
+        ctx.stroke();
+      }
+    }
+  } else if (f.kind === 'table') {
+    capsule(ctx, x, y - 10, x, y - 2, 5, PALETTE.timber, PALETTE.ink, 2);
+    inkEllipse(ctx, x, y - 16, 23, 13, 0, PALETTE.timber, PALETTE.ink, 2.6);
+    // The house radio — same family as Wren's. Still tuned. Still alive.
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.roundRect(x - 8, y - 33, 16, 12, 2);
+    }, PALETTE.slate, PALETTE.ink, 2);
+    ctx.strokeStyle = PALETTE.ink;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(x + 5, y - 33);
+    ctx.lineTo(x + 10, y - 43);
+    ctx.stroke();
+    ctx.globalAlpha = 0.55 + Math.sin(time * 2.4 + 1) * 0.45;
+    ctx.fillStyle = PALETTE.neon;
+    ctx.beginPath();
+    ctx.arc(x + 10, y - 43, 1.5, 0, TAU);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  } else if (f.kind === 'lamp') {
+    capsule(ctx, x, y, x, y - 30, 3, PALETTE.timber, PALETTE.ink, 1.8);
+    inkShape(ctx, (c) => {
+      c.beginPath();
+      c.moveTo(x - 11, y - 30);
+      c.lineTo(x - 6, y - 42);
+      c.lineTo(x + 6, y - 42);
+      c.lineTo(x + 11, y - 30);
+      c.closePath();
+    }, PALETTE.orange, PALETTE.ink, 2);
+  } else if (f.kind === 'dogbed') {
+    inkEllipse(ctx, x, y, 19, 11, 0, PALETTE.rust, PALETTE.ink, 2.2);
+    inkEllipse(ctx, x, y + 1, 14, 7.5, 0, PALETTE.cream, PALETTE.ink, 1.4);
+    ctx.strokeStyle = 'rgba(34,26,86,0.35)';
+    ctx.lineWidth = 1.1;
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * TAU;
+      ctx.beginPath();
+      ctx.moveTo(x + Math.cos(a) * 15, y + Math.sin(a) * 8.5);
+      ctx.lineTo(x + Math.cos(a) * 18, y + Math.sin(a) * 10.5);
+      ctx.stroke();
+    }
+  }
 }
 
 function drawTufts(time) {
@@ -529,33 +867,43 @@ let frameMs = 0;
 
 // A comic panel frame: paper margin + ink border. Drawn around each panel
 // during transitions, and around the whole view in Sunday Ink mode.
-function drawPanelFrame(px = 0) {
+function drawPanelFrame(px = 0, py = 0) {
   ctx.strokeStyle = PALETTE.cream;
   ctx.lineWidth = 10;
-  ctx.strokeRect(px + 5, 5, WORLD_W - 10, WORLD_H - 10);
+  ctx.strokeRect(px + 5, py + 5, WORLD_W - 10, WORLD_H - 10);
   ctx.strokeStyle = PALETTE.ink;
   ctx.lineWidth = 4;
-  ctx.strokeRect(px + 10, 10, WORLD_W - 20, WORLD_H - 20);
+  ctx.strokeRect(px + 10, py + 10, WORLD_W - 20, WORLD_H - 20);
 }
 
-// One room drawn as a comic panel at screen offset px: ground, static decor,
-// its mites (and optionally Doc), then the sky tint — all clipped to the
-// panel so nothing bleeds into the gutter.
-function drawRoomPanel(r, px, time, withDogs) {
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(px, 0, WORLD_W, WORLD_H);
-  ctx.clip();
-  ctx.translate(px, 0);
-  ctx.drawImage(groundFor(r), 0, 0);
-  if (r.decor.secret) drawSecret(r.decor.secret, time);
+// Everything a room y-sorts: decor, buildings, hoops, furniture, NPCs,
+// mites — shared by the live render and the transition panels.
+function roomDrawList(r, time) {
   const list = [
-    ...r.decor.trees.map(tr => ({ y: tr.y, fn: () => drawTree(tr, time) })),
-    ...r.decor.torches.map(to => ({ y: to.y, fn: () => drawTorch(to, time) })),
+    ...(r.decor.trees || []).map(tr => ({ y: tr.y, fn: () => drawTree(tr, time) })),
+    ...(r.decor.torches || []).map(to => ({ y: to.y, fn: () => drawTorch(to, time) })),
+    ...(r.decor.buildings || []).map(b => ({ y: b.y, fn: () => drawBuilding(b, time) })),
+    ...(r.decor.hoops || []).map(h => ({ y: h.y, fn: () => drawHoop(h, time) })),
+    ...(r.decor.furniture || []).map(f => ({ y: f.y, fn: () => drawFurniture(f, time) })),
   ];
   if (r.decor.banner) list.push({ y: r.decor.banner.y, fn: () => drawBanner(r.decor.banner, time) });
   if (r.npcs) for (const n of r.npcs) list.push({ y: n.y, fn: () => n.draw(ctx, time) });
   if (r.mites) for (const m of r.mites) list.push({ y: m.y, fn: () => m.draw(ctx, time) });
+  return list;
+}
+
+// One room drawn as a comic panel at screen offset (px, py): ground, decor,
+// its mites (and optionally the dogs), then the sky tint — all clipped to
+// the panel so nothing bleeds into the gutter.
+function drawRoomPanel(r, px, py, time, withDogs) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(px, py, WORLD_W, WORLD_H);
+  ctx.clip();
+  ctx.translate(px, py);
+  ctx.drawImage(groundFor(r), 0, 0);
+  if (r.decor.secret) drawSecret(r.decor.secret, time, r.interior);
+  const list = roomDrawList(r, time);
   if (withDogs) {
     list.push({ y: doc.y, fn: () => doc.draw(ctx, time) });
     list.push({ y: astro.y, fn: () => astro.draw(ctx, time) });
@@ -573,28 +921,34 @@ function drawRoomPanel(r, px, time, withDogs) {
 }
 
 // The gutter crossing: both rooms slide as panels over paper, and Toots
-// walks across the gutter from the old panel to the new one.
+// walks across the gutter from the old panel to the new one. E/W slide
+// sideways along the strip; N/S (and door crossings) slide between rows.
 function renderTransition(time) {
   const tr = transition;
   const p = easeInOut(clamp(tr.t / tr.dur, 0, 1));
-  const span = WORLD_W + GUTTER;
-  const off = (tr.dir === 'E' ? 1 : -1) * p * span;
+  const horiz = tr.dir === 'E' || tr.dir === 'W';
+  const span = (horiz ? WORLD_W : WORLD_H) + GUTTER;
+  const sgn = (tr.dir === 'E' || tr.dir === 'S') ? 1 : -1;
+  const off = sgn * p * span;
   ctx.fillStyle = PALETTE.cream;
   ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-  const fromX = -off;
-  const toX = (tr.dir === 'E' ? span : -span) - off;
-  drawRoomPanel(tr.fromRoom, fromX, time, true);
-  drawRoomPanel(tr.toRoom, toX, time, false);
-  drawPanelFrame(fromX);
-  drawPanelFrame(toX);
+  const fx = horiz ? -off : 0;
+  const fy = horiz ? 0 : -off;
+  const tx = horiz ? sgn * span - off : 0;
+  const ty = horiz ? 0 : sgn * span - off;
+  drawRoomPanel(tr.fromRoom, fx, fy, time, true);
+  drawRoomPanel(tr.toRoom, tx, ty, time, false);
+  drawPanelFrame(fx, fy);
+  drawPanelFrame(tx, ty);
 
   // Toots rides the exiting panel and lands at the entry point — which
   // means for a moment he is standing in the gutter. On purpose.
-  const sx = lerp(tr.exitX + fromX, tr.entryX + toX, p);
+  const sx = lerp(tr.exit.x + fx, tr.entry.x + tx, p);
+  const sy = lerp(tr.exit.y + fy, tr.entry.y + ty, p);
   const ox = player.x, oy = player.y;
   player.x = sx;
-  player.y = tr.y;
+  player.y = sy;
   player.draw(ctx, time);
   player.x = ox;
   player.y = oy;
@@ -620,45 +974,52 @@ function render(time) {
   ctx.drawImage(groundFor(room), 0, 0);
   drawRipples(time);
   drawTufts(time);
-  if (room.decor.secret) drawSecret(room.decor.secret, time);
+  if (room.decor.secret) drawSecret(room.decor.secret, time, room.interior);
 
-  // Y-sorted world objects.
-  const drawList = [
-    ...room.decor.trees.map(tr => ({ y: tr.y, fn: () => drawTree(tr, time) })),
-    ...room.decor.torches.map(to => ({ y: to.y, fn: () => drawTorch(to, time) })),
+  // Y-sorted world objects: the room's own list plus the moving cast.
+  const drawList = roomDrawList(room, time);
+  drawList.push(
     { y: player.y, fn: () => player.draw(ctx, time) },
     { y: doc.y, fn: () => doc.draw(ctx, time) },
     { y: astro.y, fn: () => astro.draw(ctx, time) },
-    ...npcs.map(n => ({ y: n.y, fn: () => n.draw(ctx, time) })),
-    ...mites.map(m => ({ y: m.y, fn: () => m.draw(ctx, time) })),
-  ];
-  if (room.decor.banner) {
-    drawList.push({ y: room.decor.banner.y, fn: () => drawBanner(room.decor.banner, time) });
-  }
+  );
   drawList.sort((a, b) => a.y - b.y);
   for (const d of drawList) d.fn();
 
   drawParticles(ctx);
   drawWords(ctx);
 
-  // Warm additive glow around each torch flame, day or night.
+  // Warm additive glow around every flame and lamp, day or night.
+  const glows = [
+    ...(room.decor.torches || []).map(t => ({ x: t.x, y: t.y - 36, r: 44 })),
+    ...(room.decor.furniture || []).filter(f => f.kind === 'lamp')
+      .map(f => ({ x: f.x, y: f.y - 38, r: 54 })),
+  ];
   ctx.globalCompositeOperation = 'lighter';
-  for (const t of room.decor.torches) {
-    const g = ctx.createRadialGradient(t.x, t.y - 36, 4, t.x, t.y - 36, 44);
+  for (const t of glows) {
+    const g = ctx.createRadialGradient(t.x, t.y, 4, t.x, t.y, t.r);
     g.addColorStop(0, 'rgba(255,140,50,0.30)');
     g.addColorStop(1, 'rgba(255,140,50,0)');
     ctx.fillStyle = g;
     ctx.beginPath();
-    ctx.arc(t.x, t.y - 36, 44, 0, TAU);
+    ctx.arc(t.x, t.y, t.r, 0, TAU);
     ctx.fill();
   }
   ctx.globalCompositeOperation = 'source-over';
 
-  // Darkness pass with punched-out light, then the day tint.
+  // Darkness pass with punched-out light, then the day tint. Lamps keep
+  // interiors livable at night; lit windows spill onto the street.
   const lights = [
-    ...room.decor.torches.map(t => ({ x: t.x, y: t.y - 34, r: 105, flicker: true })),
+    ...(room.decor.torches || []).map(t => ({ x: t.x, y: t.y - 34, r: 105, flicker: true })),
+    ...(room.decor.furniture || []).filter(f => f.kind === 'lamp')
+      .map(f => ({ x: f.x, y: f.y - 38, r: 165, flicker: true })),
     { x: player.x, y: player.y - 14, r: 135, flicker: false },
   ];
+  for (const b of room.decor.buildings || []) {
+    for (const wx of [b.x + b.w * 0.22, b.x + b.w * 0.78]) {
+      lights.push({ x: wx, y: b.y - b.h * 0.52, r: 70, flicker: false });
+    }
+  }
   if (drawLighting(lctx, WORLD_W, WORLD_H, sky.dark, lights, time)) {
     ctx.drawImage(lightCanvas, 0, 0);
   }
@@ -688,13 +1049,16 @@ function render(time) {
 }
 
 function drawHud(time) {
+  // Interiors are mostly cream paper — the HUD flips to ink up there.
+  const hud = room.interior ? 'rgba(34,26,86,0.85)' : 'rgba(248,233,210,0.9)';
+  const hudDim = room.interior ? 'rgba(34,26,86,0.6)' : 'rgba(248,233,210,0.7)';
   ctx.font = 'bold 12px monospace';
-  ctx.fillStyle = 'rgba(248,233,210,0.9)';
-  ctx.fillText(`TOOTS QUEST · M0.5 ${PRINT.on ? 'SUNDAY INK' : 'LIVING INK'}`, 14, 22);
+  ctx.fillStyle = hud;
+  ctx.fillText(`TOOTS QUEST · M1 ${PRINT.on ? 'SUNDAY INK' : 'LIVING INK'}`, 14, 22);
 
   // Perf readout — the frame budget is part of the M0 gate.
   ctx.textAlign = 'right';
-  ctx.fillStyle = frameMs > 12 ? PALETTE.hotOrange : 'rgba(248,233,210,0.7)';
+  ctx.fillStyle = frameMs > 12 ? PALETTE.hotOrange : hudDim;
   ctx.fillText(`${fps | 0} fps · ${frameMs.toFixed(1)} ms`, WORLD_W - 14, 22);
 
   // Tiny time dial.
@@ -713,11 +1077,11 @@ function drawHud(time) {
   ctx.moveTo(dx, dy);
   ctx.lineTo(dx + Math.cos(na) * 8, dy + Math.sin(na) * 8);
   ctx.stroke();
-  ctx.fillStyle = 'rgba(248,233,210,0.7)';
+  ctx.fillStyle = hudDim;
   ctx.fillText(timeLabel(tDay), dx - 18, dy + 4);
   ctx.textAlign = 'left';
 
-  ctx.fillStyle = 'rgba(248,233,210,0.55)';
+  ctx.fillStyle = room.interior ? 'rgba(34,26,86,0.5)' : 'rgba(248,233,210,0.55)';
   ctx.fillText('WASD move · SPACE attack/talk · SHIFT dash · N time · P print style', 14, WORLD_H - 18);
 }
 
@@ -767,6 +1131,24 @@ window.__TQ = {
   },
   advance: () => advanceDialogue(),
   say: (x, y, text, opts) => spawnWord(x, y, text, opts),
+  // Jump straight to a room's spawn point (testing): __TQ.goto('shopInterior').
+  goto: (id) => {
+    const r = getRoom(id);
+    if (!r) return null;
+    closeDialogue();
+    transition = null;
+    setRoom(id);
+    player.x = r.decor.playerSpawn.x;
+    player.y = r.decor.playerSpawn.y;
+    placeDog(doc, player.x - 34, player.y + 8);
+    placeDog(astro, player.x + 34, player.y + 20);
+    mites = roomMites(room);
+    npcs = roomNpcs(room);
+    particles.length = 0;
+    clearWords();
+    buildAmbient();
+    return room.id;
+  },
   setPrint: (v) => setPrintMode(v),
   // Live-tune the plate drift, e.g. setMisreg(2) or setMisreg(0) to kill it.
   setMisreg: (mx, my = 0) => { PRINT.mx = mx; PRINT.my = my; invalidateGrounds(); },

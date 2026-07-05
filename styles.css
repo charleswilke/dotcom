@@ -7559,7 +7559,7 @@ html {
     
     section.production-header.spotlight-production p {
         font-size: 0.9rem !important;
-        margin-bottom: 0.75rem !important;
+        margin-bottom: 0.35rem !important;
     }
     
     /* Adjust metadata for mobile */
@@ -7569,16 +7569,19 @@ html {
     }
 
     /* Keep the dateline stamp's box intact and push it to the lower-right of
-       the narrow panel, matching the desktop hero placement */
+       the narrow panel, matching the desktop hero placement. The negative top
+       margin tucks the stamp up under the subtitle (reclaiming the rotated
+       box's empty top-corner slack) so a short one-line subtitle doesn't leave
+       a tall empty gap; a wrapping subtitle still pushes the stamp down. */
     .spotlight-metadata:not(.spotlight-tags-container) {
-        margin: 0.5rem 0 0 0 !important;
+        margin: -0.4rem 0 0 0 !important;
         padding: 0.42rem 0.9rem 0.5rem !important;
         transform-origin: right center;
     }
 
     .spotlight-production .production-details {
-        margin-top: 0.25rem;
-        padding-top: 0.25rem;
+        margin-top: 0;
+        padding-top: 0;
         text-align: right;
     }
     

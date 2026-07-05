@@ -4242,8 +4242,8 @@ function initJCLightbox() {
         { title: 'Why This Way', act: 'Act I', file: 'audio/junkyard-cabaret/why-this-way.mp3', cover: 'audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
         { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', cover: 'audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
         { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', cover: 'audio/junkyard-cabaret/pauses-gone-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/staccato-again' },
-        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', cover: 'audio/junkyard-cabaret/house-lights-title.webp?v=202606071656', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
         { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: 'audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
+        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', cover: 'audio/junkyard-cabaret/house-lights-title.webp?v=202606071656', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
         { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
         { title: 'How Dare It Rise', file: 'audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: 'audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
         { title: 'Take Your Time', act: 'Intermission', actInline: true, file: 'audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: 'audio/junkyard-cabaret/junkyard-cabaret-cover.webp?v=202605120946', noShare: true, noNumber: true },
@@ -4252,7 +4252,8 @@ function initJCLightbox() {
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
         { title: 'Fits and Starts', file: 'audio/junkyard-cabaret/fits-and-starts.mp3?v=202607041700', cover: 'audio/junkyard-cabaret/fits-and-starts-title.webp?v=202607042140', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
         { title: 'Mind the Drop', file: 'audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: 'audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
-        { title: "Morning's Flood", file: 'audio/junkyard-cabaret/mornings-flood.mp3?v=202607041109', cover: 'audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' }
+        { title: "Morning's Flood", file: 'audio/junkyard-cabaret/mornings-flood.mp3?v=202607041109', cover: 'audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
+        { title: 'Misdirected.', file: 'audio/junkyard-cabaret/misdirected.mp3?v=202607051217', cover: 'audio/junkyard-cabaret/misdirected-title.webp?v=202607051217', article: 'https://charleswilke.substack.com/p/misdirected' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

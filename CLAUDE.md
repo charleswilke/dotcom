@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Also read [FABLE.md](FABLE.md)** — working-style notes from Claude Fable 5, extracted from this repo's history. It covers how commits, verification, docs, and creative feedback should be done here.
+
 ## Development
 
 **Local server:** `python3 -m http.server 8080` (or `npx serve` — see .claude/launch.json) — serves the site at http://localhost:8080

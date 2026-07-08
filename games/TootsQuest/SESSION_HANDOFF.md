@@ -5,7 +5,7 @@ Read this (and `TOOTS_QUEST_PRD.md`) before touching the code. The PRD is the
 `CONCEPT_SKETCHBOOK.md` (new, session 6) holds the Higgsfield generator
 prompts for upcoming visual development — the sketchbook rule lives there.
 
-## Current state (end of session 7, July 2026)
+## Current state (end of session 8, July 2026)
 
 **M0 (Living Ink renderer proof) passed its gate in session 1. M0.5 (Sunday
 Ink) was added in session 2:** a second, toggleable visual style — Sunday
@@ -56,7 +56,16 @@ the key itself on the kill), Toots' poncho became a velocity-driven motion
 instrument (trails the dash, drifts with the walk, whips with the swing)
 with canon-uneven googly eyes, Doc got his underbite tooth, Astro a cream
 closed-eye bliss arc while sniffing/pointing, and seeded flowers joined
-the ambient pass. Remaining M1: Tuning Stone, Archive mirror-rooms.
+the ambient pass. **Session 8 built the title screen** (`title.js`): the
+July 2026 key art ("the keeper") recreated entirely in code — canted
+panel, hand-lettered logo with a halftone drop shadow, Toots mid-lunge
+with the teal arc connecting into a tumbling vanquished beetle (THOK!),
+Doc chomping his own beetle, Astro blissfully digging up a neon-glinting
+medallion, and the Static eating the print off the far ridge with the
+faceless dot-copy standing in it. Everything breathes (wind, wag, churn,
+key-spin); any key lifts the cover page off the live first frame of the
+game (0.85s eased slide). The game does not simulate while the title is
+up. Remaining M1: Tuning Stone, Archive mirror-rooms.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -65,7 +74,8 @@ then open `/games/TootsQuest/` on that server's port.
 by browsers without HTTP. The page shows a red warning if the engine doesn't
 boot within 1.5 s. This burned us once already.
 
-**Controls:** WASD/arrows move · Space/J attack (3-hit combo) · Shift/K dash ·
+**Controls:** any key at the title lifts the cover · WASD/arrows move ·
+Space/J attack (3-hit combo) · Shift/K dash ·
 **F cast Clear as Day** · N skip time of day · **P toggle Sunday Ink print
 style** · walk off the east/west edge to cross to the next room. **Near an
 NPC, Space/E talks instead of attacking; near a hoop (and no NPC), Space/E
@@ -109,6 +119,9 @@ games/TootsQuest/
     spells.js   # session 6: the Frequency Dial system seeded with Clear as
                 # Day — waveform pulse, sonar pings on interactables,
                 # spellLights() for the darkness pass, drawFreqDial HUD
+    title.js    # session 8: the key art drawn in code — canted cover panel,
+                # poster-scale cast, static ridge + dot-copy, logo lettering,
+                # PRESS ANY KEY; main.js lifts it off the live game
 ```
 
 ## Decisions made across sessions (now canon)
@@ -264,6 +277,20 @@ games/TootsQuest/
   spin rate reads intent (1.6 idle → 24 rad/s lunge) alongside the
   existing inflate. When audio lands, the key wants a ratchet tick that
   accelerates with it.
+- **The title screen IS the key art, in code** (session 8): the keeper's
+  composition rebuilt from primitives, canted -0.075 rad with 1.12
+  overscan. It's a cover page: the game holds its breath (zero simulation)
+  under it, and any key lifts the panel off the live first frame. The
+  title keeps its own clock (`title.t`), so it animates identically no
+  matter how long it sits.
+- **'lighter' bleaches on cream paper** (session 8): the swing arc drawn
+  with the spell system's additive approach washed to white on the title's
+  paper sky. Additive light needs darkness to read; on paper, teal must be
+  stroked source-over. The "crisp spell light" law is about SHAPE (rings,
+  no gradient blobs), not the composite op — pick the op per background.
+- **The copy on the title emerges by negative space:** the static field
+  thins in a halo where the figure stands, because the copy is made OF the
+  static, not hidden inside it. No eyes, ever (canon).
 - **Pings are the palette law made visible:** the wavefront rim-lights
   interactables in neon as it crosses their distance, sonar-style. Secrets
   get a lingering cross-stitch X (needlepoint motif = X marks the spot);
@@ -347,6 +374,10 @@ __TQ.setMisreg(mx, my=0)          // live-tune plate drift (rebakes grounds)
 __TQ.setTime(0.96)                // 0=midnight, 0.5=noon, 0.72=golden hour
 __TQ.getTime()
 __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
+__TQ.skipTitle()                  // session 8: REQUIRED before scripted
+                                  // __TQ.step tests — step drives the game
+                                  // loop, which is paused under the title
+__TQ.title                        // getter — title state {active, leaving}
 __TQ.cast()                       // cast Clear as Day from Toots (session 6)
 __TQ.save()                       // force a save; returns the parsed save
 __TQ.wipe()                       // delete the save AND clear live flags
@@ -413,6 +444,23 @@ __TQ.spell                        // getter — spellState ({cooldownT})
   3-hit combo kill regression passes (hp 3→2→1→0, slain_mite set).
 - Night: lit windows spill light onto the street (per-building window
   lights), lamps keep interiors livable, torch pools unchanged.
+
+## Verified in session 8 (title screen)
+
+- Title renders at 60.4 fps measured over 90 rAF frames (the static/copy
+  dot fields are the priciest elements and still cost ~nothing).
+- Iterated from screenshots: arc rebuilt source-over after 'lighter'
+  bleached on paper; static field densified; the copy moved inboard of the
+  frame and given its negative-space halo — it now reads on the second
+  look, faceless, behind the dead tower.
+- Any-key lift verified: keydown → 0.85s eased slide revealing the live
+  game; post-title combat regression passes (scripted kill, hp→0); game
+  keydown bindings dead while the title is up, alive after.
+- "YOUR STITCHES HELD · RESUMING" line appears only when a save exists.
+- Incidental find: left idle in a tab for minutes, a mite knocked Toots
+  across a room edge and the crossing autosaved — the game can play
+  itself into a save. Harmless (arguably canon), noted for test hygiene:
+  wipe before boot-state assertions.
 
 ## Verified in session 7 (scripted __TQ.step + screenshots, both styles)
 
@@ -502,6 +550,8 @@ __TQ.spell                        // getter — spellState ({cooldownT})
 - The frequency dial HUD shows one station; the hold-to-tune interaction
   (PRD §4.3) arrives when there are two spells to choose between.
 - Dialogue is linear pages only — no choices, no quest hooks yet.
+- No "new game" path from the title — any key resumes the save if one
+  exists; wiping is `__TQ.wipe()` only. Fine until strangers play it.
 - Jessie/Wren still use skin-tone faces; only Toots got the ink-figure
   treatment (he's unique on the cover art too — probably correct, but
   revisit when more NPCs exist).

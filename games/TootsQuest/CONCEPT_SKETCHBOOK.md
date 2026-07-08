@@ -310,12 +310,10 @@ gets light features), and flowers. Details below preserved as the record:
 
 **Bigger builds:**
 
-- **The title screen IS the key art, drawn in code.** The game has no
-  front door yet; build one in-engine as a recreation of the keeper's
-  composition — canted frozen panel, THOK moment held mid-air, static
-  drifting on the ridge, poncho and tuft swaying. Zero assets, pure
-  renderer, and it doubles as proof the style survives translation.
-  Natural companion to shipping the M1 teaser.
+- ~~**The title screen IS the key art, drawn in code.**~~ ✅ **BUILT,
+  session 8** (`src/title.js`): canted breathing cover panel, any key
+  lifts it off the live game. The style survived translation both ways —
+  pipeline proven.
 - **The Static's look is now spec'd:** fills desaturate toward bare paper,
   halftone decays into seeded dot-noise, outlines break into dashes. This
   is the Margins treatment (M3) and the "reality misprint" meter hook

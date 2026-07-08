@@ -27,6 +27,9 @@ import {
   spellState, castClearAsDay, updateSpells, clearSpells,
   spellLights, drawSpells, drawFreqDial,
 } from './spells.js';
+import {
+  title, TITLE_LEAVE, beginTitleLeave, skipTitle, updateTitle, drawTitle,
+} from './title.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -61,6 +64,7 @@ const spawnAt = (saved && getRoom(saved.roomId) &&
   !circleBlocked(saved.x, saved.y, 9))
   ? { x: saved.x, y: saved.y }
   : room.decor.playerSpawn;
+title.hasSave = !!saved;
 
 const player = new Player(spawnAt.x, spawnAt.y);
 // The real dogs (PRD §2.5, cover-art model sheets): Doc heels and scowls,
@@ -293,6 +297,11 @@ addEventListener('keydown', (e) => {
     e.preventDefault();
   }
   if (e.repeat) return;
+  // Any key lifts the cover page; game bindings wake up once it's gone.
+  if (title.active) {
+    beginTitleLeave();
+    return;
+  }
   keys.add(e.code);
   // Action routing: Space is contextual (talk when a townsperson is in
   // range, attack otherwise); E only talks; J always attacks — the escape
@@ -1291,6 +1300,26 @@ function frame(now) {
   last = now;
   fps = fps * 0.95 + (1 / Math.max(dt, 0.0001)) * 0.05;
 
+  // The cover page: the game holds its breath (no simulation) while the
+  // title is up; leaving lifts the panel off the live first frame.
+  if (title.active) {
+    updateTitle(dt);
+    if (title.leaving) {
+      render(now / 1000);
+      const p = easeInOut(clamp(title.leaveT / TITLE_LEAVE, 0, 1));
+      ctx.save();
+      ctx.translate(0, -p * (WORLD_H + 50));
+      drawTitle(ctx, now / 1000);
+      ctx.restore();
+      if (title.leaveT >= TITLE_LEAVE) title.active = false;
+    } else {
+      drawTitle(ctx, now / 1000);
+    }
+    frameMs = frameMs * 0.9 + (performance.now() - t0) * 0.1;
+    requestAnimationFrame(frame);
+    return;
+  }
+
   if (game.hitstopT > 0) {
     game.hitstopT -= dt;
   } else {
@@ -1319,6 +1348,8 @@ window.__TQ = {
   get flags() { return worldState.flags; },
   get stitch() { return stitch; },
   get spell() { return spellState; },
+  get title() { return title; },
+  skipTitle: () => skipTitle(),   // tests jump straight into the game
   cast: () => castSpell(),
   save: () => { doSave(); return JSON.parse(localStorage.getItem('tootsquest_save_v1')); },
   wipe: () => wipeSave(),

@@ -3,8 +3,8 @@
 // parameters driving the same draw code.
 
 import {
-  TAU, PALETTE, PRINT, lerp, clamp, dist, easeOutCubic, capsule, curvedCapsule,
-  inkCircle, inkEllipse, inkShape,
+  TAU, PALETTE, PRINT, lerp, clamp, dist, easeOutCubic, mulberry32,
+  capsule, curvedCapsule, inkCircle, inkEllipse, inkShape,
 } from './ink.js';
 import { moveCircle, circleBlocked } from './terrain.js';
 import { spawnWord } from './fx.js';
@@ -18,7 +18,8 @@ export const particles = [];
 
 export function spawnParticle(p) {
   particles.push({
-    vx: 0, vy: 0, g: 0, size: 2, color: PALETTE.cream, add: false, ...p,
+    vx: 0, vy: 0, g: 0, size: 2, color: PALETTE.cream, add: false,
+    shape: null, rot: 0, vr: 0, ...p,
     max: p.life,
   });
 }
@@ -51,6 +52,47 @@ export function updateParticles(dt) {
     p.x += p.vx * dt;
     p.y += p.vy * dt;
     p.vx *= 0.97;
+    if (p.vr) p.rot += p.vr * dt;
+  }
+}
+
+// Part-shaped particles (key-art glean, session 7): windup toys don't
+// bleed, they disassemble. Each shape is a few strokes at particle scale.
+function drawPart(ctx, shape, color) {
+  ctx.strokeStyle = color;
+  ctx.lineCap = 'round';
+  if (shape === 'spring') {
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    for (let i = 0; i <= 12; i++) {
+      const u = i / 12;
+      i === 0
+        ? ctx.moveTo(-3.5, 0)
+        : ctx.lineTo(-3.5 + u * 7, Math.sin(u * Math.PI * 5) * 2.2);
+    }
+    ctx.stroke();
+  } else if (shape === 'bolt') {
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(-2.5, 0); ctx.lineTo(2.2, 0);
+    ctx.stroke();
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(-2.5, -1.6); ctx.lineTo(-2.5, 1.6);
+    ctx.stroke();
+  } else if (shape === 'nut') {
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(0, 0, 2, 0, TAU);
+    ctx.stroke();
+  } else if (shape === 'key') {
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(-2, 0, 2.2, 0, TAU);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0.2, 0); ctx.lineTo(4.2, 0);
+    ctx.stroke();
   }
 }
 
@@ -59,6 +101,14 @@ export function drawParticles(ctx) {
     const a = clamp(p.life / p.max, 0, 1);
     ctx.globalCompositeOperation = p.add ? 'lighter' : 'source-over';
     ctx.globalAlpha = a;
+    if (p.shape) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      drawPart(ctx, p.shape, p.color);
+      ctx.restore();
+      continue;
+    }
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size * (0.5 + a * 0.5), 0, TAU);
     ctx.fillStyle = p.color;
@@ -305,22 +355,37 @@ export class Player {
 
     // Arm nubs peeking from under the poncho, swinging opposite the feet.
     const armSwing = this.moving ? Math.sin(this.walkPhase) * 2.5 : 0;
-    inkCircle(ctx, -10, -11 + armSwing, 2.6, PALETTE.ink, null);
-    inkCircle(ctx, 10, -11 - armSwing, 2.6, PALETTE.ink, null);
+    inkCircle(ctx, -11.5, -11 + armSwing, 2.6, PALETTE.ink, null);
+    inkCircle(ctx, 11.5, -11 - armSwing, 2.6, PALETTE.ink, null);
 
-    // Poncho: flares from the neck, hem torn into notches that sway.
+    // Poncho: flares from the neck, hem torn into deep notches — and it's
+    // a motion instrument (key-art glean, session 7): the hem trails the
+    // dash hard, drifts against the walk, whips with the swing, settles at
+    // rest. The poncho is the speed readout.
+    let trail = 0;
+    let flare = 1;
+    if (this.dashT > 0) {
+      trail = -Math.cos(this.dashDir) * 6;
+      flare = 1.16;
+    } else if (this.attack) {
+      trail = -Math.cos(this.attack.dir) * 3;
+      flare = 1.08;
+    } else if (this.moving) {
+      trail = -fx * 2.4;
+      flare = 1.06;
+    }
     const poncho = (c) => {
       c.beginPath();
       c.moveTo(-4.5, neckY);
-      c.quadraticCurveTo(-11.5, neckY + 5, -10.5, -8.5);
-      c.lineTo(-9.5 + hemSway * 0.4, -5.5);
-      c.lineTo(-5.5 + hemSway * 0.6, -7.8);
-      c.lineTo(-2 + hemSway * 0.8, -5);
-      c.lineTo(2 + hemSway * 0.8, -7.5);
-      c.lineTo(5.5 + hemSway * 0.6, -5.2);
-      c.lineTo(9.5 + hemSway * 0.4, -7);
-      c.lineTo(10.5, -8.5);
-      c.quadraticCurveTo(11.5, neckY + 5, 4.5, neckY);
+      c.quadraticCurveTo(-13 + trail * 0.4, neckY + 5, -12 * flare + trail, -8.2);
+      c.lineTo((-10.5 + hemSway * 0.4) * flare + trail, -4.6);
+      c.lineTo((-6 + hemSway * 0.6) * flare + trail, -7.7);
+      c.lineTo((-2 + hemSway * 0.8) * flare + trail, -4.4);
+      c.lineTo((2.2 + hemSway * 0.8) * flare + trail, -7.4);
+      c.lineTo((6 + hemSway * 0.6) * flare + trail, -4.7);
+      c.lineTo((10.5 + hemSway * 0.4) * flare + trail, -7);
+      c.lineTo(12 * flare + trail, -8.2);
+      c.quadraticCurveTo(13 + trail * 0.4, neckY + 5, 4.5, neckY);
       c.quadraticCurveTo(0, neckY - 2.5, -4.5, neckY);
       c.closePath();
     };
@@ -342,13 +407,15 @@ export class Player {
     // Big cover-art eyes: cream whites nearly half the face, tiny ink
     // pupils chasing the facing direction. Facing north shows the back of
     // the head, so the whites shrink away continuously as fy goes negative.
+    // Uneven googly eyes (key-art glean, session 7): one side runs ~12%
+    // bigger. Fixed to the body, not the facing — the lopsidedness is him.
     const ex = fx * 1.6, ey = fy * 1.1;
     const eyeK = 1 + Math.min(0, fy) * 0.5;
-    inkCircle(ctx, -3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2 * eyeK, PALETTE.cream, null);
-    inkCircle(ctx, 3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.2 * eyeK, PALETTE.cream, null);
+    inkCircle(ctx, -3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.55 * eyeK, PALETTE.cream, null);
+    inkCircle(ctx, 3.8 + ex * 0.5, hy - 0.5 + ey * 0.5, 4.05 * eyeK, PALETTE.cream, null);
     ctx.fillStyle = PALETTE.ink;
-    ctx.beginPath(); ctx.arc(-3.8 + ex, hy - 0.5 + ey, 1.7 * eyeK, 0, TAU); ctx.fill();
-    ctx.beginPath(); ctx.arc(3.8 + ex, hy - 0.5 + ey, 1.7 * eyeK, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(-3.8 + ex, hy - 0.5 + ey, 1.85 * eyeK, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.arc(3.8 + ex, hy - 0.5 + ey, 1.62 * eyeK, 0, TAU); ctx.fill();
 
     // Headphones ditched for now (Charles, session 4) — the eyes carry the
     // facing telegraph. They're still canon on the cover; if they return,
@@ -728,10 +795,22 @@ export class Dog {
       capsule(ctx, hx - 6.5, hy + 5.5, hx - 2, hy + 6.5, 2.4, p.collar, null);
     }
     // The face is the personality.
-    ctx.fillStyle = PALETTE.ink;
-    ctx.beginPath();
-    ctx.arc(hx + 1.5, hy - 1, 1.4, 0, TAU);
-    ctx.fill();
+    if (p.mood === 'happy' && (this.sniffing || this.pointing)) {
+      // Bliss (key-art glean, session 7): the eye closes into a happy arc
+      // while he works the find. Cream, not ink — his fur is charcoal and
+      // joy should be legible.
+      ctx.strokeStyle = PALETTE.cream;
+      ctx.lineWidth = 1.6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(hx + 1.5, hy - 0.2, 2, Math.PI * 1.08, Math.PI * 1.92);
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = PALETTE.ink;
+      ctx.beginPath();
+      ctx.arc(hx + 1.5, hy - 1, 1.4, 0, TAU);
+      ctx.fill();
+    }
     if (p.mood === 'grumpy') {
       // Doc: a furrowed brow slanting down at the world, and a dour little
       // downturn behind the snout.
@@ -744,6 +823,15 @@ export class Dog {
       ctx.moveTo(hx + 7.5, hy + 4.4);
       ctx.lineTo(hx + 4.8, hy + 5.4);
       ctx.stroke();
+      // The underbite (key-art glean, session 7): one proud tooth poking
+      // up past the jaw — ink-outlined so it reads on the cream snout.
+      inkShape(ctx, (c) => {
+        c.beginPath();
+        c.moveTo(hx + 5.2, hy + 5.9);
+        c.lineTo(hx + 7, hy + 5.9);
+        c.lineTo(hx + 6.1, hy + 3.6);
+        c.closePath();
+      }, PALETTE.cream, PALETTE.ink, 1.1);
     } else {
       // Astro: mouth open, tongue out, forever delighted.
       inkEllipse(ctx, hx + 4.6, hy + 4.8, 2.8, 2, 0.2, PALETTE.ink, null);
@@ -759,6 +847,18 @@ export class Dog {
 export class Mite {
   constructor(x, y) {
     this.home = { x, y };
+    // Per-instance identity (key-art glean, session 7): every mite seeds
+    // its own shell tone, size, rivet layout, patch spot, and key phase
+    // from its home coordinates — same trick as the trees.
+    const rnd = mulberry32(((x * 2654435761) ^ (y * 40503)) >>> 0);
+    this.pi = {
+      s: 0.92 + rnd() * 0.18,
+      tone: ['#b06a3a', '#a4602f', '#b97a45'][Math.floor(rnd() * 3)],
+      riv: Array.from({ length: 2 + (rnd() < 0.5 ? 1 : 0) },
+        () => Math.PI * (1.18 + rnd() * 0.64)),
+      patchA: rnd() * TAU,
+      keyPh: rnd() * TAU,
+    };
     this.reset();
   }
 
@@ -777,6 +877,23 @@ export class Mite {
     this.kvx = 0; this.kvy = 0;
     this.dead = false;
     this.respawnT = 0;
+    this.keySpin = this.pi.keyPh;
+  }
+
+  // A part shakes loose — mostly upward, tumbling, then gravity takes it.
+  shedPart(shape, speed) {
+    const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.4;
+    spawnParticle({
+      x: this.x + (Math.random() - 0.5) * 8,
+      y: this.y - 10,
+      vx: Math.cos(a) * speed * (0.5 + Math.random() * 0.7),
+      vy: Math.sin(a) * speed * (0.6 + Math.random() * 0.6),
+      g: 320,
+      life: 0.6 + Math.random() * 0.35,
+      shape,
+      color: shape === 'key' ? PALETTE.timber : PALETTE.rustDark,
+      vr: (Math.random() - 0.5) * 16,
+    });
   }
 
   hurt(dx, dy, game) {
@@ -785,18 +902,26 @@ export class Mite {
     this.kvy = (dy / m) * 260;
     this.flash = 0.14;
     this.hp--;
-    burst(this.x, this.y - 6, 8, {
+    burst(this.x, this.y - 6, 6, {
       color: [PALETTE.rust, PALETTE.cream, PALETTE.neon], speed: 120, life: 0.4,
     });
+    // Windup toys disassemble — a part shakes loose on every hit.
+    this.shedPart(Math.random() < 0.5 ? 'bolt' : 'nut', 130);
     if (this.hp <= 0) {
       this.dead = true;
       this.respawnT = 6;
       this.state = 'wander';
       setFlag('slain_mite');   // NPCs notice (PRD §2.5)
-      burst(this.x, this.y - 6, 18, {
+      burst(this.x, this.y - 6, 12, {
         color: [PALETTE.rust, PALETTE.rustDark, PALETTE.hotOrange, PALETTE.cream],
         speed: 170, life: 0.6, size: 3,
       });
+      // Full disassembly: the springs, the hardware, and the key itself.
+      this.shedPart('spring', 175);
+      this.shedPart('spring', 150);
+      this.shedPart('bolt', 160);
+      this.shedPart('nut', 145);
+      this.shedPart('key', 195);
       game.shake(2.5, 0.12);
     }
   }
@@ -816,6 +941,14 @@ export class Mite {
     this.kvy *= Math.pow(0.0001, dt);
     moveCircle(this, this.kvx * dt, this.kvy * dt, this.r);
     this.stateT -= dt;
+
+    // Wind the key: a lazy unwind at idle, a furious spin-up through the
+    // telegraph, a blur during the lunge. The telegraph you can read (and
+    // hear, someday) across the room.
+    this.keySpin += dt * (
+      this.state === 'lunge' ? 24 :
+      this.state === 'telegraph' ? 4 + (1 - this.stateT / 0.42) * 20 :
+      1.6);
 
     const dp = dist(this.x, this.y, player.x, player.y);
 
@@ -862,13 +995,14 @@ export class Mite {
 
   draw(ctx, t) {
     if (this.dead) return;
+    const pi = this.pi;
     const tele = this.state === 'telegraph';
     const teleP = tele ? 1 - this.stateT / 0.42 : 0;
-    const inflate = tele ? 1 + teleP * 0.3 : 1;
+    const inflate = (tele ? 1 + teleP * 0.3 : 1) * pi.s;
     const shiver = tele ? Math.sin(t * 60) * 1.2 * teleP : 0;
     const fx = Math.cos(this.face), fy = Math.sin(this.face);
 
-    inkEllipse(ctx, this.x, this.y + 1, 10, 4, 0, 'rgba(34,26,86,0.22)', null);
+    inkEllipse(ctx, this.x, this.y + 1, 10 * pi.s, 4 * pi.s, 0, 'rgba(34,26,86,0.22)', null);
 
     ctx.save();
     ctx.translate(this.x + shiver - (tele ? fx * teleP * 4 : 0), this.y - (tele ? fy * teleP * 2 : 0));
@@ -888,17 +1022,41 @@ export class Mite {
       ctx.stroke();
     }
 
-    // Rusted dome with plate seams and a rivet.
-    const body = this.flash > 0 ? PALETTE.cream : PALETTE.rust;
-    inkEllipse(ctx, 0, -7, 10, 8, 0, body, PALETTE.ink, 2.4);
+    // Rounder rusted dome (key-art glean, session 7) with plate seams,
+    // seeded rivets, and a cream stitched patch — salvage, riveted and
+    // mended. Every mite wears its patch somewhere else.
+    const body = this.flash > 0 ? PALETTE.cream : pi.tone;
+    inkEllipse(ctx, 0, -7, 10, 8.5, 0, body, PALETTE.ink, 2.4);
     if (this.flash <= 0) {
       ctx.strokeStyle = PALETTE.rustDark;
       ctx.lineWidth = 1.6;
       ctx.beginPath();
       ctx.arc(0, -4, 8, Math.PI * 1.15, Math.PI * 1.85);
       ctx.stroke();
-      inkCircle(ctx, -2, -10, 1.4, PALETTE.rustDark, null);
+      ctx.beginPath();
+      ctx.arc(0, -11, 7, Math.PI * 0.25, Math.PI * 0.75);
+      ctx.stroke();
+      ctx.fillStyle = PALETTE.rustDark;
+      for (const a of pi.riv) {
+        ctx.beginPath();
+        ctx.arc(Math.cos(a) * 8, -4 + Math.sin(a) * 8, 1.1, 0, TAU);
+        ctx.fill();
+      }
+      const px = Math.cos(pi.patchA) * 5;
+      const py = -7 + Math.sin(pi.patchA) * 3.5;
+      ctx.strokeStyle = 'rgba(248,233,210,0.75)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(px - 1.6, py - 1.6); ctx.lineTo(px + 1.6, py + 1.6);
+      ctx.moveTo(px + 1.6, py - 1.6); ctx.lineTo(px - 1.6, py + 1.6);
+      ctx.stroke();
     }
+
+    // The wind-up key: a bow on a stem, spinning on keySpin — the bow's
+    // width is |cos| of the spin, a coin-flip fake of 3D rotation.
+    capsule(ctx, 0, -14.5, 0, -18.5, 2, PALETTE.rustDark, PALETTE.ink, 1.5);
+    const bw = 5.5 * Math.abs(Math.cos(this.keySpin)) + 1.3;
+    capsule(ctx, -bw, -19.5, bw, -19.5, 2.8, PALETTE.timber, PALETTE.ink, 1.5);
 
     // Eyes go hot when it means business.
     const eye = tele || this.state === 'lunge' ? PALETTE.hotOrange : PALETTE.cream;

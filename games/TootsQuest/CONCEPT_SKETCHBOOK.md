@@ -280,7 +280,10 @@ antennae, bolt tips, rivets, rounder rustier bodies). No new prompt needed.
 The hero image was supposed to be output; it turned out to be input. Gleanings
 from translating v5 back into shape grammars, roughly by cost:
 
-**Quick wins (parametric, cheap):**
+**Quick wins (parametric, cheap): ✅ ALL BUILT, session 7** — wind-up keys
+(spin-rate telegraph), part-shaped disassembly bursts, poncho as velocity
+instrument, uneven eyes, Doc's tooth, Astro's bliss arc (cream — dark fur
+gets light features), and flowers. Details below preserved as the record:
 
 - **Mites get wind-up keys.** The keeper's beetles carry a literal wind-up
   key on top — better than the antennae idea, and it's a *telegraph*: the

@@ -166,13 +166,16 @@ function castSpell() {
   return true;
 }
 
-// Seeded ambient detail: grass tufts and water ripple anchors, per room.
+// Seeded ambient detail: grass tufts, flowers, and water ripple anchors,
+// per room.
 let tufts = [];
 let ripples = [];
+let flowers = [];
 
 function buildAmbient() {
   tufts = [];
   ripples = [];
+  flowers = [];
   if (room.interior) return;   // no overgrowth on the floorboards
   const rnd = mulberry32(room.seed);
   let guard = 0;
@@ -182,6 +185,14 @@ function buildAmbient() {
     // Tufts on path edges read as overgrowth, so only skip water.
     if (room.waterCells.some(c => c.cx === Math.floor(x / TILE) && c.cy === Math.floor(y / TILE))) continue;
     tufts.push({ x, y, h: 5 + rnd() * 5, tone: rnd() });
+  }
+  // Flowers (key-art glean, session 7): little warm blooms in the grass.
+  guard = 0;
+  while (flowers.length < 11 && guard++ < 800) {
+    const x = rnd() * WORLD_W;
+    const y = rnd() * WORLD_H;
+    if (room.tileAt(Math.floor(x / TILE), Math.floor(y / TILE)) !== 'G') continue;
+    flowers.push({ x, y, tone: rnd(), ph: rnd() * TAU });
   }
   if (room.waterCells.length) {
     for (let i = 0; i < 12; i++) {
@@ -941,6 +952,38 @@ function drawTufts(time) {
   }
 }
 
+// A flower is a bent stem and four petal dots, swaying on the same wind
+// as the tufts. Orange, hot orange, or cream — the site's warm accents
+// scattered into the grass (key-art glean, session 7).
+function drawFlowers(time) {
+  for (const fl of flowers) {
+    const sway = Math.sin(time * 1.5 + fl.ph) * 1.2 +
+                 Math.sin(time * 2.7 + fl.x * 0.01) * 0.5;
+    const col = fl.tone < 0.55 ? PALETTE.orange
+      : fl.tone < 0.8 ? PALETTE.hotOrange : PALETTE.cream;
+    ctx.strokeStyle = PALETTE.grassDark;
+    ctx.lineWidth = 1.2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(fl.x, fl.y);
+    ctx.quadraticCurveTo(fl.x + sway * 0.5, fl.y - 3.5, fl.x + sway, fl.y - 6);
+    ctx.stroke();
+    const cx2 = fl.x + sway;
+    const cy2 = fl.y - 7;
+    ctx.fillStyle = col;
+    for (let k = 0; k < 4; k++) {
+      const a = k * (TAU / 4) + 0.4;
+      ctx.beginPath();
+      ctx.arc(cx2 + Math.cos(a) * 1.7, cy2 + Math.sin(a) * 1.7, 1.4, 0, TAU);
+      ctx.fill();
+    }
+    ctx.fillStyle = col === PALETTE.cream ? PALETTE.orange : PALETTE.cream;
+    ctx.beginPath();
+    ctx.arc(cx2, cy2, 1, 0, TAU);
+    ctx.fill();
+  }
+}
+
 function drawRipples(time) {
   ctx.lineWidth = 1.4;
   for (let i = 0; i < ripples.length; i++) {
@@ -1098,6 +1141,7 @@ function render(time) {
 
   ctx.drawImage(groundFor(room), 0, 0);
   drawRipples(time);
+  drawFlowers(time);
   drawTufts(time);
   if (room.decor.secret) drawSecret(room.decor.secret, time, room.interior);
 

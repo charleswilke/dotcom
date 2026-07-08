@@ -5,7 +5,7 @@ Read this (and `TOOTS_QUEST_PRD.md`) before touching the code. The PRD is the
 `CONCEPT_SKETCHBOOK.md` (new, session 6) holds the Higgsfield generator
 prompts for upcoming visual development — the sketchbook rule lives there.
 
-## Current state (end of session 6, July 2026)
+## Current state (end of session 7, July 2026)
 
 **M0 (Living Ink renderer proof) passed its gate in session 1. M0.5 (Sunday
 Ink) was added in session 2:** a second, toggleable visual style — Sunday
@@ -46,8 +46,17 @@ interactive thing it crosses (secrets get a lingering neon cross-stitch X;
 hoops and doors get a courtesy flash), and punches the darkness open as it
 goes, so at night the spell literally carries daylight. The frequency-dial
 HUD seeded bottom-left: casting slings the needle up the band and the
-cooldown is the needle tuning back home to 88.3. Remaining M1: Tuning
-Stone, Archive mirror-rooms.
+cooldown is the needle tuning back home to 88.3. **Session 7 was the
+key-art glean pass** (`CONCEPT_SKETCHBOOK.md`, "What the keeper feeds
+back"): mites got their render pass (per-instance seeded shells with
+rivets, seams, and a cream stitched X patch; a spinning **wind-up key**
+whose spin rate IS the telegraph — lazy at idle, furious before the lunge;
+hurt/death bursts shed part-shaped particles: springs, bolts, nuts, and
+the key itself on the kill), Toots' poncho became a velocity-driven motion
+instrument (trails the dash, drifts with the walk, whips with the swing)
+with canon-uneven googly eyes, Doc got his underbite tooth, Astro a cream
+closed-eye bliss arc while sniffing/pointing, and seeded flowers joined
+the ambient pass. Remaining M1: Tuning Stone, Archive mirror-rooms.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -243,6 +252,18 @@ games/TootsQuest/
   spell's darkness-punch holes pass `sy: 0.55` and light.js squashes the
   gradient — a round hole under an elliptical wavefront reads as a
   spotlight, not a spell.
+- **Dark fur gets light features** (session 7): ink details vanish on
+  Astro's charcoal — his bliss arc is cream, and any future dark-coated
+  character follows suit. (Doc's tooth learned the mirror lesson: cream
+  details need ink outlines near cream fur.)
+- **Mites disassemble, they don't bleed** (session 7): hits shed a bolt or
+  nut, the kill sheds springs + hardware + the wind-up key itself, all as
+  part-shaped particles (entities.js drawPart). Extend the parts palette
+  for future junk enemies — the Rust Golem should shed girders.
+- **The wind-up key IS the mite telegraph** (session 7, key-art glean):
+  spin rate reads intent (1.6 idle → 24 rad/s lunge) alongside the
+  existing inflate. When audio lands, the key wants a ratchet tick that
+  accelerates with it.
 - **Pings are the palette law made visible:** the wavefront rim-lights
   interactables in neon as it crosses their distance, sonar-style. Secrets
   get a lingering cross-stitch X (needlepoint motif = X marks the spot);
@@ -393,6 +414,22 @@ __TQ.spell                        // getter — spellState ({cooldownT})
 - Night: lit windows spill light onto the street (per-building window
   lights), lamps keep interiors livable, torch pools unchanged.
 
+## Verified in session 7 (scripted __TQ.step + screenshots, both styles)
+
+- 3-hit combo regression passes against the reworked mite (hp 3→2→1→0,
+  slain_mite set, key spinning throughout).
+- Close-up verification at 2.2×/4× canvas scale (set `canvas.style.width`
+  and scrollTo — cheap zoom for shape-grammar review): wind-up key + cream
+  X patch + rivets read; telegraph shows inflate + hot eyes + key spin-up;
+  dash slings the poncho visibly behind Toots; uneven eyes read at 1×.
+- Two contrast bugs caught at 4× and fixed: Doc's tooth was cream-on-cream
+  against his snout (now an ink-outlined triangle past the jaw) and
+  Astro's bliss arc was ink-on-charcoal (now cream — dark fur gets light
+  features, see decisions).
+- Kill in print mode: THOK! + parts scatter through the halftone; flowers
+  read as warm dots in both styles; 59–60 fps, ~1.3 ms print.
+- Clean fresh boot after wipe, no console errors.
+
 ## Verified in session 6 (scripted __TQ.step + screenshots, both styles)
 
 - Boot clean, no console errors; perf 0.7–1.0 ms painted / ~1.3 ms print
@@ -503,10 +540,9 @@ Also queued, lower priority:
   onomatopoeia barks, grabbers can drag him one screen away for a brief
   rescue aside, and Pest Mode Doc gets grabbed more (care loop = combat
   prep). Astro never fights and can't be grabbed; he digs mid-combat.**
-- **Mite render-style pass:** the cover renders give mites spring antennae
-  with bolt tips, visible rivets/patch seams, and rounder rustier bodies.
-  Combine with the queued per-instance identity pass (mites benefit most —
-  there are many of them).
+- ~~**Mite render-style pass**~~ **DONE session 7** — went with the
+  keeper's wind-up key instead of spring antennae; per-instance identity
+  (size/tone/rivets/patch/key phase) included.
 - **Physics-rope tails/ears** (idea borrowed from a 3D SDF-blend-shell
   write-up, July 2026): render dog tails/ears as 2–3 segment rope chains of
   curvedCapsules — parametric (no frames), floppy juice, and the future

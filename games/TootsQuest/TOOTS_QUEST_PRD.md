@@ -409,8 +409,10 @@ are the same technology, which is why this combination will look unique.
 
 ### 4.4 Enemies (launch set, ~8)
 
-Hollow: **Junk Mites** (scuttle, swarm), **Gull Bombers** (TootsJam cameo),
-**Rust Golems** (magnet-vulnerable), **Static Wisps** (phase in/out).
+Hollow: **Junk Mites** (scuttle, swarm; session 7 gave them a spinning
+**wind-up key** whose spin rate is the telegraph, and they disassemble
+into springs and bolts instead of bleeding), **Gull Bombers** (TootsJam
+cameo), **Rust Golems** (magnet-vulnerable), **Static Wisps** (phase in/out).
 Archive: **Redactions** (ink-black blobs that eat light), **Echo Knights**
 (mirror your last 2 seconds of movement — *The Copy Blinked First*), **Index
 Wraiths**, plus dungeon bosses (§2.3). Every enemy body is a shape grammar with a

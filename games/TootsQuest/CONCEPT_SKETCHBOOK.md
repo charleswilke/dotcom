@@ -160,30 +160,41 @@ the big-bad allusion:
   style. Fix: style first, an explicit ban list, and half the words. If a
   render still comes back textured, cut description before adding style
   words. Acid test stands: would these characters read at 40px?
+- **Whatever lives in the last clause dies (v3 lesson):** v3's simplified
+  style worked, but "tilted composition, action lines" sat at the prompt's
+  tail and the render came back level and static, with Toots standing
+  flat-footed. Camera and motion language moved up front in v4, right
+  after the style block. Corollary: anything that MUST survive goes in the
+  first third. Also: the static figure grew eyes in the v3 render —
+  "faceless" now says "strictly faceless, no eyes" because the model will
+  put eyes on anything with shoulders.
 
-Current revised prompt (simplified style, v3):
+Current revised prompt (canted + kinetic, v4):
 
 > Simple flat cartoon title panel for "TOOTS QUEST" in a clean Sunday
-> newspaper comics style: every character built from a few big rounded
-> shapes with bold dark-navy outlines and flat color fills, minimal
-> interior detail, no crosshatching, no etching, no ink wash, no painterly
-> texture — just flat shapes, soft halftone dots for shading, aged cream
-> newsprint paper. The hero: a small ink-black blob with enormous round
-> white eyes, tiny pupils, a little tuft of hair, a ragged burnt-orange
-> poncho with one cream X stitch, mid sword swing, his glowing teal blade
-> trailing a matching arc. Left: a small cream-gray shih tzu with a grumpy
-> scowl and dark collar chomping down on a round rusty windup beetle, one
-> spring and two bolts popping loose. Right: a lanky charcoal shih
-> tzu/poodle mix with a huge happy grin and orange collar, ignoring the
-> battle completely, digging happily, dirt flying, a small teal-glinting
-> trinket unearthed. On the far background ridge the print is failing:
-> color fades to plain paper, a field of simple gray halftone static, one
-> plain dead radio tower, and faint within the static a tall ragged
-> faceless silhouette made of dots that only vaguely echoes the hero's
-> shape. Fat bouncy hand-lettered "TOOTS QUEST" logo in the top corner
-> with a halftone drop shadow. Tilted composition, action lines, dust
-> puffs. Flat warm palette: cream, burnt orange, olive green, deep indigo;
-> teal only for the sword and the magic.
+> newspaper comics style: characters built from a few big rounded shapes,
+> bold dark-navy outlines, flat color fills, minimal interior detail, no
+> crosshatching, no etching, no painterly texture; soft halftone dots for
+> shading on aged cream newsprint. The whole panel is tilted on a dutch
+> angle, the horizon running diagonally corner to corner, low camera
+> looking up the hillside, everything caught mid-motion and off balance.
+> Center: the hero, a small ink-black blob with enormous round white eyes
+> and tiny pupils, a tuft of hair, ragged burnt-orange poncho with one
+> cream X stitch, caught mid-lunge in a full-body sword swing — torso
+> twisted into it, legs driving forward, feet off the ground, poncho
+> whipping behind him, his glowing teal blade smearing a huge curved arc
+> of teal light across the panel. Left: a small cream-gray shih tzu,
+> grumpy scowl, dark collar, chomping a round rusty windup beetle, a
+> spring and bolts popping loose. Right: a lanky charcoal shih tzu/poodle
+> mix, huge happy grin, orange collar, ignoring the battle, digging, dirt
+> flying, a teal-glinting trinket unearthed. On the far ridge the print is
+> failing: color fades to bare paper, a field of gray halftone static, one
+> plain dead radio tower, and faint in the static a tall ragged silhouette
+> made of dots, strictly faceless, no eyes, only vaguely echoing the
+> hero's shape. Fat bouncy hand-lettered "TOOTS QUEST" logo slammed at an
+> angle into the top corner with a halftone drop shadow. Speed lines and
+> dust puffs. Flat warm palette: cream, burnt orange, olive green, deep
+> indigo; teal only for the sword and the magic.
 
 ---
 

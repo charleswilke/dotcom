@@ -275,6 +275,55 @@ antennae, bolt tips, rivets, rounder rustier bodies). No new prompt needed.
 
 ---
 
+## What the keeper feeds back into the game (July 2026)
+
+The hero image was supposed to be output; it turned out to be input. Gleanings
+from translating v5 back into shape grammars, roughly by cost:
+
+**Quick wins (parametric, cheap):**
+
+- **Mites get wind-up keys.** The keeper's beetles carry a literal wind-up
+  key on top — better than the antennae idea, and it's a *telegraph*: the
+  key visibly spins up before a lunge and lazily unwinds at idle. Fold into
+  the queued mite render pass (rounder rustier shell, rivets, patch seams).
+- **Mites die into parts.** Hurt/death bursts should spawn part-shaped
+  particles (tiny springs, bolts, a bent antenna), not just dots. Windup
+  toys disassemble; they don't bleed.
+- **Toots' poncho is a motion instrument.** The art poncho flares and whips
+  like a cape; the in-game one barely sways. Scale it up a touch, cut
+  bigger hem notches, and drive it with velocity: trailing flare on dash,
+  whip on the swing, settle on stop. The poncho becomes the speed readout.
+- **One eye bigger than the other.** The keeper's charm is the uneven
+  googly eyes. Make the asymmetry canon in-game (~12% on one side); keep
+  the pupil-tracking facing telegraph untouched.
+- **Doc's underbite.** The chomp render confirms it: one tiny cream tooth
+  tick at the jaw. Also his latch pose for M2 combat: jaw clamped, body
+  flying like a flag.
+- **Astro's bliss face.** Closed-arc happy eyes while digging/sniffing —
+  add a third mood state to the face params. His dig unearths things that
+  glint neon (matches the palette law and the existing glint system).
+- **Flowers.** The art foreground has small orange/cream flowers in the
+  grass; the game has none. Seeded flower specks join the ambient pass.
+
+**Bigger builds:**
+
+- **The title screen IS the key art, drawn in code.** The game has no
+  front door yet; build one in-engine as a recreation of the keeper's
+  composition — canted frozen panel, THOK moment held mid-air, static
+  drifting on the ridge, poncho and tuft swaying. Zero assets, pure
+  renderer, and it doubles as proof the style survives translation.
+  Natural companion to shipping the M1 teaser.
+- **The Static's look is now spec'd:** fills desaturate toward bare paper,
+  halftone decays into seeded dot-noise, outlines break into dashes. This
+  is the Margins treatment (M3) and the "reality misprint" meter hook
+  (PRD §3.4). The Static's embodied form, if it ever needs one, is the
+  faceless dot-figure — never with eyes.
+- **The Relay Fields tower silhouette** (plain dead lattice) is settled by
+  the keeper's background tower.
+
+**Don't chase:** articulated knees/legs (fails the 40px test — the blob
+walk IS the game), the two-handed sword grip, painterly grass texture.
+
 ## Later: motion reference (video, not stills)
 
 Closer to M2+, image-to-video on approved concepts, used as AI rotoscope

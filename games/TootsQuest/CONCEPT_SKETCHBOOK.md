@@ -126,7 +126,7 @@ crossing*, two or three ways.
 Pick the one that feels inevitable. If none do, the gutter stays and that
 question is closed anyway.
 
-### 3.5 The hero image / title panel (in progress, July 2026)
+### 3.5 The hero image / title panel (SETTLED July 2026 — v5 is the keeper)
 
 Charles has a strong draft going (dutch-angle hillside, logo slammed in the
 corner, both dogs in the action). Revision notes from the canon check, plus
@@ -292,6 +292,20 @@ arcs, write the sine parameters):
 Record the keeper from each batch here, with the decision it settled, so
 the next session inherits conclusions instead of a folder of images.
 
+- **Hero image / title panel: SETTLED, v5 keeper (July 2026).** Charles
+  generated it through five prompt revisions (§3.5 has the final prompt
+  and the lessons). The keeper: dutch-angle hillside, Toots mid-lunge with
+  the teal arc connecting into a launched beetle (THOK! at impact, small,
+  clear of the logo), Doc chomping his own beetle low-left, Astro
+  blissfully digging up a teal-glinting relic low-right, and on the ridge
+  a faceless dot-silhouette by a dead tower where the color drains from
+  the print. Decisions it settled: dogs in canon combat roles (Doc fights,
+  Astro digs) on the game's front door; the Static appears as print
+  failure, never a creature; the copy silhouette is in, faceless and
+  unprovable; the blade is neon; **no headphones on the hero image**
+  (the open question from the canon check, closed by the keeper). This
+  image is the style target for the future trailer (the trailer-as-lore
+  exception) and the reference anchor for future character prompts.
 - Tuning Stone: —
 - Archive look: —
 - Crossing: —

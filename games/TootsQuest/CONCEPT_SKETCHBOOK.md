@@ -152,45 +152,38 @@ the big-bad allusion:
   faint: found on the second look, not the first.
 - Open: headphones are still canon on cover art (off in-game). Charles'
   draft omits them; his call.
+- **Style drift lesson (July 2026):** the first full-content render came
+  back etched and crosshatched, closer to a gritty album cover than the
+  funnies. Three causes: style tokens buried at the END of a long prompt
+  (generators weight early tokens), detail-inviting words ("grotesque",
+  "dripping", "warped", triple "scruffy"), and sheer length diluting the
+  style. Fix: style first, an explicit ban list, and half the words. If a
+  render still comes back textured, cut description before adding style
+  words. Acid test stands: would these characters read at 40px?
 
-Current revised prompt:
+Current revised prompt (simplified style, v3):
 
-> Sunday newspaper comic strip title panel for "TOOTS QUEST" starring a
-> small ink-black blob creature hero with enormous round white googly eyes
-> and tiny pupils, deadpan stare, small tuft of black hair, ragged-hemmed
-> burnt-orange poncho with a single cream cross-stitch X on the chest,
-> caught mid sword swing with his glowing neon-teal blade trailing a
-> matching arc slash, and his two scruffy little dog companions living
-> opposite lives: a small cream-gray scruffy shih tzu with a grumpy
-> determined scowl, dark collar, curved pot-bellied body and a tail pluming
-> up over his back, latched fearlessly onto a rusty windup junk beetle far
-> bigger than his courage should allow, springs and bolts flying off it;
-> and a lanky, scruffy charcoal shih tzu/poodle mix with a huge happy grin
-> and an orange collar at the edge of the frame, blissfully ignoring the
-> battle, mid-dig with dirt flying, having just unearthed something that
-> glints faintly teal. Action lines and dust puffs everywhere, tilted dutch angle,
-> low camera looking up the hillside, deep diagonal composition. In the far
-> background where the path crests the ridge, the world is un-tuning: the
-> printing itself fails: color drains away leaving raw uninked line art,
-> halftone dots decay into gray television static, a distant broadcast
-> tower stands dark and fuzzy, its signal drawn as jagged dead noise, a
-> wall of gray static creeping down the hillside toward the warm foreground
-> like weather. Barely visible within the static, almost subliminal, a
-> towering grotesque silhouette that only vaguely suggests the little
-> hero's shape gone wrong: stretched and buckled like a reflection in a
-> shattered funhouse mirror, the hair tuft warped into crooked spines, the
-> poncho hem melted into dripping jags, limbs too long and bending in too
-> many places, entirely faceless, only blank churning noise where a face
-> should be, a shape the static half-remembers, turned toward the scene it
-> failed to copy.
-> Hand-lettered bespoke title logo "TOOTS QUEST" in fat
-> bouncy cartoon letters wobbling along a curved baseline, logo slammed
-> into the top corner at an angle with a halftone drop shadow, flat rounded
-> shapes with bold dark navy ink outlines of varying thickness, visible
-> halftone dot shading, slightly misregistered color printing, aged cream
-> newsprint paper texture, warm palette of cream, burnt orange, olive green
-> and deep indigo with glowing teal reserved for the sword and the magic,
-> off-balance, kinetic, hand-inked Sunday morning adventure
+> Simple flat cartoon title panel for "TOOTS QUEST" in a clean Sunday
+> newspaper comics style: every character built from a few big rounded
+> shapes with bold dark-navy outlines and flat color fills, minimal
+> interior detail, no crosshatching, no etching, no ink wash, no painterly
+> texture — just flat shapes, soft halftone dots for shading, aged cream
+> newsprint paper. The hero: a small ink-black blob with enormous round
+> white eyes, tiny pupils, a little tuft of hair, a ragged burnt-orange
+> poncho with one cream X stitch, mid sword swing, his glowing teal blade
+> trailing a matching arc. Left: a small cream-gray shih tzu with a grumpy
+> scowl and dark collar chomping down on a round rusty windup beetle, one
+> spring and two bolts popping loose. Right: a lanky charcoal shih
+> tzu/poodle mix with a huge happy grin and orange collar, ignoring the
+> battle completely, digging happily, dirt flying, a small teal-glinting
+> trinket unearthed. On the far background ridge the print is failing:
+> color fades to plain paper, a field of simple gray halftone static, one
+> plain dead radio tower, and faint within the static a tall ragged
+> faceless silhouette made of dots that only vaguely echoes the hero's
+> shape. Fat bouncy hand-lettered "TOOTS QUEST" logo in the top corner
+> with a halftone drop shadow. Tilted composition, action lines, dust
+> puffs. Flat warm palette: cream, burnt orange, olive green, deep indigo;
+> teal only for the sword and the magic.
 
 ---
 

@@ -126,6 +126,68 @@ crossing*, two or three ways.
 Pick the one that feels inevitable. If none do, the gutter stays and that
 question is closed anyway.
 
+### 3.5 The hero image / title panel (in progress, July 2026)
+
+Charles has a strong draft going (dutch-angle hillside, logo slammed in the
+corner, both dogs in the action). Revision notes from the canon check, plus
+the big-bad allusion:
+
+- **Swap the dogs' jobs.** Canon (PRD §2.5, from the real dogs): Doc
+  fights, Astro doesn't care. Doc should be the one latched onto a beetle;
+  Astro should be at the edge of the frame blissfully digging, ignoring
+  the battle entirely.
+- **The blade is neon, not steel.** The sword is the player's magic made
+  visible; the teal accent belongs to the blade AND its arc.
+- **Poncho, not tunic**, ragged hem, cream cross-stitch X on the chest.
+- **The Static appears as the print failing**, not as a creature: far
+  ridgeline where color drains to raw uninked line art, halftone decaying
+  into television static, one dead broadcast tower. The villain is the
+  absence of print, creeping toward the warm foreground like weather.
+- **The copy silhouette is in** (Charles, July 2026): barely visible inside
+  the static, a funhouse-mirror distortion of Toots himself. Wrong
+  proportions, stretched, a bad copy. Foreshadows the Echo Knights and the
+  final line ("the copy blinked first") on page one. Keep it faint: found
+  on the second look, not the first.
+- Open: headphones are still canon on cover art (off in-game). Charles'
+  draft omits them; his call.
+
+Current revised prompt:
+
+> Sunday newspaper comic strip title panel for "TOOTS QUEST" starring a
+> small ink-black blob creature hero with enormous round white googly eyes
+> and tiny pupils, deadpan stare, small tuft of black hair, ragged-hemmed
+> burnt-orange poncho with a single cream cross-stitch X on the chest,
+> caught mid sword swing with his glowing neon-teal blade trailing a
+> matching arc slash, and his two scruffy little dog companions living
+> opposite lives: a small cream-gray scruffy shih tzu with a grumpy
+> determined scowl, dark collar, curved pot-bellied body and a tail pluming
+> up over his back, latched fearlessly onto a rusty windup junk beetle far
+> bigger than his courage should allow, springs and bolts flying off it;
+> and a lanky charcoal poodle-mix with a topknot, huge happy grin and an
+> orange collar at the edge of the frame, blissfully ignoring the battle,
+> mid-dig with dirt flying, having just unearthed something that glints
+> faintly teal. Action lines and dust puffs everywhere, tilted dutch angle,
+> low camera looking up the hillside, deep diagonal composition. In the far
+> background where the path crests the ridge, the world is un-tuning: the
+> printing itself fails: color drains away leaving raw uninked line art,
+> halftone dots decay into gray television static, a distant broadcast
+> tower stands dark and fuzzy, its signal drawn as jagged dead noise, a
+> wall of gray static creeping down the hillside toward the warm foreground
+> like weather. Barely visible within the static, almost subliminal, looms
+> a towering warped funhouse-mirror silhouette of the little black hero
+> himself: stretched too tall, proportions wrong, poncho hanging at the
+> wrong angle, its two enormous pale eyes the only detail that survived the
+> distortion, one drooping lower than the other, a bad photocopy of Toots
+> assembled from noise, watching the scene it was copied from.
+> Hand-lettered bespoke title logo "TOOTS QUEST" in fat
+> bouncy cartoon letters wobbling along a curved baseline, logo slammed
+> into the top corner at an angle with a halftone drop shadow, flat rounded
+> shapes with bold dark navy ink outlines of varying thickness, visible
+> halftone dot shading, slightly misregistered color printing, aged cream
+> newsprint paper texture, warm palette of cream, burnt orange, olive green
+> and deep indigo with glowing teal reserved for the sword and the magic,
+> off-balance, kinetic, hand-inked Sunday morning adventure
+
 ---
 
 ## Batch 2 — simmering (M2 pre-work)

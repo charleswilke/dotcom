@@ -169,7 +169,14 @@ the big-bad allusion:
   "faceless" now says "strictly faceless, no eyes" because the model will
   put eyes on anything with shoulders.
 
-Current revised prompt (canted + kinetic, v4):
+- **Toots connects (v5):** a swing at nothing read as posing, so the arc
+  now ends in a beetle mid-vanquish — knocked tumbling, parts flying, with
+  a small hand-lettered THOK! at the impact (the game's own onomatopoeia
+  system, §4.2, doing cover duty). Watch that the THOK! stays small: two
+  pieces of lettering can fight, and the logo wins every tie. If a render
+  crowds, cut the word before cutting the beetle.
+
+Current revised prompt (Toots connects, v5):
 
 > Simple flat cartoon title panel for "TOOTS QUEST" in a clean Sunday
 > newspaper comics style: characters built from a few big rounded shapes,
@@ -183,7 +190,11 @@ Current revised prompt (canted + kinetic, v4):
 > cream X stitch, caught mid-lunge in a full-body sword swing — torso
 > twisted into it, legs driving forward, feet off the ground, poncho
 > whipping behind him, his glowing teal blade smearing a huge curved arc
-> of teal light across the panel. Left: a small cream-gray shih tzu,
+> of teal light that connects square with a rusty windup beetle at the
+> arc's end: the beetle knocked tumbling backward through the air, a
+> spring, a bolt and a bent antenna flying off it, a small hand-lettered
+> "THOK!" burst right at the point of impact. Left: a small cream-gray
+> shih tzu,
 > grumpy scowl, dark collar, chomping a round rusty windup beetle, a
 > spring and bolts popping loose. Right: a lanky charcoal shih tzu/poodle
 > mix, huge happy grin, orange collar, ignoring the battle, digging, dirt

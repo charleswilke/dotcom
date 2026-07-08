@@ -143,11 +143,13 @@ the big-bad allusion:
   ridgeline where color drains to raw uninked line art, halftone decaying
   into television static, one dead broadcast tower. The villain is the
   absence of print, creeping toward the warm foreground like weather.
-- **The copy silhouette is in** (Charles, July 2026): barely visible inside
-  the static, a funhouse-mirror distortion of Toots himself. Wrong
-  proportions, stretched, a bad copy. Foreshadows the Echo Knights and the
-  final line ("the copy blinked first") on page one. Keep it faint: found
-  on the second look, not the first.
+- **The copy silhouette is in, and it's ambiguous** (Charles, July 2026):
+  barely visible inside the static, a grotesque faceless distortion that
+  only *maybe* is Toots. No eyes, nothing you could point to and say
+  "that's him"; a viewer should feel the resemblance without being able to
+  prove it. Foreshadows the Echo Knights and the final line ("the copy
+  blinked first") on page one, but as a question, not an answer. Keep it
+  faint: found on the second look, not the first.
 - Open: headphones are still canon on cover art (off in-game). Charles'
   draft omits them; his call.
 
@@ -173,12 +175,14 @@ Current revised prompt:
 > halftone dots decay into gray television static, a distant broadcast
 > tower stands dark and fuzzy, its signal drawn as jagged dead noise, a
 > wall of gray static creeping down the hillside toward the warm foreground
-> like weather. Barely visible within the static, almost subliminal, looms
-> a towering warped funhouse-mirror silhouette of the little black hero
-> himself: stretched too tall, proportions wrong, poncho hanging at the
-> wrong angle, its two enormous pale eyes the only detail that survived the
-> distortion, one drooping lower than the other, a bad photocopy of Toots
-> assembled from noise, watching the scene it was copied from.
+> like weather. Barely visible within the static, almost subliminal, a
+> towering grotesque silhouette that only vaguely suggests the little
+> hero's shape gone wrong: stretched and buckled like a reflection in a
+> shattered funhouse mirror, the hair tuft warped into crooked spines, the
+> poncho hem melted into dripping jags, limbs too long and bending in too
+> many places, entirely faceless, only blank churning noise where a face
+> should be, a shape the static half-remembers, turned toward the scene it
+> failed to copy.
 > Hand-lettered bespoke title logo "TOOTS QUEST" in fat
 > bouncy cartoon letters wobbling along a curved baseline, logo slammed
 > into the top corner at an angle with a halftone drop shadow, flat rounded

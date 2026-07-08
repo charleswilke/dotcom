@@ -8,11 +8,15 @@ the junk, the frequencies.
 **Status:** M0 (Living Ink renderer proof) is BUILT and PASSED its gate.
 **M0.5 (Sunday Ink)** added a second, toggleable visual style — newsprint
 misregistration + halftone screens (§3.4) — plus a two-room world with
-panel-gutter transitions (§3.4a). **M1 is IN PROGRESS** (session 4):
+panel-gutter transitions (§3.4a). **M1 is IN PROGRESS** (sessions 4–6):
 onomatopoeia combat bursts (§4.2), the first two NPCs with flag-reactive
 speech-balloon dialogue (§4.6), the `worldState` flags object (§2.5, §5),
-and the hero redesigned to the cover art (§2.4). See §6 and
-`SESSION_HANDOFF.md` for implementation notes.
+the hero redesigned to the cover art (§2.4), the six-room Hearthside with
+interiors (session 5), and — session 6 — the save system (hoop stitching +
+crossing autosave, §2.6) and the first spell, Clear as Day, with the
+frequency-dial HUD seed (§4.3). Remaining M1: the Tuning Stone and the
+Archive mirror-rooms, gated on concept art (`CONCEPT_SKETCHBOOK.md`).
+See §6 and `SESSION_HANDOFF.md` for implementation notes.
 
 ---
 
@@ -180,9 +184,10 @@ and needlepoint becomes the game's craft/collection layer:
 - **Save points are embroidery hoops.** Standing hoops scattered through the world;
   saving plays a quick "stitching" animation that literally stitches your progress.
   (Thematically perfect: the Archive *records*, Jessie *preserves*.)
-  *(Session 5: hoops stand in the square, by the house, and in the shop —
-  scenery + Doc's comfy targets; save wiring comes with M1's save item.
-  The shop interior exists, gallery wall and all, waiting for patterns.)*
+  *(Session 6: hoops SAVE. Space/E in range sews a ring of cross-stitches
+  around Toots — the save lands on frame one, the ceremony is the fiction.
+  Gutter crossings autosave as the safety net. The shop interior exists,
+  gallery wall and all, waiting for patterns.)*
 - **Patterns are collectibles.** Hidden throughout the world are lost needlepoint
   patterns (each a tiny procedural cross-stitch rendering of a song, place, or
   character). Return them to Haus of Toots and Jessie stitches them; finished
@@ -394,6 +399,14 @@ slower deep in the Archive. Spell visuals are pure composite-op light (additive
 gradients, oscilloscope-waveform projectiles) — the renderer and the magic system
 are the same technology, which is why this combination will look unique.
 
+> **Built session 6:** Clear as Day is live on F — an oscilloscope waveform
+> ring expanding in the ground plane, pinging every interactive thing it
+> crosses in neon and punching the darkness pass open (at night the spell
+> literally carries daylight). Cooldown stands in for Signal Strength for
+> now. Style law established: **spell light is crisp, never soft** — stroked
+> signal rings, no gradient blobs; soft glow stays reserved for fire. The
+> dial HUD seeds bottom-left; hold-to-tune arrives with the second spell.
+
 ### 4.4 Enemies (launch set, ~8)
 
 Hollow: **Junk Mites** (scuttle, swarm), **Gull Bombers** (TootsJam cameo),
@@ -515,6 +528,8 @@ hitstop. **Gate: does Living Ink look as good as it sounds?** If not, iterate he
 **M1 — Vertical slice.** Hearthside (4–6 rooms), 2 NPCs with flag-reactive
 dialogue, one Tuning Stone, 3 Archive mirror-rooms with darkness lighting, one
 spell (Clear as Day), save/load. *This is shippable as a teaser.*
+*(Progress: rooms ✅ · NPCs ✅ · spell ✅ · save/load ✅ · Tuning Stone and
+Archive rooms remain, gated on `CONCEPT_SKETCHBOOK.md` batch 1.)*
 
 **M2 — Dungeon One.** The Cathedral of Junk, complete: 8–10 rooms, Magnet
 Gauntlet, The Curator boss, 3 enemy types. Ship it: "Toots Quest: Chapter One."

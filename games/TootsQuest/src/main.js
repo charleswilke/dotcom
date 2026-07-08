@@ -22,7 +22,11 @@ import {
   NPC, TALK_RADIUS, dialogue, startDialogue, advanceDialogue, closeDialogue,
   updateDialogue, drawDialogue, drawTalkHint,
 } from './npc.js';
-import { worldState } from './state.js';
+import { worldState, saveGame, loadGame, wipeSave } from './state.js';
+import {
+  spellState, castClearAsDay, updateSpells, clearSpells,
+  spellLights, drawSpells, drawFreqDial,
+} from './spells.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -43,7 +47,22 @@ fit();
 const DAY_LENGTH = 150;       // seconds per full day — fast, for the demo
 let tDay = 0.56;              // start in the warm afternoon
 
-const player = new Player(room.decor.playerSpawn.x, room.decor.playerSpawn.y);
+// Resume from the stitched save, if there is one (M1 item 4). loadGame has
+// already merged the flags into worldState; the room switch must happen
+// before anyone is constructed, and a saved position that no longer fits
+// (future layout edits) falls back to the room's spawn point.
+const saved = loadGame();
+if (saved && getRoom(saved.roomId)) {
+  setRoom(saved.roomId);
+  if (typeof saved.tDay === 'number') tDay = ((saved.tDay % 1) + 1) % 1;
+}
+const spawnAt = (saved && getRoom(saved.roomId) &&
+  Number.isFinite(saved.x) && Number.isFinite(saved.y) &&
+  !circleBlocked(saved.x, saved.y, 9))
+  ? { x: saved.x, y: saved.y }
+  : room.decor.playerSpawn;
+
+const player = new Player(spawnAt.x, spawnAt.y);
 // The real dogs (PRD §2.5, cover-art model sheets): Doc heels and scowls,
 // Astro scouts and grins. Same grammar, different souls.
 const doc = new Dog(player.x - 40, player.y + 10, {
@@ -58,6 +77,11 @@ const astro = new Dog(player.x + 34, player.y + 22, {
   // Poodle build: up on long thin legs, slim barrel, head high, topknot.
   lift: 4.5, bodyW: 9, legW: 2.5, topknot: true,
 });
+// Boot placement goes through the same clamp as gutter crossings (gotcha 5):
+// a restored save can spawn against a world edge, and a dog constructed out
+// of bounds is bricked forever. (placeDog is hoisted; player exists.)
+placeDog(doc, doc.x, doc.y);
+placeDog(astro, astro.x, astro.y);
 
 function roomMites(r) {
   if (!r.mites) r.mites = (r.decor.miteSpawns || []).map(s => new Mite(s.x, s.y));
@@ -82,6 +106,18 @@ function npcInTalkRange() {
   return best;
 }
 
+// Nearest standing hoop close enough to stitch at, or null (PRD §2.6).
+const STITCH_RADIUS = 46;
+function hoopInRange() {
+  let best = null;
+  let bd = STITCH_RADIUS;
+  for (const h of room.decor.hoops || []) {
+    const d = dist(player.x, player.y, h.x, h.y);
+    if (d < bd) { bd = d; best = h; }
+  }
+  return best;
+}
+
 const game = {
   hitstopT: 0,
   shakeAmp: 0,
@@ -92,6 +128,42 @@ const game = {
     this.shakeT = Math.max(this.shakeT, dur);
   },
 };
+
+// The stitch ceremony (PRD §2.6): saving at a hoop sews a ring of
+// cross-stitches around Toots. The save itself lands on the first frame —
+// the animation is the fiction, so a mite interrupting the ceremony costs
+// the moment, never the progress.
+let stitch = null;            // {t, dur, x, y, hoop}
+let saveCue = 0;              // HUD "STITCHED" fade timer
+
+function doSave() {
+  saveGame(room.id, player.x, player.y, tDay);
+  saveCue = 1.8;
+}
+
+function startStitch(hoop) {
+  stitch = { t: 0, dur: 1.25, x: player.x, y: player.y, hoop };
+  player.face = Math.atan2(hoop.y - player.y, hoop.x - player.x);
+  player.attack = null;
+  player.attackQueued = false;
+  doSave();
+}
+
+// Cast Clear as Day from wherever Toots stands. The room's interactive set
+// is gathered at cast time; the wavefront rim-lights whatever it crosses
+// (hoop pings aim at the hoop's face, where the neon stitch already
+// promises interactivity).
+function castSpell() {
+  const targets = [];
+  if (room.decor.secret) targets.push({ ...room.decor.secret, kind: 'secret' });
+  for (const h of room.decor.hoops || []) targets.push({ x: h.x, y: h.y - 44, kind: 'hoop' });
+  for (const d of room.decor.doors || []) targets.push({ x: d.x, y: d.y, kind: 'door' });
+  if (!castClearAsDay(player.x, player.y - 6, targets)) return false;
+  burst(player.x, player.y - 14, 10, {
+    color: [PALETTE.neon, PALETTE.cream], speed: 120, life: 0.35, add: true, g: -40,
+  });
+  return true;
+}
 
 // Seeded ambient detail: grass tufts and water ripple anchors, per room.
 let tufts = [];
@@ -194,7 +266,11 @@ function finishTransition() {
   npcs = roomNpcs(room);
   particles.length = 0;
   clearWords();
+  clearSpells();     // pulses/pings are room-space — stale after a crossing
   buildAmbient();
+  // Crossings are the autosave safety net (PRD §2.6): the hoop is the
+  // fiction, the gutter is the guarantee.
+  doSave();
 }
 
 // --- Input -----------------------------------------------------------------
@@ -212,14 +288,21 @@ addEventListener('keydown', (e) => {
   if (e.code === 'Space' || e.code === 'KeyJ' || e.code === 'KeyE') {
     if (dialogue.active) {
       advanceDialogue();
-    } else if (!transition) {
+    } else if (!transition && !stitch) {
+      // Contextual routing: townsfolk first, then hoops; J stays the pure
+      // attack — the escape hatch keeps combat unhijackable.
       const n = e.code === 'KeyJ' ? null : npcInTalkRange();
+      const h = e.code === 'KeyJ' || n ? null : hoopInRange();
       if (n) startDialogue(n, player);
+      else if (h) startStitch(h);
       else if (e.code !== 'KeyE') player.bufferAttack();
     }
   }
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.code === 'KeyK') {
-    if (!dialogue.active) player.tryDash();
+    if (!dialogue.active && !stitch) player.tryDash();
+  }
+  if (e.code === 'KeyF' && !dialogue.active && !transition && !stitch) {
+    castSpell();
   }
   if (e.code === 'KeyN') tDay = (tDay + 0.08) % 1;
   if (e.code === 'KeyP') setPrintMode(!PRINT.on);
@@ -233,6 +316,7 @@ const EMPTY_KEYS = new Set();   // what the player "presses" while talking
 
 function update(dt, time) {
   tDay = (tDay + dt / DAY_LENGTH) % 1;
+  saveCue = Math.max(0, saveCue - dt);
 
   if (transition) {
     transition.t += dt;
@@ -240,16 +324,24 @@ function update(dt, time) {
     return;
   }
 
-  // Talking locks Toots' input but the world keeps living (pillar 1):
-  // mites still wander, Doc still settles, torches still spit embers.
-  player.update(dt, dialogue.active ? EMPTY_KEYS : keys, game);
+  updateSpells(dt);
+  if (stitch) {
+    stitch.t += dt;
+    if (stitch.t >= stitch.dur) stitch = null;
+  }
+
+  // Talking (or stitching) locks Toots' input but the world keeps living
+  // (pillar 1): mites still wander, Doc still settles, torches still spit.
+  player.update(dt, dialogue.active || stitch ? EMPTY_KEYS : keys, game);
   doc.update(dt, player, room.comfy);
   astro.update(dt, player, room.decor.secret);
   for (const n of npcs) n.update(dt, player);
   for (const m of mites) m.update(dt, player, game);
   // A lunge that lands mid-sentence breaks off the conversation — hurt()
-  // just set invuln to 0.9 and it hasn't decayed yet this frame.
+  // just set invuln to 0.9 and it hasn't decayed yet this frame. Same for
+  // the stitch ceremony (the save already landed; only the moment breaks).
   if (dialogue.active && player.invuln > 0.85) closeDialogue();
+  if (stitch && player.invuln > 0.85) stitch = null;
   updateParticles(dt);
   updateWords(dt);
   updateDialogue(dt);
@@ -860,6 +952,38 @@ function drawRipples(time) {
   }
 }
 
+// The stitch ceremony's visual: a ring of cross-stitches sews itself around
+// Toots in the ground plane, one X per tick — each stitch pops in at full
+// size and settles, same rule as the onomatopoeia words. The working stitch
+// is neon (the needle is magic); finished stitches settle to thread-orange.
+function drawStitch(time) {
+  if (!stitch) return;
+  const N = 12;
+  const R = 26;
+  const p = stitch.t / stitch.dur;
+  const sewn = Math.min(N, Math.floor(p * (N + 2)));
+  const fade = p > 0.85 ? 1 - (p - 0.85) / 0.15 : 1;
+  ctx.save();
+  ctx.translate(stitch.x, stitch.y);
+  ctx.lineCap = 'round';
+  for (let i = 0; i < sewn; i++) {
+    const a = -Math.PI / 2 + (i / N) * TAU;
+    const sx = Math.cos(a) * R;
+    const sy = Math.sin(a) * R * 0.55;   // ground plane, like the shadows
+    const fresh = i === sewn - 1 && p < 0.88;
+    const s = fresh ? 4.6 : 3.4;
+    ctx.strokeStyle = fresh ? PALETTE.neon : PALETTE.orange;
+    ctx.globalAlpha = fade;
+    ctx.lineWidth = fresh ? 2.6 : 2;
+    ctx.beginPath();
+    ctx.moveTo(sx - s / 2, sy - s / 2); ctx.lineTo(sx + s / 2, sy + s / 2);
+    ctx.moveTo(sx + s / 2, sy - s / 2); ctx.lineTo(sx - s / 2, sy + s / 2);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
 // --- Render ----------------------------------------------------------------
 
 let fps = 60;
@@ -988,6 +1112,8 @@ function render(time) {
 
   drawParticles(ctx);
   drawWords(ctx);
+  drawSpells(ctx, time);
+  drawStitch(time);
 
   // Warm additive glow around every flame and lamp, day or night.
   const glows = [
@@ -1014,7 +1140,11 @@ function render(time) {
     ...(room.decor.furniture || []).filter(f => f.kind === 'lamp')
       .map(f => ({ x: f.x, y: f.y - 38, r: 165, flicker: true })),
     { x: player.x, y: player.y - 14, r: 135, flicker: false },
+    // Clear as Day carries daylight with it: the wavefront and its pings
+    // punch the darkness open (this is most of the spell at midnight).
+    ...spellLights(),
   ];
+  if (stitch) lights.push({ x: stitch.x, y: stitch.y, r: 120, flicker: false });
   for (const b of room.decor.buildings || []) {
     for (const wx of [b.x + b.w * 0.22, b.x + b.w * 0.78]) {
       lights.push({ x: wx, y: b.y - b.h * 0.52, r: 70, flicker: false });
@@ -1081,8 +1211,27 @@ function drawHud(time) {
   ctx.fillText(timeLabel(tDay), dx - 18, dy + 4);
   ctx.textAlign = 'left';
 
+  // The Frequency Dial (PRD §4.3) seeds bottom-left, above the controls.
+  drawFreqDial(ctx, 14, WORLD_H - 76, time, room.interior);
+
+  // Save confirmation: one stitch and a word, then gone.
+  if (saveCue > 0) {
+    ctx.globalAlpha = Math.min(1, saveCue / 0.6);
+    const sx = 152, sy = WORLD_H - 60;
+    ctx.strokeStyle = PALETTE.neon;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(sx - 3, sy - 3); ctx.lineTo(sx + 3, sy + 3);
+    ctx.moveTo(sx + 3, sy - 3); ctx.lineTo(sx - 3, sy + 3);
+    ctx.stroke();
+    ctx.fillStyle = hud;
+    ctx.fillText('STITCHED', sx + 8, sy + 4);
+    ctx.globalAlpha = 1;
+  }
+
   ctx.fillStyle = room.interior ? 'rgba(34,26,86,0.5)' : 'rgba(248,233,210,0.55)';
-  ctx.fillText('WASD move · SPACE attack/talk · SHIFT dash · N time · P print style', 14, WORLD_H - 18);
+  ctx.fillText('WASD move · SPACE attack/talk/stitch · SHIFT dash · F spell · N time · P print', 14, WORLD_H - 18);
 }
 
 // --- Loop: fixed-step update, hitstop freezes simulation but not rendering --
@@ -1123,6 +1272,11 @@ window.__TQ = {
   get transition() { return transition; },
   get dialogue() { return dialogue.active; },
   get flags() { return worldState.flags; },
+  get stitch() { return stitch; },
+  get spell() { return spellState; },
+  cast: () => castSpell(),
+  save: () => { doSave(); return JSON.parse(localStorage.getItem('tootsquest_save_v1')); },
+  wipe: () => wipeSave(),
   // Force a conversation from the console: __TQ.talk('jessie').
   talk: (id) => {
     const n = npcs.find(x => x.id === id) || npcs[0];
@@ -1137,6 +1291,8 @@ window.__TQ = {
     if (!r) return null;
     closeDialogue();
     transition = null;
+    stitch = null;
+    clearSpells();
     setRoom(id);
     player.x = r.decor.playerSpawn.x;
     player.y = r.decor.playerSpawn.y;

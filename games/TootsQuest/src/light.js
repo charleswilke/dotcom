@@ -51,7 +51,9 @@ export function timeLabel(t01) {
   return 'Night';
 }
 
-// lights: [{x, y, r, flicker}] — returns false when no darkness was drawn.
+// lights: [{x, y, r, flicker, sy?}] — returns false when no darkness was
+// drawn. sy squashes the hole into a ground-plane ellipse (gotcha 9: spell
+// wavefronts live in the flattened plane, so their light must too).
 export function drawLighting(lctx, w, h, dark, lights, time) {
   lctx.clearRect(0, 0, w, h);
   if (dark <= 0.01) return false;
@@ -63,14 +65,18 @@ export function drawLighting(lctx, w, h, dark, lights, time) {
       ? 1 + Math.sin(time * 11 + l.x) * 0.05 + Math.sin(time * 23 + l.y) * 0.04
       : 1;
     const r = l.r * flick;
-    const grad = lctx.createRadialGradient(l.x, l.y, r * 0.15, l.x, l.y, r);
+    lctx.save();
+    lctx.translate(l.x, l.y);
+    lctx.scale(1, l.sy || 1);
+    const grad = lctx.createRadialGradient(0, 0, r * 0.15, 0, 0, r);
     grad.addColorStop(0, 'rgba(255,255,255,1)');
     grad.addColorStop(0.6, 'rgba(255,255,255,0.75)');
     grad.addColorStop(1, 'rgba(255,255,255,0)');
     lctx.fillStyle = grad;
     lctx.beginPath();
-    lctx.arc(l.x, l.y, r, 0, TAU);
+    lctx.arc(0, 0, r, 0, TAU);
     lctx.fill();
+    lctx.restore();
   }
   lctx.globalCompositeOperation = 'source-over';
   return true;

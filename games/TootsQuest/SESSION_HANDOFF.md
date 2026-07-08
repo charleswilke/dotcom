@@ -2,8 +2,10 @@
 
 Read this (and `TOOTS_QUEST_PRD.md`) before touching the code. The PRD is the
 *what and why*; this file is the *what exists right now and what bit us*.
+`CONCEPT_SKETCHBOOK.md` (new, session 6) holds the Higgsfield generator
+prompts for upcoming visual development — the sketchbook rule lives there.
 
-## Current state (end of session 4, July 2026)
+## Current state (end of session 6, July 2026)
 
 **M0 (Living Ink renderer proof) passed its gate in session 1. M0.5 (Sunday
 Ink) was added in session 2:** a second, toggleable visual style — Sunday
@@ -31,8 +33,21 @@ grammar (shop + home), interior rooms (new tiles F/B/V, plank floors,
 timber walls on paper void), rect colliders, furniture grammars, standing
 embroidery-hoop save-point scenery (PRD §2.6 — scenery only until the save
 system lands), and Doc's comfy compass wired to hoops and dog beds.
-Jessie moved inside her shop. Remaining M1: Tuning Stone, Archive
-mirror-rooms, Clear as Day spell, save/load.
+Jessie moved inside her shop. **Session 6 knocked out M1 items 3–4 (out of
+order — concept art for the Tuning Stone comes first, see
+`CONCEPT_SKETCHBOOK.md`): the save system and the first spell.** Save is
+`localStorage tootsquest_save_v1` (flags + room + position + time of day),
+written two ways: stitching at any embroidery hoop (Space/E in range — a
+1.25s cross-stitch ceremony sews a ring around Toots) and autosaving on
+every gutter/door crossing. Boot restores room, position, flags, and time.
+**Clear as Day (88.3) is live on F:** a crisp oscilloscope wavefront — a
+sine ring, no soft blobs — expands in the ground plane, rim-lights every
+interactive thing it crosses (secrets get a lingering neon cross-stitch X;
+hoops and doors get a courtesy flash), and punches the darkness open as it
+goes, so at night the spell literally carries daylight. The frequency-dial
+HUD seeded bottom-left: casting slings the needle up the band and the
+cooldown is the needle tuning back home to 88.3. Remaining M1: Tuning
+Stone, Archive mirror-rooms.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -42,10 +57,11 @@ by browsers without HTTP. The page shows a red warning if the engine doesn't
 boot within 1.5 s. This burned us once already.
 
 **Controls:** WASD/arrows move · Space/J attack (3-hit combo) · Shift/K dash ·
-N skip time of day · **P toggle Sunday Ink print style** · walk off the east/west
-edge to cross to the next room. **Near an NPC, Space/E talks instead of
-attacking; J always attacks** (the escape hatch). During dialogue any of
-Space/E/J advances: finish the typewriter → next page → close.
+**F cast Clear as Day** · N skip time of day · **P toggle Sunday Ink print
+style** · walk off the east/west edge to cross to the next room. **Near an
+NPC, Space/E talks instead of attacking; near a hoop (and no NPC), Space/E
+stitches a save; J always attacks** (the escape hatch). During dialogue any
+of Space/E/J advances: finish the typewriter → next page → close.
 
 ## File map
 
@@ -78,8 +94,12 @@ games/TootsQuest/
                 # seeded per-letter jitter, starburst polygon for big words
     npc.js      # session 4: NPC defs + entity (Jessie, Old Wren), dialogue
                 # state machine, speech-balloon + talk-hint rendering
-    state.js    # session 4: worldState flags (setFlag/getFlag) — grows into
-                # the localStorage save at M1
+    state.js    # worldState flags (setFlag/getFlag) + the save file
+                # (session 6): saveGame/loadGame/wipeSave on localStorage
+                # tootsquest_save_v1 — flags, room id, position, time of day
+    spells.js   # session 6: the Frequency Dial system seeded with Clear as
+                # Day — waveform pulse, sonar pings on interactables,
+                # spellLights() for the darkness pass, drawFreqDial HUD
 ```
 
 ## Decisions made across sessions (now canon)
@@ -206,6 +226,25 @@ games/TootsQuest/
   counter puts them out of talk range. Keep NPCs reachable, not staged.
 - **Interior HUD flips to ink** — the HUD text is cream and interiors are
   mostly cream paper; drawHud picks ink when room.interior.
+- **The save lands on the stitch's first frame; the ceremony is fiction**
+  (session 6, PRD §2.6). A mite interrupting the 1.25s animation breaks
+  the moment, never the progress — same invuln>0.85 check dialogue uses.
+  Input-locked like dialogue (EMPTY_KEYS); the world keeps living.
+- **Crossings autosave, hoops save with ceremony** — both call the same
+  doSave(). The hoop is the fiction, the gutter is the guarantee.
+- **Spell light is crisp, never soft** (session 6, the "crisp and
+  intentional" directive): Clear as Day is stroked waveform rings and
+  hairline calibration circles, zero radial-gradient blobs. Soft additive
+  gradients stay reserved for fire (torches/lamps). Future spells follow
+  suit: a spell is a *signal*, drawn like the oscilloscope it came from.
+- **The ground-plane law extends to light** (gotcha 9's corollary): the
+  spell's darkness-punch holes pass `sy: 0.55` and light.js squashes the
+  gradient — a round hole under an elliptical wavefront reads as a
+  spotlight, not a spell.
+- **Pings are the palette law made visible:** the wavefront rim-lights
+  interactables in neon as it crosses their distance, sonar-style. Secrets
+  get a lingering cross-stitch X (needlepoint motif = X marks the spot);
+  targets are gathered per cast in main.js castSpell().
 
 ## Hard-won gotchas (do not re-learn these)
 
@@ -253,7 +292,13 @@ games/TootsQuest/
    floated over the canopy. Check new NPC spots against tree positions
    (canopy spans roughly ±35px, centered above the trunk), not just the
    collision grid.
-13. **A bare moveCircle chase pins entities on walls.** Axis-separated
+13. **A restored save can spawn Toots against a world edge — and dogs are
+   constructed relative to him.** Loading a save at x=22 built Doc at
+   x=-18, outside the collision bounds: gotcha 5's permanent brick, now at
+   boot. Boot placement goes through placeDog (clamp + blocked-fallback)
+   right after construction. Anything else ever constructed relative to
+   the player must do the same.
+14. **A bare moveCircle chase pins entities on walls.** Axis-separated
    movement only slides if the free axis has a component; a dead-on
    approach (dy≈0 into a vertical rock face) sticks forever. Both dogs hit
    this on the hearth boulders at (672–736, 224–288) chasing targets east
@@ -279,6 +324,11 @@ __TQ.setMisreg(mx, my=0)          // live-tune plate drift (rebakes grounds)
 __TQ.setTime(0.96)                // 0=midnight, 0.5=noon, 0.72=golden hour
 __TQ.getTime()
 __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
+__TQ.cast()                       // cast Clear as Day from Toots (session 6)
+__TQ.save()                       // force a save; returns the parsed save
+__TQ.wipe()                       // delete the save AND clear live flags
+__TQ.stitch                       // getter — active stitch ceremony or null
+__TQ.spell                        // getter — spellState ({cooldownT})
 ```
 
 ## Verified in session 4
@@ -340,6 +390,35 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 - Night: lit windows spill light onto the street (per-building window
   lights), lamps keep interiors livable, torch pools unchanged.
 
+## Verified in session 6 (scripted __TQ.step + screenshots, both styles)
+
+- Boot clean, no console errors; perf 0.7–1.0 ms painted / ~1.3 ms print
+  with a live pulse on screen (budget ~16 ms).
+- 3-hit combo regression passes post-integration (hp 3→2→1→0, slain_mite).
+- Hoop stitch: Space near the lane hoop starts the ceremony (player
+  input-locked, faces the hoop), save written on frame one with correct
+  room/x/y/flags/tDay, ceremony runs the full 1.25s, "× STITCHED" HUD cue.
+  At the hearth hoop the first test got interrupted by the mite spawn 61px
+  away (session 5's lesson re-learned: park test subjects away from mites)
+  — which also proved the interrupt path: ceremony broke, save survived.
+- Autosave: east crossing lane→hearth wrote roomId hearth, entry-point
+  position, flags intact.
+- Full round-trip: location.reload() restored room, position (22,290),
+  flags, and time of day; dogs placed in-bounds (after fixing gotcha 13,
+  which this exact test caught: Doc constructed at x=-18, bricked; now
+  placeDog clamps at boot — re-verified Doc chases 280px across the room
+  and sits).
+- Clear as Day, screenshot-verified in both styles: waveform front + echo
+  ring + calibration hairlines, all ground-plane ellipses; secret ping X at
+  the green's stone-ring center; print mode adds radial ink dashes chasing
+  the front. At deep night the pulse punches an expanding ellipse of
+  daylight through the darkness pass (light.js sy squash) — the spell
+  clears the dark, as named.
+- Routing regressions: second F blocked during cooldown, needle returns and
+  station dot re-lights after 5s; F dead during dialogue; J attacks beside
+  a hoop; Space stitches beside a hoop with no NPC near; Jessie's dialogue
+  unaffected (talked_jessie sets).
+
 ## Regression baseline (sessions 1–3, re-verified where touched)
 
 - Everything from the M0 baseline still passes: sword combo (3 hits kill a
@@ -373,11 +452,15 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 
 ## Known gaps / not built yet
 
-- No audio (WebAudio oscillator SFX planned — fits the frequency theme).
-- No hearts/death for the player (knockback only).
-- No save/load, no spells, no Archive rooms yet. Hoops are scenery until
-  the save system lands (M1 item 4) — their neon stitch already promises
-  interactivity.
+- No audio (WebAudio oscillator SFX planned — fits the frequency theme;
+  the spell cast is begging for an oscillator sweep).
+- No hearts/death for the player (knockback only) — which means the save
+  has nothing to restore on death yet; wire that when hearts land.
+- No Archive rooms yet; Clear as Day's true job (revealing Archive geometry
+  in the Hollow) is stubbed as secret/hoop/door pings until the mirror
+  exists. No mana/Signal Strength — cooldown stands in for it.
+- The frequency dial HUD shows one station; the hold-to-tune interaction
+  (PRD §4.3) arrives when there are two spells to choose between.
 - Dialogue is linear pages only — no choices, no quest hooks yet.
 - Jessie/Wren still use skin-tone faces; only Toots got the ink-figure
   treatment (he's unique on the cover art too — probably correct, but
@@ -389,22 +472,22 @@ __TQ.step(n)                      // run n exact 60Hz frames (works hidden)
 - Not wired into the site: no `/tootsquest` rewrite in vercel.json, no share
   page, no portfolio card. Do this at M1 or M2, not before.
 
-## Next session: continue M1 (PRD §6)
+## Next session: finish M1 (PRD §6)
 
-Session 5 knocked out queue item 1 (Hearthside rooms — six rooms, two of
-them interiors, plus buildings/doors/hoops/comfy-compass). Queue:
+Sessions 5–6 cleared the queue except its headliner. What remains is the
+one item that was deliberately deferred for concept art:
 
 1. **Tuning Stone + 3 Archive mirror-rooms** — phosphor/amber palette,
    scanlines, darkness-first lighting (light.js's pass, tuned harder).
    The green's stone ring (secret at its center) is the Tuning Stone's
    intended site. Decide: does the Archive keep the paper gutter, or
    transition differently (microfiche frames? fade)? — open question from
-   PRD §6.
-2. **Clear as Day spell** (88.3) + the frequency-dial HUD seed.
-3. **localStorage save** (`tootsquest_save_v1`): worldState flags (already
-   the single source of truth in state.js), room id, autosave on gutter
-   crossings (natural save point). Wire it to the hoops: saving at a hoop
-   is the fiction (PRD §2.6), autosave on crossings is the safety net.
+   PRD §6. **Concept art first:** `CONCEPT_SKETCHBOOK.md` batch 1 (Tuning
+   Stone, Archive-as-microfiche, the crossing moment) exists precisely to
+   settle these before code. Check the sketchbook's "Picks and decisions"
+   log — if Charles has filled it in, build to it. Clear as Day's reveal
+   hook is waiting: when mirror-rooms exist, add Archive geometry to
+   castSpell()'s target gathering.
 
 Also queued, lower priority:
 - **Dog follow-ups** (canon migration itself is DONE — both dogs are in):

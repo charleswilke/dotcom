@@ -127,8 +127,10 @@ games/TootsQuest/
   the back instead of swinging out behind — tip sways over the rump with
   the wag, in both poses). **Doc is full shih tzu: defaults + bean 3.5 +
   tailCurl** — per Charles, "that signature curve to their midsection" and
-  the curl over the back. Astro is the poodle: lift 4.5, bodyW 9, legW 2.5,
-  topknot, straight tail. Curved barrels and curled tails use the
+  the curl over the back. Astro is the shih tzu/poodle mix (breed corrected
+  by Charles July 2026 — the topknot is GONE; `topknot` stays a grammar
+  dial for future dogs): lift 4.5, bodyW 9, legW 2.5, straight tail.
+  Curved barrels and curled tails use the
   `curvedCapsule` primitive in ink.js (same plate rules as capsule).
 - **The scout stops inventing adventures when Toots settles** (player.idleT
   > 2.5 stops wander re-targeting). Without this the ~1.5s wander clock
@@ -358,8 +360,9 @@ __TQ.spell                        // getter — spellState ({cooldownT})
   pinned both dogs is fixed by `seek()` — re-tested the exact pinning
   scenario (player at 800,230, dogs west of the rocks) and both arrive.
   Gutter crossings carry both dogs, clamped in-bounds, both ways.
-- Body types: Astro visibly lanky standing AND sitting (sits tall, topknot
-  clears the head); Doc unchanged. Both dogs sit within ~3.5s of Toots
+- Body types: Astro visibly lanky standing AND sitting (sits tall; the
+  topknot verified here was removed in session 6 — he's a shihpoo); Doc
+  unchanged. Both dogs sit within ~3.5s of Toots
   idling (frame 210 from a cold approach), Doc first.
 - Facing telegraph (post-headphone-removal), screenshot-verified: pupils
   track E/S, whites shrink to back-of-head at N. Continuous on diagonals

@@ -74,8 +74,9 @@ const doc = new Dog(player.x - 40, player.y + 10, {
 const astro = new Dog(player.x + 34, player.y + 22, {
   body: PALETTE.dogAstro, chest: PALETTE.dogAstroChest, collar: PALETTE.orange,
   earLen: 8.5, tailFreq: 13, size: 1, mood: 'happy', behavior: 'scout',
-  // Poodle build: up on long thin legs, slim barrel, head high, topknot.
-  lift: 4.5, bodyW: 9, legW: 2.5, topknot: true,
+  // Shihpoo build (corrected July 2026 — he's a shih tzu/poodle mix, no
+  // topknot): up on long thin legs, slim barrel, head carried high.
+  lift: 4.5, bodyW: 9, legW: 2.5,
 });
 // Boot placement goes through the same clamp as gutter crossings (gotcha 5):
 // a restored save can spawn against a world edge, and a dog constructed out

@@ -165,10 +165,10 @@ Current revised prompt:
 > determined scowl, dark collar, curved pot-bellied body and a tail pluming
 > up over his back, latched fearlessly onto a rusty windup junk beetle far
 > bigger than his courage should allow, springs and bolts flying off it;
-> and a lanky charcoal poodle-mix with a topknot, huge happy grin and an
-> orange collar at the edge of the frame, blissfully ignoring the battle,
-> mid-dig with dirt flying, having just unearthed something that glints
-> faintly teal. Action lines and dust puffs everywhere, tilted dutch angle,
+> and a lanky, scruffy charcoal shih tzu/poodle mix with a huge happy grin
+> and an orange collar at the edge of the frame, blissfully ignoring the
+> battle, mid-dig with dirt flying, having just unearthed something that
+> glints faintly teal. Action lines and dust puffs everywhere, tilted dutch angle,
 > low camera looking up the hillside, deep diagonal composition. In the far
 > background where the path crests the ridge, the world is un-tuning: the
 > printing itself fails: color drains away leaving raw uninked line art,

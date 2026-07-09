@@ -83,7 +83,18 @@ tuning), moss, the cream cross-stitch band from the render, and its own
 darkness-punch light after dark. The green also got a lighter clearing
 patch (authored `decor.patches`, baked into the ground) and a path that
 now leads to the monument. Scenery only — the world-flip mechanic is
-still M1's headliner. Remaining M1: Tuning Stone *mechanic* + Archive
+still M1's headliner. **The depth pass round two (same session, Charles:
+"everything feels a little flat, the buildings could have some sides")
+extended the extrusion to the rest of the vocabulary:** buildings turn a
+west shoulder to the sun — an oblique shaded side wall (E=11, D=15) and
+a west roof hip slope (RE=10, RD=9), drawn before the front faces so the
+front outlines cover the seams, plus an under-eave shadow band across
+the front wall; trees got real volume — highlights moved to the sunward
+(upper-right) side per the one-sun law, a canopy shade lobe clipped to
+the lower-left (painted slate in Living Ink, the halftone screen in
+Sunday Ink — the print-mode shade ellipse moved lower-left to match),
+and a slate edge-shade down the trunk's west side (cylinder read, same
+as the stones' facets). Remaining M1: Tuning Stone *mechanic* + Archive
 mirror-rooms.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
@@ -333,6 +344,14 @@ games/TootsQuest/
 - **Inline contact shadows are gone** — drawTree/drawBuilding/drawHoop no
   longer draw their own base ellipse; drawShadows owns all static shadows.
   Anything new and static needs an entry there, or it will float.
+- **Everything vertical turns its west shoulder to the sun** (session 9
+  round two): buildings wear an oblique side wall + west roof hip (shaded
+  slate in paint, halftone in print), trees carry a canopy shade lobe
+  lower-left, sunward highlights upper-right, and a trunk edge shade.
+  Shaded faces are drawn FIRST so the front faces' ink covers the seams.
+  Future verticals (dungeon walls, towers, the Cathedral) follow suit:
+  front face + shaded west face + sunward rim is the house extrusion
+  grammar now.
 - **Standing stones are decor entities, not R tiles** (session 9): the
   green's ring is `decor.stones` — y-sorted (walk behind them), circle
   colliders r=11, per-instance seeded shape/lean/taper/tone/cracks/moss
@@ -531,6 +550,13 @@ __TQ.spell                        // getter — spellState ({cooldownT})
   in real time between preview eval calls — mites knocked Toots through
   TWO gutters (green→hearth→meadow) while I was reading screenshots.
   Pin the player, park the mites, and pin tDay before every shot.
+- Round two (building sides + tree volume), screenshot-verified: shop at
+  2.4× — west wall + orange hip + under-eave band read, seams covered by
+  the front faces' ink; home in the lane — slate hip + chimney coexist;
+  hearth at midnight — volume survives the darkness pass, window spill
+  unchanged; print mode — all new shaded faces take halftone screens;
+  green wide shot — trees rounder, monument unchanged. 59–60 fps,
+  0.9 ms/frame at the full hearth scene. No console errors anywhere.
 
 ## Verified in session 8 (title screen)
 

@@ -596,9 +596,11 @@ function treeParams(tree) {
     inkW: 4 + rnd() * 1.6,
     swayAmp: 0.8 + rnd() * 0.5,
     ph: rnd() * TAU,
+    // Highlights live on the sunward (upper-right) side; the one sun is
+    // canon now (session 9), and mixed-side highlights read flat.
     hl: [
-      [(-8 + rnd() * 4) * scale, topY - (4 + rnd() * 3) * scale, (6 + rnd() * 2) * scale],
-      [(7 + rnd() * 4) * scale, topY + (1 + rnd() * 4) * scale, (4 + rnd() * 1.5) * scale],
+      [(5 + rnd() * 5) * scale, topY - (5 + rnd() * 3) * scale, (6 + rnd() * 2) * scale],
+      [(10 + rnd() * 4) * scale, topY + (1 + rnd() * 4) * scale, (4 + rnd() * 1.5) * scale],
     ],
   };
   return tree._p;
@@ -612,24 +614,33 @@ function drawTree(tree, time) {
   const circles = p.blobs.map(([ox, oy, r]) => [bx + ox, tree.y + oy, r]);
   capsule(ctx, tree.x, tree.y, tree.x + p.leanX + sway * 0.5, tree.y - p.trunkH,
     p.trunkW, TRUNK_TINTS[p.tone], PALETTE.ink, 2.2);
+  // The trunk turns away from the sun on its west edge — a slate edge
+  // shade, same cylinder read as the stones' facets.
+  capsule(ctx, tree.x - p.trunkW * 0.24, tree.y - 1,
+    tree.x + p.leanX + sway * 0.5 - p.trunkW * 0.24, tree.y - p.trunkH + 3,
+    p.trunkW * 0.36, 'rgba(44,79,124,0.30)', null);
   blobCircles(ctx, circles, CANOPY_TINTS[p.tone], p.inkW);
-  // Halftone shading on the canopy's under-side (print mode only): the
-  // pattern is page-anchored, so the canopy sways through the dots.
+  // Canopy shade on the un-sunned lower-left: painted slate in Living
+  // Ink, a halftone screen in Sunday Ink (page-anchored, so the canopy
+  // sways through the dots).
+  ctx.save();
+  ctx.beginPath();
+  for (const [x, y, r] of circles) {
+    ctx.moveTo(x + r, y);
+    ctx.arc(x, y, r, 0, TAU);
+  }
+  ctx.clip();
   if (PRINT.on) {
-    ctx.save();
-    ctx.beginPath();
-    for (const [x, y, r] of circles) {
-      ctx.moveTo(x + r, y);
-      ctx.arc(x, y, r, 0, TAU);
-    }
-    ctx.clip();
     ctx.globalAlpha = 0.45;
     ctx.fillStyle = halftone(ctx, 'shade');
-    ctx.beginPath();
-    ctx.ellipse(bx + 6, tree.y + p.topY + 9 * p.scale, 24 * p.scale, 17 * p.scale, 0, 0, TAU);
-    ctx.fill();
-    ctx.restore();
+  } else {
+    ctx.fillStyle = 'rgba(44,79,124,0.20)';
   }
+  ctx.beginPath();
+  ctx.ellipse(bx - 7 * p.scale, tree.y + p.topY + 10 * p.scale,
+    24 * p.scale, 16 * p.scale, 0.25, 0, TAU);
+  ctx.fill();
+  ctx.restore();
   for (const [ox, oy, r] of p.hl) {
     inkCircle(ctx, bx + ox, tree.y + oy, r, CANOPY_LIGHTS[p.tone], null);
   }
@@ -744,6 +755,29 @@ function drawBuilding(b, time) {
   const shop = b.kind === 'shop';
   const dark = skyState(tDay).dark;
 
+  // The west face — the building turns a shoulder to the sun. Extrusion,
+  // not projection (same trick as the standing stones): an oblique side
+  // wall in shade, drawn first so the front wall covers the seam.
+  const E = 11, D = 15;
+  const side = (c) => {
+    c.beginPath();
+    c.moveTo(x, y);
+    c.lineTo(x - E, y - D);
+    c.lineTo(x - E, y - h - D + 3);
+    c.lineTo(x, y - h + 3);
+    c.closePath();
+  };
+  inkShape(ctx, side, PALETTE.cream, PALETTE.ink, 3);
+  side(ctx);
+  if (PRINT.on) {
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = halftone(ctx, 'shade');
+  } else {
+    ctx.fillStyle = 'rgba(44,79,124,0.30)';
+  }
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
   // Wall + timber framing.
   inkShape(ctx, (c) => {
     c.beginPath();
@@ -758,10 +792,31 @@ function drawBuilding(b, time) {
   ctx.moveTo(x + 4, y - h + 9); ctx.lineTo(x + w - 4, y - h + 9);
   ctx.stroke();
 
-  // Gabled roof with an overhang and a couple of shingle seams.
+  // Gabled roof with an overhang and a couple of shingle seams. The west
+  // hip slope comes first — the roof's own shaded shoulder — then the
+  // front slope covers the shared eave line.
   const ridgeY = y - h - 34;
   const rlx = x + w / 2 - 26;
   const rrx = x + w / 2 + 26;
+  const RE = 10, RD = 9;
+  const roofSide = (c) => {
+    c.beginPath();
+    c.moveTo(x - 12, y - h + 2);
+    c.lineTo(rlx, ridgeY);
+    c.lineTo(rlx - RE, ridgeY - RD);
+    c.lineTo(x - 12 - RE, y - h + 2 - RD);
+    c.closePath();
+  };
+  inkShape(ctx, roofSide, shop ? PALETTE.orange : PALETTE.slate, PALETTE.ink, 3);
+  roofSide(ctx);
+  if (PRINT.on) {
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = halftone(ctx, 'shade');
+  } else {
+    ctx.fillStyle = 'rgba(44,79,124,0.35)';
+  }
+  ctx.fill();
+  ctx.globalAlpha = 1;
   inkShape(ctx, (c) => {
     c.beginPath();
     c.moveTo(x - 12, y - h + 2);
@@ -779,6 +834,9 @@ function drawBuilding(b, time) {
     ctx.lineTo(lerp(rrx, x + w + 12, t2) - 4, yy);
     ctx.stroke();
   }
+  // The overhang shades the top of the front wall — the under-eave band.
+  ctx.fillStyle = 'rgba(34,26,86,0.10)';
+  ctx.fillRect(x + 3, y - h + 11, w - 6, 6);
   if (!shop) {
     inkShape(ctx, (c) => {
       c.beginPath();

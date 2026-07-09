@@ -272,7 +272,11 @@ Concretely:
   dedicated ground pass drawn before the y-sorted cast (halftone screens
   stand in for the slate in Sunday Ink). The moving cast keeps shadows
   underfoot — grounded readability beats fake sun for anything that
-  fights. Depth here is light and height, never a new camera.
+  fights. Everything vertical turns a west shoulder to the sun: buildings
+  wear an oblique side wall and a west roof hip, trees a shade lobe and a
+  trunk edge, stones a facet — shaded faces draw first so the front
+  faces' ink covers the seams. Depth here is light and height, never a
+  new camera.
 - **Painted light as composite ops.** A dedicated lighting pass using
   `globalCompositeOperation`:
   - Overworld: a full-canvas time-of-day tint (`multiply` rect whose color lerps

@@ -356,7 +356,21 @@ the next session inherits conclusions instead of a folder of images.
   (the open question from the canon check, closed by the keeper). This
   image is the style target for the future trailer (the trailer-as-lore
   exception) and the reference anchor for future character prompts.
-- Tuning Stone: —
+- **Tuning Stone: previz in hand, translated in-engine (July 2026,
+  session 9).** Charles generated a forest-grove previz (kept outside the
+  repo, per the sketchbook rule) and it settled most of item 1's
+  questions: **monolith with a dial face** (not a cabinet radio), moss
+  and brass-gone-verdigris weathering, the **cream cross-stitch banding
+  at the base** (the render drew the needlepoint lattice unprompted),
+  neon confined to the needle, Toots-to-Tuner scale ≈ 1:5, and the ring
+  of standing stones as the staging. The bigger gift was indirect: the
+  render's *camera* raised the isometric question, and the answer became
+  the depth pass (PRD §3.1, "Depth by extrusion") — contact shadows, one
+  sun, side facets. The previz's depth turned out to be altitude and
+  light, not projection, so the render fed the whole world, not just the
+  monument. **Still open:** the world-flip staging (what the crossing
+  looks like AT the stone), the dial's interaction reading (needle at
+  night is built; hold-to-tune is not), and the Archive-side Tuner.
 - Archive look: —
 - Crossing: —
 - The Curator: —

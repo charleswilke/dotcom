@@ -172,9 +172,11 @@ const ROOM_DEFS = {
     neighbors: { E: 'hearth' },
   },
 
-  // The green north of the square — a quiet grove with a ring of standing
-  // stones. The Tuning Stone will rise at its center (M1 item 2); for now
-  // Astro already smells something in there.
+  // The green north of the square — the grove of the Great Tuner. The
+  // stone ring is now real standing stones (y-sorted, walk behind them)
+  // around the Tuning Stone previz at its center — the depth pass built
+  // from the July 2026 previz render: contact shadows, side facets, and
+  // a monument with real height. The path now leads to the monument.
   green: {
     seed: 211,
     layout: [
@@ -182,15 +184,15 @@ const ROOM_DEFS = {
       'GGWWWWWGGGGGGGGGGGGGGGGGGGGGGG',
       'GWWWWWWWGGGGGGGGGGGGGGGGGGGGGG',
       'GGWWWWWGGGGGGGGGGGGGGGGGGGGGGG',
-      'GGGWWGGGGGGGGGGGGGRRRRGGGGGGGG',
-      'GGGGGGGGGGGGGGGGGRGGGGRGGGGGGG',
-      'GGGGGGGGGGGGGGGGGRGGGGRGGGGGGG',
-      'GGGGGGGGGGGGGGGGGRGGGGRGGGGGGG',
-      'GGGGGGGGGGGGGGGGGGRGGRGGGGGGGG',
+      'GGGWWGGGGGGGGGGGGGGGGGGGGGGGGG',
       'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
       'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
-      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
-      'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGPPGGGGGGGGGG',
+      'GGGGGGGGGGGGGGGGGGPPGGGGGGGGGG',
+      'GGGGGGGPPPPPPPPPPPPPGGGGGGGGGG',
+      'GGGGGGGPPPPPPPPPPPPPGGGGGGGGGG',
       'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
       'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
       'GGGGGGGPPGGGGGGGGGGGGGGGGGGGGG',
@@ -199,13 +201,29 @@ const ROOM_DEFS = {
     decor: {
       trees: [
         { x: 60, y: 200 }, { x: 170, y: 190 }, { x: 420, y: 90 },
-        { x: 560, y: 160 }, { x: 870, y: 90 }, { x: 910, y: 260 },
+        { x: 460, y: 110 }, { x: 870, y: 90 }, { x: 910, y: 260 },
         { x: 300, y: 300 }, { x: 520, y: 400 }, { x: 820, y: 440 },
       ],
       torches: [{ x: 230, y: 420 }],
       npcs: [],
-      // Dead center of the stone ring. Something is buried here.
-      secret: { x: 640, y: 200 },
+      // The ring of standing stones, open to the south — the previz
+      // render's composition. Each stone seeds its own shape/lean/tone.
+      stones: [
+        { x: 699, y: 130 }, { x: 744, y: 160 }, { x: 758, y: 200 },
+        { x: 737, y: 239 }, { x: 542, y: 238 }, { x: 522, y: 193 },
+        { x: 580, y: 130 },
+      ],
+      // The Great Tuner previz (M1 item: the Tuning Stone). Scenery until
+      // the world-flip lands, but it already glows like the interactive
+      // thing it will become.
+      tuner: { x: 640, y: 188 },
+      // A lighter clearing under the monument, like the render's mound.
+      patches: [
+        { x: 640, y: 196, rx: 195, ry: 122, color: 'rgba(194,207,126,0.40)' },
+        { x: 640, y: 196, rx: 122, ry: 80, color: 'rgba(194,207,126,0.30)' },
+      ],
+      // Buried at the foot of the Tuner. Astro knows.
+      secret: { x: 640, y: 252 },
       miteSpawns: [
         { x: 200, y: 300 }, { x: 500, y: 430 }, { x: 780, y: 140 },
       ],
@@ -332,7 +350,12 @@ function buildRoom(id, def) {
     ...(d.trees || []).map(t => ({ x: t.x, y: t.y, r: 9 })),
     ...(d.torches || []).map(t => ({ x: t.x, y: t.y, r: 6 })),
     ...(d.hoops || []).map(h => ({ x: h.x, y: h.y, r: 6 })),
+    // Standing stones block at the base; their height is drawn, not walked.
+    ...(d.stones || []).map(s => ({ x: s.x, y: s.y, r: 11 })),
   ];
+  if (d.tuner) {
+    staticColliders.push({ x: d.tuner.x, y: d.tuner.y - 4, r: 26 });
+  }
   if (d.banner) {
     staticColliders.push({ x: d.banner.x, y: d.banner.y, r: 7 });
   }
@@ -608,6 +631,15 @@ function bakeGround(r) {
     g.beginPath();
     g.arc(rnd() * WORLD_W, rnd() * WORLD_H, 40 + rnd() * 90, 0, TAU);
     g.fillStyle = rnd() < 0.5 ? 'rgba(141,158,78,0.25)' : 'rgba(194,207,126,0.18)';
+    g.fill();
+  }
+
+  // Authored ground patches (room data) — the lighter clearing under the
+  // Great Tuner, painted before the flecks so the texture reads through.
+  for (const p of r.decor.patches || []) {
+    g.beginPath();
+    g.ellipse(p.x, p.y, p.rx, p.ry, 0, 0, TAU);
+    g.fillStyle = p.color;
     g.fill();
   }
 

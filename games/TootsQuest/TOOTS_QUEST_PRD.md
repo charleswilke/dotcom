@@ -14,8 +14,12 @@ speech-balloon dialogue (§4.6), the `worldState` flags object (§2.5, §5),
 the hero redesigned to the cover art (§2.4), the six-room Hearthside with
 interiors (session 5), and — session 6 — the save system (hoop stitching +
 crossing autosave, §2.6) and the first spell, Clear as Day, with the
-frequency-dial HUD seed (§4.3). Remaining M1: the Tuning Stone and the
-Archive mirror-rooms, gated on concept art (`CONCEPT_SKETCHBOOK.md`).
+frequency-dial HUD seed (§4.3). Session 9 (the depth pass) translated the
+Great Tuner previz in-engine: the monolith stands in the green's stone
+ring with directional shadows and extruded standing stones (§3.1, "Depth
+by extrusion"). Remaining M1: the Tuning Stone *mechanic* (world-flip)
+and the Archive mirror-rooms, gated on concept art
+(`CONCEPT_SKETCHBOOK.md` batch 1, items 2–3).
 See §6 and `SESSION_HANDOFF.md` for implementation notes.
 
 ---
@@ -257,6 +261,18 @@ Concretely:
   rocks: size, squash, tone, cell jitter, 0–2 cracks). Deterministic — a
   tree is always the same tree — and cached, so it costs nothing per frame.
   This is the shape-grammar promise (§3.1, characters) applied to flora.
+- **Depth by extrusion, one sun (added session 9, from the Great Tuner
+  previz).** The 3/4 projection is law — it's what keeps input axes,
+  screen axes, and combat hitboxes agreeing — but the world gets altitude:
+  big verticals (standing stones, the Tuner) wear a shaded facet on the
+  un-sunned side and a rim light on the sunward edge, clipped inside the
+  silhouette, while collision stays a circle at the base. One light
+  direction for the whole world (sun upper right): every static object
+  casts a soft slate shadow down-left plus a dark contact core, in a
+  dedicated ground pass drawn before the y-sorted cast (halftone screens
+  stand in for the slate in Sunday Ink). The moving cast keeps shadows
+  underfoot — grounded readability beats fake sun for anything that
+  fights. Depth here is light and height, never a new camera.
 - **Painted light as composite ops.** A dedicated lighting pass using
   `globalCompositeOperation`:
   - Overworld: a full-canvas time-of-day tint (`multiply` rect whose color lerps

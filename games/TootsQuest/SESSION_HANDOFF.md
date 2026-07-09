@@ -5,7 +5,7 @@ Read this (and `TOOTS_QUEST_PRD.md`) before touching the code. The PRD is the
 `CONCEPT_SKETCHBOOK.md` (new, session 6) holds the Higgsfield generator
 prompts for upcoming visual development — the sketchbook rule lives there.
 
-## Current state (end of session 8, July 2026)
+## Current state (end of session 9, July 2026)
 
 **M0 (Living Ink renderer proof) passed its gate in session 1. M0.5 (Sunday
 Ink) was added in session 2:** a second, toggleable visual style — Sunday
@@ -65,7 +65,26 @@ medallion, and the Static eating the print off the far ridge with the
 faceless dot-copy standing in it. Everything breathes (wind, wag, churn,
 key-spin); any key lifts the cover page off the live first frame of the
 game (0.85s eased slide). The game does not simulate while the title is
-up. Remaining M1: Tuning Stone, Archive mirror-rooms.
+up. **Session 9 was the depth pass**, built from Charles's Great Tuner
+previz render (see `CONCEPT_SKETCHBOOK.md`, Tuning Stone log). The camera
+question the render raised ("should the play cam go isometric?") was
+answered with **extrusion, not projection**: the projection is untouched —
+what the render actually had was altitude and one consistent light. Three
+systems landed: (1) a **directional shadow pass** — sun from the upper
+right, every static object casts a soft slate shadow down-left (halftone
+in Sunday Ink, like the boulders) plus a dark contact core, drawn on the
+ground before the y-sorted cast; (2) the green's stone ring became
+**real standing stones** — y-sorted entities with a shaded side facet,
+sunward rim light, seeded lean/taper/tone, walk-behind-able, colliders at
+the base; (3) **the Great Tuner previz stands at the ring's center** —
+168px monolith, verdigris dial with ticks and hairlines, a living neon
+needle (breathes around its station, trembles like something's still
+tuning), moss, the cream cross-stitch band from the render, and its own
+darkness-punch light after dark. The green also got a lighter clearing
+patch (authored `decor.patches`, baked into the ground) and a path that
+now leads to the monument. Scenery only — the world-flip mechanic is
+still M1's headliner. Remaining M1: Tuning Stone *mechanic* + Archive
+mirror-rooms.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -295,6 +314,40 @@ games/TootsQuest/
   interactables in neon as it crosses their distance, sonar-style. Secrets
   get a lingering cross-stitch X (needlepoint motif = X marks the spot);
   targets are gathered per cast in main.js castSpell().
+- **Depth is extrusion, not projection** (session 9, from the Great Tuner
+  previz). The 3/4 camera stays: input axes = screen axes = hitbox axes is
+  what makes lining up strikes comfortable, and a true isometric/perspective
+  flip would re-found the engine. What the previz actually had was height:
+  side facets, one sun, grounded shadows. Big verticals get a shaded facet
+  on the un-sunned side + a rim light on the sunward edge, clipped inside
+  the silhouette; collision stays a circle at the base.
+- **One sun, upper right, for the whole world** (session 9): every static
+  object shadows down-left via the drawShadows pass — soft slate
+  (`rgba(44,79,124,0.30)`) in paint, the halftone 'shade' screen in print —
+  plus a darker contact core at the base. The pass draws after the ground,
+  BEFORE tufts/flowers and the y-sorted cast, so grass pokes up through
+  shadows and nothing ever shadows over a character. **The moving cast
+  keeps its shadows underfoot on purpose** (the previz does this too):
+  combat positions must stay unambiguous. Interiors skip the pass (lamps
+  own the light) except a small anchor under standing hoops.
+- **Inline contact shadows are gone** — drawTree/drawBuilding/drawHoop no
+  longer draw their own base ellipse; drawShadows owns all static shadows.
+  Anything new and static needs an entry there, or it will float.
+- **Standing stones are decor entities, not R tiles** (session 9): the
+  green's ring is `decor.stones` — y-sorted (walk behind them), circle
+  colliders r=11, per-instance seeded shape/lean/taper/tone/cracks/moss
+  via stoneParams (same coordinate-seeding trick as trees). The old baked
+  boulders remain for R tiles elsewhere; use standing stones when
+  something should have height, boulders when it's furniture.
+- **The Tuner previz is scenery with a promise** (session 9): collider at
+  its base, neon needle (palette law: it WILL be interactive), its own
+  light in the darkness pass, drawn from `decor.tuner` in the green. The
+  world-flip mechanic, dial interaction, and Archive staging are still
+  open — previz translation ≠ the Tuning Stone feature.
+- **Authored ground patches** (session 9): `decor.patches` (x/y/rx/ry/
+  color ellipses) bake into the ground after the tonal wash, before the
+  flecks — used for the green's lighter clearing under the monument.
+  Cheap staging tool for future landmarks.
 
 ## Hard-won gotchas (do not re-learn these)
 
@@ -445,6 +498,40 @@ __TQ.spell                        // getter — spellState ({cooldownT})
 - Night: lit windows spill light onto the street (per-building window
   lights), lamps keep interiors livable, torch pools unchanged.
 
+## Verified in session 9 (the depth pass — scripted __TQ.step + screenshots)
+
+- Boot clean, no console errors across every check below; 59–60 fps,
+  ~1.4 ms/frame in the green with the full monument scene, both styles
+  (budget ~16 ms) — the shadow pass is a dozen ellipse fills.
+- Monument composition screenshot-reviewed at 2.3× zoom in BOTH styles:
+  dial overhangs the slab like the render, ticks/hairlines/needle-glow
+  read, stitch band with the one orange X, moss, stone facets + rim
+  lights, halftone shadows in print mode, plate drift horizontal-only.
+- Collision against the new bodies, driven by synthesized key events
+  (they must carry `e.code`, not `e.key` — the input reads code):
+  walking north into the Tuner stops at y=220 (collider 26 + body r),
+  west into the W stone stops at x=544, open-grass control moves freely.
+- 3-hit combo regression: hp 3→2→1→0, slain_mite set. NOTE for future
+  scripted combat: knockback pushes the mite out of the fixed swing
+  spot — close the gap with a few east-walk frames between swings or the
+  third hit whiffs (it did; that's the fight working, not a bug).
+- South gutter crossing green→hearth mid-transition and landing verified
+  (entry 250,110, dogs in-bounds); drawShadows runs inside both sliding
+  panels with no errors.
+- Astro found the RELOCATED green secret (640,252 — the Tuner's foot)
+  through the ring's south gap unprompted during setup (neon "!"
+  screenshot) — reachability confirmed by dog.
+- Clear as Day cast at the monument: cooldown runs, wavefront crosses
+  stones/Tuner/secret, no errors, print mode simultaneously on.
+- Midnight: the Tuner's dial punches its own light pool; flanking stones
+  catch the edge of it; torch pools and Toots' own light unchanged.
+- Shop interior regression: hoop keeps its anchor shadow, no directional
+  pass indoors, Jessie/furniture untouched.
+- Test hygiene note (session 8's lesson, re-learned): the rAF loop runs
+  in real time between preview eval calls — mites knocked Toots through
+  TWO gutters (green→hearth→meadow) while I was reading screenshots.
+  Pin the player, park the mites, and pin tDay before every shot.
+
 ## Verified in session 8 (title screen)
 
 - Title renders at 60.4 fps measured over 90 rAF frames (the static/copy
@@ -567,17 +654,19 @@ __TQ.spell                        // getter — spellState ({cooldownT})
 Sessions 5–6 cleared the queue except its headliner. What remains is the
 one item that was deliberately deferred for concept art:
 
-1. **Tuning Stone + 3 Archive mirror-rooms** — phosphor/amber palette,
-   scanlines, darkness-first lighting (light.js's pass, tuned harder).
-   The green's stone ring (secret at its center) is the Tuning Stone's
-   intended site. Decide: does the Archive keep the paper gutter, or
+1. **Tuning Stone mechanic + 3 Archive mirror-rooms** — phosphor/amber
+   palette, scanlines, darkness-first lighting (light.js's pass, tuned
+   harder). **The Tuner now STANDS in the green (session 9's depth pass
+   — look, moss, dial, ring composition all previz'd in-engine); what
+   remains is making it DO something:** the world-flip interaction, and
+   the Archive side. Decide: does the Archive keep the paper gutter, or
    transition differently (microfiche frames? fade)? — open question from
-   PRD §6. **Concept art first:** `CONCEPT_SKETCHBOOK.md` batch 1 (Tuning
-   Stone, Archive-as-microfiche, the crossing moment) exists precisely to
-   settle these before code. Check the sketchbook's "Picks and decisions"
-   log — if Charles has filled it in, build to it. Clear as Day's reveal
-   hook is waiting: when mirror-rooms exist, add Archive geometry to
-   castSpell()'s target gathering.
+   PRD §6. `CONCEPT_SKETCHBOOK.md` batch 1 items 2–3 (Archive-as-
+   microfiche, the crossing moment) exist precisely to settle that before
+   code. Check the sketchbook's "Picks and decisions" log — if Charles
+   has filled it in, build to it. Clear as Day's reveal hook is waiting:
+   when mirror-rooms exist, add Archive geometry to castSpell()'s target
+   gathering.
 
 Also queued, lower priority:
 - **Dog follow-ups** (canon migration itself is DONE — both dogs are in):

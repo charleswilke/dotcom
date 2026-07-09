@@ -452,6 +452,84 @@ function update(dt, time) {
 
 // --- Decor drawing ---------------------------------------------------------
 
+// The depth pass (July 2026, from the Great Tuner previz render): one light
+// direction for the whole world — sun from the upper right — so every
+// static object casts a soft slate shadow down-left, anchored by a darker
+// contact core at its base. Shadows draw on the ground BEFORE the y-sorted
+// cast, so nothing ever shadows over a character. The moving cast keeps
+// its shadows underfoot (the render does this too — it's what keeps
+// combat positions readable).
+function drawShadows(r, time) {
+  const d = r.decor;
+  if (r.interior) {
+    // Indoors the lamps own the light — just anchor the standing hoop.
+    ctx.fillStyle = 'rgba(34,26,86,0.18)';
+    for (const h of d.hoops || []) {
+      ctx.beginPath();
+      ctx.ellipse(h.x, h.y + 1, 10, 4, 0, 0, TAU);
+      ctx.fill();
+    }
+    return;
+  }
+  const soft = [];   // [x, y, rx, ry]
+  const core = [];
+
+  for (const tr of d.trees || []) {
+    const p = treeParams(tr);
+    const sway = (Math.sin(time * 1.4 + p.ph) * 2.6 +
+                  Math.sin(time * 2.3 + p.ph * 1.7) * 1.1) * p.swayAmp;
+    soft.push([tr.x - 13 * p.scale + sway * 0.4, tr.y + 5, 26 * p.scale, 9.5 * p.scale]);
+    core.push([tr.x, tr.y + 2, 9 * p.scale, 3.2]);
+  }
+  for (const s of d.stones || []) {
+    const p = stoneParams(s);
+    soft.push([s.x - p.h * 0.30, s.y + 3, p.h * 0.46, 6.5]);
+    core.push([s.x, s.y + 1, p.w * 0.55, 2.8]);
+  }
+  if (d.tuner) {
+    soft.push([d.tuner.x - 52, d.tuner.y + 7, 80, 14]);
+    core.push([d.tuner.x, d.tuner.y + 2, 32, 5.5]);
+  }
+  for (const t of d.torches || []) {
+    soft.push([t.x - 7, t.y + 2, 9, 3.2]);
+    core.push([t.x, t.y + 1, 4.5, 1.8]);
+  }
+  for (const h of d.hoops || []) {
+    soft.push([h.x - 9, h.y + 2, 11, 3.8]);
+    core.push([h.x, h.y + 1, 6.5, 2.4]);
+  }
+  if (d.banner) {
+    soft.push([d.banner.x - 8, d.banner.y + 2, 12, 4]);
+    core.push([d.banner.x, d.banner.y + 1, 5, 2]);
+  }
+  for (const b of d.buildings || []) {
+    soft.push([b.x + b.w / 2 - 16, b.y + 5, b.w * 0.58, 9.5]);
+    core.push([b.x + b.w / 2, b.y + 3, b.w * 0.5, 5.5]);
+  }
+
+  ctx.save();
+  // Sunday Ink shades with the halftone screen, like the boulders do.
+  if (PRINT.on) {
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = halftone(ctx, 'shade');
+  } else {
+    ctx.fillStyle = 'rgba(44,79,124,0.30)';
+  }
+  for (const [x, y, rx, ry] of soft) {
+    ctx.beginPath();
+    ctx.ellipse(x, y, rx, ry, -0.12, 0, TAU);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = 'rgba(34,26,86,0.22)';
+  for (const [x, y, rx, ry] of core) {
+    ctx.beginPath();
+    ctx.ellipse(x, y, rx, ry, 0, 0, TAU);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
 // Fill + fat stroke + refill: overlapping circles read as one inked blob.
 // In print mode the refill (the color plate) drifts off-register.
 function blobCircles(c, circles, fill, inkW = 5) {
@@ -532,7 +610,6 @@ function drawTree(tree, time) {
                 Math.sin(time * 2.3 + p.ph * 1.7) * 1.1) * p.swayAmp;
   const bx = tree.x + p.leanX + sway;
   const circles = p.blobs.map(([ox, oy, r]) => [bx + ox, tree.y + oy, r]);
-  inkEllipse(ctx, tree.x, tree.y + 2, 16 * p.scale, 6 * p.scale, 0, 'rgba(34,26,86,0.18)', null);
   capsule(ctx, tree.x, tree.y, tree.x + p.leanX + sway * 0.5, tree.y - p.trunkH,
     p.trunkW, TRUNK_TINTS[p.tone], PALETTE.ink, 2.2);
   blobCircles(ctx, circles, CANOPY_TINTS[p.tone], p.inkW);
@@ -666,7 +743,6 @@ function drawBuilding(b, time) {
   const { x, y, w, h } = b;
   const shop = b.kind === 'shop';
   const dark = skyState(tDay).dark;
-  inkEllipse(ctx, x + w / 2, y + 3, w * 0.55, 7, 0, 'rgba(34,26,86,0.15)', null);
 
   // Wall + timber framing.
   inkShape(ctx, (c) => {
@@ -757,7 +833,6 @@ function drawBuilding(b, time) {
 // save system. The one neon stitch is the promise: neon = interactive.
 function drawHoop(hp, time) {
   const { x, y } = hp;
-  inkEllipse(ctx, x, y + 1, 10, 4, 0, 'rgba(34,26,86,0.18)', null);
   capsule(ctx, x - 7, y, x - 2, y - 22, 3, PALETTE.timber, PALETTE.ink, 1.8);
   capsule(ctx, x + 7, y, x + 2, y - 22, 3, PALETTE.timber, PALETTE.ink, 1.8);
   capsule(ctx, x, y - 20, x, y - 30, 3.5, PALETTE.timber, PALETTE.ink, 1.8);
@@ -782,6 +857,257 @@ function drawHoop(hp, time) {
     ctx.stroke();
     ctx.globalAlpha = 1;
   }
+}
+
+// --- Standing stones & the Great Tuner (the depth pass, July 2026) ----------
+// Translated from the Tuning Stone previz render. The depth trick is
+// extrusion, not projection: each stone is a front face with a shaded
+// side facet and a lit rim, so it reads as a body with thickness while
+// collision stays a circle at its base. Y-sorted — you can walk behind.
+
+const STONE_TONES = ['#b7aa90', '#aa9d85', '#c0b49b'];
+
+function stoneParams(s) {
+  if (s._p) return s._p;
+  const rnd = mulberry32(((s.x * 2654435761) ^ (s.y * 40503)) >>> 0);
+  s._p = {
+    h: 36 + rnd() * 26,
+    w: 16 + rnd() * 9,
+    lean: (rnd() - 0.5) * 0.24,       // no stone stands straight-on
+    taper: 0.55 + rnd() * 0.25,
+    tone: Math.floor(rnd() * 3),
+    j: [rnd() * 4 - 2, rnd() * 5 - 2.5, rnd() * 4 - 2, rnd() * 5 - 2.5],
+    inkW: 2.6 + rnd() * 0.9,
+    cracks: Math.floor(rnd() * 2.4),
+    crackSeed: rnd() * 1000,
+    mossy: rnd() < 0.6,
+  };
+  return s._p;
+}
+
+// The stone's silhouette, built in local space (base center at 0,0).
+function stonePath(c, p) {
+  const hw = p.w / 2;
+  const tw = hw * p.taper;
+  const h = p.h;
+  const [j0, j1, j2, j3] = p.j;
+  c.beginPath();
+  c.moveTo(-hw, 0);
+  c.lineTo(-hw - 2 + j0, -h * 0.48);
+  c.lineTo(-tw + j1 * 0.4, -h + 2);
+  c.quadraticCurveTo(0 + j2 * 0.5, -h - 5, tw + j2 * 0.4, -h + 2.5);
+  c.lineTo(hw + 2 + j3, -h * 0.52);
+  c.lineTo(hw, 0);
+  c.closePath();
+}
+
+function drawStone(s, time) {
+  const p = stoneParams(s);
+  ctx.save();
+  ctx.translate(s.x, s.y);
+  ctx.rotate(p.lean);
+  inkShape(ctx, (c) => stonePath(c, p), STONE_TONES[p.tone], PALETTE.ink, p.inkW);
+
+  // Shaded side facet (away from the sun) — the extrusion read.
+  const hw = p.w / 2, tw = hw * p.taper, h = p.h;
+  const fw = 4 + p.w * 0.16;
+  ctx.save();
+  stonePath(ctx, p);
+  ctx.clip();
+  ctx.beginPath();
+  ctx.moveTo(-hw - 4, 2);
+  ctx.lineTo(-hw - 6 + p.j[0], -h * 0.48);
+  ctx.lineTo(-tw + p.j[1] * 0.4, -h + 1);
+  ctx.lineTo(-tw + p.j[1] * 0.4 + fw, -h + 3);
+  ctx.lineTo(-hw - 2 + p.j[0] + fw, -h * 0.46);
+  ctx.lineTo(-hw + fw * 0.8, 2);
+  ctx.closePath();
+  if (PRINT.on) {
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = halftone(ctx, 'shade');
+  } else {
+    ctx.fillStyle = 'rgba(44,79,124,0.30)';
+  }
+  ctx.fill();
+  ctx.restore();
+
+  // Rim light along the sunward top edge.
+  ctx.strokeStyle = 'rgba(248,233,210,0.55)';
+  ctx.lineWidth = 1.8;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(p.j[2] * 0.5 + 1, -h - 2.4);
+  ctx.quadraticCurveTo(tw * 0.8, -h - 0.5, tw + p.j[3] * 0.4 + 1, -h * 0.72);
+  ctx.stroke();
+
+  // Cracks and a little moss at the foot, off the same seeded stream.
+  const rnd = mulberry32(p.crackSeed * 4096);
+  ctx.strokeStyle = 'rgba(34,26,86,0.35)';
+  ctx.lineWidth = 1.2;
+  for (let k = 0; k < p.cracks; k++) {
+    const sx = (rnd() - 0.5) * p.w * 0.6;
+    const sy = -h * (0.35 + rnd() * 0.35);
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(sx + (rnd() - 0.5) * 5, sy + h * 0.16);
+    ctx.lineTo(sx + (rnd() - 0.5) * 6, sy + h * 0.3);
+    ctx.stroke();
+  }
+  if (p.mossy) {
+    inkCircle(ctx, hw * 0.5, -3, 3.2, PALETTE.grassDark, null);
+    inkCircle(ctx, hw * 0.2, -1.5, 2.2, PALETTE.grassDark, null);
+  }
+  ctx.restore();
+}
+
+// The Great Tuner — the Tuning Stone previz, translated from the render:
+// a monolith with a verdigris dial, a glowing neon needle (neon = the
+// interactive promise), moss, and the cream cross-stitch band at its base
+// (needlepoint holds the world together here).
+const TUNER = {
+  h: 168, baseW: 66, topW: 46,
+  brass: '#7d9468', brassDark: '#5f7350', stone: '#cfc2a6',
+};
+
+function tunerPath(c) {
+  const { h, baseW, topW } = TUNER;
+  c.beginPath();
+  c.moveTo(-baseW / 2, 0);
+  c.lineTo(-baseW / 2 + 3, -h * 0.55);
+  c.lineTo(-topW / 2, -h + 4);
+  c.quadraticCurveTo(-topW / 2 + 2, -h, -topW / 2 + 7, -h);
+  c.lineTo(topW / 2 - 7, -h);
+  c.quadraticCurveTo(topW / 2 - 2, -h, topW / 2, -h + 4);
+  c.lineTo(baseW / 2 - 2, -h * 0.55);
+  c.lineTo(baseW / 2, 0);
+  c.closePath();
+}
+
+function drawTuner(t, time) {
+  const { h, baseW, topW, brass, brassDark, stone } = TUNER;
+  ctx.save();
+  ctx.translate(t.x, t.y);
+
+  // Finial peg on top, like the render.
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.roundRect(-5, -h - 10, 10, 12, 2);
+  }, brass, PALETTE.ink, 2);
+
+  // The slab.
+  inkShape(ctx, (c) => tunerPath(c), stone, PALETTE.ink, 3.5);
+
+  // Shaded left facet — same extrusion trick as the standing stones.
+  ctx.save();
+  tunerPath(ctx);
+  ctx.clip();
+  ctx.beginPath();
+  ctx.moveTo(-baseW / 2 - 4, 2);
+  ctx.lineTo(-baseW / 2 - 1, -h * 0.55);
+  ctx.lineTo(-topW / 2 + 3, -h - 2);
+  ctx.lineTo(-topW / 2 + 14, -h - 2);
+  ctx.lineTo(-baseW / 2 + 12, -h * 0.53);
+  ctx.lineTo(-baseW / 2 + 9, 2);
+  ctx.closePath();
+  if (PRINT.on) {
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = halftone(ctx, 'shade');
+  } else {
+    ctx.fillStyle = 'rgba(44,79,124,0.26)';
+  }
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.restore();
+
+  // Rim light down the sunward edge.
+  ctx.strokeStyle = 'rgba(248,233,210,0.6)';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(topW / 2 - 6, -h + 1.5);
+  ctx.quadraticCurveTo(topW / 2 + 1, -h + 3, topW / 2 + 1.5, -h + 10);
+  ctx.lineTo(baseW / 2 - 0.5, -h * 0.55);
+  ctx.stroke();
+
+  // The dial: verdigris ring, cream face, ticks, hairlines, neon needle.
+  const dy = -h * 0.62;
+  inkCircle(ctx, 0, dy, 42, brass, PALETTE.ink, 3);
+  inkCircle(ctx, 0, dy, 34, PALETTE.cream, PALETTE.ink, 1.8);
+  ctx.strokeStyle = brassDark;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.arc(0, dy, 38.5, 0, TAU);
+  ctx.stroke();
+  // Frequency ticks — heavier every third, like the render's dial.
+  ctx.lineCap = 'round';
+  for (let i = 0; i < 36; i++) {
+    const a = (i / 36) * TAU;
+    const major = i % 3 === 0;
+    const r0 = major ? 26.5 : 29.5;
+    ctx.strokeStyle = major ? 'rgba(34,26,86,0.75)' : 'rgba(34,26,86,0.45)';
+    ctx.lineWidth = major ? 1.9 : 1.1;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(a) * r0, dy + Math.sin(a) * r0);
+    ctx.lineTo(Math.cos(a) * 32.5, dy + Math.sin(a) * 32.5);
+    ctx.stroke();
+  }
+  ctx.strokeStyle = 'rgba(34,26,86,0.30)';
+  ctx.lineWidth = 1.2;
+  for (const rr of [20, 13]) {
+    ctx.beginPath();
+    ctx.arc(0, dy, rr, 0, TAU);
+    ctx.stroke();
+  }
+  // The needle: a two-pointed hand, alive — it breathes around its
+  // station and trembles faintly, like something is still tuning.
+  // Crisp strokes, no gradient blobs (spell-light law): the glow is a
+  // wider low-alpha understroke, source-over so cream can't bleach it.
+  const na = -1.92 + Math.sin(time * 0.6) * 0.05 + Math.sin(time * 7.3) * 0.012;
+  const nx = Math.cos(na), ny = Math.sin(na);
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = 'rgba(0,247,194,0.28)';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(-nx * 30, dy - ny * 30);
+  ctx.lineTo(nx * 30, dy + ny * 30);
+  ctx.stroke();
+  ctx.strokeStyle = PALETTE.neon;
+  ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  ctx.moveTo(-nx * 30, dy - ny * 30);
+  ctx.lineTo(nx * 30, dy + ny * 30);
+  ctx.stroke();
+  inkCircle(ctx, 0, dy, 4.2, PALETTE.ink, null);
+  inkCircle(ctx, 0, dy, 1.8, PALETTE.neon, null);
+
+  // The cream cross-stitch band near the base (the render's lattice,
+  // which is of course needlepoint).
+  const bw = baseW - 8;
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.roundRect(-bw / 2, -36, bw, 19, 3);
+  }, PALETTE.cream, PALETTE.ink, 2.2);
+  ctx.lineWidth = 1.2;
+  ctx.lineCap = 'round';
+  for (let i = 0; i < 6; i++) {
+    const sx = -bw / 2 + 7 + i * (bw - 14) / 5;
+    ctx.strokeStyle = i === 2 ? PALETTE.orange : 'rgba(34,26,86,0.42)';
+    ctx.beginPath();
+    ctx.moveTo(sx - 3, -30.5); ctx.lineTo(sx + 3, -24.5);
+    ctx.moveTo(sx + 3, -30.5); ctx.lineTo(sx - 3, -24.5);
+    ctx.stroke();
+  }
+
+  // Moss, hugging the shaded edges and pooling at the foot.
+  for (const [mx, my, mr] of [
+    [-baseW / 2 + 4, -h * 0.42, 5], [-baseW / 2 + 7, -h * 0.34, 3.6],
+    [topW / 2 - 3, -h + 8, 4.2], [-baseW / 2 + 6, -6, 6], [baseW / 2 - 9, -4, 4.5],
+  ]) {
+    inkCircle(ctx, mx, my, mr, PALETTE.grassDark, PALETTE.ink, 1.4);
+  }
+  inkCircle(ctx, -baseW / 2 + 9, -8, 3, PALETTE.canopyLight, null);
+
+  ctx.restore();
 }
 
 // Interior furniture — small shape grammars, one per kind. Collision
@@ -1062,7 +1388,9 @@ function roomDrawList(r, time) {
     ...(r.decor.buildings || []).map(b => ({ y: b.y, fn: () => drawBuilding(b, time) })),
     ...(r.decor.hoops || []).map(h => ({ y: h.y, fn: () => drawHoop(h, time) })),
     ...(r.decor.furniture || []).map(f => ({ y: f.y, fn: () => drawFurniture(f, time) })),
+    ...(r.decor.stones || []).map(s => ({ y: s.y, fn: () => drawStone(s, time) })),
   ];
+  if (r.decor.tuner) list.push({ y: r.decor.tuner.y, fn: () => drawTuner(r.decor.tuner, time) });
   if (r.decor.banner) list.push({ y: r.decor.banner.y, fn: () => drawBanner(r.decor.banner, time) });
   if (r.npcs) for (const n of r.npcs) list.push({ y: n.y, fn: () => n.draw(ctx, time) });
   if (r.mites) for (const m of r.mites) list.push({ y: m.y, fn: () => m.draw(ctx, time) });
@@ -1079,6 +1407,7 @@ function drawRoomPanel(r, px, py, time, withDogs) {
   ctx.clip();
   ctx.translate(px, py);
   ctx.drawImage(groundFor(r), 0, 0);
+  drawShadows(r, time);
   if (r.decor.secret) drawSecret(r.decor.secret, time, r.interior);
   const list = roomDrawList(r, time);
   if (withDogs) {
@@ -1149,6 +1478,7 @@ function render(time) {
   }
 
   ctx.drawImage(groundFor(room), 0, 0);
+  drawShadows(room, time);
   drawRipples(time);
   drawFlowers(time);
   drawTufts(time);
@@ -1199,6 +1529,10 @@ function render(time) {
     ...spellLights(),
   ];
   if (stitch) lights.push({ x: stitch.x, y: stitch.y, r: 120, flicker: false });
+  // The Tuner's dial keeps its own faint vigil after dark.
+  if (room.decor.tuner) {
+    lights.push({ x: room.decor.tuner.x, y: room.decor.tuner.y - TUNER.h * 0.62, r: 85, flicker: false });
+  }
   for (const b of room.decor.buildings || []) {
     for (const wx of [b.x + b.w * 0.22, b.x + b.w * 0.78]) {
       lights.push({ x: wx, y: b.y - b.h * 0.52, r: 70, flicker: false });

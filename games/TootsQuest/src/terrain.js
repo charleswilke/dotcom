@@ -58,7 +58,10 @@ const ROOM_DEFS = {
       // Toots can slip behind the roof along the top rows; the y-sort hides
       // him back there, which is classic and correct.
       buildings: [
-        { x: 292, y: 162, w: 168, h: 92, kind: 'shop', doorX: 384 },
+        // turn (session 10, from the Archive render): the shop angles its
+        // east face toward the square, like a building that grew up
+        // facing its plaza. Negative = east side visible, sunlit.
+        { x: 292, y: 162, w: 168, h: 92, kind: 'shop', doorX: 384, turn: -0.55 },
       ],
       doors: [
         { x: 384, y: 166, to: 'shopInterior', dir: 'N', entry: { x: 480, y: 400 } },
@@ -156,7 +159,9 @@ const ROOM_DEFS = {
         { x: 280, y: 205 }, { x: 620, y: 350 },
       ],
       buildings: [
-        { x: 240, y: 186, w: 150, h: 96, kind: 'home', doorX: 315 },
+        // Toots' home leans the other way — west shoulder to the camera,
+        // a touch gentler than the shop.
+        { x: 240, y: 186, w: 150, h: 96, kind: 'home', doorX: 315, turn: 0.4 },
       ],
       doors: [
         { x: 315, y: 190, to: 'homeInterior', dir: 'N', entry: { x: 480, y: 344 } },

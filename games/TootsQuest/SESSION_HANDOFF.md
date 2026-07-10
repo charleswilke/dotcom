@@ -94,11 +94,14 @@ the front wall; trees got real volume — highlights moved to the sunward
 the lower-left (painted slate in Living Ink, the halftone screen in
 Sunday Ink — the print-mode shade ellipse moved lower-left to match),
 and a slate edge-shade down the trunk's west side (cylinder read, same
-as the stones' facets). **Session 10 was the dog photo-canon pass:**
+as the stones' facets). **Session 10 was the dog photo-canon pass plus the building turn dial:**
 Charles shared reference photos of the real Doc and Astro, which
 corrected several session-4 model-sheet guesses — see the updated dog
-canon bullet in Decisions. Remaining M1: Tuning Stone *mechanic* +
-Archive mirror-rooms.
+canon bullet in Decisions. Then his Archive-square concept render came
+back (sketchbook item 2) and its first gleaning went straight in-engine:
+buildings now sit at individual angles to the camera via a `turn` dial
+(see Decisions; the Archive style itself is still an open pick).
+Remaining M1: Tuning Stone *mechanic* + Archive mirror-rooms.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -370,6 +373,24 @@ games/TootsQuest/
   Future verticals (dungeon walls, towers, the Cathedral) follow suit:
   front face + shaded west face + sunward rim is the house extrusion
   grammar now.
+- **Buildings sit at an angle: the `turn` dial** (session 10, gleaned from
+  the Archive-square render — Charles: the structures "sit at a
+  delightful angle from the camera... not all face forward"). Signed
+  `turn` in [-1, 1] on a building's decor entry: a vertical shear of
+  every horizontal line, pivoting at the wall's center (±w*0.045 at the
+  edges at full turn), with the visible side wall/roof hip swinging
+  wider as |turn| grows. STILL extrusion, not projection: parallels stay
+  parallel, verticals stay vertical, the collider stays the axis-aligned
+  rect, and door triggers don't move (keep doorX near the pivot center —
+  the visual shift there is sub-pixel). The one-sun law picks the side
+  face's light: positive turn shows the shaded WEST face, negative the
+  SUNLIT east face (faint warm lift in paint, bare cream plate in print —
+  no halftone on a lit face). Gravity-hung props (shop sign, banner)
+  stay vertical on purpose; the contrast is what sells the lean.
+  Authored so far: shop turn -0.55 (lit east face angled toward its
+  square), home turn +0.4. turn: 0 preserves session 9's fixed west
+  shoulder exactly, except the wall quad dropped roundRect's r4 corners;
+  the fat round-join ink stroke keeps them soft.
 - **Standing stones are decor entities, not R tiles** (session 9): the
   green's ring is `decor.stones` — y-sorted (walk behind them), circle
   colliders r=11, per-instance seeded shape/lean/taper/tone/cracks/moss
@@ -556,6 +577,14 @@ __TQ.spell                        // getter — spellState ({cooldownT})
   freeze with `game.hitstopT = 9999` to stage portraits (rendering
   continues); `setTime` re-pins are needed between screenshots because
   stepped frames advance the clock (dusk crept into two shots).
+- Building turn dial (same session): shop (turn -0.55) and home (+0.4)
+  screenshot-reviewed at 1×/1.6×/2×/2.5× — sheared baseline, corner
+  post, lit east wedge / shaded west shoulder, windows/door/timber/
+  chimney/sign all riding the shear; print mode (plate drift + no
+  halftone on the lit face) and night (lamplit windows + spill on the
+  sheared wall) both pass; door walk-in regression: north walk into the
+  shop door still lands in shopInterior; 60 fps, ~1.2 ms; no console
+  errors.
 
 ## Verified in session 9 (the depth pass — scripted __TQ.step + screenshots)
 

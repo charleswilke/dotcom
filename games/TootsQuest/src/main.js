@@ -763,98 +763,149 @@ function drawBuilding(b, time) {
   const shop = b.kind === 'shop';
   const dark = skyState(tDay).dark;
 
-  // The west face — the building turns a shoulder to the sun. Extrusion,
-  // not projection (same trick as the standing stones): an oblique side
-  // wall in shade, drawn first so the front wall covers the seam.
-  const E = 11, D = 15;
+  // The turn dial (session 10, from the Archive render): buildings sit at
+  // a slight angle to the camera instead of facing dead forward. Signed
+  // `b.turn` in about [-1, 1]: positive swings the WEST face toward the
+  // camera, negative the EAST. Implementation is a vertical shear of
+  // every horizontal line, pivoting at the wall's center — extrusion, not
+  // projection: parallels stay parallel, comics-oblique, and the collider
+  // stays the axis-aligned rect (the shear is ±w*0.045 at the edges).
+  // The visible side wall swings wider with the turn; which side you see
+  // follows the sign, and the one-sun law decides its light: west face
+  // shaded, east face sunlit.
+  const t = b.turn || 0;
+  const s = t * w * 0.09;                          // rise across the width
+  const dy = (px) => -s * ((px - x) / w - 0.5);    // shear, centered pivot
+
+  // The side face. At t=0 this is exactly session 9's west shoulder.
+  const west = t >= 0;
+  const E = 11 + 14 * Math.abs(t);
+  const D = 15 + 5 * Math.abs(t);
+  const sx = west ? x : x + w;                     // near vertical edge
+  const sdir = west ? -1 : 1;                      // extrusion direction
+  const sy0 = y + dy(sx);
   const side = (c) => {
     c.beginPath();
-    c.moveTo(x, y);
-    c.lineTo(x - E, y - D);
-    c.lineTo(x - E, y - h - D + 3);
-    c.lineTo(x, y - h + 3);
+    c.moveTo(sx, sy0);
+    c.lineTo(sx + sdir * E, sy0 - D);
+    c.lineTo(sx + sdir * E, sy0 - h - D + 3);
+    c.lineTo(sx, sy0 - h + 3);
     c.closePath();
   };
   inkShape(ctx, side, PALETTE.cream, PALETTE.ink, 3);
   side(ctx);
-  if (PRINT.on) {
-    ctx.globalAlpha = 0.55;
-    ctx.fillStyle = halftone(ctx, 'shade');
-  } else {
-    ctx.fillStyle = 'rgba(44,79,124,0.30)';
+  if (west) {
+    // Shaded shoulder, away from the sun.
+    if (PRINT.on) {
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = halftone(ctx, 'shade');
+      ctx.fill();
+    } else {
+      ctx.fillStyle = 'rgba(44,79,124,0.30)';
+      ctx.fill();
+    }
+  } else if (!PRINT.on) {
+    // Sunward face — a faint warm lift instead of shade. In print the
+    // bare cream plate already reads lit.
+    ctx.fillStyle = 'rgba(248,233,210,0.30)';
+    ctx.fill();
   }
-  ctx.fill();
   ctx.globalAlpha = 1;
 
-  // Wall + timber framing.
+  // Wall + timber framing. The wall is a sheared quad now; round joins on
+  // the fat ink stroke keep the corners soft.
   inkShape(ctx, (c) => {
     c.beginPath();
-    c.roundRect(x, y - h, w, h, 4);
+    c.moveTo(x, y + dy(x));
+    c.lineTo(x + w, y + dy(x + w));
+    c.lineTo(x + w, y - h + dy(x + w));
+    c.lineTo(x, y - h + dy(x));
+    c.closePath();
   }, PALETTE.cream, PALETTE.ink, 3);
   ctx.strokeStyle = PALETTE.timber;
   ctx.lineWidth = 4;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(x + 6, y - 4); ctx.lineTo(x + 6, y - h + 8);
-  ctx.moveTo(x + w - 6, y - 4); ctx.lineTo(x + w - 6, y - h + 8);
-  ctx.moveTo(x + 4, y - h + 9); ctx.lineTo(x + w - 4, y - h + 9);
+  ctx.moveTo(x + 6, y - 4 + dy(x + 6)); ctx.lineTo(x + 6, y - h + 8 + dy(x + 6));
+  ctx.moveTo(x + w - 6, y - 4 + dy(x + w - 6)); ctx.lineTo(x + w - 6, y - h + 8 + dy(x + w - 6));
+  ctx.moveTo(x + 4, y - h + 9 + dy(x + 4)); ctx.lineTo(x + w - 4, y - h + 9 + dy(x + w - 4));
   ctx.stroke();
 
-  // Gabled roof with an overhang and a couple of shingle seams. The west
-  // hip slope comes first — the roof's own shaded shoulder — then the
-  // front slope covers the shared eave line.
+  // Gabled roof with an overhang and a couple of shingle seams. The hip
+  // slope on the visible side comes first — shaded on a west turn, lit on
+  // an east turn — then the front slope covers the shared eave line.
   const ridgeY = y - h - 34;
   const rlx = x + w / 2 - 26;
   const rrx = x + w / 2 + 26;
-  const RE = 10, RD = 9;
+  const RD = 9 + 3 * Math.abs(t);
+  const hipE = 10 + 9 * Math.abs(t);
+  const eaveX = west ? x - 12 : x + w + 12;
+  const hipRidgeX = west ? rlx : rrx;
   const roofSide = (c) => {
     c.beginPath();
-    c.moveTo(x - 12, y - h + 2);
-    c.lineTo(rlx, ridgeY);
-    c.lineTo(rlx - RE, ridgeY - RD);
-    c.lineTo(x - 12 - RE, y - h + 2 - RD);
+    c.moveTo(eaveX, y - h + 2 + dy(eaveX));
+    c.lineTo(hipRidgeX, ridgeY + dy(hipRidgeX));
+    c.lineTo(hipRidgeX + sdir * hipE, ridgeY + dy(hipRidgeX) - RD);
+    c.lineTo(eaveX + sdir * hipE, y - h + 2 + dy(eaveX) - RD);
     c.closePath();
   };
   inkShape(ctx, roofSide, shop ? PALETTE.orange : PALETTE.slate, PALETTE.ink, 3);
   roofSide(ctx);
-  if (PRINT.on) {
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = halftone(ctx, 'shade');
-  } else {
-    ctx.fillStyle = 'rgba(44,79,124,0.35)';
+  if (west) {
+    if (PRINT.on) {
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = halftone(ctx, 'shade');
+      ctx.fill();
+    } else {
+      ctx.fillStyle = 'rgba(44,79,124,0.35)';
+      ctx.fill();
+    }
+  } else if (!PRINT.on) {
+    ctx.fillStyle = 'rgba(248,233,210,0.22)';
+    ctx.fill();
   }
-  ctx.fill();
   ctx.globalAlpha = 1;
   inkShape(ctx, (c) => {
     c.beginPath();
-    c.moveTo(x - 12, y - h + 2);
-    c.lineTo(rlx, ridgeY);
-    c.lineTo(rrx, ridgeY);
-    c.lineTo(x + w + 12, y - h + 2);
+    c.moveTo(x - 12, y - h + 2 + dy(x - 12));
+    c.lineTo(rlx, ridgeY + dy(rlx));
+    c.lineTo(rrx, ridgeY + dy(rrx));
+    c.lineTo(x + w + 12, y - h + 2 + dy(x + w + 12));
     c.closePath();
   }, shop ? PALETTE.orange : PALETTE.slate, PALETTE.ink, 3.5);
   ctx.strokeStyle = 'rgba(34,26,86,0.45)';
   ctx.lineWidth = 1.6;
   for (const t2 of [0.38, 0.72]) {
+    const ax = lerp(rlx, x - 12, t2) + 4;
+    const bx = lerp(rrx, x + w + 12, t2) - 4;
     const yy = ridgeY + (y - h + 2 - ridgeY) * t2;
     ctx.beginPath();
-    ctx.moveTo(lerp(rlx, x - 12, t2) + 4, yy);
-    ctx.lineTo(lerp(rrx, x + w + 12, t2) - 4, yy);
+    ctx.moveTo(ax, yy + dy(ax));
+    ctx.lineTo(bx, yy + dy(bx));
     ctx.stroke();
   }
-  // The overhang shades the top of the front wall — the under-eave band.
+  // The overhang shades the top of the front wall — the under-eave band,
+  // sheared along with the wall it sits on.
   ctx.fillStyle = 'rgba(34,26,86,0.10)';
-  ctx.fillRect(x + 3, y - h + 11, w - 6, 6);
+  ctx.beginPath();
+  ctx.moveTo(x + 3, y - h + 11 + dy(x + 3));
+  ctx.lineTo(x + w - 3, y - h + 11 + dy(x + w - 3));
+  ctx.lineTo(x + w - 3, y - h + 17 + dy(x + w - 3));
+  ctx.lineTo(x + 3, y - h + 17 + dy(x + 3));
+  ctx.closePath();
+  ctx.fill();
   if (!shop) {
+    const cx = x + w - 46;
     inkShape(ctx, (c) => {
       c.beginPath();
-      c.roundRect(x + w - 46, ridgeY + 4, 15, 24, 2);
+      c.roundRect(cx, ridgeY + 4 + dy(cx + 7.5), 15, 24, 2);
     }, PALETTE.rust, PALETTE.ink, 2.2);
   }
 
-  // Windows — slate by day, lamplight after dark.
+  // Windows — slate by day, lamplight after dark. Each rides the shear at
+  // its own x.
   for (const wx of [x + w * 0.22, x + w * 0.78]) {
-    const wy = y - h * 0.52;
+    const wy = y - h * 0.52 + dy(wx);
     inkShape(ctx, (c) => {
       c.beginPath();
       c.roundRect(wx - 9, wy - 8, 18, 16, 2);
@@ -867,30 +918,33 @@ function drawBuilding(b, time) {
     ctx.stroke();
   }
 
-  // The door, on its own x so it can meet the path.
+  // The door, on its own x so it can meet the path — its sill sits on the
+  // sheared baseline.
   const dx = b.doorX ?? x + w / 2;
+  const doorDy = dy(dx);
   inkShape(ctx, (c) => {
     c.beginPath();
-    c.roundRect(dx - 12, y - 31, 24, 31, [10, 10, 0, 0]);
+    c.roundRect(dx - 12, y - 31 + doorDy, 24, 31, [10, 10, 0, 0]);
   }, PALETTE.timber, PALETTE.ink, 2.5);
-  inkCircle(ctx, dx + 6, y - 14, 1.7, PALETTE.ink, null);
+  inkCircle(ctx, dx + 6, y - 14 + doorDy, 1.7, PALETTE.ink, null);
 
   // The shop hangs a little hoop sign over its door.
   if (shop) {
     const sway = Math.sin(time * 1.9 + 2) * 1.5;
+    const sy = y - h + dy(dx);
     ctx.strokeStyle = PALETTE.ink;
     ctx.lineWidth = 1.4;
     ctx.beginPath();
-    ctx.moveTo(dx, y - h + 10);
-    ctx.lineTo(dx + sway, y - h + 22);
+    ctx.moveTo(dx, sy + 10);
+    ctx.lineTo(dx + sway, sy + 22);
     ctx.stroke();
-    inkCircle(ctx, dx + sway, y - h + 30, 8.5, PALETTE.timber, PALETTE.ink, 2);
-    inkCircle(ctx, dx + sway, y - h + 30, 6, PALETTE.cream, PALETTE.ink, 1.4);
+    inkCircle(ctx, dx + sway, sy + 30, 8.5, PALETTE.timber, PALETTE.ink, 2);
+    inkCircle(ctx, dx + sway, sy + 30, 6, PALETTE.cream, PALETTE.ink, 1.4);
     ctx.strokeStyle = PALETTE.orange;
     ctx.lineWidth = 1.4;
     ctx.beginPath();
-    ctx.moveTo(dx + sway - 2.5, y - h + 27.5); ctx.lineTo(dx + sway + 2.5, y - h + 32.5);
-    ctx.moveTo(dx + sway + 2.5, y - h + 27.5); ctx.lineTo(dx + sway - 2.5, y - h + 32.5);
+    ctx.moveTo(dx + sway - 2.5, sy + 27.5); ctx.lineTo(dx + sway + 2.5, sy + 32.5);
+    ctx.moveTo(dx + sway + 2.5, sy + 27.5); ctx.lineTo(dx + sway - 2.5, sy + 32.5);
     ctx.stroke();
   }
 }

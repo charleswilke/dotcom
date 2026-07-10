@@ -387,7 +387,20 @@ the next session inherits conclusions instead of a folder of images.
   monument. **Still open:** the world-flip staging (what the crossing
   looks like AT the stone), the dial's interaction reading (needle at
   night is built; hold-to-tune is not), and the Archive-side Tuner.
-- Archive look: —
+- **Archive look: render in hand (July 2026, session 10) — first gleaning
+  translated, style decision still open.** Charles generated the item-2
+  side-by-side (kept outside the repo, per the sketchbook rule): warm
+  hearth square on the left, amber phosphor recording on the right. What
+  he flagged first wasn't the phosphor — it was the *camera*: the
+  render's buildings each sit at a slight, individual angle instead of
+  facing dead forward, and the square feels dimensional because of it.
+  That's now in-engine as the building `turn` dial (signed shear +
+  side-face swing; see the handoff) — the shop angles its lit east face
+  toward the square, the home leans the other way. **Still open from
+  this render:** the Archive style itself — line-work density, amber vs.
+  amber+teal, how much cream survives, scanline weight — plus whether
+  glow-edged solids or wireframes win. Log those picks here when
+  Charles calls them.
 - Crossing: —
 - The Curator: —
 - Cathedral vocabulary: —

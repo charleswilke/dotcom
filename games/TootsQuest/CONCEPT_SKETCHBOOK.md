@@ -175,8 +175,21 @@ the big-bad allusion:
   system, §4.2, doing cover duty). Watch that the THOK! stays small: two
   pieces of lettering can fight, and the logo wins every tie. If a render
   crowds, cut the word before cutting the beetle.
+- **The dogs, from photos this time (v5.1, session 10):** Charles shared
+  reference photos of the real dogs, which corrected the model-sheet
+  guesses every earlier prompt inherited. Doc is SILVER-gray, not cream:
+  white blaze up the muzzle, white chest, short-eared bob, heavy-lidded
+  squint, olive-green collar. Astro is groomed two-tone — dark charcoal
+  head/ears/tail plume over a lighter body — with long curtain ears and
+  a mustard collar carrying a small mint tracker fob. The v5 keeper
+  render predates this and stands; the corrections are for every render
+  that comes after (trailer, character sheets). Full photo canon (brass
+  name tags, wheaten beard tinge, pooling tail) lives in the handoff's
+  dog bullet and is already in-game; the prompt below keeps only what
+  earns its words at poster scale.
 
-Current revised prompt (Toots connects, v5):
+Current revised prompt (v5.1 — the v5 keeper composition with photo-canon
+dogs):
 
 > Simple flat cartoon title panel for "TOOTS QUEST" in a clean Sunday
 > newspaper comics style: characters built from a few big rounded shapes,
@@ -193,12 +206,14 @@ Current revised prompt (Toots connects, v5):
 > of teal light that connects square with a rusty windup beetle at the
 > arc's end: the beetle knocked tumbling backward through the air, a
 > spring, a bolt and a bent antenna flying off it, a small hand-lettered
-> "THOK!" burst right at the point of impact. Left: a small cream-gray
-> shih tzu,
-> grumpy scowl, dark collar, chomping a round rusty windup beetle, a
-> spring and bolts popping loose. Right: a lanky charcoal shih tzu/poodle
-> mix, huge happy grin, orange collar, ignoring the battle, digging, dirt
-> flying, a teal-glinting trinket unearthed. On the far ridge the print is
+> "THOK!" burst right at the point of impact. Left: a small silver-gray
+> shih tzu with a white blaze up the muzzle and a white chest, short
+> ears, heavy-lidded grumpy scowl, olive-green collar, chomping a round
+> rusty windup beetle, a spring and bolts popping loose. Right: a lanky
+> shih tzu/poodle mix, dark charcoal head with long floppy ears, lighter
+> silver-gray body, huge happy grin, mustard-yellow collar with a small
+> mint tracker fob, ignoring the battle, digging, dirt flying, a
+> teal-glinting trinket unearthed. On the far ridge the print is
 > failing: color fades to bare paper, a field of gray halftone static, one
 > plain dead radio tower, and faint in the static a tall ragged silhouette
 > made of dots, strictly faceless, no eyes, only vaguely echoing the
@@ -261,8 +276,9 @@ not bolted on.
 > size. [style block]
 >
 > [ENEMY] = a lumbering golem of rusted plates and salvaged girders, one arm
-> oversized, shown in one extra pose carrying a small grumpy shih tzu tucked
-> under that arm while fighting one-handed
+> oversized, shown in one extra pose carrying a small grumpy silver-gray
+> shih tzu (white-blazed muzzle, olive collar) tucked under that arm while
+> fighting one-handed
 >
 > [ENEMY] = a scruffy seagull in aviator goggles hauling a small bomb-shaped
 > basketball, mid-swoop (TootsJam cameo — keep it recognizably the same gull)

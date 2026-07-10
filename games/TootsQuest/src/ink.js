@@ -24,13 +24,19 @@ export const PALETTE = {
   canopyLight: '#8ab864',
   dogBody: '#c98a4b',
   dogChest: '#f3e2c0',
-  // The real dogs (cover-art model sheets, session 4): Doc is cream-gray
-  // scruff, Astro is charcoal with an ink undertone so he sits well on
-  // the outlines.
-  dogDoc: '#d8cbb6',
-  dogDocChest: '#f3e6cd',
-  dogAstro: '#57506a',
+  // The real dogs (reference PHOTOS, July 2026 — supersede the session-4
+  // model-sheet guesses): Doc is cool SILVER-gray, not cream — white blaze
+  // up the muzzle, white chest, olive collar. Astro is charcoal with an ink
+  // undertone, groomed two-tone: dark head/ears/tail over a lighter shaved
+  // body, mustard collar. Both wear brass name tags.
+  dogDoc: '#b6b7c6',
+  dogDocChest: '#f5f1e6',
+  dogDocCollar: '#4a5f38',
+  dogAstro: '#4e4763',
+  dogAstroBody: '#6f6883',
   dogAstroChest: '#867e9a',
+  dogAstroCollar: '#d9a441',
+  brass: '#c89b45',
   skin: '#f2c89b',
   rust: '#b06a3a',
   rustDark: '#8c5128',

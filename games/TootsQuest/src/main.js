@@ -70,17 +70,25 @@ const player = new Player(spawnAt.x, spawnAt.y);
 // The real dogs (PRD §2.5, cover-art model sheets): Doc heels and scowls,
 // Astro scouts and grins. Same grammar, different souls.
 const doc = new Dog(player.x - 40, player.y + 10, {
-  body: PALETTE.dogDoc, chest: PALETTE.dogDocChest, collar: PALETTE.slate,
-  earLen: 11, tailFreq: 6, size: 1.05, mood: 'grumpy', behavior: 'heel',
+  body: PALETTE.dogDoc, chest: PALETTE.dogDocChest, collar: PALETTE.dogDocCollar,
+  earLen: 5.5,     // short ears that blend into the silver bob (photo canon)
+  tailFreq: 6, size: 1.05, mood: 'grumpy', behavior: 'heel',
   bean: 3.5,       // the shih tzu curved-bean midsection
   tailCurl: true,  // plume over the back — the other shih tzu signature
+  blaze: true,     // the white stripe up the muzzle — his signature mark
+  tag: true,       // the brass "DOCTOR" tag
 });
 const astro = new Dog(player.x + 34, player.y + 22, {
-  body: PALETTE.dogAstro, chest: PALETTE.dogAstroChest, collar: PALETTE.orange,
-  earLen: 8.5, tailFreq: 13, size: 1, mood: 'happy', behavior: 'scout',
+  body: PALETTE.dogAstroBody, chest: PALETTE.dogAstroChest, collar: PALETTE.dogAstroCollar,
+  earLen: 11.5,    // long curtain ears framing the face (photo canon)
+  tailFreq: 13, size: 1, mood: 'happy', behavior: 'scout',
   // Shihpoo build (corrected July 2026 — he's a shih tzu/poodle mix, no
   // topknot): up on long thin legs, slim barrel, head carried high.
   lift: 4.5, bodyW: 9, legW: 2.5,
+  dark: PALETTE.dogAstro,      // groomed two-tone: dark head/ears/tail
+  beardTint: PALETTE.dogBody,  // the wheaten tinge on his beard
+  tag: true,                   // the brass shooting-star "ASTRO" tag
+  airtag: true,                // the mint tracker — the scout wears it
 });
 // Boot placement goes through the same clamp as gutter crossings (gotcha 5):
 // a restored save can spawn against a world edge, and a dog constructed out

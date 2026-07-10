@@ -534,6 +534,13 @@ export class Dog {
       // down, chest and rump ride up), tailCurl plumes the tail up over
       // the back instead of swinging it out behind.
       lift: 0, bodyW: 12, legW: 3.5, topknot: false, bean: 0, tailCurl: false,
+      // Marking dials (July 2026 reference photos): `dark` two-tones the
+      // head/ears/tail over a lighter body (a groomed dog keeps the dark
+      // coat where the clippers don't go), `blaze` paints the white stripe
+      // from snout up between the eyes, `beardTint` warms the muzzle
+      // scruff, `tag` hangs a brass name tag from the collar, `airtag`
+      // rides a mint tracker on it.
+      dark: null, blaze: false, beardTint: null, tag: false, airtag: false,
       ...params,
     };
   }
@@ -693,15 +700,18 @@ export class Dog {
     const L = p.lift;              // barrel height off the ground
     const bw = p.bodyW;
     const lw = p.legW;
+    const dk = p.dark || p.body;   // two-tone dogs keep the dark coat on the tail
 
     if (this.sitting) {
       // Haunches down, chest up, tail sweeping the grass — or, for the
       // shih tzu, pluming up over the back. A lanky dog sits tall — the
       // torso stretches with the lift; haunches stay grounded.
       if (p.tailCurl) {
-        curvedCapsule(ctx, -11, -8, -18, -18, -8 + wag, -17, 4.5, p.body, PALETTE.ink, 1.8);
+        curvedCapsule(ctx, -11, -8, -18, -18, -8 + wag, -17, 4.5, dk, PALETTE.ink, 1.8);
       } else {
-        capsule(ctx, -9, -7, -16 + wag, -3, 4, p.body, PALETTE.ink, 1.8);
+        // The straight tail is a long plume that pools on the grass when
+        // he sits (photo canon) — the tip sways along the ground.
+        curvedCapsule(ctx, -9, -7, -16, -4.5, -21 + wag, -0.5, 4, dk, PALETTE.ink, 1.8);
       }
       inkEllipse(ctx, -7, -7, 8 - L * 0.2, 7, 0, p.body, PALETTE.ink, 2.2);
       // Bean dogs sit with the chest puffed out on that curved front.
@@ -724,9 +734,9 @@ export class Dog {
       if (p.tailCurl) {
         // The plume: base at the rump, curling up and forward so the tip
         // sways over the back.
-        curvedCapsule(ctx, -10, by - 2, -17, by - 12, -8 + wag, by - bw / 2 - 3.5, 4.5, p.body, PALETTE.ink, 1.8);
+        curvedCapsule(ctx, -10, by - 2, -17, by - 12, -8 + wag, by - bw / 2 - 3.5, 4.5, dk, PALETTE.ink, 1.8);
       } else {
-        capsule(ctx, -11, by + 1, -17 + wag, by - 4, 4, p.body, PALETTE.ink, 1.8);
+        capsule(ctx, -11, by + 1, -19 + wag, by - 5, 4, dk, PALETTE.ink, 1.8);
       }
       capsule(ctx, -8 + l1, by + 2, -8 + l1 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
       capsule(ctx, 6 + l2, by + 2, 6 + l2 * 1.4, -1, lw, p.body, PALETTE.ink, 1.8);
@@ -778,21 +788,41 @@ export class Dog {
 
   drawHead(ctx, hx, hy, t) {
     const p = this.p;
+    const dk = p.dark || p.body;   // two-tone dogs keep the dark coat up top
     const earSwing = this.moving ? Math.sin(this.trot) * 1.6 : Math.sin(t * 1.4) * 0.6;
     // The poodle topknot goes on first so the head overlaps its base.
     if (p.topknot) {
-      inkCircle(ctx, hx - 1, hy - 8, 3.6, p.body, PALETTE.ink, 1.8);
+      inkCircle(ctx, hx - 1, hy - 8, 3.6, dk, PALETTE.ink, 1.8);
     }
-    inkCircle(ctx, hx, hy, 7, p.body, PALETTE.ink, 2.2);
+    inkCircle(ctx, hx, hy, 7, dk, PALETTE.ink, 2.2);
     // Floppy ears.
-    capsule(ctx, hx - 3, hy - 6, hx - 6 - earSwing, hy - 6 + p.earLen, 4.5, p.body, PALETTE.ink, 1.8);
-    capsule(ctx, hx + 3, hy - 6, hx + 1 - earSwing, hy - 6 + p.earLen * 0.8, 4, p.body, PALETTE.ink, 1.8);
+    capsule(ctx, hx - 3, hy - 6, hx - 6 - earSwing, hy - 6 + p.earLen, 4.5, dk, PALETTE.ink, 1.8);
+    capsule(ctx, hx + 3, hy - 6, hx + 1 - earSwing, hy - 6 + p.earLen * 0.8, 4, dk, PALETTE.ink, 1.8);
+    // The blaze (photo canon): a white stripe flowing from the snout up
+    // between the eyes — Doc's single most identifying mark. No outline;
+    // it's a marking, not a part.
+    if (p.blaze) {
+      capsule(ctx, hx + 4.5, hy + 0.5, hx + 1, hy - 5.2, 2.6, p.chest, null);
+    }
     // Snout and nose.
     inkEllipse(ctx, hx + 6, hy + 2, 4.5, 3.2, 0, p.chest, PALETTE.ink, 1.6);
+    // The wheaten tinge on the beard — Astro's muzzle scruff runs warm.
+    if (p.beardTint) {
+      inkEllipse(ctx, hx + 5.6, hy + 3.4, 2.2, 1.2, 0.2, p.beardTint, null);
+    }
     inkCircle(ctx, hx + 8.5, hy + 1.5, 1.6, PALETTE.ink, null);
-    // Collar peeking at the neck.
+    // Collar peeking at the neck, plus its hardware.
     if (p.collar) {
       capsule(ctx, hx - 6.5, hy + 5.5, hx - 2, hy + 6.5, 2.4, p.collar, null);
+      // The mint tracker rides the collar (photo canon — and the palette
+      // law holds: finding hidden things IS the scout's magic).
+      if (p.airtag) {
+        inkCircle(ctx, hx - 4.8, hy + 5.3, 1.7, PALETTE.neon, PALETTE.ink, 1);
+      }
+      // The brass name tag dangling at the throat.
+      if (p.tag) {
+        inkCircle(ctx, hx - 1.4, hy + 8.4, 1.6, PALETTE.brass, PALETTE.ink, 1);
+      }
     }
     // The face is the personality.
     if (p.mood === 'happy' && (this.sniffing || this.pointing)) {
@@ -805,7 +835,18 @@ export class Dog {
       ctx.beginPath();
       ctx.arc(hx + 1.5, hy - 0.2, 2, Math.PI * 1.08, Math.PI * 1.92);
       ctx.stroke();
+    } else if (p.mood === 'grumpy') {
+      // The photo-canon squint: a flat-topped, heavy-lidded half-eye.
+      // He is not asleep; he is assessing you.
+      ctx.fillStyle = PALETTE.ink;
+      ctx.beginPath();
+      ctx.arc(hx + 1.5, hy - 1.1, 1.7, 0, Math.PI);
+      ctx.closePath();
+      ctx.fill();
     } else {
+      // Dark fur gets light features (canon, session 7): on a dark head
+      // the button eye gets a cream backing ring so it reads at 1×.
+      if (p.dark) inkCircle(ctx, hx + 1.5, hy - 1, 2, PALETTE.cream, null);
       ctx.fillStyle = PALETTE.ink;
       ctx.beginPath();
       ctx.arc(hx + 1.5, hy - 1, 1.4, 0, TAU);

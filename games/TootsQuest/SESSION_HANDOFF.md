@@ -94,8 +94,11 @@ the front wall; trees got real volume — highlights moved to the sunward
 the lower-left (painted slate in Living Ink, the halftone screen in
 Sunday Ink — the print-mode shade ellipse moved lower-left to match),
 and a slate edge-shade down the trunk's west side (cylinder read, same
-as the stones' facets). Remaining M1: Tuning Stone *mechanic* + Archive
-mirror-rooms.
+as the stones' facets). **Session 10 was the dog photo-canon pass:**
+Charles shared reference photos of the real Doc and Astro, which
+corrected several session-4 model-sheet guesses — see the updated dog
+canon bullet in Decisions. Remaining M1: Tuning Stone *mechanic* +
+Archive mirror-rooms.
 
 **Run it:** any static server from the repo root, e.g. `python3 -m http.server 8080`
 (note: this machine has no bare `python`, only `python3`) or `npx serve`,
@@ -158,12 +161,27 @@ games/TootsQuest/
 
 - **Hero is Toots = Charles.** Orange tunic, headphones with neon dots, sword on
   back, cross-stitch chest charm. Doc & Astro are co-stars, not the player.
-- **Both dogs are in, canon-correct** (session 4, PRD §2.5): one Dog grammar,
-  two personalities via params. **Doc** = cream-gray (`PALETTE.dogDoc`),
-  slate collar, chunkier (size 1.05), slow tail (freq 6), grumpy face
-  (furrowed brow + downturned mouth), behavior `heel` — sticks behind Toots
-  and sits almost immediately when he stops. **Astro** = charcoal
-  (`PALETTE.dogAstro`), orange collar, smaller (0.95), manic tail (freq 13),
+- **Both dogs are in, canon-correct** (session 4, PRD §2.5; colors and
+  markings corrected session 10 from REAL PHOTOS — photo canon supersedes
+  the session-4 model-sheet guesses): one Dog grammar, two personalities
+  via params. **Doc** = cool SILVER-gray, not cream (`PALETTE.dogDoc`),
+  white blaze up the muzzle (`blaze` dial — his single most identifying
+  mark), SHORT ears that blend into the bob (earLen 5.5 — the long ears
+  were backwards; Astro's are the long ones), olive collar
+  (`dogDocCollar`) with a brass "DOCTOR" tag (`tag`), chunkier (size
+  1.05), slow tail (freq 6), grumpy face (photo-canon SQUINT — a
+  flat-topped lidded half-eye — plus furrowed brow + downturned mouth),
+  behavior `heel` — sticks behind Toots
+  and sits almost immediately when he stops. **Astro** = groomed two-tone
+  charcoal: dark head/ears/tail (`dogAstro` via the `dark` dial) over a
+  lighter shaved body (`dogAstroBody`) — kept SUBTLE on purpose (Charles);
+  long curtain ears (earLen 11.5), wheaten `beardTint` on the muzzle, a
+  long dark tail plume that POOLS on the grass when he sits (the straight
+  tail is a curvedCapsule down to the ground now), mustard collar
+  (`dogAstroCollar`) carrying a brass shooting-star "ASTRO" tag and a
+  NEON mint tracker (`airtag` — palette law holds: finding hidden things
+  IS the scout's magic; the real dog wears the AirTag), cream-backed
+  button eye (dark fur gets light features), manic tail (freq 13),
   happy face (open mouth + tongue), behavior `scout` — orbits the player at
   50–120px picking random things to investigate, and when the room's secret
   is within 170px he beelines, sniffs (head-down bob), and blinks the neon
@@ -516,6 +534,28 @@ __TQ.spell                        // getter — spellState ({cooldownT})
   3-hit combo kill regression passes (hp 3→2→1→0, slain_mite set).
 - Night: lit windows spill light onto the street (per-building window
   lights), lamps keep interiors livable, torch pools unchanged.
+
+## Verified in session 10 (dog photo-canon — scripted __TQ.step + screenshots)
+
+- Boot clean, no console errors, before and after every change below.
+- Both dogs screenshot-reviewed at 2.6×/4.5× canvas zoom, sitting AND
+  trotting, in paint and print modes, at pinned noon: Doc's silver +
+  blaze + squint + olive collar + brass tag; Astro's two-tone +
+  curtain ears + pooled tail + mint tracker + brass tag + beard tinge.
+- 1× legibility check (the one that matters): both dogs stay instantly
+  identifiable at gameplay zoom; the collar hardware reads as single-pixel
+  glints, not noise.
+- Astro's ink eye vanished on the darker head at first pass — fixed with
+  a cream backing ring (session 7's "dark fur gets light features" law,
+  applied again). Bliss arc re-verified on the new head color while sniffing.
+- Title screen inherits the palette recolor (it draws from PALETTE.dogDoc/
+  dogAstro directly): silver Doc + charcoal Astro, screenshot-verified.
+- Print mode: markings drift with the color plate over registered ink,
+  as they should; two-tone + blaze read through the drift.
+- Test hygiene notes: dogs re-heel over manual placement within a frame —
+  freeze with `game.hitstopT = 9999` to stage portraits (rendering
+  continues); `setTime` re-pins are needed between screenshots because
+  stepped frames advance the clock (dusk crept into two shots).
 
 ## Verified in session 9 (the depth pass — scripted __TQ.step + screenshots)
 

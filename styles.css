@@ -11431,6 +11431,20 @@ section.production-header.alice p {
     min-width: 0;
 }
 
+/* An inline act row that also carries actions (the Encore) can run out of line:
+   number + pill + spark/share leave the title no room at narrow widths, and with
+   min-width: 0 the title collapses and its text paints under the pill. Let the
+   row wrap and hold the title at its own width, so the pill and buttons drop to
+   a second line instead. */
+.mixtape-track-item--act-start {
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+}
+
+.mixtape-track-item--act-start .track-title-text {
+    min-width: min-content;
+}
+
 /* Inline act marker — rides on the first track row of an act instead of a
    separate header row, so it adds no vertical height to the list. */
 .track-act-marker {

@@ -1643,7 +1643,8 @@ section.production-header.alice .production-details p strong {
     position: relative;
     z-index: 1;
     border-radius: 0.35rem;
-    overflow: clip;
+    /* Keep the edge layer visible so its light can fall just outside the case. */
+    overflow: visible;
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
     text-decoration: none;
@@ -1664,28 +1665,30 @@ section.production-header.alice .production-details p strong {
         radial-gradient(ellipse at var(--crt-warm), rgba(255, 90, 54, 0.55) 0%, transparent 60%),
         linear-gradient(135deg, #1a1550, #0d0a35);
     box-shadow:
-        0 14px 24px rgba(0, 0, 0, 0.16),
-        0 0 12px rgba(255, 185, 58, 0.38),
-        0 0 0 1px rgba(255, 185, 58, 0.18),
-        inset 0 0 0 1px rgba(248, 233, 210, 0.08);
+        0 16px 26px -18px rgba(0, 0, 0, 0.9),
+        0 0 2px color-mix(in srgb, var(--showcase-edge) 72%, transparent),
+        0 0 7px -2px color-mix(in srgb, var(--showcase-edge) 42%, transparent),
+        inset 0 0 7px -3px color-mix(in srgb, var(--showcase-edge) 28%, transparent);
     transition: --tile-scale 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    border: 1px solid rgba(255, 185, 58, 0.14);
+    border: 1px solid color-mix(in srgb, var(--showcase-edge) 52%, #151036);
     cursor: pointer;
     isolation: isolate;
     --showcase-accent: #ffb93a;
+    --showcase-edge: #ffc75c;
     --showcase-accent-soft: rgba(255, 185, 58, 0.12);
     --showcase-label: var(--light);
     --showcase-meta-color: rgba(248, 233, 210, 0.62);
     --showcase-media-tint: rgba(255, 185, 58, 0.08);
 }
 
-.showcase-item:hover {
+.showcase-item:is(:hover, :focus-visible) {
     --tile-scale: 1.025;
     box-shadow:
-        0 20px 34px rgba(0, 0, 0, 0.18),
-        0 0 16px rgba(255, 185, 58, 0.5),
-        0 0 0 1px var(--showcase-accent-soft),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+        0 20px 30px -18px rgba(0, 0, 0, 0.92),
+        0 0 3px color-mix(in srgb, var(--showcase-edge) 88%, transparent),
+        0 0 11px -2px color-mix(in srgb, var(--showcase-edge) 58%, transparent),
+        inset 0 0 10px -3px color-mix(in srgb, var(--showcase-edge) 40%, transparent);
+    outline: none;
 }
 
 /* Weightless float for the "Recently" cards, mirroring the game cartridges below.
@@ -1751,14 +1754,54 @@ section.production-header.alice .production-details p strong {
     z-index: 0;
 }
 
-.showcase-item::after {
-    content: '';
+.showcase-signal {
     position: absolute;
-    inset: 0;
-    border: 1px solid rgba(248, 233, 210, 0.08);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    inset: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    overflow: visible;
     pointer-events: none;
     z-index: 4;
+}
+
+.showcase-signal-blip {
+    x: 2px;
+    y: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    rx: 6px;
+    ry: 6px;
+    fill: none;
+    stroke: var(--showcase-edge);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    /* Two equal blips, separated by half of the normalized perimeter. */
+    stroke-dasharray: 3 47 3 47;
+    stroke-dashoffset: 0;
+    vector-effect: non-scaling-stroke;
+    mix-blend-mode: screen;
+    opacity: 0;
+}
+
+.showcase-item:is(:hover, :focus-visible) .showcase-signal-blip {
+    animation:
+        showcase-signal-lap 2.6s linear infinite,
+        showcase-signal-pulse 1.3s ease-in-out infinite;
+    filter:
+        brightness(1.25)
+        drop-shadow(0 0 1px #fffdf1)
+        drop-shadow(0 0 4px var(--showcase-edge))
+        drop-shadow(0 0 9px color-mix(in srgb, var(--showcase-edge) 88%, transparent))
+        drop-shadow(0 0 16px color-mix(in srgb, var(--showcase-edge) 48%, transparent));
+}
+
+@keyframes showcase-signal-lap {
+    to { stroke-dashoffset: -100; }
+}
+
+@keyframes showcase-signal-pulse {
+    0%, 100% { opacity: 0.86; }
+    50% { opacity: 1; }
 }
 
 .showcase-media {
@@ -1919,6 +1962,7 @@ section.production-header.alice .production-details p strong {
 
 .showcase-item-toast {
     --showcase-accent: #68b8ff;
+    --showcase-edge: #8bd4ff;
     --showcase-accent-soft: rgba(104, 184, 255, 0.2);
     --showcase-media-tint: rgba(104, 184, 255, 0.12);
     --crt-cool: 22% 25%;
@@ -1944,6 +1988,7 @@ section.production-header.alice .production-details p strong {
 
 .showcase-item-jc {
     --showcase-accent: #c27038;
+    --showcase-edge: #ff9a55;
     --showcase-accent-soft: rgba(194, 112, 56, 0.18);
     --showcase-media-tint: rgba(194, 112, 56, 0.12);
     --crt-cool: 12% 60%;

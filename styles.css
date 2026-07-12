@@ -13198,6 +13198,7 @@ body.reader-open {
     margin-inline: calc(var(--reader-gutter) * -1);
     margin-top: -42px;
     margin-bottom: 2em;
+    max-width: none;
     position: relative;
     z-index: 10;
 }
@@ -13304,9 +13305,12 @@ body.reader-open {
 }
 .article-reader-body li { margin-bottom: 0.4em; }
 
-/* Substack image containers — neutralize their layout, keep our framing */
+/* Substack image containers — neutralize their layout, keep our framing.
+   In-article media matches the 600px text column; the first-child hero
+   keeps its full-bleed treatment via the more specific rule above. */
 .article-reader-body .captioned-image-container {
-    margin: 1.8em 0;
+    margin: 1.8em auto;
+    max-width: 600px;
     text-align: center;
 }
 .article-reader-body .captioned-image-container figure {
@@ -13317,6 +13321,7 @@ body.reader-open {
 .article-reader-body .image2-inset {
     display: inline-block;
     max-width: 100%;
+    border-bottom: none;
 }
 .article-reader-body img,
 .article-reader-body picture {
@@ -13350,7 +13355,8 @@ body.reader-open {
 .article-reader-body .article-reader-video {
     display: block;
     width: 100%;
-    margin: 1.8em 0;
+    max-width: 600px;
+    margin: 1.8em auto;
     border-radius: 4px;
     background: #1d1408;
     box-shadow: 0 0 0 1px rgba(168, 90, 29, 0.35), 0 0 18px rgba(168, 90, 29, 0.18);

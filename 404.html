@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 — Signal Lost | Charles Wilke</title>
-    <meta name="description" content="This page doesn't exist — but the future still looks bright." />
+    <title>404: Signal Lost | Charles Wilke</title>
+    <meta name="description" content="Nothing is broadcasting at this address, but the main signal is still strong." />
     <meta name="robots" content="noindex" />
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -17,8 +17,8 @@
             --secondary: #ff5a36;
             --light: #f8e9d2;
             --accent: #2c4f7c;
-            --neon: #00f7c2;
-            --grid: rgba(0, 247, 194, 0.15);
+            --amber: #ffb93a;
+            --grid: rgba(255, 185, 58, 0.15);
         }
 
         * {
@@ -82,9 +82,9 @@
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(ellipse at 50% 40%, rgba(0, 247, 194, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 40%, rgba(255, 185, 58, 0.08) 0%, transparent 60%),
                 radial-gradient(ellipse at 30% 70%, rgba(75, 29, 138, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(255, 90, 54, 0.06) 0%, transparent 40%);
+                radial-gradient(ellipse at 70% 80%, rgba(255, 90, 54, 0.08) 0%, transparent 40%);
             pointer-events: none;
             z-index: 1;
         }
@@ -108,9 +108,9 @@
             position: relative;
             color: var(--light);
             text-shadow:
-                0 0 20px var(--neon),
-                0 0 40px var(--neon),
-                0 0 80px rgba(0, 247, 194, 0.4);
+                0 0 20px var(--amber),
+                0 0 40px var(--amber),
+                0 0 80px rgba(255, 185, 58, 0.4);
             animation: flicker 4s ease-in-out infinite;
             margin-bottom: 0.5rem;
         }
@@ -133,7 +133,7 @@
         }
 
         .error-code::after {
-            color: var(--neon);
+            color: var(--amber);
             z-index: -1;
             animation: glitchCyan 3s steps(2) infinite;
         }
@@ -167,7 +167,7 @@
             font-size: clamp(0.7rem, 2vw, 0.95rem);
             text-transform: uppercase;
             letter-spacing: 0.3em;
-            color: var(--neon);
+            color: var(--amber);
             opacity: 0.7;
             margin-bottom: 2rem;
         }
@@ -188,13 +188,13 @@
             color: var(--light);
             opacity: 0.85;
             margin-bottom: 2.5rem;
-            text-shadow: 0 0 5px rgba(0, 247, 194, 0.2);
+            text-shadow: 0 0 5px rgba(255, 185, 58, 0.2);
         }
 
         .message em {
-            color: var(--neon);
+            color: var(--amber);
             font-style: normal;
-            text-shadow: 0 0 8px rgba(0, 247, 194, 0.5);
+            text-shadow: 0 0 8px rgba(255, 185, 58, 0.5);
         }
 
         /* Home button */
@@ -205,7 +205,7 @@
             font-weight: 700;
             text-decoration: none;
             color: var(--primary);
-            background: var(--neon);
+            background: var(--amber);
             padding: 0.9rem 2.5rem;
             border: none;
             border-radius: 0;
@@ -215,16 +215,16 @@
             transition: all 0.3s ease;
             position: relative;
             box-shadow:
-                0 0 15px rgba(0, 247, 194, 0.4),
-                0 0 30px rgba(0, 247, 194, 0.15);
+                0 0 15px rgba(255, 185, 58, 0.4),
+                0 0 30px rgba(255, 185, 58, 0.15);
         }
 
         .home-link:hover {
             background: var(--light);
             color: var(--primary);
             box-shadow:
-                0 0 25px rgba(0, 247, 194, 0.6),
-                0 0 50px rgba(0, 247, 194, 0.25);
+                0 0 25px rgba(255, 185, 58, 0.6),
+                0 0 50px rgba(255, 185, 58, 0.25);
             transform: translateY(-2px);
         }
 
@@ -245,7 +245,7 @@
             position: absolute;
             width: 3px;
             height: 3px;
-            background: var(--neon);
+            background: var(--amber);
             border-radius: 50%;
             opacity: 0;
             animation: float-up linear infinite;
@@ -306,10 +306,10 @@
         <div class="error-code" aria-label="404 error">404</div>
         <div class="status-line">signal lost<span class="blink"> _</span></div>
         <p class="message">
-            This frequency doesn't carry a signal yet.<br>
-            But every lost path is just <em>an unbuilt one</em>.
+            Nothing is broadcasting on this frequency.<br>
+            But somewhere down the dial, <em>the music is still playing</em>.
         </p>
-        <a href="/" class="home-link">Return to Base</a>
+        <a href="/" class="home-link">Tune Back Home</a>
     </main>
 
     <div class="tagline">intention defines probability</div>
@@ -336,12 +336,12 @@
             const code = document.querySelector('.error-code');
             function triggerGlitch() {
                 code.style.textShadow =
-                    '4px 0 var(--secondary), -4px 0 var(--neon), 0 0 40px rgba(0,247,194,0.6)';
+                    '4px 0 var(--secondary), -4px 0 var(--amber), 0 0 40px rgba(255,185,58,0.6)';
                 code.style.transform = 'skewX(' + (Math.random() * 4 - 2) + 'deg)';
 
                 setTimeout(function () {
                     code.style.textShadow =
-                        '0 0 20px var(--neon), 0 0 40px var(--neon), 0 0 80px rgba(0,247,194,0.4)';
+                        '0 0 20px var(--amber), 0 0 40px var(--amber), 0 0 80px rgba(255,185,58,0.4)';
                     code.style.transform = 'none';
                 }, 120 + Math.random() * 100);
 

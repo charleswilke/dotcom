@@ -3284,6 +3284,34 @@ html {
 
     .image-wrapper {
         aspect-ratio: 1 / 1;
+        /* Safari can drop composited <img> layers when a tap combines clipping,
+           filtering, and transforms. Paint the primary portrait on the stable
+           parent layer as a fallback, then use a simple opacity crossfade. */
+        background: #f5e9d0 url('images/cw4.webp') center 20% / cover no-repeat;
+    }
+
+    .image-compare,
+    .image-compare:hover {
+        transform: none;
+    }
+
+    .image-after,
+    .image-wrapper:hover .image-after {
+        clip-path: none;
+        filter: none;
+    }
+
+    .image-after {
+        opacity: 0;
+        transition: opacity 0.35s ease;
+    }
+
+    .image-wrapper:hover .image-after {
+        opacity: 1;
+    }
+
+    .about-photo-signal .showcase-signal-blip {
+        mix-blend-mode: normal;
     }
 
     .social-links {

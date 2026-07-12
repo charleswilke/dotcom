@@ -4262,7 +4262,7 @@ function initJCLightbox() {
         { title: 'Mind the Drop', file: 'audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: 'audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
         { title: "Morning's Flood", file: 'audio/junkyard-cabaret/mornings-flood.mp3?v=202607051245', cover: 'audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
         { title: 'Misdirected.', file: 'audio/junkyard-cabaret/misdirected.mp3?v=202607051217', cover: 'audio/junkyard-cabaret/misdirected-title.webp?v=202607051217', article: 'https://charleswilke.substack.com/p/misdirected' },
-        { title: 'Scarce', act: 'Encore', actInline: true, file: 'audio/junkyard-cabaret/scarce.mp3', cover: 'audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }
+        { title: 'Scarce', act: 'Encore', actInline: true, file: 'audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: 'audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

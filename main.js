@@ -586,13 +586,21 @@ function hydrateNativeMedia(root) {
 
     root.querySelectorAll('.native-video-embed').forEach(el => {
         let id = '';
-        try { id = (JSON.parse(el.getAttribute('data-attrs') || '{}') || {}).mediaUploadId; } catch (e) { /* ignore */ }
+        let poster = '';
+        try {
+            const attrs = JSON.parse(el.getAttribute('data-attrs') || '{}') || {};
+            id = attrs.mediaUploadId;
+            // Injected server-side by enrichVideoEmbeds (lib/substack-utils.js);
+            // absent when the feed came from a fallback source.
+            poster = attrs.thumbnailUrl;
+        } catch (e) { /* ignore */ }
         if (!id) { el.remove(); return; }
         const src = `${SUBSTACK_BASE}/api/v1/video/upload/${id}/src`;
         const v = document.createElement('video');
         v.src = src;
         v.controls = true;
         v.preload = 'metadata';
+        if (typeof poster === 'string' && /^https:\/\//.test(poster)) v.poster = poster;
         v.setAttribute('playsinline', '');
         v.className = 'article-reader-video';
         el.replaceWith(v);

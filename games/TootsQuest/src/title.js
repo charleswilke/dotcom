@@ -14,7 +14,7 @@
 
 import {
   TAU, PALETTE, lerp, clamp, mulberry32, capsule, inkCircle, inkEllipse,
-  inkShape,
+  inkShape, taperedStroke,
 } from './ink.js';
 import { WORLD_W, WORLD_H } from './terrain.js';
 import { halftone } from './print.js';
@@ -569,6 +569,34 @@ function drawToots(ctx, x, y, s, t) {
   ctx.restore();
 }
 
+// Cutout shades for the pups: construction-paper layers, no ink outlines.
+// One step darker for far limbs / undersides, one step lighter for the
+// pieces that ride on top (plume, ear) so anatomy reads by value, not line.
+const DOC_DARK = '#9294ab';
+const DOC_LITE = '#d7d8e3';
+const ASTRO_DARK = '#3d3752';
+
+// Lifted-paper cue: a soft ink shadow offset under the top-layer pieces,
+// like the cutout is peeling up off the page. dx flips for mirrored dogs so
+// the light stays in one place on screen.
+const LIFT = 'rgba(34,26,86,0.22)';
+function liftCapsule(ctx, dx, x1, y1, x2, y2, w, fill) {
+  capsule(ctx, x1 + dx, y1 + 1.3, x2 + dx, y2 + 1.3, w, LIFT, null);
+  capsule(ctx, x1, y1, x2, y2, w, fill, null);
+}
+function liftEllipse(ctx, dx, x, y, rx, ry, rot, fill) {
+  inkEllipse(ctx, x + dx, y + 1.3, rx, ry, rot, LIFT, null);
+  inkEllipse(ctx, x, y, rx, ry, rot, fill, null);
+}
+function liftShape(ctx, dx, buildPath, fill) {
+  inkShape(ctx, (c) => {
+    c.translate(dx, 1.3);
+    buildPath(c);
+    c.translate(-dx, -1.3);
+  }, LIFT, null);
+  inkShape(ctx, buildPath, fill, null);
+}
+
 // Doc, committed: jaw clamped on a beetle twice his courage class.
 function drawDoc(ctx, x, y, s, t) {
   ctx.save();
@@ -582,42 +610,123 @@ function drawDoc(ctx, x, y, s, t) {
   // Spring popping loose overhead.
   drawPart(ctx, 'spring', 12, -20 + Math.sin(t * 3) * 1.2, 0.6 + t * 0.0, 1);
 
-  // Low lunge: rump up, chest down, the bean at full commitment.
-  capsule(ctx, -10, -9, -16, -16, 4, PALETTE.dogDoc, PALETTE.ink, 1.8);   // tail base
-  ctx.save();
-  ctx.rotate(0.14);
-  inkEllipse(ctx, -4, -9.5, 10.5, 6.8, 0, PALETTE.dogDoc, PALETTE.ink, 2.2);
-  ctx.restore();
-  // The curl plume, sweeping over the back.
-  capsule(ctx, -12, -12, -17 + wag, -19, 3.6, PALETTE.dogDoc, PALETTE.ink, 1.8);
-  // Legs braced wide.
-  capsule(ctx, -8, -6, -10, 0, 3, PALETTE.dogDoc, PALETTE.ink, 1.8);
-  capsule(ctx, -2, -6, -1, 0, 3, PALETTE.dogDoc, PALETTE.ink, 1.8);
-  capsule(ctx, 4, -7, 6, 0, 3, PALETTE.dogDoc, PALETTE.ink, 1.8);
-  // Head down at the beetle, jaw open around its shell.
-  inkCircle(ctx, 8, -8, 6.5, PALETTE.dogDoc, PALETTE.ink, 2.2);
-  capsule(ctx, 5, -13, 1, -8, 3.8, PALETTE.dogDoc, PALETTE.ink, 1.8);   // ear flying
-  // Upper snout biting down; lower jaw beneath the shell edge.
-  inkEllipse(ctx, 13, -8.5, 4.5, 2.8, 0.5, PALETTE.dogDocChest, PALETTE.ink, 1.6);
-  inkEllipse(ctx, 12.5, -3.5, 3.6, 2, 0.2, PALETTE.dogDocChest, PALETTE.ink, 1.6);
-  inkCircle(ctx, 15.5, -10.5, 1.5, PALETTE.ink, null);   // nose
+  // Doc v2 (session 11): drawn silhouettes instead of assembled tubes.
+  // Each signature piece is one closed bezier path — the fidelity lives in
+  // the concavities (back sag, belly tuck, ruff nick, muzzle stop).
+
+  // Far legs first, a shade back, tapered thigh-to-paw.
+  taperedStroke(ctx, 0.2, -6.4, 0.8, -3.4, 1.6, -0.3, 3.4, 2.0, DOC_DARK, null);
+  taperedStroke(ctx, -8.2, -6.2, -8.8, -3.2, -9.8, -0.3, 3.4, 2.0, DOC_DARK, null);
+
+  // The bean at full commitment: rump peaked, back sagging into the lunge,
+  // belly tucked, chest dropped, one ruff nick at the throat.
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.moveTo(4, -11.5);
+    c.bezierCurveTo(1, -12.2, -2, -12.0, -5, -13.0);      // back sag
+    c.bezierCurveTo(-8, -14.0, -10.5, -14.6, -12, -13.2);  // rump peak
+    c.bezierCurveTo(-14.2, -11.2, -14.0, -8.0, -12.5, -6.0); // butt
+    c.bezierCurveTo(-11.5, -4.6, -9.5, -4.0, -7.5, -4.2);  // thigh
+    c.bezierCurveTo(-4.5, -4.6, -2.5, -5.4, 0, -5.2);      // belly tuck
+    c.bezierCurveTo(2.5, -5.0, 4.5, -4.2, 5.8, -5.4);      // chest drop
+    c.bezierCurveTo(7.0, -6.8, 7.2, -8.6, 6.2, -9.4);      // chest front
+    c.lineTo(5.2, -9.2);                                    // ruff nick
+    c.bezierCurveTo(6.4, -10.2, 6.4, -10.8, 5.6, -11.4);
+    c.bezierCurveTo(5.2, -11.8, 4.6, -11.7, 4, -11.5);
+    c.closePath();
+  }, PALETTE.dogDoc, null);
+
+  // The curl plume, a lighter comma laid over the rump, hooked at the tip.
+  liftShape(ctx, 0.8, (c) => {
+    c.beginPath();
+    c.moveTo(-9.0, -12.6);
+    c.bezierCurveTo(-13.5, -15.5, -16.5, -16.5, -18.0 + wag, -19.2);
+    c.bezierCurveTo(-18.8 + wag, -21.4, -21.6 + wag, -20.4, -20.4 + wag, -17.8);
+    c.bezierCurveTo(-18.6 + wag * 0.6, -14.2, -15.0, -11.8, -11.6, -10.6);
+    c.bezierCurveTo(-10.2, -10.2, -9.0, -11.0, -9.0, -12.6);
+    c.closePath();
+  }, DOC_LITE);
+
+  // Near legs braced wide, thick at the hip, thin at the paw.
+  taperedStroke(ctx, -11, -6, -12.6, -3.4, -13.4, -0.4, 3.6, 2.2, PALETTE.dogDoc, null);
+  taperedStroke(ctx, 3.5, -6, 4.6, -3.2, 5.6, -0.3, 3.4, 2.1, PALETTE.dogDoc, null);
+
+  // Olive collar at the neck, tucked behind the head.
+  capsule(ctx, 2.8, -11.8, 4.6, -5.2, 1.8, PALETTE.dogDocCollar, null);
+
+  // Head: skull dome, a real stop above the muzzle, open upper jaw around
+  // the shell, cheek nick at the back.
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.moveTo(3.2, -6.2);
+    c.lineTo(2.2, -7.4);                                    // cheek nick
+    c.lineTo(3.4, -7.8);
+    c.bezierCurveTo(2.2, -9.5, 2.6, -12.0, 4.6, -13.4);     // back of head
+    c.bezierCurveTo(6.5, -14.8, 9.5, -14.6, 11.4, -13.2);   // dome
+    c.bezierCurveTo(12.2, -12.6, 12.0, -12.2, 12.6, -11.9); // the stop
+    c.bezierCurveTo(14.5, -11.6, 16.0, -11.3, 16.6, -10.4); // bridge
+    c.bezierCurveTo(17.0, -9.4, 16.4, -8.6, 15.4, -8.4);    // nose end
+    c.bezierCurveTo(13.5, -8.0, 12.0, -7.8, 10.8, -7.4);    // upper lip
+    c.bezierCurveTo(8.5, -6.6, 5.5, -5.8, 3.2, -6.2);       // mouth corner
+    c.closePath();
+  }, PALETTE.dogDoc, null);
+
+  // White blaze up the bridge, between the eyes.
+  inkShape(ctx, (c) => {
+    c.beginPath();
+    c.moveTo(16.3, -10.5);
+    c.bezierCurveTo(14.2, -11.6, 12.4, -12.3, 9.8, -13.6);
+    c.lineTo(10.9, -11.9);
+    c.bezierCurveTo(12.8, -11.2, 14.6, -10.4, 15.6, -9.6);
+    c.closePath();
+  }, PALETTE.dogDocChest, null);
+
+  // Lower jaw beneath the shell edge, chin scruff cut in zigzag.
+  liftShape(ctx, 0.8, (c) => {
+    c.beginPath();
+    c.moveTo(9.2, -5.8);
+    c.bezierCurveTo(11.5, -5.6, 13.8, -5.2, 15.2, -4.6);
+    c.bezierCurveTo(15.9, -4.2, 15.8, -3.4, 15.0, -3.1);    // chin
+    c.lineTo(13.8, -2.9);                                    // the beard
+    c.lineTo(13.4, -1.8);
+    c.lineTo(12.2, -2.6);
+    c.lineTo(11.2, -1.5);
+    c.lineTo(10.4, -2.7);
+    c.lineTo(9.2, -2.2);
+    c.bezierCurveTo(8.6, -3.6, 8.6, -4.8, 9.2, -5.8);
+    c.closePath();
+  }, PALETTE.dogDocChest);
+
+  // Short bob ear, a soft flag blown back by the lunge.
+  liftShape(ctx, 0.8, (c) => {
+    c.beginPath();
+    c.moveTo(5.0, -13.4);
+    c.bezierCurveTo(3.8, -15.2, 1.8, -15.9, 0.6, -15.0);
+    c.bezierCurveTo(0.2, -13.8, 1.4, -12.2, 3.2, -11.6);
+    c.bezierCurveTo(3.9, -12.0, 4.6, -12.7, 5.0, -13.4);
+    c.closePath();
+  }, DOC_LITE);
+
+  // Brass tag swinging at the throat.
+  inkCircle(ctx, 4.6, -3.4, 1.5, '#c9a45a', null);
+  inkCircle(ctx, 15.9, -10.1, 1.4, PALETTE.ink, null);   // nose
   // The underbite tooth, mid-bite.
   inkShape(ctx, (c) => {
     c.beginPath();
-    c.moveTo(13.6, -4.6);
-    c.lineTo(15.4, -4.6);
-    c.lineTo(14.5, -6.8);
+    c.moveTo(13.4, -4.9);
+    c.lineTo(15.0, -4.9);
+    c.lineTo(14.3, -6.6);
     c.closePath();
   }, PALETTE.cream, PALETTE.ink, 1);
   // Furrowed brow + furious eye.
   ctx.strokeStyle = PALETTE.ink;
-  ctx.lineWidth = 1.6;
+  ctx.lineWidth = 1.3;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(5, -12); ctx.lineTo(10, -10.4);
+  ctx.moveTo(6.2, -12.0); ctx.lineTo(10.0, -11.1);
   ctx.stroke();
   ctx.fillStyle = PALETTE.ink;
-  ctx.beginPath(); ctx.arc(8.6, -9.6, 1.3, 0, TAU); ctx.fill();
+  ctx.beginPath(); ctx.arc(8.8, -10.4, 1.3, 0, TAU); ctx.fill();
   ctx.restore();
 }
 
@@ -629,23 +738,30 @@ function drawAstro(ctx, x, y, s, t) {
   const wag = Math.sin(t * 13) * 2.4;
 
   inkEllipse(ctx, 0, 1.5, 15, 5, 0, 'rgba(34,26,86,0.2)', null);
-  // Rear high on the long poodle legs.
-  capsule(ctx, -8, -14, -8.5, 0, 2.6, PALETTE.dogAstro, PALETTE.ink, 1.8);
-  capsule(ctx, -4, -14, -3.5, 0, 2.6, PALETTE.dogAstro, PALETTE.ink, 1.8);
-  // Tail straight up, wagging hard.
-  capsule(ctx, -9, -16, -12 + wag, -26, 3.4, PALETTE.dogAstro, PALETTE.ink, 1.8);
+  // Two-tone groom: charcoal head/ears/tail, lighter shaved body and legs.
+  // Rear high on the long poodle legs — far leg a shade darker.
+  capsule(ctx, -8, -14, -8.5, 0, 2.6, ASTRO_DARK, null);
+  capsule(ctx, -4, -14, -3.5, 0, 2.6, PALETTE.dogAstroBody, null);
+  // Tail straight up, wagging hard — the dark plume, star of the pose.
+  liftCapsule(ctx, -0.8, -9, -16, -12 + wag, -26, 3.4, PALETTE.dogAstro);
   // Body diving forward-down.
   ctx.save();
   ctx.rotate(0.34);
-  inkEllipse(ctx, 1, -10, 11, 6, 0, PALETTE.dogAstro, PALETTE.ink, 2.2);
+  inkEllipse(ctx, 1, -10, 11, 6, 0, PALETTE.dogAstroBody, null);
   ctx.restore();
-  // Front legs plunged into the dig.
-  capsule(ctx, 7, -6, 9, 2, 2.6, PALETTE.dogAstro, PALETTE.ink, 1.8);
-  capsule(ctx, 11, -5, 13, 2.5, 2.6, PALETTE.dogAstro, PALETTE.ink, 1.8);
-  // Head down at the ground, ears flopped forward.
-  inkCircle(ctx, 13, -6, 6.5, PALETTE.dogAstro, PALETTE.ink, 2.2);
-  capsule(ctx, 11, -11, 16, -13, 4, PALETTE.dogAstro, PALETTE.ink, 1.8);
-  inkEllipse(ctx, 17.5, -3.5, 4, 2.6, 0.5, PALETTE.dogAstroChest, PALETTE.ink, 1.6);
+  // Front legs plunged into the dig — far leg darker.
+  capsule(ctx, 7, -6, 9, 2, 2.6, ASTRO_DARK, null);
+  capsule(ctx, 11, -5, 13, 2.5, 2.6, PALETTE.dogAstroBody, null);
+  // Mustard collar where the charcoal head meets the shaved neck.
+  capsule(ctx, 7.5, -11.5, 10, -2.5, 1.6, PALETTE.dogAstroCollar, null);
+  // Head down at the ground, ears flopped forward — dark ear rides on top,
+  // the lift shadow doing the separating.
+  inkCircle(ctx, 13, -6, 6.5, PALETTE.dogAstro, null);
+  liftCapsule(ctx, -0.8, 11, -11, 16, -13, 4, PALETTE.dogAstro);
+  liftEllipse(ctx, -0.8, 17.5, -3.5, 4, 2.6, 0.5, PALETTE.dogAstroChest);
+  // AirTag mint disc + brass star tag, dangling into the dig.
+  inkCircle(ctx, 8.8, -0.6, 1.5, PALETTE.neon, null);
+  inkCircle(ctx, 11, 0, 1, '#c9a45a', null);
   inkCircle(ctx, 19.5, -5.5, 1.4, PALETTE.ink, null);
   // The bliss arc, cream on charcoal.
   ctx.strokeStyle = PALETTE.cream;
@@ -732,8 +848,9 @@ export function drawTitle(ctx, time) {
   drawFlora(ctx, t);
 
   // The cast.
-  drawDoc(ctx, 175, 470, 2.7, t);
-  drawAstro(ctx, 800, 462, 2.6, t);
+  // Astro is the noticeably bigger dog; Doc compensates with attitude.
+  drawDoc(ctx, 175, 470, 2.55, t);
+  drawAstro(ctx, 800, 462, 2.9, t);
   drawToots(ctx, 400, 380, 3, t);
   // The vanquished beetle at the top of the arc, parts flying.
   drawBeetle(ctx, 570, 268, 2.3, -0.55 + Math.sin(t * 1.7) * 0.05, t,

@@ -147,6 +147,40 @@ export function curvedCapsule(ctx, x1, y1, cx, cy, x2, y2, w, fill, inkColor, in
   ctx.stroke();
 }
 
+// A brush stroke: a quadratic spine from (x1,y1) through (cx,cy) to (x2,y2)
+// whose width tapers from w1 to w2, with round caps. This is what stops a
+// limb reading as an inflated tube — thighs are thick, paws are thin.
+// Same plate rules as the other primitives (built on inkShape).
+export function taperedStroke(ctx, x1, y1, cx, cy, x2, y2, w1, w2, fill, inkColor, inkW = 2.2) {
+  const N = 10;
+  const build = (c) => {
+    const left = [], right = [];
+    let a0 = 0, a1 = 0;
+    for (let i = 0; i <= N; i++) {
+      const t = i / N, mt = 1 - t;
+      const px = mt * mt * x1 + 2 * mt * t * cx + t * t * x2;
+      const py = mt * mt * y1 + 2 * mt * t * cy + t * t * y2;
+      let dx = mt * (cx - x1) + t * (x2 - cx);
+      let dy = mt * (cy - y1) + t * (y2 - cy);
+      const len = Math.hypot(dx, dy) || 1;
+      dx /= len; dy /= len;
+      if (i === 0) a0 = Math.atan2(dy, dx);
+      if (i === N) a1 = Math.atan2(dy, dx);
+      const w = (w1 + (w2 - w1) * t) / 2;
+      left.push([px - dy * w, py + dx * w]);
+      right.push([px + dy * w, py - dx * w]);
+    }
+    c.beginPath();
+    c.moveTo(left[0][0], left[0][1]);
+    for (let i = 1; i <= N; i++) c.lineTo(left[i][0], left[i][1]);
+    c.arc(x2, y2, w2 / 2, a1 + Math.PI / 2, a1 - Math.PI / 2, true);
+    for (let i = N; i >= 0; i--) c.lineTo(right[i][0], right[i][1]);
+    c.arc(x1, y1, w1 / 2, a0 - Math.PI / 2, a0 + Math.PI / 2, true);
+    c.closePath();
+  };
+  inkShape(ctx, build, fill, inkColor, inkW);
+}
+
 // Arbitrary closed shape with the same plate rules as the primitives:
 // fill drifts in print mode, ink outline stays registered. buildPath must
 // begin its own path and be safe to call twice.

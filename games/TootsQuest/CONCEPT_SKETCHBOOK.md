@@ -188,8 +188,17 @@ the big-bad allusion:
   dog bullet and is already in-game; the prompt below keeps only what
   earns its words at poster scale.
 
-Current revised prompt (v5.1 — the v5 keeper composition with photo-canon
-dogs):
+- **The old WANTED poster weighs in (v5.2, session 11):** Charles re-shared
+  his years-old wanted-poster drawing of the boys ("GRAND THEFT CHEWIE").
+  Its colors are outdated (the photos win), but it settles what the photos'
+  close crops couldn't: Astro is the noticeably BIGGER dog, Doc the small
+  one, and their default faces are opposites — Astro's tongue lolls in
+  bliss, Doc's grump lives in the beard. The prompt now says "the smaller
+  dog" / "the bigger dog" outright, gives Doc his white beard, and trades
+  Astro's "huge happy grin" for the tongue. All three read at 40px.
+
+Current revised prompt (v5.2 — the v5 keeper composition with photo-canon
+dogs, sized per the wanted poster):
 
 > Simple flat cartoon title panel for "TOOTS QUEST" in a clean Sunday
 > newspaper comics style: characters built from a few big rounded shapes,
@@ -206,14 +215,14 @@ dogs):
 > of teal light that connects square with a rusty windup beetle at the
 > arc's end: the beetle knocked tumbling backward through the air, a
 > spring, a bolt and a bent antenna flying off it, a small hand-lettered
-> "THOK!" burst right at the point of impact. Left: a small silver-gray
-> shih tzu with a white blaze up the muzzle and a white chest, short
-> ears, heavy-lidded grumpy scowl, olive-green collar, chomping a round
-> rusty windup beetle, a spring and bolts popping loose. Right: a lanky
-> shih tzu/poodle mix, dark charcoal head with long floppy ears, lighter
-> silver-gray body, huge happy grin, mustard-yellow collar with a small
-> mint tracker fob, ignoring the battle, digging, dirt flying, a
-> teal-glinting trinket unearthed. On the far ridge the print is
+> "THOK!" burst right at the point of impact. Left: the smaller dog, a
+> silver-gray shih tzu with a white blaze up the muzzle, white beard and
+> chest, short ears, heavy-lidded grumpy scowl, olive-green collar,
+> chomping a round rusty windup beetle, a spring and bolts popping loose.
+> Right: the bigger dog, a lanky shih tzu/poodle mix, dark charcoal head
+> with long floppy ears, lighter silver-gray body, tongue lolling out in
+> bliss, mustard-yellow collar with a small mint tracker fob, ignoring
+> the battle, digging, dirt flying, a teal-glinting trinket unearthed. On the far ridge the print is
 > failing: color fades to bare paper, a field of gray halftone static, one
 > plain dead radio tower, and faint in the static a tall ragged silhouette
 > made of dots, strictly faceless, no eyes, only vaguely echoing the

@@ -9717,7 +9717,6 @@ section.production-header.alice p {
         flex-direction: row;
         align-items: stretch;
         max-width: 1100px;
-        min-height: min(800px, 96vh);
         padding: 1.25rem 2rem;
         gap: 2rem;
     }
@@ -9761,6 +9760,11 @@ section.production-header.alice p {
         display: flex;
         flex-direction: column;
         min-width: 0;
+        /* Size containment keeps the tracklist from inflating the modal:
+           the left column (art + deck) sets the height, and the playlist
+           scrolls within it. */
+        contain: size;
+        min-height: 0;
     }
 
     .mixtape-title {

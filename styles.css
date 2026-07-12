@@ -1783,7 +1783,7 @@ section.production-header.alice .production-details p strong {
     opacity: 0;
 }
 
-.showcase-item:is(:hover, :focus-visible) .showcase-signal-blip {
+:is(.showcase-item, .image-compare):is(:hover, :focus-visible) .showcase-signal-blip {
     animation:
         showcase-signal-lap 2.6s linear infinite,
         showcase-signal-pulse 1.3s ease-in-out infinite;
@@ -3149,6 +3149,7 @@ html {
 
 .image-compare {
     position: relative;
+    --showcase-edge: #ffb93a;
     width: 100%;
     max-width: 420px;
     margin: 0 auto;

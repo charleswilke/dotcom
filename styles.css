@@ -1762,6 +1762,8 @@ section.production-header.alice .production-details p strong {
     overflow: visible;
     pointer-events: none;
     z-index: 4;
+    /* Pulse lives here, not on the blip, so it never fights the blip's opacity fade. */
+    animation: showcase-signal-pulse 1.3s ease-in-out infinite;
 }
 
 .showcase-signal-blip {
@@ -1781,12 +1783,19 @@ section.production-header.alice .production-details p strong {
     vector-effect: non-scaling-stroke;
     mix-blend-mode: screen;
     opacity: 0;
+    /* Lap runs even while invisible so un-hover glides out mid-orbit instead of snapping. */
+    animation: showcase-signal-lap 2.6s linear infinite;
+    transition: opacity 0.45s ease, filter 0.45s ease;
 }
 
 :is(.showcase-item, .image-compare):is(:hover, :focus-visible) .showcase-signal-blip {
-    animation:
-        showcase-signal-lap 2.6s linear infinite,
-        showcase-signal-pulse 1.3s ease-in-out infinite;
+    opacity: 1;
+    /* Plain fade-up entry: the base rule's 0.45s transition runs both
+       directions. A tune-in flicker variant exists — to restore it, add
+       "transition: opacity 0.1s ease, filter 0.45s ease;" here and append
+       showcase-signal-lock (keyframes below) to an animation list that
+       redeclares the lap verbatim at index 0, since animations match by name
+       and list position and would restart otherwise. */
     filter:
         brightness(1.25)
         drop-shadow(0 0 1px #fffdf1)
@@ -1802,6 +1811,48 @@ section.production-header.alice .production-details p strong {
 @keyframes showcase-signal-pulse {
     0%, 100% { opacity: 0.86; }
     50% { opacity: 1; }
+}
+
+/* Tuning flicker: steps(1, end) holds each value then hard-cuts, so the blips
+   stutter like a station being found before settling into the steady lock.
+   Flickers stroke-opacity, NOT opacity: a CSS animation on opacity would
+   animation-taint the property and silently kill the fade-out transition. */
+@keyframes showcase-signal-lock {
+    0%   { stroke-opacity: 0; }
+    12%  { stroke-opacity: 0.85; }
+    22%  { stroke-opacity: 0.12; }
+    36%  { stroke-opacity: 0.7; }
+    46%  { stroke-opacity: 0.25; }
+    64%  { stroke-opacity: 1; }
+    76%  { stroke-opacity: 0.5; }
+    100% { stroke-opacity: 1; }
+}
+
+/* Desync the orbits so hovering different cards doesn't show the blips at the
+   identical spot on every border. Selectors are doubled up to tie the hover
+   rule's specificity: an animation shorthand there (as in the flicker variant)
+   resets delay to 0s, and these land later in the file, so the negative lap
+   delays survive hover either way. */
+.showcase-item.showcase-item-jc .showcase-signal-blip { animation-delay: -0.65s, 0s; }
+.showcase-item.showcase-item-s2i .showcase-signal-blip { animation-delay: -1.3s, 0s; }
+.image-compare .about-photo-signal .showcase-signal-blip { animation-delay: -1.95s, 0s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .showcase-signal,
+    .showcase-signal-blip {
+        animation: none;
+    }
+
+    .showcase-signal-blip {
+        /* No orbit under reduced motion: a static full outline that plainly crossfades. */
+        stroke-dasharray: none;
+        stroke-width: 1.5px;
+    }
+
+    /* The hover rule's :is() specificity beats the reset above, so re-kill it here. */
+    :is(.showcase-item, .image-compare):is(:hover, :focus-visible) .showcase-signal-blip {
+        animation: none;
+    }
 }
 
 .showcase-media {
@@ -3170,6 +3221,22 @@ html {
 .image-compare:hover {
     transform: translateY(-10px) rotate(1deg);
     box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 0 15px rgba(255, 185, 58, 0.55);
+}
+
+/* Ride the mustard outline instead of the padding edge: the ring is a 2px
+   outline just past the 3px black border, so the stroke's centerline needs to
+   sit 4px farther out than the showcase default (-2px inset). */
+.about-photo-signal {
+    inset: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+}
+
+/* Split the difference between the ring's ~9px top and ~17px bottom corner
+   radii — an SVG rect only takes one rx, and the glow hides the few px of drift. */
+.about-photo-signal .showcase-signal-blip {
+    rx: 12px;
+    ry: 12px;
 }
 
 .image-wrapper {

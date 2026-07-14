@@ -2809,11 +2809,11 @@ section.production-header.alice p {
     font-family: 'Orbitron', sans-serif;
     font-size: 1rem;
     font-weight: 700;
-    color: #c4ac75;
+    color: #ffb93a;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 6px;
-    text-shadow: 0 0 8px rgba(196, 172, 117, 0.6);
+    text-shadow: 0 0 8px rgba(255, 185, 58, 0.6);
     flex-shrink: 0;
     opacity: 0;
     pointer-events: none;
@@ -2826,7 +2826,7 @@ section.production-header.alice p {
 }
 
 .nav-logo:hover {
-    text-shadow: 0 0 16px rgba(196, 172, 117, 0.7), 0 0 30px rgba(196, 172, 117, 0.5);
+    text-shadow: 0 0 16px rgba(255, 185, 58, 0.7), 0 0 30px rgba(255, 185, 58, 0.5);
 }
 
 .nav-links {

@@ -3245,6 +3245,7 @@ function createMiniPlayer() {
         if (current.oscilloscope) current.oscilloscope.destroy();
         if (stopAudio && current.audio) current.audio.pause();
         detachListeners();
+        setTucked(false);
         root.classList.remove('active');
         root.setAttribute('aria-hidden', 'true');
         setTimeout(() => {
@@ -3310,6 +3311,7 @@ function createMiniPlayer() {
         current = { audio, onExpand, onClose, listeners, oscilloscope, updateTitle };
 
         root.hidden = false;
+        setTucked(false);
         // force reflow so the transition animates in
         void root.offsetWidth;
         root.classList.add('active');
@@ -3353,6 +3355,79 @@ function createMiniPlayer() {
             if (typeof onClose === 'function') onClose();
         });
     }
+
+    // Swipe right (touch only) tucks the player offscreen, leaving a 28px sliver
+    // as a handle; tapping the sliver or swiping it left brings the player back.
+    const TUCK_PEEK = 28;
+    let tucked = false;
+    let suppressClick = false;
+    function setTucked(next) {
+        tucked = next;
+        root.classList.toggle('is-tucked', tucked);
+    }
+
+    let touch = null; // { startX, startY, baseOffset, maxOffset, dragging }
+    root.addEventListener('touchstart', (e) => {
+        if (!current || e.touches.length !== 1) return;
+        // distance from resting spot to tucked spot (mirrors --mini-tuck-x)
+        const cssRight = parseFloat(getComputedStyle(root).right) || 0;
+        const max = root.offsetWidth + cssRight - TUCK_PEEK;
+        touch = {
+            startX: e.touches[0].clientX,
+            startY: e.touches[0].clientY,
+            baseOffset: tucked ? max : 0,
+            maxOffset: max,
+            dragging: false
+        };
+    }, { passive: true });
+
+    root.addEventListener('touchmove', (e) => {
+        if (!touch || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - touch.startX;
+        const dy = e.touches[0].clientY - touch.startY;
+        if (!touch.dragging) {
+            if (Math.abs(dx) < 12 || Math.abs(dx) <= Math.abs(dy)) return;
+            touch.dragging = true;
+            root.classList.add('is-dragging');
+        }
+        e.preventDefault();
+        const offset = Math.min(touch.maxOffset, Math.max(0, touch.baseOffset + dx));
+        root.style.transform = `translateX(${offset}px)`;
+    }, { passive: false });
+
+    function endTouch(e) {
+        if (!touch) return;
+        if (touch.dragging) {
+            const endX = e.changedTouches && e.changedTouches.length
+                ? e.changedTouches[0].clientX : touch.startX;
+            const dx = endX - touch.startX;
+            root.classList.remove('is-dragging');
+            root.style.transform = '';
+            if (!tucked && dx > 60) setTucked(true);
+            else if (tucked && dx < -40) setTucked(false);
+            suppressClick = true; // swallow the ghost click that follows a swipe
+            setTimeout(() => { suppressClick = false; }, 400);
+        }
+        touch = null;
+    }
+    root.addEventListener('touchend', endTouch);
+    root.addEventListener('touchcancel', endTouch);
+
+    // While tucked, the peeking sliver acts purely as an "untuck" handle — capture
+    // clicks so the buttons underneath don't fire.
+    root.addEventListener('click', (e) => {
+        if (suppressClick) {
+            suppressClick = false;
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        if (tucked) {
+            e.preventDefault();
+            e.stopPropagation();
+            setTucked(false);
+        }
+    }, true);
 
     return {
         attach,

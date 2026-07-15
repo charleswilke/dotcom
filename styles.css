@@ -12005,10 +12005,12 @@ section.production-header.alice p {
 /* ===== FLOATING MINI PLAYER ===== */
 
 .mini-player {
+    --mini-tuck-x: calc(100% + 1.25rem - 28px);
     position: fixed;
     right: 1.25rem;
     bottom: 1.25rem;
-    z-index: 9000;
+    /* above the article reader overlay (9999) so audio stays reachable while reading */
+    z-index: 10001;
     display: flex;
     align-items: stretch;
     gap: 0.65rem;
@@ -12041,6 +12043,15 @@ section.production-header.alice p {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+}
+
+/* Swiped right offscreen (mobile) — leaves a sliver of the cover peeking as a handle */
+.mini-player.active.is-tucked {
+    transform: translateX(var(--mini-tuck-x));
+}
+
+.mini-player.is-dragging {
+    transition: none;
 }
 
 .mini-player::after {
@@ -12290,6 +12301,7 @@ section.production-header.alice p {
 
 @media (max-width: 640px) {
     .mini-player {
+        --mini-tuck-x: calc(100% + 0.6rem - 28px);
         right: 0.6rem;
         bottom: 0.6rem;
         left: 0.6rem;

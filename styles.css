@@ -12005,7 +12005,7 @@ section.production-header.alice p {
 /* ===== FLOATING MINI PLAYER ===== */
 
 .mini-player {
-    --mini-tuck-x: calc(100% + 1.25rem - 28px);
+    --mini-tuck-x: calc(100% + 1.25rem);
     position: fixed;
     right: 1.25rem;
     bottom: 1.25rem;
@@ -12045,13 +12045,86 @@ section.production-header.alice p {
     pointer-events: auto;
 }
 
-/* Swiped right offscreen (mobile) — leaves a sliver of the cover peeking as a handle */
+/* Swiped right offscreen (mobile) — only the handle tab stays peeking */
 .mini-player.active.is-tucked {
     transform: translateX(var(--mini-tuck-x));
 }
 
 .mini-player.is-dragging {
     transition: none;
+}
+
+/* Handle tab protruding from the player's left edge; hidden until tucked.
+   Styled like a tiny "Recently" showcase card: same radius, color-mix edge
+   glow, and scanline-over-CRT background — but keyed to the player's theme. */
+.mini-player-handle {
+    --handle-edge: rgb(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194));
+    position: absolute;
+    right: calc(100% + 3px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 62px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--handle-edge) 52%, #151036);
+    border-radius: 0.35rem;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 2px,
+            rgba(0, 0, 0, 0.22) 2px 3px
+        ),
+        radial-gradient(ellipse at 30% 20%, rgba(58, 42, 140, 0.95) 0%, transparent 60%),
+        radial-gradient(ellipse at 75% 90%, color-mix(in srgb, var(--handle-edge) 30%, transparent) 0%, transparent 65%),
+        linear-gradient(135deg, #1a1550, #0d0a35);
+    color: rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), 0.9);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow:
+        0 16px 26px -18px rgba(0, 0, 0, 0.9),
+        0 0 2px color-mix(in srgb, var(--handle-edge) 72%, transparent),
+        0 0 7px -2px color-mix(in srgb, var(--handle-edge) 42%, transparent),
+        inset 0 0 7px -3px color-mix(in srgb, var(--handle-edge) 28%, transparent);
+    transition: opacity 180ms ease;
+}
+
+.mini-player.is-tucked .mini-player-handle {
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 160ms; /* fade in as the player finishes sliding away */
+    animation: mini-handle-pulse 2.4s ease-in-out infinite;
+}
+
+.mini-player.is-tucked.is-paused .mini-player-handle {
+    animation: none;
+}
+
+.mini-player-handle-chevron {
+    font-size: 1.3rem;
+    line-height: 1;
+    transform: translateX(-1px);
+    text-shadow: 0 0 8px rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), 0.7);
+}
+
+@keyframes mini-handle-pulse {
+    0%, 100% {
+        box-shadow:
+            0 16px 26px -18px rgba(0, 0, 0, 0.9),
+            0 0 2px color-mix(in srgb, var(--handle-edge) 72%, transparent),
+            0 0 7px -2px color-mix(in srgb, var(--handle-edge) 42%, transparent),
+            inset 0 0 7px -3px color-mix(in srgb, var(--handle-edge) 28%, transparent);
+    }
+    50% {
+        box-shadow:
+            0 16px 26px -18px rgba(0, 0, 0, 0.9),
+            0 0 3px color-mix(in srgb, var(--handle-edge) 88%, transparent),
+            0 0 12px -2px color-mix(in srgb, var(--handle-edge) 62%, transparent),
+            inset 0 0 10px -3px color-mix(in srgb, var(--handle-edge) 40%, transparent);
+    }
 }
 
 .mini-player::after {
@@ -12301,7 +12374,7 @@ section.production-header.alice p {
 
 @media (max-width: 640px) {
     .mini-player {
-        --mini-tuck-x: calc(100% + 0.6rem - 28px);
+        --mini-tuck-x: calc(100% + 0.6rem);
         right: 0.6rem;
         bottom: 0.6rem;
         left: 0.6rem;

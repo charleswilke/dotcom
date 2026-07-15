@@ -3356,9 +3356,8 @@ function createMiniPlayer() {
         });
     }
 
-    // Swipe right (touch only) tucks the player offscreen, leaving a 28px sliver
-    // as a handle; tapping the sliver or swiping it left brings the player back.
-    const TUCK_PEEK = 28;
+    // Swipe right (touch only) tucks the player offscreen, leaving only the
+    // handle tab peeking; tapping the handle or swiping it left brings it back.
     let tucked = false;
     let suppressClick = false;
     function setTucked(next) {
@@ -3371,7 +3370,7 @@ function createMiniPlayer() {
         if (!current || e.touches.length !== 1) return;
         // distance from resting spot to tucked spot (mirrors --mini-tuck-x)
         const cssRight = parseFloat(getComputedStyle(root).right) || 0;
-        const max = root.offsetWidth + cssRight - TUCK_PEEK;
+        const max = root.offsetWidth + cssRight;
         touch = {
             startX: e.touches[0].clientX,
             startY: e.touches[0].clientY,

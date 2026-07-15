@@ -4185,24 +4185,54 @@ function initMixtapeLightbox() {
 
 function initGWORLightbox() {
     const tracks = [
-        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
-        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
-        { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
-        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
-        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
-        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
-        { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
-        { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'Scattered Thunderstorms', file: 'audio/grief-without-ritual/scattered-thunderstorms.mp3', article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },
-        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' }
+        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', cover: 'audio/grief-without-ritual/waiting-for-something-title.webp', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
+        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', cover: 'audio/grief-without-ritual/underlined-once-title.webp', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
+        { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', cover: 'audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
+        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', cover: 'audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
+        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', cover: 'audio/grief-without-ritual/slow-the-clock-title.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', cover: 'audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', cover: 'audio/grief-without-ritual/from-the-beginning-title.webp', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
+        { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', cover: 'audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
+        { title: 'Scattered Thunderstorms', file: 'audio/grief-without-ritual/scattered-thunderstorms.mp3', cover: 'audio/grief-without-ritual/scattered-thunderstorms-title.webp', article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },
+        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', cover: 'audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');
     const audio = document.getElementById('gworAudio');
     const trackList = document.getElementById('gworTrackList');
+    const coverImg = document.getElementById('gworCoverImg');
+    const albumCoverSrc = coverImg ? coverImg.src : '';
     if (!lightbox || !audio || !trackList) return;
 
     const GWOR_OSC_COLORS = { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' };
+
+    // Cover art choreography (same pattern as JC): the album cover shows at
+    // rest, each track's title art shows while it plays. isChangingTrack keeps
+    // the pause fired by a track switch from flashing the album cover
+    // mid-transition.
+    let isChangingTrack = false;
+
+    function showAlbumCover() {
+        if (!coverImg) return;
+        if (coverImg.src !== albumCoverSrc) {
+            coverImg.src = albumCoverSrc;
+        }
+        coverImg.alt = 'Grief without Ritual Cover';
+    }
+
+    function showTrackCover(index) {
+        if (!coverImg) return;
+        const track = tracks[index];
+        if (!track || !track.cover) {
+            showAlbumCover();
+            return;
+        }
+        const trackCoverUrl = new URL(track.cover, window.location.href).href;
+        if (coverImg.src !== trackCoverUrl) {
+            coverImg.src = track.cover;
+        }
+        coverImg.alt = `${track.title} title art`;
+    }
 
     return createAlbumPlayer({
         tracks,
@@ -4210,7 +4240,7 @@ function initGWORLightbox() {
             lightbox,
             audio,
             trackList,
-            coverImg: document.getElementById('gworCoverImg'),
+            coverImg,
             tile: document.getElementById('gworTile'),
             closeBtn: document.getElementById('gworClose'),
             trackDisplay: document.getElementById('gworCurrentTrack'),
@@ -4241,6 +4271,26 @@ function initGWORLightbox() {
                 fillStyle: `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.6 + intensity * 0.4})`,
                 shadowColor: `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`
             };
+        },
+        hooks: {
+            afterLoadTrack: (index, { wasPlaying }) => {
+                isChangingTrack = wasPlaying;
+                if (wasPlaying) {
+                    showTrackCover(index);
+                } else {
+                    showAlbumCover();
+                }
+            },
+            onPlay: (index) => {
+                isChangingTrack = false;
+                showTrackCover(index);
+            },
+            onPause: () => {
+                if (!audio.ended && !isChangingTrack) {
+                    showAlbumCover();
+                }
+            },
+            onEndedAtEnd: showAlbumCover
         }
     });
 }

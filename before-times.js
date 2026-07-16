@@ -130,6 +130,9 @@
     const guestbookStatus = document.getElementById('bt-guestbook-status');
     const guestbookEntries = document.getElementById('bt-guestbook-entries');
     const guestbookRefresh = document.getElementById('bt-guestbook-refresh');
+    const bellHotspot = document.querySelector('[data-action="bell"]');
+    const radioHotspot = document.querySelector('[data-action="radio"]');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let statusTimer = null;
     let revealTimer = null;
     let guestbookLoaded = false;
@@ -237,6 +240,7 @@
     }
 
     function tuneRadio() {
+        animateLayer(radioHotspot, 'is-tuning', 680);
         if (!soundEnabled) {
             showStatus('Sound is off. The dial moves silently.');
             return;
@@ -253,6 +257,7 @@
     }
 
     function ringBell() {
+        animateLayer(bellHotspot, 'is-ringing', 780);
         if (soundEnabled && (window.AudioContext || window.webkitAudioContext)) {
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             const context = new AudioContextClass();
@@ -270,6 +275,15 @@
             oscillator.addEventListener('ended', () => context.close());
         }
         showStatus('Ding. No archivist appears. It seems to be self-service.');
+    }
+
+    function animateLayer(button, className, duration) {
+        if (!button) return;
+        window.clearTimeout(button.btAnimationTimer);
+        button.classList.remove(className);
+        void button.offsetWidth;
+        button.classList.add(className);
+        button.btAnimationTimer = window.setTimeout(() => button.classList.remove(className), duration);
     }
 
     function formatEntryDate(value) {
@@ -352,7 +366,21 @@
     }
 
     document.querySelectorAll('[data-panel]').forEach((button) => {
-        button.addEventListener('click', () => openPanel(button.dataset.panel));
+        button.addEventListener('click', () => {
+            const panelId = button.dataset.panel;
+            const hasDoorwayAnimation = panelId === 'portal' || button.classList.contains('bt-layered-doorway');
+            if (!hasDoorwayAnimation) {
+                openPanel(panelId);
+                return;
+            }
+
+            animateLayer(button, 'is-activating', 680);
+            if (prefersReducedMotion.matches) {
+                openPanel(panelId);
+                return;
+            }
+            window.setTimeout(() => openPanel(panelId), 360);
+        });
     });
 
     document.querySelectorAll('[data-action]').forEach((button) => {
@@ -362,7 +390,11 @@
             if (action === 'bell') ringBell();
             if (action === 'radio') {
                 tuneRadio();
-                openPanel('radio');
+                if (prefersReducedMotion.matches) {
+                    openPanel('radio');
+                } else {
+                    window.setTimeout(() => openPanel('radio'), 360);
+                }
             }
             if (action === 'guestbook') {
                 openDialog(guestbookDialog);

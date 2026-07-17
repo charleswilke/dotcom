@@ -4627,6 +4627,117 @@ function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
     }, { capture: true, once: true });
 }
 
+// Game Lightbox: the browser-game cartridges open the game in an overlay
+// iframe instead of navigating away, mirroring the album lightboxes. The
+// cartridge hrefs stay as no-JS/SEO fallbacks and feed the "Full Page" link.
+// The iframe src is set on open and blanked on close so the game loop and
+// its audio fully stop; reopening restarts the game fresh.
+function initGameLightbox() {
+    const lightbox = document.getElementById('gameLightbox');
+    const frame = document.getElementById('gameLightboxFrame');
+    const titleEl = document.getElementById('gameLightboxTitle');
+    const newTabLink = document.getElementById('gameLightboxNewTab');
+    const closeBtn = document.getElementById('gameLightboxClose');
+    if (!lightbox || !frame) return;
+
+    // Local servers don't apply vercel.json rewrites, so use the direct file
+    // paths there. In production the clean URLs matter: /games/* HTML would
+    // be served with the immutable cache headers.
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const games = {
+        'tootsjam': {
+            title: 'Toots Jam',
+            page: '/tootsjam/',
+            src: isLocal ? '/games/TootsJam/tootsjam.html' : '/tootsjam/',
+            tile: document.querySelector('.game-cartridge-tootsjam')
+        },
+        'spacetoots': {
+            title: 'Space Toots',
+            page: '/spacetoots/',
+            src: isLocal ? '/games/SpaceToots/index.html' : '/spacetoots/',
+            tile: document.querySelector('.game-cartridge-spacetoots')
+        }
+    };
+
+    let activeKey = null;
+
+    function hideLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+        frame.src = 'about:blank';
+        activeKey = null;
+    }
+
+    function openGame(key, historyMethod = 'pushState') {
+        const game = games[key];
+        if (!game) return;
+        pauseManagedAudioExcept(null); // site audio yields to the game's own sound
+        activeKey = key;
+        if (titleEl) titleEl.textContent = game.title;
+        if (newTabLink) newTabLink.href = game.page;
+        frame.title = game.title;
+        frame.src = game.src;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
+        updateHistoryHash(`#${key}`, historyMethod);
+    }
+
+    function closeGame() {
+        if (!lightbox.classList.contains('active')) return;
+        const closingKey = activeKey;
+        hideLightbox();
+        if (closingKey && window.location.hash === `#${closingKey}`) {
+            history.pushState(null, '', window.location.pathname);
+        }
+    }
+
+    Object.keys(games).forEach((key) => {
+        if (games[key].tile) {
+            games[key].tile.addEventListener('click', (e) => {
+                e.preventDefault();
+                openGame(key);
+            });
+        }
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeGame);
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeGame();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) closeGame();
+    });
+
+    // Keyboard controls should work the moment the game appears, and Escape
+    // should still close the overlay while the game holds focus (same-origin,
+    // so we can listen inside the frame).
+    frame.addEventListener('load', () => {
+        if (!lightbox.classList.contains('active')) return;
+        try {
+            frame.contentWindow.focus();
+            frame.contentWindow.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeGame();
+            });
+        } catch (err) { /* cross-origin or detached frame — close button still works */ }
+    });
+
+    window.addEventListener('popstate', () => {
+        const key = window.location.hash.replace(/^#/, '');
+        if (games[key]) {
+            openGame(key, 'replaceState');
+        } else if (lightbox.classList.contains('active')) {
+            hideLightbox();
+        }
+    });
+
+    const initialKey = window.location.hash.replace(/^#/, '');
+    if (games[initialKey]) {
+        openGame(initialKey, 'replaceState');
+    }
+
+    return { open: openGame, close: closeGame };
+}
+
 function initDeferredHomepageMedia() {
     const ensureMixtapeLightbox = createLazyInitializer(initMixtapeLightbox);
     const ensureGWORLightbox = createLazyInitializer(initGWORLightbox);
@@ -4685,6 +4796,8 @@ function initDeferredHomepageMedia() {
         const s2i = ensureS2ILightbox();
         if (s2i) s2i.open(0);
     }
+
+    initGameLightbox();
 }
 
 function initDeferredHomepageEffects() {

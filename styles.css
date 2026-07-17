@@ -14661,3 +14661,121 @@ body.reader-open {
     }
 }
 /* ===== END BEFORE TIMES WORKSPACE ===== */
+
+/* ===== GAME LIGHTBOX ===== */
+/* Overlay iframe player for the browser-game cartridges. Chrome bar echoes
+   the cartridge label band (Space Mono, band gradient); the frame below is
+   pure game viewport. */
+.game-lightbox {
+    background-color: rgba(4, 3, 16, 0.97);
+}
+
+.game-lightbox-content {
+    display: flex;
+    flex-direction: column;
+    width: min(1400px, 96vw);
+    height: min(920px, 94dvh);
+    cursor: auto;
+    background: #080812;
+    border: 1px solid rgba(0, 247, 194, 0.35);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+        0 0 60px rgba(0, 247, 194, 0.12),
+        0 30px 80px rgba(0, 0, 0, 0.7);
+}
+
+.game-lightbox-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    min-height: 44px;
+    padding: 0.45rem clamp(0.9rem, 2vw, 1.1rem);
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.55rem, 1vw, 0.68rem);
+    font-weight: 700;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background-image: linear-gradient(90deg, var(--primary) 0%, #2a2270 100%);
+    border-bottom: 1px solid rgba(0, 247, 194, 0.25);
+}
+
+.game-lightbox-band-label {
+    opacity: 0.75;
+}
+
+.game-lightbox-title {
+    color: var(--neon);
+    font-size: clamp(0.66rem, 1.2vw, 0.8rem);
+    text-shadow: 0 0 10px rgba(0, 247, 194, 0.45);
+}
+
+.game-lightbox-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.game-lightbox-newtab {
+    padding: 0.22rem 0.5rem;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-lightbox-newtab:hover,
+.game-lightbox-newtab:focus-visible {
+    color: var(--neon);
+    border-color: rgba(0, 247, 194, 0.7);
+    box-shadow: 0 0 12px rgba(0, 247, 194, 0.25);
+}
+
+.game-lightbox-close {
+    padding: 0 0.2rem;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.game-lightbox-close:hover,
+.game-lightbox-close:focus-visible {
+    color: var(--neon);
+    text-shadow: 0 0 12px rgba(0, 247, 194, 0.6);
+}
+
+.game-lightbox-frame-wrap {
+    flex: 1;
+    min-height: 0;
+    background: #000;
+}
+
+.game-lightbox-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+@media (max-width: 768px) {
+    .game-lightbox-content {
+        width: 100vw;
+        height: 100dvh;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .game-lightbox-band-label {
+        display: none;
+    }
+}
+/* ===== END GAME LIGHTBOX ===== */

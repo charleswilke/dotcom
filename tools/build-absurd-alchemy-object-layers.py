@@ -1,57 +1,31 @@
-"""Build clean, moveable prop layers for the Absurd Alchemy room.
+"""Build interactive prop layers for the Absurd Alchemy room.
 
-The backplate was inpainted without the chair or crate. The two foreground
-sources were then rendered as complete isolated props and keyed to alpha. This
-script color-matches, sizes, and registers those sources on the 1672x941 scene.
+The chair is a fresh isolated render matched to the original pose and room
+style. All visible crate pixels still come from the original room plate. The
+chair-removal repair is used only where the chair actually occluded the crate.
 """
 
 from pathlib import Path
 
-from PIL import Image, ImageEnhance
+import numpy as np
+from PIL import Image, ImageEnhance, ImageFilter
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PATCH_DIR = ROOT / "tools/before-times-clean-patches"
 OUTPUT_DIR = ROOT / "images/before-times/layers"
 
+ORIGINAL_PATH = ROOT / "images/before-times/absurd-alchemy-clean-v1.png"
 BACKPLATE_PATH = ROOT / "images/before-times/absurd-alchemy-clean-v2.png"
-CHAIR_SOURCE_PATH = PATCH_DIR / "alchemy-chair-isolated-v2.png"
-CRATE_SOURCE_PATH = PATCH_DIR / "alchemy-script-crate-isolated-v2.png"
+CHAIRLESS_REPAIR_PATH = PATCH_DIR / "alchemy-no-chair-v1.png"
+CHAIR_SOURCE_PATH = PATCH_DIR / "alchemy-chair-isolated-v5.png"
+ORIGINAL_CHAIR_MASK_PATH = PATCH_DIR / "alchemy-chair-mask-v4.png"
+CRATE_MASK_PATH = PATCH_DIR / "alchemy-script-crate-mask-v3.png"
 
-CHAIR_OUTPUT = OUTPUT_DIR / "alchemy-chair-v2.png"
-CRATE_OUTPUT = OUTPUT_DIR / "alchemy-script-crate-v2.png"
+CHAIR_OUTPUT = OUTPUT_DIR / "alchemy-chair-v5.png"
+CRATE_OUTPUT = OUTPUT_DIR / "alchemy-script-crate-v3.png"
 
-# x, y, width, height in the 1672x941 scene. Both props remain fully inside the
-# canvas so their lower edges stay intact when the hover animation lifts them.
-CHAIR_BOX = (840, 510, 340, 425)
-CRATE_BOX = (1040, 725, 455, 210)
-
-
-def color_grade(image, brightness, contrast, saturation):
-    """Match the isolated prop's brighter studio render to the dark room."""
-    red, green, blue, alpha = image.split()
-    rgb = Image.merge("RGB", (red, green, blue))
-    rgb = ImageEnhance.Brightness(rgb).enhance(brightness)
-    rgb = ImageEnhance.Contrast(rgb).enhance(contrast)
-    rgb = ImageEnhance.Color(rgb).enhance(saturation)
-    result = rgb.convert("RGBA")
-    result.putalpha(alpha)
-    return result
-
-
-def place_prop(source, canvas_size, box, grade):
-    source = Image.open(source).convert("RGBA")
-    bounds = source.getchannel("A").getbbox()
-    if not bounds:
-        raise ValueError(f"No opaque pixels found in {source}")
-    source = source.crop(bounds)
-    source = color_grade(source, *grade)
-
-    x, y, width, height = box
-    source = source.resize((width, height), Image.Resampling.LANCZOS)
-    layer = Image.new("RGBA", canvas_size)
-    layer.alpha_composite(source, (x, y))
-    return layer
+CHAIR_BOX = (839, 523, 1174, 941)
 
 
 def save_png_and_webp(image, path):
@@ -59,29 +33,61 @@ def save_png_and_webp(image, path):
     image.save(path.with_suffix(".webp"), "WEBP", lossless=True, method=6)
 
 
+def build_chair(canvas_size):
+    source = Image.open(CHAIR_SOURCE_PATH).convert("RGBA")
+    alpha_box = source.getchannel("A").getbbox()
+    if alpha_box is None:
+        raise ValueError(f"Chair source has no visible pixels: {CHAIR_SOURCE_PATH}")
+
+    padding = 4
+    crop_box = (
+        max(0, alpha_box[0] - padding),
+        max(0, alpha_box[1] - padding),
+        min(source.width, alpha_box[2] + padding),
+        min(source.height, alpha_box[3] + padding),
+    )
+    chair = source.crop(crop_box)
+    chair = ImageEnhance.Brightness(chair).enhance(0.82)
+    chair = ImageEnhance.Contrast(chair).enhance(1.04)
+    chair = ImageEnhance.Color(chair).enhance(0.86)
+
+    target_width = CHAIR_BOX[2] - CHAIR_BOX[0]
+    target_height = CHAIR_BOX[3] - CHAIR_BOX[1]
+    chair = chair.resize((target_width, target_height), Image.Resampling.LANCZOS)
+
+    layer = Image.new("RGBA", canvas_size, (0, 0, 0, 0))
+    layer.alpha_composite(chair, (CHAIR_BOX[0], CHAIR_BOX[1]))
+    return layer
+
+
 def main():
+    original = Image.open(ORIGINAL_PATH).convert("RGBA")
     backplate = Image.open(BACKPLATE_PATH).convert("RGBA")
-    chair = place_prop(
-        CHAIR_SOURCE_PATH,
-        backplate.size,
-        CHAIR_BOX,
-        grade=(0.82, 1.04, 0.82),
+    crate_mask = Image.open(CRATE_MASK_PATH).convert("L")
+
+    chair = build_chair(original.size)
+
+    # Preserve the original crate everywhere it was visible. Under the chair's
+    # exact matte, softly blend in the chair-removal repair that reconstructed
+    # the previously hidden crate/floor boundary.
+    repair = Image.open(CHAIRLESS_REPAIR_PATH).convert("RGBA").resize(
+        original.size, Image.Resampling.LANCZOS
     )
-    crate = place_prop(
-        CRATE_SOURCE_PATH,
-        backplate.size,
-        CRATE_BOX,
-        grade=(0.76, 1.06, 0.78),
-    )
+    original_chair_alpha = np.asarray(Image.open(ORIGINAL_CHAIR_MASK_PATH).convert("L"))
+    occlusion = np.zeros((original.height, original.width), dtype=np.uint8)
+    occlusion[735:941, 1020:1200] = original_chair_alpha[735:941, 1020:1200]
+    occlusion_mask = Image.fromarray(occlusion, "L").filter(ImageFilter.GaussianBlur(1.0))
+    crate = Image.composite(repair, original, occlusion_mask)
+    crate.putalpha(crate_mask)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     save_png_and_webp(chair, CHAIR_OUTPUT)
     save_png_and_webp(crate, CRATE_OUTPUT)
 
     preview = backplate.copy()
-    preview.alpha_composite(crate)
     preview.alpha_composite(chair)
-    preview.convert("RGB").save(Path("/tmp/bt-alchemy-layer-preview-v2.png"))
+    preview.alpha_composite(crate)
+    preview.convert("RGB").save(Path("/tmp/bt-alchemy-layer-preview-v5.png"))
 
 
 if __name__ == "__main__":

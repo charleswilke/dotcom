@@ -674,6 +674,13 @@ a {
 /* ===== ABSURD ALCHEMY ROOM ===== */
 
 .bt-alchemy-scene {
+    /* Container context so the CRT surface's perspective() can be expressed
+       in cqw and scale with the scene. A px perspective distorts more on
+       small stages (the plane overhangs the clip further and eats the right
+       side of the video frame); cqw keeps the projection identical at every
+       viewport. Width is explicitly set above, so inline-size containment
+       is safe. */
+    container-type: inline-size;
     /* Content-reactive TV light. JS drives these from the precomputed
        glow tracks (see tools/build-alchemy-glow-tracks.py); the defaults
        are the room's native teal for idle/fallback. --bt-glow-mult scales
@@ -692,6 +699,22 @@ a {
     --bt-production-lower-shape: polygon(6% 2%, 91% 5.5%, 95% 8%, 98% 13%, 99% 82%, 95.5% 89.5%, 90.5% 94.5%, 87% 96.5%, 9% 96%, 5% 93%, 2.5% 88%, 1.2% 78%, 1.5% 18%, 3% 9%);
     overflow: hidden;
     background: #071c1d;
+}
+
+/* Scale-invariant surface: perspective in cqw tracks the scene width, and
+   the tighter oversize puts the projected right edge just past the clip at
+   EVERY size (~2% margin) instead of only at 1672px. The px values above
+   remain as the legacy fallback. */
+@supports (width: 1cqw) {
+    .bt-alchemy-scene {
+        --bt-alchemy-crt-surface-inset: -2% -21% -2% -1.1%;
+        --bt-alchemy-crt-surface-transform: perspective(60cqw) rotateZ(2.1deg) rotateY(14deg);
+    }
+
+    .bt-alchemy-scene .bt-crt-video-plane iframe {
+        top: -3%;
+        height: 106%;
+    }
 }
 
 .bt-alchemy-art {
@@ -885,10 +908,11 @@ a {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    /* padding-right recenters the chip on the visible glass: the shared
-       surface box overhangs to the right, so its flex center projects
-       right of the tube's optical center. */
-    padding-right: 11%;
+    /* padding-right recenters the chip on the drawn glass (judged against
+       the room art, not the hotspot box): the shared surface box overhangs
+       to the right, so its flex center projects right of the tube's
+       optical center. */
+    padding-right: 3.5%;
     padding-bottom: 10%;
     pointer-events: none;
     transform: var(--bt-alchemy-crt-surface-transform);

@@ -100,9 +100,14 @@ system, door, props, and perspective remain locked to the concept render.
   on `.bt-alchemy-scene` (inset, transform, origin, radius); change those, not
   the individual rules, so the video and its glass can never drift apart.
   Adjust `--bt-alchemy-screen-shape` for contour changes, but keep the surface
-  oversize (right inset ≈ -28%) in step with any rotation change: the projected
-  right edge must reach the clip boundary at the full 1672px scene width, the
-  worst case for coverage.
+  oversize in step with any rotation or perspective change. The surface is
+  scale-invariant: `.bt-alchemy-scene` is an inline-size container and the
+  modern values (`perspective(60cqw)`, right inset -21%, iframe 106%) live in
+  an `@supports (width: 1cqw)` block, giving a uniform ~1.7% projected
+  overhang past the clip at every scene width. Do not go back to a px
+  perspective with a fat oversize — that combination ate up to 11% of the
+  video frame's right side on small stages. The px fallback values outside
+  the `@supports` block serve legacy browsers only.
   While Vimeo is playing, a separate layer behind the embed adds teal spill
   and radial rays across the television frame. The light runs three
   desynchronized drift animations (breathe 5.8s, beam shimmer 8.3s, ray sweep

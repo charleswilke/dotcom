@@ -405,6 +405,150 @@
         {
             src: '/images/before-times/production/fragment-segment-chip-sterling-v1.mp4',
             label: 'A Chip Sterling opinion fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-101-v1.mp4',
+            label: 'A season premiere fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-104-v1.mp4',
+            label: 'An episode 104 diplomacy fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-106-v1.mp4',
+            label: 'A Glassholes fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-109-v1.mp4',
+            label: 'A Justice Gone Wild fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-111-v1.mp4',
+            label: 'A Good Way Emporium fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-112-v1.mp4',
+            label: 'A season finale fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-segment-stu-brewed-beat-v1.mp4',
+            label: 'A Stu Brewed Beat fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-lucifer-2-b-v1.mp4',
+            label: 'Another Lucifer session fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-lucifer-4-b-v1.mp4',
+            label: 'A later Lucifer finale fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-1-b-v1.mp4',
+            label: 'Another newsroom fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-3-b-v1.mp4',
+            label: 'A late game-night fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-side-effects-1-b-v1.mp4',
+            label: 'Another Side Effects fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-sagan-b-v1.mp4',
+            label: 'Another Sagan park fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-105-b-v1.mp4',
+            label: 'A late Santa fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-107-b-v1.mp4',
+            label: 'Another vaccination fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-110-b-v1.mp4',
+            label: 'A late Pricks fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-lucifer-1-b-v1.mp4',
+            label: 'An early Lucifer fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-lucifer-3-b-v1.mp4',
+            label: 'Another Lucifer confessional fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-2-b-v1.mp4',
+            label: 'A late races fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-4-b-v1.mp4',
+            label: 'An early virus-scare fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-101-b-v1.mp4',
+            label: 'Another premiere fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-102-b-v1.mp4',
+            label: 'A late Waterland fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-103-b-v1.mp4',
+            label: 'An early Thanksgiving fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-104-b-v1.mp4',
+            label: 'A late diplomacy fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-106-b-v1.mp4',
+            label: 'A late Glassholes fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-108-b-v1.mp4',
+            label: 'A late brewery fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-109-b-v1.mp4',
+            label: 'Another justice fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-111-b-v1.mp4',
+            label: 'Another Emporium fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-112-b-v1.mp4',
+            label: 'A late finale fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-lucifer-4-c-v1.mp4',
+            label: 'A third Lucifer finale fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-1-c-v1.mp4',
+            label: 'An early newsroom fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-3-c-v1.mp4',
+            label: 'A third game-night fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-side-effects-1-c-v1.mp4',
+            label: 'A third Side Effects fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-105-c-v1.mp4',
+            label: 'A very late Santa fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-107-c-v1.mp4',
+            label: 'A closing vaccination fragment'
+        },
+        {
+            src: '/images/before-times/production/fragment-noho-110-c-v1.mp4',
+            label: 'A third Pricks fragment'
         }
     ];
     const lobbySceneStatus = document.getElementById('bt-scene-status');
@@ -431,6 +575,10 @@
     const alchemyDoorHotspot = document.querySelector('.bt-hotspot-alchemy');
     const alchemyChairHotspot = document.querySelector('.bt-alchemy-hotspot-chair');
     const alchemyScriptsHotspot = document.querySelector('.bt-alchemy-hotspot-scripts');
+    const alchemySolarHotspot = document.querySelector('.bt-alchemy-hotspot-solar');
+    const alchemyCatHotspot = document.querySelector('.bt-alchemy-hotspot-cat');
+    const alchemyExitHotspot = document.querySelector('.bt-alchemy-hotspot-door');
+    const alchemyCameraHotspot = document.querySelector('.bt-alchemy-hotspot-camera');
     const alchemyTwentyFiveHotspot = document.querySelector('.bt-alchemy-hotspot-25');
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
@@ -438,6 +586,11 @@
     const alchemyArt = document.querySelector('.bt-alchemy-art');
     const alchemyChairLayer = document.getElementById('bt-alchemy-chair-layer');
     const alchemyCrateLayer = document.getElementById('bt-alchemy-crate-layer');
+    const alchemySolarLayer = document.getElementById('bt-alchemy-solar-layer');
+    const alchemyCatLayer = document.getElementById('bt-alchemy-cat-layer');
+    const alchemyTapeTwentyFiveLayer = document.getElementById('bt-alchemy-tape-25-layer');
+    const alchemyExitDoorLayer = document.getElementById('bt-alchemy-exit-door-layer');
+    const alchemyCameraLayer = document.getElementById('bt-alchemy-camera-layer');
     const mobileFloorplan = document.getElementById('bt-mobile-floorplan');
     const mobileRoomExit = document.getElementById('bt-mobile-room-exit');
     const alchemyHeroScreen = document.getElementById('bt-alchemy-hero-screen');
@@ -463,6 +616,7 @@
     let heroSource = 'vimeo';
     let productionTimer = null;
     let lastProductionLoop = -1;
+    let productionDeck = [];
     let alchemyRoomOpening = false;
 
     function showStatus(message, duration) {
@@ -903,13 +1057,22 @@
         productionScreens.forEach((screen) => deactivateProductionScreen(screen, withBlip));
     }
 
+    /* Shuffled deck rather than random draws: every fragment appears once
+       before any repeats, so ambient variety is guaranteed, not likely. */
     function chooseProductionLoop() {
-        let index = Math.floor(Math.random() * PRODUCTION_LOOPS.length);
-        if (index === lastProductionLoop && PRODUCTION_LOOPS.length > 1) {
-            index = (index + 1) % PRODUCTION_LOOPS.length;
+        if (!productionDeck.length) {
+            productionDeck = PRODUCTION_LOOPS.map((_, index) => index);
+            for (let i = productionDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [productionDeck[i], productionDeck[j]] = [productionDeck[j], productionDeck[i]];
+            }
+            const last = productionDeck.length - 1;
+            if (productionDeck[last] === lastProductionLoop && productionDeck.length > 1) {
+                [productionDeck[0], productionDeck[last]] = [productionDeck[last], productionDeck[0]];
+            }
         }
-        lastProductionLoop = index;
-        return PRODUCTION_LOOPS[index];
+        lastProductionLoop = productionDeck.pop();
+        return PRODUCTION_LOOPS[lastProductionLoop];
     }
 
     function activateProductionScreen(screen, loop) {
@@ -1227,6 +1390,11 @@
 
     bindAlchemyObjectLayer(alchemyChairHotspot, alchemyChairLayer);
     bindAlchemyObjectLayer(alchemyScriptsHotspot, alchemyCrateLayer);
+    bindAlchemyObjectLayer(alchemySolarHotspot, alchemySolarLayer);
+    bindAlchemyObjectLayer(alchemyCatHotspot, alchemyCatLayer);
+    bindAlchemyObjectLayer(alchemyTwentyFiveHotspot, alchemyTapeTwentyFiveLayer);
+    bindAlchemyObjectLayer(alchemyExitHotspot, alchemyExitDoorLayer);
+    bindAlchemyObjectLayer(alchemyCameraHotspot, alchemyCameraLayer);
 
     function formatEntryDate(value) {
         const date = new Date(value);

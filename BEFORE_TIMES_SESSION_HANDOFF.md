@@ -144,9 +144,15 @@ Fragments play through exactly once: `video.loop` is off and each video's
 back to its opening frames. The ghost timer remains only as a cap for stalled
 or slow-loading video (and still cuts mid-clip when it draws a short window).
 
-The production monitors now rotate through twenty real 6-second fragments cut
+The production monitors rotate through fifty-six real 6-second fragments cut
 from the actual reels (`images/before-times/production/fragment-*-v1.mp4`,
 320×240 silent h264 at 12fps, center-cropped to the monitors' 4:3 glass).
+Every reel is covered; the longer ones carry second (`-b`) and third (`-c`)
+moments whose timestamps were scored with all earlier picks' neighborhoods
+(±50–60s) excluded, so each clip is a genuinely different scene.
+`chooseProductionLoop` deals from a shuffled deck, so every fragment appears
+once before any repeats. YouTube source downloads occasionally fail with
+transient "unavailable"/403 errors — just retry the same command.
 Clip moments were chosen programmatically: a scorer over the glow tracks
 (mean intensity + chroma + frame-to-frame color activity, restricted to the
 middle 70% of each reel) picked the liveliest window. To add or re-cut a

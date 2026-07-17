@@ -335,6 +335,83 @@ a {
     --bt-door-light-hover: 0.38;
 }
 
+.bt-construction-barricade {
+    --bt-barricade-angle: -1.4deg;
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: -2.5%;
+    width: 148%;
+    aspect-ratio: 1672 / 941;
+    pointer-events: none;
+    transform: translateX(-50%) rotate(var(--bt-barricade-angle));
+    transform-origin: 50% 84%;
+    transition: filter 180ms ease, transform 180ms ease;
+}
+
+.bt-construction-barricade > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.bt-is-under-construction:hover .bt-construction-barricade,
+.bt-is-under-construction:focus-visible .bt-construction-barricade {
+    filter: brightness(1.08) saturate(1.08) drop-shadow(0 5px 5px rgba(3, 4, 17, 0.48));
+    transform: translate(-50%, -1.2%) rotate(var(--bt-barricade-angle)) scale(1.018);
+}
+
+.bt-construction-factory-sign {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: -4%;
+    width: 54%;
+    aspect-ratio: 1023 / 1537;
+    pointer-events: none;
+    transform: translateX(-50%) rotate(1.7deg);
+    transform-origin: 50% 90%;
+    transition: filter 180ms ease, transform 180ms ease;
+}
+
+.bt-construction-factory-sign > img,
+.bt-construction-maze-tape > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.bt-is-under-construction:hover .bt-construction-factory-sign,
+.bt-is-under-construction:focus-visible .bt-construction-factory-sign {
+    filter: brightness(1.08) saturate(1.08) drop-shadow(0 5px 5px rgba(3, 4, 17, 0.48));
+    transform: translate(-50%, -1.2%) rotate(1.7deg) scale(1.025);
+}
+
+.bt-construction-maze-tape {
+    position: absolute;
+    z-index: 3;
+    top: 35%;
+    left: 50%;
+    width: 136%;
+    aspect-ratio: 1672 / 941;
+    pointer-events: none;
+    transform: translate(-50%, -50%) rotate(-0.8deg);
+    transform-origin: 50% 50%;
+    transition: filter 180ms ease, transform 180ms ease;
+}
+
+.bt-is-under-construction:hover .bt-construction-maze-tape,
+.bt-is-under-construction:focus-visible .bt-construction-maze-tape {
+    filter: brightness(1.08) saturate(1.08) drop-shadow(0 4px 4px rgba(3, 4, 17, 0.44));
+    transform: translate(-50%, -51.2%) rotate(-0.8deg) scale(1.022);
+}
+
 .bt-hotspot-portal {
     --bt-door-light-rgb: 76, 242, 204;
     --bt-door-light-rest: 0.24;
@@ -739,8 +816,124 @@ a {
     transform-origin: 61% 75%;
 }
 
+.bt-alchemy-chair-aura {
+    position: absolute;
+    z-index: 2;
+    top: 49.5%;
+    left: 48.8%;
+    width: 23%;
+    height: 52%;
+    pointer-events: none;
+    opacity: 0;
+    background:
+        radial-gradient(
+            ellipse at 54% 42%,
+            rgba(255, 225, 164, 0.42) 0 10%,
+            rgba(255, 172, 75, 0.3) 28%,
+            rgba(255, 126, 70, 0.12) 46%,
+            transparent 68%
+        ),
+        radial-gradient(
+            ellipse at 50% 79%,
+            rgba(0, 247, 194, 0.32) 0 8%,
+            rgba(0, 247, 194, 0.14) 33%,
+            transparent 67%
+        );
+    filter: blur(7px);
+    transform: scale(0.93);
+    transform-origin: 52% 68%;
+    transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.bt-alchemy-chair-layer.is-hovered + .bt-alchemy-chair-aura {
+    opacity: 1;
+    transform: scale(1.02);
+    animation: bt-chair-aura-breathe 1.8s ease-in-out infinite alternate;
+}
+
+.bt-alchemy-crate-aura {
+    position: absolute;
+    z-index: 2;
+    top: 75.5%;
+    left: 64.2%;
+    width: 25.5%;
+    height: 26%;
+    pointer-events: none;
+    opacity: 0;
+    background:
+        radial-gradient(
+            ellipse at 55% 47%,
+            rgba(255, 231, 183, 0.4) 0 10%,
+            rgba(255, 174, 77, 0.28) 31%,
+            rgba(255, 126, 70, 0.1) 49%,
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse at 52% 82%,
+            rgba(0, 247, 194, 0.28) 0 8%,
+            rgba(0, 247, 194, 0.11) 34%,
+            transparent 68%
+        );
+    filter: blur(7px);
+    transform: scale(0.93);
+    transform-origin: 54% 74%;
+    transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.bt-alchemy-crate-layer.is-hovered + .bt-alchemy-crate-aura {
+    opacity: 1;
+    transform: scale(1.02);
+    animation: bt-crate-aura-breathe 1.9s ease-in-out infinite alternate;
+}
+
 .bt-alchemy-crate-layer {
     transform-origin: 77% 89%;
+}
+
+.bt-alchemy-curio-layer {
+    position: absolute;
+    z-index: 3;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: none;
+    transition: filter 180ms ease-out;
+    will-change: filter;
+}
+
+.bt-alchemy-solar-layer,
+.bt-alchemy-cat-layer,
+.bt-alchemy-tape-25-layer,
+.bt-alchemy-exit-door-layer,
+.bt-alchemy-camera-layer {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Full-scene transparent layers share the background image's raster origin.
+   Keeping them at 1672×941 avoids subpixel resampling drift on the 1000px
+   mobile stage. */
+
+.bt-alchemy-solar-layer.is-hovered {
+    animation: bt-solar-halo-breathe 1.85s ease-in-out infinite alternate;
+}
+
+.bt-alchemy-cat-layer.is-hovered {
+    animation: bt-cat-halo-breathe 1.85s ease-in-out infinite alternate;
+}
+
+.bt-alchemy-tape-25-layer.is-hovered {
+    animation: bt-tape-25-halo-breathe 1.75s ease-in-out infinite alternate;
+}
+
+.bt-alchemy-exit-door-layer.is-hovered {
+    animation: bt-exit-door-halo-breathe 1.9s ease-in-out infinite alternate;
+}
+
+.bt-alchemy-camera-layer.is-hovered {
+    animation: bt-camera-halo-breathe 1.85s ease-in-out infinite alternate;
 }
 
 .bt-alchemy-chair-layer.is-hovered {
@@ -1224,9 +1417,86 @@ a {
 
 .bt-alchemy-hotspot-chair:hover,
 .bt-alchemy-hotspot-chair:focus-visible {
-    border-color: rgba(255, 202, 117, 0.92);
-    background: rgba(255, 202, 117, 0.045);
-    box-shadow: 0 0 0 3px rgba(9, 10, 35, 0.62), 0 0 26px rgba(255, 172, 75, 0.44), inset 0 0 24px rgba(255, 214, 143, 0.08);
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+.bt-alchemy-hotspot-scripts:hover,
+.bt-alchemy-hotspot-scripts:focus-visible {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+.bt-alchemy-hotspot-solar:hover,
+.bt-alchemy-hotspot-solar:focus-visible,
+.bt-alchemy-hotspot-cat:hover,
+.bt-alchemy-hotspot-cat:focus-visible,
+.bt-alchemy-hotspot-25:hover,
+.bt-alchemy-hotspot-25:focus-visible,
+.bt-alchemy-hotspot-door:hover,
+.bt-alchemy-hotspot-door:focus-visible,
+.bt-alchemy-hotspot-camera:hover,
+.bt-alchemy-hotspot-camera:focus-visible {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+@keyframes bt-chair-aura-breathe {
+    from { opacity: 0.72; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1.035); }
+}
+
+@keyframes bt-crate-aura-breathe {
+    from { opacity: 0.7; transform: scale(0.975); }
+    to { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes bt-solar-halo-breathe {
+    from {
+        filter: brightness(1.06) saturate(1.1) drop-shadow(0 0 3px rgba(255, 190, 83, 0.72)) drop-shadow(0 0 7px rgba(0, 247, 194, 0.26));
+    }
+    to {
+        filter: brightness(1.15) saturate(1.18) drop-shadow(0 0 5px rgba(255, 205, 111, 0.92)) drop-shadow(0 0 11px rgba(0, 247, 194, 0.42));
+    }
+}
+
+@keyframes bt-cat-halo-breathe {
+    from {
+        filter: brightness(1.05) saturate(1.08) drop-shadow(0 0 3px rgba(255, 183, 105, 0.7)) drop-shadow(0 0 7px rgba(184, 154, 216, 0.24));
+    }
+    to {
+        filter: brightness(1.14) saturate(1.14) drop-shadow(0 0 5px rgba(255, 211, 145, 0.9)) drop-shadow(0 0 11px rgba(184, 154, 216, 0.4));
+    }
+}
+
+@keyframes bt-tape-25-halo-breathe {
+    from {
+        filter: drop-shadow(0 0 3px rgba(255, 125, 76, 0.76)) drop-shadow(0 0 7px rgba(255, 205, 111, 0.25));
+    }
+    to {
+        filter: drop-shadow(0 0 5px rgba(255, 145, 89, 0.94)) drop-shadow(0 0 11px rgba(255, 215, 138, 0.42));
+    }
+}
+
+@keyframes bt-exit-door-halo-breathe {
+    from {
+        filter: drop-shadow(0 0 3px rgba(184, 154, 216, 0.68)) drop-shadow(0 0 8px rgba(0, 247, 194, 0.2));
+    }
+    to {
+        filter: drop-shadow(0 0 5px rgba(205, 178, 231, 0.9)) drop-shadow(0 0 13px rgba(0, 247, 194, 0.34));
+    }
+}
+
+@keyframes bt-camera-halo-breathe {
+    from {
+        filter: drop-shadow(0 0 3px rgba(255, 190, 99, 0.7)) drop-shadow(0 0 7px rgba(184, 154, 216, 0.22));
+    }
+    to {
+        filter: drop-shadow(0 0 5px rgba(255, 211, 139, 0.9)) drop-shadow(0 0 11px rgba(184, 154, 216, 0.38));
+    }
 }
 
 .bt-alchemy-hotspot-25.is-farting {

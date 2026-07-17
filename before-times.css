@@ -666,9 +666,720 @@ a {
 }
 
 .bt-mobile-hint,
-.bt-mobile-floorplan {
+.bt-mobile-floorplan,
+.bt-mobile-room-exit {
     display: none;
 }
+
+/* ===== ABSURD ALCHEMY ROOM ===== */
+
+.bt-alchemy-scene {
+    /* Content-reactive TV light. JS drives these from the precomputed
+       glow tracks (see tools/build-alchemy-glow-tracks.py); the defaults
+       are the room's native teal for idle/fallback. --bt-glow-mult scales
+       the light's opacity, the rgb pair carries the sampled tint. */
+    --bt-glow-rgb: 116 239 207;
+    --bt-glow-hi-rgb: 166 255 230;
+    --bt-glow-mult: 1;
+    /* Shared hero-CRT surface geometry: anything painted "on the tube"
+       (video plane, scanline glass) must use all three together. */
+    --bt-alchemy-crt-surface-inset: -2% -28% -2% -1.1%;
+    --bt-alchemy-crt-surface-transform: perspective(800px) rotateZ(2.1deg) rotateY(14deg);
+    --bt-alchemy-crt-surface-origin: 0% 48%;
+    --bt-alchemy-crt-surface-radius: 9% 7% 8% 10% / 18% 15% 17% 19%;
+    --bt-alchemy-screen-shape: polygon(2.6% 0, 94.4% 10.7%, 98.3% 13.3%, 100% 17%, 99.1% 88%, 96.2% 97%, 92% 100%, 8.5% 98.3%, 5.8% 97%, 3.6% 94.5%, 2% 90.5%, 1.15% 84%, 0.85% 76%, 0.85% 18%, 1.15% 11%, 1.6% 5%);
+    --bt-production-upper-shape: polygon(7.5% 2%, 92% 4.5%, 96% 7%, 98.5% 12%, 99% 81%, 97% 90%, 93% 96%, 88% 98%, 11% 96.5%, 7.5% 94%, 4.5% 89%, 3% 79%, 3% 17%, 4.5% 9%);
+    --bt-production-lower-shape: polygon(6% 2%, 91% 5.5%, 95% 8%, 98% 13%, 99% 82%, 95.5% 89.5%, 90.5% 94.5%, 87% 96.5%, 9% 96%, 5% 93%, 2.5% 88%, 1.2% 78%, 1.5% 18%, 3% 9%);
+    overflow: hidden;
+    background: #071c1d;
+}
+
+.bt-alchemy-art {
+    position: relative;
+    z-index: 0;
+}
+
+.bt-alchemy-object-layer {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: transform 180ms ease-out, filter 180ms ease-out;
+    will-change: transform, filter;
+}
+
+.bt-alchemy-chair-layer {
+    transform-origin: 61% 75%;
+}
+
+.bt-alchemy-crate-layer {
+    transform-origin: 77% 89%;
+}
+
+.bt-alchemy-chair-layer.is-hovered {
+    filter: brightness(1.09) saturate(1.12) drop-shadow(0 8px 7px rgba(0, 0, 0, 0.3));
+    transform: translateY(-0.7%) rotate(-0.25deg);
+}
+
+.bt-alchemy-crate-layer.is-hovered {
+    filter: brightness(1.1) saturate(1.14) drop-shadow(0 6px 6px rgba(0, 0, 0, 0.26));
+    transform: translateY(-0.38%) rotate(0.15deg);
+}
+
+.bt-alchemy-chair-layer.is-selected {
+    animation: bt-chair-select 650ms cubic-bezier(0.28, 0.85, 0.32, 1) both;
+}
+
+.bt-alchemy-crate-layer.is-rustling {
+    animation: bt-crate-rustle 620ms cubic-bezier(0.32, 0.8, 0.28, 1) both;
+}
+
+.bt-alchemy-scene.is-entering {
+    animation: bt-alchemy-enter 520ms cubic-bezier(0.2, 0.78, 0.26, 1) both;
+}
+
+.bt-alchemy-hero-screen {
+    position: absolute;
+    z-index: 2;
+    left: 12.2%;
+    top: 11.8%;
+    width: 33.1%;
+    height: 37.1%;
+    overflow: hidden;
+    background: rgba(5, 10, 13, 0.05);
+    border-radius: 7% 7% 6% 7% / 11% 10% 10% 11%;
+    clip-path: var(--bt-alchemy-screen-shape);
+    box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.72);
+    transform: rotate(0.15deg);
+    transition: box-shadow 240ms ease, filter 240ms ease;
+}
+
+/*
+ * The video plane is a real 3D surface: oversized to the right, then rotated
+ * away with perspective so the projected right edge still reaches the clip
+ * boundary. The parent .bt-alchemy-hero-screen's clip-path owns the final
+ * silhouette, so this element must NOT carry its own screen-shape clip.
+ */
+.bt-crt-video-plane {
+    position: absolute;
+    z-index: 1;
+    inset: var(--bt-alchemy-crt-surface-inset);
+    overflow: hidden;
+    border-radius: var(--bt-alchemy-crt-surface-radius);
+    box-shadow: inset 0 0 26px rgba(2, 8, 9, 0.55);
+    transform: var(--bt-alchemy-crt-surface-transform);
+    transform-origin: var(--bt-alchemy-crt-surface-origin);
+}
+
+.bt-crt-video-plane iframe {
+    position: absolute;
+    top: -6%;
+    left: 0;
+    width: 100%;
+    height: 112%;
+    opacity: 0;
+    border: 0;
+    filter: saturate(0.82) contrast(1.08) brightness(0.9);
+    transition: opacity 180ms ease;
+}
+
+.bt-alchemy-hero-screen.is-loaded .bt-crt-video-plane iframe {
+    opacity: 1;
+}
+
+/* Only the active source's iframe shows on the glass; the other keeps its
+   state but stays invisible (and its keystone/glow plumbing untouched). */
+.bt-alchemy-hero-screen[data-crt-source="vimeo"] #bt-alchemy-player-yt,
+.bt-alchemy-hero-screen[data-crt-source="youtube"] #bt-alchemy-player {
+    visibility: hidden;
+}
+
+.bt-alchemy-hero-screen.is-playing {
+    box-shadow:
+        inset 0 0 25px rgba(0, 0, 0, 0.62),
+        0 0 18px rgb(var(--bt-glow-hi-rgb) / 0.25),
+        0 0 44px rgb(var(--bt-glow-rgb) / 0.16);
+    filter: brightness(1.035);
+}
+
+.bt-alchemy-tv-light {
+    position: absolute;
+    z-index: 1;
+    left: 12.2%;
+    top: 11.8%;
+    width: 33.1%;
+    height: 37.1%;
+    overflow: visible;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 720ms ease;
+}
+
+.bt-alchemy-tv-light::before,
+.bt-alchemy-tv-light::after,
+.bt-alchemy-tv-rays {
+    position: absolute;
+    content: "";
+    pointer-events: none;
+}
+
+.bt-alchemy-tv-light::before {
+    inset: 0;
+    background: rgb(var(--bt-glow-rgb) / 0.17);
+    clip-path: var(--bt-alchemy-screen-shape);
+    filter:
+        drop-shadow(0 0 12px rgb(var(--bt-glow-hi-rgb) / 0.5))
+        drop-shadow(0 0 30px rgb(var(--bt-glow-rgb) / 0.32))
+        drop-shadow(0 0 74px rgb(var(--bt-glow-rgb) / 0.2));
+    mix-blend-mode: screen;
+}
+
+.bt-alchemy-tv-light::after {
+    inset: -58% -75% -68% -71%;
+    background: repeating-conic-gradient(from 252deg at 48% 47%, transparent 0deg 8deg, rgb(var(--bt-glow-hi-rgb) / 0.105) 9deg 12deg, transparent 13deg 25deg);
+    filter: blur(14px);
+    -webkit-mask-image: radial-gradient(ellipse at 48% 47%, transparent 0 28%, rgba(0, 0, 0, 0.78) 47%, transparent 80%);
+    mask-image: radial-gradient(ellipse at 48% 47%, transparent 0 28%, rgba(0, 0, 0, 0.78) 47%, transparent 80%);
+    mix-blend-mode: screen;
+    transform: rotate(-0.7deg);
+}
+
+.bt-alchemy-tv-rays {
+    inset: -43% -59% -55% -57%;
+    opacity: 0.62;
+    background:
+        linear-gradient(164deg, transparent 29%, rgb(var(--bt-glow-hi-rgb) / 0.2) 46%, transparent 57%),
+        linear-gradient(16deg, transparent 35%, rgb(var(--bt-glow-rgb) / 0.15) 49%, transparent 61%);
+    filter: blur(18px);
+    -webkit-mask-image: radial-gradient(ellipse at center, transparent 0 24%, #000 49%, transparent 83%);
+    mask-image: radial-gradient(ellipse at center, transparent 0 24%, #000 49%, transparent 83%);
+    mix-blend-mode: screen;
+}
+
+.bt-alchemy-hero-screen.is-playing + .bt-alchemy-tv-light {
+    opacity: 1;
+    animation: bt-tv-light-breathe 5.8s ease-in-out infinite alternate;
+}
+
+/* Slow, non-synchronized drifts (5.8s / 8.3s / 12.7s) so the combined light
+   never visibly loops. Only animate while a reel is actually rolling. */
+.bt-alchemy-hero-screen.is-playing + .bt-alchemy-tv-light::after {
+    animation: bt-tv-rays-sweep 12.7s ease-in-out infinite alternate;
+}
+
+.bt-alchemy-hero-screen.is-playing + .bt-alchemy-tv-light .bt-alchemy-tv-rays {
+    animation: bt-tv-beam-shimmer 8.3s ease-in-out infinite alternate;
+}
+
+/* The idle HUD chip sits on the keystoned tube surface like everything else
+   painted on the glass: outer span is the shared surface plane, inner span
+   is the visible chip. */
+.bt-crt-idle-copy {
+    position: absolute;
+    z-index: 2;
+    inset: var(--bt-alchemy-crt-surface-inset);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    /* padding-right recenters the chip on the visible glass: the shared
+       surface box overhangs to the right, so its flex center projects
+       right of the tube's optical center. */
+    padding-right: 11%;
+    padding-bottom: 10%;
+    pointer-events: none;
+    transform: var(--bt-alchemy-crt-surface-transform);
+    transform-origin: var(--bt-alchemy-crt-surface-origin);
+    transition: opacity 160ms ease;
+}
+
+.bt-crt-idle-copy > span {
+    padding: 0.24rem 0.42rem;
+    color: rgba(184, 219, 204, 0.58);
+    background: rgba(7, 17, 18, 0.54);
+    border: 1px solid rgba(184, 219, 204, 0.16);
+    font-size: clamp(0.38rem, 0.58vw, 0.68rem);
+    letter-spacing: 0.12em;
+}
+
+.bt-alchemy-hero-screen.is-loaded .bt-crt-idle-copy {
+    opacity: 0;
+}
+
+.bt-crt-glass,
+.bt-crt-glass::before,
+.bt-crt-glass::after {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    content: "";
+    pointer-events: none;
+}
+
+.bt-crt-glass {
+    background:
+        radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, 0.34) 100%),
+        repeating-linear-gradient(0deg, rgba(2, 8, 9, 0.13) 0 1px, transparent 1px 4px);
+    mix-blend-mode: multiply;
+}
+
+.bt-crt-glass::before {
+    inset: 3% 5% 67% 13%;
+    border-radius: 50%;
+    background: linear-gradient(105deg, rgba(255,255,255,0.09), rgba(255,255,255,0));
+    filter: blur(5px);
+    mix-blend-mode: screen;
+    transform: skewX(-17deg);
+}
+
+.bt-crt-glass::after {
+    opacity: 0.16;
+    background-image: radial-gradient(rgba(185, 234, 215, 0.38) 0.5px, transparent 0.75px);
+    background-size: 3px 3px;
+}
+
+/* Invisible tap surface over the picture area; the bottom strip is left open
+   so Vimeo's own scrubber, volume, and fullscreen controls stay reachable. */
+.bt-crt-tap-toggle {
+    position: absolute;
+    z-index: 4;
+    inset: 0 0 16% 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.bt-crt-tap-toggle:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 3px rgba(0, 247, 194, 0.65);
+}
+
+/* The hero screen's scanlines, vignette, and sheen sit on the same keystoned
+   tube surface as the video plane; the parent clip-path trims the overhang. */
+.bt-alchemy-hero-screen .bt-crt-glass {
+    inset: var(--bt-alchemy-crt-surface-inset);
+    overflow: hidden;
+    border-radius: var(--bt-alchemy-crt-surface-radius);
+    transform: var(--bt-alchemy-crt-surface-transform);
+    transform-origin: var(--bt-alchemy-crt-surface-origin);
+}
+
+/* The power-on blip lives on the keystoned tube surface: the outer span IS
+   the surface (same shared geometry as the video plane and glass), and the
+   sweeping line is drawn inside it so it inherits the screen's angle. */
+.bt-crt-power-line {
+    position: absolute;
+    z-index: 5;
+    inset: var(--bt-alchemy-crt-surface-inset);
+    pointer-events: none;
+    transform: var(--bt-alchemy-crt-surface-transform);
+    transform-origin: var(--bt-alchemy-crt-surface-origin);
+}
+
+.bt-crt-power-line::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    opacity: 0;
+    background: #e9fff8;
+    box-shadow: 0 0 7px #fff, 0 0 17px rgba(0, 247, 194, 0.92);
+    transform: translate(-50%, -50%);
+}
+
+.bt-alchemy-hero-screen.is-loading .bt-crt-power-line::before {
+    animation: bt-crt-power-on 720ms ease both;
+}
+
+.bt-alchemy-hero-screen.is-powering-off .bt-crt-power-line::before {
+    animation: bt-crt-power-off 620ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.bt-crt-play-fallback {
+    position: absolute;
+    z-index: 6;
+    top: 50%;
+    left: 50%;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.8rem;
+    color: var(--bt-paper);
+    background: rgba(9, 10, 35, 0.92);
+    border: 2px solid var(--bt-cream);
+    border-radius: 4px;
+    box-shadow: 3px 3px 0 var(--bt-orange), 0 0 22px rgba(0, 247, 194, 0.4);
+    cursor: pointer;
+    font-size: clamp(0.55rem, 0.75vw, 0.82rem);
+    font-weight: 700;
+    transform: translate(-50%, -50%);
+}
+
+.bt-crt-play-fallback:hover,
+.bt-crt-play-fallback:focus-visible {
+    color: var(--bt-ink);
+    background: var(--bt-mint);
+    outline: 3px solid var(--bt-ink);
+    outline-offset: 2px;
+}
+
+.bt-production-screen {
+    position: absolute;
+    z-index: 2;
+    overflow: hidden;
+    padding: 0;
+    background: rgba(5, 10, 13, 0.04);
+    border: 2px solid transparent;
+    cursor: pointer;
+    clip-path: var(--bt-production-shape);
+    touch-action: manipulation;
+    transition: border-color 160ms ease, filter 180ms ease;
+}
+
+.bt-production-screen-upper,
+.bt-production-light-upper {
+    --bt-production-shape: var(--bt-production-upper-shape);
+    left: 51.17%;
+    top: 14.75%;
+    width: 10.66%;
+    height: 15%;
+}
+
+.bt-production-screen-lower,
+.bt-production-light-lower {
+    --bt-production-shape: var(--bt-production-lower-shape);
+    left: 50.72%;
+    top: 35.25%;
+    width: 10.4%;
+    height: 14.9%;
+}
+
+.bt-production-screen video {
+    position: absolute;
+    z-index: 1;
+    inset: -4%;
+    width: 108%;
+    height: 108%;
+    object-fit: cover;
+    opacity: 0;
+    filter: grayscale(0.28) sepia(0.08) saturate(0.75) contrast(1.2) brightness(0.82);
+    transition: opacity 140ms ease;
+}
+
+.bt-production-screen-upper video {
+    transform: skewY(1.35deg) scale(1.015);
+    transform-origin: 100% 50%;
+}
+
+.bt-production-screen-lower video {
+    transform: skewY(1.7deg) scale(1.015);
+    transform-origin: 100% 50%;
+}
+
+.bt-production-screen.is-active video {
+    opacity: 1;
+}
+
+/* Miniature CRT power blips for the small monitors, matching each glass's
+   skew. Reuses the hero's power-on/off keyframes at snappier durations. */
+.bt-production-power-line {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    pointer-events: none;
+}
+
+.bt-production-screen-upper .bt-production-power-line {
+    transform: skewY(1.35deg);
+}
+
+.bt-production-screen-lower .bt-production-power-line {
+    transform: skewY(1.7deg);
+}
+
+.bt-production-power-line::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 1.5px;
+    opacity: 0;
+    background: #e9fff8;
+    box-shadow: 0 0 4px #fff, 0 0 9px rgba(0, 247, 194, 0.9);
+    transform: translate(-50%, -50%);
+}
+
+.bt-production-screen.is-powering-on .bt-production-power-line::before {
+    animation: bt-crt-power-on 420ms ease both;
+}
+
+.bt-production-screen.is-powering-off .bt-production-power-line::before {
+    animation: bt-crt-power-off 380ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.bt-production-screen:hover,
+.bt-production-screen:focus-visible {
+    border-color: rgba(0, 247, 194, 0.78);
+    outline: none;
+    filter: brightness(1.08);
+}
+
+.bt-production-light {
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease;
+}
+
+.bt-production-light::before {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: rgba(112, 239, 207, 0.13);
+    clip-path: var(--bt-production-shape);
+    filter:
+        drop-shadow(0 0 6px rgba(174, 255, 233, 0.42))
+        drop-shadow(0 0 14px rgba(65, 226, 191, 0.25))
+        drop-shadow(0 0 28px rgba(26, 165, 148, 0.13));
+    mix-blend-mode: screen;
+}
+
+.bt-production-screen:hover + .bt-production-light,
+.bt-production-screen:focus-visible + .bt-production-light {
+    opacity: 0.74;
+}
+
+.bt-production-screen.is-active + .bt-production-light {
+    opacity: 1;
+    animation: bt-production-light-breathe 3.8s ease-in-out infinite alternate;
+}
+
+.bt-production-static {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    opacity: 0.08;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(0deg, transparent 0 2px, rgba(218, 255, 241, 0.1) 2px 3px),
+        linear-gradient(90deg, transparent, rgba(218, 255, 241, 0.06), transparent);
+    animation: bt-production-static 420ms steps(3, end) infinite;
+}
+
+.bt-production-screen.is-active .bt-production-static {
+    opacity: 0.26;
+}
+
+.bt-alchemy-hotspot {
+    z-index: 4;
+}
+
+.bt-alchemy-hotspot-chair { left: 50.2%; top: 52.5%; width: 19.2%; height: 46.5%; }
+.bt-alchemy-hotspot-door { left: 70.3%; top: 5.2%; width: 18.2%; height: 70.5%; border-radius: 9px 9px 3px 3px; }
+.bt-alchemy-hotspot-25 { left: 6.2%; top: 70.4%; width: 10.7%; height: 7.4%; }
+.bt-alchemy-hotspot-solar { left: 0; top: 39.5%; width: 10.5%; height: 11.6%; border-radius: 50%; }
+.bt-alchemy-hotspot-cat { left: 10.5%; top: 0; width: 6.5%; height: 9.8%; border-radius: 50%; }
+.bt-alchemy-hotspot-camera { left: 84.7%; top: 43.3%; width: 11.2%; height: 21.6%; }
+.bt-alchemy-hotspot-scripts { left: 67.1%; top: 79.2%; width: 19.6%; height: 20.8%; }
+.bt-alchemy-hotspot-cans { left: 83.8%; top: 72.2%; width: 16.2%; height: 27.8%; }
+
+.bt-alchemy-hotspot-door:hover,
+.bt-alchemy-hotspot-door:focus-visible {
+    border-color: rgba(184, 154, 216, 0.96);
+    background: rgba(184, 154, 216, 0.07);
+    box-shadow: 0 0 0 3px rgba(9, 10, 35, 0.72), 0 0 31px rgba(184, 154, 216, 0.78), inset 0 0 24px rgba(184, 154, 216, 0.12);
+}
+
+.bt-alchemy-hotspot-chair:hover,
+.bt-alchemy-hotspot-chair:focus-visible {
+    border-color: rgba(255, 202, 117, 0.92);
+    background: rgba(255, 202, 117, 0.045);
+    box-shadow: 0 0 0 3px rgba(9, 10, 35, 0.62), 0 0 26px rgba(255, 172, 75, 0.44), inset 0 0 24px rgba(255, 214, 143, 0.08);
+}
+
+.bt-alchemy-hotspot-25.is-farting {
+    animation: bt-tape-fart 520ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.bt-alchemy-scene-status {
+    bottom: 3.4%;
+    max-width: min(38rem, 72%);
+}
+
+.bt-alchemy-menu-dialog {
+    width: min(43rem, calc(100vw - 2rem));
+}
+
+.bt-alchemy-menu-card {
+    background:
+        linear-gradient(90deg, transparent 0 7%, rgba(255, 90, 54, 0.1) 7% calc(7% + 2px), transparent calc(7% + 2px)),
+        repeating-linear-gradient(0deg, transparent 0 1.75rem, rgba(26, 21, 80, 0.1) 1.75rem calc(1.75rem + 1px)),
+        var(--bt-paper);
+}
+
+.bt-alchemy-menu-card h1 {
+    max-width: none;
+}
+
+.bt-alchemy-menu-intro {
+    max-width: 37rem;
+    margin: 0 0 1.2rem;
+    color: #45323b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.05rem;
+    line-height: 1.55;
+}
+
+.bt-alchemy-video-list {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.bt-alchemy-series-label {
+    margin: 0.9rem 0 -0.1rem;
+    color: #644235;
+    font-family: "Space Mono", monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.bt-alchemy-series-label:first-child {
+    margin-top: 0;
+}
+
+.bt-alchemy-video-option {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.4rem 1rem;
+    padding: 0.95rem 1rem;
+    color: var(--bt-paper);
+    background: rgba(26, 21, 80, 0.96);
+    border: 2px solid var(--bt-ink);
+    border-radius: 5px;
+    box-shadow: 4px 4px 0 var(--bt-orange);
+    cursor: pointer;
+    text-align: left;
+}
+
+.bt-alchemy-video-option:hover,
+.bt-alchemy-video-option:focus-visible,
+.bt-alchemy-video-option[aria-current="true"] {
+    color: var(--bt-ink);
+    background: var(--bt-mint);
+    outline: 3px solid var(--bt-ink);
+    outline-offset: 2px;
+}
+
+.bt-alchemy-video-title {
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 1.15rem;
+}
+
+.bt-alchemy-video-year {
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.bt-alchemy-video-description {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.bt-alchemy-now-playing {
+    margin: 1rem 0 0;
+    color: #644235;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+@keyframes bt-alchemy-enter {
+    from { opacity: 0; filter: brightness(0.38) blur(2px); transform: scale(1.025); }
+    to { opacity: 1; filter: brightness(1) blur(0); transform: scale(1); }
+}
+
+@keyframes bt-tv-light-breathe {
+    0% { opacity: calc(0.72 * var(--bt-glow-mult)); filter: brightness(0.86) saturate(0.9); }
+    42% { opacity: calc(1 * var(--bt-glow-mult)); filter: brightness(1.08) saturate(1.06); }
+    100% { opacity: calc(0.82 * var(--bt-glow-mult)); filter: brightness(0.94) saturate(0.96); }
+}
+
+@keyframes bt-tv-rays-sweep {
+    0% { transform: rotate(-2.3deg) scale(1); opacity: 0.78; }
+    45% { transform: rotate(0.5deg) scale(1.03); opacity: 1; }
+    100% { transform: rotate(1.5deg) scale(0.99); opacity: 0.7; }
+}
+
+@keyframes bt-tv-beam-shimmer {
+    0% { opacity: 0.5; transform: rotate(-0.5deg) translateY(0.4%); }
+    38% { opacity: 0.92; transform: rotate(0.35deg) translateY(-0.5%); }
+    72% { opacity: 0.66; transform: rotate(-0.15deg) translateY(0.2%); }
+    100% { opacity: 0.98; transform: rotate(0.5deg) translateY(-0.3%); }
+}
+
+@keyframes bt-crt-power-on {
+    0% { width: 0; opacity: 0; }
+    18% { width: 8%; opacity: 1; }
+    52% { width: 92%; opacity: 1; }
+    72% { width: 100%; height: 3px; opacity: 0.95; }
+    100% { width: 100%; height: 100%; opacity: 0; }
+}
+
+@keyframes bt-crt-power-off {
+    0% { width: 100%; height: 46%; opacity: 0; }
+    26% { width: 100%; height: 3px; opacity: 0.92; }
+    58% { width: 46%; height: 2px; opacity: 1; }
+    82% { width: 5%; height: 2px; opacity: 0.9; }
+    100% { width: 0; height: 2px; opacity: 0; }
+}
+
+@keyframes bt-production-static {
+    0% { transform: translate(0, 0); }
+    33% { transform: translate(1%, -1%); }
+    66% { transform: translate(-1%, 0.5%); }
+    100% { transform: translate(0.5%, 1%); }
+}
+
+@keyframes bt-production-light-breathe {
+    from { opacity: 0.68; filter: brightness(0.88); }
+    to { opacity: 0.9; filter: brightness(1.04); }
+}
+
+@keyframes bt-tape-fart {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    16% { transform: translate(-2%, 1%) rotate(-1deg); }
+    32% { transform: translate(2.5%, -1.5%) rotate(1.2deg); }
+    48% { transform: translate(-1.5%, 0.5%) rotate(-0.8deg); }
+    64% { transform: translate(1%, -0.5%) rotate(0.5deg); }
+}
+
+@keyframes bt-chair-select {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    28% { transform: translate(-0.7%, -1.5%) rotate(-1.1deg); }
+    58% { transform: translate(0.4%, 0.25%) rotate(0.45deg); }
+}
+
+@keyframes bt-crate-rustle {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    24% { transform: translate(-0.45%, -1.1%) rotate(-0.5deg); }
+    54% { transform: translate(0.35%, 0.15%) rotate(0.35deg); }
+}
+
+/* ===== END ABSURD ALCHEMY ROOM ===== */
 
 .bt-dialog {
     width: min(46rem, calc(100vw - 2rem));
@@ -1110,6 +1821,30 @@ a {
         box-shadow: 3px 3px 0 var(--bt-orange);
         font-size: 0.7rem;
         font-weight: 700;
+    }
+
+    .bt-mobile-room-exit {
+        position: fixed;
+        z-index: 12;
+        right: max(0.75rem, env(safe-area-inset-right));
+        bottom: max(0.75rem, env(safe-area-inset-bottom));
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-height: 2.75rem;
+        padding: 0.55rem 0.7rem;
+        color: var(--bt-paper);
+        background: rgba(26, 21, 80, 0.95);
+        border: 2px solid var(--bt-cream);
+        border-radius: 5px;
+        box-shadow: 3px 3px 0 var(--bt-orange);
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+
+    .bt-mobile-room-exit:focus-visible {
+        outline: 3px solid var(--bt-mint);
+        outline-offset: 3px;
     }
 
     .bt-mobile-floorplan:focus-visible {

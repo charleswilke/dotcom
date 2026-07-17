@@ -49,6 +49,108 @@ dedicated `.bt-door-light` element behind each sprite, so light spill is not
 clipped by an image bounding box. Its `::before` is a narrow opening aura and
 its `::after` is a restrained elliptical floor pool.
 
+## Absurd Alchemy room
+
+The Absurd Alchemy doorway now enters a full-width illustrated production room
+at `#absurd-alchemy`. The runtime image is a clean 1672×941 plate with an empty
+hero CRT; only that screen was replaced, so the original VHS 25, chair, solar
+system, door, props, and perspective remain locked to the concept render.
+
+- The director's chair opens a call-sheet playlist. Selecting a title loads the
+  Vimeo source and calls `play()` inside the same click gesture. The current
+  reel is also primed silently when the room opens, which makes delegated
+  autoplay much more reliable; a visible Press play fallback remains for strict
+  browser policies.
+- The call sheet now carries 27 reels in five groups: the 11-video Vimeo vault
+  (Call Me Lucifer 1–4, The NoHo Rag 1–4, shorts and one-offs) plus, last on
+  the list, The NoHo Rag Season One (12 YouTube episodes, 2014–15) and
+  Segments (4 YouTube shorts, 2015). Vimeo entries carry `id` (+ optional
+  `hash`; only Sagan has one); YouTube entries carry `yt`. The presence of
+  `yt` is what routes a cue to the YouTube path.
+- The hero CRT is dual-source: two stacked iframes inside the same keystoned
+  video plane, with `data-crt-source` on the hero screen controlling which is
+  visible. The YouTube IFrame API loads lazily on first YouTube cue. A thin
+  adapter maps YT state changes onto the same handlers Vimeo uses (play/pause
+  labels, power-off on ended) and a 250ms poll substitutes for Vimeo's
+  timeupdate to drive the glow. Tap toggle, press-play fallback, and
+  leave-room cleanup all branch on `heroSource`.
+- The small cat figure cues the French Kitty trailer on the hero screen, the
+  same way the solar system cues Sagan.
+- Once a reel has started, an invisible `.bt-crt-tap-toggle` button covers the
+  picture area and toggles play/pause through the Player API (a tap after the
+  reel ends rewinds and replays).
+- When a reel ends, the set powers itself off instead of showing Vimeo's
+  end screen: the `ended` handler collapses the picture to a bright line
+  (`bt-crt-power-off` on the shared power-line surface), fades the iframe,
+  restores the SELECT A REEL idle state, and resets the glow to neutral teal.
+  Tapping the dark screen powers it back on with the same reel from the top. Its bottom 16% strip is deliberately left
+  open so Vimeo's scrubber, volume, and fullscreen controls remain reachable —
+  don't extend the toggle to full height. It also sidesteps unreliable
+  hit-testing on the 3D-transformed iframe.
+- The hero embed now plays on a true 3D keystoned surface. `.bt-crt-video-plane`
+  is oversized to the right and rotated away with
+  `perspective(800px) rotateZ(2.1deg) rotateY(14deg)` from a left-edge origin,
+  so the video texture itself compresses toward the receding right side the way
+  the painted CRT does; rounded plane corners plus the inset shadow supply the
+  curved-tube feel. The plane no longer carries its own screen-shape clip —
+  the parent `.bt-alchemy-hero-screen`'s clip-path owns the final silhouette,
+  and the glow layer still shares it. The scanline/vignette/sheen overlay
+  (`.bt-alchemy-hero-screen .bt-crt-glass`) rides the identical surface. The
+  shared geometry lives in the `--bt-alchemy-crt-surface-*` custom properties
+  on `.bt-alchemy-scene` (inset, transform, origin, radius); change those, not
+  the individual rules, so the video and its glass can never drift apart.
+  Adjust `--bt-alchemy-screen-shape` for contour changes, but keep the surface
+  oversize (right inset ≈ -28%) in step with any rotation change: the projected
+  right edge must reach the clip boundary at the full 1672px scene width, the
+  worst case for coverage.
+  While Vimeo is playing, a separate layer behind the embed adds teal spill
+  and radial rays across the television frame. The light runs three
+  desynchronized drift animations (breathe 5.8s, beam shimmer 8.3s, ray sweep
+  12.7s) so the combined glow never visibly loops; they are gated on
+  `.is-playing`, stop entirely on pause, and collapse under reduced motion.
+- The TV light is content-reactive. The page cannot sample the cross-origin
+  Vimeo iframe, so `tools/build-alchemy-glow-tracks.py` analyzes low-res
+  local copies of the reels offline (2 samples/sec of average color + luma)
+  and writes `images/before-times/glow-tracks-v1.json` (~100KB). At runtime,
+  the player's `timeupdate` event indexes the current sample and a small rAF
+  lerp drives the `--bt-glow-rgb` / `--bt-glow-hi-rgb` / `--bt-glow-mult`
+  custom properties on `.bt-alchemy-scene`; all glow colors and the breathe
+  keyframes consume those vars. Defaults are the room teal, so a missing or
+  failed JSON fetch degrades silently to the old fixed glow. After adding a
+  new reel, re-run the script (yt-dlp a low-res copy keyed by playlist key,
+  e.g. `noho-5.mp4`) or the new reel simply keeps the neutral teal glow.
+- The tiny solar system directly cues/restarts Carl Sagan: Prank Master.
+- VHS 25 plays a short procedural Web Audio joke and animates the tape. It
+  respects the site's existing sound preference and needs no audio asset.
+- The two smaller CRTs run short, silent production fragments on an 8–20 second
+  randomized schedule. Normally only one plays; a rare double hit is allowed.
+  Clicking either screen triggers it immediately. Add future clips by extending
+  `PRODUCTION_LOOPS` in `before-times.js`. Each monitor has its own measured
+  4:3-ish inner-glass polygon, perspective-skewed video, and matching active
+  glow; do not reuse the hero-screen contour or a generic rectangle for them.
+- The right-side doorway and fixed mobile Lobby button return to the central
+  room and restore the URL/history state.
+- On narrow screens the room stays a 1000px horizontal stage inside its own
+  scroll area. This keeps the CRT and hotspots legible rather than shrinking
+  the full illustration to phone width.
+
+Fragments play through exactly once: `video.loop` is off and each video's
+`ended` listener powers the monitor down with the blip, so a clip never wraps
+back to its opening frames. The ghost timer remains only as a cap for stalled
+or slow-loading video (and still cuts mid-clip when it draws a short window).
+
+The production monitors now rotate through twenty real 6-second fragments cut
+from the actual reels (`images/before-times/production/fragment-*-v1.mp4`,
+320×240 silent h264 at 12fps, center-cropped to the monitors' 4:3 glass).
+Clip moments were chosen programmatically: a scorer over the glow tracks
+(mean intensity + chroma + frame-to-frame color activity, restricted to the
+middle 70% of each reel) picked the liveliest window. To add or re-cut a
+fragment, download a ≤360p source keyed by playlist key and run the same
+ffmpeg recipe; bump the `-v1` suffix on re-cuts because `/images/*` ships
+with immutable caching. The old thumbnail-derived
+`sagan-production-fragment-a/b.mp4` files remain on disk but are out of the
+rotation.
+
 ## July 16–17 finishing-pass notes
 
 ### Layer choices that held up
@@ -173,8 +275,8 @@ before-times.css
   Layer placement, glow spill, hover motion, activation animation, hotspots.
 
 before-times.js
-  Panel behavior, delayed doorway activation, radio/bell actions, and guestbook
-  loading/submission.
+  Panel behavior, delayed doorway activation, radio/bell actions, guestbook
+  loading/submission, Vimeo cueing, Tape 25 audio, and production-loop scheduling.
 
 api/before-times-guestbook.js
   Vercel serverless ledger API, KV persistence, validation, rate limiting, and
@@ -226,6 +328,22 @@ tools/build-before-times-layers.py
   Deterministic masks/compositing for the old portal, all doors, the broad
   floor repair, all extracted props, the newsstand-only runtime plate, and
   `lobby-clean-v5.png`.
+
+images/before-times/absurd-alchemy-concept-v1.png
+  Locked full-room concept render and source of truth for prop placement.
+
+images/before-times/absurd-alchemy-clean-v1.{png,webp}
+  Master and runtime room plates with only the hero CRT glass cleaned.
+
+images/before-times/production/*
+  Sagan thumbnail and the two current silent production-monitor MP4 loops.
+
+tools/build-absurd-alchemy-plate.py
+  Deterministically composites the dark-screen donor crop into the locked
+  concept and writes both the PNG master and WebP runtime plate.
+
+tools/before-times-clean-patches/alchemy-hero-screen-dark-v1.webp
+  Donor crop used by the room-plate builder. Keep this with the script.
 ```
 
 ## The rule that solved the perspective problem

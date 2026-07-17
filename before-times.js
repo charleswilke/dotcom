@@ -7,9 +7,12 @@
             title: 'Before Times',
             copy: [
                 'A career archive for the work made before AI became a daily collaborator. The doors organize the big chapters; the lobby holds the earlier obsessions that never fit neatly on a résumé.',
-                'Nothing important is locked behind a puzzle. Click around for the main stories, then use found objects for side roads, old recordings, and jokes.'
+                'Nothing important is locked behind a puzzle. Click around for the main stories, then use found objects for side roads, old recordings, and jokes.',
+                'Click or tap a door, exhibit, or desk object. Keyboard visitors can use Tab and Enter. On a narrow screen, swipe sideways through the lobby or use the floating floor-plan button.',
+                'Sound is always opt-in. Nothing plays until you ring the bell or tune the radio.'
             ],
-            facts: ['Use Tab to move between every interactive object.', 'The hand icon briefly reveals all hotspots.', 'The glowing mint door returns to the present-day site.']
+            facts: ['Use Tab to move between every interactive object.', 'The glowing mint door and the X in the upper-right return to the present-day site.'],
+            button: { label: 'Turn sound off', action: 'sound' }
         },
         alchemy: {
             kicker: 'Door 01 // Los Angeles // 2013–2017',
@@ -85,15 +88,6 @@
             facts: ['Cassette-ready player', 'Nine original tuning sounds already mounted', 'Episode slots waiting for recovered audio'],
             button: { label: 'Turn the dial', action: 'tune' }
         },
-        settings: {
-            kicker: 'Lobby controls // accessibility',
-            title: 'How to explore',
-            copy: [
-                'Click or tap a door, exhibit, or desk object. Keyboard visitors can use Tab and Enter. On a narrow screen, swipe sideways through the lobby or use the floating floor-plan button.',
-                'Sound is always opt-in. Nothing plays until you ring the bell or tune the radio.'
-            ],
-            button: { label: 'Turn sound off', action: 'sound' }
-        },
         floorplan: {
             kicker: 'Inventory // permanent item',
             title: 'Floor plan',
@@ -112,7 +106,6 @@
     };
 
     const TUNING_TRACKS = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => `/audio/radio_tuning${number}.mp3`);
-    const scene = document.querySelector('.bt-lobby-scene');
     const sceneStatus = document.getElementById('bt-scene-status');
     const infoDialog = document.getElementById('bt-info-dialog');
     const guestbookDialog = document.getElementById('bt-guestbook-dialog');
@@ -134,7 +127,6 @@
     const radioHotspot = document.querySelector('[data-action="radio"]');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let statusTimer = null;
-    let revealTimer = null;
     let guestbookLoaded = false;
     let soundEnabled = localStorage.getItem('bt-sound-enabled') !== 'false';
 
@@ -222,13 +214,6 @@
         }
 
         openDialog(infoDialog);
-    }
-
-    function revealHotspots() {
-        window.clearTimeout(revealTimer);
-        scene.classList.add('bt-show-hotspots');
-        showStatus('The useful objects hum briefly.', 2200);
-        revealTimer = window.setTimeout(() => scene.classList.remove('bt-show-hotspots'), 2600);
     }
 
     function toggleSound() {
@@ -386,7 +371,6 @@
     document.querySelectorAll('[data-action]').forEach((button) => {
         button.addEventListener('click', () => {
             const action = button.dataset.action;
-            if (action === 'reveal') revealHotspots();
             if (action === 'bell') ringBell();
             if (action === 'radio') {
                 tuneRadio();
@@ -423,8 +407,4 @@
         showStatus('Only static for now. The old broadcasts are still hiding somewhere.');
     });
 
-    if (!localStorage.getItem('bt-lobby-visited')) {
-        window.setTimeout(revealHotspots, 900);
-        localStorage.setItem('bt-lobby-visited', 'true');
-    }
 }());

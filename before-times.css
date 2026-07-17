@@ -155,8 +155,7 @@ a {
 }
 
 .bt-hotspot:hover,
-.bt-hotspot:focus-visible,
-.bt-lobby-scene.bt-show-hotspots .bt-hotspot {
+.bt-hotspot:focus-visible {
     border-color: rgba(0, 247, 194, 0.92);
     background: rgba(0, 247, 194, 0.075);
     box-shadow:
@@ -211,6 +210,56 @@ a {
     height: 148.3%;
 }
 
+.bt-radio-aura {
+    position: absolute;
+    z-index: 0;
+    inset: -24% -8% -15% -7%;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.965);
+    transform-origin: 52% 70%;
+    transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.bt-radio-aura::before,
+.bt-radio-aura::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+}
+
+.bt-radio-aura::before {
+    top: 33%;
+    right: 0;
+    bottom: 4%;
+    left: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse at 52% 58%,
+        transparent 0 43%,
+        rgba(255, 216, 135, 0.13) 49%,
+        rgba(0, 247, 194, 0.32) 58%,
+        rgba(0, 247, 194, 0.08) 69%,
+        transparent 80%
+    );
+    filter: blur(5px);
+}
+
+.bt-radio-aura::after {
+    top: 33%;
+    left: 16%;
+    width: 52%;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(0, 247, 194, 0.22);
+    box-shadow:
+        0 0 8px rgba(255, 216, 135, 0.58),
+        0 0 17px rgba(0, 247, 194, 0.62);
+    filter: blur(3.5px);
+    transform: rotate(-20.5deg);
+    transform-origin: 0 50%;
+}
+
 .bt-object-layer-prop {
     inset: 0;
     width: 100%;
@@ -233,24 +282,24 @@ a {
 }
 
 .bt-object-layer-door-games {
-    top: -1.85%;
+    top: -0.45%;
     left: -11.64%;
     width: 125.67%;
     height: 103.67%;
 }
 
 .bt-object-layer-door-content {
-    top: -2%;
+    top: -3.4%;
     left: -4.26%;
     width: 114.73%;
     height: 113%;
 }
 
 .bt-object-layer-door-docs {
-    top: -4.28%;
-    left: -10.17%;
-    width: 106.32%;
-    height: 112.95%;
+    top: -3.65%;
+    left: -9.14%;
+    width: 104.25%;
+    height: 110.75%;
 }
 
 .bt-layered-doorway {
@@ -363,7 +412,6 @@ a {
 
 .bt-hotspot.bt-layered-hotspot:hover,
 .bt-hotspot.bt-layered-hotspot:focus-visible,
-.bt-lobby-scene.bt-show-hotspots .bt-hotspot.bt-layered-hotspot,
 .bt-hotspot.bt-layered-hotspot.is-ringing,
 .bt-hotspot.bt-layered-hotspot.is-tuning,
 .bt-hotspot.bt-layered-hotspot.is-activating {
@@ -374,7 +422,6 @@ a {
 
 .bt-layered-hotspot:hover .bt-object-layer,
 .bt-layered-hotspot:focus-visible .bt-object-layer,
-.bt-lobby-scene.bt-show-hotspots .bt-layered-hotspot .bt-object-layer,
 .bt-layered-hotspot.is-ringing .bt-object-layer,
 .bt-layered-hotspot.is-tuning .bt-object-layer,
 .bt-layered-hotspot.is-activating .bt-object-layer {
@@ -446,6 +493,17 @@ a {
     transform: translateZ(0) scale(1);
 }
 
+.bt-hotspot-radio:hover .bt-radio-aura,
+.bt-hotspot-radio:focus-visible .bt-radio-aura,
+.bt-hotspot-radio.is-tuning .bt-radio-aura {
+    opacity: 0.78;
+    transform: scale(1);
+}
+
+.bt-hotspot-radio.is-tuning .bt-radio-aura {
+    opacity: 0.92;
+}
+
 .bt-hotspot-bulletin:hover .bt-object-layer,
 .bt-hotspot-bulletin:focus-visible .bt-object-layer {
     animation: bt-bulletin-rustle 760ms ease-in-out infinite alternate;
@@ -466,18 +524,12 @@ a {
     animation: bt-camera-swing 980ms ease-in-out infinite alternate;
 }
 
-.bt-hotspot-guestbook:hover .bt-object-layer,
-.bt-hotspot-guestbook:focus-visible .bt-object-layer {
-    animation: bt-guestbook-lift 950ms ease-in-out infinite alternate;
-}
-
 .bt-hotspot-door {
     border-radius: 18px 18px 7px 7px;
 }
 
 .bt-hotspot-door:hover,
-.bt-hotspot-door:focus-visible,
-.bt-lobby-scene.bt-show-hotspots .bt-hotspot-door {
+.bt-hotspot-door:focus-visible {
     border-color: rgba(255, 90, 54, 0.96);
     background: rgba(255, 90, 54, 0.06);
     box-shadow:
@@ -487,8 +539,34 @@ a {
 }
 
 .bt-hotspot-help { left: 1.75%; top: 1.05%; width: 4.25%; height: 6.2%; border-radius: 50%; }
-.bt-hotspot-reveal { left: 89.55%; top: 1%; width: 4.2%; height: 6.2%; border-radius: 50%; }
-.bt-hotspot-settings { left: 94.25%; top: 1%; width: 4.15%; height: 6.2%; border-radius: 50%; }
+.bt-header-control-mask { position: absolute; z-index: 2; left: 89.55%; top: 1%; width: 4.2%; height: 6.2%; pointer-events: none; }
+.bt-header-control-mask::before { content: ""; position: absolute; inset: 0 -12% 15%; background: var(--bt-ink); }
+.bt-hotspot-exit { left: 94.25%; top: 1%; width: 4.15%; height: 6.2%; border-radius: 50%; text-decoration: none; }
+.bt-hotspot-exit::before {
+    content: "";
+    position: absolute;
+    inset: -8% -30% 10% -50%;
+    background: var(--bt-ink);
+}
+
+.bt-exit-icon {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: 72%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    transform: translate(-50%, -50%);
+    transition: filter 160ms ease, transform 160ms ease;
+}
+
+.bt-hotspot-exit:hover .bt-exit-icon,
+.bt-hotspot-exit:focus-visible .bt-exit-icon {
+    filter: brightness(1.1) saturate(1.08) drop-shadow(0 0 5px rgba(0, 247, 194, 0.72));
+    transform: translate(-50%, -50%) scale(1.04);
+}
 
 .bt-hotspot-alchemy { left: 6.8%; top: 8.2%; width: 18%; height: 48%; }
 .bt-hotspot-games { left: 26.2%; top: 8.1%; width: 14.6%; height: 48.2%; }
@@ -551,11 +629,6 @@ a {
 @keyframes bt-camera-swing {
     from { filter: brightness(1.05) saturate(1.08); }
     to { filter: brightness(1.14) saturate(1.17); }
-}
-
-@keyframes bt-guestbook-lift {
-    from { filter: brightness(1.03) saturate(1.03); }
-    to { filter: brightness(1.11) saturate(1.09); }
 }
 
 @keyframes bt-bell-ring {

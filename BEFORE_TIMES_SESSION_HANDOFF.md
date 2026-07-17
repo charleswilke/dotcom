@@ -2,7 +2,7 @@
 
 Read this before doing more lobby image separation or interaction work. This is
 the practical record of what exists, what worked, and what cost us time during
-the July 16, 2026 session.
+the July 16–17, 2026 sessions.
 
 ## Current state
 
@@ -21,18 +21,123 @@ The layered scene currently includes:
 - The Knowledge Maze: documentation interior, angular frame, and circular maze
   medallion.
 - Return portal: a separately generated angled door and frame.
-- Desk bell, radio, guestbook assembly, college bulletin board, newspaper
-  stand, photography lightbox, and hanging camera: pixel-exact cutouts from
-  the original room art.
+- Radio, college bulletin board, photography lightbox, and hanging camera:
+  pixel-exact cutouts from the original room art.
+- Desk bell and newspaper stand: cleaned or regenerated independent sprites
+  paired with deliberately local background repairs.
+
+The guestbook assembly stays baked into the runtime lobby plate. Its extracted
+layer included a broad, jagged desk-and-floor matte that nicked the gold plaque,
+so the page now places an invisible interactive hotspot over the clean baked
+art instead of rendering the redundant `guestbook.webp` cutout.
 
 The photography lightbox and hanging camera are separate buttons even though
 they open the same panel, so their hover behavior can evolve independently.
 The small inventory medallion is covered by a responsive `CW` monogram layer.
 
+The question-mark control now contains both the About copy and the former
+How-to-explore instructions, including the opt-in sound toggle. The hotspot
+reveal control has been removed; its baked hand icon is covered by a small
+header-colored mask. The upper-right cog is covered by an accessible X link
+that exits to `/`; its rough dry-brush illustrated sprite lives at
+`images/before-times/layers/exit-button-v3.png`. The X link's header-colored
+backing mask deliberately extends beyond the hotspot so no fragment of the
+baked cog can peek around the replacement.
+
 All five doors have hover/activation motion. Their light is produced by a
 dedicated `.bt-door-light` element behind each sprite, so light spill is not
 clipped by an image bounding box. Its `::before` is a narrow opening aura and
 its `::after` is a restrained elliptical floor pool.
+
+## July 16–17 finishing-pass notes
+
+### Layer choices that held up
+
+- Treat the lobby as a flattened illustration first, not a collection of
+  separable objects. Before moving anything, inspect the background plate for
+  baked duplicates, shadows, rods, and edge fragments.
+- The guestbook should remain baked into the desk. Its cleanest interaction is
+  an invisible semantic hotspot over the original art; the extracted guestbook
+  layer carried a jagged desk/floor matte and nicked the gold plaque.
+- The newsstand needs only an upper-silhouette repair behind its replacement
+  sprite. Keep the baked cabinet body, base, and grounding shadow. Removing the
+  whole object made it look pulled away from the wall and brought generated
+  floor shadows back.
+- The radio selection effect belongs in the separate `.bt-radio-aura` DOM
+  layer. This gives the antenna and body glow breathing room without clipping
+  the aura to the raster bounds or lighting up the extraction's dirty matte.
+- The bell is small enough that a cohesive redraw works better than surgical
+  pixel repair. `bell-v4.*` was generated as one object, chroma-keyed, cleaned,
+  and fitted to the original 140px sprite box by its alpha bounds.
+- The exit control needs both a rough illustrated sprite and an oversized
+  header-colored backing mask. `exit-button-v3.png` uses dry-brush linework;
+  the mask extends outside the hotspot because the baked cog silhouette is
+  wider than the new X.
+- Door-frame tuning is most convincing in small percentage increments. The
+  generated doors already contain the room perspective; large transforms make
+  them look assembled instead of drawn into the wall.
+
+### Dead ends and why they failed
+
+- The full-room all-props-removed plate repaired too many unrelated regions at
+  once. It introduced choppy texture seams and invented floor shadows.
+- A broad newsstand removal exposed more generated floor than the replacement
+  could cover. The cabinet lost contact with the wall and the old shadow
+  problem returned.
+- Rebuilding only the malformed knob on the 140px bell produced pinched,
+  mushroom-shaped, or dome-clipping results. Regenerating the whole bell was
+  faster and visually more coherent.
+- Transparent PNG inspection can be misleading because fully transparent
+  pixels may still contain stale RGB values. Composite the asset over black or
+  the real scene before judging a matte or apparent fragment.
+- The first X replacement was too smooth and geometric at runtime size. The
+  roughness must be exaggerated in the high-resolution master so dry-brush
+  gaps and stroke variation survive downscaling.
+- A backing mask sized only to the X hotspot left a tiny piece of the baked cog
+  visible above-left. Mask the full old silhouette, not just the replacement.
+- Generated assets still need a cleanup pass. The otherwise successful bell
+  included a small interior spindle that was only obvious after chroma removal
+  and live-scale inspection.
+
+### Repeatable finishing workflow
+
+1. Inspect the full lobby and a tight crop to determine what is baked into the
+   plate and what is truly isolated.
+2. Preserve original art whenever an invisible hotspot or restrained CSS
+   effect provides the interaction without moving the object.
+3. For a genuinely new sprite, generate the complete physical object on a flat
+   chroma background with no wall, floor, glow, or cast shadow.
+4. Remove the chroma key, validate transparent corners and partial-alpha counts,
+   then fit the visible alpha bounding box rather than the padded canvas.
+5. Save a sibling versioned PNG master and runtime WebP when appropriate. Do
+   not overwrite the prior source asset.
+6. Repair only the background pixels the moving sprite can expose, using a
+   feathered shaped mask rather than a large rectangular replacement.
+7. Inspect the asset both enlarged on a dark background and at actual lobby
+   scale. Exercise its hover/activation state before calling it finished.
+8. Bump the HTML cache token whenever CSS or a same-named runtime asset changes.
+
+### Guestbook wiring and deployment state
+
+- The client flow is complete: open the modal, load recent entries, submit
+  `name`, `message`, and the hidden honeypot, reset the form, and refresh the
+  visible ledger.
+- `api/before-times-guestbook.js` implements public `GET` and `POST`, plus an
+  authenticated `DELETE`. It stores 100 entries, returns the newest 40, blocks
+  links, normalizes text, and limits one IP fingerprint to three posts per 15
+  minutes.
+- The endpoint accepts `guestbook_KV_*`, `plays_KV_*`, or generic `KV_*` REST
+  credentials. Production's existing play-counter API gets past its KV config
+  gate, so the guestbook should be able to reuse that store after deployment.
+- `python3 -m http.server` is visual-only and returns 404 for `/api/*`. Use a
+  deployed Vercel preview or an authenticated/linked `vercel dev` session for
+  a real end-to-end guestbook test.
+- As of this handoff, `https://charleswilke.com/api/before-times-guestbook`
+  returns 404 because the feature is still on `codex/before-times`, not
+  production `main`. A local mocked POST→GET round trip passed with 201/200.
+- Entries publish immediately. There is an admin-token delete route, but no
+  moderation queue or management UI; the current spam defenses are deliberately
+  lightweight.
 
 ## Run and verify
 
@@ -51,6 +156,10 @@ http://127.0.0.1:8080/before-times.html
 Use localhost, not `file://`. The absolute asset paths and browser behavior are
 reliable over HTTP, while direct file preview previously looked broken.
 
+This static server does not execute the Vercel functions under `/api`. A 404
+from the guestbook on this localhost is expected and does not diagnose the
+serverless handler.
+
 There is no build step. If an old image persists, bump the `?v=` cache token in
 `before-times.html` and reload.
 
@@ -64,17 +173,31 @@ before-times.css
   Layer placement, glow spill, hover motion, activation animation, hotspots.
 
 before-times.js
-  Panel behavior and the delayed doorway activation sequence.
+  Panel behavior, delayed doorway activation, radio/bell actions, and guestbook
+  loading/submission.
+
+api/before-times-guestbook.js
+  Vercel serverless ledger API, KV persistence, validation, rate limiting, and
+  authenticated deletion.
 
 images/before-times/lobby-v1.webp
   Original flattened 1672×941 lobby art. Keep this unchanged as the source of truth.
 
 images/before-times/layers/lobby-clean-v4.png
 images/before-times/layers/lobby-clean-v4.webp
-  Current runtime lobby plate. V3 removes the doors; V4 adds the broad floor
-  repair while deliberately retaining the bulletin, newsstand, wall displays,
-  camera station, and guestbook. V5 is an experimental all-props-removed plate
-  and is not used because its multiple generated repair regions read as choppy.
+  Base lobby plate. V3 removes the doors; V4 adds the broad floor repair while
+  deliberately retaining the bulletin, newsstand, wall displays, camera
+  station, and guestbook.
+
+images/before-times/layers/lobby-clean-v4-newsstand-v1.png
+images/before-times/layers/lobby-clean-v4-newsstand-v1.webp
+  Current runtime lobby plate. It applies only the localized, feathered
+  upper-silhouette repair over V4 so the independent `newsstand-v2` sprite has
+  no doubled diagonal rod or original top plane peeking behind it. The baked
+  cabinet body, base, and grounding shadow remain; removing them made the
+  dispenser look pulled from the wall and reintroduced generated floor shadows.
+  V5 remains an experimental all-props-removed plate and is not used because
+  its multiple generated repair regions read as choppy.
 
 images/before-times/layers/door-*-v1.png
   Full-resolution transparent masters for the four career door assemblies.
@@ -86,15 +209,23 @@ images/before-times/layers/portal-angle-v1.png
 images/before-times/layers/portal-angle-v1.webp
   Generated return portal already painted at the room angle.
 
-images/before-times/layers/{bell,radio,bulletin,newsstand,photo-display,camera,guestbook}.{png,webp}
+images/before-times/layers/{bell,radio,bulletin,newsstand,photo-display,camera}.{png,webp}
   Original-pixel object layers.
+
+images/before-times/layers/bell-v4.png
+images/before-times/layers/bell-v4.webp
+  Current cohesive generated desk bell with one clean plunger.
+
+images/before-times/layers/exit-button-v3.png
+  Current rough dry-brush X control. V2 is the cleaner superseded iteration.
 
 tools/before-times-clean-patches/*.webp
   Generated wall/floor repair patches used to rebuild the clean plate.
 
 tools/build-before-times-layers.py
   Deterministic masks/compositing for the old portal, all doors, the broad
-  floor repair, all extracted props, and `lobby-clean-v5.png`.
+  floor repair, all extracted props, the newsstand-only runtime plate, and
+  `lobby-clean-v5.png`.
 ```
 
 ## The rule that solved the perspective problem
@@ -190,12 +321,15 @@ large crop when a shaped mask will preserve more original art.
 
 For the smaller props, one full-room precise-object-edit pass removed all five
 prop groups at once. That experimental room is stored as
-`tools/before-times-clean-patches/props-v1.*`, but it is not used by the live
-page. Combining unrelated wall, floor, and desk repairs introduced visible
-texture seams. The live V4 plate keeps the original props beneath pixel-exact
+`tools/before-times-clean-patches/props-v1.*`, but it is not used wholesale by
+the live page. Combining unrelated wall, floor, and desk repairs introduced
+visible texture seams. The base V4 plate keeps the original props beneath pixel-exact
 effect layers; those overlays animate through light and color without shifting
-far enough to expose a duplicate. The generated repair remains available if a
-future prop truly needs large positional movement and can be repaired locally.
+far enough to expose a duplicate. The live `lobby-clean-v4-newsstand-v1`
+derivative is the one exception: it uses the generated empty-room source only
+through a narrow upper-silhouette mask because the replacement cabinet's rod
+and top plane did not align perfectly with the baked original. The cabinet
+body, base, grounding shadow, and remaining props stay untouched.
 
 The active V4 floor now uses `tools/before-times-clean-patches/floor-v2.*`.
 This is a neutral continuous-tile repaint with the triangular yellow beam,
@@ -222,14 +356,25 @@ Those shadows illuminate retained desk/floor pixels and read as cyan blocks.
 Keep prop hover effects to restrained brightness/saturation until the props get
 true per-object background repairs and cleaner mattes.
 
-The live bell uses `images/before-times/layers/bell-v2.*`, a generated clean
-silhouette with no baked desk pixels or navy oval. It retains only a tiny CSS
-contact shadow. The older `bell.*` remains the extraction/build source but
-should not be restored to the page unless its oversized shadow matte is fixed.
+The radio is the exception only through a separate `.bt-radio-aura` layer. Its
+elliptical body pool and diagonal antenna trace sit behind the extracted raster,
+so the selection glow has breathing room without outlining the dirty matte or
+being clipped by the radio image bounds. Do not fold this effect back into an
+image `drop-shadow()`.
+
+The live bell uses `images/before-times/layers/bell-v4.*`, a fresh generated
+hand-inked brass sprite with a single cohesive knob and stem. Its chroma-key
+background and stray interior spindle were removed before sizing it to the
+existing 140px sprite box. It has no baked desk pixels or navy oval and retains
+only a tiny CSS contact shadow. The older `bell.*` remains the extraction/build
+source but should not be restored to the page unless its oversized shadow matte
+is fixed.
 
 The live newsstand similarly uses `images/before-times/layers/newsstand-v2.*`.
 It preserves the full cabinet, top rod, side cable, and newspaper face without
 the wall slivers and large floor wedge carried by the older extracted matte.
+Its matching background is `lobby-clean-v4-newsstand-v1.*`; do not restore the
+plain V4 plate unless the doubled handle and top plane are intentionally wanted.
 
 Running the helper rebuilds the PNG clean plate:
 
@@ -241,8 +386,8 @@ It does not currently rebuild the runtime WebPs. Afterward run:
 
 ```bash
 cwebp -q 92 -m 6 -mt \
-  images/before-times/layers/lobby-clean-v4.png \
-  -o images/before-times/layers/lobby-clean-v4.webp
+  images/before-times/layers/lobby-clean-v4-newsstand-v1.png \
+  -o images/before-times/layers/lobby-clean-v4-newsstand-v1.webp
 ```
 
 ## Geometry and placement
@@ -266,9 +411,9 @@ Current fitted image placement inside each hotspot:
 | Layer | Top | Left | Width | Height |
 | --- | ---: | ---: | ---: | ---: |
 | Alchemy | -5.31% | -5.28% | 107.93% | 113.78% |
-| Games | -3.11% | -13.92% | 130.23% | 107.43% |
-| Content | -0.11% | -6.34% | 118.89% | 117.09% |
-| Knowledge Maze | -4.28% | -10.17% | 106.32% | 112.95% |
+| Games | -0.45% | -11.64% | 125.67% | 103.67% |
+| Content | -3.4% | -4.26% | 114.73% | 113% |
+| Knowledge Maze | -3.65% | -9.14% | 104.25% | 110.75% |
 | Return portal | 9.39% | -13.27% | 121.95% | 103.27% |
 
 These values already produce a convincing rest-state fit. Tune them in very
@@ -320,31 +465,53 @@ The reduced-motion media rule already collapses animation and transitions.
 - Do not overcorrect charming asymmetry. The irregular geometry is part of why
   the room feels illustrated rather than assembled.
 - Do not regenerate because of a placement issue. Fix the percentages first.
+- Do not manually reconstruct a tiny malformed generated object when a complete
+  cohesive redraw is cheaper and cleaner.
+- Do not judge transparent edges without compositing the asset over an opaque
+  background.
+- Do not assume the replacement icon's bounds cover the baked control beneath
+  it; mask the source silhouette.
+- Do not use the plain static server to validate a Vercel `/api` route.
 
 ## Verification completed this session
 
-- The page was tested at `http://127.0.0.1:8080/before-times.html`.
-- All four new doorway WebPs loaded at their expected natural dimensions.
-- The clean plate loaded from `lobby-clean-v3.webp`.
-- Rest and hover states were visually inspected at 1280 × 720.
-- The Alchemy activation animation completed and its information panel opened.
-- No page errors or console errors were reported.
-- `node --check before-times.js`, Python compilation, and `git diff --check`
-  passed.
+- The page was repeatedly tested at `http://localhost:8080/before-times.html`.
+- The runtime plate loads from `lobby-clean-v4-newsstand-v1.webp` with the
+  localized newsstand-top repair.
+- Door rest states, adjusted frame positions, radio aura, guestbook hotspot,
+  generated bell, rough X, and X backing mask were visually inspected in the
+  live lobby.
+- The bell interaction completed and reported its status without error.
+- The generated bell and X assets returned HTTP 200 and retained transparent
+  corners after their PNG/WebP export steps.
+- The guestbook handler passed a local mocked POST→GET persistence round trip.
+- The production guestbook route was confirmed absent (404) pending branch
+  deployment; the existing production play API confirmed KV configuration is
+  present.
+- `node --check before-times.js` and `git diff --check` passed after the final
+  asset and documentation edits.
 
-## Working-tree warning
+## Branch and asset warning
 
-At the end of this session, the Before Times changes are still uncommitted. The
-modified files are `before-times.html`, `before-times.css`, and
-`before-times.js`. The layer assets, clean patches, and build helper are new
-files. Preserve these changes and inspect `git status` before doing any cleanup,
-branch switching, or broad rewrite.
+This finishing pass belongs together on `codex/before-times`: the handoff,
+HTML, CSS, JavaScript, layer builder, and the binary runtime assets
+`bell-v4.*`, `exit-button-v2.png`, `exit-button-v3.png`, and
+`lobby-clean-v4-newsstand-v1.*`. The PNG/WebP files are project sources, not
+disposable temp output. Inspect `git status` before any cleanup, branch switch,
+or broad rewrite.
 
 ## Good next steps
 
-The door separation problem is solved. The next session should spend generation
-budget only on genuinely new interactive art. Safe high-value work includes:
+The door separation and lobby finishing problems are solved. The next session
+should spend generation budget only on genuinely new interactive art. Safe
+high-value work includes:
 
+- Review the branch diff or existing PR and merge it when the lobby is ready to
+  become public.
+- After deployment, make one real guestbook test entry, confirm it appears on a
+  fresh GET, and verify the admin-delete path before inviting public traffic.
+- Decide whether immediate publication plus the current honeypot/rate limit is
+  enough, or whether a moderation view or stronger abuse control is warranted.
 - Tune each door's individual hover personality without changing its geometry.
 - Add restrained sound cues synchronized to `.is-activating`.
 - Separate remaining wall objects only when their intended motion requires it.

@@ -129,7 +129,7 @@ def paint_alchemy_door(draw):
 
 
 def paint_games_door(draw):
-    polygon(draw, [(24, 26), (256, 22), (279, 68), (279, 447), (250, 494), (119, 512), (26, 478), (15, 78)])
+    polygon(draw, [(8, 22), (256, 22), (279, 68), (279, 447), (250, 494), (119, 512), (8, 492), (0, 70)])
 
 
 def paint_content_door(draw):
@@ -213,6 +213,35 @@ def paint_newsstand_details(draw):
     line(draw, [(31, 63), (123, 22)], 6)
     ellipse(draw, (27, 58, 37, 68))
     ellipse(draw, (119, 18, 128, 27))
+
+
+def paint_newsstand_handle_repair(draw):
+    # The original flattened handle sits lower and farther left than the V2
+    # sprite handle. Cover its complete rod, caps, and painted shadow so no
+    # ghost line survives the feathered composite.
+    line(draw, [(20, 82), (135, 24)], 18)
+    ellipse(draw, (13, 69, 42, 96))
+    ellipse(draw, (120, 10, 146, 39))
+
+
+def paint_newsstand_top_repair(draw):
+    # The V2 cabinet's top plane is lower and steeper than the flattened
+    # original. Remove only the old upper plane and shoulder that can peek out
+    # behind it; the original body, base, and grounding remain untouched.
+    polygon(
+        draw,
+        [
+            (7, 57),
+            (40, 28),
+            (120, 18),
+            (205, 32),
+            (224, 70),
+            (218, 103),
+            (188, 113),
+            (32, 104),
+            (7, 89),
+        ],
+    )
 
 
 def paint_photo_display(draw):
@@ -434,6 +463,7 @@ def main():
     props_patch = Image.open(PATCH_DIR / "props-v1.webp").convert("RGB")
     props_patch = props_patch.resize(source.size, Image.Resampling.LANCZOS)
     clean_props_plate = clean_floor_plate.copy()
+    clean_newsstand_plate = clean_floor_plate.copy()
 
     for name, config in PROP_LAYERS.items():
         left, top, right, bottom = config["box"]
@@ -478,8 +508,30 @@ def main():
         fill_mask = fill_mask.filter(ImageFilter.GaussianBlur(config["feather"]))
         repaired_region = Image.composite(patch_region, original_region, fill_mask)
         clean_props_plate.paste(repaired_region, (left, top))
+        if name == "newsstand":
+            # Keep the original cabinet and grounding shadow baked into V4.
+            # Only its mismatched diagonal handle needs removal behind the
+            # cleaner V2 sprite; replacing the cabinet reintroduces generated
+            # floor shadows and makes the dispenser look pulled from the wall.
+            upper_mask = ImageChops.lighter(
+                make_mask(size, paint_newsstand_handle_repair),
+                make_mask(size, paint_newsstand_top_repair),
+            )
+            upper_fill_mask = upper_mask.filter(ImageFilter.MaxFilter(5))
+            upper_fill_mask = upper_fill_mask.filter(ImageFilter.GaussianBlur(2.5))
+            upper_repair = Image.composite(
+                patch_region,
+                before_region,
+                upper_fill_mask,
+            )
+            clean_newsstand_plate.paste(upper_repair, (left, top))
+            upper_fill_mask.save(MASK_DIR / "newsstand-upper-background-mask.png")
         mask.save(MASK_DIR / f"{name}-mask.png")
 
+    clean_newsstand_plate.save(
+        OUTPUT_DIR / "lobby-clean-v4-newsstand-v1.png",
+        optimize=True,
+    )
     clean_props_plate.save(OUTPUT_DIR / "lobby-clean-v5.png", optimize=True)
 
 

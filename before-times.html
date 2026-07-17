@@ -28,8 +28,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
-    <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4.webp?v=20260716w" type="image/webp" fetchpriority="high">
-    <link rel="stylesheet" href="/before-times.css?v=20260716s">
+    <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-v1.webp?v=20260716d" type="image/webp" fetchpriority="high">
+    <link rel="stylesheet" href="/before-times.css?v=20260716ab">
 </head>
 <body class="before-times-page">
     <a class="bt-skip-link" href="#bt-lobby">Skip to the lobby</a>
@@ -45,7 +45,7 @@
             <section class="bt-lobby-scene" aria-label="Before Times archive lobby" aria-describedby="bt-lobby-instructions">
                 <img
                     class="bt-lobby-art"
-                    src="/images/before-times/layers/lobby-clean-v4.webp?v=20260716w"
+                    src="/images/before-times/layers/lobby-clean-v4-newsstand-v1.webp?v=20260716d"
                     width="1672"
                     height="941"
                     alt=""
@@ -54,8 +54,10 @@
                     fetchpriority="high">
 
                 <button class="bt-hotspot bt-hotspot-help" type="button" data-panel="about" data-label="About this place" aria-label="About the Before Times archive"></button>
-                <button class="bt-hotspot bt-hotspot-reveal" type="button" data-action="reveal" data-label="Show hotspots" aria-label="Reveal interactive objects"></button>
-                <button class="bt-hotspot bt-hotspot-settings" type="button" data-panel="settings" data-label="How to explore" aria-label="Open exploration settings"></button>
+                <span class="bt-header-control-mask" aria-hidden="true"></span>
+                <a class="bt-hotspot bt-hotspot-exit" href="/" data-label="Exit to the present" aria-label="Exit Before Times and return to the present-day site">
+                    <img class="bt-exit-icon" src="/images/before-times/layers/exit-button-v3.png?v=20260716b" width="256" height="256" alt="" aria-hidden="true" decoding="async">
+                </a>
 
                 <button class="bt-hotspot bt-hotspot-door bt-hotspot-alchemy bt-layered-hotspot bt-layered-doorway" type="button" data-panel="alchemy" data-label="Absurd Alchemy" aria-label="Inspect the Absurd Alchemy film room">
                     <span class="bt-door-light" aria-hidden="true"></span>
@@ -92,14 +94,13 @@
                 </button>
 
                 <button class="bt-hotspot bt-hotspot-bell bt-layered-hotspot" type="button" data-action="bell" data-label="Ring bell" aria-label="Ring the archive desk bell">
-                    <img class="bt-object-layer bt-object-layer-bell" src="/images/before-times/layers/bell-v2.webp?v=20260716a" width="140" height="140" alt="" aria-hidden="true" decoding="async">
+                    <img class="bt-object-layer bt-object-layer-bell" src="/images/before-times/layers/bell-v4.webp?v=20260716a" width="140" height="140" alt="" aria-hidden="true" decoding="async">
                 </button>
                 <button class="bt-hotspot bt-hotspot-radio bt-layered-hotspot" type="button" data-action="radio" data-label="Tune the old radio" aria-label="Tune the cassette radio">
+                    <span class="bt-radio-aura" aria-hidden="true"></span>
                     <img class="bt-object-layer bt-object-layer-radio" src="/images/before-times/layers/radio.webp?v=20260716q" width="350" height="300" alt="" aria-hidden="true" decoding="async">
                 </button>
-                <button class="bt-hotspot bt-hotspot-guestbook bt-layered-hotspot bt-prop-hotspot" type="button" data-action="guestbook" data-label="Sign the guest book" aria-label="Open and sign the Before Times guest book">
-                    <img class="bt-object-layer bt-object-layer-prop" src="/images/before-times/layers/guestbook.webp?v=20260716l" width="585" height="220" alt="" aria-hidden="true" decoding="async">
-                </button>
+                <button class="bt-hotspot bt-hotspot-guestbook bt-layered-hotspot" type="button" data-action="guestbook" data-label="Sign the guest book" aria-label="Open and sign the Before Times guest book"></button>
                 <button class="bt-hotspot bt-hotspot-floorplan" type="button" data-panel="floorplan" data-label="Floor plan" aria-label="Open the Before Times floor plan"></button>
 
                 <div class="bt-scene-status" id="bt-scene-status" role="status" aria-live="polite"></div>
@@ -171,6 +172,6 @@
 
     <audio id="bt-radio-audio" preload="none"></audio>
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
-    <script src="/before-times.js?v=20260716e" defer></script>
+    <script src="/before-times.js?v=20260716f" defer></script>
 </body>
 </html>

@@ -1393,3 +1393,24 @@ canvas {
   }
 }
 
+
+/* Embed mode (?embed=1): the portfolio's arcade-cabinet lightbox hosts the
+   game in a same-origin iframe and supplies its own backdrop and bezel, so
+   the page backdrop and the hard offset shadow go, and the frame gets the
+   full iframe viewport instead of the standalone page's 96vw margins. */
+html.embed body {
+  background: transparent;
+}
+
+html.embed .frame {
+  width: min(980px, 100vw, calc((100vh - 130px) * 4 / 3));
+  box-shadow: 0 0 34px rgba(41, 201, 255, 0.32);
+}
+
+@media (max-width: 760px) {
+  /* In the cabinet, the marquee sits directly above — top-align instead of
+     centering so the frame doesn't float with a dead gap over it. */
+  html.embed body {
+    place-items: start center;
+  }
+}

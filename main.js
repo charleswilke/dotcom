@@ -4648,7 +4648,10 @@ function initGameLightbox() {
         'tootsjam': {
             title: 'Toots Jam',
             page: '/tootsjam/',
-            src: isLocal ? '/games/TootsJam/tootsjam.html' : '/tootsjam/',
+            // embed mode drops the game page's own backdrop so the cabinet
+            // bezel shows through (see games/TootsJam/styles.css html.embed)
+            src: (isLocal ? '/games/TootsJam/tootsjam.html' : '/tootsjam/') + '?embed=1',
+            embed: true,
             tile: document.querySelector('.game-cartridge-tootsjam')
         },
         'spacetoots': {
@@ -4673,6 +4676,8 @@ function initGameLightbox() {
         if (!game) return;
         pauseManagedAudioExcept(null); // site audio yields to the game's own sound
         activeKey = key;
+        const content = lightbox.querySelector('.game-lightbox-content');
+        if (content) content.dataset.game = key; // per-game cabinet sizing
         if (titleEl) titleEl.textContent = game.title;
         if (newTabLink) newTabLink.href = game.page;
         frame.title = game.title;
@@ -4714,6 +4719,12 @@ function initGameLightbox() {
     frame.addEventListener('load', () => {
         if (!lightbox.classList.contains('active')) return;
         try {
+            // The ?embed=1 inline script normally sets this, but some static
+            // servers (npx serve's cleanUrls redirect) drop the query string
+            // locally — stamp the class from out here too since same-origin.
+            if (activeKey && games[activeKey].embed) {
+                frame.contentDocument.documentElement.classList.add('embed');
+            }
             frame.contentWindow.focus();
             frame.contentWindow.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeGame();

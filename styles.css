@@ -14662,28 +14662,45 @@ body.reader-open {
 }
 /* ===== END BEFORE TIMES WORKSPACE ===== */
 
+
 /* ===== GAME LIGHTBOX ===== */
-/* Overlay iframe player for the browser-game cartridges. Chrome bar echoes
-   the cartridge label band (Space Mono, band gradient); the frame below is
-   pure game viewport. */
+/* Arcade-cabinet overlay for the browser-game cartridges: amber backlit
+   marquee up top, inset CRT screen below. Type echoes the cartridge label
+   band (Space Mono). */
 .game-lightbox {
     background-color: rgba(4, 3, 16, 0.97);
 }
 
 .game-lightbox-content {
+    --cab-wall: clamp(12px, 1.6vw, 20px);
+    --cab-h: min(920px, 94dvh);
     display: flex;
     flex-direction: column;
     width: min(1400px, 96vw);
-    height: min(920px, 94dvh);
+    height: var(--cab-h);
+    padding: clamp(10px, 1.2vw, 14px) var(--cab-wall) var(--cab-wall);
     cursor: auto;
-    background: #080812;
+    background: linear-gradient(180deg, #221a44 0%, #131028 42%, #0a0818 100%);
     border: 1px solid rgba(0, 247, 194, 0.35);
-    border-radius: 14px;
+    border-radius: 18px 18px 12px 12px;
     overflow: hidden;
     box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+        inset 2px 0 0 rgba(255, 255, 255, 0.06),
+        inset -2px 0 0 rgba(0, 0, 0, 0.45),
         0 0 60px rgba(0, 247, 194, 0.12),
         0 30px 80px rgba(0, 0, 0, 0.7);
+}
+
+/* Toots Jam's play area is a 4:3 canvas plus ~130px of HUD/help chrome,
+   capped at 980px wide (games/TootsJam/styles.css .frame). Hug it: the
+   234px here is marquee + gaps + cabinet padding (~104px) plus the game's
+   own non-canvas chrome (~130px). */
+.game-lightbox-content[data-game="tootsjam"] {
+    width: min(
+        calc(980px + 2 * var(--cab-wall)),
+        96vw,
+        calc((var(--cab-h) - 234px) * 4 / 3 + 2 * var(--cab-wall))
+    );
 }
 
 .game-lightbox-chrome {
@@ -14691,27 +14708,38 @@ body.reader-open {
     align-items: center;
     justify-content: space-between;
     gap: 0.7rem;
-    min-height: 44px;
-    padding: 0.45rem clamp(0.9rem, 2vw, 1.1rem);
+    min-height: 56px;
+    padding: 0.5rem clamp(0.9rem, 2vw, 1.2rem);
     font-family: 'Space Mono', monospace;
     font-size: clamp(0.55rem, 1vw, 0.68rem);
     font-weight: 700;
     line-height: 1.1;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     color: #fff;
-    background-image: linear-gradient(90deg, var(--primary) 0%, #2a2270 100%);
-    border-bottom: 1px solid rgba(0, 247, 194, 0.25);
+    background:
+        radial-gradient(ellipse at 50% 130%, rgba(255, 174, 60, 0.3) 0%, transparent 62%),
+        linear-gradient(180deg, #322a6e 0%, var(--primary) 55%, #14104a 100%);
+    border: 2px solid rgba(255, 179, 71, 0.5);
+    border-radius: 10px;
+    box-shadow:
+        0 0 22px rgba(255, 170, 60, 0.2),
+        inset 0 0 26px rgba(255, 170, 60, 0.12),
+        inset 0 -8px 18px rgba(0, 0, 0, 0.35);
 }
 
 .game-lightbox-band-label {
-    opacity: 0.75;
+    opacity: 0.7;
 }
 
 .game-lightbox-title {
-    color: var(--neon);
-    font-size: clamp(0.66rem, 1.2vw, 0.8rem);
-    text-shadow: 0 0 10px rgba(0, 247, 194, 0.45);
+    color: #ffc46b;
+    font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+    letter-spacing: 0.22em;
+    text-shadow:
+        0 0 6px rgba(255, 180, 70, 0.9),
+        0 0 18px rgba(255, 180, 70, 0.5),
+        0 0 34px rgba(255, 150, 40, 0.3);
 }
 
 .game-lightbox-actions {
@@ -14731,9 +14759,9 @@ body.reader-open {
 
 .game-lightbox-newtab:hover,
 .game-lightbox-newtab:focus-visible {
-    color: var(--neon);
-    border-color: rgba(0, 247, 194, 0.7);
-    box-shadow: 0 0 12px rgba(0, 247, 194, 0.25);
+    color: #ffc46b;
+    border-color: rgba(255, 179, 71, 0.7);
+    box-shadow: 0 0 12px rgba(255, 170, 60, 0.25);
 }
 
 .game-lightbox-close {
@@ -14749,14 +14777,20 @@ body.reader-open {
 
 .game-lightbox-close:hover,
 .game-lightbox-close:focus-visible {
-    color: var(--neon);
-    text-shadow: 0 0 12px rgba(0, 247, 194, 0.6);
+    color: #ffc46b;
+    text-shadow: 0 0 12px rgba(255, 180, 70, 0.6);
 }
 
 .game-lightbox-frame-wrap {
     flex: 1;
     min-height: 0;
+    margin: clamp(8px, 1vw, 12px) 0;
     background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.05),
+        inset 0 0 44px rgba(0, 0, 0, 0.85);
 }
 
 .game-lightbox-frame-wrap iframe {
@@ -14767,15 +14801,25 @@ body.reader-open {
 }
 
 @media (max-width: 768px) {
-    .game-lightbox-content {
+    .game-lightbox-content,
+    .game-lightbox-content[data-game] {
         width: 100vw;
         height: 100dvh;
+        padding: 6px 8px 0;
         border: 0;
         border-radius: 0;
     }
 
+    .game-lightbox-chrome {
+        min-height: 44px;
+    }
+
     .game-lightbox-band-label {
         display: none;
+    }
+
+    .game-lightbox-frame-wrap {
+        margin-bottom: 8px;
     }
 }
 /* ===== END GAME LIGHTBOX ===== */

@@ -30,15 +30,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-v1.webp?v=20260716d" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=20260717a" type="image/webp" fetchpriority="high">
-    <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v3.webp?v=20260717c" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-chair-v5.webp?v=20260717e" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-script-crate-v3.webp?v=20260717c" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-solar-model-original-v1.webp?v=20260717b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-french-kitty-original-v1.webp?v=20260717b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-tape-25-sticker-original-v1.webp?v=20260717b" type="image/webp">
-    <link rel="preload" as="image" href="/images/before-times/layers/alchemy-exit-door-frame-original-v1.webp?v=20260717b" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/layers/alchemy-exit-door-lobby-v2.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-hand-logo-v1.webp?v=20260717e" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260717ay">
+    <link rel="preload" as="image" href="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" type="image/png">
+    <link rel="preload" as="image" href="/images/before-times/layers/guestbook-no-pen-v4.webp?v=20260718a" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/layers/alchemy-pen-free-patch-v4.webp?v=20260718a" type="image/webp">
+    <link rel="stylesheet" href="/before-times.css?v=20260718m">
 </head>
 <body class="before-times-page">
     <a class="bt-skip-link" href="#bt-lobby">Skip to the lobby</a>
@@ -127,8 +130,15 @@
                     <span class="bt-radio-aura" aria-hidden="true"></span>
                     <img class="bt-object-layer bt-object-layer-radio" src="/images/before-times/layers/radio.webp?v=20260716q" width="350" height="300" alt="" aria-hidden="true" decoding="async">
                 </button>
-                <button class="bt-hotspot bt-hotspot-guestbook bt-layered-hotspot" type="button" data-action="guestbook" data-label="Sign the guest book" aria-label="Open and sign the Before Times guest book"></button>
+                <button class="bt-hotspot bt-hotspot-guestbook bt-layered-hotspot" type="button" data-action="guestbook" data-label="Sign the guest book" aria-label="Open and sign the Before Times guest book">
+                    <img class="bt-object-layer bt-guestbook-clean-layer" id="bt-guestbook-clean-layer" src="/images/before-times/layers/guestbook-no-pen-v4.webp?v=20260718a" width="585" height="220" alt="" aria-hidden="true" decoding="async">
+                </button>
                 <button class="bt-hotspot bt-hotspot-floorplan" type="button" data-panel="floorplan" data-label="Floor plan" aria-label="Open the Before Times floor plan"></button>
+
+                <button class="bt-lobby-inventory-item bt-lobby-inventory-pen" id="bt-lobby-inventory-pen" type="button" aria-label="Select the collected Absurd Alchemy fountain pen" aria-pressed="false" draggable="true" hidden>
+                    <img src="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" width="1536" height="1024" alt="">
+                    <span aria-hidden="true">Absurd Alchemy pen</span>
+                </button>
 
                 <div class="bt-scene-status" id="bt-scene-status" role="status" aria-live="polite"></div>
             </section>
@@ -141,7 +151,7 @@
                 </p>
                 <img
                     class="bt-lobby-art bt-alchemy-art"
-                    src="/images/before-times/absurd-alchemy-clean-v3.webp?v=20260717c"
+                    src="/images/before-times/absurd-alchemy-clean-v4.webp?v=20260718a"
                     width="1672"
                     height="941"
                     alt=""
@@ -200,11 +210,12 @@
                 <span class="bt-alchemy-chair-aura" aria-hidden="true"></span>
                 <img class="bt-alchemy-object-layer bt-alchemy-crate-layer" id="bt-alchemy-crate-layer" src="/images/before-times/layers/alchemy-script-crate-v3.webp?v=20260717c" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <span class="bt-alchemy-crate-aura" aria-hidden="true"></span>
+                <img class="bt-alchemy-pen-clean-layer" id="bt-alchemy-pen-clean-layer" src="/images/before-times/layers/alchemy-pen-free-patch-v4.webp?v=20260718a" width="340" height="190" alt="" aria-hidden="true" decoding="async" hidden>
                 <img class="bt-alchemy-curio-layer bt-alchemy-solar-layer" id="bt-alchemy-solar-layer" src="/images/before-times/layers/alchemy-solar-model-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <img class="bt-alchemy-curio-layer bt-alchemy-cat-layer" id="bt-alchemy-cat-layer" src="/images/before-times/layers/alchemy-french-kitty-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <img class="bt-alchemy-curio-layer bt-alchemy-tape-25-layer" id="bt-alchemy-tape-25-layer" src="/images/before-times/layers/alchemy-tape-25-sticker-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
-                <img class="bt-alchemy-curio-layer bt-alchemy-exit-door-layer" id="bt-alchemy-exit-door-layer" src="/images/before-times/layers/alchemy-exit-door-frame-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
-                <span class="bt-alchemy-exit-door-light" aria-hidden="true"></span>
+                <img class="bt-alchemy-curio-layer bt-alchemy-exit-door-layer" id="bt-alchemy-exit-door-layer" src="/images/before-times/layers/alchemy-exit-door-lobby-v2.webp?v=20260718a" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
+                <span class="bt-door-light bt-alchemy-exit-door-light" aria-hidden="true"></span>
                 <img class="bt-alchemy-curio-layer bt-alchemy-hand-layer" id="bt-alchemy-hand-layer" src="/images/before-times/layers/alchemy-hand-logo-v1.webp?v=20260717e" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
 
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-chair" type="button" data-alchemy-action="playlist" data-label="Director's playlist" aria-label="Open the director's playlist"></button>
@@ -213,11 +224,31 @@
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-solar" type="button" data-alchemy-action="sagan" data-label="Tiny solar system" aria-label="Inspect the tiny solar-system model"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-cat" type="button" data-alchemy-action="cat" data-label="French Kitty?" aria-label="Inspect the small cat figure"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-hand" type="button" data-alchemy-action="hand" data-label="Absurd Alchemy hand" aria-label="Inspect the Absurd Alchemy hand emblem"></button>
+                <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-pen" id="bt-alchemy-pen" type="button" data-alchemy-action="collect-pen" data-label="Take the pen" aria-label="Take the fountain pen and add it to inventory">
+                    <img class="bt-alchemy-pen-sprite" src="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" width="1536" height="1024" alt="" aria-hidden="true">
+                </button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-scripts" type="button" data-alchemy-action="scripts" data-label="Script crate" aria-label="Inspect the crate of scripts"></button>
 
                 <div class="bt-scene-status bt-alchemy-scene-status" id="bt-alchemy-scene-status" role="status" aria-live="polite"></div>
             </section>
         </div>
+
+        <aside class="bt-inventory-drawer" id="bt-inventory-drawer" aria-label="Inventory" aria-hidden="true">
+            <button class="bt-inventory-handle" id="bt-inventory-handle" type="button" aria-controls="bt-inventory-drawer-body" aria-expanded="false">
+                <span class="bt-inventory-handle-mark" aria-hidden="true">⌄</span>
+                <span>Inventory</span>
+            </button>
+            <div class="bt-inventory-drawer-body" id="bt-inventory-drawer-body">
+                <div class="bt-inventory-slot bt-inventory-slot-filled">
+                    <img src="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" width="1536" height="1024" alt="Black-and-gold Absurd Alchemy fountain pen">
+                    <span>Absurd Alchemy pen</span>
+                </div>
+                <div class="bt-inventory-slot" aria-hidden="true"></div>
+                <div class="bt-inventory-slot" aria-hidden="true"></div>
+            </div>
+        </aside>
+
+        <img class="bt-inventory-drag-ghost" id="bt-inventory-drag-ghost" src="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" width="1536" height="1024" alt="" aria-hidden="true" hidden>
 
         <button class="bt-mobile-floorplan" id="bt-mobile-floorplan" type="button" data-panel="floorplan" aria-label="Open floor plan">
             <span aria-hidden="true">⌑</span> Floor plan
@@ -303,6 +334,6 @@
     <audio id="bt-radio-audio" preload="none"></audio>
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
-    <script src="/before-times.js?v=20260717s" defer></script>
+    <script src="/before-times.js?v=20260718e" defer></script>
 </body>
 </html>

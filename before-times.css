@@ -285,6 +285,14 @@ a {
     height: 100%;
 }
 
+.bt-guestbook-clean-layer {
+    inset: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    object-fit: fill;
+    transform: none;
+}
+
 .bt-object-layer-portal {
     top: 9.39%;
     left: -13.27%;
@@ -680,6 +688,107 @@ a {
 .bt-hotspot-guestbook { left: 49.04%; top: 55.79%; width: 34.99%; height: 23.38%; }
 .bt-hotspot-floorplan { left: 3.35%; top: 82.5%; width: 13.9%; height: 16%; }
 
+/* The pen-free book is a pixel-aligned replacement for baked lobby art. Keep
+   it pinned to the desk on hover/focus so the original cannot peek out. */
+.bt-hotspot-guestbook:hover .bt-guestbook-clean-layer,
+.bt-hotspot-guestbook:focus-visible .bt-guestbook-clean-layer {
+    filter: brightness(1.035) saturate(1.03);
+    transform: none;
+}
+
+.bt-lobby-inventory-item {
+    position: absolute;
+    z-index: 4;
+    left: 18.25%;
+    top: 84.4%;
+    width: 10.75%;
+    height: 12.4%;
+    display: grid;
+    place-items: center;
+    padding: 0.4%;
+    color: var(--bt-paper);
+    background: transparent;
+    border: 0;
+    border-radius: 8%;
+    cursor: pointer;
+    touch-action: none;
+}
+
+.bt-lobby-inventory-item:active {
+    cursor: grabbing;
+}
+
+.bt-lobby-inventory-item.is-selected {
+    outline: 3px solid var(--bt-mint);
+    outline-offset: -4px;
+    box-shadow: inset 0 0 18px rgba(0, 247, 194, 0.24), 0 0 18px rgba(0, 247, 194, 0.38);
+}
+
+.bt-lobby-inventory-item img {
+    width: 87%;
+    height: 76%;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.72));
+    transform: rotate(-4deg);
+    transition: filter 160ms ease, transform 180ms ease;
+}
+
+.bt-lobby-inventory-item span {
+    position: absolute;
+    right: 4%;
+    bottom: 4%;
+    left: 4%;
+    color: var(--bt-cream);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: clamp(0.42rem, 0.58vw, 0.65rem);
+    line-height: 1;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(0.2rem);
+    transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.bt-lobby-inventory-item:hover,
+.bt-lobby-inventory-item:focus-visible {
+    outline: 2px solid rgba(0, 247, 194, 0.86);
+    outline-offset: -3px;
+}
+
+.bt-lobby-inventory-item:hover img,
+.bt-lobby-inventory-item:focus-visible img {
+    filter: brightness(1.14) saturate(1.12) drop-shadow(0 0 7px rgba(0, 247, 194, 0.68));
+    transform: rotate(-2deg) scale(1.06);
+}
+
+.bt-lobby-inventory-item:hover span,
+.bt-lobby-inventory-item:focus-visible span {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.bt-hotspot-guestbook.is-drop-target {
+    border-color: rgba(0, 247, 194, 0.92);
+    background: rgba(0, 247, 194, 0.05);
+    box-shadow: 0 0 0 3px rgba(9, 10, 35, 0.7), 0 0 28px rgba(0, 247, 194, 0.66);
+}
+
+.bt-hotspot-guestbook.is-drop-over {
+    background: rgba(0, 247, 194, 0.13);
+    box-shadow: 0 0 0 4px rgba(243, 216, 173, 0.88), 0 0 38px rgba(0, 247, 194, 0.92);
+    transform: scale(1.012);
+}
+
+.bt-inventory-drag-ghost {
+    position: fixed;
+    z-index: 100;
+    width: clamp(7rem, 13vw, 11rem);
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    filter: brightness(1.12) saturate(1.08) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.72)) drop-shadow(0 0 7px rgba(0, 247, 194, 0.56));
+    transform: translate(-50%, -50%) rotate(-4deg) scale(1.06);
+}
+
 @keyframes bt-portal-breathe {
     from { transform: translateY(0) scale(1.01); }
     to { transform: translateY(-0.65%) scale(1.035); }
@@ -909,6 +1018,18 @@ a {
     transform-origin: 77% 89%;
 }
 
+.bt-alchemy-pen-clean-layer {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    top: 54.729%;
+    width: 20.3349%;
+    height: 20.1913%;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 .bt-alchemy-curio-layer {
     position: absolute;
     z-index: 3;
@@ -948,73 +1069,37 @@ a {
 }
 
 .bt-alchemy-exit-door-layer.is-hovered {
-    animation: bt-exit-door-halo-breathe 1.9s ease-in-out infinite alternate;
+    filter: brightness(1.1) saturate(1.16);
+    animation: none;
+    transform: none;
 }
 
 .bt-alchemy-hand-layer.is-hovered {
     animation: bt-hand-logo-halo-breathe 1.85s ease-in-out infinite alternate;
 }
 
-/* The lobby exit is too large and rectilinear for the curio-style broad
-   drop-shadow used by the cat and solar model. Its emitted light lives on a
-   separate layer behind the physical frame: a narrow opening aura plus a low
-   threshold pool, so the hover reads as room light instead of a glass panel. */
+/* The room exit uses the same bt-door-light component and color lift as the
+   lobby doors. This full-scene layer stays stationary: moving it exposes the
+   source-colored antialias fringe intentionally retained in the clean plate. */
+.bt-alchemy-exit-door-layer {
+    transition: filter 180ms ease-out;
+}
+
 .bt-alchemy-exit-door-light {
-    position: absolute;
     z-index: 2;
-    top: 4.35%;
-    left: 69.1%;
-    width: 18.25%;
-    height: 68.15%;
-    pointer-events: none;
-    opacity: 0;
-    transform: scale(0.985);
-    transform-origin: 50% 88%;
-    transition: opacity 180ms ease, transform 220ms ease;
-}
-
-.bt-alchemy-exit-door-light::before,
-.bt-alchemy-exit-door-light::after {
-    position: absolute;
-    content: "";
-    pointer-events: none;
-    mix-blend-mode: screen;
-}
-
-.bt-alchemy-exit-door-light::before {
-    top: 16.5%;
-    right: 14%;
-    bottom: 7.5%;
-    left: 15.5%;
-    background:
-        linear-gradient(90deg, rgba(205, 178, 231, 0.2), transparent 19% 78%, rgba(0, 247, 194, 0.11)),
-        linear-gradient(180deg, rgba(205, 178, 231, 0.12), transparent 21% 76%, rgba(0, 247, 194, 0.07));
-    clip-path: polygon(0 0, 98% 1.8%, 100% 100%, 1.5% 98.2%);
-    filter: blur(7px);
-}
-
-.bt-alchemy-exit-door-light::after {
-    right: -7%;
-    bottom: -5%;
-    left: -9%;
-    height: 18%;
-    border-radius: 50%;
-    background: radial-gradient(
-        ellipse at 49% 48%,
-        rgba(205, 178, 231, 0.2) 0 8%,
-        rgba(184, 154, 216, 0.11) 32%,
-        rgba(0, 247, 194, 0.045) 54%,
-        transparent 73%
-    );
-    filter: blur(7px);
-    transform: scaleY(0.56) rotate(1deg);
-    transform-origin: 50% 50%;
+    inset: auto;
+    top: 5.2%;
+    left: 70.3%;
+    width: 18.2%;
+    height: 70.5%;
+    --bt-door-light-rgb: 28, 226, 202;
+    --bt-door-light-rest: 0.2;
+    --bt-door-light-hover: 0.46;
 }
 
 .bt-alchemy-exit-door-layer.is-hovered + .bt-alchemy-exit-door-light {
-    opacity: 0.82;
-    transform: scale(1.008);
-    animation: bt-exit-door-light-breathe 2.3s ease-in-out infinite alternate;
+    opacity: var(--bt-door-light-hover);
+    transform: scale(1.015);
 }
 
 .bt-alchemy-chair-layer.is-hovered {
@@ -1486,7 +1571,176 @@ a {
 .bt-alchemy-hotspot-solar { left: 0; top: 39.5%; width: 10.5%; height: 11.6%; border-radius: 50%; }
 .bt-alchemy-hotspot-cat { left: 10.5%; top: 0; width: 6.5%; height: 9.8%; border-radius: 50%; }
 .bt-alchemy-hotspot-hand { left: 85.9%; top: 40.4%; width: 8.6%; height: 20%; }
+.bt-alchemy-hotspot-pen { left: 5.65%; top: 59.4%; width: 6.7%; height: 7.8%; }
 .bt-alchemy-hotspot-scripts { left: 67.1%; top: 79.2%; width: 19.6%; height: 20.8%; }
+
+.bt-alchemy-hotspot-pen:hover,
+.bt-alchemy-hotspot-pen:focus-visible {
+    border-color: transparent;
+    background: radial-gradient(ellipse, rgba(243, 216, 173, 0.16), transparent 68%);
+    box-shadow: none;
+}
+
+.bt-alchemy-pen-sprite {
+    position: absolute;
+    z-index: 1;
+    inset: -9% -6%;
+    width: 112%;
+    height: 118%;
+    object-fit: contain;
+    pointer-events: none;
+    opacity: 0;
+    filter: drop-shadow(0 0 3px rgba(243, 216, 173, 0.64));
+    transform: rotate(-1deg) scale(0.96);
+    transition: opacity 150ms ease, filter 150ms ease, transform 180ms ease;
+}
+
+.bt-alchemy-hotspot-pen:hover .bt-alchemy-pen-sprite,
+.bt-alchemy-hotspot-pen:focus-visible .bt-alchemy-pen-sprite {
+    opacity: 0.78;
+    filter: brightness(1.12) saturate(1.1) drop-shadow(0 0 5px rgba(0, 247, 194, 0.62));
+    transform: rotate(-1deg) scale(1.04);
+}
+
+.bt-alchemy-hotspot-pen.is-collecting .bt-alchemy-pen-sprite {
+    opacity: 1;
+    animation: bt-pen-to-inventory 720ms cubic-bezier(0.22, 0.76, 0.25, 1) both;
+}
+
+.bt-inventory-drawer {
+    position: fixed;
+    z-index: 30;
+    left: 50%;
+    bottom: max(0.45rem, env(safe-area-inset-bottom));
+    width: min(34rem, calc(100vw - 1.5rem));
+    padding-top: 1.65rem;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, calc(100% - 1.65rem));
+    transition: opacity 180ms ease, transform 540ms cubic-bezier(0.22, 0.78, 0.24, 1);
+}
+
+body.bt-room-alchemy .bt-inventory-drawer.is-active {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+body.bt-room-alchemy .bt-inventory-drawer.is-open {
+    transform: translate(-50%, 0);
+}
+
+.bt-inventory-handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    min-width: 8.6rem;
+    height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.2rem 0.9rem 0;
+    color: var(--bt-cream);
+    background: #101337;
+    border: 2px solid #bd8053;
+    border-bottom: 0;
+    border-radius: 9px 9px 0 0;
+    box-shadow: 0 -5px 18px rgba(0, 0, 0, 0.44);
+    cursor: pointer;
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+}
+
+.bt-inventory-handle:hover,
+.bt-inventory-handle:focus-visible {
+    color: var(--bt-mint);
+    outline: 2px solid var(--bt-mint);
+    outline-offset: 2px;
+}
+
+.bt-inventory-handle-mark {
+    font-family: "Space Mono", monospace;
+    transform: rotate(180deg);
+    transition: transform 300ms ease;
+}
+
+.bt-inventory-drawer.is-open .bt-inventory-handle-mark {
+    transform: rotate(0deg);
+}
+
+.bt-inventory-drawer-body {
+    display: grid;
+    grid-template-columns: 1.25fr repeat(2, 1fr);
+    gap: 0.45rem;
+    min-height: 7rem;
+    padding: 0.55rem;
+    background:
+        linear-gradient(180deg, rgba(48, 41, 93, 0.52), transparent 46%),
+        #0d1030;
+    border: 2px solid #bd8053;
+    border-radius: 10px;
+    box-shadow: 0 -10px 38px rgba(0, 0, 0, 0.62), inset 0 0 24px rgba(0, 247, 194, 0.04);
+}
+
+.bt-inventory-slot {
+    position: relative;
+    min-width: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+        linear-gradient(145deg, rgba(48, 41, 93, 0.92), rgba(16, 19, 55, 0.98));
+    border: 2px solid rgba(189, 128, 83, 0.58);
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 3px rgba(9, 10, 35, 0.62), inset 0 8px 18px rgba(0, 0, 0, 0.34);
+}
+
+.bt-inventory-slot::after {
+    content: "";
+    width: 38%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(243, 216, 173, 0.18);
+    border-radius: 22%;
+    transform: rotate(45deg);
+}
+
+.bt-inventory-slot-filled img {
+    position: absolute;
+    z-index: 1;
+    width: 92%;
+    height: 76%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.78));
+    transform: rotate(-3deg);
+    animation: bt-inventory-item-arrive 620ms 260ms cubic-bezier(0.2, 0.8, 0.24, 1) both;
+}
+
+.bt-inventory-slot-filled span {
+    position: absolute;
+    z-index: 2;
+    right: 0.3rem;
+    bottom: 0.25rem;
+    left: 0.3rem;
+    color: var(--bt-cream);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.62rem;
+    line-height: 1;
+    text-align: center;
+}
+
+@keyframes bt-pen-to-inventory {
+    0% { opacity: 0.88; transform: translate(0, 0) rotate(-1deg) scale(1); }
+    48% { opacity: 1; transform: translate(310%, -120%) rotate(7deg) scale(1.34); }
+    100% { opacity: 0; transform: translate(620%, 390%) rotate(-5deg) scale(0.72); }
+}
+
+@keyframes bt-inventory-item-arrive {
+    from { opacity: 0; transform: translateY(-42%) rotate(5deg) scale(1.28); }
+    to { opacity: 1; transform: translateY(0) rotate(-3deg) scale(1); }
+}
 
 .bt-alchemy-hotspot-hand::after {
     right: 0;
@@ -1570,20 +1824,6 @@ a {
     to {
         filter: drop-shadow(0 0 2.5px rgba(255, 145, 89, 1)) drop-shadow(0 0 5.5px rgba(255, 215, 138, 0.48));
     }
-}
-
-@keyframes bt-exit-door-halo-breathe {
-    from {
-        filter: brightness(1.025) saturate(1.04) drop-shadow(0 0 1.5px rgba(205, 178, 231, 0.44)) drop-shadow(0 0 3px rgba(0, 247, 194, 0.12));
-    }
-    to {
-        filter: brightness(1.055) saturate(1.07) drop-shadow(0 0 2.5px rgba(218, 198, 239, 0.58)) drop-shadow(0 0 5px rgba(0, 247, 194, 0.18));
-    }
-}
-
-@keyframes bt-exit-door-light-breathe {
-    from { opacity: 0.64; transform: scale(0.994); }
-    to { opacity: 0.88; transform: scale(1.012); }
 }
 
 @keyframes bt-hand-logo-halo-breathe {

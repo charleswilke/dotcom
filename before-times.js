@@ -574,6 +574,8 @@
     const guestbookStatus = document.getElementById('bt-guestbook-status');
     const guestbookEntries = document.getElementById('bt-guestbook-entries');
     const guestbookRefresh = document.getElementById('bt-guestbook-refresh');
+    const guestbookHotspot = document.querySelector('[data-action="guestbook"]');
+    const guestbookCleanLayer = document.getElementById('bt-guestbook-clean-layer');
     const bellHotspot = document.querySelector('[data-action="bell"]');
     const radioHotspot = document.querySelector('[data-action="radio"]');
     const alchemyDoorHotspot = document.querySelector('.bt-hotspot-alchemy');
@@ -584,6 +586,12 @@
     const alchemyExitHotspot = document.querySelector('.bt-alchemy-hotspot-door');
     const alchemyHandHotspot = document.querySelector('.bt-alchemy-hotspot-hand');
     const alchemyTwentyFiveHotspot = document.querySelector('.bt-alchemy-hotspot-25');
+    const alchemyPenHotspot = document.getElementById('bt-alchemy-pen');
+    const alchemyPenCleanLayer = document.getElementById('bt-alchemy-pen-clean-layer');
+    const lobbyInventoryPen = document.getElementById('bt-lobby-inventory-pen');
+    const inventoryDragGhost = document.getElementById('bt-inventory-drag-ghost');
+    const inventoryDrawer = document.getElementById('bt-inventory-drawer');
+    const inventoryHandle = document.getElementById('bt-inventory-handle');
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
     const alchemyScene = document.getElementById('bt-alchemy-scene');
@@ -625,6 +633,165 @@
     let lastProductionLoop = -1;
     let productionDeck = [];
     let alchemyRoomOpening = false;
+    let inventoryCloseTimer = 0;
+    let hasAlchemyPen = false;
+    let alchemyPenLocation = 'room';
+    let inventoryPenSelected = false;
+    let penPointerId = null;
+    let penDragStarted = false;
+    let suppressPenClick = false;
+    let penPointerStartX = 0;
+    let penPointerStartY = 0;
+    let penPointerLastX = 0;
+    let penPointerLastY = 0;
+
+    function readInventory() {
+        try {
+            const saved = JSON.parse(sessionStorage.getItem('bt-inventory-v1') || '{}');
+            return saved && typeof saved === 'object' ? saved : {};
+        } catch (error) {
+            return {};
+        }
+    }
+
+    function writeInventory(inventory) {
+        try {
+            sessionStorage.setItem('bt-inventory-v1', JSON.stringify(inventory));
+        } catch (error) {
+            // The inventory still works for this page view when storage is unavailable.
+        }
+    }
+
+    function penIsInInventory() {
+        return hasAlchemyPen && alchemyPenLocation === 'inventory';
+    }
+
+    function penIsOnGuestbook() {
+        return hasAlchemyPen && alchemyPenLocation === 'guestbook';
+    }
+
+    function savePenState() {
+        const inventory = readInventory();
+        inventory.alchemyPen = hasAlchemyPen;
+        inventory.alchemyPenLocation = alchemyPenLocation;
+        writeInventory(inventory);
+    }
+
+    function setInventoryDrawerOpen(open, autoClose) {
+        if (!penIsInInventory()) return;
+        window.clearTimeout(inventoryCloseTimer);
+        inventoryDrawer.classList.toggle('is-open', open);
+        inventoryHandle.setAttribute('aria-expanded', String(open));
+        if (open && autoClose && !prefersReducedMotion.matches) {
+            inventoryCloseTimer = window.setTimeout(() => setInventoryDrawerOpen(false, false), 2900);
+        }
+    }
+
+    function syncGuestbookAccess() {
+        const penOnBook = penIsOnGuestbook();
+        const penReady = penIsInInventory();
+        guestbookCleanLayer.hidden = penOnBook;
+        if (penOnBook) {
+            guestbookHotspot.dataset.label = 'Sign the guest book';
+            guestbookHotspot.setAttribute('aria-label', 'Open and sign the Before Times guest book');
+        } else if (penReady) {
+            guestbookHotspot.dataset.label = 'Guest book · use the pen';
+            guestbookHotspot.setAttribute('aria-label', 'Drop the collected fountain pen onto the guest book');
+        } else {
+            guestbookHotspot.dataset.label = 'Guest book · needs a pen';
+            guestbookHotspot.setAttribute('aria-label', 'Inspect the guest book; a pen is needed before signing');
+        }
+    }
+
+    function syncPenInventory() {
+        const penReady = penIsInInventory();
+        inventoryDrawer.classList.toggle('is-active', penReady);
+        inventoryDrawer.setAttribute('aria-hidden', String(!penReady));
+        lobbyInventoryPen.hidden = !penReady;
+        alchemyPenHotspot.hidden = hasAlchemyPen;
+        alchemyPenCleanLayer.hidden = !hasAlchemyPen;
+        if (!penReady) {
+            inventoryPenSelected = false;
+            lobbyInventoryPen.classList.remove('is-selected');
+            lobbyInventoryPen.setAttribute('aria-pressed', 'false');
+            inventoryDrawer.classList.remove('is-open');
+            inventoryHandle.setAttribute('aria-expanded', 'false');
+            guestbookHotspot.classList.remove('is-drop-target', 'is-drop-over');
+        }
+        syncGuestbookAccess();
+    }
+
+    function collectAlchemyPen() {
+        if (hasAlchemyPen) {
+            setInventoryDrawerOpen(true, true);
+            return;
+        }
+
+        hasAlchemyPen = true;
+        alchemyPenLocation = 'inventory';
+        savePenState();
+        inventoryDrawer.classList.add('is-active');
+        inventoryDrawer.setAttribute('aria-hidden', 'false');
+        lobbyInventoryPen.hidden = false;
+        alchemyPenCleanLayer.hidden = false;
+        syncGuestbookAccess();
+        animateLayer(alchemyPenHotspot, 'is-collecting', 740);
+        window.setTimeout(() => {
+            alchemyPenHotspot.hidden = true;
+            setInventoryDrawerOpen(true, true);
+        }, prefersReducedMotion.matches ? 0 : 420);
+        showStatus('Fountain pen added to inventory.', 3400);
+    }
+
+    function setInventoryPenSelected(selected) {
+        inventoryPenSelected = Boolean(selected && penIsInInventory());
+        lobbyInventoryPen.classList.toggle('is-selected', inventoryPenSelected);
+        lobbyInventoryPen.setAttribute('aria-pressed', String(inventoryPenSelected));
+        guestbookHotspot.classList.toggle('is-drop-target', inventoryPenSelected);
+        if (inventoryPenSelected) {
+            showStatus('Pen selected. Drag it onto the guest book, or activate the guest book to use it.', 4200);
+        }
+    }
+
+    function placePenOnGuestbook() {
+        if (!penIsInInventory()) return;
+        alchemyPenLocation = 'guestbook';
+        savePenState();
+        setInventoryPenSelected(false);
+        syncPenInventory();
+        showStatus('The pen settles onto the guest book. Time to sign.', 3000);
+        openDialog(guestbookDialog);
+        loadGuestbook(false);
+    }
+
+    function pointerIsOverGuestbook(clientX, clientY) {
+        if (activeRoom !== 'lobby') return false;
+        const rect = guestbookHotspot.getBoundingClientRect();
+        return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
+    }
+
+    function movePenDragGhost(clientX, clientY) {
+        inventoryDragGhost.style.left = `${clientX}px`;
+        inventoryDragGhost.style.top = `${clientY}px`;
+        guestbookHotspot.classList.toggle('is-drop-over', pointerIsOverGuestbook(clientX, clientY));
+    }
+
+    function finishPenDrag(event, cancelled) {
+        if (event.pointerId !== penPointerId) return;
+        const shouldPlace = !cancelled && penDragStarted && pointerIsOverGuestbook(penPointerLastX, penPointerLastY);
+        if (lobbyInventoryPen.hasPointerCapture && lobbyInventoryPen.hasPointerCapture(event.pointerId)) {
+            lobbyInventoryPen.releasePointerCapture(event.pointerId);
+        }
+        inventoryDragGhost.hidden = true;
+        guestbookHotspot.classList.remove('is-drop-over');
+        penPointerId = null;
+        if (penDragStarted) {
+            suppressPenClick = true;
+            window.setTimeout(() => { suppressPenClick = false; }, 0);
+        }
+        penDragStarted = false;
+        if (shouldPlace) placePenOnGuestbook();
+    }
 
     function showStatus(message, duration) {
         const sceneStatus = activeRoom === 'alchemy' ? alchemySceneStatus : lobbySceneStatus;
@@ -1181,6 +1348,7 @@
     function leaveAlchemyRoom(options) {
         const settings = options || {};
         if (activeRoom !== 'alchemy') return;
+        setInventoryDrawerOpen(false, false);
         activeRoom = 'lobby';
         window.clearTimeout(productionTimer);
         stopProductionScreens();
@@ -1420,6 +1588,10 @@
 
     async function submitGuestbook(event) {
         event.preventDefault();
+        if (!penIsOnGuestbook()) {
+            guestbookStatus.textContent = 'Place the inventory pen on the guest book before signing.';
+            return;
+        }
         const submit = guestbookForm.querySelector('button[type="submit"]');
         const formData = new FormData(guestbookForm);
         const payload = {
@@ -1489,6 +1661,7 @@
             if (action === 'sagan') cueAlchemyVideo('sagan');
             if (action === 'cat') cueAlchemyVideo('french-kitty');
             if (action === 'hand') showStatus('The hand of Absurd Alchemy. Still reaching for one more impossible shot.', 3600);
+            if (action === 'collect-pen') collectAlchemyPen();
             if (action === 'scripts') {
                 animateLayer(alchemyCrateLayer, 'is-rustling', 620);
                 showStatus('Drafts, call sheets, and at least one page nobody remembers approving.', 3800);
@@ -1519,8 +1692,23 @@
                 }
             }
             if (action === 'guestbook') {
-                openDialog(guestbookDialog);
-                loadGuestbook(false);
+                if (penIsOnGuestbook()) {
+                    openDialog(guestbookDialog);
+                    loadGuestbook(false);
+                    return;
+                }
+                if (penIsInInventory() && inventoryPenSelected) {
+                    placePenOnGuestbook();
+                    return;
+                }
+                if (penIsInInventory()) {
+                    showStatus('Drag the pen from your inventory onto the guest book. Keyboard visitors can select the pen, then activate the book.', 5200);
+                    return;
+                }
+                if (!hasAlchemyPen) {
+                    showStatus('The guest book is waiting, but there is nothing to write with. Maybe Absurd Alchemy has a spare pen.', 4800);
+                    return;
+                }
             }
         });
     });
@@ -1540,6 +1728,72 @@
     });
     guestbookForm.addEventListener('submit', submitGuestbook);
     guestbookRefresh.addEventListener('click', () => loadGuestbook(true));
+    inventoryHandle.addEventListener('click', () => {
+        setInventoryDrawerOpen(!inventoryDrawer.classList.contains('is-open'), false);
+    });
+    lobbyInventoryPen.addEventListener('pointerdown', (event) => {
+        if (!penIsInInventory() || event.button !== 0 || event.pointerType === 'mouse') return;
+        penPointerId = event.pointerId;
+        penPointerStartX = event.clientX;
+        penPointerStartY = event.clientY;
+        penPointerLastX = event.clientX;
+        penPointerLastY = event.clientY;
+        penDragStarted = false;
+        if (lobbyInventoryPen.setPointerCapture) lobbyInventoryPen.setPointerCapture(event.pointerId);
+    });
+    lobbyInventoryPen.addEventListener('pointermove', (event) => {
+        if (event.pointerId !== penPointerId) return;
+        penPointerLastX = event.clientX;
+        penPointerLastY = event.clientY;
+        const distance = Math.hypot(event.clientX - penPointerStartX, event.clientY - penPointerStartY);
+        if (!penDragStarted && distance > 6) {
+            penDragStarted = true;
+            setInventoryPenSelected(true);
+            inventoryDragGhost.hidden = false;
+        }
+        if (penDragStarted) {
+            event.preventDefault();
+            movePenDragGhost(event.clientX, event.clientY);
+        }
+    });
+    lobbyInventoryPen.addEventListener('pointerup', (event) => finishPenDrag(event, false));
+    lobbyInventoryPen.addEventListener('pointercancel', (event) => finishPenDrag(event, true));
+    lobbyInventoryPen.addEventListener('dragstart', (event) => {
+        if (!penIsInInventory()) {
+            event.preventDefault();
+            return;
+        }
+        setInventoryPenSelected(true);
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', 'absurd-alchemy-pen');
+    });
+    lobbyInventoryPen.addEventListener('dragend', () => {
+        guestbookHotspot.classList.remove('is-drop-over');
+    });
+    guestbookHotspot.addEventListener('dragover', (event) => {
+        if (!penIsInInventory()) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+        guestbookHotspot.classList.add('is-drop-over');
+    });
+    guestbookHotspot.addEventListener('dragleave', (event) => {
+        if (!guestbookHotspot.contains(event.relatedTarget)) {
+            guestbookHotspot.classList.remove('is-drop-over');
+        }
+    });
+    guestbookHotspot.addEventListener('drop', (event) => {
+        if (!penIsInInventory()) return;
+        event.preventDefault();
+        guestbookHotspot.classList.remove('is-drop-over');
+        placePenOnGuestbook();
+    });
+    lobbyInventoryPen.addEventListener('click', (event) => {
+        if (suppressPenClick) {
+            event.preventDefault();
+            return;
+        }
+        setInventoryPenSelected(!inventoryPenSelected);
+    });
 
     radioAudio.addEventListener('ended', () => {
         showStatus('Only static for now. The old broadcasts are still hiding somewhere.');
@@ -1555,6 +1809,10 @@
     });
 
     window.addEventListener('popstate', syncRoomFromLocation);
+    const savedInventory = readInventory();
+    hasAlchemyPen = savedInventory.alchemyPen === true;
+    alchemyPenLocation = hasAlchemyPen && savedInventory.alchemyPenLocation === 'guestbook' ? 'guestbook' : (hasAlchemyPen ? 'inventory' : 'room');
+    syncPenInventory();
     renderAlchemyPlaylist();
     syncRoomFromLocation();
 

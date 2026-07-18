@@ -76,6 +76,19 @@ system, door, props, and perspective remain locked to the concept render.
   leave-room cleanup all branch on `heroSource`.
 - The small cat figure cues the French Kitty trailer on the hero screen, the
   same way the solar system cues Sagan.
+- The fountain pen on the left-side script stack is now a collectible. Picking
+  it up animates a compact inventory drawer from the bottom of the room; the
+  drawer tucks itself after 2.9 seconds but its handle remains available. The
+  item and its `room` → `inventory` → `guestbook` location are stored in
+  `sessionStorage` under `bt-inventory-v1`, so both state and location persist
+  through reloads for that browser tab. A localized clean layer permanently
+  masks the baked room pen after pickup. In the lobby, the guest book remains
+  pen-free and locked while the pen is in inventory. Dragging the inventory pen
+  onto the book places it there, removes it from inventory, reveals the baked
+  guest-book pen, and opens the signing modal. Clicking or keyboard-activating
+  the pen selects it; activating the book then provides the equivalent
+  accessible path. Both the entry handler and submit handler enforce that the
+  pen must actually be on the book, not merely collected.
 - The old production camera on the right-side equipment case has been replaced
   by a dimensional Absurd Alchemy hand emblem: blackened metal, the original
   yellow cuff, and a gray mounting base. It keeps the compact curio-style
@@ -139,13 +152,14 @@ system, door, props, and perspective remain locked to the concept render.
   glow; do not reuse the hero-screen contour or a generic rectangle for them.
 - The right-side doorway and fixed mobile Lobby button return to the central
   room and restore the URL/history state.
-- The right-side doorway's hover light is deliberately split between a tight
-  rim on `.bt-alchemy-exit-door-layer` and the separate
-  `.bt-alchemy-exit-door-light` behind it. The latter paints a restrained
-  opening aura and a low threshold pool. Do not restore the broad full-frame
-  `drop-shadow()` treatment: on this large hollow sprite it reads as a
-  translucent rectangular panel, unlike the compact cat and solar-model
-  silhouettes.
+- The right-side exit is now one opaque interaction sprite containing the
+  physical frame, threshold, reverse side of the lobby's clapboard, and the
+  complete lobby view inside the opening. The room plate is repaired beneath
+  it. The light span now uses the lobby's shared `.bt-door-light` component,
+  including its opening aura, threshold pool, hover opacity, and scale. The
+  doorway raster uses the same brightness/saturation as the lobby doors, but
+  remains stationary: unlike the tight lobby sprites, this full-scene layer
+  would expose the source-colored antialias fringe retained beneath it if moved.
 - On narrow screens the room stays a 1000px horizontal stage inside its own
   scroll area. This keeps the CRT and hotspots legible rather than shrinking
   the full illustration to phone width.
@@ -358,14 +372,40 @@ images/before-times/absurd-alchemy-clean-v1.{png,webp}
   Master and runtime room plates with only the hero CRT glass cleaned.
 
 images/before-times/absurd-alchemy-clean-v3.{png,webp}
-  Current runtime room plate. It starts from V2 and uses only the expanded,
+  Previous room plate. It starts from V2 and uses only the expanded,
   feathered production-camera matte to composite the generated empty-shelf
   repair; the rest of the room remains pixel-identical to V2.
+
+images/before-times/absurd-alchemy-clean-v4.{png,webp}
+  Current runtime room plate. It starts from V3 and applies the localized
+  generated teal wall/floor repair only beneath the extracted exit doorway.
+
+images/before-times/layers/alchemy-exit-door-lobby-v2.{png,webp}
+  Full-scene transparent exit sprite. Original concept pixels preserve the
+  installed reverse-view perspective; frame, threshold, reverse clapboard,
+  and visible lobby interior share one alpha silhouette for hover lighting.
 
 images/before-times/layers/alchemy-hand-logo-v1.{png,webp}
   Full-scene transparent hand-emblem interaction layer, aligned to the repaired
   case top. The original production-camera layer remains as the deterministic
   removal mask but is no longer loaded by the page.
+
+images/before-times/inventory/fountain-pen-{chroma-,}v1.png
+  Generated black-and-gold pen sprite. The chroma source is retained so the
+  transparent runtime PNG can be rebuilt with the imagegen chroma-key helper.
+
+images/before-times/layers/guestbook-no-pen-v4.{png,webp}
+  Surgical pen-free lobby guestbook replacement. The original guestbook crop is
+  the base, and only pixels inside the pen/contact-shadow silhouette come from
+  the aligned clean-page donor. Book geometry, handwriting outside the pen,
+  binding, page edges, desk, floor, chair fragment, and complete plaque remain
+  original. The layer stays pinned on hover/focus until the pen is placed.
+
+images/before-times/layers/alchemy-pen-free-patch-v4.{png,webp}
+  Coherent 340 × 190 single-sheet replacement with softly feathered transitions
+  in the surrounding dark equipment. It removes both the pen and the generated
+  lower duplicate-pad wedge, and remains visible after pickup so revisiting
+  Absurd Alchemy cannot reveal the baked pen again.
 
 images/before-times/production/*
   Sagan thumbnail and the two current silent production-monitor MP4 loops.
@@ -378,6 +418,18 @@ tools/build-absurd-alchemy-hand-logo.py
   Builds the localized V3 camera-removal plate, sizes and places the isolated
   generated hand master, writes the runtime PNG/WebP layer, and emits a preview.
 
+tools/build-absurd-alchemy-exit-door.py
+  Builds the combined exit sprite from original concept pixels, applies the
+  localized no-door repair to V3, and writes the V4 plate plus runtime WebP.
+
+tools/build-guestbook-no-pen.py
+  Composites a narrow generated ruled-paper donor into the locked guest-book
+  crop with a feathered pen silhouette and writes the PNG/WebP clean layer.
+
+tools/build-alchemy-pen-patch.py
+  Builds the localized script-stack repair from the generated donor and locked
+  room pixels, then writes the PNG/WebP runtime patch.
+
 tools/before-times-clean-patches/alchemy-hero-screen-dark-v1.webp
   Donor crop used by the room-plate builder. Keep this with the script.
 
@@ -385,6 +437,25 @@ tools/before-times-clean-patches/alchemy-no-production-camera-v1.png
 tools/before-times-clean-patches/alchemy-hand-logo-{chroma,isolated}-v1.png
   Generated empty-shelf repair and preserved hand-emblem masters used by the
   hand-logo builder. Keep the chroma source so the alpha can be rebuilt.
+
+tools/before-times-clean-patches/alchemy-no-exit-door-v1.png
+  Generated teal wall/floor repair used only beneath the combined exit sprite.
+
+tools/before-times-clean-patches/guestbook-no-pen-generated-v1.png
+  Generated pen-free book edit retained as the ruled-paper donor for the
+  localized guest-book clean-layer builder.
+
+tools/before-times-clean-patches/guestbook-no-pen-generated-v2.png
+  Current coherent full-crop donor. It keeps the complete plaque inside frame
+  and replaces the entire right page, avoiding the old pen-shaped smudge.
+
+tools/before-times-clean-patches/alchemy-pen-free-generated-v2.png
+  Generated pen-free script-paper edit retained as the texture donor for the
+  localized Alchemy clean-layer builder.
+
+tools/before-times-clean-patches/alchemy-paper-single-sheet-generated-v3.png
+  Generated single-sheet crop with the lower duplicate-pad wedge removed. This
+  is the current donor used by the Alchemy clean-layer builder.
 ```
 
 ## The rule that solved the perspective problem

@@ -11,7 +11,10 @@ node_modules
 package.json
 package-lock.json
 tools/
-transcripts/
+# transcripts/*.md sources stay private via the *.md rule below; the
+# pre-rendered .html fragments in transcripts/ ARE served (article reader
+# fetches them), and an unanchored "transcripts/" here would also swallow
+# images/transcripts/ (gitignore patterns match at any depth).
 .lighthouse/
 *.sh
 *.code-workspace

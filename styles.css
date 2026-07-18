@@ -13535,6 +13535,90 @@ body.reader-open {
 }
 .article-reader-body li { margin-bottom: 0.4em; }
 
+/* ===== Transcript turns (local repo-hosted articles, e.g. /read/surviving-salem-transcript) ===== */
+.article-reader-body .transcript-note {
+    max-width: 600px;
+    margin: 0 auto 2.6em;
+    padding: 14px 18px;
+    border: 1px solid var(--fiche-rule);
+    background: rgba(46, 33, 19, 0.04);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--fiche-ink-soft);
+}
+.article-reader-body .transcript-note p { margin: 0; }
+.article-reader-body .transcript-turn {
+    max-width: 600px;
+    margin: 0 auto 2.4em;
+}
+.article-reader-body .transcript-turn p { margin: 0 0 1.1em; }
+.article-reader-body .transcript-speaker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 1em;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fiche-ink-soft);
+}
+.article-reader-body .transcript-speaker::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--fiche-rule), transparent);
+}
+.article-reader-body .transcript-turn--charles .transcript-speaker { color: var(--fiche-accent); }
+.article-reader-body .transcript-turn--process { opacity: 0.78; }
+.article-reader-body .transcript-turn--process p:not(.transcript-speaker) {
+    font-family: 'Space Mono', monospace;
+    font-size: 13.5px;
+    font-style: italic;
+    color: var(--fiche-ink-soft);
+}
+.article-reader-body .transcript-figure {
+    margin: 1.8em auto;
+    max-width: 600px;
+    text-align: center;
+}
+.article-reader-body .transcript-attachment {
+    max-width: 600px;
+    margin: 1.4em auto;
+    border: 1px solid var(--fiche-rule);
+    background: rgba(46, 33, 19, 0.05);
+    border-radius: 2px;
+}
+.article-reader-body .transcript-attachment summary {
+    cursor: pointer;
+    padding: 10px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--fiche-ink-soft);
+}
+.article-reader-body .transcript-attachment pre {
+    margin: 0;
+    padding: 12px 14px;
+    border-top: 1px solid var(--fiche-rule);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--fiche-ink);
+    max-height: 420px;
+    overflow-y: auto;
+}
+.article-reader-body .transcript-dead-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--fiche-ink-soft);
+}
+
 /* Substack image containers — neutralize their layout, keep our framing.
    In-article media matches the 600px text column; the first-child hero
    keeps its full-bleed treatment via the more specific rule above. */

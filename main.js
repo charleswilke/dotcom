@@ -447,6 +447,7 @@ function createFeedExcerpt(item) {
 // rendered with site typography instead of jumping out to substack.com.
 
 function slugifyArticle(item) {
+    if (item && item.slug) return item.slug;
     if (item && item.link) {
         const m = item.link.match(/\/p\/([^/?#]+)/);
         if (m) return m[1];
@@ -457,6 +458,41 @@ function slugifyArticle(item) {
 
 const SUBSTACK_BASE = 'https://charleswilke.substack.com';
 const ARTICLE_READER_PATH_PREFIX = '/read/';
+
+// Articles that live in this repo rather than the Substack feed but open in the
+// same reader. Content is a pre-rendered HTML fragment fetched on demand.
+// `link: ''` hides the "Read on Substack" topbar link and footer.
+const LOCAL_ARTICLES = [
+    {
+        slug: 'surviving-salem-transcript',
+        title: 'Surviving Salem: The Conversation',
+        cleanDescription: 'The full working session behind "Vilify and Deny" — workshopping the essay with Codex, from first draft to final polish, generated art included.',
+        pubDate: '2026-07-18T16:00:00.000Z',
+        contentUrl: '/transcripts/surviving-salem-transcript.html',
+        link: ''
+    }
+];
+
+function findLocalArticle(slug) {
+    return LOCAL_ARTICLES.find(entry => entry.slug === slug) || null;
+}
+
+function openLocalArticle(entry, options = {}) {
+    if (entry._content) {
+        return openArticleReader({ ...entry, content: entry._content }, options);
+    }
+    fetch(entry.contentUrl)
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.text();
+        })
+        .then(html => {
+            entry._content = html;
+            openArticleReader({ ...entry, content: html }, options);
+        })
+        .catch(err => console.warn('[reader] local article failed to load:', err));
+    return true;
+}
 
 function getArticleSharePath(itemOrSlug) {
     const slug = typeof itemOrSlug === 'string' ? itemOrSlug : slugifyArticle(itemOrSlug);
@@ -949,9 +985,19 @@ function openArticleReader(item, options = {}) {
         hr.replaceWith(row);
     });
 
+    // Local (repo-hosted) articles have no Substack page; hide the links to it.
+    const sepEl = overlay.querySelector('.reader-sep');
+    const footerEl = overlay.querySelector('.article-reader-footer');
     if (item.link) {
         topLink.href = item.link;
         footLink.href = item.link;
+        topLink.style.display = '';
+        if (sepEl) sepEl.style.display = '';
+        if (footerEl) footerEl.style.display = '';
+    } else {
+        topLink.style.display = 'none';
+        if (sepEl) sepEl.style.display = 'none';
+        if (footerEl) footerEl.style.display = 'none';
     }
 
     const slug = slugifyArticle(item);
@@ -1018,8 +1064,24 @@ function maybeOpenReaderFromLocation() {
     const item = findItemBySlug(route.slug);
     if (item) {
         openArticleReader(item, { replaceUrl: route.source === 'hash' });
+        return;
+    }
+
+    const local = findLocalArticle(route.slug);
+    if (local) {
+        openLocalArticle(local, { replaceUrl: route.source === 'hash' });
     }
 }
+
+// Local articles don't depend on the RSS feed (which is skipped on localhost
+// and lazy-loaded in production), so resolve their routes as soon as the DOM
+// is ready instead of waiting for the feed.
+onReady(() => {
+    const route = getArticleRouteFromLocation();
+    if (route && findLocalArticle(route.slug)) {
+        openLocalArticle(findLocalArticle(route.slug), { replaceUrl: route.source === 'hash' });
+    }
+});
 
 window.addEventListener('popstate', () => {
     if (getArticleRouteFromLocation()) {

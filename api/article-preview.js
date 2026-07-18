@@ -10,6 +10,18 @@ const DEFAULT_IMAGE = `${SITE_URL}/images/og-image.jpg?v=202607032147`;
 const DEFAULT_TITLE = 'Exploring L.ai.bor | Charles Wilke';
 const DEFAULT_DESCRIPTION = 'Essays on capitalism, humanity, and AI from Charles Wilke.';
 
+// Repo-hosted articles that open in the reader but aren't in the Substack feed.
+// Keep in sync with LOCAL_ARTICLES in main.js.
+const LOCAL_ARTICLES = {
+    'surviving-salem-transcript': {
+        title: 'Surviving Salem: The Conversation',
+        description: 'The full working session behind "Vilify and Deny" — workshopping the essay with Codex, from first draft to final polish, generated art included.',
+        thumbnail: '/images/transcripts/surviving-salem/the-accusation-creates-the-witch.webp',
+        image: { width: 1536, height: 1024 },
+        pubDate: '2026-07-18T16:00:00.000Z'
+    }
+};
+
 function escapeHtml(value = '') {
     return String(value)
         .replace(/&/g, '&amp;')
@@ -111,6 +123,14 @@ module.exports = async function handler(req, res) {
     if (!slug) {
         res.setHeader('Location', '/#writing');
         res.status(302).end();
+        return;
+    }
+
+    const localItem = LOCAL_ARTICLES[slug];
+    if (localItem) {
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.setHeader('Cache-Control', 'public, max-age=900, stale-while-revalidate=1800, stale-if-error=3600');
+        res.status(200).send(renderPage({ item: localItem, slug, statusCode: 200 }));
         return;
     }
 

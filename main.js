@@ -4268,7 +4268,9 @@ function initGWORLightbox() {
         { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', cover: 'audio/grief-without-ritual/from-the-beginning-title.webp', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', cover: 'audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'Scattered Thunderstorms', file: 'audio/grief-without-ritual/scattered-thunderstorms.mp3?v=202607181517', cover: 'audio/grief-without-ritual/scattered-thunderstorms-title.webp', article: 'https://charleswilke.substack.com/p/scattered-thunderstorms' },
-        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', cover: 'audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' }
+        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', cover: 'audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        // No title art yet — omitting `cover` makes the player fall back to the album cover while playing.
+        { title: 'Surviving Salem', file: 'audio/grief-without-ritual/surviving-salem.mp3', article: 'https://charleswilke.substack.com/p/surviving-salem' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');

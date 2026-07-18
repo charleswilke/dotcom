@@ -16,7 +16,8 @@ PATCH_DIR = ROOT / "tools/before-times-clean-patches"
 OUTPUT_DIR = ROOT / "images/before-times/layers"
 
 ORIGINAL_PATH = ROOT / "images/before-times/absurd-alchemy-clean-v1.png"
-BACKPLATE_PATH = ROOT / "images/before-times/absurd-alchemy-clean-v2.png"
+BACKPLATE_PATH = ROOT / "images/before-times/absurd-alchemy-clean-v3.png"
+HAND_LAYER_PATH = OUTPUT_DIR / "alchemy-hand-logo-v1.png"
 CHAIRLESS_REPAIR_PATH = PATCH_DIR / "alchemy-no-chair-v1.png"
 CHAIR_SOURCE_PATH = PATCH_DIR / "alchemy-chair-isolated-v5.png"
 ORIGINAL_CHAIR_MASK_PATH = PATCH_DIR / "alchemy-chair-mask-v4.png"
@@ -87,6 +88,8 @@ def main():
     preview = backplate.copy()
     preview.alpha_composite(chair)
     preview.alpha_composite(crate)
+    if HAND_LAYER_PATH.exists():
+        preview.alpha_composite(Image.open(HAND_LAYER_PATH).convert("RGBA"))
     preview.convert("RGB").save(Path("/tmp/bt-alchemy-layer-preview-v5.png"))
 
 

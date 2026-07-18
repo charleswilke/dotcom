@@ -29,15 +29,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-v1.webp?v=20260716d" type="image/webp" fetchpriority="high">
-    <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v2.webp?v=20260717b" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=20260717a" type="image/webp" fetchpriority="high">
+    <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v3.webp?v=20260717c" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-chair-v5.webp?v=20260717e" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-script-crate-v3.webp?v=20260717c" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-solar-model-original-v1.webp?v=20260717b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-french-kitty-original-v1.webp?v=20260717b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-tape-25-sticker-original-v1.webp?v=20260717b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/alchemy-exit-door-frame-original-v1.webp?v=20260717b" type="image/webp">
-    <link rel="preload" as="image" href="/images/before-times/layers/alchemy-production-camera-original-v1.webp?v=20260717b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260717an">
+    <link rel="preload" as="image" href="/images/before-times/layers/alchemy-hand-logo-v1.webp?v=20260717e" type="image/webp">
+    <link rel="stylesheet" href="/before-times.css?v=20260717ay">
 </head>
 <body class="before-times-page">
     <a class="bt-skip-link" href="#bt-lobby">Skip to the lobby</a>
@@ -59,6 +60,15 @@
                     alt=""
                     aria-hidden="true"
                     decoding="sync"
+                    fetchpriority="high">
+                <img
+                    class="bt-lobby-title-prefix"
+                    src="/images/before-times/layers/title-the-v1.webp?v=20260717a"
+                    width="813"
+                    height="553"
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async"
                     fetchpriority="high">
 
                 <button class="bt-hotspot bt-hotspot-help" type="button" data-panel="about" data-label="About this place" aria-label="About the Before Times archive"></button>
@@ -127,11 +137,11 @@
         <div class="bt-lobby-scroll bt-alchemy-scroll" id="bt-alchemy-scroll" hidden>
             <section class="bt-lobby-scene bt-alchemy-scene" id="bt-alchemy-scene" aria-label="Absurd Alchemy production room" aria-describedby="bt-alchemy-instructions">
                 <p class="bt-sr-only" id="bt-alchemy-instructions">
-                    Click the director's chair to select a film for the large screen. The smaller production monitors, VHS tapes, camera, scripts, and doorway are also interactive.
+                    Click the director's chair to select a film for the large screen. The smaller production monitors, VHS tapes, hand emblem, scripts, and doorway are also interactive.
                 </p>
                 <img
                     class="bt-lobby-art bt-alchemy-art"
-                    src="/images/before-times/absurd-alchemy-clean-v2.webp?v=20260717b"
+                    src="/images/before-times/absurd-alchemy-clean-v3.webp?v=20260717c"
                     width="1672"
                     height="941"
                     alt=""
@@ -194,16 +204,16 @@
                 <img class="bt-alchemy-curio-layer bt-alchemy-cat-layer" id="bt-alchemy-cat-layer" src="/images/before-times/layers/alchemy-french-kitty-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <img class="bt-alchemy-curio-layer bt-alchemy-tape-25-layer" id="bt-alchemy-tape-25-layer" src="/images/before-times/layers/alchemy-tape-25-sticker-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <img class="bt-alchemy-curio-layer bt-alchemy-exit-door-layer" id="bt-alchemy-exit-door-layer" src="/images/before-times/layers/alchemy-exit-door-frame-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
-                <img class="bt-alchemy-curio-layer bt-alchemy-camera-layer" id="bt-alchemy-camera-layer" src="/images/before-times/layers/alchemy-production-camera-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
+                <span class="bt-alchemy-exit-door-light" aria-hidden="true"></span>
+                <img class="bt-alchemy-curio-layer bt-alchemy-hand-layer" id="bt-alchemy-hand-layer" src="/images/before-times/layers/alchemy-hand-logo-v1.webp?v=20260717e" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
 
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-chair" type="button" data-alchemy-action="playlist" data-label="Director's playlist" aria-label="Open the director's playlist"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-door" type="button" data-alchemy-action="lobby" data-label="Back to the lobby" aria-label="Return to the Before Times lobby"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-25" type="button" data-alchemy-action="twenty-five" data-label="Tape 25" aria-label="Inspect VHS tape 25"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-solar" type="button" data-alchemy-action="sagan" data-label="Tiny solar system" aria-label="Inspect the tiny solar-system model"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-cat" type="button" data-alchemy-action="cat" data-label="French Kitty?" aria-label="Inspect the small cat figure"></button>
-                <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-camera" type="button" data-alchemy-action="camera" data-label="Production camera" aria-label="Inspect the production camera"></button>
+                <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-hand" type="button" data-alchemy-action="hand" data-label="Absurd Alchemy hand" aria-label="Inspect the Absurd Alchemy hand emblem"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-scripts" type="button" data-alchemy-action="scripts" data-label="Script crate" aria-label="Inspect the crate of scripts"></button>
-                <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-cans" type="button" data-alchemy-action="cans" data-label="Film cans" aria-label="Inspect the film cans"></button>
 
                 <div class="bt-scene-status bt-alchemy-scene-status" id="bt-alchemy-scene-status" role="status" aria-live="polite"></div>
             </section>
@@ -293,6 +303,6 @@
     <audio id="bt-radio-audio" preload="none"></audio>
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
-    <script src="/before-times.js?v=20260717p" defer></script>
+    <script src="/before-times.js?v=20260717s" defer></script>
 </body>
 </html>

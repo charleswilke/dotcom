@@ -106,6 +106,10 @@
     };
 
     const TUNING_TRACKS = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => `/audio/radio_tuning${number}.mp3`);
+    const TAPE_25_CLIPS = [
+        '/audio/before-times/tape25-fart-1.mp3',
+        '/audio/before-times/tape25-fart-2.mp3'
+    ];
     const ALCHEMY_VIDEOS = [
         {
             key: 'lucifer-1',
@@ -578,7 +582,7 @@
     const alchemySolarHotspot = document.querySelector('.bt-alchemy-hotspot-solar');
     const alchemyCatHotspot = document.querySelector('.bt-alchemy-hotspot-cat');
     const alchemyExitHotspot = document.querySelector('.bt-alchemy-hotspot-door');
-    const alchemyCameraHotspot = document.querySelector('.bt-alchemy-hotspot-camera');
+    const alchemyHandHotspot = document.querySelector('.bt-alchemy-hotspot-hand');
     const alchemyTwentyFiveHotspot = document.querySelector('.bt-alchemy-hotspot-25');
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
@@ -590,7 +594,7 @@
     const alchemyCatLayer = document.getElementById('bt-alchemy-cat-layer');
     const alchemyTapeTwentyFiveLayer = document.getElementById('bt-alchemy-tape-25-layer');
     const alchemyExitDoorLayer = document.getElementById('bt-alchemy-exit-door-layer');
-    const alchemyCameraLayer = document.getElementById('bt-alchemy-camera-layer');
+    const alchemyHandLayer = document.getElementById('bt-alchemy-hand-layer');
     const mobileFloorplan = document.getElementById('bt-mobile-floorplan');
     const mobileRoomExit = document.getElementById('bt-mobile-room-exit');
     const alchemyHeroScreen = document.getElementById('bt-alchemy-hero-screen');
@@ -605,6 +609,9 @@
     let statusTimer = null;
     let guestbookLoaded = false;
     let soundEnabled = localStorage.getItem('bt-sound-enabled') !== 'false';
+    const tape25Audio = new Audio();
+    tape25Audio.preload = 'none';
+    let lastTape25ClipIndex = -1;
     let activeRoom = 'lobby';
     let alchemyPlayer = null;
     let loadedAlchemyVideoKey = null;
@@ -1212,54 +1219,19 @@
 
     function playTapeTwentyFive() {
         animateLayer(alchemyTwentyFiveHotspot, 'is-farting', 560);
-        if (!soundEnabled || !(window.AudioContext || window.webkitAudioContext)) {
-            showStatus(soundEnabled ? 'Tape 25 vibrates mysteriously.' : 'Tape 25 performs in dignified silence.');
+        if (!soundEnabled) {
+            showStatus('Tape 25 performs in dignified silence.');
             return;
         }
 
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        const context = new AudioContextClass();
-        const now = context.currentTime;
-        const master = context.createGain();
-        const lowpass = context.createBiquadFilter();
-        const oscillator = context.createOscillator();
-        const oscillatorGain = context.createGain();
-        const noise = context.createBufferSource();
-        const noiseGain = context.createGain();
-        const noiseBuffer = context.createBuffer(1, Math.ceil(context.sampleRate * 0.78), context.sampleRate);
-        const noiseData = noiseBuffer.getChannelData(0);
-
-        for (let index = 0; index < noiseData.length; index += 1) {
-            const envelope = Math.sin(Math.PI * index / noiseData.length);
-            noiseData[index] = (Math.random() * 2 - 1) * envelope;
+        let clipIndex = Math.floor(Math.random() * TAPE_25_CLIPS.length);
+        if (TAPE_25_CLIPS.length > 1 && clipIndex === lastTape25ClipIndex) {
+            clipIndex = (clipIndex + 1) % TAPE_25_CLIPS.length;
         }
-
-        oscillator.type = 'sawtooth';
-        oscillator.frequency.setValueAtTime(92, now);
-        oscillator.frequency.exponentialRampToValueAtTime(43, now + 0.72);
-        oscillatorGain.gain.setValueAtTime(0.0001, now);
-        oscillatorGain.gain.exponentialRampToValueAtTime(0.26, now + 0.025);
-        oscillatorGain.gain.setValueAtTime(0.22, now + 0.43);
-        oscillatorGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.76);
-
-        noise.buffer = noiseBuffer;
-        noise.playbackRate.setValueAtTime(0.72, now);
-        noiseGain.gain.setValueAtTime(0.0001, now);
-        noiseGain.gain.exponentialRampToValueAtTime(0.16, now + 0.04);
-        noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.72);
-        lowpass.type = 'lowpass';
-        lowpass.frequency.setValueAtTime(330, now);
-        lowpass.frequency.exponentialRampToValueAtTime(105, now + 0.76);
-        master.gain.value = 0.68;
-
-        oscillator.connect(oscillatorGain).connect(lowpass);
-        noise.connect(noiseGain).connect(lowpass);
-        lowpass.connect(master).connect(context.destination);
-        oscillator.start(now);
-        noise.start(now);
-        oscillator.stop(now + 0.78);
-        noise.stop(now + 0.78);
-        oscillator.addEventListener('ended', () => context.close());
+        lastTape25ClipIndex = clipIndex;
+        tape25Audio.src = TAPE_25_CLIPS[clipIndex];
+        tape25Audio.currentTime = 0;
+        tape25Audio.play().catch(() => {});
         showStatus('Tape 25 offers its production notes.', 2800);
     }
 
@@ -1328,7 +1300,10 @@
         soundEnabled = !soundEnabled;
         localStorage.setItem('bt-sound-enabled', String(soundEnabled));
         infoButton.textContent = soundEnabled ? 'Turn sound off' : 'Turn sound on';
-        if (!soundEnabled) radioAudio.pause();
+        if (!soundEnabled) {
+            radioAudio.pause();
+            tape25Audio.pause();
+        }
         showStatus(soundEnabled ? 'Lobby sound is on.' : 'Lobby sound is off.');
     }
 
@@ -1394,7 +1369,7 @@
     bindAlchemyObjectLayer(alchemyCatHotspot, alchemyCatLayer);
     bindAlchemyObjectLayer(alchemyTwentyFiveHotspot, alchemyTapeTwentyFiveLayer);
     bindAlchemyObjectLayer(alchemyExitHotspot, alchemyExitDoorLayer);
-    bindAlchemyObjectLayer(alchemyCameraHotspot, alchemyCameraLayer);
+    bindAlchemyObjectLayer(alchemyHandHotspot, alchemyHandLayer);
 
     function formatEntryDate(value) {
         const date = new Date(value);
@@ -1513,12 +1488,11 @@
             if (action === 'twenty-five') playTapeTwentyFive();
             if (action === 'sagan') cueAlchemyVideo('sagan');
             if (action === 'cat') cueAlchemyVideo('french-kitty');
-            if (action === 'camera') showStatus('Still loaded. Still expensive. Please return it before Monday.', 3600);
+            if (action === 'hand') showStatus('The hand of Absurd Alchemy. Still reaching for one more impossible shot.', 3600);
             if (action === 'scripts') {
                 animateLayer(alchemyCrateLayer, 'is-rustling', 620);
                 showStatus('Drafts, call sheets, and at least one page nobody remembers approving.', 3800);
             }
-            if (action === 'cans') showStatus('Mostly empty. One rattles when nobody is looking.', 3200);
         });
     });
 

@@ -76,6 +76,10 @@ system, door, props, and perspective remain locked to the concept render.
   leave-room cleanup all branch on `heroSource`.
 - The small cat figure cues the French Kitty trailer on the hero screen, the
   same way the solar system cues Sagan.
+- The old production camera on the right-side equipment case has been replaced
+  by a dimensional Absurd Alchemy hand emblem: blackened metal, the original
+  yellow cuff, and a gray mounting base. It keeps the compact curio-style
+  silhouette glow and exposes an object label/status line on hover or focus.
 - Once a reel has started, an invisible `.bt-crt-tap-toggle` button covers the
   picture area and toggles play/pause through the Player API (a tap after the
   reel ends rewinds and replays).
@@ -135,6 +139,13 @@ system, door, props, and perspective remain locked to the concept render.
   glow; do not reuse the hero-screen contour or a generic rectangle for them.
 - The right-side doorway and fixed mobile Lobby button return to the central
   room and restore the URL/history state.
+- The right-side doorway's hover light is deliberately split between a tight
+  rim on `.bt-alchemy-exit-door-layer` and the separate
+  `.bt-alchemy-exit-door-light` behind it. The latter paints a restrained
+  opening aura and a low threshold pool. Do not restore the broad full-frame
+  `drop-shadow()` treatment: on this large hollow sprite it reads as a
+  translucent rectangular panel, unlike the compact cat and solar-model
+  silhouettes.
 - On narrow screens the room stays a 1000px horizontal stage inside its own
   scroll area. This keeps the CRT and hotspots legible rather than shrinking
   the full illustration to phone width.
@@ -346,6 +357,16 @@ images/before-times/absurd-alchemy-concept-v1.png
 images/before-times/absurd-alchemy-clean-v1.{png,webp}
   Master and runtime room plates with only the hero CRT glass cleaned.
 
+images/before-times/absurd-alchemy-clean-v3.{png,webp}
+  Current runtime room plate. It starts from V2 and uses only the expanded,
+  feathered production-camera matte to composite the generated empty-shelf
+  repair; the rest of the room remains pixel-identical to V2.
+
+images/before-times/layers/alchemy-hand-logo-v1.{png,webp}
+  Full-scene transparent hand-emblem interaction layer, aligned to the repaired
+  case top. The original production-camera layer remains as the deterministic
+  removal mask but is no longer loaded by the page.
+
 images/before-times/production/*
   Sagan thumbnail and the two current silent production-monitor MP4 loops.
 
@@ -353,8 +374,17 @@ tools/build-absurd-alchemy-plate.py
   Deterministically composites the dark-screen donor crop into the locked
   concept and writes both the PNG master and WebP runtime plate.
 
+tools/build-absurd-alchemy-hand-logo.py
+  Builds the localized V3 camera-removal plate, sizes and places the isolated
+  generated hand master, writes the runtime PNG/WebP layer, and emits a preview.
+
 tools/before-times-clean-patches/alchemy-hero-screen-dark-v1.webp
   Donor crop used by the room-plate builder. Keep this with the script.
+
+tools/before-times-clean-patches/alchemy-no-production-camera-v1.png
+tools/before-times-clean-patches/alchemy-hand-logo-{chroma,isolated}-v1.png
+  Generated empty-shelf repair and preserved hand-emblem masters used by the
+  hand-logo builder. Keep the chroma source so the alpha can be rebuilt.
 ```
 
 ## The rule that solved the perspective problem

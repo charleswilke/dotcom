@@ -1,0 +1,1948 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<FinalDraft DocumentType="Script" Template="No" Version="2">
+
+  <Content>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="1" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Ext. Power Station - Lunch</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The power station gleams a soft sandstone glow in the intense noonday sun. An interwoven ballet of power lines dance above as two WORKERS exit for lunch.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Both are dressed in coveralls. Both are carrying their LUNCH.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>One walks away in the slump of habitual drudgery. The other bounds towards his favorite lunch perch, with energy only someone in their mid-twenties could muster. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The patch on his chest reads ‘Arthur.’</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3" Page="1" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="ARTHUR"></CharacterArcBeat>
+          <CharacterArcBeat Name="LILY"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>EXT. Power tower leg - ConTINUOUS</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur arrives at the concrete base of the grand electrical tower. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>His lunchtime routine is rote but relished. He sets down his LUNCH BOX, removes the BANDANA tied like a cravat around his neck and places it on the concrete. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>His movement shows fluency only attained after years of repetition. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He hops himself confidently onto the bandana resting on the concrete. He grabs his nearby lunch box and places it on his lap.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur remembers to grab his spare BANDANA and tucks it in his undershirt as a napkin.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>At that moment, a WOMAN bounds to a halt behind Arthur and affixes a Book Sale sign to the tower near Arthur’s head. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur remains focused on his lunch.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>As Arthur opens the box’s first clasp, he stops and turns to acknowledge Lily with a polite nod, a smile and a hand flourish.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur returns to his routine as rehearsed. He opens the second clasp and flips open the lid, revealing a NOTE resting on top of his sandwich.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He lifts the note from the box and rests it in his palm.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>It reads: I’m leaving you. -Bianca</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur is frozen, isolated.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily literally sticks her nose in behind Arthur’s shoulder.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Whatcha reading?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur recoils, clenching his hand into a fist and pressing it to his self.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur takes a breath and pockets the note.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh, a silly little note.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur reaches for his sandwich in his lunch box.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s personal.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily flutters in front of Arthur.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’d ask you your name, but I see it on your chest, Arthur.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur looks up to Lily, his hands still in his lunch box.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Arthur is my Father’s name. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur raises his SANDWICH wrapped in wax paper.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARtHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Everyone calls me Art.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily flutters to a new spot around Arthur.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’s cute!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My family once had a chinchilla named Artie!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Mind if I call you Artie?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur bristles as he flips over his sandwich to reveal another note written on the sticker holding the wax paper together.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>It reads: Like you care, Artie.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily floats to a new spot.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m having a book sale!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur unwraps his sandwich.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Bully for you.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily leans in just before Arthur takes a bite.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s Saturday! In the park!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur bites hard. He reels in pain as Lily recoils.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (O.S.) (CONT’D) </Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh heavens! Are you okay?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur pulls the bandana from his neck and spits the key out of his mouth into it.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Not your fancy napkin!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur digs through the contents he spat into the bandana and finds a key. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He holds it up in disbelief.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Was that </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline">in</Text>
+      <Text> the sandwich?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur rubs his jaw as he throws the bandana in the lunch box. He closes the lid and latches it as he says:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It was.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur stands, swipes his bandana off the tower’s foot with panache, ties it around his neck to complete his armor and focuses on Lily.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Good luck with your book sale.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur exits with diligent energy, almost like a tragic clown.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily turns and follows a number of paces behind.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Thank you! Did one seven months ago, nobody showed. But this time...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily comes to a stop and for a second gets lost in thought.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hey, you didn’t even ask my name!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s Lily!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Like the flower!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>DOOR SLAM.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>CUT TO:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="4" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="CO-WORKER"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>INT. Power Station - Continuous</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur enters a dark room with gauges, wheels and levers on the wall. Piping everywhere. Industrial. He places his lunch box on a hook to the side then proceeds to walk towards his co-worker.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>His co-worker stands, wiping a greasy component with one of Arthur’s BANDANAS.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Co-Worker</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hey Artie! I found your spare bandanas!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The co-worker waves the dirty bandana in Arthur’s face.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>TITLE CARD: I HATE YOU, ARTIE!</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="4" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Ext. Power Station path - Sunset</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur leaves for the day with a thousand-yard stare. He tensely walks down the corridor, with the weight of this particular day on his shoulders.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="4" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Ext. Bench path - a few minutes past</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur navigates the space efficiently and without thought. He takes no notice of the BUM laying on the side of the path.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The bum, however, sees Arthur instantly. He reaches his hand out to Arthur on autopilot. His eyes lag behind his hand, tracking as Arthur passes.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Noticing Arthur is out of range, he snaps his fingers, shrugs to himself and lays his head down for the evening slumber.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The sun sets, the day concludes.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>CUT TO:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="5" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="BUM"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Ext. Bench Path - Morning</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A garbage truck drops an empty can next to the bum, waking him abruptly. He’s in shock then takes inventory of his self.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He breathes deep, then scrambles to grab his watch. It’s perched on the hat of a small porcelain LAWN GNOME.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The bum checks the time, and exclaims to the lawn gnome:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>BUM</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m late for work! Hold down the fort, Gerald! </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The bum hurriedly exits.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1 3/8" Page="5" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="BUM"></CharacterArcBeat>
+          <CharacterArcBeat Name="LILY"></CharacterArcBeat>
+          <CharacterArcBeat Name="RUDY"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Ext. Lily’s books ‘n’ Things - Morning</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A dilapidated storefront sits on a dead stretch of road. Bars on windows, trinkets on shelves. It’s actually hard to tell if it’s open or closed, or that it even is a shop. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The bum arrives out of breath and prepares himself for “his work.”</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He clears his throat and raises his chin.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Bum</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Ladies and gentlemen, your time is valuable, your attention moreso. Now I know what you think, but I’m not here to beg, but to proclaim! </Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The most valuable asset we have is </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">each other</Text>
+      <Text>. Not some figurative amount you check occasionally on your phones.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>High score! Kudos!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But we each have our own strengths. And when focused on a common goal...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’d be astounded what can be done.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The bum looks around, sees no one near.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Bum (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Is it Saturday?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>No, no it’s Friday.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily rounds the corner as the bum’s face lights up.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>BUM (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s Friday. Because here comes Lily!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>There’s my favorite flower!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily smiles as she presses towards the door.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hi, Rudy.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Rudy attempts to stop and chat.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Rudy</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Book sale. Saturday. In the park.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily pauses, smirks, then looks up.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’s right, Rudy!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Good luck out here today.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily enters her shop, as Rudy breathes deep and puffs out his chest.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="6" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Int. Arthur’s apartment - BATHROOM - Morning</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur is in the shower. We catch him humming a musical flourish. As the song ends, the shower does as well. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Water drips from the shower head as an arm juts out from the curtain, grabs the BATH TOWEL and whips it back into the shower.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>An instant later, the curtain smoothly opens with Arthur wrapped in a towel.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>CUT TO:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="6" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Int. Arthur’S APARTMENT - Bathroom</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur is brushing his teeth. He has on his undershirt and pants. He raises his head up from spitting in the sink, the TOOTHBRUSH held in hand, smiles and ends with an impressive toothbrush toss that flips the brush over head. He grabs the toothbrush midair and guides it down into the HOLDER.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>As the toothbrush comes to a rest, the TOASTER OVEN DINGS!</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>CUT To:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="7" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Int. ARthur’s Apartment - Kitchen</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur now has his shirt on unbuttoned. He excitedly opens the door to the TOASTER OVEN, and grabs the toast. He immediately recoils from the relative temperature of the bread. He tosses the toast into the air, thereby cooling it, as Arthur wets his burnt finger. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He has other his hand exactly where it needs to be to catch the falling toast. His burnt hand reaches to grab the KNIFE in the JAM JAR sitting nearby.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="7" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Int. Arthur’s Apartment - Kitchen</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur meticulously steeps a BAG OF TEA in a MUG of boiling water. He peers outside silently, perhaps wistfully. His shirt is buttoned, his name badge clearly visible.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1 3/8" Page="7" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="ARTHUR"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Int. Arthur’s Apartment - Living Room</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur is nearly fully prepared for work. His cravat is around his neck but untied. The LUNCH BOX rests near the door, while Arthur is lovingly tending to his PLANT.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He holds one of the plant’s large leaves with care, as he snaps out a BANDANA from his pocket to wipe it clean.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So, I think it’s going to be just you and me for a while.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He pulls back from wiping. Looks down.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She really left years ago, now she’s just gone.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur looks down at his bandana in his hand, starts folding it.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Well, at least I’ve still got my job.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He pockets the bandana.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The uniform is a bit restrictive, and my supervisor is a little rough around the edges.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But it keeps you fed, so I can’t really complain.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur reaches out and delicately holds a single leaf.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m loving this fresh growth on you!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He releases the leaf and stands.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Keep this up and you’ll be as tall as me!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He begins tying his cravat.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’ll be happy to know I met someone yesterday.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>A woman. I didn’t catch her name.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He finishes tying his cravat and looks to the floor.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ArtHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Some kind of flower.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur looks up at the plant and busts out laughing.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Your rapier wit is sharper than your thorns!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur emits an uproarious guffaw from the belly. He picks up his lunch box and exits fluidly laughing heartily.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The door closes and the plant settles.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="6/8" Page="8" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="ARTHUR"></CharacterArcBeat>
+          <CharacterArcBeat Name="RUDY"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Ext. Commute Montage</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur is chipper, dapper and with a spring in his step.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He politely nods to a few no ones in particular, with his signature hand flourish.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Rudy sits reading CAT’S CRADLE. He notices Arthur heading his way and slides in a Lily’s Books ‘n’ Things bookmark and shuts the book.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Rudy pops to his feet as Arthur passes.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>RudY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Good morning, fine sir. Lovely cravat!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur doesn’t break stride. Rudy is forced to rush.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Rudy (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m not here to beg, but to proclaim! Yes, we-</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur passes, nods and hand flourishes.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Good morning!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur motors past. Rudy looks flabbergasted.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>RUDY</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">sure</Text>
+      <Text> he saw me.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>Cut to:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="9" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Ext. Power STATION</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur arrives and heads towards the entrance, he pauses, places his lunch box on the ground as he stands with his back to a poster that reads: UNION MEETING TONIGHT.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur begrudgingly sighs as he looks at the building before him. He begins removing his cravat.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur head rolls as he pockets it. Then pulls out his telltale bandana.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He ties the bandana to his neck with slight disdain, but as he pulls the knot taught, his back straightens.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A smile crests his face and he swings down to grab his lunch box, then he bounds towards the entrance.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1/8" Page="9" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Ext. Power Station Montage</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A number of beautiful shots from around that beautiful place.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1" Page="10" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="ARTHUR"></CharacterArcBeat>
+          <CharacterArcBeat Name="CO-WORKER"></CharacterArcBeat>
+          <CharacterArcBeat Name="LILY"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Int. Power Station - Evening</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur exits holding a PINK SLIP. His stride is rudely efficient, he glides down the stairs fluidly.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>His co-worker passes and slaps Arthur on the shoulder.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Co-WORKER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Meeting tonight, princess.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The co-worker exits without breaking stride.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur sighs and peels open the paper.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>It reads: Employee #</Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">556794-A-04</Text>
+      <Text> Name: Arthur.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The paper includes a grid of various numbers, amounts and dates. Figures. And across all of that a large red stamp reads: Fired.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur looks up, squints into the distance. And sees Lily standing by the power leg across the street.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hey! Artie!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Without missing a beat Arthur ambles towards Lily while pocketing the pink slip.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hello! ...</Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">You</Text>
+      <Text>!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur approaches Lily chest broad with open arms. He steps with little foot flicks as he comes to a halt and rubs his hands together.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He leans in.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>How was the book sale!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LilY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s tomorrow! Please come! I need someone to come this time.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My schedule’s just opened up! I’ll be there!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily explodes with excitement and performs a full-body perk!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ArtHUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Heading my way?</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1/8" Page="11" Title="">
+        <SceneArcBeats/>
+      </SceneProperties>
+      <Text>Ext. Walking PATHS Montage</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily and Arthur stroll along jovial, lively. The information each delivers is unheard but abundant. The two look... happy.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2 3/8" Page="11" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="ARTHUR"></CharacterArcBeat>
+          <CharacterArcBeat Name="LILY"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Ext. Tree at the Barracks - About twenty minutes later</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily bounce-walks alongside Arthur towards the tree.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LilY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Another great bandana.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’ve got quite a collection!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur quickly removes it and shoves it into his far-side pocket.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’ve never been fond.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You should come by my store Lily’s Book’s ‘n’ Things down on Main!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We’ve got bandanas!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>They protect the precious moment dolls!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He pulls out his cravat and hangs it over his neck, not noticing his pink slip fell out as well.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily immediately spots the falling paper.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Ooh</Text>
+      <Text>! Pink!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She takes a step back and picks up the paper.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Love note?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur shakes his head.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Was this in your sandwich today too?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ArtHUR</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>God, no!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily begins opening the folded paper. Arthur instinctively swipes for the paper. He is unsuccessful.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily’s face lights up.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">is</Text>
+      <Text> a love note!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She turns her back to Arthur and opens the note. He peers over her shoulder with a look of shame on his face.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily’s face drops from cheeky to morose.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hasn’t been your week!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur sits on the tree.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Two of the foundational elements of my life have disappeared in 36 hours.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The one, sure, that one needed to go.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But my work. </Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">my</Text>
+      <Text> routine, I mean that was me.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LILY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hate to break it to ya, Art.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Your job ain’t you </Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">cuz</Text>
+      <Text> you don’t have it anymore and you’re still alive.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily plants her palm on Arthur’s forehead. Then quickly dual-fingers his throat pulse.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Aren’tcha</Text>
+      <Text>?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Little clammy but you’ll pull through.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur slaps Lily’s appendages away.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’re alive, the next move is yours.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He quickly ties his cravat.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Perhaps in time.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But for now, I just want to be let alone.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur walks off and gains an increasingly chipper stride for the situation.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I respect that.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>See you tomorrow at the Book Sale?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur turns and with a hand flourish:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Wouldn’t miss it for the world!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He bows.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ArthUR (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Until tomorrow.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur exits.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>CUT TO:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1 2/8" Page="13" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="ARTHUR"></CharacterArcBeat>
+          <CharacterArcBeat Name="RUDY"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Ext. LilY’S BOOKS ‘N’ THINGS - next morning</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur looks from across the street at a closed Lily’s Books ‘n’ Things.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The storm within his self approaches.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She said today, today is Saturday.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It is </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">supposed</Text>
+      <Text> to be today!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What the hell is wrong with me?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur runs across the street with conviction to the window. Sees the poster hanging there.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur is noticeably sweating. He removes his cravat as he reads:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Book Sale. Saturday. In the park?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He wipes away the sweat with his cravat as he digests the question he just uttered.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Rudy (O.s.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Book Sale. Saturday. In the park!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur sees Rudy and the two walk towards each other.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Rudy (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Dapper as always!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You know what? I think this is the first time I’ve seen you’re neck!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur is perplexed.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh thank you!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Have a lovely day!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur turns and walks away.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Rudy</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What a strange man.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Ladies and gentlemen!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I am not here to beg, but to proclaim!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Arthur’s ear perks.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARTHUR</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hang on.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He stops and turns.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Excuse me. Proclaimer!</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="7/8" Page="14" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="ARTHUR"></CharacterArcBeat>
+          <CharacterArcBeat Name="LILY"></CharacterArcBeat>
+          <CharacterArcBeat Name="R"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Ext. Park - Book Sale Picnic table - Minutes later</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily sits. Head in hand at the picnic table with a decent smattering of books and a hand written sign that reads: BOOK SALE TODAY.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur (o.s.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text></Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Never seen somebody so down surrounded by so many good books.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lily turns and sees Artie. Her face lights up.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lily</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(blaring)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Someone came!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A flock of birds flies off in the distance.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LilY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Artie!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You came!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Arthur</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Not just me!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Swung by your shop.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He points to the table.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ARthur (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Mistakenly.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But luckily, I found someone who might help get you some attention.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh, Rudy!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Rudy jumps out from behind a tree, because that’s just how Rudy operates.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Rudy</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text></Text>
+    </Paragraph>
+  </Content>
+
+  <Watermarking Text=""/>
+
+  <HeaderAndFooter FooterFirstPage="Yes" FooterVisible="No" HeaderFirstPage="No" HeaderVisible="Yes" StartingPage="1">
+    <Header>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.00" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">	</Text>
+        <DynamicLabel Type="Last Revised"/>
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">	</Text>
+        <DynamicLabel Type="Page #"/>
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">.</Text>
+        <Tabstops>
+          <Tabstop Position="4.50" Type="Center"/>
+          <Tabstop Position="7.25" Type="Right"/>
+        </Tabstops>
+      </Paragraph>
+    </Header>
+    <Footer>
+      <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""> </Text>
+      </Paragraph>
+    </Footer>
+  </HeaderAndFooter>
+
+  <SpellCheckIgnoreLists>
+    <IgnoredRanges/>
+    <IgnoredWords/>
+  </SpellCheckIgnoreLists>
+
+  <PageLayout BackgroundColor="#FFFFFFFFFFFF" BottomMargin="72" BreakDialogueAndActionAtSentences="Yes" DocumentLeading="Normal" FooterMargin="36" ForegroundColor="#000000000000" HeaderMargin="36" InvisiblesColor="#808080808080" TopMargin="72" UsesSmartQuotes="Yes">
+    <PageSize Height="11.00" Width="8.50"/>
+    <AutoCastList AddParentheses="Yes" AutomaticallyGenerate="Yes" CastListElement="Cast List"/>
+  </PageLayout>
+
+  <WindowState Height="872" Left="3" Mode="Normal" Top="5" Width="634"/>
+
+  <TextState Scaling="100" Selection="15648,15648" ShowInvisibles="No"/>
+
+  <ElementSettings Type="General">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="General" ReturnKey="General" Shortcut="0"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Scene Heading">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="24" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Scene Heading" ReturnKey="Action" Shortcut="1"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Action">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Action" ReturnKey="Action" Shortcut="2"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Character">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="3.50" RightIndent="7.25" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Character" ReturnKey="Dialogue" Shortcut="3"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Parenthetical">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="-0.10" Leading="Regular" LeftIndent="3.00" RightIndent="5.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Parenthetical" ReturnKey="Dialogue" Shortcut="4"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Dialogue">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="2.50" RightIndent="6.00" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Dialogue" ReturnKey="Action" Shortcut="5"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Transition">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="5.50" RightIndent="7.10" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Transition" ReturnKey="Scene Heading" Shortcut="6"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Shot">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="24" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Scene Heading" ReturnKey="Action" Shortcut="7"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Cast List">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Action" ReturnKey="Action" Shortcut="8"/>
+  </ElementSettings>
+
+  <TitlePage>
+    <HeaderAndFooter FooterFirstPage="Yes" FooterVisible="No" HeaderFirstPage="No" HeaderVisible="Yes" StartingPage="1">
+      <Header>
+        <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+          <DynamicLabel Type="Page #"/>
+          <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">.</Text>
+        </Paragraph>
+      </Header>
+      <Footer>
+        <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+          <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+        </Paragraph>
+      </Footer>
+    </HeaderAndFooter>
+    <Content>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline+AllCaps">Script Title</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Written by</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Name of First Writer</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Based on, If Any</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Address</Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Phone Number</Text>
+      </Paragraph>
+    </Content>
+    <TextState Scaling="100" Selection="0,0" ShowInvisibles="No"/>
+  </TitlePage>
+
+  <UnanchoredScriptNotes/>
+
+  <SmartType>
+    <Characters>
+      <Character>Lily</Character>
+      <Character>Arthur</Character>
+      <Character>Arthurs</Character>
+      <Character>Co-Worker</Character>
+      <Character>BUM</Character>
+      <Character>Rudy</Character>
+    </Characters>
+    <Extensions>
+      <Extension>(V.O.)</Extension>
+      <Extension>(O.S.)</Extension>
+      <Extension>(O.C.)</Extension>
+      <Extension>(CONT'D)</Extension>
+      <Extension>(SUBTITLE)</Extension>
+    </Extensions>
+    <SceneIntros Separator=". ">
+      <SceneIntro>INT</SceneIntro>
+      <SceneIntro>EXT</SceneIntro>
+      <SceneIntro>I/E</SceneIntro>
+    </SceneIntros>
+    <Locations>
+      <Location>POWER STATION</Location>
+      <Location>POWER TOWER LEG</Location>
+      <Location>POWER STATION PATH</Location>
+      <Location>BIKE PATH</Location>
+      <Location>LILY'S BOOKS 'N' THINGS</Location>
+      <Location>BENCH PATH</Location>
+      <Location>ARTHUR'S APARTMENT</Location>
+      <Location>ARTHUR'S APARTMENT - BATHROOM</Location>
+      <Location>COMMUTE MONTAGE</Location>
+      <Location>POWER STATION MONTAGE</Location>
+      <Location>WALKING PATHS MONTAGE</Location>
+    </Locations>
+    <TimesOfDay Separator=" - ">
+      <TimeOfDay>DAY</TimeOfDay>
+      <TimeOfDay>NIGHT</TimeOfDay>
+      <TimeOfDay>AFTERNOON</TimeOfDay>
+      <TimeOfDay>MORNING</TimeOfDay>
+      <TimeOfDay>EVENING</TimeOfDay>
+      <TimeOfDay>LATER</TimeOfDay>
+      <TimeOfDay>MOMENTS LATER</TimeOfDay>
+      <TimeOfDay>CONTINUOUS</TimeOfDay>
+      <TimeOfDay>THE NEXT DAY</TimeOfDay>
+      <TimeOfDay>LUNCH</TimeOfDay>
+      <TimeOfDay>SUNSET</TimeOfDay>
+      <TimeOfDay>A FEW MINUTES PAST</TimeOfDay>
+      <TimeOfDay>BATHROOM</TimeOfDay>
+      <TimeOfDay>KITCHEN</TimeOfDay>
+      <TimeOfDay>LIVING ROOM</TimeOfDay>
+      <TimeOfDay>A FEW MINUTES LATER</TimeOfDay>
+      <TimeOfDay>ABOUT TWENTY MINUTES LATER</TimeOfDay>
+    </TimesOfDay>
+    <Transitions>
+      <Transition>CUT TO:</Transition>
+      <Transition>FADE IN:</Transition>
+      <Transition>FADE OUT.</Transition>
+      <Transition>FADE TO:</Transition>
+      <Transition>DISSOLVE TO:</Transition>
+      <Transition>BACK TO:</Transition>
+      <Transition>MATCH CUT TO:</Transition>
+      <Transition>JUMP CUT TO:</Transition>
+      <Transition>FADE TO BLACK.</Transition>
+    </Transitions>
+  </SmartType>
+
+  <MoresAndContinueds>
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <DialogueBreaks AutomaticCharacterContinueds="Yes" BottomOfPage="Yes" DialogueBottom="(MORE)" DialogueTop="(CONT'D)" TopOfNext="Yes"/>
+    <SceneBreaks ContinuedNumber="No" SceneBottom="(CONTINUED)" SceneBottomOfPage="No" SceneTop="CONTINUED:" SceneTopOfNext="No"/>
+  </MoresAndContinueds>
+
+  <LockedPages/>
+
+  <Revisions ActiveSet="1" Location="7.75" RevisionMode="No" RevisionsShown="Active" ShowAllMarks="No" ShowAllSets="No" ShowPageColor="No">
+    <Revision Color="#000000000000" FullRevision="No" ID="1" Mark="*" Name="Blue Rev. (mm/dd/yy)" PageColor="#C6C6EDEDFEFE" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="2" Mark="*" Name="Pink Rev. (mm/dd/yy)" PageColor="#FDFDCCCCD4D4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="3" Mark="*" Name="Yellow Rev. (mm/dd/yy)" PageColor="#FDFDFFFFABAB" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="4" Mark="*" Name="Green Rev. (mm/dd/yy)" PageColor="#D1D1FEFED0D0" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="5" Mark="*" Name="Goldenrod Rev. (mm/dd/yy)" PageColor="#FAFACDCD3939" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="6" Mark="*" Name="Buff Rev. (mm/dd/yy)" PageColor="#FCFCEDED9D9D" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="7" Mark="*" Name="Salmon Rev. (mm/dd/yy)" PageColor="#F8F8AEAE8E8E" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="8" Mark="*" Name="Cherry Rev. (mm/dd/yy)" PageColor="#FBFBA4A4B4B4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="9" Mark="*" Name="Tan Rev. (mm/dd/yy)" PageColor="#FDFDF1F1C7C7" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="10" Mark="*" Name="2nd White Rev. (mm/dd/yy)" PageColor="#FFFFFFFFFFFF" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="11" Mark="*" Name="2nd Blue Rev. (mm/dd/yy)" PageColor="#C6C6EDEDFEFE" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="12" Mark="*" Name="2nd Pink Rev. (mm/dd/yy)" PageColor="#FDFDCCCCD4D4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="13" Mark="*" Name="2nd Yellow Rev. (mm/dd/yy)" PageColor="#FDFDFFFFABAB" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="14" Mark="*" Name="2nd Green Rev. (mm/dd/yy)" PageColor="#D1D1FEFED0D0" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="15" Mark="*" Name="2nd Goldenrod Rev. (mm/dd/yy)" PageColor="#FAFACDCD3939" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="16" Mark="*" Name="2nd Buff Rev. (mm/dd/yy)" PageColor="#FCFCEDED9D9D" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="17" Mark="*" Name="2nd Salmon Rev. (mm/dd/yy)" PageColor="#F8F8AEAE8E8E" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="18" Mark="*" Name="2nd Cherry Rev. (mm/dd/yy)" PageColor="#FBFBA4A4B4B4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="19" Mark="*" Name="2nd Tan Rev. (mm/dd/yy)" PageColor="#FDFDF1F1C7C7" Style=""/>
+  </Revisions>
+
+  <SplitState ActivePanel="1" SplitMode="None" SplitterPosition="0">
+    <ScriptPanel DisplayMode="Page">
+      <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Verdana" RevisionID="0" Size="9" Style=""/>
+    </ScriptPanel>
+  </SplitState>
+
+  <Macros>
+    <Macro Element="Scene Heading" Name="INT" Shortcut="Ctrl+Alt+1" Text="INT. " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="EXT" Shortcut="Ctrl+Alt+2" Text="EXT. " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="I/E" Shortcut="Ctrl+Alt+3" Text="I/E " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="DAY" Shortcut="Ctrl+Alt+4" Text=" - DAY" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="NIGHT" Shortcut="Ctrl+Alt+5" Text=" - NIGHT" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="SUNRISE" Shortcut="Ctrl+Alt+6" Text=" - SUNRISE" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="MAGIC" Shortcut="Ctrl+Alt+7" Text=" - MAGIC" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Parenthetical" Name="CONT" Shortcut="Ctrl+Alt+8" Text="continuing" Transition="Dialogue">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Parenthetical" Name="INTER" Shortcut="Ctrl+Alt+9" Text="interrupting" Transition="Dialogue">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="None" Name="" Shortcut="Ctrl+Alt+0" Text="" Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="CUTTO" Shortcut="Ctrl+Shift+Alt+1" Text="CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Action" Name="FADEIN" Shortcut="Ctrl+Shift+Alt+2" Text="FADE IN:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FADEOUT" Shortcut="Ctrl+Shift+Alt+3" Text="FADE OUT." Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FADETO" Shortcut="Ctrl+Shift+Alt+4" Text="FADE TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="DISSLV" Shortcut="Ctrl+Shift+Alt+5" Text="DISSOLVE TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="BACKTO" Shortcut="Ctrl+Shift+Alt+6" Text="BACK TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="MATCHCUT" Shortcut="Ctrl+Shift+Alt+7" Text="MATCH CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="JUMPCUT" Shortcut="Ctrl+Shift+Alt+8" Text="JUMP CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FBLACK" Shortcut="Ctrl+Shift+Alt+9" Text="FADE TO BLACK." Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="None" Name="" Shortcut="E" Text="" Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+  </Macros>
+
+  <Actors>
+    <Actor MacVoice="" Name="Man 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Man 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Woman 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Woman 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Boy 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Boy 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Girl 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Girl 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Old Man" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Old Woman" Pitch="Normal" Speed="Medium" WinVoice=""/>
+  </Actors>
+
+  <Cast>
+    <Narrator Actor="Man 1">
+      <Element Type="Character"/>
+      <Element Type="Dialogue"/>
+    </Narrator>
+    <Member Actor="Man 1" Character="Lily"/>
+    <Member Actor="Man 1" Character="Arthur"/>
+    <Member Actor="Man 1" Character="Arthurs"/>
+    <Member Actor="Man 1" Character="Co-Worker"/>
+    <Member Actor="Man 1" Character="BUM"/>
+    <Member Actor="Man 1" Character="Rudy"/>
+  </Cast>
+
+  <SceneNumberOptions LeftLocation="0.75" RightLocation="7.38" ShowNumbersOnLeft="Yes" ShowNumbersOnRight="Yes">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+  </SceneNumberOptions>
+
+  <CastList SortOption="Alphabetical">
+    <CustomOrder/>
+  </CastList>
+
+  <CharacterHighlighting>
+    <Character Color="#FFFFFFFFFFFF" Name="ARTHUR" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="BUM" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="CO-WORKER" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="LILY" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="R" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="RUDY" Visible="No"/>
+  </CharacterHighlighting>
+
+  <CharacterNavigatorPreferences IsSortAscending="Yes" SortColumn=""/>
+
+</FinalDraft>

@@ -1,0 +1,2124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<FinalDraft DocumentType="Script" Template="No" Version="1">
+
+  <Content>
+    <Paragraph Type="Action">
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps">FADE in:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="1" Title=""/>
+      <Text>Ext. Suburbia - subdivision street - day</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>An idyllic subdivision with crisp, well-kept lawns and rows of mailboxes lining the street rolls out into the distance.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Suddenly, a car rumbles through, disrupting the quaint stillness.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1 2/8" Page="1" Title=""/>
+      <Text>INT. Suburbia - Chloe’s car - Cont’D</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>CHLOE, 27, has a cellphone pressed between her ear and shoulder as she wrenches the rearview mirror into a position where she can see her face.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She pulls out lipstick from her purse on the passenger seat as she chats on the phone.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I was ready to give up on Craigslist, then wouldn’t you know, I get a job offer!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad (O.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(Over the phone)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So what are you doing again?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Part-time personal assistant to some actress. Uh, Scarlette Hayes.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe applies lipstick as she hurtles through the subdivision.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad (o.s.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The old child star? One half of Scarlette and Sophia?! Really?!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh, so she really was world famous? The job listing read more delusional that factual.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad (o.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Their little sister act practically owned Broadway in the </Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">80’s</Text>
+      <Text>. The Sisters Hayes, they were called.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I wonder what they’re up to these days.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe finishes applying her lipstick and purses her lips.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So, you’re saying she’ll pay well?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad (o.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(laughing)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We’ve gotta get you some real work, my dear.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe throws the lipstick on the passenger seat and starts digging in her bag for her mascara.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What is that supposed to mean?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad (o.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Being near success isn’t the same as finding it for yourself... Don’t you want to become a writer?</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="2" Title=""/>
+      <Text>EXT. SubURBIA - SUBDIVISION STREET - CONT’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe rounds the bend, turning onto another identical suburban street. A BOY, 7, plays with a red kickball on the driveway of one of the houses.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="2" Title=""/>
+      <Text>INT. SUBURBIA - CHLOE’S CAR - CONT’d</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I don’t know, I just haven’t found any good inspiration to write about. And, I hate asking you and mom for bailouts each month. </Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Maybe this Scarlette Hayes will have some good connections, so you know, I can rub elbows or something...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe looks down to her hand that’s wrist deep in her bag searching aimlessly for her mascara.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="2" Title=""/>
+      <Text>EXT. SuBURBIA - SUBDIVISION STREET - CONT’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The boy bounces his ball against the garage door of his house and it flies over his head and rolls into the street. The child chases after it and directly into the path of Chloe’s oncoming car.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="3" Title=""/>
+      <Text>INT. suBURBIA - CHLOE’S CAR - CONT’d</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Just don’t bury yourself into years of indentured servitude like your last couple jobs. You never seem to know when to just walk away. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe laughs as she pulls out her mascara.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Thanks for the bid of confidence.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe looks up as her car quickly approaches the boy who just picked up his ball in the middle of the street.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1/8" Page="3" Title=""/>
+      <Text>EXT. suBURBIA - SUBDIVISION STREET - CONT’D</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The boy holds the ball to his chest and looks up like a deer in headlights at the car hurtling towards him.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1/8" Page="3" Title=""/>
+      <Text>INT. SuBURBIA - CHLOE’S CAR - CONT’D</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe SCREAMS! She slams on the breaks and the car comes to a SCREECHING halt.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="3" Title=""/>
+      <Text>Ext. SuBURBIA - SUBDIVISION STREET - CONT’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The boy stands inches from the front fender of Chloe’s car. For a brief second, he’s shocked and motionless, then turns and runs back towards his house.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1 3/8" Page="3" Title=""/>
+      <Text>INT. sUBURBIA - CHLOE’S CAR - CONT’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe sits, head down, both hands on the wheel. One still clutching her mascara. Her cell phone lay on her lap.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad (o.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(faint)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What the hell was that?! Chloe? Are you okay?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe grabs the phone and slowly brings it to her ear.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I think I need to go, dad. I gotta focus on driving here.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe’s Dad (o.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’d be a good idea not to kill someone on your first day, Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe ends the call and throws her phone on the passenger seat. She rubs her temples and looks over at the boy who ran to the front door of his house where his FATHER, 38, now stands. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The boy is crying and pointing back at Chloe’s car. Chloe begins to drive off slowly as she makes apologetic eyes with the boy’s father mouthing the words ‘I’m sorry.’</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe begins scanning the numbers on each house, when suddenly her phone rings. She distractedly grabs it and brings it to her ear without looking at it.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I said I needed to focus! I nearly...</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Scarlette (o.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Chloe? Hi, this is Scarlette Hayes!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(awkwardly)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh, hello Miss Hayes... Scar... </Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Lette</Text>
+      <Text>...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe shakes off her socially awkward greeting, hoping Scarlette doesn’t make note of it.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hey Chloe, I’m at the store and just noticed the time, I know I said to be at my house at noon, but... Are you close?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m just down the street.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Ah okay. Well, my sister is home and I left the front door unlocked for you. Can you just wait in the living room until I return?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(awkwardly)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Will do... Boss!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe cringes again at her own word choice.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Great, thanks!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe ends the call and throws the phone onto the passenger seat.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="5" Title=""/>
+      <Text>Ext. Hayes REsidence - moments LATER</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe’s car rolls to a stop along the curb in front of a modest, entirely-forgettable suburban house.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe pops out of the car, shuts the door, and straightens her blouse as she walks up to the front door.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="4/8" Page="5" Title=""/>
+      <Text>INT. HayES RESIDENCE - Foyer - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The door creaks open as Chloe pokes her head in. She faintly knocks on the door while nervously looking around.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(cautiously)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hello?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She gets no response as she cautiously enters the house, closing the door slowly behind her. When the door finally closes it still makes a pronounced CLANG as it latches.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe surveys the house. A modest dwelling, not too gaudy, but the walls are covered in pictures and framed clippings.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She moves towards a room across the foyer. She glances at the photos as she walks. She sees young, fresh faced girls and older men in tuxedos with beaming smiles.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>There’s a framed Playbill of an old Broadway play that Chloe had never heard of below a large one-sheet promoting The Sisters Hayes.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3" Page="5" Title=""/>
+      <Text>Int. Hayes resIDENCE - LIVING ROOM - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe enters the living room and notices SOPHIA, 47, sitting in a chair near the corner of the living room. A floor to ceiling bookshelf lines the wall behind her.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>On the wall next to Sophia are two framed child-sized sequined dresses.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe notices that Sophia is lost in thought.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hello?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My name is Chloe, I’m Scarlette’s new personal assistant.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia doesn’t register.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You... You must be Sophie?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia snaps out of her gaze and turns to Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(tersely)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sophia.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe recoils slightly from the icy retort.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh, I’m sorry, Sophia.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s a pleasure to meet you.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe extends her hand. Sophia stands and holds out a limp hand for Chloe to awkwardly shake.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Charmed. I’m sure.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia looks Chloe up and down.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SopHIA (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Tea?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe nods and Sophia exits.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia (o.S.) (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(shouting)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So you’re Scarlette’s new slave?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe turns to look at the dresses on the wall.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Umm</Text>
+      <Text>... Well, assistant.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA (o.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(shouting)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m messing with you, my dear!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe rolls her eyes as she shifts down across a long row of framed memories on the wall. Photos and framed newspaper reviews and write-ups about Broadway shows.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She continues surveying the room and comes across a table in front of the window that has a small collection of Hummel figurines.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe takes a closer look at the small trinkets, amazed at their artistry. The small children’s faces looking on with such doe-eyed wonder, Chloe catches herself smiling as she gazes at them.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She reaches out to pick one up for a closer look.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Holding one in her hand, she flips it around, looking at the small details on the piece.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia enters the room carrying a tray with a tea pot and two tea cups on it. Her face snaps from a practiced smile to dread when she sees Chloe holding the figurine.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(insistently)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>PUT THAT DOWN!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia’s booming command startles Chloe, which causes her to jump in fright making her drop the figurine.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia watches the small trinket fall. Her mouth widens as the figurine descends to the hardwood floor. The trinket shatters making Sophia drop the tea tray. The cacophony of SHATTERING is intensified as Sophia dashes past Chloe to the broken pieces of her beloved Hummel figurine.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe stands behind Sophia and attempts to mumble an apology.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Frederick! You killed Frederick!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia drops to her knees surveying the pieces. She’s nearly hyperventilating as she begins to scoop the shards of porcelain into her hands.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m so stupid. So stupid.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Why did I leave her in here alone with you?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>One sharp piece cuts Sophia’s hand, which she doesn’t even register as she hurries to scoop together every last piece.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Her blood begins to coat each piece as she brings them to the tabletop, resting them like a fallen comrade in front of the other figurines.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe looks on in regret.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m so sorry, Sophia.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia is caught in a one-sided conversation with the figurines.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But, she didn’t know any better, Frederick...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I... I’m sorry... She’s...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yes. Yes, I understand.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It obviously meant a lot to you. Is there anything I can do?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe’s words enrage Sophia. She turns to look over her shoulder. Her eyes burning with anger.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Is there anything you can do?!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia stands to her feet and turns square with Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yes... There is something...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe takes a step back.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia charges at Chloe. Chloe screams and is quickly silenced by Sophia’s grasp around her neck.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Blood for blood.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia’s strength easily overpowers Chloe’s frail figure.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1" Page="8" Title=""/>
+      <Text>Int. HayES RESIDENCE - FOYER - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia pushes Chloe into the foyer and slams her against the wall. Chloe’s purse goes flying as Chloe’s arms splay out against the wall.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You killed him!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Blood for blood...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe tries to fight off Sophia. Reaching at her arms, flailing her legs trying to kick Sophia off. Finally, Chloe grabs Sophia’s hair and yanks as hard as she can muster. Freeing herself from Sophia’s grasp.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe consoles her own neck and races to the front door, but just as she reaches it, the door flings open.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>SCARLETTE, 47, stands in the doorway. Mouth agape. She takes in the situation. Sophia stands with her bloodied hand, nursing her head that’s still reeling in pain from her pulled hair. And Chloe, who’s collapsed to the ground, rubbing her neck.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette sees a few shattered fragments of the tea set that had been kicked into the foyer as she shuts the door behind her and uses her key to lock the door from the inside.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScarLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What happened here?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia urgently exclaims.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She killed him, Scarlette!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She killed Frederick!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe returns to her feet, trying to collect herself.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I asked if there was anything I could do! I’m so sorry it broke, I was just...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette silences Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Let’s all just calm down. Come everyone, to the kitchen, we’ll work this out like adults.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2 3/8" Page="9" Title=""/>
+      <Text>INT. HaYES RESIDENCE - Kitchen - A few Minutes later</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The shattered and bloodied pieces of the Hummel figurine lay in the center of the kitchen table.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia sits, dejected, staring at the broken pieces. She’s wrapped a grey dish rag around her cut hand. Chloe stares at Scarlette who is standing with her hands on her hips looking on the entire scene with maternal disgust.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia pouts like a small child.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SopHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She killed him, Scar...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette snaps her gaze to her sister, which makes Sophia squirm in her seat.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I was startled. It was an accident.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette looks at Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScarLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I understand this.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She killed him, Scar! They don’t care if it was an accident.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Blood for blood.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette motions for Sophia to quiet down then rubs her temples.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Go ask them for yourself!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette nods as Chloe scoffs at the idea.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’re right. I will.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette turns and exits the kitchen. Sophia looks at Chloe and mocks her scoffing.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A short time later the two sitting at the table hear a muffled one-sided conversation in the living room.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScaRLETTE (o.S.) (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(muffled)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But she meant no harm.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It was an accident!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yes. Yes I know.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette returns. She looks somber, resolute.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette looks at her sister, then turns to Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(calmly)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Blood for Blood.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia’s face contorts into a devious grin as she springs to her feet. She shifts over to a kitchen drawer and begins rummaging through it.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe realizes she’s the only one sitting and springs to her feet.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What? No. Please.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It was a fucking accident!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette grabs Chloe’s wrist and pulls her near. She holds Chloe facing towards Sophia as she digs through the drawer.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We’re not arguing with you on that. We understand you didn’t mean to kill Frederick, but they require your blood for his.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe squirms indignantly.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My blood for his?! But it’s just a silly little...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She looks over to the broken pieces, still glistening with blood.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>...Trinket...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia finds what she was looking for in the drawer. She quickly raises her hand triumphantly as she turns towards Chloe and her sister. She’s holding a large, very sharp knife.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Don’t worry honey.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette holds Chloe tight with one arm as she uses her free hand to pull back Chloe’s hair maternally.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sophia is great with a knife, she’ll make it quick. Won’t you sister?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia nods as she starts taking steps towards Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’re both fucking insane! You know that?!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia lunges as Chloe slams her heel down on Scarlette’s foot. Scarlette lets out a pained SCREAM as Chloe wiggles free from her grasp.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>But Chloe’s not fast enough, her forearm gets sliced by Sophia’s lunging blade.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1 4/8" Page="12" Title=""/>
+      <Text>Int. HayES RESIDENCE - FOYER - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe screams as she races from the kitchen, through the foyer and to the front door. She tries the door, but it had been locked by Scarlette from the inside. She’ll need the key to open it.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Locked... Of course!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia gives chase and catches up to Chloe at the door nearly instantly. Sophia flings herself knife first at Chloe but misses and slams into the door. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe is stunned, struggling to get to her feet after diving out of the way. Sophia is crumpled against the door, knife stuck in the wood about half an inch.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette jingles the keys in front of her as she casually walks into the foyer.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScarlETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Looking for these, Chloe? You won’t be going too far without them.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe’s gaze darts from Sophia to Scarlette, then to the staircase. She races upstairs. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia turns and sits against the door after the failed attack. She points to Chloe halfway up the staircase.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOphia</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She’s going upstairs.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So go after her.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia looks pained by the command.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Don’t tell me what to do. You always tell me what to do!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Please, we both know if you took direction better we’d still be working!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>If you were a little less bossy, maybe some director would be willing to work with us again.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Just go after her.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia rises to her feet, yanks the knife from the door and starts up the stairs. Scarlette follows.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(shouting)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Once the applause faded and the lights dimmed on our careers, the phone stopped ringing and our parents took everything we made. We were so young and forced into retirement.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We were stars God dammit! But, no one cares about us now, no one looks at us the same anymore. </Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Except for them, those beautiful porcelain children, they’ve always looked at us the same.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette intently presses her foot down on each step, taking her time.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="6/8" Page="13" Title=""/>
+      <Text>Int. Hayes Residence - upstairs hallway - cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia makes it to the top of the stairs and starts looking in each room.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette soon follows.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(shouting)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Left to fend for ourselves, confined and isolated. We began to find comfort venting our frustrations to those figurines, and they became fantastic listeners.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia returns to the hallway after checking a room.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(shouting)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>They did more than just listen! They told us that we were still something special.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Frederick was the most outspoken. He adored us, he </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline">loved</Text>
+      <Text> us. And now he’s gone. Because of </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline">you</Text>
+      <Text>, Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette grabs Sophia’s arm to stand still so they could listen. She holds her finger to her mouth so Sophia doesn’t speak.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette points to her bedroom.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="14" Title=""/>
+      <Text>INT. Scarlette’s Bedroom - Inside Closet - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe cowers in the closet while a small slit of light beams through. She presses her eye towards the crack that’s letting in the light so she can see out into the bedroom.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="7/8" Page="14" Title=""/>
+      <Text>INT. Scarlette’s Bedroom - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette enters and looks around the room. Sophia follows soon after, crowding Scarlette as she scans the room.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScarLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sophie, step back! Don’t crowd me.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia steps back and demurs.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sophi</Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline">a</Text>
+      <Text>.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Why couldn’t you have just stayed with Chloe while I was gone?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>This whole thing could’ve been avoided...</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I was making tea. I was being a good host.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’s how you justify leaving her alone with them?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’re starting to sound just like mother.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Somebody has to be an adult here.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SOPHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s that kind of talk that will get you a spot right next to her and father under our flower bed.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(indignant)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You need me. You needed me when we killed them and you still need me now. Don’t be so damned dramatic.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="2/8" Page="15" Title=""/>
+      <Text>INT. ScarLETTE’S BEDROOM - INSIDE CLOSET - CONT’D</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe recoils from the slit in the door.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>They killed their parents?!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>This will make a great story if I get out of here alive...</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3/8" Page="15" Title=""/>
+      <Text>INT. ScARLETTE’S BEDROOM - CONt’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The two sisters snap their attention to the closet and slowly start for the door.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Chloe? Is that you? Come on out dear.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>As Scarlette makes it to the door, Chloe flings it open, knocking Scarlette back. Chloe sprints out of the room, pushing Sophia out of the way as she runs past.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="3 5/8" Page="15" Title=""/>
+      <Text>INT. hayES RESIDENCE - Foyer - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe races down the stairs, sees her purse on the floor where she had dropped it during the initial confrontation and reaches in for her phone.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia flies down the flight of stairs and snatches the phone from Chloe's hand.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia looks at the phone.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SopHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So close!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia’s eyes burn at Chloe as she throws the phone hard to her side. It hits the front door shattering into multiple pieces.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Suddenly, there’s a KNOCK at the door.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia seizes up and grabs Chloe, placing her hand firmly over her mouth, and dropping her knife on the floor behind her.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Another KNOCK at the door.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette heads down the stairs. With each step she composes her self more and more. Donning her old-Hollywood persona.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScarLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>One moment, my dear!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She makes it to the front door, reaches in her pocket for her key, unlocks the door and casually swings it open.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>MIKE, the father of the young boy that Chloe nearly ran over earlier, stands with his head tilted, clearly annoyed.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Mike</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Is everything alright? We can hear you shouting all the way down the street. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette stands still as she prepares her response. Mike looks in and sees Sophia covering the mouth of a very distressed Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette positions her head Mike’s line of sight.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We’re shooting a horror movie next week with the world renowned director </Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">H.R</Text>
+      <Text>. Grimly, perhaps you’ve heard of him?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Mike shakes his head no.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>He’s well respected by those in the know.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We’re just rehearsing the climactic final confrontation right at this very moment.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MIKE</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Fucking actors.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He turns to leave then stops. Looking in, he takes an intent look at Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>At this moment, her eyes grow wide and she tries to shout through Sophia’s hand.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Mike points at Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Mike (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>And watch out for that one. She nearly ran over my kid today.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Mike turns and leaves as Scarlette quickly closes the door, locks it and puts the key back in her pocket.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette turns and raises an eyebrow as she addresses Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Accident prone, aren’t we, Chloe? I didn’t see anything about that on your resume. In fact, I didn’t see much of anything noteworthy on your resume.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette starts towards Chloe and her sister. Sophia kicks the knife across the floor to her sister.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScarLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s a shame, really.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette bends to pick up the knife. She grabs hold of it and lifts it slowly as it’s blade SCRAPES along the floor.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hear that? It’s your curtain call. Sadly, you were just a bit player in a story that never went anywhere. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette stands and starts walking towards Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SopHIA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>At least </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline">we</Text>
+      <Text> had a moment in the spotlight.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette nods.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We were quite a team, weren’t we?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette refocuses on Chloe. </Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My sister and I achieved great success very early because we understood one universal truth.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She places her hand on Chloe’s shoulder and pulls the knife back, aiming at Chloe’s midsection.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Chloe. Baby. You gotta take what you want.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette swings the knife towards Chloe. Right before the knife makes it to her, she swings her slender frame hard to the right. The knife misses Chloe and drives deep into Sophia’s midsection.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia releases her grip on Chloe and begins to slowly crumple to the ground. Scarlette follows her sister down as Chloe steps aside.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sophia?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sophie?!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia holds the wound in her midsection.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Sophia</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(pained)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I hate it when you call me that.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette nods as she begins to tear up.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Just keep pressure on it. I’ll finish with her and get you to a hospital right away.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Sophia goes still and Scarlette loses it. She’d never been without her sister in all her years.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>No. No! Sister! Come back!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette turns to Chloe. Scarlette’s face is beat red, not with anger, but fear and confusion.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She’s... She’s gone.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I... I don’t know what to do, Chloe. She’s gone.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe stands defiantly in the foyer.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She’s gone and you’re downright certifiable!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette’s eyes burn with fury and stands with the knife.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You have no right to talk to me like that you little brat! Do you know who I am! I’m Scarlette fucking Hayes!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe races to the living room and Scarlette chases after, knife wielded high above her head.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="6/8" Page="19" Title=""/>
+      <Text>INT. HayES RESIDENCE - Living Room - Cont’d</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe sprints over to the table by the window and scoops up the remaining Hummel figurines and turns just as Scarlette enters the room.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Stay back. You wouldn’t want any more accidents today, would you?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe holds the group of trinkets in one arm like a bread basket.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette immediately stops in her tracks. Tears stream down Scarlette’s face fueled by a mixture of fear, sadness, and rage.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ScARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette grips the knife tightly and takes a step towards Chloe.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe takes one figurine, raises it high above her head and throws it down viciously. SMASH!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Fuck!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She rapidly grabs a second and throws it to the ground. It shatters instantly. CRASH!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette recoils. She takes a step backward after each smashed trinket, stumbling out of the room into the foyer.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1" Page="20" Title=""/>
+      <Text>Int. Hayes RESIDENCE - FOYER - CONT’d</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>No!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette drops her knife and clasps her ears.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SCARLETTE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Stop!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe SMASHES another, and another, pushing Scarlette further away from the knife she dropped.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Chloe</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The last of the figures she throws directly at Scarlette instead of the ground. Scarlette anxiously catches it and cradles it.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ChLOE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Deranged.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe bends down and picks up the knife. She jams it into Scarlette’s midsection.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>BITCH!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Chloe pulls out the knife and cuts open Scarlette’s pocket and her keys fall into Chloe’s waiting hand.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette crumples to the ground next to her sister as Chloe walks to the door. She picks up her purse and unlocks the door.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She flings open the door and as she walks out, she looks back over her shoulder.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>CHLOE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I quit!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Scarlette falls still and the two sisters lay motionless surrounded by the shattered fragments of their Hummel figurine collection.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>Fade out.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="1/8" Page="21" Title=""/>
+      <Text>The end.</Text>
+    </Paragraph>
+  </Content>
+
+  <HeaderAndFooter FooterFirstPage="Yes" FooterVisible="No" HeaderFirstPage="No" HeaderVisible="Yes" StartingPage="1">
+    <Header>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.00" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">	</Text>
+        <DynamicLabel Type="Last Revised"/>
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">	</Text>
+        <DynamicLabel Type="Page #"/>
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">.</Text>
+        <Tabstops>
+          <Tabstop Position="4.50" Type="Center"/>
+          <Tabstop Position="7.25" Type="Right"/>
+        </Tabstops>
+      </Paragraph>
+    </Header>
+    <Footer>
+      <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""> </Text>
+      </Paragraph>
+    </Footer>
+  </HeaderAndFooter>
+
+  <SpellCheckIgnoreLists>
+    <IgnoredRanges/>
+    <IgnoredWords/>
+  </SpellCheckIgnoreLists>
+
+  <PageLayout BackgroundColor="#FFFFFFFFFFFF" BottomMargin="72" BreakDialogueAndActionAtSentences="Yes" DocumentLeading="Normal" FooterMargin="36" ForegroundColor="#000000000000" HeaderMargin="36" InvisiblesColor="#808080808080" TopMargin="72" UsesSmartQuotes="Yes">
+    <AutoCastList AddParentheses="Yes" AutomaticallyGenerate="No" CastListElement="Cast List"/>
+  </PageLayout>
+
+  <WindowState Height="696" Left="6" Mode="Normal" Top="100" Width="634"/>
+
+  <TextState Scaling="100" Selection="6072,6143" ShowInvisibles="No"/>
+
+  <ElementSettings Type="General">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="General" ReturnKey="General" Shortcut="0"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Scene Heading">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="24" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Scene Heading" ReturnKey="Action" Shortcut="1"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Action">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Action" ReturnKey="Action" Shortcut="2"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Character">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="3.50" RightIndent="7.25" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Character" ReturnKey="Dialogue" Shortcut="3"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Parenthetical">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="-0.10" Leading="Regular" LeftIndent="3.00" RightIndent="5.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Parenthetical" ReturnKey="Dialogue" Shortcut="4"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Dialogue">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="2.50" RightIndent="6.00" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Dialogue" ReturnKey="Action" Shortcut="5"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Transition">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="5.50" RightIndent="7.10" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Transition" ReturnKey="Scene Heading" Shortcut="6"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Shot">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="24" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Scene Heading" ReturnKey="Action" Shortcut="7"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Cast List">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Action" ReturnKey="Action" Shortcut="8"/>
+  </ElementSettings>
+
+  <TitlePage>
+    <HeaderAndFooter FooterFirstPage="Yes" FooterVisible="No" HeaderFirstPage="No" HeaderVisible="Yes" StartingPage="1">
+      <Header>
+        <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+          <DynamicLabel Type="Page #"/>
+          <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">.</Text>
+        </Paragraph>
+      </Header>
+      <Footer>
+        <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+          <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+        </Paragraph>
+      </Footer>
+    </HeaderAndFooter>
+    <Content>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline+AllCaps">The Sisters Hayes</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Written by</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Chaz Wilke</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">October 8, 2013</Text>
+      </Paragraph>
+      <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Los Angeles, 90038</Text>
+      </Paragraph>
+      <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">213-949-0972</Text>
+      </Paragraph>
+      <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">ChazWilke@</Text>
+        <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">gmail.com</Text>
+      </Paragraph>
+    </Content>
+    <TextState Scaling="100" Selection="96,96" ShowInvisibles="No"/>
+  </TitlePage>
+
+  <ScriptNoteDefinitions Active="1">
+    <ScriptNoteDefinition Color="#000000000000" ID="1" Marker="!" Name="Important"/>
+    <ScriptNoteDefinition Color="#000000000000" ID="2" Marker="?" Name="Information"/>
+    <ScriptNoteDefinition Color="#000000000000" ID="3" Marker="*" Name="Suggestion"/>
+  </ScriptNoteDefinitions>
+
+  <SmartType>
+    <Characters>
+      <Character>CHLOE</Character>
+      <Character>AMBER</Character>
+      <Character>Scarlette</Character>
+      <Character>Sophia</Character>
+      <Character>Mike</Character>
+    </Characters>
+    <Extensions>
+      <Extension>(V.O.)</Extension>
+      <Extension>(O.S.)</Extension>
+      <Extension>(O.C.)</Extension>
+      <Extension>(CONT'D)</Extension>
+      <Extension>(SUBTITLE)</Extension>
+    </Extensions>
+    <SceneIntros Separator=". ">
+      <SceneIntro>INT</SceneIntro>
+      <SceneIntro>EXT</SceneIntro>
+      <SceneIntro>I/E</SceneIntro>
+    </SceneIntros>
+    <Locations>
+      <Location>SUBURBIA - SUBDIVISION STREET</Location>
+      <Location>SUBURBIA - CHLOE'S CAR</Location>
+      <Location>HAYES RESIDENCE</Location>
+      <Location>HAYES RESIDENCE - KITCHEN</Location>
+      <Location>SCARLETTE'S BEDROOM - INSIDE CLOSET</Location>
+      <Location>SCARLETTE'S BEDROOM</Location>
+      <Location>HAYES RESIDENCE - FOYER</Location>
+      <Location>HAYES RESIDENCE - LIVING ROOM</Location>
+    </Locations>
+    <TimesOfDay Separator=" - ">
+      <TimeOfDay>DAY</TimeOfDay>
+      <TimeOfDay>NIGHT</TimeOfDay>
+      <TimeOfDay>AFTERNOON</TimeOfDay>
+      <TimeOfDay>MORNING</TimeOfDay>
+      <TimeOfDay>EVENING</TimeOfDay>
+      <TimeOfDay>LATER</TimeOfDay>
+      <TimeOfDay>MOMENTS LATER</TimeOfDay>
+      <TimeOfDay>CONTINUOUS</TimeOfDay>
+      <TimeOfDay>THE NEXT DAY</TimeOfDay>
+      <TimeOfDay>CONT'D</TimeOfDay>
+      <TimeOfDay>A FEW MOMENTS LATER</TimeOfDay>
+    </TimesOfDay>
+    <Transitions>
+      <Transition>CUT TO:</Transition>
+      <Transition>FADE IN:</Transition>
+      <Transition>FADE OUT.</Transition>
+      <Transition>FADE TO:</Transition>
+      <Transition>DISSOLVE TO:</Transition>
+      <Transition>BACK TO:</Transition>
+      <Transition>MATCH CUT TO:</Transition>
+      <Transition>JUMP CUT TO:</Transition>
+      <Transition>FADE TO BLACK.</Transition>
+    </Transitions>
+  </SmartType>
+
+  <MoresAndContinueds>
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <DialogueBreaks AutomaticCharacterContinueds="Yes" BottomOfPage="Yes" DialogueBottom="(MORE)" DialogueTop="(CONT'D)" TopOfNext="Yes"/>
+    <SceneBreaks ContinuedNumber="No" SceneBottom="(CONTINUED)" SceneBottomOfPage="No" SceneTop="CONTINUED:" SceneTopOfNext="No"/>
+  </MoresAndContinueds>
+
+  <LockedPages/>
+
+  <Revisions ActiveSet="1" Location="7.75" RevisionMode="No" RevisionsShown="Active" ShowAllMarks="No" ShowAllSets="No">
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="1" Mark="*" Name="Blue (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="2" Mark="*" Name="Pink (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="3" Mark="*" Name="Yellow (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="4" Mark="*" Name="Green (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="5" Mark="*" Name="Goldenrod (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="6" Mark="*" Name="Buff (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="7" Mark="*" Name="Salmon (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="8" Mark="*" Name="Cherry (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="9" Mark="*" Name="Tan (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="10" Mark="*" Name="2nd White (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="11" Mark="*" Name="2nd Blue (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="12" Mark="*" Name="2nd Pink (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="13" Mark="*" Name="2nd Yellow (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="14" Mark="*" Name="2nd Green (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="15" Mark="*" Name="2nd Goldenrod (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="16" Mark="*" Name="2nd Buff (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="17" Mark="*" Name="2nd Salmon (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="18" Mark="*" Name="2nd Cherry (mm/dd/yyyy)" Style=""/>
+    <Revision Color="#00000000FFFF" FullRevision="No" ID="19" Mark="*" Name="2nd Tan (mm/dd/yyyy)" Style=""/>
+  </Revisions>
+
+  <SplitState ActivePanel="1" SplitMode="None" SplitterPosition="637">
+    <ScriptPanel DisplayMode="Page">
+      <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Verdana" RevisionID="0" Size="9" Style=""/>
+    </ScriptPanel>
+  </SplitState>
+
+  <Macros>
+    <Macro Element="Scene Heading" Name="INT" Shortcut="Ctrl+Alt+1" Text="INT. " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="EXT" Shortcut="Ctrl+Alt+2" Text="EXT. " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="I/E" Shortcut="Ctrl+Alt+3" Text="I/E " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="DAY" Shortcut="Ctrl+Alt+4" Text=" - DAY" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="NIGHT" Shortcut="Ctrl+Alt+5" Text=" - NIGHT" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="SUNRISE" Shortcut="Ctrl+Alt+6" Text=" - SUNRISE" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="MAGIC" Shortcut="Ctrl+Alt+7" Text=" - MAGIC" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Parenthetical" Name="CONT" Shortcut="Ctrl+Alt+8" Text="continuing" Transition="Dialogue">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Parenthetical" Name="INTER" Shortcut="Ctrl+Alt+9" Text="interrupting" Transition="Dialogue">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="None" Name="" Shortcut="Ctrl+Alt+0" Text="" Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="CUTTO" Shortcut="Ctrl+Shift+Alt+1" Text="CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Action" Name="FADEIN" Shortcut="Ctrl+Shift+Alt+2" Text="FADE IN:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FADEOUT" Shortcut="Ctrl+Shift+Alt+3" Text="FADE OUT." Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FADETO" Shortcut="Ctrl+Shift+Alt+4" Text="FADE TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="DISSLV" Shortcut="Ctrl+Shift+Alt+5" Text="DISSOLVE TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="BACKTO" Shortcut="Ctrl+Shift+Alt+6" Text="BACK TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="MATCHCUT" Shortcut="Ctrl+Shift+Alt+7" Text="MATCH CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="JUMPCUT" Shortcut="Ctrl+Shift+Alt+8" Text="JUMP CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FBLACK" Shortcut="Ctrl+Shift+Alt+9" Text="FADE TO BLACK." Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="None" Name="" Shortcut="E" Text="" Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+  </Macros>
+
+  <Actors>
+    <Actor MacVoice="" Name="Man 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Man 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Woman 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Woman 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Boy 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Boy 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Girl 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Girl 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Old Man" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Old Woman" Pitch="Normal" Speed="Medium" WinVoice=""/>
+  </Actors>
+
+  <Cast>
+    <Narrator Actor="Man 1">
+      <Element Type="Character"/>
+      <Element Type="Dialogue"/>
+    </Narrator>
+    <Member Actor="Man 1" Character="CHLOE"/>
+    <Member Actor="Man 1" Character="AMBER"/>
+    <Member Actor="Man 1" Character="Scarlette"/>
+    <Member Actor="Man 1" Character="Sophia"/>
+    <Member Actor="Man 1" Character="Mike"/>
+  </Cast>
+
+  <SceneNumberOptions LeftLocation="0.75" RightLocation="7.38" ShowNumbersOnLeft="Yes" ShowNumbersOnRight="Yes">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+  </SceneNumberOptions>
+
+</FinalDraft>

@@ -1,0 +1,2116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<FinalDraft DocumentType="Script" Template="No" Version="2">
+
+  <Content>
+    <Paragraph Type="Scene Heading">
+      <SceneProperties Length="15 1/8" Page="1" Title="">
+        <SceneArcBeats>
+          <CharacterArcBeat Name="AVA"></CharacterArcBeat>
+          <CharacterArcBeat Name="LUCILE"></CharacterArcBeat>
+          <CharacterArcBeat Name="MAN"></CharacterArcBeat>
+          <CharacterArcBeat Name="MAURICE"></CharacterArcBeat>
+          <CharacterArcBeat Name="SHNITZER"></CharacterArcBeat>
+          <CharacterArcBeat Name="STANLEY"></CharacterArcBeat>
+        </SceneArcBeats>
+      </SceneProperties>
+      <Text>Int. Detective’s OFfice - Day</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>LUCILE, a woman in a nebulous time of early-mid womanhood sits clacking away at a typewriter.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A MAN stands further inside the office listening to the bass. Tapping along, maybe snapping a little. He’s a hulking mass, dressed in a fine, wide-shouldered suit.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>STANLEY C. CLARKE enters in a huff and stops at Lucile’s desk.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan doesn’t initially see the man. He first addresses Lucile.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Landlord’s dog got out again, Lucile.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Chased me damn near three blocks!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That must explain the odor, Mr. Clarke!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile waves her hand in front of her nose. Backing up in her seat ever so slightly.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sure got the blood flowing.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I don’t think I’ll need coffee today!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LUCILE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Speak for yourself!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile eye rolls back to typing on her typewriter.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(while typing)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The lieutenant let himself in again.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan’s shoulders drop, he looks to the ground then to Lucile.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StaNLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I think I’m gonna need that coffee.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley enters his office. The man doesn’t turn, he keeps tapping his foot.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan throws his jacket on his chair, sits and gets situated behind his desk. He attempts numerous postures and positions at his desk before saying anything. He gesticulates as he’s about to begin, stops, then attempts again, until:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Man</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Late again!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The man turns.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Man (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>And I can smell you from here.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Jesus man, did you run here?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StanLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yeah. For a stretch.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley repositions and points a finger at his visitor.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StaNLEY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You know, you could use a few laps yourself, Mo.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAN</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’s Lieutenant Maurice Callahan to you, Stanley.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The moment is tense.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley throws his arms in the air then behind his head and stares down Maurice.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice releases a deep belly laugh.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley instantly disarms and pulls out glasses and a bottle of bourbon.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Will you ever stop pulling rank, dill weed?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley pours two stiff drinks.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Maurice</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Will you ever leave the schoolyard?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice sits.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Those were my finest days!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You certainly weren’t complaining about all those answer keys I acquired for you.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Maurice</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Well, you’re lucky we have a use for degenerates like yourself.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’s why I’m here.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Something’s gone missing.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Something dangerous in the wrong hands.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Ever heard of Acute Vibrio Pneumococcal Pan-sepsis.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Pan-whatsis</Text>
+      <Text>?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>In short!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The plague.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan’s eyes go wide, his glass returns to the desk.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh wow, you should </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">not</Text>
+      <Text> have lost that!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice grows agitated, then calms himself.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We intend this loss of possession to be a temporary issue.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’s where you come in.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley recoils in his chair.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Woah</Text>
+      <Text>, hey, I haven’t got all my shots.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(shouting)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>In fact, I think Lucile might...</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(over her shoulder)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Nope, all up to date, Mr. C!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley snaps in disappointment.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MauRICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>No is not an available option for </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">you</Text>
+      <Text>, Stan.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Your government needs you to track down a kraut.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan gets up and walks to the edge of his desk.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The Germans. Damn.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Doctor </Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Heinrich</Text>
+      <Text> Shnitzer.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We believe he stole our sample and is hiding out somewhere on the east side.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley scoffs.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So he takes out a few hippies.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Great, he did the world a service.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The lieutenant stands and walks towards the detective, growing increasingly agitated.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Or say he might weaponize it, filling the balloons of the Macy’s day parade!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The casualties would be catastrophic!!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice collects himself.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Maurice (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You need to find that stolen sample, destroy whatever work has been done, and secure the threat before I come back.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I prefer you </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">don’t </Text>
+      <Text>come back!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice throws his arm around Stan.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’ve not let me down yet.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Don’t start now.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice exits.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What a free spirit!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan resets, the bass plays, he cleans up the drinks off his desk, sits back down. Rubs his head.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Then she enters. A sultry vixen, big hair, red dress, high heels. Her name: AVA SHNITZER </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She walks with a noticeable wobble in her step, only on a single side.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava lets herself into the office.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile turns and watches her pass.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LucILE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Bombshell incoming, Mr. C.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan looks up from having his head in his hands. His eyes go wide just as Ava hides her wobble by grabbing on to the back of the chair.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava attempts to fix her hair and hit a sexy pose, while holding on to the chair.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(measured)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Do you need to sit down?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava laughs and sits.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Ava</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Do I entice you.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan scoffs.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Uhh</Text>
+      <Text>. Yeah.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yes. Yes. Yes you do.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley collects himself.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StaNLEY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But, to what do I owe the pleasure?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I believe you owe me a drink, Stanley C. Clarke.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Well, you’ve got me at a disadvantage, miss...</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Shnitzer.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Ava. Shnitzer.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan shakes his fist and leans down to the side, profile of Miss Ava.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The Germans!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He then leverages his current position to grab the glasses and bourbon. He rises and sets it all on the table.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He speaks as he pours:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StaNLEY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So, how your father doing.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava takes the glass.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AvA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>He needs...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Time.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sorry honey, I’m on a bit of a tight schedule.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava hits her most seductive </Text>
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">pouty</Text>
+      <Text> pose.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m told to delay you by any means necessary.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava stands, her legs buckle and she is unable to stand still. She wobbles towards the edge of the desk, Stan rises out of his seat to catch Ava before she falls.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Ava (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Get off me!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava pushes herself away while standing on the heels. She stands tall.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Then.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She pulls the heels off and shrinks a good few inches.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>A degree in physics and I still can’t figure these things out.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You wore them well and that’s what counts.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava gives a good belly laugh. She begins gesturing with her heels.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You have to give my father time.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You don’t understand.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My father’s intentions with the plague are benign.  </Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Cancer?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Cure!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Your government lies to you.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>They wish to weaponize it!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My father wants to build a vaccine.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Nothing more.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But he stole it, right?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Because I need that!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Or it’s my ass!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Your ass or hundreds of millions dead?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava creates a map with her shoes.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Ava (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It could go from New York...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>All the way...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>To San Francisco.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Well, I like my ass.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>AVA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Ugh... Idiot.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava storms off, heels in hand. She pauses at the stage’s end and turns back, points a heel at Stan:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Ava (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Do not interfere, Stanley C. Clarke.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>For your own good.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ava exits.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">That</Text>
+      <Text> went well.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan rubs his brow then grabs his glass off his desk and downs the drink.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He sighs and heads down left of stage.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>All attention is on Stan.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He speaks to the audience.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The plague?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Isn’t that, like, history stuff?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sure, the Lieutenant gives me steady work.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>And that Ava sure looked good in those heels.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>But a guys gotta get paid, so I’m off to find that dirty kraut. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan exits the stage.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>INTERLUDE</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>BASS plays.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile sits clacking at her typewriter.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A FRAIL MAN enters. His coke-bottle glasses and pronounced hunch pair nicely with his trench coat. He’s holding a small POSTAL-WRAPPED PACKAGE.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>His stride is measured if not a little labored. As he steps on stage, he leans in to Lucile.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Man</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m not here, and </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">this</Text>
+      <Text> is not a thing.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He enters the office. And as Lucile speaks, the man places the package on Stan’s desk and hides behind the bass player:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LucILE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>They don’t pay me to see anything but this typewriter, honey.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan returns.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StaNLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Do you know how many Shnitzers there are on the east side?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LUCILE</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(nonplussed)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>A billion, Mr. C?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>At least!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan enters his office and throws his jacket over the chair as he notices the package.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StaNLEY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Lucile! Did anyone come in while I was out?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh honey, you only pay me to see these keys.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Now if you want to increase the circumference of my view...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’ll cost ya!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Initiative, Lucile! Initiative!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile goes back to clacking away at her typewriter.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan opens the package after fully scrutinizing the wrapping.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He holds a vial filled with green liquid up by his forehead to get a real good look at the contents.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StANLEY (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sotto)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The Germans...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The man shifts out from behind the bass player holding a PISTOL.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Man</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m afraid you’re correct Herr Clarke!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Doctor Shnitzer!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Shnitzer</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>One in the same!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text AdornmentStyle="-1" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Ooh</Text>
+      <Text> sounds like you’ve got a German in there, Mr. C!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StanLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yeah. </Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(to Lucile)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Unfortunately!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ShNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I must say, Stanley.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m disappointed in your institutionalized distrust of the German people.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We are not all bad.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Some of us want to do great good!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>By stealing the plague?!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SHNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>By creating a cure!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>And pointing a gun at me?!!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SHNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Formalities, Mr. Clarke.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’m a wanted man, my face is in every post office.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I need you to send this vial to Geneva. To people who care!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Would now be a weird time for me to reach for my gun?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The Lieutenant enters whistling as Lucile begins to type and the bass fills in the bottom end. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He hops on stage and leans down to Lucile.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MaURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Don’t work too hard, Lucile.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I know for a fact he’s not paying you enough.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Mind if I head in?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You wouldn’t listen if I said no...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice chuckles and walks in.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He surveys the scene. From his perspective, he sees a relatively tense Stan and the back of Dr. Shnitzer. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He doesn’t see the gun.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Ah! Found the Kraut ahead of schedule!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice claps the shoulders of Shnitzer.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Maurice (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’s a home-by-five kind of day!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice looks down and sees the gun, he recoils and pulls his own.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Sweet Jesus!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley motions to Dr. Shnitzer.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>This nice German says he only stole the plague from you to make a </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">cure</Text>
+      <Text>.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Isn’t that right, Doctor?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The Doctor nods.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SHNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yes, to save the lives of billions!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Maurice</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’s very much the problem!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>There’s too. Many. Of. Us.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We can’t feed everyone.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We’re making quite a mess of this planet.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>And there’s so. Many. Imbeciles. </Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Hey, I take offense to that!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(to Stanley)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Quiet you. You’ll be getting your money.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley coos at the though.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAurICE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We need to limit the population to survive.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yes Doctor, for the greater good.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Shnitzer</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>We have a different word for that where I come from.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Genocide.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What makes you think you deserve to decide? Who lives, who dies.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I leave that up to my superiors in the U.S. Government.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Specifically, the department of Happy Live Long Time.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>And you’re saying </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">I</Text>
+      <Text> need to leave the schoolyard?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ShNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Schoolyard, yes think of the </Text>
+      <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Bold">children</Text>
+      <Text>!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Maurice</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The fit will survive.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SHNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>And the rest?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The plague!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It’ll replace sugar. We’ve been using it for years, but it just. Takes. Too. Long!</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SHNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You fiend!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The epidemics in diabetes. Heart disease. Obesity!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>It is all you.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>My god.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Yes, but the plague is far more efficient!</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Our species will strengthen and thrive.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The casualties are a necessary cost to survival.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SHNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>One government should not dictate the future.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Doctor Shnitzer raises his gun.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ShnitZER (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I cannot allow this injustice to continue!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Shnitzer shoots and Stanley instinctively pushes the Doctor so his shot lands off target. The bullet hits Maurice in the shoulder. The Doctor falls over the desk. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice lists backwards slightly, then laughs.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Stan...</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You just saved me a mountain of paperwork.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice shoots Shnitzer square in the chest. Leaving Shnitzer enough time to brace on the desk and deliver one hell of a last line.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>SHNITZER</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh, you asshole.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He looks to Stanley.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ShnitZER (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You idiot.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He dies and drapes over the desk.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley looks up at Maurice. Maurice holsters his weapon.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAurice</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’ll be needing that cure.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STanLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’ve been through a lot today, how about I keep it?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>As part of payment.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MauRICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>To get paid, you’ll need to give me that vial, Stan.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Okay.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Why don’t we split it?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice pulls his gun and points it at Stan.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You wouldn’t be much more paperwork.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan immediately throws his hands over his head, the vial flies over to Maurice. Maurice catches it easily and pockets it.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MauRICE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You’ve made Uncle Sam a happy man today.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Stanley</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(sarcastic)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Do I get a parade?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice hoists Shnitzer over his shoulder and begins to walk off. He turns back to look at Stanley.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You know what happens when you open your mouth.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stan beams a nervous smile and nods. Maurice smiles and slaps a wad of cash on the desk.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>This should pay the bills.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>The department of Happy Live Long Time will be in touch.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice turns and leaves. As he passes Lucile:</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What do you see, Lucile?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>Lucile</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Just these keys, Lieutenant.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MAURICE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That’a girl.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Maurice exits.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile starts typing and the bass begins again.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley shakes his head, grabs his jacket.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>He grabs the money.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Holds it in his hand and pockets the money.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>StaNLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Well Lucile, there’s a fifty percent chance I just saved the human race.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile balks.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LucilE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Oh, you think highly of the Lieutenant!</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile turns to look at Stan. The first time in the entire play.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LucILE (CONT’D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I’ll give it a solid twelve percent.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>STANLEY</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Twelve percent a hero?</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I can live with that.</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(beat)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Lock it up tight, would ya?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Stanley exits.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Lucile types just a few more clacks. Then pauses. </Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The BASS stops.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>LUCILE</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Another day, another dance through the minefield...</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>BASS picks up. Plays to blackout.</Text>
+    </Paragraph>
+  </Content>
+
+  <Watermarking Text=""/>
+
+  <HeaderAndFooter FooterFirstPage="Yes" FooterVisible="No" HeaderFirstPage="No" HeaderVisible="Yes" StartingPage="1">
+    <Header>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.00" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">	</Text>
+        <DynamicLabel Type="Last Revised"/>
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">	</Text>
+        <DynamicLabel Type="Page #"/>
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">.</Text>
+        <Tabstops>
+          <Tabstop Position="4.50" Type="Center"/>
+          <Tabstop Position="7.25" Type="Right"/>
+        </Tabstops>
+      </Paragraph>
+    </Header>
+    <Footer>
+      <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""> </Text>
+      </Paragraph>
+    </Footer>
+  </HeaderAndFooter>
+
+  <SpellCheckIgnoreLists>
+    <IgnoredRanges/>
+    <IgnoredWords/>
+  </SpellCheckIgnoreLists>
+
+  <PageLayout BackgroundColor="#FFFFFFFFFFFF" BottomMargin="72" BreakDialogueAndActionAtSentences="Yes" DocumentLeading="Normal" FooterMargin="36" ForegroundColor="#000000000000" HeaderMargin="36" InvisiblesColor="#808080808080" TopMargin="72" UsesSmartQuotes="Yes">
+    <PageSize Height="11.00" Width="8.50"/>
+    <AutoCastList AddParentheses="Yes" AutomaticallyGenerate="Yes" CastListElement="Cast List"/>
+  </PageLayout>
+
+  <WindowState Height="873" Left="73" Mode="Normal" Top="4" Width="634"/>
+
+  <TextState Scaling="100" Selection="13331,13331" ShowInvisibles="No"/>
+
+  <ElementSettings Type="General">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="General" ReturnKey="General" Shortcut="0"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Scene Heading">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="24" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Scene Heading" ReturnKey="Action" Shortcut="1"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Action">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Action" ReturnKey="Action" Shortcut="2"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Character">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="3.50" RightIndent="7.25" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Character" ReturnKey="Dialogue" Shortcut="3"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Parenthetical">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="-0.10" Leading="Regular" LeftIndent="3.00" RightIndent="5.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Parenthetical" ReturnKey="Dialogue" Shortcut="4"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Dialogue">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="2.50" RightIndent="6.00" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Dialogue" ReturnKey="Action" Shortcut="5"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Transition">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="5.50" RightIndent="7.10" SpaceBefore="12" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Transition" ReturnKey="Scene Heading" Shortcut="6"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Shot">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="24" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Scene Heading" ReturnKey="Action" Shortcut="7"/>
+  </ElementSettings>
+
+  <ElementSettings Type="Cast List">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="AllCaps"/>
+    <ParagraphSpec Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.50" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No"/>
+    <Behavior PaginateAs="Action" ReturnKey="Action" Shortcut="8"/>
+  </ElementSettings>
+
+  <TitlePage>
+    <HeaderAndFooter FooterFirstPage="Yes" FooterVisible="No" HeaderFirstPage="No" HeaderVisible="Yes" StartingPage="1">
+      <Header>
+        <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+          <DynamicLabel Type="Page #"/>
+          <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">.</Text>
+        </Paragraph>
+      </Header>
+      <Footer>
+        <Paragraph Alignment="Right" FirstIndent="0.00" Leading="Regular" LeftIndent="1.25" RightIndent="-1.25" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+          <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+        </Paragraph>
+      </Footer>
+    </HeaderAndFooter>
+    <Content>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="Underline+AllCaps">Script Title</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Written by</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Name of First Writer</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Based on, If Any</Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Center" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Left" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""></Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Address</Text>
+      </Paragraph>
+      <Paragraph Alignment="Full" FirstIndent="0.00" Leading="Regular" LeftIndent="1.00" RightIndent="7.50" SpaceBefore="0" Spacing="1" StartsNewPage="No">
+        <Text AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style="">Phone Number</Text>
+      </Paragraph>
+    </Content>
+    <TextState Scaling="100" Selection="0,0" ShowInvisibles="No"/>
+  </TitlePage>
+
+  <UnanchoredScriptNotes/>
+
+  <SmartType>
+    <Characters>
+      <Character>Stanley</Character>
+      <Character>Lucile</Character>
+      <Character>Man</Character>
+      <Character>Maurice</Character>
+      <Character>Ava</Character>
+      <Character>Stal</Character>
+      <Character>Shnitzer</Character>
+    </Characters>
+    <Extensions>
+      <Extension>(V.O.)</Extension>
+      <Extension>(O.S.)</Extension>
+      <Extension>(O.C.)</Extension>
+      <Extension>(CONT'D)</Extension>
+      <Extension>(SUBTITLE)</Extension>
+    </Extensions>
+    <SceneIntros Separator=". ">
+      <SceneIntro>INT</SceneIntro>
+      <SceneIntro>EXT</SceneIntro>
+      <SceneIntro>I/E</SceneIntro>
+    </SceneIntros>
+    <Locations>
+      <Location>DETECTIVE'S OFFICE</Location>
+    </Locations>
+    <TimesOfDay Separator=" - ">
+      <TimeOfDay>DAY</TimeOfDay>
+      <TimeOfDay>NIGHT</TimeOfDay>
+      <TimeOfDay>AFTERNOON</TimeOfDay>
+      <TimeOfDay>MORNING</TimeOfDay>
+      <TimeOfDay>EVENING</TimeOfDay>
+      <TimeOfDay>LATER</TimeOfDay>
+      <TimeOfDay>MOMENTS LATER</TimeOfDay>
+      <TimeOfDay>CONTINUOUS</TimeOfDay>
+      <TimeOfDay>THE NEXT DAY</TimeOfDay>
+    </TimesOfDay>
+    <Transitions>
+      <Transition>CUT TO:</Transition>
+      <Transition>FADE IN:</Transition>
+      <Transition>FADE OUT.</Transition>
+      <Transition>FADE TO:</Transition>
+      <Transition>DISSOLVE TO:</Transition>
+      <Transition>BACK TO:</Transition>
+      <Transition>MATCH CUT TO:</Transition>
+      <Transition>JUMP CUT TO:</Transition>
+      <Transition>FADE TO BLACK.</Transition>
+    </Transitions>
+  </SmartType>
+
+  <MoresAndContinueds>
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+    <DialogueBreaks AutomaticCharacterContinueds="Yes" BottomOfPage="Yes" DialogueBottom="(MORE)" DialogueTop="(CONT'D)" TopOfNext="Yes"/>
+    <SceneBreaks ContinuedNumber="No" SceneBottom="(CONTINUED)" SceneBottomOfPage="No" SceneTop="CONTINUED:" SceneTopOfNext="No"/>
+  </MoresAndContinueds>
+
+  <LockedPages/>
+
+  <Revisions ActiveSet="1" Location="7.75" RevisionMode="No" RevisionsShown="Active" ShowAllMarks="No" ShowAllSets="No" ShowPageColor="No">
+    <Revision Color="#000000000000" FullRevision="No" ID="1" Mark="*" Name="Blue Rev. (mm/dd/yy)" PageColor="#C6C6EDEDFEFE" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="2" Mark="*" Name="Pink Rev. (mm/dd/yy)" PageColor="#FDFDCCCCD4D4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="3" Mark="*" Name="Yellow Rev. (mm/dd/yy)" PageColor="#FDFDFFFFABAB" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="4" Mark="*" Name="Green Rev. (mm/dd/yy)" PageColor="#D1D1FEFED0D0" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="5" Mark="*" Name="Goldenrod Rev. (mm/dd/yy)" PageColor="#FAFACDCD3939" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="6" Mark="*" Name="Buff Rev. (mm/dd/yy)" PageColor="#FCFCEDED9D9D" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="7" Mark="*" Name="Salmon Rev. (mm/dd/yy)" PageColor="#F8F8AEAE8E8E" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="8" Mark="*" Name="Cherry Rev. (mm/dd/yy)" PageColor="#FBFBA4A4B4B4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="9" Mark="*" Name="Tan Rev. (mm/dd/yy)" PageColor="#FDFDF1F1C7C7" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="10" Mark="*" Name="2nd White Rev. (mm/dd/yy)" PageColor="#FFFFFFFFFFFF" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="11" Mark="*" Name="2nd Blue Rev. (mm/dd/yy)" PageColor="#C6C6EDEDFEFE" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="12" Mark="*" Name="2nd Pink Rev. (mm/dd/yy)" PageColor="#FDFDCCCCD4D4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="13" Mark="*" Name="2nd Yellow Rev. (mm/dd/yy)" PageColor="#FDFDFFFFABAB" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="14" Mark="*" Name="2nd Green Rev. (mm/dd/yy)" PageColor="#D1D1FEFED0D0" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="15" Mark="*" Name="2nd Goldenrod Rev. (mm/dd/yy)" PageColor="#FAFACDCD3939" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="16" Mark="*" Name="2nd Buff Rev. (mm/dd/yy)" PageColor="#FCFCEDED9D9D" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="17" Mark="*" Name="2nd Salmon Rev. (mm/dd/yy)" PageColor="#F8F8AEAE8E8E" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="18" Mark="*" Name="2nd Cherry Rev. (mm/dd/yy)" PageColor="#FBFBA4A4B4B4" Style=""/>
+    <Revision Color="#000000000000" FullRevision="No" ID="19" Mark="*" Name="2nd Tan Rev. (mm/dd/yy)" PageColor="#FDFDF1F1C7C7" Style=""/>
+  </Revisions>
+
+  <SplitState ActivePanel="1" SplitMode="None" SplitterPosition="0">
+    <ScriptPanel DisplayMode="Page">
+      <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Verdana" RevisionID="0" Size="9" Style=""/>
+    </ScriptPanel>
+  </SplitState>
+
+  <Macros>
+    <Macro Element="Scene Heading" Name="INT" Shortcut="Ctrl+Alt+1" Text="INT. " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="EXT" Shortcut="Ctrl+Alt+2" Text="EXT. " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="I/E" Shortcut="Ctrl+Alt+3" Text="I/E " Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="DAY" Shortcut="Ctrl+Alt+4" Text=" - DAY" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="NIGHT" Shortcut="Ctrl+Alt+5" Text=" - NIGHT" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="SUNRISE" Shortcut="Ctrl+Alt+6" Text=" - SUNRISE" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Scene Heading" Name="MAGIC" Shortcut="Ctrl+Alt+7" Text=" - MAGIC" Transition="Action">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Parenthetical" Name="CONT" Shortcut="Ctrl+Alt+8" Text="continuing" Transition="Dialogue">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Parenthetical" Name="INTER" Shortcut="Ctrl+Alt+9" Text="interrupting" Transition="Dialogue">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="None" Name="" Shortcut="Ctrl+Alt+0" Text="" Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="CUTTO" Shortcut="Ctrl+Shift+Alt+1" Text="CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Action" Name="FADEIN" Shortcut="Ctrl+Shift+Alt+2" Text="FADE IN:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FADEOUT" Shortcut="Ctrl+Shift+Alt+3" Text="FADE OUT." Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FADETO" Shortcut="Ctrl+Shift+Alt+4" Text="FADE TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="DISSLV" Shortcut="Ctrl+Shift+Alt+5" Text="DISSOLVE TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="BACKTO" Shortcut="Ctrl+Shift+Alt+6" Text="BACK TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="MATCHCUT" Shortcut="Ctrl+Shift+Alt+7" Text="MATCH CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="JUMPCUT" Shortcut="Ctrl+Shift+Alt+8" Text="JUMP CUT TO:" Transition="Scene Heading">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="Transition" Name="FBLACK" Shortcut="Ctrl+Shift+Alt+9" Text="FADE TO BLACK." Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+    <Macro Element="None" Name="" Shortcut="E" Text="" Transition="None">
+      <Alias Confirm="No" MatchCase="No" SmartReplace="Yes" Text="" WordOnly="No">
+        <ActivateIn Element="General"/>
+        <ActivateIn Element="Scene Heading"/>
+        <ActivateIn Element="Action"/>
+        <ActivateIn Element="Character"/>
+        <ActivateIn Element="Parenthetical"/>
+        <ActivateIn Element="Dialogue"/>
+        <ActivateIn Element="Transition"/>
+        <ActivateIn Element="Shot"/>
+      </Alias>
+    </Macro>
+  </Macros>
+
+  <Actors>
+    <Actor MacVoice="" Name="Man 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Man 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Woman 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Woman 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Boy 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Boy 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Girl 1" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Girl 2" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Old Man" Pitch="Normal" Speed="Medium" WinVoice=""/>
+    <Actor MacVoice="" Name="Old Woman" Pitch="Normal" Speed="Medium" WinVoice=""/>
+  </Actors>
+
+  <Cast>
+    <Narrator Actor="Man 1">
+      <Element Type="Character"/>
+      <Element Type="Dialogue"/>
+    </Narrator>
+    <Member Actor="Man 1" Character="Stanley"/>
+    <Member Actor="Man 1" Character="Lucile"/>
+    <Member Actor="Man 1" Character="Man"/>
+    <Member Actor="Man 1" Character="Maurice"/>
+    <Member Actor="Man 1" Character="Ava"/>
+    <Member Actor="Man 1" Character="Stal"/>
+    <Member Actor="Man 1" Character="Shnitzer"/>
+  </Cast>
+
+  <SceneNumberOptions LeftLocation="0.75" RightLocation="7.38" ShowNumbersOnLeft="Yes" ShowNumbersOnRight="Yes">
+    <FontSpec AdornmentStyle="0" Background="#FFFFFFFFFFFF" Color="#000000000000" Font="Courier Final Draft" RevisionID="0" Size="12" Style=""/>
+  </SceneNumberOptions>
+
+  <CastList SortOption="Alphabetical">
+    <CustomOrder/>
+  </CastList>
+
+  <CharacterHighlighting>
+    <Character Color="#FFFFFFFFFFFF" Name="AVA" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="LUCILE" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="MAN" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="MAURICE" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="SHNITZER" Visible="No"/>
+    <Character Color="#FFFFFFFFFFFF" Name="STANLEY" Visible="No"/>
+  </CharacterHighlighting>
+
+  <CharacterNavigatorPreferences IsSortAscending="Yes" SortColumn="Order"/>
+
+</FinalDraft>

@@ -555,6 +555,11 @@
             label: 'A third Pricks fragment'
         }
     ];
+    const archiveGate = document.getElementById('bt-gate');
+    const archiveGateForm = document.getElementById('bt-gate-form');
+    const archiveGatePassword = document.getElementById('bt-gate-password');
+    const archiveGateStatus = document.getElementById('bt-gate-status');
+    const archiveExperience = document.getElementById('bt-lobby');
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
     const contentSceneStatus = document.getElementById('bt-content-scene-status');
@@ -674,6 +679,85 @@
     let quarterPointerStartY = 0;
     let quarterPointerLastX = 0;
     let quarterPointerLastY = 0;
+
+    function makeArchiveExperienceAccessible() {
+        archiveExperience.removeAttribute('inert');
+        archiveExperience.removeAttribute('aria-hidden');
+    }
+
+    function initializeArchiveGate() {
+        const wasUnlocked = document.documentElement.classList.contains('bt-gate-bypassed');
+
+        if (wasUnlocked) {
+            archiveGate.hidden = true;
+            makeArchiveExperienceAccessible();
+            return;
+        }
+
+        const denyEntry = () => {
+            archiveGate.classList.remove('is-denied');
+            void archiveGate.offsetWidth;
+            archiveGate.classList.add('is-denied');
+            archiveGatePassword.setAttribute('aria-invalid', 'true');
+            archiveGateStatus.textContent = 'The ward does not know that word.';
+            archiveGatePassword.focus({ preventScroll: true });
+            archiveGatePassword.select();
+        };
+
+        archiveGateForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            if (archiveGatePassword.value.trim() !== 'p33k') {
+                denyEntry();
+                return;
+            }
+
+            archiveGatePassword.removeAttribute('aria-invalid');
+            archiveGateStatus.textContent = 'The old locks remember.';
+            archiveGate.classList.remove('is-denied');
+            archiveGate.classList.add('is-accepting');
+            archiveGatePassword.blur();
+            archiveGateForm.querySelector('button[type="submit"]').disabled = true;
+
+            try {
+                sessionStorage.setItem('bt-gate-unlocked-v1', 'true');
+            } catch (error) {
+                // The password still opens this page view when storage is unavailable.
+            }
+
+            window.setTimeout(() => {
+                archiveGate.classList.add('is-unlocking');
+                document.documentElement.classList.add('bt-gate-open');
+            }, prefersReducedMotion.matches ? 0 : 180);
+
+            window.setTimeout(() => {
+                archiveGate.hidden = true;
+                makeArchiveExperienceAccessible();
+            }, prefersReducedMotion.matches ? 300 : 1770);
+        });
+
+        archiveGatePassword.addEventListener('input', () => {
+            archiveGatePassword.removeAttribute('aria-invalid');
+            archiveGateStatus.textContent = '';
+        });
+
+        archiveGate.addEventListener('keydown', (event) => {
+            if (event.key !== 'Tab') return;
+            const controls = Array.from(archiveGateForm.querySelectorAll('input, button:not(:disabled)'));
+            if (!controls.length) return;
+            const first = controls[0];
+            const last = controls[controls.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        });
+
+        window.requestAnimationFrame(() => archiveGatePassword.focus({ preventScroll: true }));
+    }
 
     function readInventory() {
         try {
@@ -2472,5 +2556,6 @@
     syncQuarterInventory();
     renderAlchemyPlaylist();
     syncRoomFromLocation();
+    initializeArchiveGate();
 
 }());

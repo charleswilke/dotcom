@@ -28,6 +28,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="/images/before-times/gate/dog-medallion-v1.webp" type="image/webp" fetchpriority="high">
+    <link rel="preload" as="image" href="/images/before-times/gate/dog-shackle-v1.webp" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.webp?v=20260718e" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=20260717a" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4.webp?v=20260718a" type="image/webp">
@@ -44,12 +46,72 @@
     <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4-no-pen.webp?v=20260719a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/content-factory-room-v1.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260719q">
+    <link rel="stylesheet" href="/before-times.css?v=20260719r">
+    <script>
+        try {
+            if (sessionStorage.getItem('bt-gate-unlocked-v1') === 'true') {
+                document.documentElement.classList.add('bt-gate-bypassed');
+            }
+        } catch (error) {
+            // A private browsing policy may deny storage; the gate still works.
+        }
+    </script>
+    <noscript><style>.bt-gate{display:none!important}.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}.bt-experience{filter:none!important}</style></noscript>
 </head>
 <body class="before-times-page">
+    <section class="bt-gate" id="bt-gate" role="dialog" aria-modal="true" aria-labelledby="bt-gate-title" aria-describedby="bt-gate-hint">
+        <div class="bt-gate-atmosphere" aria-hidden="true"></div>
+        <header class="bt-gate-heading">
+            <p>The archive recognizes its own</p>
+            <h1 id="bt-gate-title">The Before Times</h1>
+        </header>
+
+        <div class="bt-gate-lock" id="bt-gate-lock">
+            <img
+                class="bt-gate-shackle"
+                src="/images/before-times/gate/dog-shackle-v1.webp"
+                width="1254"
+                height="1254"
+                alt=""
+                aria-hidden="true"
+                decoding="sync"
+                fetchpriority="high">
+            <div class="bt-gate-medallion">
+                <img
+                    class="bt-gate-medallion-art"
+                    src="/images/before-times/gate/dog-medallion-v1.webp"
+                    width="1122"
+                    height="1402"
+                    alt="An ornate brass archive lock guarded by two shaggy dogs"
+                    decoding="sync"
+                    fetchpriority="high">
+                <form class="bt-gate-form" id="bt-gate-form" novalidate>
+                    <label class="bt-sr-only" for="bt-gate-password">Archive password</label>
+                    <input
+                        id="bt-gate-password"
+                        name="password"
+                        type="password"
+                        inputmode="text"
+                        autocomplete="off"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        maxlength="24"
+                        placeholder="PASSWORD"
+                        aria-describedby="bt-gate-status"
+                        required>
+                    <button type="submit" aria-label="Unlock the archive"><span aria-hidden="true">↵</span></button>
+                    <span class="bt-gate-field-glint" aria-hidden="true"></span>
+                </form>
+            </div>
+        </div>
+
+        <p class="bt-gate-hint" id="bt-gate-hint">A small word opens an old world.</p>
+        <p class="bt-gate-status" id="bt-gate-status" role="status" aria-live="polite"></p>
+    </section>
+
     <a class="bt-skip-link" href="#bt-lobby">Skip to the lobby</a>
 
-    <main class="bt-experience" id="bt-lobby">
+    <main class="bt-experience" id="bt-lobby" inert aria-hidden="true">
         <p class="bt-sr-only" id="bt-lobby-instructions">
             Before Times is an interactive career archive. Tab through the room doors and lobby objects, or open the floor plan for a directory.
         </p>
@@ -398,6 +460,6 @@
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260719h" defer></script>
-    <script src="/before-times.js?v=20260719h" defer></script>
+    <script src="/before-times.js?v=20260719i" defer></script>
 </body>
 </html>

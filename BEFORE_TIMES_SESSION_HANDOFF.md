@@ -6,6 +6,23 @@ the July 16–17, 2026 sessions.
 
 ## Current state
 
+The experience now begins behind a theatrical dog-guardian archive gate. It is
+a client-side threshold rather than a security boundary: the password is
+`p33k`, a successful unlock is remembered in `sessionStorage` under
+`bt-gate-unlocked-v1`, and a fresh tab shows the gate again. The underlying
+archive remains `inert` and `aria-hidden` until the gate opens. The form traps
+focus between its password field and submit control, announces rejected words,
+and has a reduced-motion path.
+
+The gate artwork is intentionally split into two transparent runtime layers:
+`images/before-times/gate/dog-medallion-v1.webp` holds the dog portraits and
+live HTML field recess, while `dog-shackle-v1.webp` lifts and cants away before
+the medallion drops. Full-resolution transparent PNG masters live beside those
+WebPs. The original magenta chroma renders are retained in
+`tools/before-times-clean-patches/gate-*-chroma-v1.png`. Keep the password and
+status copy in HTML; do not bake text into either raster. Short landscape
+viewports use a side-by-side gate layout so the input remains reachable.
+
 The first lobby is now built as a clean background plate plus independent
 interactive raster layers. The visible career doors are not warped crops. Each
 is a newly rendered asset that already contains the correct installed

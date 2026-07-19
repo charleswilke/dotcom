@@ -8,7 +8,8 @@ the July 16–17, 2026 sessions.
 
 The experience now begins behind a theatrical dog-guardian archive gate. It is
 a client-side threshold rather than a security boundary: the passwords are
-`p33k` and `tootsie`, a successful unlock is remembered in `sessionStorage` under
+`p33k`, `tootsie`, `doc`, and `astro`; capitalization and surrounding whitespace
+are ignored. A successful unlock is remembered in `sessionStorage` under
 `bt-gate-unlocked-v1`, and a fresh tab shows the gate again. The underlying
 archive remains `inert` and `aria-hidden` until the gate opens. The form traps
 focus between its password field and submit control, announces rejected words,

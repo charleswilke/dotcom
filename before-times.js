@@ -560,7 +560,7 @@
     const archiveGatePassword = document.getElementById('bt-gate-password');
     const archiveGateStatus = document.getElementById('bt-gate-status');
     const archiveExperience = document.getElementById('bt-lobby');
-    const archivePasswords = new Set(['p33k', 'tootsie']);
+    const archivePasswords = new Set(['p33k', 'tootsie', 'doc', 'astro']);
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
     const contentSceneStatus = document.getElementById('bt-content-scene-status');

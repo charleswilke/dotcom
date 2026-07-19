@@ -91,7 +91,7 @@
         floorplan: {
             kicker: 'Inventory // permanent item',
             title: 'Floor plan',
-            copy: ['The lobby is open. The career rooms are being excavated one at a time; each door already contains its field notes and planned artifacts.'],
+            copy: ['The lobby is open. Absurd Alchemy and The Content Factory are ready to enter; the remaining career rooms are still being excavated.'],
             routes: [
                 { id: 'alchemy', label: '01 · Absurd Alchemy' },
                 { id: 'games', label: '02 · Game Development' },
@@ -557,6 +557,7 @@
     ];
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
+    const contentSceneStatus = document.getElementById('bt-content-scene-status');
     const infoDialog = document.getElementById('bt-info-dialog');
     const guestbookDialog = document.getElementById('bt-guestbook-dialog');
     const alchemyMenuDialog = document.getElementById('bt-alchemy-menu-dialog');
@@ -575,7 +576,8 @@
     const guestbookEntries = document.getElementById('bt-guestbook-entries');
     const guestbookRefresh = document.getElementById('bt-guestbook-refresh');
     const guestbookHotspot = document.querySelector('[data-action="guestbook"]');
-    const guestbookCleanLayer = document.getElementById('bt-guestbook-clean-layer');
+    const guestbookPenLayer = document.getElementById('bt-guestbook-pen-layer');
+    const newspaperHotspot = document.querySelector('[data-action="newspaper"]');
     const bellHotspot = document.querySelector('[data-action="bell"]');
     const radioHotspot = document.querySelector('[data-action="radio"]');
     const alchemyDoorHotspot = document.querySelector('.bt-hotspot-alchemy');
@@ -589,13 +591,24 @@
     const alchemyPenHotspot = document.getElementById('bt-alchemy-pen');
     const alchemyPenCleanLayer = document.getElementById('bt-alchemy-pen-clean-layer');
     const lobbyInventoryPen = document.getElementById('bt-lobby-inventory-pen');
+    const inventoryPenSlot = document.getElementById('bt-inventory-slot-pen');
+    const contentDoorHotspot = document.querySelector('.bt-hotspot-content');
+    const contentExitHotspot = document.querySelector('.bt-content-hotspot-door');
+    const contentConsoleHotspot = document.querySelector('.bt-content-hotspot-console');
+    const contentQuarterHotspot = document.getElementById('bt-content-quarter');
+    const lobbyInventoryQuarter = document.getElementById('bt-lobby-inventory-quarter');
+    const inventoryQuarterSlot = document.getElementById('bt-inventory-slot-quarter');
     const inventoryDragGhost = document.getElementById('bt-inventory-drag-ghost');
+    const inventoryQuarterDragGhost = document.getElementById('bt-inventory-quarter-drag-ghost');
     const inventoryDrawer = document.getElementById('bt-inventory-drawer');
     const inventoryHandle = document.getElementById('bt-inventory-handle');
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
     const alchemyScene = document.getElementById('bt-alchemy-scene');
     const alchemyArt = document.querySelector('.bt-alchemy-art');
+    const contentScroll = document.getElementById('bt-content-scroll');
+    const contentScene = document.getElementById('bt-content-scene');
+    const contentArt = document.querySelector('.bt-content-art');
     const alchemyChairLayer = document.getElementById('bt-alchemy-chair-layer');
     const alchemyCrateLayer = document.getElementById('bt-alchemy-crate-layer');
     const alchemySolarLayer = document.getElementById('bt-alchemy-solar-layer');
@@ -633,6 +646,7 @@
     let lastProductionLoop = -1;
     let productionDeck = [];
     let alchemyRoomOpening = false;
+    let contentRoomOpening = false;
     let inventoryCloseTimer = 0;
     let hasAlchemyPen = false;
     let alchemyPenLocation = 'room';
@@ -644,6 +658,16 @@
     let penPointerStartY = 0;
     let penPointerLastX = 0;
     let penPointerLastY = 0;
+    let hasContentQuarter = false;
+    let contentQuarterLocation = 'room';
+    let inventoryQuarterSelected = false;
+    let quarterPointerId = null;
+    let quarterDragStarted = false;
+    let suppressQuarterClick = false;
+    let quarterPointerStartX = 0;
+    let quarterPointerStartY = 0;
+    let quarterPointerLastX = 0;
+    let quarterPointerLastY = 0;
 
     function readInventory() {
         try {
@@ -670,6 +694,18 @@
         return hasAlchemyPen && alchemyPenLocation === 'guestbook';
     }
 
+    function quarterIsInInventory() {
+        return hasContentQuarter && contentQuarterLocation === 'inventory';
+    }
+
+    function quarterIsInNewsstand() {
+        return hasContentQuarter && contentQuarterLocation === 'newsstand';
+    }
+
+    function inventoryHasItems() {
+        return penIsInInventory() || quarterIsInInventory();
+    }
+
     function savePenState() {
         const inventory = readInventory();
         inventory.alchemyPen = hasAlchemyPen;
@@ -677,8 +713,25 @@
         writeInventory(inventory);
     }
 
+    function saveQuarterState() {
+        const inventory = readInventory();
+        inventory.contentQuarter = hasContentQuarter;
+        inventory.contentQuarterLocation = contentQuarterLocation;
+        writeInventory(inventory);
+    }
+
+    function syncInventoryDrawer() {
+        const hasItems = inventoryHasItems();
+        inventoryDrawer.classList.toggle('is-active', hasItems);
+        inventoryDrawer.setAttribute('aria-hidden', String(!hasItems));
+        if (!hasItems) {
+            inventoryDrawer.classList.remove('is-open');
+            inventoryHandle.setAttribute('aria-expanded', 'false');
+        }
+    }
+
     function setInventoryDrawerOpen(open, autoClose) {
-        if (!penIsInInventory()) return;
+        if (!inventoryHasItems()) return;
         window.clearTimeout(inventoryCloseTimer);
         inventoryDrawer.classList.toggle('is-open', open);
         inventoryHandle.setAttribute('aria-expanded', String(open));
@@ -690,7 +743,7 @@
     function syncGuestbookAccess() {
         const penOnBook = penIsOnGuestbook();
         const penReady = penIsInInventory();
-        guestbookCleanLayer.hidden = penOnBook;
+        guestbookPenLayer.hidden = !penOnBook;
         if (penOnBook) {
             guestbookHotspot.dataset.label = 'Sign the guest book';
             guestbookHotspot.setAttribute('aria-label', 'Open and sign the Before Times guest book');
@@ -705,8 +758,7 @@
 
     function syncPenInventory() {
         const penReady = penIsInInventory();
-        inventoryDrawer.classList.toggle('is-active', penReady);
-        inventoryDrawer.setAttribute('aria-hidden', String(!penReady));
+        inventoryPenSlot.classList.toggle('bt-inventory-slot-filled', penReady);
         lobbyInventoryPen.hidden = !penReady;
         alchemyPenHotspot.hidden = hasAlchemyPen;
         alchemyPenCleanLayer.hidden = !hasAlchemyPen;
@@ -714,11 +766,10 @@
             inventoryPenSelected = false;
             lobbyInventoryPen.classList.remove('is-selected');
             lobbyInventoryPen.setAttribute('aria-pressed', 'false');
-            inventoryDrawer.classList.remove('is-open');
-            inventoryHandle.setAttribute('aria-expanded', 'false');
             guestbookHotspot.classList.remove('is-drop-target', 'is-drop-over');
         }
         syncGuestbookAccess();
+        syncInventoryDrawer();
     }
 
     function collectAlchemyPen() {
@@ -730,10 +781,10 @@
         hasAlchemyPen = true;
         alchemyPenLocation = 'inventory';
         savePenState();
-        inventoryDrawer.classList.add('is-active');
-        inventoryDrawer.setAttribute('aria-hidden', 'false');
+        inventoryPenSlot.classList.add('bt-inventory-slot-filled');
         lobbyInventoryPen.hidden = false;
         alchemyPenCleanLayer.hidden = false;
+        syncInventoryDrawer();
         syncGuestbookAccess();
         animateLayer(alchemyPenHotspot, 'is-collecting', 740);
         window.setTimeout(() => {
@@ -744,6 +795,7 @@
     }
 
     function setInventoryPenSelected(selected) {
+        if (selected && inventoryQuarterSelected) setInventoryQuarterSelected(false);
         inventoryPenSelected = Boolean(selected && penIsInInventory());
         lobbyInventoryPen.classList.toggle('is-selected', inventoryPenSelected);
         lobbyInventoryPen.setAttribute('aria-pressed', String(inventoryPenSelected));
@@ -793,8 +845,113 @@
         if (shouldPlace) placePenOnGuestbook();
     }
 
+    function syncNewsstandAccess() {
+        const unlocked = quarterIsInNewsstand();
+        const quarterReady = quarterIsInInventory();
+        newspaperHotspot.classList.toggle('is-unlocked', unlocked);
+        if (unlocked) {
+            newspaperHotspot.dataset.label = 'Newspaper archive · unlocked';
+            newspaperHotspot.setAttribute('aria-label', 'Open the unlocked collegiate newspaper dispenser');
+        } else if (quarterReady) {
+            newspaperHotspot.dataset.label = 'Newspaper archive · use the quarter';
+            newspaperHotspot.setAttribute('aria-label', 'Drop the collected quarter into the newspaper dispenser');
+        } else {
+            newspaperHotspot.dataset.label = 'Coin-operated newspaper archive';
+            newspaperHotspot.setAttribute('aria-label', 'Inspect the coin-operated collegiate newspaper dispenser');
+        }
+    }
+
+    function syncQuarterInventory() {
+        const quarterReady = quarterIsInInventory();
+        inventoryQuarterSlot.classList.toggle('bt-inventory-slot-filled', quarterReady);
+        lobbyInventoryQuarter.hidden = !quarterReady;
+        contentQuarterHotspot.hidden = hasContentQuarter;
+        if (!quarterReady) {
+            inventoryQuarterSelected = false;
+            lobbyInventoryQuarter.classList.remove('is-selected');
+            lobbyInventoryQuarter.setAttribute('aria-pressed', 'false');
+            newspaperHotspot.classList.remove('is-drop-target', 'is-drop-over');
+        }
+        syncNewsstandAccess();
+        syncInventoryDrawer();
+    }
+
+    function collectContentQuarter() {
+        if (hasContentQuarter) {
+            setInventoryDrawerOpen(true, true);
+            return;
+        }
+
+        hasContentQuarter = true;
+        contentQuarterLocation = 'inventory';
+        saveQuarterState();
+        inventoryQuarterSlot.classList.add('bt-inventory-slot-filled');
+        lobbyInventoryQuarter.hidden = false;
+        syncInventoryDrawer();
+        syncNewsstandAccess();
+        animateLayer(contentQuarterHotspot, 'is-collecting', 740);
+        window.setTimeout(() => {
+            contentQuarterHotspot.hidden = true;
+            setInventoryDrawerOpen(true, true);
+        }, prefersReducedMotion.matches ? 0 : 420);
+        showStatus('A shiny quarter rattles into inventory.', 3400);
+    }
+
+    function setInventoryQuarterSelected(selected) {
+        if (selected && inventoryPenSelected) setInventoryPenSelected(false);
+        inventoryQuarterSelected = Boolean(selected && quarterIsInInventory());
+        lobbyInventoryQuarter.classList.toggle('is-selected', inventoryQuarterSelected);
+        lobbyInventoryQuarter.setAttribute('aria-pressed', String(inventoryQuarterSelected));
+        newspaperHotspot.classList.toggle('is-drop-target', inventoryQuarterSelected);
+        if (inventoryQuarterSelected) {
+            showStatus('Quarter selected. Drag it to the newspaper dispenser, or activate the dispenser to use it.', 4400);
+        }
+    }
+
+    function insertQuarterIntoNewsstand() {
+        if (!quarterIsInInventory()) return;
+        contentQuarterLocation = 'newsstand';
+        saveQuarterState();
+        setInventoryQuarterSelected(false);
+        syncQuarterInventory();
+        animateLayer(newspaperHotspot, 'is-opening', 780);
+        showStatus('Clink. The newspaper dispenser unlocks with a mechanical sigh.', 3200);
+        window.setTimeout(() => openPanel('press'), prefersReducedMotion.matches ? 0 : 420);
+    }
+
+    function pointerIsOverNewsstand(clientX, clientY) {
+        if (activeRoom !== 'lobby') return false;
+        const rect = newspaperHotspot.getBoundingClientRect();
+        return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
+    }
+
+    function moveQuarterDragGhost(clientX, clientY) {
+        inventoryQuarterDragGhost.style.left = `${clientX}px`;
+        inventoryQuarterDragGhost.style.top = `${clientY}px`;
+        newspaperHotspot.classList.toggle('is-drop-over', pointerIsOverNewsstand(clientX, clientY));
+    }
+
+    function finishQuarterDrag(event, cancelled) {
+        if (event.pointerId !== quarterPointerId) return;
+        const shouldInsert = !cancelled && quarterDragStarted && pointerIsOverNewsstand(quarterPointerLastX, quarterPointerLastY);
+        if (lobbyInventoryQuarter.hasPointerCapture && lobbyInventoryQuarter.hasPointerCapture(event.pointerId)) {
+            lobbyInventoryQuarter.releasePointerCapture(event.pointerId);
+        }
+        inventoryQuarterDragGhost.hidden = true;
+        newspaperHotspot.classList.remove('is-drop-over');
+        quarterPointerId = null;
+        if (quarterDragStarted) {
+            suppressQuarterClick = true;
+            window.setTimeout(() => { suppressQuarterClick = false; }, 0);
+        }
+        quarterDragStarted = false;
+        if (shouldInsert) insertQuarterIntoNewsstand();
+    }
+
     function showStatus(message, duration) {
-        const sceneStatus = activeRoom === 'alchemy' ? alchemySceneStatus : lobbySceneStatus;
+        const sceneStatus = activeRoom === 'alchemy'
+            ? alchemySceneStatus
+            : (activeRoom === 'content' ? contentSceneStatus : lobbySceneStatus);
         window.clearTimeout(statusTimer);
         sceneStatus.textContent = message;
         sceneStatus.classList.add('is-visible');
@@ -1377,12 +1534,75 @@
         window.setTimeout(() => alchemyDoorHotspot.focus({ preventScroll: true }), 60);
     }
 
+    async function enterContentRoom(options) {
+        const settings = options || {};
+        if (activeRoom === 'content' || contentRoomOpening) return;
+        contentRoomOpening = true;
+        if (!contentArt.complete || !contentArt.naturalWidth) {
+            showStatus('Starting the conveyor line…', 3200);
+            try {
+                await contentArt.decode();
+            } catch (error) {
+                // The image element will still show its normal fallback behavior.
+            }
+        }
+        contentRoomOpening = false;
+        if (infoDialog.open) closeDialog(infoDialog);
+        radioAudio.pause();
+        activeRoom = 'content';
+        lobbyScroll.hidden = true;
+        contentScroll.hidden = false;
+        mobileFloorplan.hidden = true;
+        mobileRoomExit.hidden = false;
+        document.body.classList.add('bt-room-content');
+        contentScene.classList.remove('is-entering');
+        void contentScene.offsetWidth;
+        contentScene.classList.add('is-entering');
+        contentScroll.scrollLeft = 0;
+
+        if (settings.updateHistory !== false && window.location.hash !== '#content-factory') {
+            window.history.pushState({ btRoom: 'content' }, '', '#content-factory');
+        }
+        showStatus('The Content Factory. The conveyor line is still carrying old work.', 4200);
+        const focusTarget = hasContentQuarter ? contentConsoleHotspot : contentQuarterHotspot;
+        window.setTimeout(() => focusTarget.focus({ preventScroll: true }), 380);
+    }
+
+    function leaveContentRoom(options) {
+        const settings = options || {};
+        if (activeRoom !== 'content') return;
+        setInventoryDrawerOpen(false, false);
+        activeRoom = 'lobby';
+        contentScroll.hidden = true;
+        lobbyScroll.hidden = false;
+        mobileFloorplan.hidden = false;
+        mobileRoomExit.hidden = true;
+        document.body.classList.remove('bt-room-content');
+
+        if (settings.updateHistory !== false) {
+            if (window.history.state && window.history.state.btRoom === 'content') {
+                window.history.back();
+            } else {
+                window.history.replaceState({ btRoom: 'lobby' }, '', `${window.location.pathname}${window.location.search}`);
+            }
+        }
+        showStatus('Back in the lobby.', 2200);
+        window.setTimeout(() => contentDoorHotspot.focus({ preventScroll: true }), 60);
+    }
+
     function syncRoomFromLocation() {
         if (window.location.hash === '#absurd-alchemy') {
+            if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
             enterAlchemyRoom({ updateHistory: false });
-        } else {
-            leaveAlchemyRoom({ updateHistory: false });
+            return;
         }
+        if (window.location.hash === '#content-factory') {
+            if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+            enterContentRoom({ updateHistory: false });
+            return;
+        }
+        if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+        if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
     }
 
     function playTapeTwentyFive() {
@@ -1428,6 +1648,10 @@
                 closeDialog(infoDialog);
                 if (route.id === 'alchemy') {
                     window.setTimeout(() => enterAlchemyRoom(), 30);
+                    return;
+                }
+                if (route.id === 'content') {
+                    window.setTimeout(() => enterContentRoom(), 30);
                     return;
                 }
                 window.setTimeout(() => openPanel(route.id), 30);
@@ -1634,6 +1858,15 @@
                 }
                 return;
             }
+            if (panelId === 'content') {
+                animateLayer(button, 'is-activating', 680);
+                if (prefersReducedMotion.matches) {
+                    enterContentRoom();
+                } else {
+                    window.setTimeout(() => enterContentRoom(), 360);
+                }
+                return;
+            }
             const hasDoorwayAnimation = panelId === 'portal' || button.classList.contains('bt-layered-doorway');
             if (!hasDoorwayAnimation) {
                 openPanel(panelId);
@@ -1669,6 +1902,17 @@
         });
     });
 
+    document.querySelectorAll('[data-content-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const action = button.dataset.contentAction;
+            if (action === 'lobby') leaveContentRoom();
+            if (action === 'collect-quarter') collectContentQuarter();
+            if (action === 'console') {
+                showStatus('Twenty-four article jobs are queued across the conveyor loop.', 3200);
+            }
+        });
+    });
+
     productionScreens.forEach((screen, index) => {
         screen.addEventListener('click', () => triggerProductionGhost(index));
         screen.querySelector('video').addEventListener('ended', () => {
@@ -1690,6 +1934,23 @@
                 } else {
                     window.setTimeout(() => openPanel('radio'), 360);
                 }
+            }
+            if (action === 'newspaper') {
+                if (quarterIsInNewsstand()) {
+                    animateLayer(newspaperHotspot, 'is-opening', 780);
+                    window.setTimeout(() => openPanel('press'), prefersReducedMotion.matches ? 0 : 320);
+                    return;
+                }
+                if (quarterIsInInventory() && inventoryQuarterSelected) {
+                    insertQuarterIntoNewsstand();
+                    return;
+                }
+                if (quarterIsInInventory()) {
+                    showStatus('The dispenser wants the quarter. Drag it from inventory, or select it and activate the dispenser.', 5200);
+                    return;
+                }
+                showStatus('The newspaper dispenser is locked behind a twenty-five-cent problem. The Content Factory may have spare change.', 5000);
+                return;
             }
             if (action === 'guestbook') {
                 if (penIsOnGuestbook()) {
@@ -1795,6 +2056,75 @@
         setInventoryPenSelected(!inventoryPenSelected);
     });
 
+    lobbyInventoryQuarter.addEventListener('pointerdown', (event) => {
+        if (!quarterIsInInventory() || event.button !== 0 || event.pointerType === 'mouse') return;
+        quarterPointerId = event.pointerId;
+        quarterPointerStartX = event.clientX;
+        quarterPointerStartY = event.clientY;
+        quarterPointerLastX = event.clientX;
+        quarterPointerLastY = event.clientY;
+        quarterDragStarted = false;
+        if (lobbyInventoryQuarter.setPointerCapture) lobbyInventoryQuarter.setPointerCapture(event.pointerId);
+    });
+    lobbyInventoryQuarter.addEventListener('pointermove', (event) => {
+        if (event.pointerId !== quarterPointerId) return;
+        quarterPointerLastX = event.clientX;
+        quarterPointerLastY = event.clientY;
+        const distance = Math.hypot(event.clientX - quarterPointerStartX, event.clientY - quarterPointerStartY);
+        if (!quarterDragStarted && distance > 6) {
+            quarterDragStarted = true;
+            setInventoryQuarterSelected(true);
+            inventoryQuarterDragGhost.hidden = false;
+        }
+        if (quarterDragStarted) {
+            event.preventDefault();
+            moveQuarterDragGhost(event.clientX, event.clientY);
+        }
+    });
+    lobbyInventoryQuarter.addEventListener('pointerup', (event) => finishQuarterDrag(event, false));
+    lobbyInventoryQuarter.addEventListener('pointercancel', (event) => finishQuarterDrag(event, true));
+    lobbyInventoryQuarter.addEventListener('dragstart', (event) => {
+        if (!quarterIsInInventory()) {
+            event.preventDefault();
+            return;
+        }
+        setInventoryQuarterSelected(true);
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', 'content-factory-quarter');
+    });
+    lobbyInventoryQuarter.addEventListener('dragend', () => {
+        newspaperHotspot.classList.remove('is-drop-over');
+    });
+    newspaperHotspot.addEventListener('dragover', (event) => {
+        if (!quarterIsInInventory()) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+        newspaperHotspot.classList.add('is-drop-over');
+    });
+    newspaperHotspot.addEventListener('dragleave', (event) => {
+        if (!newspaperHotspot.contains(event.relatedTarget)) {
+            newspaperHotspot.classList.remove('is-drop-over');
+        }
+    });
+    newspaperHotspot.addEventListener('drop', (event) => {
+        if (!quarterIsInInventory()) return;
+        event.preventDefault();
+        newspaperHotspot.classList.remove('is-drop-over');
+        insertQuarterIntoNewsstand();
+    });
+    lobbyInventoryQuarter.addEventListener('click', (event) => {
+        if (suppressQuarterClick) {
+            event.preventDefault();
+            return;
+        }
+        setInventoryQuarterSelected(!inventoryQuarterSelected);
+    });
+
+    mobileRoomExit.addEventListener('click', () => {
+        if (activeRoom === 'alchemy') leaveAlchemyRoom();
+        if (activeRoom === 'content') leaveContentRoom();
+    });
+
     radioAudio.addEventListener('ended', () => {
         showStatus('Only static for now. The old broadcasts are still hiding somewhere.');
     });
@@ -1812,7 +2142,12 @@
     const savedInventory = readInventory();
     hasAlchemyPen = savedInventory.alchemyPen === true;
     alchemyPenLocation = hasAlchemyPen && savedInventory.alchemyPenLocation === 'guestbook' ? 'guestbook' : (hasAlchemyPen ? 'inventory' : 'room');
+    hasContentQuarter = savedInventory.contentQuarter === true;
+    contentQuarterLocation = hasContentQuarter && savedInventory.contentQuarterLocation === 'newsstand'
+        ? 'newsstand'
+        : (hasContentQuarter ? 'inventory' : 'room');
     syncPenInventory();
+    syncQuarterInventory();
     renderAlchemyPlaylist();
     syncRoomFromLocation();
 

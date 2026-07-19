@@ -26,10 +26,11 @@ The layered scene currently includes:
 - Desk bell and newspaper stand: cleaned or regenerated independent sprites
   paired with deliberately local background repairs.
 
-The guestbook assembly stays baked into the runtime lobby plate. Its extracted
-layer included a broad, jagged desk-and-floor matte that nicked the gold plaque,
-so the page now places an invisible interactive hotspot over the clean baked
-art instead of rendering the redundant `guestbook.webp` cutout.
+The guestbook is now fully separated from the desk. The runtime lobby plate
+repairs the original book footprint while preserving the baked brass plaque;
+a fresh pen-free ledger and placed-pen overlay sit inside the existing semantic
+hotspot. This lets the smaller book lift on hover without exposing duplicate
+art or the earlier pen-shaped page patch.
 
 The photography lightbox and hanging camera are separate buttons even though
 they open the same panel, so their hover behavior can evolve independently.
@@ -84,8 +85,8 @@ system, door, props, and perspective remain locked to the concept render.
   through reloads for that browser tab. A localized clean layer permanently
   masks the baked room pen after pickup. In the lobby, the guest book remains
   pen-free and locked while the pen is in inventory. Dragging the inventory pen
-  onto the book places it there, removes it from inventory, reveals the baked
-  guest-book pen, and opens the signing modal. Clicking or keyboard-activating
+  onto the book places it there, removes it from inventory, reveals the
+  independent placed-pen overlay, and opens the signing modal. Clicking or keyboard-activating
   the pen selects it; activating the book then provides the equivalent
   accessible path. Both the entry handler and submit handler enforce that the
   pen must actually be on the book, not merely collected.
@@ -194,9 +195,11 @@ rotation.
 - Treat the lobby as a flattened illustration first, not a collection of
   separable objects. Before moving anything, inspect the background plate for
   baked duplicates, shadows, rods, and edge fragments.
-- The guestbook should remain baked into the desk. Its cleanest interaction is
-  an invisible semantic hotspot over the original art; the extracted guestbook
-  layer carried a jagged desk/floor matte and nicked the gold plaque.
+- The earlier advice to keep the guestbook baked into the desk is superseded.
+  The clean solution is a generated empty-desk repair plus a fresh isolated
+  book, while the original brass plaque stays baked. The repair uses the clean
+  full-scene donor through one expanded, feathered old-book silhouette; do not
+  add a cloned texture strip, because it duplicates the desk edge.
 - The newsstand needs only an upper-silhouette repair behind its replacement
   sprite. Keep the baked cabinet body, base, and grounding shadow. Removing the
   whole object made it look pulled away from the wall and brought generated
@@ -329,13 +332,19 @@ images/before-times/layers/lobby-clean-v4.webp
 
 images/before-times/layers/lobby-clean-v4-newsstand-v1.png
 images/before-times/layers/lobby-clean-v4-newsstand-v1.webp
-  Current runtime lobby plate. It applies only the localized, feathered
+  Base plate for the current runtime lobby. It applies only the localized, feathered
   upper-silhouette repair over V4 so the independent `newsstand-v2` sprite has
   no doubled diagonal rod or original top plane peeking behind it. The baked
   cabinet body, base, and grounding shadow remain; removing them made the
   dispenser look pulled from the wall and reintroduced generated floor shadows.
   V5 remains an experimental all-props-removed plate and is not used because
   its multiple generated repair regions read as choppy.
+
+images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.{png,webp}
+  Current runtime lobby plate. It derives from the newsstand V1 base and repairs
+  only the original full-size book footprint. The expanded feathered mask takes
+  the complete tabletop and rim repair from the clean full-scene donor, covering
+  the old contact shadow without introducing the V2 clone strip's false edge.
 
 images/before-times/layers/door-*-v1.png
   Full-resolution transparent masters for the four career door assemblies.
@@ -395,11 +404,18 @@ images/before-times/inventory/fountain-pen-{chroma-,}v1.png
   transparent runtime PNG can be rebuilt with the imagegen chroma-key helper.
 
 images/before-times/layers/guestbook-no-pen-v4.{png,webp}
-  Surgical pen-free lobby guestbook replacement. The original guestbook crop is
+  Superseded surgical pen-free replacement. The original guestbook crop is
   the base, and only pixels inside the pen/contact-shadow silhouette come from
   the aligned clean-page donor. Book geometry, handwriting outside the pen,
   binding, page edges, desk, floor, chair fragment, and complete plaque remain
-  original. The layer stays pinned on hover/focus until the pen is placed.
+  original. Keep only as a record of the earlier patch approach.
+
+images/before-times/layers/guestbook-fresh-v1.{png,webp}
+images/before-times/layers/guestbook-placed-pen-v1.{png,webp}
+  Current full-canvas interaction layers. The fresh isolated ledger is rendered
+  at roughly two-thirds of the earlier book size and sits lower/right, toward
+  the brass plaque. The placed pen is a separate, proportionally scaled overlay
+  so both layers can move together.
 
 images/before-times/layers/alchemy-pen-free-patch-v4.{png,webp}
   Coherent 340 × 190 single-sheet replacement with softly feathered transitions
@@ -426,6 +442,11 @@ tools/build-guestbook-no-pen.py
   Composites a narrow generated ruled-paper donor into the locked guest-book
   crop with a feathered pen silhouette and writes the PNG/WebP clean layer.
 
+tools/build-fresh-guestbook.py
+  Builds the current empty-desk V3 runtime plate, fits the fresh book, and
+  creates the proportional placed-pen overlay. Run this after rebuilding the
+  newsstand V1 base plate.
+
 tools/build-alchemy-pen-patch.py
   Builds the localized script-stack repair from the generated donor and locked
   room pixels, then writes the PNG/WebP runtime patch.
@@ -448,6 +469,14 @@ tools/before-times-clean-patches/guestbook-no-pen-generated-v1.png
 tools/before-times-clean-patches/guestbook-no-pen-generated-v2.png
   Current coherent full-crop donor. It keeps the complete plaque inside frame
   and replaces the entire right page, avoiding the old pen-shaped smudge.
+
+tools/before-times-clean-patches/guestbook-empty-desk-fullscene-v3.png
+  Full-scene precise-object-edit donor used only inside the original book mask.
+  It supplies the desk geometry hidden behind the old book.
+
+tools/before-times-clean-patches/guestbook-fresh-{chroma,isolated}-v1.png
+  Preserved generated master and chroma-removed source for the current fresh
+  pen-free book layer.
 
 tools/before-times-clean-patches/alchemy-pen-free-generated-v2.png
   Generated pen-free script-paper edit retained as the texture donor for the
@@ -555,8 +584,8 @@ prop groups at once. That experimental room is stored as
 the live page. Combining unrelated wall, floor, and desk repairs introduced
 visible texture seams. The base V4 plate keeps the original props beneath pixel-exact
 effect layers; those overlays animate through light and color without shifting
-far enough to expose a duplicate. The live `lobby-clean-v4-newsstand-v1`
-derivative is the one exception: it uses the generated empty-room source only
+far enough to expose a duplicate. The `lobby-clean-v4-newsstand-v1`
+base is the newsstand exception: it uses the generated empty-room source only
 through a narrow upper-silhouette mask because the replacement cabinet's rod
 and top plane did not align perfectly with the baked original. The cabinet
 body, base, grounding shadow, and remaining props stay untouched.
@@ -603,8 +632,9 @@ is fixed.
 The live newsstand similarly uses `images/before-times/layers/newsstand-v2.*`.
 It preserves the full cabinet, top rod, side cable, and newspaper face without
 the wall slivers and large floor wedge carried by the older extracted matte.
-Its matching background is `lobby-clean-v4-newsstand-v1.*`; do not restore the
-plain V4 plate unless the doubled handle and top plane are intentionally wanted.
+Its matching base background is `lobby-clean-v4-newsstand-v1.*`; the live plate
+is the guestbook V3 derivative. Do not restore the plain V4 plate unless the
+doubled handle and top plane are intentionally wanted.
 
 Running the helper rebuilds the PNG clean plate:
 
@@ -612,12 +642,11 @@ Running the helper rebuilds the PNG clean plate:
 python3 tools/build-before-times-layers.py
 ```
 
-It does not currently rebuild the runtime WebPs. Afterward run:
+It does not currently rebuild the runtime WebPs or the separated guestbook.
+Afterward rebuild the live plate and guestbook layers with:
 
 ```bash
-cwebp -q 92 -m 6 -mt \
-  images/before-times/layers/lobby-clean-v4-newsstand-v1.png \
-  -o images/before-times/layers/lobby-clean-v4-newsstand-v1.webp
+python3 tools/build-fresh-guestbook.py
 ```
 
 ## Geometry and placement
@@ -703,11 +732,40 @@ The reduced-motion media rule already collapses animation and transitions.
   it; mask the source silhouette.
 - Do not use the plain static server to validate a Vercel `/api` route.
 
+## Content Factory room and quarter path
+
+The Content Factory is now a navigable second room at `#content-factory`.
+The lobby door enters the room directly and no longer carries the
+under-construction sandwich board. Its room plate is
+`images/before-times/content-factory-room-v1.webp` (`1672 × 941`), with the
+reverse lobby view, a partial newspaper dispenser, and the desk bell visible
+through the open doorway.
+
+The collectible uses
+`images/before-times/inventory/content-quarter-v2.png` (`460 × 140`). It is an
+almost edge-on illustrated sliver rather than a face-on realistic coin. Its
+room hotspot is currently `left: 67%`, `top: 56.8%`, `width: 3.1%`, and
+`height: 4%`, which seats the glint on the control unit's top-left lip. Keep
+future placement tuning small; enlarging it or lowering it makes it look pasted
+onto the instrument face.
+
+Quarter state shares the existing `bt-inventory-v1` session-storage record:
+`contentQuarter` tracks whether it has been collected, and
+`contentQuarterLocation` moves from `room` to `inventory` to `newsstand`. Once
+inserted, the quarter is consumed for the session, the lobby dispenser changes
+to its unlocked state, and the student press panel opens. Mouse drag, touch
+drag, click selection, and keyboard activation all use the same transition.
+
+End-to-end local verification completed: enter the room, collect the quarter,
+return through the Content Factory door, select the inventory quarter, unlock
+the newspaper dispenser, and open the student press panel. The browser reported
+no console errors or error overlays.
+
 ## Verification completed this session
 
 - The page was repeatedly tested at `http://localhost:8080/before-times.html`.
-- The runtime plate loads from `lobby-clean-v4-newsstand-v1.webp` with the
-  localized newsstand-top repair.
+- The runtime plate loads from `lobby-clean-v4-newsstand-guestbook-v3.webp`
+  with the localized newsstand-top and empty-desk repairs.
 - Door rest states, adjusted frame positions, radio aura, guestbook hotspot,
   generated bell, rough X, and X backing mask were visually inspected in the
   live lobby.
@@ -725,8 +783,8 @@ The reduced-motion media rule already collapses animation and transitions.
 
 This finishing pass belongs together on `codex/before-times`: the handoff,
 HTML, CSS, JavaScript, layer builder, and the binary runtime assets
-`bell-v4.*`, `exit-button-v2.png`, `exit-button-v3.png`, and
-`lobby-clean-v4-newsstand-v1.*`. The PNG/WebP files are project sources, not
+`bell-v4.*`, `exit-button-v2.png`, `exit-button-v3.png`, the fresh guestbook
+layers, and `lobby-clean-v4-newsstand-guestbook-v3.*`. The PNG/WebP files are project sources, not
 disposable temp output. Inspect `git status` before any cleanup, branch switch,
 or broad rewrite.
 

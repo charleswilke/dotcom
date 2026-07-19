@@ -82,10 +82,13 @@ system, door, props, and perspective remain locked to the concept render.
   drawer tucks itself after 2.9 seconds but its handle remains available. The
   item and its `room` → `inventory` → `guestbook` location are stored in
   `sessionStorage` under `bt-inventory-v1`, so both state and location persist
-  through reloads for that browser tab. A localized clean layer permanently
-  masks the baked room pen after pickup. In the lobby, the guest book remains
-  pen-free and locked while the pen is in inventory. Dragging the inventory pen
-  onto the book places it there, removes it from inventory, reveals the
+  through reloads for that browser tab. The complete pen-free V4 room plate
+  replaces the original background after pickup, so revisiting the room cannot
+  reveal the baked pen or a localized repair seam. In the lobby, the guest book
+  remains pen-free and locked while the pen is in inventory. Hovering or focusing
+  the room pen also reveals that clean plate beneath the lifted pen sprite, avoiding
+  a doubled pen during the preview animation. Dragging the inventory pen onto the
+  book places it there, removes it from inventory, reveals the
   independent placed-pen overlay, and opens the signing modal. Clicking or keyboard-activating
   the pen selects it; activating the book then provides the equivalent
   accessible path. Both the entry handler and submit handler enforce that the
@@ -389,6 +392,11 @@ images/before-times/absurd-alchemy-clean-v4.{png,webp}
   Current runtime room plate. It starts from V3 and applies the localized
   generated teal wall/floor repair only beneath the extracted exit doorway.
 
+images/before-times/absurd-alchemy-clean-v4-no-pen.{png,webp}
+  Full-room post-pickup plate. It matches V4 but removes the fountain pen from
+  the left script stack. The page swaps to this plate whenever persisted pen
+  state says the pen is in inventory or on the guest book.
+
 images/before-times/layers/alchemy-exit-door-lobby-v2.{png,webp}
   Full-scene transparent exit sprite. Original concept pixels preserve the
   installed reverse-view perspective; frame, threshold, reverse clapboard,
@@ -418,10 +426,9 @@ images/before-times/layers/guestbook-placed-pen-v1.{png,webp}
   so both layers can move together.
 
 images/before-times/layers/alchemy-pen-free-patch-v4.{png,webp}
-  Coherent 340 × 190 single-sheet replacement with softly feathered transitions
-  in the surrounding dark equipment. It removes both the pen and the generated
-  lower duplicate-pad wedge, and remains visible after pickup so revisiting
-  Absurd Alchemy cannot reveal the baked pen again.
+  Superseded 340 × 190 single-sheet replacement retained as a record of the
+  earlier localized repair approach. The runtime now swaps the complete room
+  plate after pickup.
 
 images/before-times/production/*
   Sagan thumbnail and the two current silent production-monitor MP4 loops.
@@ -736,18 +743,21 @@ The reduced-motion media rule already collapses animation and transitions.
 
 The Content Factory is now a navigable second room at `#content-factory`.
 The lobby door enters the room directly and no longer carries the
-under-construction sandwich board. Its room plate is
+under-construction sandwich board. The room is back on its original static plate,
 `images/before-times/content-factory-room-v1.webp` (`1672 × 941`), with the
-reverse lobby view, a partial newspaper dispenser, and the desk bell visible
-through the open doorway.
+control console, foreground conveyor, and rocket article baked into the image.
+The reverse lobby view, partial newspaper dispenser, and desk bell remain
+visible through the open doorway. The attempted console/conveyor isolation was
+not adopted; no replacement visual layers are loaded.
 
-The collectible uses
-`images/before-times/inventory/content-quarter-v2.png` (`460 × 140`). It is an
-almost edge-on illustrated sliver rather than a face-on realistic coin. Its
-room hotspot is currently `left: 67%`, `top: 56.8%`, `width: 3.1%`, and
-`height: 4%`, which seats the glint on the control unit's top-left lip. Keep
-future placement tuning small; enlarging it or lowering it makes it look pasted
-onto the instrument face.
+The room collectible and all inventory representations use the face-on
+`images/before-times/inventory/content-quarter-doc-v1.webp` runtime asset: a
+fictional silver novelty coin embossed with Doc's portrait and a paw-print mint
+mark. The transparent PNG is its master; the flat-green generation source lives
+at `tools/before-times-clean-patches/content-quarter-doc-chroma-v1.png`. In the
+room, slight horizontal compression makes the coin look leaned against the
+lower-right machinery inside the hanging lamp's pool of light. The earlier
+realistic V1 and edge-only V2 assets remain available but are no longer loaded.
 
 Quarter state shares the existing `bt-inventory-v1` session-storage record:
 `contentQuarter` tracks whether it has been collected, and

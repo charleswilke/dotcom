@@ -589,7 +589,7 @@
     const alchemyHandHotspot = document.querySelector('.bt-alchemy-hotspot-hand');
     const alchemyTwentyFiveHotspot = document.querySelector('.bt-alchemy-hotspot-25');
     const alchemyPenHotspot = document.getElementById('bt-alchemy-pen');
-    const alchemyPenCleanLayer = document.getElementById('bt-alchemy-pen-clean-layer');
+    const alchemyArtNoPen = document.getElementById('bt-alchemy-art-no-pen');
     const lobbyInventoryPen = document.getElementById('bt-lobby-inventory-pen');
     const inventoryPenSlot = document.getElementById('bt-inventory-slot-pen');
     const contentDoorHotspot = document.querySelector('.bt-hotspot-content');
@@ -761,7 +761,7 @@
         inventoryPenSlot.classList.toggle('bt-inventory-slot-filled', penReady);
         lobbyInventoryPen.hidden = !penReady;
         alchemyPenHotspot.hidden = hasAlchemyPen;
-        alchemyPenCleanLayer.hidden = !hasAlchemyPen;
+        alchemyArtNoPen.classList.toggle('is-active', hasAlchemyPen);
         if (!penReady) {
             inventoryPenSelected = false;
             lobbyInventoryPen.classList.remove('is-selected');
@@ -783,7 +783,7 @@
         savePenState();
         inventoryPenSlot.classList.add('bt-inventory-slot-filled');
         lobbyInventoryPen.hidden = false;
-        alchemyPenCleanLayer.hidden = false;
+        alchemyArtNoPen.classList.add('is-active');
         syncInventoryDrawer();
         syncGuestbookAccess();
         animateLayer(alchemyPenHotspot, 'is-collecting', 740);
@@ -894,7 +894,7 @@
             contentQuarterHotspot.hidden = true;
             setInventoryDrawerOpen(true, true);
         }, prefersReducedMotion.matches ? 0 : 420);
-        showStatus('A shiny quarter rattles into inventory.', 3400);
+        showStatus('A suspiciously good quarter rattles into inventory.', 3400);
     }
 
     function setInventoryQuarterSelected(selected) {

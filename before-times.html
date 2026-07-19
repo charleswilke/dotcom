@@ -41,10 +41,10 @@
     <link rel="preload" as="image" href="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" type="image/png">
     <link rel="preload" as="image" href="/images/before-times/layers/guestbook-fresh-v1.webp?v=20260718d" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/layers/guestbook-placed-pen-v1.webp?v=20260718d" type="image/webp">
-    <link rel="preload" as="image" href="/images/before-times/layers/alchemy-pen-free-patch-v4.webp?v=20260718a" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4-no-pen.webp?v=20260719a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/content-factory-room-v1.webp?v=20260718a" type="image/webp">
-    <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-v2.png?v=20260718b" type="image/png">
-    <link rel="stylesheet" href="/before-times.css?v=20260718t">
+    <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
+    <link rel="stylesheet" href="/before-times.css?v=20260719n">
 </head>
 <body class="before-times-page">
     <a class="bt-skip-link" href="#bt-lobby">Skip to the lobby</a>
@@ -142,9 +142,9 @@
                     <img src="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" width="1536" height="1024" alt="">
                     <span aria-hidden="true">Absurd Alchemy pen</span>
                 </button>
-                <button class="bt-lobby-inventory-item bt-lobby-inventory-quarter" id="bt-lobby-inventory-quarter" type="button" aria-label="Select the collected Content Factory quarter" aria-pressed="false" draggable="true" hidden>
-                    <img src="/images/before-times/inventory/content-quarter-v2.png?v=20260718b" width="460" height="140" alt="">
-                    <span aria-hidden="true">Factory quarter</span>
+                <button class="bt-lobby-inventory-item bt-lobby-inventory-quarter" id="bt-lobby-inventory-quarter" type="button" aria-label="Select the collected Doc quarter" aria-pressed="false" draggable="true" hidden>
+                    <img src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="">
+                    <span aria-hidden="true">Doc quarter</span>
                 </button>
 
                 <div class="bt-scene-status" id="bt-scene-status" role="status" aria-live="polite"></div>
@@ -159,6 +159,15 @@
                 <img
                     class="bt-lobby-art bt-alchemy-art"
                     src="/images/before-times/absurd-alchemy-clean-v4.webp?v=20260718a"
+                    width="1672"
+                    height="941"
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async">
+                <img
+                    class="bt-lobby-art bt-alchemy-art bt-alchemy-art-no-pen"
+                    id="bt-alchemy-art-no-pen"
+                    src="/images/before-times/absurd-alchemy-clean-v4-no-pen.webp?v=20260719a"
                     width="1672"
                     height="941"
                     alt=""
@@ -217,7 +226,6 @@
                 <span class="bt-alchemy-chair-aura" aria-hidden="true"></span>
                 <img class="bt-alchemy-object-layer bt-alchemy-crate-layer" id="bt-alchemy-crate-layer" src="/images/before-times/layers/alchemy-script-crate-v3.webp?v=20260717c" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <span class="bt-alchemy-crate-aura" aria-hidden="true"></span>
-                <img class="bt-alchemy-pen-clean-layer" id="bt-alchemy-pen-clean-layer" src="/images/before-times/layers/alchemy-pen-free-patch-v4.webp?v=20260718a" width="340" height="190" alt="" aria-hidden="true" decoding="async" hidden>
                 <img class="bt-alchemy-curio-layer bt-alchemy-solar-layer" id="bt-alchemy-solar-layer" src="/images/before-times/layers/alchemy-solar-model-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <img class="bt-alchemy-curio-layer bt-alchemy-cat-layer" id="bt-alchemy-cat-layer" src="/images/before-times/layers/alchemy-french-kitty-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
                 <img class="bt-alchemy-curio-layer bt-alchemy-tape-25-layer" id="bt-alchemy-tape-25-layer" src="/images/before-times/layers/alchemy-tape-25-sticker-original-v1.webp?v=20260717b" width="1672" height="941" alt="" aria-hidden="true" decoding="async">
@@ -258,8 +266,8 @@
                     <span class="bt-door-light" aria-hidden="true"></span>
                 </button>
                 <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-console" type="button" data-content-action="console" data-label="Main control unit" aria-label="Inspect the Content Factory main control unit"></button>
-                <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-quarter" id="bt-content-quarter" type="button" data-content-action="collect-quarter" data-label="Take the shiny quarter" aria-label="Take the shiny quarter and add it to inventory">
-                    <img class="bt-content-quarter-sprite" src="/images/before-times/inventory/content-quarter-v2.png?v=20260718b" width="460" height="140" alt="" aria-hidden="true">
+                <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-quarter" id="bt-content-quarter" type="button" data-content-action="collect-quarter" data-label="Take the Doc quarter" aria-label="Take the Doc novelty quarter and add it to inventory">
+                    <img class="bt-content-quarter-sprite" src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="" aria-hidden="true">
                 </button>
 
                 <div class="bt-scene-status bt-content-scene-status" id="bt-content-scene-status" role="status" aria-live="polite"></div>
@@ -277,15 +285,15 @@
                     <span>Absurd Alchemy pen</span>
                 </div>
                 <div class="bt-inventory-slot bt-inventory-slot-quarter" id="bt-inventory-slot-quarter">
-                    <img src="/images/before-times/inventory/content-quarter-v2.png?v=20260718b" width="460" height="140" alt="Shiny silver quarter from The Content Factory">
-                    <span>Factory quarter</span>
+                    <img src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="Silver novelty quarter embossed with Doc from The Content Factory">
+                    <span>Doc quarter</span>
                 </div>
                 <div class="bt-inventory-slot" aria-hidden="true"></div>
             </div>
         </aside>
 
         <img class="bt-inventory-drag-ghost" id="bt-inventory-drag-ghost" src="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" width="1536" height="1024" alt="" aria-hidden="true" hidden>
-        <img class="bt-inventory-drag-ghost bt-inventory-quarter-drag-ghost" id="bt-inventory-quarter-drag-ghost" src="/images/before-times/inventory/content-quarter-v2.png?v=20260718b" width="460" height="140" alt="" aria-hidden="true" hidden>
+        <img class="bt-inventory-drag-ghost bt-inventory-quarter-drag-ghost" id="bt-inventory-quarter-drag-ghost" src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="" aria-hidden="true" hidden>
 
         <button class="bt-mobile-floorplan" id="bt-mobile-floorplan" type="button" data-panel="floorplan" aria-label="Open floor plan">
             <span aria-hidden="true">⌑</span> Floor plan
@@ -371,6 +379,6 @@
     <audio id="bt-radio-audio" preload="none"></audio>
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
-    <script src="/before-times.js?v=20260718f" defer></script>
+    <script src="/before-times.js?v=20260719b" defer></script>
 </body>
 </html>

@@ -560,6 +560,10 @@
     const archiveGatePassword = document.getElementById('bt-gate-password');
     const archiveGateStatus = document.getElementById('bt-gate-status');
     const archiveExperience = document.getElementById('bt-lobby');
+    const mobileOrientationPrompt = document.getElementById('bt-mobile-orientation');
+    const mobileOrientationFullscreen = document.getElementById('bt-mobile-orientation-fullscreen');
+    const mobileOrientationContinue = document.getElementById('bt-mobile-orientation-continue');
+    const mobileImmersiveButton = document.getElementById('bt-mobile-immersive');
     const archivePasswords = new Set(['p33k', 'tootsie', 'doc', 'astro']);
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
@@ -639,6 +643,9 @@
     const alchemyNowPlaying = document.getElementById('bt-alchemy-now-playing');
     const productionScreens = Array.from(document.querySelectorAll('[data-production-screen]'));
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const usesTouchscreenLayout = window.matchMedia('(hover: none) and (pointer: coarse)');
+    const isPortraitOrientation = window.matchMedia('(orientation: portrait)');
+    const isStandaloneDisplay = window.matchMedia('(display-mode: standalone), (display-mode: fullscreen)');
     let statusTimer = null;
     let guestbookLoaded = false;
     let soundEnabled = localStorage.getItem('bt-sound-enabled') !== 'false';
@@ -680,6 +687,70 @@
     let quarterPointerStartY = 0;
     let quarterPointerLastX = 0;
     let quarterPointerLastY = 0;
+    let portraitPromptDismissed = false;
+
+    function fullscreenElement() {
+        return document.fullscreenElement || document.webkitFullscreenElement || null;
+    }
+
+    function fullscreenRequest() {
+        return document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || null;
+    }
+
+    function listenForMediaQueryChange(mediaQuery, handler) {
+        if (typeof mediaQuery.addEventListener === 'function') {
+            mediaQuery.addEventListener('change', handler);
+        } else if (typeof mediaQuery.addListener === 'function') {
+            mediaQuery.addListener(handler);
+        }
+    }
+
+    function archiveIsOpen() {
+        return archiveGate.hidden || document.documentElement.classList.contains('bt-gate-bypassed');
+    }
+
+    function syncMobileImmersiveControls() {
+        const isTouchscreen = usesTouchscreenLayout.matches;
+        const canRequestFullscreen = typeof fullscreenRequest() === 'function';
+        const isFullscreen = Boolean(fullscreenElement()) || isStandaloneDisplay.matches || navigator.standalone === true;
+        const showOrientationPrompt = isTouchscreen
+            && isPortraitOrientation.matches
+            && archiveIsOpen()
+            && !portraitPromptDismissed;
+
+        mobileOrientationPrompt.hidden = !showOrientationPrompt;
+        mobileOrientationFullscreen.hidden = !canRequestFullscreen || isFullscreen;
+        mobileImmersiveButton.hidden = !isTouchscreen
+            || !canRequestFullscreen
+            || isFullscreen
+            || !archiveIsOpen()
+            || showOrientationPrompt;
+    }
+
+    async function requestMobileImmersiveMode() {
+        if (!usesTouchscreenLayout.matches) return;
+
+        const request = fullscreenRequest();
+        if (!fullscreenElement() && !isStandaloneDisplay.matches && navigator.standalone !== true && request) {
+            try {
+                await Promise.resolve(request.call(document.documentElement));
+            } catch (error) {
+                // Fullscreen is a progressive enhancement. The rotate prompt
+                // remains available when a browser declines the request.
+            }
+        }
+
+        if (screen.orientation && typeof screen.orientation.lock === 'function') {
+            try {
+                await screen.orientation.lock('landscape');
+            } catch (error) {
+                // iOS and some embedded browsers do not expose orientation
+                // locking. They receive the rotate-phone fallback instead.
+            }
+        }
+
+        syncMobileImmersiveControls();
+    }
 
     function makeArchiveExperienceAccessible() {
         archiveExperience.removeAttribute('inert');
@@ -692,6 +763,7 @@
         if (wasUnlocked) {
             archiveGate.hidden = true;
             makeArchiveExperienceAccessible();
+            syncMobileImmersiveControls();
             return;
         }
 
@@ -715,6 +787,7 @@
 
             archiveGatePassword.removeAttribute('aria-invalid');
             archiveGateStatus.textContent = 'The old locks remember.';
+            requestMobileImmersiveMode();
             archiveGate.classList.remove('is-denied');
             archiveGate.classList.add('is-accepting');
             archiveGatePassword.blur();
@@ -734,6 +807,7 @@
             window.setTimeout(() => {
                 archiveGate.hidden = true;
                 makeArchiveExperienceAccessible();
+                syncMobileImmersiveControls();
             }, prefersReducedMotion.matches ? 300 : 1770);
         });
 
@@ -759,6 +833,19 @@
 
         window.requestAnimationFrame(() => archiveGatePassword.focus({ preventScroll: true }));
     }
+
+    mobileOrientationFullscreen.addEventListener('click', requestMobileImmersiveMode);
+    mobileImmersiveButton.addEventListener('click', requestMobileImmersiveMode);
+    mobileOrientationContinue.addEventListener('click', () => {
+        portraitPromptDismissed = true;
+        syncMobileImmersiveControls();
+    });
+
+    document.addEventListener('fullscreenchange', syncMobileImmersiveControls);
+    document.addEventListener('webkitfullscreenchange', syncMobileImmersiveControls);
+    listenForMediaQueryChange(isPortraitOrientation, syncMobileImmersiveControls);
+    listenForMediaQueryChange(usesTouchscreenLayout, syncMobileImmersiveControls);
+    listenForMediaQueryChange(isStandaloneDisplay, syncMobileImmersiveControls);
 
     function readInventory() {
         try {

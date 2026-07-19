@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Before Times | Charles Wilke</title>
     <meta name="description" content="A career archive from before the machines started talking back.">
     <meta name="robots" content="index,follow,max-image-preview:large">
@@ -63,7 +66,7 @@
     <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4-no-pen.webp?v=20260719a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/content-factory-room-v1.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260719r">
+    <link rel="stylesheet" href="/before-times.css?v=20260719s">
     <script>
         try {
             if (sessionStorage.getItem('bt-gate-unlocked-v1') === 'true') {
@@ -134,6 +137,25 @@
         </p>
 
         <div class="bt-mobile-hint" aria-hidden="true">Swipe to explore · tap an object</div>
+
+        <section class="bt-mobile-orientation" id="bt-mobile-orientation" role="region" aria-labelledby="bt-mobile-orientation-title" hidden>
+            <div class="bt-mobile-orientation-card">
+                <span class="bt-mobile-phone" aria-hidden="true"><span></span></span>
+                <p class="bt-mobile-orientation-kicker">The archive needs the long wall</p>
+                <h2 id="bt-mobile-orientation-title">Turn your phone sideways</h2>
+                <p>Before Times is designed as a landscape room. Rotate your phone for the full view.</p>
+                <div class="bt-mobile-orientation-actions">
+                    <button class="bt-mobile-orientation-fullscreen" id="bt-mobile-orientation-fullscreen" type="button" hidden>
+                        <span aria-hidden="true">⛶</span> Try full screen
+                    </button>
+                    <button class="bt-mobile-orientation-continue" id="bt-mobile-orientation-continue" type="button">Stay in portrait</button>
+                </div>
+            </div>
+        </section>
+
+        <button class="bt-mobile-immersive" id="bt-mobile-immersive" type="button" aria-label="Enter full screen and use landscape orientation" hidden>
+            <span aria-hidden="true">⛶</span> Full screen
+        </button>
 
         <div class="bt-lobby-scroll" id="bt-lobby-scroll">
             <section class="bt-lobby-scene" aria-label="Before Times archive lobby" aria-describedby="bt-lobby-instructions">
@@ -477,6 +499,6 @@
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260719h" defer></script>
-    <script src="/before-times.js?v=20260719k" defer></script>
+    <script src="/before-times.js?v=20260719l" defer></script>
 </body>
 </html>

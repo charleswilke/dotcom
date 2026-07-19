@@ -24,6 +24,17 @@ WebPs. The original magenta chroma renders are retained in
 status copy in HTML; do not bake text into either raster. Short landscape
 viewports use a side-by-side gate layout so the input remains reachable.
 
+On touch-first mobile devices, a successful password submission also makes a
+best-effort request for browser fullscreen and a landscape orientation lock
+while the submit gesture is still active. Both APIs are progressive
+enhancements: Android browsers commonly honor them, while iPhone Safari may
+not. If the archive is still portrait after the gate clears, a themed
+rotate-phone interstitial appears and can be dismissed with “Stay in portrait.”
+Supported browsers also keep a small Full screen control available when the
+archive is open but not immersive. Session-bypassed reloads cannot request
+fullscreen automatically because there is no fresh user gesture, so the same
+manual control/fallback handles that path.
+
 The first lobby is now built as a clean background plate plus independent
 interactive raster layers. The visible career doors are not warped crops. Each
 is a newly rendered asset that already contains the correct installed

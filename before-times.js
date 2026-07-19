@@ -19,9 +19,9 @@
             title: 'Absurd Alchemy',
             copy: [
                 'The crooked production office: scripts, short films, web series, questionable props, and twenty-five projects shepherded from idea to finished thing.',
-                'This room will hold French Kitty, production artifacts, and the years when making the work meant writing it, scheduling it, shooting it, and occasionally figuring out where everyone had parked.'
+                'Its project files now connect the working title of French Kitty to the finished film, open the production machinery inside The NoHo Rag, and follow Call Me Lucifer from broadcast scandal into Burbank exile.'
             ],
-            facts: ['Writer / producer', 'French Kitty, featuring Chloe Fineman', 'Distributed by Troma Entertainment'],
+            facts: ['Writer / producer', 'French Kitty, featuring Chloe Fineman', 'The NoHo Rag + Call Me Lucifer', 'Distributed by Troma Entertainment'],
             action: { label: 'Visit the surviving Vimeo archive', href: 'https://vimeo.com/absurdalchemy', external: true }
         },
         games: {
@@ -38,9 +38,9 @@
             title: 'The Content Factory',
             copy: [
                 'A cheerful industrial accident producing blogs, landing pages, campaign copy, websites, search traffic, and the occasional viral object.',
-                'This room joins the copy mines, freelance design years, Salt & Straw work, and FieldEdge into one absurd machine built to turn technical subjects into language people could actually use.'
+                'The archive now opens in layers: a fast taste, the reason each piece survived, then a full reading edition, strategy system, or annotated before-and-after proof.'
             ],
-            facts: ['Hundreds of B2B and B2C content pieces', 'Corporate websites and digital assets', 'A 240% organic-traffic increase at FieldEdge']
+            facts: ['13 recovered reading paths in the current archive', 'Hundreds of B2B and B2C content pieces', 'Corporate websites and digital assets', 'A 240% organic-traffic increase at FieldEdge']
         },
         docs: {
             kicker: 'Door 04 // remote // 2022–2024',
@@ -561,6 +561,12 @@
     const infoDialog = document.getElementById('bt-info-dialog');
     const guestbookDialog = document.getElementById('bt-guestbook-dialog');
     const alchemyMenuDialog = document.getElementById('bt-alchemy-menu-dialog');
+    const archiveDialog = document.getElementById('bt-archive-dialog');
+    const archiveKicker = document.getElementById('bt-archive-kicker');
+    const archiveTitle = document.getElementById('bt-archive-title');
+    const archiveIntro = document.getElementById('bt-archive-intro');
+    const archiveIndex = document.getElementById('bt-archive-index');
+    const archiveDetail = document.getElementById('bt-archive-detail');
     const radioAudio = document.getElementById('bt-radio-audio');
     const infoKicker = document.getElementById('bt-dialog-kicker');
     const infoTitle = document.getElementById('bt-dialog-title');
@@ -978,6 +984,315 @@
         const paragraph = document.createElement('p');
         paragraph.textContent = text;
         return paragraph;
+    }
+
+    function makeArchiveElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text) element.textContent = text;
+        return element;
+    }
+
+    function renderArchiveBody(blocks) {
+        const body = makeArchiveElement('div', 'bt-archive-body');
+        (blocks || []).forEach((block) => {
+            if (block.type === 'paragraph') {
+                body.appendChild(makeArchiveElement('p', '', block.text));
+                return;
+            }
+            if (block.type === 'quote') {
+                body.appendChild(makeArchiveElement('blockquote', '', block.text));
+                return;
+            }
+            if (block.type === 'subhead') {
+                body.appendChild(makeArchiveElement('h3', 'bt-archive-body-heading', block.text));
+                return;
+            }
+            if (block.type === 'bullets') {
+                const section = makeArchiveElement('section', 'bt-archive-notes');
+                section.appendChild(makeArchiveElement('h3', '', block.title));
+                const list = document.createElement('ul');
+                block.items.forEach((item) => list.appendChild(makeArchiveElement('li', '', item)));
+                section.appendChild(list);
+                body.appendChild(section);
+                return;
+            }
+            if (block.type === 'screenplay') {
+                const excerpt = makeArchiveElement('blockquote', 'bt-archive-screenplay');
+                excerpt.appendChild(makeArchiveElement('strong', '', block.character));
+                excerpt.appendChild(makeArchiveElement('p', '', block.text));
+                body.appendChild(excerpt);
+            }
+        });
+        return body;
+    }
+
+    function makeArchiveFigure(piece) {
+        if (piece.beforeImage && piece.afterImage) {
+            const comparison = makeArchiveElement('figure', 'bt-archive-comparison');
+            const comparisons = [
+                { label: 'Before // 2020', src: piece.beforeImage, alt: piece.beforeAlt },
+                { label: 'After // 2021', src: piece.afterImage, alt: piece.afterAlt }
+            ];
+            comparisons.forEach((item) => {
+                const proof = makeArchiveElement('div', 'bt-archive-proof');
+                proof.appendChild(makeArchiveElement('span', 'bt-archive-proof-label', item.label));
+                const windowElement = makeArchiveElement('div', 'bt-archive-proof-window');
+                const image = document.createElement('img');
+                image.src = item.src;
+                image.alt = item.alt;
+                image.loading = 'lazy';
+                image.decoding = 'async';
+                windowElement.appendChild(image);
+                proof.appendChild(windowElement);
+                comparison.appendChild(proof);
+            });
+            return comparison;
+        }
+        if (!piece.image) return null;
+        const figure = makeArchiveElement('figure', 'bt-archive-hero');
+        const image = document.createElement('img');
+        image.src = piece.image;
+        image.alt = piece.imageAlt || '';
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        figure.appendChild(image);
+        return figure;
+    }
+
+    function renderArchiveLineage(lineage) {
+        if (!lineage) return null;
+        const list = makeArchiveElement('ol', 'bt-archive-lineage');
+        lineage.forEach((step) => {
+            const item = document.createElement('li');
+            item.appendChild(makeArchiveElement('span', 'bt-archive-lineage-year', step.year));
+            item.appendChild(makeArchiveElement('strong', '', step.label));
+            item.appendChild(makeArchiveElement('span', '', step.detail));
+            list.appendChild(item);
+        });
+        return list;
+    }
+
+    function makeArchiveBackButton(collectionName, piece) {
+        const back = makeArchiveElement('button', 'bt-archive-back', '← Back to the preview');
+        back.type = 'button';
+        back.addEventListener('click', () => renderArchivePiece(collectionName, piece.id));
+        return back;
+    }
+
+    function renderArchiveComparison(piece) {
+        const container = makeArchiveElement('div', 'bt-archive-deep-content');
+        const mapHeading = makeArchiveElement('header', 'bt-compare-heading');
+        mapHeading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'The editorial map'));
+        mapHeading.appendChild(makeArchiveElement('h3', '', 'Five decisions hiding inside the rewrite'));
+        mapHeading.appendChild(makeArchiveElement('p', '', 'Read straight down for the argument, then open either complete page proof to inspect the source.'));
+        container.appendChild(mapHeading);
+
+        const changes = makeArchiveElement('div', 'bt-compare-map');
+        piece.depth.changes.forEach((change) => {
+            const card = makeArchiveElement('article', 'bt-compare-change');
+            card.appendChild(makeArchiveElement('h4', '', change.title));
+
+            const before = makeArchiveElement('section', 'bt-compare-change-before');
+            before.appendChild(makeArchiveElement('strong', '', 'Before'));
+            before.appendChild(makeArchiveElement('p', '', change.before));
+            card.appendChild(before);
+
+            const after = makeArchiveElement('section', 'bt-compare-change-after');
+            after.appendChild(makeArchiveElement('strong', '', 'After'));
+            after.appendChild(makeArchiveElement('p', '', change.after));
+            card.appendChild(after);
+
+            const why = makeArchiveElement('aside', 'bt-compare-change-why');
+            why.appendChild(makeArchiveElement('strong', '', 'Why it matters'));
+            why.appendChild(makeArchiveElement('p', '', change.why));
+            card.appendChild(why);
+            changes.appendChild(card);
+        });
+        container.appendChild(changes);
+
+        const source = makeArchiveElement('section', 'bt-compare-source');
+        source.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'The complete page proofs'));
+        source.appendChild(makeArchiveElement('h3', '', 'Follow the rabbit hole all the way down'));
+        source.appendChild(makeArchiveElement('p', 'bt-compare-source-intro', 'Choose a version, then scroll inside the proof to read the complete captured page.'));
+
+        const controls = makeArchiveElement('div', 'bt-compare-source-controls');
+        const beforeButton = makeArchiveElement('button', '', 'Read the 2020 original');
+        const afterButton = makeArchiveElement('button', '', 'Read the 2021 rewrite');
+        beforeButton.type = 'button';
+        afterButton.type = 'button';
+        controls.append(beforeButton, afterButton);
+        source.appendChild(controls);
+
+        const proofLabel = makeArchiveElement('p', 'bt-compare-source-label');
+        const proofWindow = makeArchiveElement('div', 'bt-compare-source-window');
+        const proofImage = document.createElement('img');
+        proofImage.loading = 'lazy';
+        proofImage.decoding = 'async';
+        proofWindow.appendChild(proofImage);
+        source.append(proofLabel, proofWindow);
+
+        function selectProof(version) {
+            const isBefore = version === 'before';
+            beforeButton.classList.toggle('is-active', isBefore);
+            afterButton.classList.toggle('is-active', !isBefore);
+            beforeButton.setAttribute('aria-pressed', String(isBefore));
+            afterButton.setAttribute('aria-pressed', String(!isBefore));
+            proofLabel.textContent = isBefore
+                ? 'Original publication // November 2020'
+                : 'Rebuilt publication // November 2021';
+            proofImage.src = isBefore ? piece.beforeImage : piece.afterImage;
+            proofImage.alt = isBefore ? piece.beforeAlt : piece.afterAlt;
+            proofWindow.scrollTop = 0;
+        }
+
+        beforeButton.addEventListener('click', () => selectProof('before'));
+        afterButton.addEventListener('click', () => selectProof('after'));
+        selectProof('after');
+        container.appendChild(source);
+        return container;
+    }
+
+    function renderArchiveDepth(collectionName, piece) {
+        if (!piece.depth) return;
+        const isComparison = piece.depth.kind === 'compare';
+        const heading = makeArchiveElement('header', 'bt-archive-deep-header');
+        heading.appendChild(makeArchiveBackButton(collectionName, piece));
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', piece.depth.meta));
+        heading.appendChild(makeArchiveElement('h2', '', piece.title));
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-dek', piece.depth.intro));
+
+        const children = [heading];
+        if (isComparison) {
+            children.push(renderArchiveComparison(piece));
+        } else {
+            const figure = makeArchiveFigure(piece);
+            if (figure) children.push(figure);
+            const reader = renderArchiveBody(piece.depth.body);
+            reader.classList.add('bt-archive-reader');
+            children.push(reader);
+            const endMark = makeArchiveElement('aside', 'bt-archive-end-mark');
+            endMark.appendChild(makeArchiveElement('strong', '', 'End of recovered artifact'));
+            endMark.appendChild(makeArchiveElement('p', '', 'You made it past the nibble. The conveyor belt approves.'));
+            children.push(endMark);
+        }
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        if (piece.action && piece.action.video) {
+            const action = makeArchiveElement('button', 'bt-dialog-action', piece.action.label);
+            action.type = 'button';
+            action.addEventListener('click', () => {
+                closeDialog(archiveDialog);
+                cueAlchemyVideo(piece.action.video);
+            });
+            actions.appendChild(action);
+        }
+        const previewBack = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the preview');
+        previewBack.type = 'button';
+        previewBack.addEventListener('click', () => renderArchivePiece(collectionName, piece.id));
+        actions.appendChild(previewBack);
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+        children.push(actions);
+
+        archiveDetail.replaceChildren(...children);
+        archiveDetail.scrollTop = 0;
+    }
+
+    function renderArchivePiece(collectionName, pieceId) {
+        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
+        if (!collection || !collection.length) return;
+        const piece = collection.find((item) => item.id === pieceId) || collection[0];
+
+        archiveIndex.replaceChildren();
+        collection.forEach((item, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'bt-archive-index-item';
+            button.classList.toggle('is-active', item.id === piece.id);
+            button.setAttribute('aria-current', item.id === piece.id ? 'true' : 'false');
+            button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', String(index + 1).padStart(2, '0')));
+            button.appendChild(makeArchiveElement('strong', '', item.title));
+            button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', item.eyebrow.replace(' // ', ' · ')));
+            button.appendChild(makeArchiveElement('span', 'bt-archive-index-depth', item.depthLabel || 'Curated preview'));
+            button.addEventListener('click', () => renderArchivePiece(collectionName, item.id));
+            archiveIndex.appendChild(button);
+        });
+
+        const heading = makeArchiveElement('header', 'bt-archive-piece-header');
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', piece.eyebrow));
+        heading.appendChild(makeArchiveElement('span', 'bt-archive-mode-chip', piece.depthLabel || 'Curated preview'));
+        heading.appendChild(makeArchiveElement('h2', '', piece.title));
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-dek', piece.dek));
+
+        const meta = makeArchiveElement('dl', 'bt-archive-meta');
+        [
+            ['Publication', piece.publication],
+            ['Credit', piece.credit],
+            ['Artifact', piece.format]
+        ].forEach(([term, description]) => {
+            meta.appendChild(makeArchiveElement('dt', '', term));
+            meta.appendChild(makeArchiveElement('dd', '', description));
+        });
+
+        const children = [heading, meta];
+        if (piece.depth) {
+            const depthPrompt = makeArchiveElement('aside', 'bt-archive-depth-prompt');
+            const depthCopy = makeArchiveElement('div', '');
+            depthCopy.appendChild(makeArchiveElement('span', '', piece.depth.kind === 'compare' ? 'See the transformation' : 'Keep reading'));
+            depthCopy.appendChild(makeArchiveElement('strong', '', piece.depth.meta));
+            const depthButton = makeArchiveElement('button', 'bt-dialog-action', piece.depth.label);
+            depthButton.type = 'button';
+            depthButton.addEventListener('click', () => renderArchiveDepth(collectionName, piece));
+            depthPrompt.append(depthCopy, depthButton);
+            children.push(depthPrompt);
+        }
+        const figure = makeArchiveFigure(piece);
+        if (figure) children.push(figure);
+        const lineage = renderArchiveLineage(piece.lineage);
+        if (lineage) children.push(lineage);
+        children.push(renderArchiveBody(piece.body));
+
+        const curator = makeArchiveElement('aside', 'bt-archive-curator');
+        curator.appendChild(makeArchiveElement('strong', '', 'Why it survived'));
+        curator.appendChild(makeArchiveElement('p', '', piece.curator));
+        children.push(curator);
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        if (piece.action && piece.action.video) {
+            const action = makeArchiveElement('button', 'bt-dialog-action', piece.action.label);
+            action.type = 'button';
+            action.addEventListener('click', () => {
+                closeDialog(archiveDialog);
+                cueAlchemyVideo(piece.action.video);
+            });
+            actions.appendChild(action);
+        }
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+        children.push(actions);
+
+        archiveDetail.replaceChildren(...children);
+        archiveDetail.scrollTop = 0;
+    }
+
+    function openArchive(collectionName, pieceId) {
+        const isAlchemy = collectionName === 'alchemy';
+        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
+        const pieceCount = collection ? collection.length : 0;
+        archiveKicker.textContent = isAlchemy
+            ? 'Absurd Alchemy // project file'
+            : 'Content Factory // recovered work';
+        archiveTitle.textContent = isAlchemy ? 'The mutation archive' : 'The output archive';
+        archiveIntro.textContent = isAlchemy
+            ? 'Scripts, strange decisions, and the finished creatures they became.'
+            : `${pieceCount} recovered pieces. Start with the quick version, then keep going into a reading edition or editorial comparison.`;
+        renderArchivePiece(collectionName, pieceId);
+        openDialog(archiveDialog);
     }
 
     function renderAlchemyPlaylist() {
@@ -1897,9 +2212,16 @@
             if (action === 'collect-pen') collectAlchemyPen();
             if (action === 'scripts') {
                 animateLayer(alchemyCrateLayer, 'is-rustling', 620);
-                showStatus('Drafts, call sheets, and at least one page nobody remembers approving.', 3800);
+                window.setTimeout(
+                    () => openArchive('alchemy', 'french-kitty-lineage'),
+                    prefersReducedMotion.matches ? 0 : 220
+                );
             }
         });
+    });
+
+    document.querySelectorAll('[data-content-archive]').forEach((button) => {
+        button.addEventListener('click', () => openArchive('content', button.dataset.contentArchive));
     });
 
     document.querySelectorAll('[data-content-action]').forEach((button) => {
@@ -1908,7 +2230,7 @@
             if (action === 'lobby') leaveContentRoom();
             if (action === 'collect-quarter') collectContentQuarter();
             if (action === 'console') {
-                showStatus('Twenty-four article jobs are queued across the conveyor loop.', 3200);
+                openArchive('content', 'solars-retro-future');
             }
         });
     });
@@ -1978,7 +2300,7 @@
         button.addEventListener('click', () => closeDialog(button.closest('dialog')));
     });
 
-    [infoDialog, guestbookDialog, alchemyMenuDialog].forEach((dialog) => {
+    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog].forEach((dialog) => {
         dialog.addEventListener('click', (event) => {
             if (event.target === dialog) closeDialog(dialog);
         });

@@ -44,7 +44,7 @@
     <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4-no-pen.webp?v=20260719a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/content-factory-room-v1.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260719n">
+    <link rel="stylesheet" href="/before-times.css?v=20260719q">
 </head>
 <body class="before-times-page">
     <a class="bt-skip-link" href="#bt-lobby">Skip to the lobby</a>
@@ -242,7 +242,7 @@
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-pen" id="bt-alchemy-pen" type="button" data-alchemy-action="collect-pen" aria-label="Take the fountain pen and add it to inventory">
                     <img class="bt-alchemy-pen-sprite" src="/images/before-times/inventory/fountain-pen-v1.png?v=20260718a" width="1536" height="1024" alt="" aria-hidden="true">
                 </button>
-                <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-scripts" type="button" data-alchemy-action="scripts" data-label="Script crate" aria-label="Inspect the crate of scripts"></button>
+                <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-scripts" type="button" data-alchemy-action="scripts" data-label="Project files" aria-label="Open the Absurd Alchemy project files"></button>
 
                 <div class="bt-scene-status bt-alchemy-scene-status" id="bt-alchemy-scene-status" role="status" aria-live="polite"></div>
             </section>
@@ -251,7 +251,7 @@
         <div class="bt-lobby-scroll bt-content-scroll" id="bt-content-scroll" hidden>
             <section class="bt-lobby-scene bt-content-scene" id="bt-content-scene" aria-label="The Content Factory room" aria-describedby="bt-content-instructions">
                 <p class="bt-sr-only" id="bt-content-instructions">
-                    Conveyor belts carry clipped article pages through the factory. The main control console, a collectible quarter, and the doorway back to the lobby are interactive.
+                    Conveyor belts carry clipped article pages through the factory. Three foreground clipboards open featured work; the main console opens the complete collection. A collectible quarter and the doorway back to the lobby are also interactive.
                 </p>
                 <img
                     class="bt-lobby-art bt-content-art"
@@ -265,7 +265,10 @@
                 <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-door" type="button" data-content-action="lobby" data-label="Back to the lobby" aria-label="Return to the Before Times lobby">
                     <span class="bt-door-light" aria-hidden="true"></span>
                 </button>
-                <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-console" type="button" data-content-action="console" data-label="Main control unit" aria-label="Inspect the Content Factory main control unit"></button>
+                <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-console" type="button" data-content-action="console" data-label="Open the full archive" aria-label="Open the complete Content Factory archive"></button>
+                <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-article bt-content-hotspot-article-solar" type="button" data-content-archive="solars-retro-future" data-label="Solar's Retro Future" aria-label="Read Solar's Retro Future"></button>
+                <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-article bt-content-hotspot-article-metrics" type="button" data-content-archive="social-media-metric-mirage" data-label="The Metric Mirage" aria-label="Read The Social Media Metric Mirage"></button>
+                <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-article bt-content-hotspot-article-watcher" type="button" data-content-archive="the-watcher" data-label="The Watcher" aria-label="Read The Watcher"></button>
                 <button class="bt-hotspot bt-content-hotspot bt-content-hotspot-quarter" id="bt-content-quarter" type="button" data-content-action="collect-quarter" data-label="Take the Doc quarter" aria-label="Take the Doc novelty quarter and add it to inventory">
                     <img class="bt-content-quarter-sprite" src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="" aria-hidden="true">
                 </button>
@@ -334,6 +337,21 @@
         </article>
     </dialog>
 
+    <dialog class="bt-dialog bt-archive-dialog" id="bt-archive-dialog" aria-labelledby="bt-archive-title">
+        <article class="bt-dialog-card bt-archive-card">
+            <button class="bt-dialog-close" type="button" data-dialog-close aria-label="Close archive">×</button>
+            <header class="bt-archive-header">
+                <p class="bt-dialog-kicker" id="bt-archive-kicker">Content Factory // recovered work</p>
+                <h1 id="bt-archive-title">The output archive</h1>
+                <p id="bt-archive-intro">Start with the quick version. When a complete source survives, keep going into a full read or editorial comparison.</p>
+            </header>
+            <div class="bt-archive-layout">
+                <nav class="bt-archive-index" id="bt-archive-index" aria-label="Archive pieces"></nav>
+                <article class="bt-archive-detail" id="bt-archive-detail" aria-live="polite"></article>
+            </div>
+        </article>
+    </dialog>
+
     <dialog class="bt-dialog bt-guestbook-dialog" id="bt-guestbook-dialog" aria-labelledby="bt-guestbook-title">
         <article class="bt-dialog-card bt-guestbook-card">
             <button class="bt-dialog-close" type="button" data-dialog-close aria-label="Close">×</button>
@@ -379,6 +397,7 @@
     <audio id="bt-radio-audio" preload="none"></audio>
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
-    <script src="/before-times.js?v=20260719b" defer></script>
+    <script src="/before-times-archive.js?v=20260719h" defer></script>
+    <script src="/before-times.js?v=20260719h" defer></script>
 </body>
 </html>

@@ -38,9 +38,9 @@
             title: 'The Content Factory',
             copy: [
                 'A cheerful industrial accident producing blogs, landing pages, campaign copy, websites, search traffic, and the occasional viral object.',
-                'The archive now opens in layers: a fast taste, the reason each piece survived, then a full reading edition, strategy system, or annotated before-and-after proof.'
+                'The archive now opens in layers: a fast taste, the reason each piece survived, then a full reading edition, strategy system, or annotated before-and-after proof. Below the restored pieces, a card catalog logs the rest of the factory output by client.'
             ],
-            facts: ['13 recovered reading paths in the current archive', 'Hundreds of B2B and B2C content pieces', 'Corporate websites and digital assets', 'A 240% organic-traffic increase at FieldEdge']
+            facts: ['13 recovered reading paths in the current archive', 'A card catalog logging 195 pieces across eight clients', 'Corporate websites and digital assets', 'A 240% organic-traffic increase at FieldEdge']
         },
         docs: {
             kicker: 'Door 04 // remote // 2022–2024',
@@ -570,7 +570,6 @@
     const archiveDialog = document.getElementById('bt-archive-dialog');
     const archiveKicker = document.getElementById('bt-archive-kicker');
     const archiveTitle = document.getElementById('bt-archive-title');
-    const archiveIntro = document.getElementById('bt-archive-intro');
     const archiveIndex = document.getElementById('bt-archive-index');
     const archiveDetail = document.getElementById('bt-archive-detail');
     const radioAudio = document.getElementById('bt-radio-audio');
@@ -1286,18 +1285,17 @@
         archiveDetail.scrollTop = 0;
     }
 
-    function renderArchivePiece(collectionName, pieceId) {
+    function renderArchiveIndex(collectionName, activeId) {
         const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
         if (!collection || !collection.length) return;
-        const piece = collection.find((item) => item.id === pieceId) || collection[0];
 
         archiveIndex.replaceChildren();
         collection.forEach((item, index) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'bt-archive-index-item';
-            button.classList.toggle('is-active', item.id === piece.id);
-            button.setAttribute('aria-current', item.id === piece.id ? 'true' : 'false');
+            button.classList.toggle('is-active', item.id === activeId);
+            button.setAttribute('aria-current', item.id === activeId ? 'true' : 'false');
             button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', String(index + 1).padStart(2, '0')));
             button.appendChild(makeArchiveElement('strong', '', item.title));
             button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', item.eyebrow.replace(' // ', ' · ')));
@@ -1305,6 +1303,103 @@
             button.addEventListener('click', () => renderArchivePiece(collectionName, item.id));
             archiveIndex.appendChild(button);
         });
+
+        const catalog = collectionName === 'content'
+            ? window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog
+            : null;
+        if (catalog && catalog.length) {
+            archiveIndex.appendChild(makeArchiveElement('p', 'bt-archive-index-divider', 'The card catalog // by client'));
+            catalog.forEach((group, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'bt-archive-index-item bt-archive-catalog-tab';
+                button.classList.toggle('is-active', group.id === activeId);
+                button.setAttribute('aria-current', group.id === activeId ? 'true' : 'false');
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', 'D' + (index + 1)));
+                button.appendChild(makeArchiveElement('strong', '', group.client));
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', `${group.years} · ${group.pieces} pieces logged`));
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-depth', 'Catalog card'));
+                button.addEventListener('click', () => renderCatalogCard(group.id));
+                archiveIndex.appendChild(button);
+            });
+        }
+
+        const activeItem = archiveIndex.querySelector('.bt-archive-index-item.is-active');
+        if (activeItem) activeItem.scrollIntoView({ block: 'nearest' });
+    }
+
+    function renderCatalogCard(groupId) {
+        const catalog = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog;
+        if (!catalog || !catalog.length) return;
+        const group = catalog.find((item) => item.id === groupId) || catalog[0];
+        renderArchiveIndex('content', group.id);
+
+        const heading = makeArchiveElement('header', 'bt-archive-piece-header');
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', `Card catalog // ${group.years}`));
+        heading.appendChild(makeArchiveElement('span', 'bt-archive-mode-chip', 'Catalog card'));
+        heading.appendChild(makeArchiveElement('h2', '', group.client));
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-dek', group.summary));
+
+        const meta = makeArchiveElement('dl', 'bt-archive-meta');
+        [
+            ['Engagement', group.years],
+            ['Pieces logged', String(group.pieces)],
+            ['Formats', group.formats]
+        ].forEach(([term, description]) => {
+            meta.appendChild(makeArchiveElement('dt', '', term));
+            meta.appendChild(makeArchiveElement('dd', '', description));
+        });
+
+        const children = [heading, meta];
+
+        const samples = makeArchiveElement('section', 'bt-archive-catalog-samples');
+        samples.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'Pulled from the drawer'));
+        const sampleList = makeArchiveElement('ul', '');
+        (group.samples || []).forEach((title) => {
+            sampleList.appendChild(makeArchiveElement('li', '', title));
+        });
+        samples.appendChild(sampleList);
+        children.push(samples);
+
+        const restoredIds = group.restored || [];
+        if (restoredIds.length) {
+            const restored = makeArchiveElement('section', 'bt-archive-catalog-restored');
+            restored.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'Restored from this drawer'));
+            restoredIds.forEach((pieceId) => {
+                const piece = (window.BEFORE_TIMES_ARCHIVE.content || []).find((item) => item.id === pieceId);
+                if (!piece) return;
+                const link = makeArchiveElement('button', 'bt-archive-restored-link', piece.title);
+                link.type = 'button';
+                link.addEventListener('click', () => renderArchivePiece('content', piece.id));
+                restored.appendChild(link);
+            });
+            children.push(restored);
+        }
+
+        const note = makeArchiveElement('aside', 'bt-archive-curator');
+        note.appendChild(makeArchiveElement('strong', '', 'Restoration status'));
+        note.appendChild(makeArchiveElement('p', '', restoredIds.length
+            ? `${restoredIds.length} of the ${group.pieces} logged pieces ${restoredIds.length === 1 ? 'has' : 'have'} been fully restored. The rest wait, labeled and preserved, for a turn on the bench.`
+            : `None of the ${group.pieces} logged pieces has been fully restored yet. Each one waits, labeled and preserved, for a turn on the bench.`));
+        children.push(note);
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+        children.push(actions);
+
+        archiveDetail.replaceChildren(...children);
+        archiveDetail.scrollTop = 0;
+    }
+
+    function renderArchivePiece(collectionName, pieceId) {
+        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
+        if (!collection || !collection.length) return;
+        const piece = collection.find((item) => item.id === pieceId) || collection[0];
+
+        renderArchiveIndex(collectionName, piece.id);
 
         const heading = makeArchiveElement('header', 'bt-archive-piece-header');
         heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', piece.eyebrow));
@@ -1367,15 +1462,10 @@
 
     function openArchive(collectionName, pieceId) {
         const isAlchemy = collectionName === 'alchemy';
-        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
-        const pieceCount = collection ? collection.length : 0;
         archiveKicker.textContent = isAlchemy
             ? 'Absurd Alchemy // project file'
             : 'Content Factory // recovered work';
         archiveTitle.textContent = isAlchemy ? 'The mutation archive' : 'The output archive';
-        archiveIntro.textContent = isAlchemy
-            ? 'Scripts, strange decisions, and the finished creatures they became.'
-            : `${pieceCount} recovered pieces. Start with the quick version, then keep going into a reading edition or editorial comparison.`;
         renderArchivePiece(collectionName, pieceId);
         openDialog(archiveDialog);
     }

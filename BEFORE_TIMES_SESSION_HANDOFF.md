@@ -789,6 +789,36 @@ return through the Content Factory door, select the inventory quarter, unlock
 the newspaper dispenser, and open the student press panel. The browser reported
 no console errors or error overlays.
 
+### The card catalog (July 19, 2026)
+
+The output archive now has a second tier below the 13 restored pieces: a card
+catalog grouped by client. `contentCatalog` in `before-times-archive.js` holds
+eight drawer entries (client, years, piece count, formats, summary, sample
+titles, and `restored` ids that cross-link to full pieces). The counts were
+taken from `bt-assets/ContentWritingClippings`, deduplicated across formats
+and the Review-Weekly/EquateMedia overlap: 195 pieces total. GoDaddy's five
+help-center rewrites were deliberately excluded; that material belongs to The
+Knowledge Maze, not the Content Factory.
+
+The room now carries nine article hotspots on the conveyor papers (up from
+three): Solar, Metrics, and Watcher in the foreground, plus Urban Climb,
+40-Hour Workweek, Google Glass, Hip Neighborhood Bubble, Trimming the Fringe,
+and DeepMind & DeepDream matched to mid-ground papers whose printed images fit
+each piece. The six new ones use `.bt-content-hotspot-article-far`, which
+floats the label chip above the paper instead of inside the small hotspot.
+Article highlight is an inner spotlight: a `::before` radial layer with
+`mix-blend-mode: screen` fading in on hover, no border or outer glow. The
+archive dialog highlights (index items, catalog tabs, restored links) use a
+soft layered glow instead of the earlier solid-indigo hard-shadow flip.
+
+In `before-times.js`, `renderArchiveIndex` renders both lists (drawer tabs are
+numbered D1–D8 and use `.bt-archive-catalog-tab`), `renderCatalogCard` renders
+a drawer in the detail pane, and the active index item is scrolled into view
+after every render. The archive intro line and the room panel facts compute or
+state the logged totals; update `contentCatalog` counts if clippings are added.
+Promoting a piece to full restoration means adding it to `content` and listing
+its id in the owning drawer's `restored` array.
+
 ## Verification completed this session
 
 - The page was repeatedly tested at `http://localhost:8080/before-times.html`.

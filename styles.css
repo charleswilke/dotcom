@@ -6921,7 +6921,7 @@ html {
     display: inline-flex;
     align-items: center;
     margin: 0 0 0.2rem;
-    padding: 0.08rem 0.38rem 0.1rem;
+    padding: 0.18rem 0.38rem 0.04rem;
     font-family: 'IBM Plex Sans Condensed', sans-serif;
     font-size: clamp(0.58rem, 1vw, 0.68rem);
     font-weight: 700;

@@ -45,8 +45,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
-    <link rel="preload" as="image" href="/images/before-times/gate/dog-medallion-v1.webp" type="image/webp" fetchpriority="high">
-    <link rel="preload" as="image" href="/images/before-times/gate/dog-shackle-v1.webp" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.webp?v=20260718e" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=20260717a" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4.webp?v=20260718a" type="image/webp">
@@ -63,74 +61,18 @@
     <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4-no-pen.webp?v=20260719a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/games/game-development-room-v2-no-lamp.webp?v=20260721a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/games/game-development-lamp-v1.webp?v=20260721a" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/content-factory-room-v1.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260721h">
-    <script>
-        try {
-            if (sessionStorage.getItem('bt-gate-unlocked-v1') === 'true') {
-                document.documentElement.classList.add('bt-gate-bypassed');
-            }
-        } catch (error) {
-            // A private browsing policy may deny storage; the gate still works.
-        }
-    </script>
-    <noscript><style>.bt-gate{display:none!important}.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}.bt-experience{filter:none!important}</style></noscript>
+    <link rel="preload" as="image" href="/images/before-times/knowledge-maze/knowledge-maze-contained-v3.webp?v=20260722b" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/knowledge-maze/knowledge-maze-breached-v2.webp?v=20260722b" type="image/webp">
+    <link rel="stylesheet" href="/before-times.css?v=20260722l">
+    <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
-    <section class="bt-gate" id="bt-gate" role="dialog" aria-modal="true" aria-labelledby="bt-gate-title" aria-describedby="bt-gate-hint">
-        <div class="bt-gate-atmosphere" aria-hidden="true"></div>
-        <header class="bt-gate-heading">
-            <p>The archive recognizes its own</p>
-            <h1 id="bt-gate-title">The Before Times</h1>
-        </header>
-
-        <div class="bt-gate-lock" id="bt-gate-lock">
-            <img
-                class="bt-gate-shackle"
-                src="/images/before-times/gate/dog-shackle-v1.webp"
-                width="1254"
-                height="1254"
-                alt=""
-                aria-hidden="true"
-                decoding="sync"
-                fetchpriority="high">
-            <div class="bt-gate-medallion">
-                <img
-                    class="bt-gate-medallion-art"
-                    src="/images/before-times/gate/dog-medallion-v1.webp"
-                    width="1122"
-                    height="1402"
-                    alt="An ornate brass archive lock guarded by two shaggy dogs"
-                    decoding="sync"
-                    fetchpriority="high">
-                <form class="bt-gate-form" id="bt-gate-form" novalidate>
-                    <label class="bt-sr-only" for="bt-gate-password">Archive password</label>
-                    <input
-                        id="bt-gate-password"
-                        name="password"
-                        type="password"
-                        inputmode="text"
-                        autocomplete="off"
-                        autocapitalize="none"
-                        spellcheck="false"
-                        maxlength="24"
-                        placeholder="PASSWORD"
-                        aria-describedby="bt-gate-status"
-                        required>
-                    <button type="submit" aria-label="Unlock the archive"><span aria-hidden="true">↵</span></button>
-                    <span class="bt-gate-field-glint" aria-hidden="true"></span>
-                </form>
-            </div>
-        </div>
-
-        <p class="bt-gate-hint" id="bt-gate-hint">A small word opens an old world.</p>
-        <p class="bt-gate-status" id="bt-gate-status" role="status" aria-live="polite"></p>
-    </section>
-
     <a class="bt-skip-link" href="#bt-lobby">Skip to the lobby</a>
 
-    <main class="bt-experience" id="bt-lobby" inert aria-hidden="true">
+    <main class="bt-experience" id="bt-lobby">
         <p class="bt-sr-only" id="bt-lobby-instructions">
             Before Times is an interactive career archive. Tab through the room doors and lobby objects, or open the floor plan for a directory.
         </p>
@@ -176,12 +118,9 @@
                     <span class="bt-door-light" aria-hidden="true"></span>
                     <img class="bt-object-layer bt-object-layer-door-content" src="/images/before-times/layers/door-content-v1.webp?v=20260716e" width="984" height="1599" alt="" aria-hidden="true" decoding="async">
                 </button>
-                <button class="bt-hotspot bt-hotspot-door bt-hotspot-docs bt-layered-hotspot bt-layered-doorway bt-is-under-construction" type="button" data-panel="docs" data-label="Preview The Knowledge Maze · under construction" aria-label="Preview the knowledge maze, which is under construction">
+                <button class="bt-hotspot bt-hotspot-door bt-hotspot-docs bt-layered-hotspot bt-layered-doorway" type="button" data-panel="docs" data-label="Enter The Knowledge Maze" aria-label="Enter The Knowledge Maze documentation room">
                     <span class="bt-door-light" aria-hidden="true"></span>
                     <img class="bt-object-layer bt-object-layer-door-docs" src="/images/before-times/layers/door-docs-v1.webp?v=20260716e" width="936" height="1680" alt="" aria-hidden="true" decoding="async">
-                    <span class="bt-construction-maze-tape" aria-hidden="true">
-                        <img src="/images/before-times/layers/construction-maze-tape-v1.webp?v=20260717a" width="1672" height="941" alt="" decoding="async">
-                    </span>
                 </button>
                 <button class="bt-hotspot bt-hotspot-door bt-hotspot-portal bt-layered-hotspot" type="button" data-panel="portal" data-label="Return to the AI era" aria-label="Inspect the glowing portal back to the present">
                     <span class="bt-door-light" aria-hidden="true"></span>
@@ -223,6 +162,10 @@
                 <button class="bt-lobby-inventory-item bt-lobby-inventory-quarter" id="bt-lobby-inventory-quarter" type="button" aria-label="Select the collected Doc quarter" aria-pressed="false" draggable="true" hidden>
                     <img src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="">
                     <span aria-hidden="true">Doc quarter</span>
+                </button>
+                <button class="bt-lobby-inventory-item bt-lobby-inventory-cassette" id="bt-lobby-inventory-cassette" type="button" aria-label="Open the radio unlocked by The Boat cassette" hidden>
+                    <img src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="">
+                    <span aria-hidden="true">The Boat cassette</span>
                 </button>
 
                 <div class="bt-scene-status" id="bt-scene-status" role="status" aria-live="polite"></div>
@@ -329,7 +272,7 @@
         <div class="bt-lobby-scroll bt-game-scroll" id="bt-game-scroll" hidden>
             <section class="bt-lobby-scene bt-game-scene" id="bt-game-scene" aria-label="Game Development room" aria-describedby="bt-game-instructions">
                 <p class="bt-sr-only" id="bt-game-instructions">
-                    Eight game cases select official trailers for the right monitor while the left monitor states Charles Wilke's role. The writing binder, motion-capture mannequin, and doorway back to the lobby are also interactive.
+                    Eight game cases select official trailers for the right monitor while the left monitor states Charles Wilke's role. The writing binder, motion-capture mannequin, a hidden cassette on the front-right desk, and doorway back to the lobby are also interactive.
                 </p>
                 <img
                     class="bt-lobby-art bt-game-art"
@@ -383,6 +326,14 @@
                 <span class="bt-game-trailer-light" aria-hidden="true"></span>
                 <div class="bt-game-trailer-screen" id="bt-game-trailer-screen" aria-live="polite">
                     <span class="bt-game-video-plane">
+                        <img
+                            class="bt-game-mocap-gif"
+                            id="bt-game-mocap-gif"
+                            src=""
+                            alt=""
+                            width="320"
+                            height="180"
+                            hidden>
                         <iframe
                             id="bt-game-player"
                             title="Game Development official trailer player"
@@ -411,6 +362,9 @@
 
                 <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-binder" type="button" data-game-action="binder" data-label="Game-writing binder" aria-label="Inspect the game-writing binder"></button>
                 <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-mocap" type="button" data-game-action="mocap" data-label="Motion-capture archive" aria-label="Inspect the motion-capture mannequin"></button>
+                <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-cassette" id="bt-game-cassette" type="button" data-game-action="collect-cassette" data-label="A hand-labeled cassette" aria-label="Take The Boat cassette and add it to inventory">
+                    <img class="bt-game-cassette-sprite" src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="" aria-hidden="true">
+                </button>
                 <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-door" type="button" data-game-action="lobby" data-label="Back to the lobby" aria-label="Return to the Before Times lobby">
                     <span class="bt-door-light" aria-hidden="true"></span>
                 </button>
@@ -433,6 +387,9 @@
                         <p>Drag each handle to the inside corner of the painted glass. Values save locally as you move them.</p>
                         <pre id="bt-monitor-calibration-output" aria-live="polite"></pre>
                         <div>
+                            <button type="button" data-calibration-visibility="left" aria-pressed="true">Left guides: on</button>
+                            <button type="button" data-calibration-visibility="right" aria-pressed="true">Right guides: on</button>
+                            <button type="button" id="bt-monitor-calibration-screens" aria-controls="bt-game-role-screen bt-game-trailer-screen" aria-pressed="true">Screen overlays: on</button>
                             <button type="button" id="bt-monitor-calibration-copy">Copy points</button>
                             <button type="button" id="bt-monitor-calibration-reset">Reset</button>
                             <a href="/before-times.html#game-development">Exit calibration</a>
@@ -479,6 +436,132 @@
             </section>
         </div>
 
+        <div class="bt-lobby-scroll bt-knowledge-scroll" id="bt-knowledge-scroll" hidden>
+            <section class="bt-lobby-scene bt-knowledge-scene" id="bt-knowledge-scene" aria-label="The Knowledge Maze room" aria-describedby="bt-knowledge-instructions">
+                <p class="bt-sr-only" id="bt-knowledge-instructions">
+                    Inspect the paired documentation panels, voice-and-tone controls, and impact gauge to give the early assistance terminal the human context it is missing. The right doorway returns to the lobby. Completing the terminal opens a path to the present-day site.
+                </p>
+                <img
+                    class="bt-lobby-art bt-knowledge-art bt-knowledge-art-contained"
+                    src="/images/before-times/knowledge-maze/knowledge-maze-contained-v3.webp?v=20260722b"
+                    width="1672"
+                    height="941"
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async">
+                <img
+                    class="bt-lobby-art bt-knowledge-art bt-knowledge-art-breached"
+                    src="/images/before-times/knowledge-maze/knowledge-maze-breached-v2.webp?v=20260722b"
+                    width="1672"
+                    height="941"
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async">
+
+                <div class="bt-knowledge-documents" aria-hidden="true">
+                    <span class="bt-knowledge-document-surface bt-knowledge-document-surface-before" id="bt-knowledge-document-before-surface" data-knowledge-document-surface="before">
+                        <span class="bt-knowledge-document-plane">
+                            <img
+                                class="bt-knowledge-document bt-knowledge-document-before"
+                                src="/images/before-times/knowledge-maze/knowledge-answer-exists-v1.webp?v=20260722a"
+                                width="1024"
+                                height="1536"
+                                alt=""
+                                decoding="async">
+                        </span>
+                    </span>
+                    <span class="bt-knowledge-document-surface bt-knowledge-document-surface-after" id="bt-knowledge-document-after-surface" data-knowledge-document-surface="after">
+                        <span class="bt-knowledge-document-plane">
+                            <img
+                                class="bt-knowledge-document bt-knowledge-document-after"
+                                src="/images/before-times/knowledge-maze/knowledge-answer-arrives-v1.webp?v=20260722a"
+                                width="1024"
+                                height="1536"
+                                alt=""
+                                decoding="async">
+                        </span>
+                    </span>
+                </div>
+
+                <a class="bt-knowledge-present-portal" id="bt-knowledge-present-portal" href="/#portfolio" aria-label="Return to Charles Wilke's present-day portfolio" hidden>
+                    <video class="bt-knowledge-present-video" id="bt-knowledge-present-video" muted loop playsinline preload="metadata" poster="/images/before-times/knowledge-maze/present-site-peek-poster-v1.webp?v=20260722b" tabindex="-1" aria-hidden="true">
+                        <source src="/images/before-times/knowledge-maze/present-site-peek-v1.mp4?v=20260722b" type="video/mp4">
+                    </video>
+                    <span class="bt-knowledge-present-call">There you are. Return to the present →</span>
+                </a>
+
+                <svg class="bt-knowledge-cracks" viewBox="0 0 1672 941" aria-hidden="true">
+                    <path class="bt-knowledge-crack bt-knowledge-crack-one" d="M835 291 L818 263 L829 239 L801 208 L812 175 L784 148 L791 112" pathLength="1"></path>
+                    <path class="bt-knowledge-crack bt-knowledge-crack-two" d="M836 292 L868 270 L857 242 L887 218 L881 183 L918 158 L910 122" pathLength="1"></path>
+                    <path class="bt-knowledge-crack bt-knowledge-crack-three" d="M835 292 L812 316 L827 342 L795 368 L807 397 L778 426 L791 451" pathLength="1"></path>
+                    <path class="bt-knowledge-crack bt-knowledge-crack-four" d="M836 292 L863 316 L850 343 L879 367 L868 398 L898 425 L886 451" pathLength="1"></path>
+                </svg>
+                <span class="bt-knowledge-dust" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i>
+                </span>
+
+                <div class="bt-knowledge-terminal-surface" id="bt-knowledge-terminal-surface" data-knowledge-terminal-surface="terminal">
+                    <div class="bt-knowledge-terminal" id="bt-knowledge-terminal" aria-live="polite">
+                        <header>
+                            <span>GUIDED ASSISTANCE PROTOTYPE // 2022</span>
+                            <strong id="bt-knowledge-context-count">CONTEXT 0 / 3</strong>
+                        </header>
+                        <p class="bt-knowledge-terminal-request" id="bt-knowledge-terminal-request">HELP ME WITH MY WEBSITE.</p>
+                        <div class="bt-knowledge-context-list" id="bt-knowledge-context-list">
+                            <p data-knowledge-context="human"><span>WHO</span><b id="bt-knowledge-context-human">MISSING</b></p>
+                            <p data-knowledge-context="goal"><span>GOAL</span><b id="bt-knowledge-context-goal">MISSING</b></p>
+                            <p data-knowledge-context="friction"><span>FRICTION</span><b id="bt-knowledge-context-friction">MISSING</b></p>
+                        </div>
+                        <p class="bt-knowledge-terminal-response" id="bt-knowledge-terminal-response">A useful answer needs a person, a goal, and the thing standing in the way.</p>
+                        <button class="bt-knowledge-ask" id="bt-knowledge-ask" type="button" disabled>Ask a better question</button>
+                    </div>
+                </div>
+
+                <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-docs" type="button" data-knowledge-key="goal" data-label="Before and after documentation" aria-label="Inspect the before and after documentation panels"></button>
+                <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-voice" type="button" data-knowledge-key="human" data-label="Voice and tone controls" aria-label="Inspect the voice and tone controls"></button>
+                <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-impact" type="button" data-knowledge-key="friction" data-label="Impact gauge · 93 percent" aria-label="Inspect the customer-care escalation impact gauge"></button>
+                <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-door" type="button" data-knowledge-action="lobby" data-label="Back to the lobby" aria-label="Return to the Before Times lobby">
+                    <span class="bt-door-light" aria-hidden="true"></span>
+                </button>
+
+                <div class="bt-document-calibration" id="bt-document-calibration" hidden>
+                    <svg class="bt-monitor-calibration-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                        <polygon data-document-calibration-polygon="before" points=""></polygon>
+                        <polygon data-document-calibration-polygon="after" points=""></polygon>
+                        <polygon data-document-calibration-polygon="terminal" points=""></polygon>
+                    </svg>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="before" data-document-calibration-corner="tl" data-label="BEFORE TL" aria-label="Move the before document top-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="before" data-document-calibration-corner="tr" data-label="BEFORE TR" aria-label="Move the before document top-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="before" data-document-calibration-corner="br" data-label="BEFORE BR" aria-label="Move the before document bottom-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="before" data-document-calibration-corner="bl" data-label="BEFORE BL" aria-label="Move the before document bottom-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="after" data-document-calibration-corner="tl" data-label="AFTER TL" aria-label="Move the after document top-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="after" data-document-calibration-corner="tr" data-label="AFTER TR" aria-label="Move the after document top-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="after" data-document-calibration-corner="br" data-label="AFTER BR" aria-label="Move the after document bottom-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="after" data-document-calibration-corner="bl" data-label="AFTER BL" aria-label="Move the after document bottom-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="tl" data-label="INTERFACE TL" aria-label="Move the interface top-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="tr" data-label="INTERFACE TR" aria-label="Move the interface top-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="br" data-label="INTERFACE BR" aria-label="Move the interface bottom-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="bl" data-label="INTERFACE BL" aria-label="Move the interface bottom-left corner"></button>
+                    <aside class="bt-monitor-calibration-panel bt-document-calibration-panel" aria-label="Knowledge surface corner calibration controls">
+                        <strong>Knowledge surface calibration</strong>
+                        <p>Drag the handles to seat each document and the rounded interface screen. The perspective updates live and saves locally.</p>
+                        <pre id="bt-document-calibration-output" aria-live="polite"></pre>
+                        <div>
+                            <button type="button" data-document-calibration-visibility="before" aria-pressed="true">Before guides: on</button>
+                            <button type="button" data-document-calibration-visibility="after" aria-pressed="true">After guides: on</button>
+                            <button type="button" data-document-calibration-visibility="terminal" aria-pressed="true">Interface guides: on</button>
+                            <button type="button" id="bt-document-calibration-art" aria-controls="bt-knowledge-document-before-surface bt-knowledge-document-after-surface" aria-pressed="true">Document art: on</button>
+                            <button type="button" id="bt-document-calibration-copy">Copy points</button>
+                            <button type="button" id="bt-document-calibration-reset">Reset</button>
+                            <a href="/before-times.html#knowledge-maze">Exit calibration</a>
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="bt-scene-status bt-knowledge-scene-status" id="bt-knowledge-scene-status" role="status" aria-live="polite"></div>
+            </section>
+        </div>
+
         <aside class="bt-inventory-drawer" id="bt-inventory-drawer" aria-label="Inventory" aria-hidden="true">
             <button class="bt-inventory-handle" id="bt-inventory-handle" type="button" aria-controls="bt-inventory-drawer-body" aria-expanded="false">
                 <span class="bt-inventory-handle-mark" aria-hidden="true">⌄</span>
@@ -493,7 +576,10 @@
                     <img src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="Silver novelty quarter embossed with Doc from The Content Factory">
                     <span>Doc quarter</span>
                 </div>
-                <div class="bt-inventory-slot" aria-hidden="true"></div>
+                <div class="bt-inventory-slot bt-inventory-slot-cassette" id="bt-inventory-slot-cassette">
+                    <img src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="Scuffed black cassette hand-labeled The Boat">
+                    <span>The Boat cassette</span>
+                </div>
             </div>
         </aside>
 
@@ -513,6 +599,20 @@
             <button class="bt-dialog-close" type="button" data-dialog-close aria-label="Close">×</button>
             <p class="bt-dialog-kicker" id="bt-dialog-kicker"></p>
             <h1 id="bt-dialog-title"></h1>
+            <div class="bt-knowledge-document-viewer" id="bt-knowledge-document-viewer" hidden>
+                <figure>
+                    <a href="/images/before-times/knowledge-maze/knowledge-answer-exists-v1.png?v=20260722a" target="_blank" rel="noopener" aria-label="Open The Answer Exists document at full resolution">
+                        <img src="/images/before-times/knowledge-maze/knowledge-answer-exists-v1.webp?v=20260722a" width="1024" height="1536" alt="A dense, annotated Archive Unit K-27 field manual titled The Answer Exists, with tangled search paths and buried findings." loading="lazy">
+                    </a>
+                    <figcaption><strong>Before // The answer exists</strong><span>Open the recovered document at full resolution ↗</span></figcaption>
+                </figure>
+                <figure>
+                    <a href="/images/before-times/knowledge-maze/knowledge-answer-arrives-v1.png?v=20260722a" target="_blank" rel="noopener" aria-label="Open The Answer Arrives document at full resolution">
+                        <img src="/images/before-times/knowledge-maze/knowledge-answer-arrives-v1.webp?v=20260722a" width="1024" height="1536" alt="A clarified Archive Unit K-27 field manual titled The Answer Arrives, organizing the person, goal, friction, and next step into one verified route." loading="lazy">
+                    </a>
+                    <figcaption><strong>After // The answer arrives</strong><span>Open the recovered document at full resolution ↗</span></figcaption>
+                </figure>
+            </div>
             <div class="bt-dialog-copy" id="bt-dialog-copy"></div>
             <ul class="bt-dialog-facts" id="bt-dialog-facts"></ul>
             <div class="bt-dialog-routes" id="bt-dialog-routes"></div>
@@ -549,6 +649,73 @@
             <div class="bt-archive-layout">
                 <nav class="bt-archive-index" id="bt-archive-index" aria-label="Archive pieces"></nav>
                 <article class="bt-archive-detail" id="bt-archive-detail" aria-live="polite"></article>
+            </div>
+        </article>
+    </dialog>
+
+    <dialog class="bt-dialog bt-game-binder-dialog" id="bt-game-binder-dialog" aria-labelledby="bt-game-binder-title">
+        <article class="bt-dialog-card bt-game-binder-card">
+            <button class="bt-dialog-close bt-game-binder-close" type="button" data-dialog-close aria-label="Close game-writing archive">×</button>
+            <header class="bt-game-binder-header">
+                <div>
+                    <p class="bt-game-binder-path">C:\IG_ARCHIVE\NARRATIVE\RECOVERED</p>
+                    <h1 id="bt-game-binder-title">Game-Writing Terminal</h1>
+                </div>
+                <dl class="bt-game-binder-system" aria-label="Archive system status">
+                    <div><dt>INDEX</dt><dd>06 FILES</dd></div>
+                    <div><dt>MODE</dt><dd>READ ONLY</dd></div>
+                    <div><dt>STATUS</dt><dd><span aria-hidden="true"></span> ONLINE</dd></div>
+                </dl>
+            </header>
+            <div class="bt-game-binder-layout">
+                <nav class="bt-game-binder-index" id="bt-game-binder-index" aria-label="Recovered game-writing files"></nav>
+                <article class="bt-game-binder-detail" id="bt-game-binder-detail" aria-live="polite" tabindex="0"></article>
+            </div>
+            <footer class="bt-game-binder-footer">
+                <span id="bt-game-binder-position">RECORD 01 / 06</span>
+                <span>↑↓ SELECT&nbsp;&nbsp;·&nbsp;&nbsp;ENTER OPEN&nbsp;&nbsp;·&nbsp;&nbsp;ESC CLOSE</span>
+                <span>TRANSCRIPTION // SOURCE SPELLING PRESERVED</span>
+            </footer>
+        </article>
+    </dialog>
+
+    <dialog class="bt-dialog bt-radio-dialog" id="bt-radio-dialog" aria-labelledby="bt-radio-title">
+        <article class="bt-dialog-card bt-radio-card">
+            <button class="bt-dialog-close bt-radio-close" type="button" data-dialog-close aria-label="Close The Boat radio archive">×</button>
+            <header class="bt-radio-header">
+                <p class="bt-radio-path">ARCHIVE RECEIVER // CASSETTE INPUT 01</p>
+                <div class="bt-radio-heading-row">
+                    <div>
+                        <span class="bt-radio-lock-state"><i aria-hidden="true"></i> SIGNAL RECOVERED</span>
+                        <h1 id="bt-radio-title">The Boat</h1>
+                    </div>
+                    <p>NIU radio · 2004<br>Chaz Wilke · John Ugolini<br>Brayton Cameron</p>
+                </div>
+            </header>
+            <div class="bt-radio-layout">
+                <section class="bt-radio-console" aria-label="The Boat episode player">
+                    <div class="bt-radio-oscilloscope-frame" id="bt-radio-oscilloscope-frame">
+                        <canvas class="bt-radio-oscilloscope" id="bt-radio-oscilloscope" aria-label="Live audio waveform"></canvas>
+                        <div class="bt-radio-scope-copy" aria-live="polite">
+                            <span id="bt-radio-episode-number">TRANSMISSION 01 / 05</span>
+                            <strong id="bt-radio-now-playing">Walken on Water</strong>
+                            <small id="bt-radio-episode-date">First episode · 2004</small>
+                        </div>
+                        <span class="bt-radio-scope-glass" aria-hidden="true"></span>
+                    </div>
+                    <div class="bt-radio-transport">
+                        <button type="button" id="bt-radio-prev" aria-label="Previous episode">‹‹</button>
+                        <button class="bt-radio-play" type="button" id="bt-radio-play" aria-label="Play episode" aria-pressed="false"><span aria-hidden="true">▶</span></button>
+                        <button type="button" id="bt-radio-next" aria-label="Next episode">››</button>
+                        <label class="bt-radio-progress">
+                            <span class="bt-sr-only">Episode progress</span>
+                            <input id="bt-radio-seek" type="range" min="0" max="1000" value="0" step="1">
+                        </label>
+                        <output class="bt-radio-time" id="bt-radio-time">00:00 / --:--</output>
+                    </div>
+                    <p class="bt-radio-player-note">Recovered from the original cassette archive. Click the scope or the center control to play and pause.</p>
+                </section>
+                <nav class="bt-radio-playlist" id="bt-radio-playlist" aria-label="The Boat episodes"></nav>
             </div>
         </article>
     </dialog>
@@ -599,6 +766,7 @@
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260719i" defer></script>
-    <script src="/before-times.js?v=20260721d" defer></script>
+    <script src="/before-times-game-binder.js?v=20260722a" defer></script>
+    <script src="/before-times.js?v=20260722m" defer></script>
 </body>
 </html>

@@ -528,6 +528,12 @@
             tr: [23.96, 20.21],
             br: [24.04, 44.53],
             bl: [16.24, 45.84]
+        },
+        terminal: {
+            tl: [39.38, 51.79],
+            tr: [62.06, 51.51],
+            br: [63.3, 73.03],
+            bl: [38.06, 73.25]
         }
     };
     const PRODUCTION_LOOPS = [
@@ -876,7 +882,8 @@
     const knowledgePresentVideo = document.getElementById('bt-knowledge-present-video');
     const knowledgeDocumentSurfaces = {
         before: document.querySelector('[data-knowledge-document-surface="before"]'),
-        after: document.querySelector('[data-knowledge-document-surface="after"]')
+        after: document.querySelector('[data-knowledge-document-surface="after"]'),
+        terminal: document.getElementById('bt-knowledge-terminal-surface')
     };
     const documentCalibrationLayer = document.getElementById('bt-document-calibration');
     const documentCalibrationOutput = document.getElementById('bt-document-calibration-output');
@@ -2739,7 +2746,7 @@
 
         try {
             const saved = JSON.parse(localStorage.getItem(DOCUMENT_CALIBRATION_STORAGE_KEY) || 'null');
-            ['before', 'after'].forEach((surface) => {
+            ['before', 'after', 'terminal'].forEach((surface) => {
                 ['tl', 'tr', 'br', 'bl'].forEach((corner) => {
                     const point = saved && saved[surface] && saved[surface][corner];
                     if (!Array.isArray(point) || point.length !== 2) return;
@@ -2768,7 +2775,9 @@
     function applyKnowledgeDocumentKeystone(surfaceName) {
         const surface = knowledgeDocumentSurfaces[surfaceName];
         const points = documentCalibration && documentCalibration[surfaceName];
-        const plane = surface && surface.querySelector('.bt-knowledge-document-plane');
+        const plane = surfaceName === 'terminal'
+            ? surface
+            : surface && surface.querySelector('.bt-knowledge-document-plane');
         if (!surface || !points || !plane) return;
 
         const corners = ['tl', 'tr', 'br', 'bl'];
@@ -2804,6 +2813,7 @@
     function applyKnowledgeDocumentKeystones() {
         applyKnowledgeDocumentKeystone('before');
         applyKnowledgeDocumentKeystone('after');
+        applyKnowledgeDocumentKeystone('terminal');
     }
 
     function initializeKnowledgeDocumentKeystones() {
@@ -2865,7 +2875,8 @@
                 const visible = toggle.getAttribute('aria-pressed') !== 'true';
                 documentCalibrationLayer.classList.toggle(`is-${surface}-hidden`, !visible);
                 toggle.setAttribute('aria-pressed', String(visible));
-                toggle.textContent = `${surface === 'before' ? 'Before' : 'After'} guides: ${visible ? 'on' : 'off'}`;
+                const labels = { before: 'Before', after: 'After', terminal: 'Interface' };
+                toggle.textContent = `${labels[surface]} guides: ${visible ? 'on' : 'off'}`;
             });
         });
 

@@ -994,16 +994,21 @@ two high-resolution pages side by side; each links to its full `1024 × 1536`
 PNG. On phones the pair becomes a two-stop horizontal swipe rail without making
 the page itself overflow.
 
-The two room-scale documents use the same rectangle-to-quad `matrix3d`
-homography as the Game Development monitors. Their authoritative four-corner
-defaults are `DOCUMENT_CALIBRATION_DEFAULTS` in `before-times.js`; local working
-points persist under `bt-document-calibration-v1`. Open
-`/before-times.html?calibrate=documents#knowledge-maze` to tune them. The mode
-provides eight draggable handles, arrow-key nudging (`0.25%`, or `0.1%` while
-holding Shift), independent guide toggles, an art visibility toggle, reset, and
-copyable JSON. The page art keystones live while handles move. Each image keeps
-its ambient animation on an inner layer, so calibration transforms and motion
-do not fight over the same CSS `transform` property.
+The two room-scale documents and the main terminal use the same
+rectangle-to-quad `matrix3d` homography as the Game Development monitors. Their
+authoritative four-corner defaults are `DOCUMENT_CALIBRATION_DEFAULTS` in
+`before-times.js`; local working points persist under
+`bt-document-calibration-v1`. Open
+`/before-times.html?calibrate=documents#knowledge-maze` to tune all three
+surfaces. The mode provides twelve draggable handles, arrow-key nudging
+(`0.25%`, or `0.1%` while holding Shift), independent guide toggles, a document
+art visibility toggle, reset, and copyable JSON. All three surfaces reproject
+live while handles move. Each document keeps its ambient animation on an inner
+layer, so calibration transforms and motion do not fight over the same CSS
+`transform` property. The terminal's positioning surface carries its calibration
+transform while the child interface retains its searching animation. The
+child's `overflow: hidden` and border radius preserve the rounded CRT corners
+without clipping the calibrated quad into sharp corners.
 
 The far-right reverse doorway was corrected as a spatially distinct sightline
 from Door 04. It now looks diagonally across the lobby: the back edge of the

@@ -66,7 +66,7 @@
     <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/knowledge-maze/knowledge-maze-contained-v3.webp?v=20260722b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/knowledge-maze/knowledge-maze-breached-v2.webp?v=20260722b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260722k">
+    <link rel="stylesheet" href="/before-times.css?v=20260722l">
     <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
@@ -500,19 +500,21 @@
                     <i></i><i></i><i></i><i></i><i></i><i></i>
                 </span>
 
-                <div class="bt-knowledge-terminal" id="bt-knowledge-terminal" aria-live="polite">
-                    <header>
-                        <span>GUIDED ASSISTANCE PROTOTYPE // 2022</span>
-                        <strong id="bt-knowledge-context-count">CONTEXT 0 / 3</strong>
-                    </header>
-                    <p class="bt-knowledge-terminal-request" id="bt-knowledge-terminal-request">HELP ME WITH MY WEBSITE.</p>
-                    <div class="bt-knowledge-context-list" id="bt-knowledge-context-list">
-                        <p data-knowledge-context="human"><span>WHO</span><b id="bt-knowledge-context-human">MISSING</b></p>
-                        <p data-knowledge-context="goal"><span>GOAL</span><b id="bt-knowledge-context-goal">MISSING</b></p>
-                        <p data-knowledge-context="friction"><span>FRICTION</span><b id="bt-knowledge-context-friction">MISSING</b></p>
+                <div class="bt-knowledge-terminal-surface" id="bt-knowledge-terminal-surface" data-knowledge-terminal-surface="terminal">
+                    <div class="bt-knowledge-terminal" id="bt-knowledge-terminal" aria-live="polite">
+                        <header>
+                            <span>GUIDED ASSISTANCE PROTOTYPE // 2022</span>
+                            <strong id="bt-knowledge-context-count">CONTEXT 0 / 3</strong>
+                        </header>
+                        <p class="bt-knowledge-terminal-request" id="bt-knowledge-terminal-request">HELP ME WITH MY WEBSITE.</p>
+                        <div class="bt-knowledge-context-list" id="bt-knowledge-context-list">
+                            <p data-knowledge-context="human"><span>WHO</span><b id="bt-knowledge-context-human">MISSING</b></p>
+                            <p data-knowledge-context="goal"><span>GOAL</span><b id="bt-knowledge-context-goal">MISSING</b></p>
+                            <p data-knowledge-context="friction"><span>FRICTION</span><b id="bt-knowledge-context-friction">MISSING</b></p>
+                        </div>
+                        <p class="bt-knowledge-terminal-response" id="bt-knowledge-terminal-response">A useful answer needs a person, a goal, and the thing standing in the way.</p>
+                        <button class="bt-knowledge-ask" id="bt-knowledge-ask" type="button" disabled>Ask a better question</button>
                     </div>
-                    <p class="bt-knowledge-terminal-response" id="bt-knowledge-terminal-response">A useful answer needs a person, a goal, and the thing standing in the way.</p>
-                    <button class="bt-knowledge-ask" id="bt-knowledge-ask" type="button" disabled>Ask a better question</button>
                 </div>
 
                 <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-docs" type="button" data-knowledge-key="goal" data-label="Before and after documentation" aria-label="Inspect the before and after documentation panels"></button>
@@ -526,6 +528,7 @@
                     <svg class="bt-monitor-calibration-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                         <polygon data-document-calibration-polygon="before" points=""></polygon>
                         <polygon data-document-calibration-polygon="after" points=""></polygon>
+                        <polygon data-document-calibration-polygon="terminal" points=""></polygon>
                     </svg>
                     <button class="bt-calibration-handle" type="button" data-document-calibration-surface="before" data-document-calibration-corner="tl" data-label="BEFORE TL" aria-label="Move the before document top-left corner"></button>
                     <button class="bt-calibration-handle" type="button" data-document-calibration-surface="before" data-document-calibration-corner="tr" data-label="BEFORE TR" aria-label="Move the before document top-right corner"></button>
@@ -535,13 +538,18 @@
                     <button class="bt-calibration-handle" type="button" data-document-calibration-surface="after" data-document-calibration-corner="tr" data-label="AFTER TR" aria-label="Move the after document top-right corner"></button>
                     <button class="bt-calibration-handle" type="button" data-document-calibration-surface="after" data-document-calibration-corner="br" data-label="AFTER BR" aria-label="Move the after document bottom-right corner"></button>
                     <button class="bt-calibration-handle" type="button" data-document-calibration-surface="after" data-document-calibration-corner="bl" data-label="AFTER BL" aria-label="Move the after document bottom-left corner"></button>
-                    <aside class="bt-monitor-calibration-panel bt-document-calibration-panel" aria-label="Document corner calibration controls">
-                        <strong>Document corner calibration</strong>
-                        <p>Drag each handle to the inside corner of its illuminated board. The generated page keystones live as you move and the values save locally.</p>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="tl" data-label="INTERFACE TL" aria-label="Move the interface top-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="tr" data-label="INTERFACE TR" aria-label="Move the interface top-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="br" data-label="INTERFACE BR" aria-label="Move the interface bottom-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-document-calibration-surface="terminal" data-document-calibration-corner="bl" data-label="INTERFACE BL" aria-label="Move the interface bottom-left corner"></button>
+                    <aside class="bt-monitor-calibration-panel bt-document-calibration-panel" aria-label="Knowledge surface corner calibration controls">
+                        <strong>Knowledge surface calibration</strong>
+                        <p>Drag the handles to seat each document and the rounded interface screen. The perspective updates live and saves locally.</p>
                         <pre id="bt-document-calibration-output" aria-live="polite"></pre>
                         <div>
                             <button type="button" data-document-calibration-visibility="before" aria-pressed="true">Before guides: on</button>
                             <button type="button" data-document-calibration-visibility="after" aria-pressed="true">After guides: on</button>
+                            <button type="button" data-document-calibration-visibility="terminal" aria-pressed="true">Interface guides: on</button>
                             <button type="button" id="bt-document-calibration-art" aria-controls="bt-knowledge-document-before-surface bt-knowledge-document-after-surface" aria-pressed="true">Document art: on</button>
                             <button type="button" id="bt-document-calibration-copy">Copy points</button>
                             <button type="button" id="bt-document-calibration-reset">Reset</button>
@@ -759,6 +767,6 @@
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260719i" defer></script>
     <script src="/before-times-game-binder.js?v=20260722a" defer></script>
-    <script src="/before-times.js?v=20260722l" defer></script>
+    <script src="/before-times.js?v=20260722m" defer></script>
 </body>
 </html>

@@ -1346,32 +1346,30 @@ a {
 }
 
 .bt-game-role-screen {
-    left: 19.2%;
-    top: 28.1%;
-    width: 18.74%;
-    height: 22.97%;
-    clip-path: polygon(0% 0%, 99.9466% 6.4432%, 100% 93.2085%, 2.1345% 100%);
+    left: 20.29%;
+    top: 28.35%;
+    width: 17.59%;
+    height: 22.2%;
+    clip-path: polygon(0.0569% 0%, 100% 4.7748%, 100% 89.3694%, 0% 100%);
     border-radius: 2.8% 2.2% 3.3% 2.5%;
 }
 
 .bt-game-role-terminal {
     position: absolute;
     z-index: 1;
-    inset: -4% -18% -5% -1.4%;
+    inset: 0;
     display: flex;
     flex-direction: column;
     gap: 0.42cqw;
     padding: 6.5% 7% 6%;
     color: #ddc5f5;
     background:
-        linear-gradient(90deg, rgb(var(--bt-game-glow-rgb) / 0.14) 0 1.2%, transparent 1.2% 100%),
         radial-gradient(circle at 74% 28%, rgb(var(--bt-game-glow-rgb) / 0.18), transparent 48%),
         linear-gradient(145deg, rgba(126, 69, 164, 0.13), rgba(4, 4, 9, 0.26) 48%, rgba(0, 0, 0, 0.62));
     font-family: "Space Mono", ui-monospace, monospace;
     text-shadow: 0 0 0.55rem rgb(var(--bt-game-glow-hi-rgb) / 0.34);
     opacity: 0.84;
-    transform: perspective(31cqw) rotateY(10.4deg) rotateZ(0.02deg) scale(1.012);
-    transform-origin: 0 50%;
+    transform-origin: 0 0;
     transition: color 240ms ease, opacity 240ms ease, text-shadow 240ms ease;
 }
 
@@ -1600,6 +1598,13 @@ a {
     filter: drop-shadow(0 0 0.35cqw rgba(255, 181, 71, 0.72));
 }
 
+.bt-monitor-calibration.is-left-hidden [data-calibration-monitor="left"],
+.bt-monitor-calibration.is-left-hidden [data-calibration-polygon="left"],
+.bt-monitor-calibration.is-right-hidden [data-calibration-monitor="right"],
+.bt-monitor-calibration.is-right-hidden [data-calibration-polygon="right"] {
+    display: none;
+}
+
 .bt-calibration-handle {
     position: absolute;
     width: clamp(1.45rem, 2.2cqw, 2rem);
@@ -1608,7 +1613,10 @@ a {
     border: 2px solid #061d1a;
     border-radius: 50%;
     color: #061d1a;
-    background: #00f7c2;
+    background-color: rgba(0, 247, 194, 0.3);
+    background-image:
+        linear-gradient(to right, transparent calc(50% - 1px), currentColor calc(50% - 1px), currentColor calc(50% + 1px), transparent calc(50% + 1px)),
+        linear-gradient(to bottom, transparent calc(50% - 1px), currentColor calc(50% - 1px), currentColor calc(50% + 1px), transparent calc(50% + 1px));
     box-shadow:
         0 0 0 2px rgba(239, 255, 250, 0.92),
         0 0 0.85cqw rgba(0, 247, 194, 0.95);
@@ -1618,10 +1626,25 @@ a {
     transform: translate(-50%, -50%);
 }
 
+.bt-calibration-handle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.34rem;
+    aspect-ratio: 1;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.72);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
 .bt-calibration-handle[data-calibration-monitor="right"] {
     border-color: #2b1700;
     color: #2b1700;
-    background: #ffb547;
+    background-color: rgba(255, 181, 71, 0.3);
     box-shadow:
         0 0 0 2px rgba(255, 249, 230, 0.94),
         0 0 0.85cqw rgba(255, 181, 71, 0.95);
@@ -1728,28 +1751,48 @@ a {
     outline: none;
 }
 
+.bt-monitor-calibration-panel [data-calibration-visibility][aria-pressed="true"] {
+    color: #071a17;
+    background: rgba(0, 247, 194, 0.9);
+    border-color: #00f7c2;
+}
+
+.bt-monitor-calibration-panel [data-calibration-visibility="right"][aria-pressed="true"] {
+    color: #2b1700;
+    background: rgba(255, 181, 71, 0.92);
+    border-color: #ffb547;
+}
+
 body.bt-calibrating-monitors .bt-game-hotspot,
 body.bt-calibrating-monitors .bt-game-play-fallback {
     pointer-events: none;
 }
 
+body.bt-calibrating-monitors.bt-calibration-hide-screens .bt-game-role-screen,
+body.bt-calibrating-monitors.bt-calibration-hide-screens .bt-game-trailer-screen {
+    visibility: hidden;
+}
+
 .bt-game-trailer-screen {
-    left: 38.57%;
-    top: 29.42%;
-    width: 17.42%;
-    height: 19.81%;
-    clip-path: polygon(0.5741% 0%, 100% 0.7572%, 98.9093% 100%, 0% 99.0409%);
+    left: 38.97%;
+    top: 29.72%;
+    width: 16.29%;
+    height: 18.2%;
+    clip-path: polygon(0.2455% 0.1099%, 99.3861% 0%, 100% 98.4066%, 0% 100%);
     border-radius: 2.2% 2.8% 3.2% 2.6%;
 }
 
 .bt-game-video-plane {
     position: absolute;
     z-index: 1;
-    inset: -2.6% -4%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     background: #030306;
-    transform: perspective(46cqw) rotateY(-4.4deg) rotateZ(-0.18deg) scale(1.015);
-    transform-origin: 100% 50%;
+    transform-origin: 0 0;
 }
 
 .bt-game-video-plane iframe {

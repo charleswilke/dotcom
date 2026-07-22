@@ -799,13 +799,14 @@ project title and year are the visual anchors, the current case is numbered,
 each credit gets its own numbered high-contrast row, and the footer reports the
 trailer lifecycle (linking, rolling, paused, or complete). Keep the decorative
 archive labels quiet; title, year, and credits must remain the readable layer.
-Both monitor textures have their own inner 3D surface transforms inside exact
-four-corner outer clips. `.bt-game-role-terminal` recedes toward the right edge
-with overscan inside the left screen clip, and `.bt-game-video-plane` uses the
-opposing keystone. The outer containers deliberately have no CSS transform: the
-measured bounding boxes and local clip polygons are the authoritative bezel fit.
-Adjust the inner transforms only for texture perspective; do not enlarge the
-iframe itself or reintroduce an outer rotation.
+Both monitor textures use true four-point projective transforms inside exact
+four-corner outer clips. `createRectangleToQuadMatrix()` maps each rectangular
+source plane directly to the accepted `tl`, `tr`, `br`, `bl` quadrilateral and
+emits a CSS `matrix3d()`; a `ResizeObserver` recalculates it with the rendered
+screen dimensions. The right video plane remains 16:9 before projection. The
+outer containers deliberately have no CSS transform: the measured bounding
+boxes and local clip polygons are the authoritative bezel fit. Do not
+reintroduce hand-tuned `rotateY`, `rotateZ`, outer rotation, or iframe overscan.
 The left screen's outer clip is deliberately asymmetric: its near-left edge is
 taller and tucked inside the frame, while the far-right edge is substantially
 shorter at the center hinge. A transparent foreground lamp now provides the
@@ -824,10 +825,17 @@ two sets of JSON coordinates for handoff. Arrow keys nudge the focused handle by
 tool only: it does not alter the normal room or apply the exported coordinates
 to the CSS surface mappings until they are reviewed.
 
-The accepted July 21 calibration is now applied to the CSS and stored as the
-Reset default: left `TL [19.2,28.1]`, `TR [37.93,29.58]`,
-`BR [37.94,49.51]`, `BL [19.6,51.07]`; right `TL [38.67,29.42]`,
-`TR [55.99,29.57]`, `BR [55.8,49.23]`, `BL [38.57,49.04]`. These are scene
+The July 22 calibration pass added translucent targeting-reticle handles with
+an exact center dot and crosshair, so the painted corner remains visible while
+dragging. `Left guides` and `Right guides` independently hide each monitor's
+four handles and SVG polygon. `Screen overlays` hides both runtime screen
+surfaces to expose the painted room plate while leaving the guides active. All
+three visibility controls are calibration-only and never alter saved points.
+
+The accepted July 22 calibration is applied to the CSS and stored as the Reset
+default: left `TL [20.3,28.35]`, `TR [37.88,29.41]`,
+`BR [37.88,48.19]`, `BL [20.29,50.55]`; right `TL [39.01,29.74]`,
+`TR [55.16,29.72]`, `BR [55.26,47.63]`, `BL [38.97,47.92]`. These are scene
 percentages at the inside corners of the painted glass.
 
 ### Reusable four-corner screen calibration

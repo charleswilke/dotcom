@@ -420,16 +420,16 @@
     const MONITOR_CALIBRATION_STORAGE_KEY = 'bt-monitor-calibration-v1';
     const MONITOR_CALIBRATION_DEFAULTS = {
         left: {
-            tl: [19.2, 28.1],
-            tr: [37.93, 29.58],
-            br: [37.94, 49.51],
-            bl: [19.6, 51.07]
+            tl: [20.3, 28.35],
+            tr: [37.88, 29.41],
+            br: [37.88, 48.19],
+            bl: [20.29, 50.55]
         },
         right: {
-            tl: [38.67, 29.42],
-            tr: [55.99, 29.57],
-            br: [55.8, 49.23],
-            bl: [38.57, 49.04]
+            tl: [39.01, 29.74],
+            tr: [55.16, 29.72],
+            br: [55.26, 47.63],
+            bl: [38.97, 47.92]
         }
     };
     const PRODUCTION_LOOPS = [
@@ -726,7 +726,10 @@
     const gameScroll = document.getElementById('bt-game-scroll');
     const gameScene = document.getElementById('bt-game-scene');
     const gameArt = document.querySelector('.bt-game-art');
+    const gameRoleScreen = document.getElementById('bt-game-role-screen');
+    const gameRoleTerminal = document.querySelector('.bt-game-role-terminal');
     const gameTrailerScreen = document.getElementById('bt-game-trailer-screen');
+    const gameVideoPlane = document.querySelector('.bt-game-video-plane');
     const gameIframe = document.getElementById('bt-game-player');
     const gamePlayFallback = document.getElementById('bt-game-play-fallback');
     const gameRoleCase = document.getElementById('bt-game-role-case');
@@ -738,6 +741,8 @@
     const monitorCalibrationOutput = document.getElementById('bt-monitor-calibration-output');
     const monitorCalibrationCopy = document.getElementById('bt-monitor-calibration-copy');
     const monitorCalibrationReset = document.getElementById('bt-monitor-calibration-reset');
+    const monitorCalibrationScreens = document.getElementById('bt-monitor-calibration-screens');
+    const monitorCalibrationVisibilityToggles = Array.from(document.querySelectorAll('[data-calibration-visibility]'));
     const monitorCalibrationHandles = Array.from(document.querySelectorAll('[data-calibration-corner]'));
     const monitorCalibrationPolygons = Array.from(document.querySelectorAll('[data-calibration-polygon]'));
     const contentScroll = document.getElementById('bt-content-scroll');
@@ -788,6 +793,7 @@
     let alchemyRoomOpening = false;
     let gameRoomOpening = false;
     let contentRoomOpening = false;
+    let gameMonitorResizeObserver = null;
     let inventoryCloseTimer = 0;
     let hasAlchemyPen = false;
     let alchemyPenLocation = 'room';
@@ -2056,6 +2062,87 @@
         return Math.round(value * 100) / 100;
     }
 
+    function createRectangleToQuadMatrix(sourceWidth, sourceHeight, quad) {
+        const [tl, tr, br, bl] = quad;
+        const dx1 = tr.x - br.x;
+        const dx2 = bl.x - br.x;
+        const dx3 = tl.x - tr.x + br.x - bl.x;
+        const dy1 = tr.y - br.y;
+        const dy2 = bl.y - br.y;
+        const dy3 = tl.y - tr.y + br.y - bl.y;
+        let projectiveX = 0;
+        let projectiveY = 0;
+
+        if (Math.abs(dx3) > 1e-8 || Math.abs(dy3) > 1e-8) {
+            const denominator = dx1 * dy2 - dx2 * dy1;
+            if (Math.abs(denominator) < 1e-8) return null;
+            projectiveX = (dx3 * dy2 - dx2 * dy3) / denominator;
+            projectiveY = (dx1 * dy3 - dx3 * dy1) / denominator;
+        }
+
+        const scaleX = tr.x - tl.x + projectiveX * tr.x;
+        const shearX = bl.x - tl.x + projectiveY * bl.x;
+        const scaleY = tr.y - tl.y + projectiveX * tr.y;
+        const shearY = bl.y - tl.y + projectiveY * bl.y;
+        const homography = {
+            h11: scaleX / sourceWidth,
+            h12: shearX / sourceHeight,
+            h13: tl.x,
+            h21: scaleY / sourceWidth,
+            h22: shearY / sourceHeight,
+            h23: tl.y,
+            h31: projectiveX / sourceWidth,
+            h32: projectiveY / sourceHeight
+        };
+
+        return [
+            homography.h11, homography.h21, 0, homography.h31,
+            homography.h12, homography.h22, 0, homography.h32,
+            0, 0, 1, 0,
+            homography.h13, homography.h23, 0, 1
+        ];
+    }
+
+    function applyMonitorKeystone(monitor, screen, plane) {
+        const screenWidth = screen.clientWidth;
+        const screenHeight = screen.clientHeight;
+        const sourceWidth = plane.offsetWidth;
+        const sourceHeight = plane.offsetHeight;
+        if (!screenWidth || !screenHeight || !sourceWidth || !sourceHeight) return;
+
+        const points = MONITOR_CALIBRATION_DEFAULTS[monitor];
+        const corners = ['tl', 'tr', 'br', 'bl'];
+        const xs = corners.map((corner) => points[corner][0]);
+        const ys = corners.map((corner) => points[corner][1]);
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+        const quad = corners.map((corner) => ({
+            x: ((points[corner][0] - minX) / (maxX - minX)) * screenWidth,
+            y: ((points[corner][1] - minY) / (maxY - minY)) * screenHeight
+        }));
+        const matrix = createRectangleToQuadMatrix(sourceWidth, sourceHeight, quad);
+        if (!matrix) return;
+
+        const formatted = matrix.map((value) => Math.abs(value) < 1e-10 ? 0 : Number(value.toFixed(10)));
+        plane.style.transform = `matrix3d(${formatted.join(',')})`;
+    }
+
+    function applyGameMonitorKeystones() {
+        applyMonitorKeystone('left', gameRoleScreen, gameRoleTerminal);
+        applyMonitorKeystone('right', gameTrailerScreen, gameVideoPlane);
+    }
+
+    function initializeGameMonitorKeystones() {
+        if ('ResizeObserver' in window) {
+            gameMonitorResizeObserver = new ResizeObserver(applyGameMonitorKeystones);
+            gameMonitorResizeObserver.observe(gameScene);
+        } else {
+            window.addEventListener('resize', applyGameMonitorKeystones);
+        }
+    }
+
     function updateMonitorCalibrationView() {
         if (!monitorCalibration) return;
         const cornerOrder = ['tl', 'tr', 'br', 'bl'];
@@ -2097,6 +2184,23 @@
         monitorCalibrationLayer.hidden = false;
         document.body.classList.add('bt-calibrating-monitors');
         updateMonitorCalibrationView();
+
+        monitorCalibrationVisibilityToggles.forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+                const monitor = toggle.dataset.calibrationVisibility;
+                const visible = toggle.getAttribute('aria-pressed') !== 'true';
+                monitorCalibrationLayer.classList.toggle(`is-${monitor}-hidden`, !visible);
+                toggle.setAttribute('aria-pressed', String(visible));
+                toggle.textContent = `${monitor === 'left' ? 'Left' : 'Right'} guides: ${visible ? 'on' : 'off'}`;
+            });
+        });
+
+        monitorCalibrationScreens.addEventListener('click', () => {
+            const visible = monitorCalibrationScreens.getAttribute('aria-pressed') !== 'true';
+            document.body.classList.toggle('bt-calibration-hide-screens', !visible);
+            monitorCalibrationScreens.setAttribute('aria-pressed', String(visible));
+            monitorCalibrationScreens.textContent = `Screen overlays: ${visible ? 'on' : 'off'}`;
+        });
 
         monitorCalibrationHandles.forEach((handle) => {
             handle.addEventListener('pointerdown', (event) => {
@@ -2486,6 +2590,7 @@
         activeRoom = 'games';
         lobbyScroll.hidden = true;
         gameScroll.hidden = false;
+        applyGameMonitorKeystones();
         mobileFloorplan.hidden = true;
         mobileRoomExit.hidden = false;
         document.body.classList.add('bt-room-games');
@@ -3190,6 +3295,7 @@
     syncPenInventory();
     syncQuarterInventory();
     renderAlchemyPlaylist();
+    initializeGameMonitorKeystones();
     initializeMonitorCalibration();
     syncRoomFromLocation();
     initializeArchiveGate();

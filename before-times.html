@@ -65,7 +65,7 @@
     <link rel="preload" as="image" href="/images/before-times/games/game-development-lamp-v1.webp?v=20260721a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/content-factory-room-v1.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260721h">
+    <link rel="stylesheet" href="/before-times.css?v=20260722c">
     <script>
         try {
             if (sessionStorage.getItem('bt-gate-unlocked-v1') === 'true') {
@@ -433,6 +433,9 @@
                         <p>Drag each handle to the inside corner of the painted glass. Values save locally as you move them.</p>
                         <pre id="bt-monitor-calibration-output" aria-live="polite"></pre>
                         <div>
+                            <button type="button" data-calibration-visibility="left" aria-pressed="true">Left guides: on</button>
+                            <button type="button" data-calibration-visibility="right" aria-pressed="true">Right guides: on</button>
+                            <button type="button" id="bt-monitor-calibration-screens" aria-controls="bt-game-role-screen bt-game-trailer-screen" aria-pressed="true">Screen overlays: on</button>
                             <button type="button" id="bt-monitor-calibration-copy">Copy points</button>
                             <button type="button" id="bt-monitor-calibration-reset">Reset</button>
                             <a href="/before-times.html#game-development">Exit calibration</a>
@@ -599,6 +602,6 @@
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260719i" defer></script>
-    <script src="/before-times.js?v=20260721d" defer></script>
+    <script src="/before-times.js?v=20260722b" defer></script>
 </body>
 </html>

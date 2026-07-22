@@ -18,6 +18,15 @@ original magenta chroma renders remain in
 `tools/before-times-clean-patches/gate-*-chroma-v1.png` if the threshold is ever
 revisited as a non-blocking introduction.
 
+On touch-first mobile devices, portrait mode opens a themed rotate-phone
+interstitial that can be dismissed with “Stay in portrait.” Its fullscreen
+button makes a best-effort browser fullscreen request and landscape orientation
+lock while the tap gesture is still active. Both APIs are progressive
+enhancements: Android browsers commonly honor them, while iPhone Safari may
+not. Supported browsers also keep a small Full screen control available when
+the archive is landscape but not immersive. The lobby stays immediately
+available throughout; this feature must not restore the retired password gate.
+
 The first lobby is now built as a clean background plate plus independent
 interactive raster layers. The visible career doors are not warped crops. Each
 is a newly rendered asset that already contains the correct installed

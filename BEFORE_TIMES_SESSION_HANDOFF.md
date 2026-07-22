@@ -830,6 +830,34 @@ Reset default: left `TL [19.2,28.1]`, `TR [37.93,29.58]`,
 `TR [55.99,29.57]`, `BR [55.8,49.23]`, `BL [38.57,49.04]`. These are scene
 percentages at the inside corners of the painted glass.
 
+### Reusable four-corner screen calibration
+
+Use this same pattern for any future Before Times screen, frame, poster, or
+projected surface that needs to follow illustrated perspective:
+
+1. Put an opt-in calibration layer over the full scene with an SVG
+   `viewBox="0 0 100 100"` and four draggable handles ordered `tl`, `tr`, `br`,
+   `bl` for each surface.
+2. Convert each pointer position through the scene's `getBoundingClientRect()`
+   and store it as `[xPercent, yPercent]`. Draw the SVG polygon live, persist a
+   versioned JSON object in local storage, and provide a one-click copy action.
+3. Treat the copied points as the authoritative inside corners. Compute the
+   outer rectangle as `left = min(x)`, `top = min(y)`,
+   `width = max(x) - min(x)`, and `height = max(y) - min(y)`.
+4. Convert every scene point into the container's local clip coordinate with
+   `localX = (x - left) / width * 100` and
+   `localY = (y - top) / height * 100`, then use those four local pairs in a
+   CSS `clip-path: polygon(...)`.
+5. Do not transform the outer calibrated container after this conversion; that
+   would move the measured corners. Put perspective, rotation, and overscan on
+   an inner content plane instead. Keep any foreground occluders above both.
+6. Preserve the accepted JSON as the calibration Reset default and document the
+   query parameter, storage key, and final points here for reproducibility.
+
+The current `?calibrate=monitors` implementation is the reference version of
+this tool. Generalize its data attributes and storage key when another room
+needs multiple independently calibrated surfaces.
+
 The selected case uses the Content Factory article treatment: an inset radial
 `::before` spotlight with screen blending, no border, and no detached outer
 glow. It becomes persistent when selected, breathes while the trailer plays,

@@ -757,6 +757,91 @@ The reduced-motion media rule already collapses animation and transitions.
   it; mask the source silhouette.
 - Do not use the plain static server to validate a Vercel `/api` route.
 
+## Game Development room
+
+The Game Development doorway now enters a full-width illustrated studio at
+`#game-development`. Its runtime plate is
+`images/before-times/games/game-development-room-v2-no-lamp.webp` (`1672 × 941`),
+with the PNG master beside it. The original v1 plate remains the rebuild source.
+The baked desk lamp was removed from v2 so the transparent foreground lamp is
+the only visible copy. Rebuild the clean plate with
+`tools/build-game-development-no-lamp.py`; its localized repair input and
+generated repair live in `tools/before-times-clean-patches/`. The eight game
+cases, writing binder, mocap mannequin,
+dual-monitor workstation, and the reverse/inside view of the Game Development
+door frame are intentionally baked into that plate. Interactive HTML surfaces
+are mapped over the two monitor screens and transparent hotspots sit over the
+cases and props.
+
+`GAME_PROJECTS` in `before-times.js` is the source of truth for project title,
+year, credited role, official YouTube trailer, and per-project monitor/case
+glow. The current cases are:
+
+- Quest for Booty (`Wuql7jRIn6Y`) — Quality Assurance.
+- Resistance 2 (`hnk_zWmBK6Y`, Insomniac Games' “Last Hours” trailer) —
+  Quality Assurance + Cinematic Support. The earlier PlayStation E3 upload was
+  replaced because its age gate prevents embedded playback.
+- A Crack in Time (`trDZcBShFl0`) — Cinematic Scripter.
+- All 4 One (`D_7W4-9Rfsc`) — Cinematic Scripter.
+- Resistance 3 (`3t8ZoFCGfyQ`) — Cinematic Scripter.
+- Full Frontal Assault (`ZY1aeurQ2z4`) — Cinematic Scripter.
+- Fuse (`4JyokG3aHVo`) — Cinematic Scripter.
+- Into the Nexus (`4RZpGvGgdZA`) — Cinematic Scripter.
+
+Selecting a case updates the left HTML monitor with the title, year, and role,
+then cues the trailer through the shared lazily loaded YouTube IFrame API on the
+right monitor. Only one player exists. Room exit pauses it, and a visible
+Press play fallback handles browsers that block autoplay. The iframe title is
+also updated for the selected trailer.
+
+The left monitor is a compact project dossier rather than a sparse terminal:
+project title and year are the visual anchors, the current case is numbered,
+each credit gets its own numbered high-contrast row, and the footer reports the
+trailer lifecycle (linking, rolling, paused, or complete). Keep the decorative
+archive labels quiet; title, year, and credits must remain the readable layer.
+Both monitor textures have their own inner 3D surface transforms inside exact
+four-corner outer clips. `.bt-game-role-terminal` recedes toward the right edge
+with overscan inside the left screen clip, and `.bt-game-video-plane` uses the
+opposing keystone. The outer containers deliberately have no CSS transform: the
+measured bounding boxes and local clip polygons are the authoritative bezel fit.
+Adjust the inner transforms only for texture perspective; do not enlarge the
+iframe itself or reintroduce an outer rotation.
+The left screen's outer clip is deliberately asymmetric: its near-left edge is
+taller and tucked inside the frame, while the far-right edge is substantially
+shorter at the center hinge. A transparent foreground lamp now provides the
+physical occlusion over that screen. Runtime asset:
+`images/before-times/games/game-development-lamp-v1.webp`; PNG master beside it;
+flat-key generation source at
+`tools/before-times-clean-patches/game-development-lamp-chroma-v1.png`. The lamp
+must remain above the screen/glass layers (`z-index: 6`) and non-interactive.
+
+For exact monitor-edge calibration, open
+`/before-times.html?calibrate=monitors#game-development`. The calibration-only
+overlay exposes four draggable handles per monitor, draws the resulting
+quadrilaterals, autosaves them under `bt-monitor-calibration-v1`, and copies the
+two sets of JSON coordinates for handoff. Arrow keys nudge the focused handle by
+`0.25%`; Shift + Arrow uses `0.1%`. This overlay is deliberately a measuring
+tool only: it does not alter the normal room or apply the exported coordinates
+to the CSS surface mappings until they are reviewed.
+
+The accepted July 21 calibration is now applied to the CSS and stored as the
+Reset default: left `TL [19.2,28.1]`, `TR [37.93,29.58]`,
+`BR [37.94,49.51]`, `BL [19.6,51.07]`; right `TL [38.67,29.42]`,
+`TR [55.99,29.57]`, `BR [55.8,49.23]`, `BL [38.57,49.04]`. These are scene
+percentages at the inside corners of the painted glass.
+
+The selected case uses the Content Factory article treatment: an inset radial
+`::before` spotlight with screen blending, no border, and no detached outer
+glow. It becomes persistent when selected, breathes while the trailer plays,
+and settles to a lower intensity when paused. Each case supplies its own glow
+RGB so the light relates to the cover instead of washing every case purple.
+
+The binder opens the Game Development information panel. The mocap mannequin
+currently reports that its tape source is still missing; it is already a
+dedicated hotspot so the recovered video can be mapped there without changing
+the room geometry. The right-side reverse door and the fixed mobile Lobby
+button both return to the lobby and pause the active trailer.
+
 ## Content Factory room and quarter path
 
 The Content Factory is now a navigable second room at `#content-factory`.
@@ -822,6 +907,16 @@ its id in the owning drawer's `restored` array.
 ## Verification completed this session
 
 - The page was repeatedly tested at `http://localhost:8080/before-times.html`.
+- The Game Development room was tested from a fresh direct hash load. All eight
+  case hotspots selected the expected title, year, role, and case state; live
+  YouTube playback rendered on the right monitor; the binder, mocap status, and
+  reverse door were exercised; and the browser reported no console errors or
+  error overlays. A binder/case hotspot overlap found during this pass was fixed
+  by keeping the case layer above the foreground prop hotspots.
+- The dossier redesign was visually checked with Resistance 2's two credit rows
+  and Full Frontal Assault's wrapped title. Neither overflows the mapped screen.
+  Insomniac's replacement Resistance 2 trailer played inside the monitor without
+  the previous age-gate block, and the trailer lifecycle status updated correctly.
 - The runtime plate loads from `lobby-clean-v4-newsstand-guestbook-v3.webp`
   with the localized newsstand-top and empty-desk repairs.
 - Door rest states, adjusted frame positions, radio aura, guestbook hotspot,

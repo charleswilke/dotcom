@@ -29,9 +29,15 @@
             title: 'Game Development',
             copy: [
                 'A cinematic engine room full of narrative tools, debug geometry, motion-capture cleanup, version-control rituals, and characters waiting for their animation pass.',
-                'The artifacts here will trace the path from cinematic support and QA into scripting and pipeline work across several AAA productions.'
+                'The eight illuminated cases trace the path from quality assurance into cinematic support and scripting. Each one wakes the dual-monitor workstation: the official trailer on the right, the credited role on the left.',
+                'The binder is reserved for recovered game-writing artifacts. The motion-capture mannequin already has a screen waiting for the tape when it resurfaces.'
             ],
-            facts: ['Ratchet & Clank Future: A Crack in Time', 'Resistance 3', 'Sunset Overdrive', 'MotionBuilder, Maya, Perforce, and internal narrative tools']
+            facts: [
+                'Quality Assurance · Quest for Booty',
+                'Quality Assurance + Cinematic Support · Resistance 2',
+                'Cinematic Scripter · six releases from 2009–2013',
+                'MotionBuilder, Maya, Perforce, and internal narrative tools'
+            ]
         },
         content: {
             kicker: 'Door 03 // 2013–2022',
@@ -91,7 +97,7 @@
         floorplan: {
             kicker: 'Inventory // permanent item',
             title: 'Floor plan',
-            copy: ['The lobby is open. Absurd Alchemy and The Content Factory are ready to enter; the remaining career rooms are still being excavated.'],
+            copy: ['The lobby is open. Absurd Alchemy, Game Development, and The Content Factory are ready to enter; The Knowledge Maze is still being excavated.'],
             routes: [
                 { id: 'alchemy', label: '01 · Absurd Alchemy' },
                 { id: 'games', label: '02 · Game Development' },
@@ -329,6 +335,103 @@
             description: 'One pill to binge them all.'
         }
     ];
+    const GAME_PROJECTS = [
+        {
+            key: 'quest-for-booty',
+            yt: 'Wuql7jRIn6Y',
+            title: 'Quest for Booty',
+            fullTitle: 'Ratchet & Clank Future: Quest for Booty',
+            year: '2008',
+            role: ['Quality Assurance'],
+            glow: '71 190 205',
+            glowHi: '145 235 244'
+        },
+        {
+            key: 'resistance-2',
+            yt: 'hnk_zWmBK6Y',
+            title: 'Resistance 2',
+            fullTitle: 'Resistance 2',
+            year: '2008',
+            role: ['Quality Assurance', 'Cinematic Support'],
+            glow: '214 146 67',
+            glowHi: '255 211 126'
+        },
+        {
+            key: 'crack-in-time',
+            yt: 'trDZcBShFl0',
+            title: 'A Crack in Time',
+            fullTitle: 'Ratchet & Clank Future: A Crack in Time',
+            year: '2009',
+            role: ['Cinematic Scripter'],
+            glow: '83 190 232',
+            glowHi: '158 236 255'
+        },
+        {
+            key: 'all-4-one',
+            yt: 'D_7W4-9Rfsc',
+            title: 'All 4 One',
+            fullTitle: 'Ratchet & Clank: All 4 One',
+            year: '2011',
+            role: ['Cinematic Scripter'],
+            glow: '231 146 52',
+            glowHi: '255 215 125'
+        },
+        {
+            key: 'resistance-3',
+            yt: '3t8ZoFCGfyQ',
+            title: 'Resistance 3',
+            fullTitle: 'Resistance 3',
+            year: '2011',
+            role: ['Cinematic Scripter'],
+            glow: '205 69 43',
+            glowHi: '255 151 96'
+        },
+        {
+            key: 'full-frontal-assault',
+            yt: 'ZY1aeurQ2z4',
+            title: 'Full Frontal Assault',
+            fullTitle: 'Ratchet & Clank: Full Frontal Assault',
+            year: '2012',
+            role: ['Cinematic Scripter'],
+            glow: '72 157 222',
+            glowHi: '147 218 255'
+        },
+        {
+            key: 'fuse',
+            yt: '4JyokG3aHVo',
+            title: 'Fuse',
+            fullTitle: 'Fuse',
+            year: '2013',
+            role: ['Cinematic Scripter'],
+            glow: '220 118 54',
+            glowHi: '255 190 116'
+        },
+        {
+            key: 'into-the-nexus',
+            yt: '4RZpGvGgdZA',
+            title: 'Into the Nexus',
+            fullTitle: 'Ratchet & Clank: Into the Nexus',
+            year: '2013',
+            role: ['Cinematic Scripter'],
+            glow: '143 86 210',
+            glowHi: '211 157 255'
+        }
+    ];
+    const MONITOR_CALIBRATION_STORAGE_KEY = 'bt-monitor-calibration-v1';
+    const MONITOR_CALIBRATION_DEFAULTS = {
+        left: {
+            tl: [19.2, 28.1],
+            tr: [37.93, 29.58],
+            br: [37.94, 49.51],
+            bl: [19.6, 51.07]
+        },
+        right: {
+            tl: [38.67, 29.42],
+            tr: [55.99, 29.57],
+            br: [55.8, 49.23],
+            bl: [38.57, 49.04]
+        }
+    };
     const PRODUCTION_LOOPS = [
         {
             src: '/images/before-times/production/fragment-lucifer-2-v1.mp4',
@@ -563,6 +666,7 @@
     const archivePasswords = new Set(['p33k', 'tootsie', 'doc', 'astro']);
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
+    const gameSceneStatus = document.getElementById('bt-game-scene-status');
     const contentSceneStatus = document.getElementById('bt-content-scene-status');
     const infoDialog = document.getElementById('bt-info-dialog');
     const guestbookDialog = document.getElementById('bt-guestbook-dialog');
@@ -601,6 +705,8 @@
     const alchemyTwentyFiveHotspot = document.querySelector('.bt-alchemy-hotspot-25');
     const alchemyPenHotspot = document.getElementById('bt-alchemy-pen');
     const alchemyArtNoPen = document.getElementById('bt-alchemy-art-no-pen');
+    const gameDoorHotspot = document.querySelector('.bt-hotspot-games');
+    const gameCaseHotspots = Array.from(document.querySelectorAll('[data-game-key]'));
     const lobbyInventoryPen = document.getElementById('bt-lobby-inventory-pen');
     const inventoryPenSlot = document.getElementById('bt-inventory-slot-pen');
     const contentDoorHotspot = document.querySelector('.bt-hotspot-content');
@@ -617,6 +723,23 @@
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
     const alchemyScene = document.getElementById('bt-alchemy-scene');
     const alchemyArt = document.querySelector('.bt-alchemy-art');
+    const gameScroll = document.getElementById('bt-game-scroll');
+    const gameScene = document.getElementById('bt-game-scene');
+    const gameArt = document.querySelector('.bt-game-art');
+    const gameTrailerScreen = document.getElementById('bt-game-trailer-screen');
+    const gameIframe = document.getElementById('bt-game-player');
+    const gamePlayFallback = document.getElementById('bt-game-play-fallback');
+    const gameRoleCase = document.getElementById('bt-game-role-case');
+    const gameRoleTitle = document.getElementById('bt-game-role-title');
+    const gameRoleYear = document.getElementById('bt-game-role-year');
+    const gameRoleCopy = document.getElementById('bt-game-role-copy');
+    const gameRoleState = document.getElementById('bt-game-role-state');
+    const monitorCalibrationLayer = document.getElementById('bt-monitor-calibration');
+    const monitorCalibrationOutput = document.getElementById('bt-monitor-calibration-output');
+    const monitorCalibrationCopy = document.getElementById('bt-monitor-calibration-copy');
+    const monitorCalibrationReset = document.getElementById('bt-monitor-calibration-reset');
+    const monitorCalibrationHandles = Array.from(document.querySelectorAll('[data-calibration-corner]'));
+    const monitorCalibrationPolygons = Array.from(document.querySelectorAll('[data-calibration-polygon]'));
     const contentScroll = document.getElementById('bt-content-scroll');
     const contentScene = document.getElementById('bt-content-scene');
     const contentArt = document.querySelector('.bt-content-art');
@@ -653,10 +776,17 @@
     let ytGlowPoll = 0;
     let ytCaptionsClearedFor = null;
     let heroSource = 'vimeo';
+    let gamePlayer = null;
+    let gamePlayerPromise = null;
+    let loadedGameKey = null;
+    let currentGameProject = null;
+    let gameFallbackTimer = 0;
+    let monitorCalibration = null;
     let productionTimer = null;
     let lastProductionLoop = -1;
     let productionDeck = [];
     let alchemyRoomOpening = false;
+    let gameRoomOpening = false;
     let contentRoomOpening = false;
     let inventoryCloseTimer = 0;
     let hasAlchemyPen = false;
@@ -1041,7 +1171,9 @@
     function showStatus(message, duration) {
         const sceneStatus = activeRoom === 'alchemy'
             ? alchemySceneStatus
-            : (activeRoom === 'content' ? contentSceneStatus : lobbySceneStatus);
+            : (activeRoom === 'games'
+                ? gameSceneStatus
+                : (activeRoom === 'content' ? contentSceneStatus : lobbySceneStatus));
         window.clearTimeout(statusTimer);
         sceneStatus.textContent = message;
         sceneStatus.classList.add('is-visible');
@@ -1863,6 +1995,318 @@
         }
     }
 
+    function updateGameRole(project) {
+        const projectIndex = GAME_PROJECTS.findIndex((item) => item.key === project.key);
+        currentGameProject = project;
+        gameRoleCase.textContent = `${String(projectIndex + 1).padStart(2, '0')} / ${String(GAME_PROJECTS.length).padStart(2, '0')}`;
+        gameRoleTitle.textContent = project.title;
+        gameRoleYear.textContent = project.year;
+        gameRoleCopy.replaceChildren(...project.role.map((role, index) => {
+            const row = document.createElement('span');
+            const number = document.createElement('b');
+            const label = document.createElement('span');
+            row.className = 'bt-game-role-credit-row';
+            number.textContent = String(index + 1).padStart(2, '0');
+            label.textContent = role;
+            row.append(number, label);
+            return row;
+        }));
+        gameRoleState.textContent = 'CASE LOADED';
+        gameScene.style.setProperty('--bt-game-glow-rgb', project.glow);
+        gameScene.style.setProperty('--bt-game-glow-hi-rgb', project.glowHi);
+        gameScene.classList.add('has-game-selection');
+    }
+
+    function cloneMonitorCalibrationDefaults() {
+        return JSON.parse(JSON.stringify(MONITOR_CALIBRATION_DEFAULTS));
+    }
+
+    function readMonitorCalibration() {
+        const calibration = cloneMonitorCalibrationDefaults();
+
+        try {
+            const saved = JSON.parse(localStorage.getItem(MONITOR_CALIBRATION_STORAGE_KEY) || 'null');
+            ['left', 'right'].forEach((monitor) => {
+                ['tl', 'tr', 'br', 'bl'].forEach((corner) => {
+                    const point = saved && saved[monitor] && saved[monitor][corner];
+                    if (!Array.isArray(point) || point.length !== 2) return;
+                    const x = Number(point[0]);
+                    const y = Number(point[1]);
+                    if (Number.isFinite(x) && Number.isFinite(y)) {
+                        calibration[monitor][corner] = [x, y];
+                    }
+                });
+            });
+        } catch (error) {
+            // The default guide remains usable when local storage is unavailable.
+        }
+
+        return calibration;
+    }
+
+    function saveMonitorCalibration() {
+        try {
+            localStorage.setItem(MONITOR_CALIBRATION_STORAGE_KEY, JSON.stringify(monitorCalibration));
+        } catch (error) {
+            // Calibration still works for the current page view without persistence.
+        }
+    }
+
+    function roundMonitorCalibration(value) {
+        return Math.round(value * 100) / 100;
+    }
+
+    function updateMonitorCalibrationView() {
+        if (!monitorCalibration) return;
+        const cornerOrder = ['tl', 'tr', 'br', 'bl'];
+
+        monitorCalibrationHandles.forEach((handle) => {
+            const point = monitorCalibration[handle.dataset.calibrationMonitor][handle.dataset.calibrationCorner];
+            handle.style.left = `${point[0]}%`;
+            handle.style.top = `${point[1]}%`;
+        });
+
+        monitorCalibrationPolygons.forEach((polygon) => {
+            const points = cornerOrder
+                .map((corner) => monitorCalibration[polygon.dataset.calibrationPolygon][corner].join(','))
+                .join(' ');
+            polygon.setAttribute('points', points);
+        });
+
+        monitorCalibrationOutput.textContent = JSON.stringify(monitorCalibration, null, 2);
+    }
+
+    function moveMonitorCalibrationHandle(handle, clientX, clientY) {
+        const sceneBounds = gameScene.getBoundingClientRect();
+        if (!sceneBounds.width || !sceneBounds.height) return;
+        const monitor = handle.dataset.calibrationMonitor;
+        const corner = handle.dataset.calibrationCorner;
+        const x = Math.min(100, Math.max(0, ((clientX - sceneBounds.left) / sceneBounds.width) * 100));
+        const y = Math.min(100, Math.max(0, ((clientY - sceneBounds.top) / sceneBounds.height) * 100));
+        monitorCalibration[monitor][corner] = [roundMonitorCalibration(x), roundMonitorCalibration(y)];
+        updateMonitorCalibrationView();
+        saveMonitorCalibration();
+    }
+
+    function initializeMonitorCalibration() {
+        if (new URLSearchParams(window.location.search).get('calibrate') !== 'monitors') return;
+        if (!monitorCalibrationLayer || !monitorCalibrationOutput) return;
+
+        const calibrationPointerIds = new WeakMap();
+        monitorCalibration = readMonitorCalibration();
+        monitorCalibrationLayer.hidden = false;
+        document.body.classList.add('bt-calibrating-monitors');
+        updateMonitorCalibrationView();
+
+        monitorCalibrationHandles.forEach((handle) => {
+            handle.addEventListener('pointerdown', (event) => {
+                if (event.button !== 0) return;
+                event.preventDefault();
+                calibrationPointerIds.set(handle, event.pointerId);
+                handle.setPointerCapture(event.pointerId);
+                handle.classList.add('is-dragging');
+                moveMonitorCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            handle.addEventListener('pointermove', (event) => {
+                if (calibrationPointerIds.get(handle) !== event.pointerId) return;
+                event.preventDefault();
+                moveMonitorCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            const finishDrag = (event) => {
+                if (calibrationPointerIds.get(handle) !== event.pointerId) return;
+                calibrationPointerIds.delete(handle);
+                handle.classList.remove('is-dragging');
+                if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+                saveMonitorCalibration();
+            };
+            handle.addEventListener('pointerup', finishDrag);
+            handle.addEventListener('pointercancel', finishDrag);
+            handle.addEventListener('keydown', (event) => {
+                const offsets = {
+                    ArrowLeft: [-1, 0],
+                    ArrowRight: [1, 0],
+                    ArrowUp: [0, -1],
+                    ArrowDown: [0, 1]
+                };
+                if (!offsets[event.key]) return;
+                event.preventDefault();
+                const monitor = handle.dataset.calibrationMonitor;
+                const corner = handle.dataset.calibrationCorner;
+                const point = monitorCalibration[monitor][corner];
+                const step = event.shiftKey ? 0.1 : 0.25;
+                monitorCalibration[monitor][corner] = [
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[0] + offsets[event.key][0] * step))),
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[1] + offsets[event.key][1] * step)))
+                ];
+                updateMonitorCalibrationView();
+                saveMonitorCalibration();
+            });
+        });
+
+        monitorCalibrationCopy.addEventListener('click', async () => {
+            const payload = JSON.stringify(monitorCalibration, null, 2);
+            const originalLabel = monitorCalibrationCopy.textContent;
+            try {
+                await navigator.clipboard.writeText(payload);
+                monitorCalibrationCopy.textContent = 'Copied — paste into chat';
+            } catch (error) {
+                monitorCalibrationCopy.textContent = 'Select the JSON above';
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(monitorCalibrationOutput);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            window.setTimeout(() => {
+                monitorCalibrationCopy.textContent = originalLabel;
+            }, 2200);
+        });
+
+        monitorCalibrationReset.addEventListener('click', () => {
+            monitorCalibration = cloneMonitorCalibrationDefaults();
+            updateMonitorCalibrationView();
+            saveMonitorCalibration();
+            monitorCalibrationHandles[0].focus({ preventScroll: true });
+        });
+    }
+
+    function setGameCaseState(state) {
+        const roleStates = {
+            loading: 'LINKING TRAILER',
+            playing: 'TRAILER ROLLING',
+            paused: 'TRAILER PAUSED',
+            ended: 'TRAILER COMPLETE'
+        };
+        if (currentGameProject) gameRoleState.textContent = roleStates[state] || 'CASE LOADED';
+        gameCaseHotspots.forEach((button) => {
+            const isCurrent = currentGameProject && button.dataset.gameKey === currentGameProject.key;
+            button.classList.remove('is-loading', 'is-playing', 'is-paused');
+            button.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
+            if (isCurrent && ['loading', 'playing', 'paused'].includes(state)) button.classList.add(`is-${state}`);
+        });
+    }
+
+    function powerDownGameScreen() {
+        gameTrailerScreen.classList.remove('is-playing', 'is-loading');
+        gameTrailerScreen.classList.add('is-powering-off');
+        gameScene.classList.remove('is-trailer-playing');
+        window.setTimeout(() => gameTrailerScreen.classList.remove('is-loaded'), 140);
+        window.setTimeout(() => gameTrailerScreen.classList.remove('is-powering-off'), 700);
+    }
+
+    function handleGamePlayerState(event) {
+        if (!window.YT || !currentGameProject) return;
+        const states = window.YT.PlayerState;
+        window.clearTimeout(gameFallbackTimer);
+
+        if (event.data === states.PLAYING) {
+            disableYtCaptions(gamePlayer);
+            gameTrailerScreen.classList.add('is-loaded', 'is-playing');
+            gameTrailerScreen.classList.remove('is-loading', 'is-powering-off');
+            gameScene.classList.add('is-trailer-playing');
+            gamePlayFallback.hidden = true;
+            setGameCaseState('playing');
+            return;
+        }
+
+        if (event.data === states.PAUSED) {
+            gameTrailerScreen.classList.remove('is-playing', 'is-loading');
+            gameScene.classList.remove('is-trailer-playing');
+            gamePlayFallback.hidden = true;
+            setGameCaseState('paused');
+            return;
+        }
+
+        if (event.data === states.ENDED) {
+            setGameCaseState('ended');
+            powerDownGameScreen();
+            showStatus(`${currentGameProject.title} clicks to a stop. Choose another case or replay it.`, 4000);
+            return;
+        }
+
+        if (event.data === states.BUFFERING) {
+            gameTrailerScreen.classList.add('is-loaded', 'is-loading');
+            setGameCaseState('loading');
+        }
+    }
+
+    function primeGamePlayer(project) {
+        if (gamePlayer) return Promise.resolve(gamePlayer);
+        if (gamePlayerPromise) return gamePlayerPromise;
+
+        gamePlayerPromise = loadYouTubeApi().then((api) => new Promise((resolve) => {
+            gameIframe.src =
+                `https://www.youtube.com/embed/${project.yt}?enablejsapi=1&playsinline=1&rel=0&modestbranding=1` +
+                `&origin=${encodeURIComponent(window.location.origin)}`;
+            const player = new api.Player(gameIframe, {
+                events: {
+                    onReady: () => {
+                        gamePlayer = player;
+                        loadedGameKey = project.key;
+                        disableYtCaptions(player);
+                        resolve(player);
+                    },
+                    onStateChange: handleGamePlayerState
+                }
+            });
+        })).catch((error) => {
+            gamePlayerPromise = null;
+            throw error;
+        });
+
+        return gamePlayerPromise;
+    }
+
+    async function cueGameTrailer(gameKey) {
+        const project = GAME_PROJECTS.find((item) => item.key === gameKey);
+        if (!project) return;
+        const restartCurrent = currentGameProject && currentGameProject.key === project.key;
+
+        updateGameRole(project);
+        setGameCaseState('loading');
+        gamePlayFallback.hidden = true;
+        gameTrailerScreen.classList.remove('is-powering-off');
+        gameTrailerScreen.classList.add('is-loading');
+        showStatus(`Loading the official ${project.title} trailer…`, 3200);
+
+        try {
+            const player = await primeGamePlayer(project);
+            if (loadedGameKey !== project.key) {
+                player.loadVideoById(project.yt);
+                loadedGameKey = project.key;
+            } else {
+                if (restartCurrent) player.seekTo(0, true);
+                player.playVideo();
+            }
+            gameTrailerScreen.classList.add('is-loaded');
+
+            window.clearTimeout(gameFallbackTimer);
+            gameFallbackTimer = window.setTimeout(() => {
+                if (!window.YT || !gamePlayer) return;
+                const state = gamePlayer.getPlayerState();
+                if (state !== window.YT.PlayerState.PLAYING && state !== window.YT.PlayerState.BUFFERING) {
+                    gamePlayFallback.hidden = false;
+                }
+            }, 1700);
+        } catch (error) {
+            gameTrailerScreen.classList.add('is-loaded');
+            gamePlayFallback.hidden = false;
+            showStatus('The browser wants one more press directly on the monitor.', 4200);
+        } finally {
+            window.setTimeout(() => gameTrailerScreen.classList.remove('is-loading'), 720);
+        }
+    }
+
+    function retryGamePlayback() {
+        if (!currentGameProject) return;
+        if (!gamePlayer || typeof gamePlayer.playVideo !== 'function') {
+            cueGameTrailer(currentGameProject.key);
+            return;
+        }
+        gamePlayer.playVideo();
+        gamePlayFallback.hidden = true;
+    }
+
     function deactivateProductionScreen(screen, withBlip) {
         window.clearTimeout(screen.btGhostTimer);
         window.clearTimeout(screen.btRevealTimer);
@@ -2024,6 +2468,68 @@
         window.setTimeout(() => alchemyDoorHotspot.focus({ preventScroll: true }), 60);
     }
 
+    async function enterGameRoom(options) {
+        const settings = options || {};
+        if (activeRoom === 'games' || gameRoomOpening) return;
+        gameRoomOpening = true;
+        if (!gameArt.complete || !gameArt.naturalWidth) {
+            showStatus('Booting the development room…', 3200);
+            try {
+                await gameArt.decode();
+            } catch (error) {
+                // The image element will still show its normal fallback behavior.
+            }
+        }
+        gameRoomOpening = false;
+        if (infoDialog.open) closeDialog(infoDialog);
+        radioAudio.pause();
+        activeRoom = 'games';
+        lobbyScroll.hidden = true;
+        gameScroll.hidden = false;
+        mobileFloorplan.hidden = true;
+        mobileRoomExit.hidden = false;
+        document.body.classList.add('bt-room-games');
+        gameScene.classList.remove('is-entering');
+        void gameScene.offsetWidth;
+        gameScene.classList.add('is-entering');
+        gameScroll.scrollLeft = 0;
+        primeGamePlayer(GAME_PROJECTS[0]).catch(() => {});
+
+        if (settings.updateHistory !== false && window.location.hash !== '#game-development') {
+            window.history.pushState({ btRoom: 'games' }, '', '#game-development');
+        }
+        showStatus('Game Development. Choose a case to load its role and official trailer.', 4600);
+        window.setTimeout(() => gameCaseHotspots[0].focus({ preventScroll: true }), 380);
+    }
+
+    function leaveGameRoom(options) {
+        const settings = options || {};
+        if (activeRoom !== 'games') return;
+        setInventoryDrawerOpen(false, false);
+        activeRoom = 'lobby';
+        window.clearTimeout(gameFallbackTimer);
+        if (gamePlayer && typeof gamePlayer.pauseVideo === 'function') gamePlayer.pauseVideo();
+        gamePlayFallback.hidden = true;
+        gameTrailerScreen.classList.remove('is-loading', 'is-playing');
+        gameScene.classList.remove('is-trailer-playing');
+        if (currentGameProject) setGameCaseState('paused');
+        gameScroll.hidden = true;
+        lobbyScroll.hidden = false;
+        mobileFloorplan.hidden = false;
+        mobileRoomExit.hidden = true;
+        document.body.classList.remove('bt-room-games');
+
+        if (settings.updateHistory !== false) {
+            if (window.history.state && window.history.state.btRoom === 'games') {
+                window.history.back();
+            } else {
+                window.history.replaceState({ btRoom: 'lobby' }, '', `${window.location.pathname}${window.location.search}`);
+            }
+        }
+        showStatus('Back in the lobby.', 2200);
+        window.setTimeout(() => gameDoorHotspot.focus({ preventScroll: true }), 60);
+    }
+
     async function enterContentRoom(options) {
         const settings = options || {};
         if (activeRoom === 'content' || contentRoomOpening) return;
@@ -2082,16 +2588,25 @@
 
     function syncRoomFromLocation() {
         if (window.location.hash === '#absurd-alchemy') {
+            if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
             if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
             enterAlchemyRoom({ updateHistory: false });
             return;
         }
+        if (window.location.hash === '#game-development') {
+            if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+            if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+            enterGameRoom({ updateHistory: false });
+            return;
+        }
         if (window.location.hash === '#content-factory') {
             if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+            if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
             enterContentRoom({ updateHistory: false });
             return;
         }
         if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+        if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
         if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
     }
 
@@ -2348,6 +2863,15 @@
                 }
                 return;
             }
+            if (panelId === 'games') {
+                animateLayer(button, 'is-activating', 680);
+                if (prefersReducedMotion.matches) {
+                    enterGameRoom();
+                } else {
+                    window.setTimeout(() => enterGameRoom(), 360);
+                }
+                return;
+            }
             if (panelId === 'content') {
                 animateLayer(button, 'is-activating', 680);
                 if (prefersReducedMotion.matches) {
@@ -2399,6 +2923,21 @@
         button.addEventListener('click', () => openArchive('content', button.dataset.contentArchive));
     });
 
+    gameCaseHotspots.forEach((button) => {
+        button.addEventListener('click', () => cueGameTrailer(button.dataset.gameKey));
+    });
+
+    document.querySelectorAll('[data-game-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const action = button.dataset.gameAction;
+            if (action === 'lobby') leaveGameRoom();
+            if (action === 'binder') openPanel('games');
+            if (action === 'mocap') {
+                showStatus('The mocap tape has a home. Its source file is still hiding in the physical archive.', 4400);
+            }
+        });
+    });
+
     document.querySelectorAll('[data-content-action]').forEach((button) => {
         button.addEventListener('click', () => {
             const action = button.dataset.contentAction;
@@ -2419,6 +2958,7 @@
 
     alchemyPlayFallback.addEventListener('click', retryAlchemyPlayback);
     alchemyTapToggle.addEventListener('click', toggleAlchemyPlayback);
+    gamePlayFallback.addEventListener('click', retryGamePlayback);
 
     document.querySelectorAll('[data-action]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -2619,6 +3159,7 @@
 
     mobileRoomExit.addEventListener('click', () => {
         if (activeRoom === 'alchemy') leaveAlchemyRoom();
+        if (activeRoom === 'games') leaveGameRoom();
         if (activeRoom === 'content') leaveContentRoom();
     });
 
@@ -2630,6 +3171,9 @@
         if (document.hidden) {
             window.clearTimeout(productionTimer);
             stopProductionScreens();
+            if (activeRoom === 'games' && gamePlayer && typeof gamePlayer.pauseVideo === 'function') {
+                gamePlayer.pauseVideo();
+            }
         } else if (activeRoom === 'alchemy') {
             scheduleProductionGhost(2400);
         }
@@ -2646,6 +3190,7 @@
     syncPenInventory();
     syncQuarterInventory();
     renderAlchemyPlaylist();
+    initializeMonitorCalibration();
     syncRoomFromLocation();
     initializeArchiveGate();
 

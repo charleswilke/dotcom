@@ -881,6 +881,35 @@ a dedicated hotspot so the recovered video can be mapped there without changing
 the room geometry. The right-side reverse door and the fixed mobile Lobby button
 both return to the lobby and pause the active trailer.
 
+### The Boat cassette and radio unlock (July 22, 2026)
+
+The Game Development room now hides a small collectible hand-labeled cassette
+on the near-left corner of the front-right desk. The interactive sprite is
+`images/before-times/inventory/the-boat-cassette-v1.webp`; the transparent PNG
+master lives beside it and the flat-green generation source is
+`tools/before-times-clean-patches/the-boat-cassette-chroma-v1.png`. Its runtime
+position is intentionally an HTML layer rather than a baked plate edit, so the
+same asset can animate into inventory and disappear cleanly after collection.
+
+The cassette shares `bt-inventory-v1` through the `boatCassette` boolean. It is
+a permanent inventory key rather than a consumable location-state item. Once
+collected, the lobby radio changes from its static/tuning panel to the unlocked
+five-episode archive, and the cassette remains visible in both the drawer and
+the lobby inventory row. Clicking either the unlocked radio or the cassette
+opens the dedicated receiver dialog.
+
+The Boat player uses the existing album-player vocabulary: a live mint CRT
+oscilloscope, persistent title/date glass copy, five-track list, previous/play/
+next transport, seek rail, elapsed/duration readout, autoplay advance, keyboard
+controls, and a single shared audio element. Audio remains user-initiated. The
+Web Audio analyser is created lazily on the first explicit play action, and the
+dialog pauses playback when it closes.
+
+The untouched archival MP3s remain in `bt-assets/radio/`. Deployable 96 kbps
+copies live in `audio/before-times/the-boat/`; each individual runtime file is
+below GitHub's 100 MB file limit. The runtime order is Walken on Water,
+Elections, Robotic Brayton, Burnt Sienna, then Viva Variety.
+
 ## Content Factory room and quarter path
 
 The Content Factory is now a navigable second room at `#content-factory`.

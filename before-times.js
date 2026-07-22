@@ -146,6 +146,38 @@
     };
 
     const TUNING_TRACKS = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => `/audio/radio_tuning${number}.mp3`);
+    const RADIO_EPISODES = [
+        {
+            title: 'Walken on Water',
+            date: 'First episode · 2004',
+            duration: '53:03',
+            file: '/audio/before-times/the-boat/01-walken-on-water.mp3'
+        },
+        {
+            title: 'Elections',
+            date: 'February 24, 2004',
+            duration: '21:05',
+            file: '/audio/before-times/the-boat/02-elections.mp3'
+        },
+        {
+            title: 'Robotic Brayton',
+            date: 'March 16, 2004',
+            duration: '25:23',
+            file: '/audio/before-times/the-boat/03-robotic-brayton.mp3'
+        },
+        {
+            title: 'Burnt Sienna',
+            date: '2004',
+            duration: '26:36',
+            file: '/audio/before-times/the-boat/04-burnt-sienna.mp3'
+        },
+        {
+            title: 'Viva Variety',
+            date: '2004',
+            duration: '26:56',
+            file: '/audio/before-times/the-boat/05-viva-variety.mp3'
+        }
+    ];
     const TAPE_25_CLIPS = [
         '/audio/before-times/tape25-fart-1.mp3',
         '/audio/before-times/tape25-fart-2.mp3'
@@ -741,7 +773,19 @@
     const gameBinderIndex = document.getElementById('bt-game-binder-index');
     const gameBinderDetail = document.getElementById('bt-game-binder-detail');
     const gameBinderPosition = document.getElementById('bt-game-binder-position');
+    const radioDialog = document.getElementById('bt-radio-dialog');
     const radioAudio = document.getElementById('bt-radio-audio');
+    const radioPlaylist = document.getElementById('bt-radio-playlist');
+    const radioOscilloscopeFrame = document.getElementById('bt-radio-oscilloscope-frame');
+    const radioOscilloscope = document.getElementById('bt-radio-oscilloscope');
+    const radioEpisodeNumber = document.getElementById('bt-radio-episode-number');
+    const radioNowPlaying = document.getElementById('bt-radio-now-playing');
+    const radioEpisodeDate = document.getElementById('bt-radio-episode-date');
+    const radioPrev = document.getElementById('bt-radio-prev');
+    const radioPlay = document.getElementById('bt-radio-play');
+    const radioNext = document.getElementById('bt-radio-next');
+    const radioSeek = document.getElementById('bt-radio-seek');
+    const radioTime = document.getElementById('bt-radio-time');
     const infoKicker = document.getElementById('bt-dialog-kicker');
     const infoTitle = document.getElementById('bt-dialog-title');
     const knowledgeDocumentViewer = document.getElementById('bt-knowledge-document-viewer');
@@ -774,8 +818,11 @@
     const alchemyArtNoPen = document.getElementById('bt-alchemy-art-no-pen');
     const gameDoorHotspot = document.querySelector('.bt-hotspot-games');
     const gameCaseHotspots = Array.from(document.querySelectorAll('[data-game-key]'));
+    const gameCassetteHotspot = document.getElementById('bt-game-cassette');
     const lobbyInventoryPen = document.getElementById('bt-lobby-inventory-pen');
     const inventoryPenSlot = document.getElementById('bt-inventory-slot-pen');
+    const lobbyInventoryCassette = document.getElementById('bt-lobby-inventory-cassette');
+    const inventoryCassetteSlot = document.getElementById('bt-inventory-slot-cassette');
     const contentDoorHotspot = document.querySelector('.bt-hotspot-content');
     const contentExitHotspot = document.querySelector('.bt-content-hotspot-door');
     const contentConsoleHotspot = document.querySelector('.bt-content-hotspot-console');
@@ -870,6 +917,13 @@
     const tape25Audio = new Audio();
     tape25Audio.preload = 'none';
     let lastTape25ClipIndex = -1;
+    let currentRadioEpisode = 0;
+    let radioMode = 'tuning';
+    let radioAudioContext = null;
+    let radioAnalyser = null;
+    let radioAudioSource = null;
+    let radioScopeAnimation = 0;
+    let radioScopeData = null;
     let activeRoom = 'lobby';
     let alchemyPlayer = null;
     let loadedAlchemyVideoKey = null;
@@ -923,6 +977,7 @@
     let quarterPointerStartY = 0;
     let quarterPointerLastX = 0;
     let quarterPointerLastY = 0;
+    let hasBoatCassette = false;
 
     function readInventory() {
         try {
@@ -957,8 +1012,12 @@
         return hasContentQuarter && contentQuarterLocation === 'newsstand';
     }
 
+    function boatCassetteIsInInventory() {
+        return hasBoatCassette;
+    }
+
     function inventoryHasItems() {
-        return penIsInInventory() || quarterIsInInventory();
+        return penIsInInventory() || quarterIsInInventory() || boatCassetteIsInInventory();
     }
 
     function savePenState() {
@@ -972,6 +1031,12 @@
         const inventory = readInventory();
         inventory.contentQuarter = hasContentQuarter;
         inventory.contentQuarterLocation = contentQuarterLocation;
+        writeInventory(inventory);
+    }
+
+    function saveBoatCassetteState() {
+        const inventory = readInventory();
+        inventory.boatCassette = hasBoatCassette;
         writeInventory(inventory);
     }
 
@@ -1201,6 +1266,52 @@
         }
         quarterDragStarted = false;
         if (shouldInsert) insertQuarterIntoNewsstand();
+    }
+
+    function syncRadioAccess() {
+        const unlocked = boatCassetteIsInInventory();
+        radioHotspot.classList.toggle('is-unlocked', unlocked);
+        gameCassetteHotspot.hidden = unlocked;
+        inventoryCassetteSlot.classList.toggle('bt-inventory-slot-filled', unlocked);
+        lobbyInventoryCassette.hidden = !unlocked;
+
+        if (unlocked) {
+            radioHotspot.dataset.label = 'The Boat radio archive · unlocked';
+            radioHotspot.setAttribute('aria-label', 'Open the unlocked archive of The Boat radio show');
+            PANELS.radio.kicker = 'Lobby exhibit // signal recovered';
+            PANELS.radio.title = 'The Boat is on the air';
+            PANELS.radio.copy = [
+                'The hand-labeled cassette from the Game Development desk fits the receiver. Five broadcasts from 2004 have come back through the static.',
+                'The recovered archive includes the first episode, Walken on Water, plus Elections, Robotic Brayton, Burnt Sienna, and Viva Variety.'
+            ];
+            PANELS.radio.facts = ['Five complete recovered broadcasts', 'Chaz Wilke · John Ugolini · Brayton Cameron', 'Live CRT oscilloscope playback'];
+            PANELS.radio.button = { label: 'Open The Boat archive', action: 'broadcasts' };
+        }
+    }
+
+    function syncBoatCassetteInventory(options) {
+        const settings = options || {};
+        syncRadioAccess();
+        syncInventoryDrawer();
+        if (settings.openDrawer && hasBoatCassette) setInventoryDrawerOpen(true, true);
+    }
+
+    function collectBoatCassette() {
+        if (hasBoatCassette) {
+            setInventoryDrawerOpen(true, true);
+            return;
+        }
+
+        hasBoatCassette = true;
+        saveBoatCassetteState();
+        inventoryCassetteSlot.classList.add('bt-inventory-slot-filled');
+        lobbyInventoryCassette.hidden = false;
+        animateLayer(gameCassetteHotspot, 'is-collecting', 740);
+        window.setTimeout(() => {
+            gameCassetteHotspot.hidden = true;
+            syncBoatCassetteInventory({ openDrawer: true });
+        }, prefersReducedMotion.matches ? 0 : 420);
+        showStatus('“THE BOAT.” Five old broadcasts just unlocked the lobby radio.', 4600);
     }
 
     function readKnowledgeState() {
@@ -3502,6 +3613,7 @@
             infoButton.hidden = false;
             infoButton.onclick = () => {
                 if (panel.button.action === 'tune') tuneRadio();
+                if (panel.button.action === 'broadcasts') openRadioArchive();
                 if (panel.button.action === 'sound') toggleSound();
             };
         }
@@ -3520,12 +3632,233 @@
         showStatus(soundEnabled ? 'Lobby sound is on.' : 'Lobby sound is off.');
     }
 
+    function formatRadioTime(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) return '--:--';
+        const whole = Math.floor(seconds);
+        const hours = Math.floor(whole / 3600);
+        const minutes = Math.floor((whole % 3600) / 60);
+        const secs = whole % 60;
+        return hours
+            ? `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+            : `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function setRadioPlayState() {
+        const playing = radioMode === 'episode' && !radioAudio.paused;
+        radioPlay.setAttribute('aria-pressed', String(playing));
+        radioPlay.setAttribute('aria-label', playing ? 'Pause episode' : 'Play episode');
+        radioPlay.querySelector('span').textContent = playing ? '❚❚' : '▶';
+        radioOscilloscopeFrame.classList.toggle('is-playing', playing);
+    }
+
+    function syncRadioProgress() {
+        const duration = Number.isFinite(radioAudio.duration) ? radioAudio.duration : 0;
+        const current = Number.isFinite(radioAudio.currentTime) ? radioAudio.currentTime : 0;
+        const progress = duration ? current / duration : 0;
+        radioSeek.value = String(Math.round(progress * 1000));
+        radioSeek.style.setProperty('--bt-radio-progress', `${progress * 100}%`);
+        radioTime.textContent = `${formatRadioTime(current)} / ${duration ? formatRadioTime(duration) : '--:--'}`;
+    }
+
+    function ensureRadioAnalyser() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        if (!radioAudioContext) {
+            radioAudioContext = new AudioContextClass();
+            radioAnalyser = radioAudioContext.createAnalyser();
+            radioAnalyser.fftSize = 2048;
+            radioAnalyser.smoothingTimeConstant = 0.76;
+            radioAudioSource = radioAudioContext.createMediaElementSource(radioAudio);
+            radioAudioSource.connect(radioAnalyser);
+            radioAnalyser.connect(radioAudioContext.destination);
+            radioScopeData = new Uint8Array(radioAnalyser.fftSize);
+        }
+        if (radioAudioContext.state === 'suspended') radioAudioContext.resume().catch(() => {});
+        return radioAnalyser;
+    }
+
+    function resizeRadioOscilloscope() {
+        const rect = radioOscilloscope.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(1, Math.round(rect.width * dpr));
+        const height = Math.max(1, Math.round(rect.height * dpr));
+        if (radioOscilloscope.width !== width || radioOscilloscope.height !== height) {
+            radioOscilloscope.width = width;
+            radioOscilloscope.height = height;
+        }
+        return { width: rect.width, height: rect.height, dpr };
+    }
+
+    function drawRadioOscilloscope() {
+        const ctx = radioOscilloscope.getContext('2d');
+        const dimensions = resizeRadioOscilloscope();
+        const { width, height, dpr } = dimensions;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+
+        const background = ctx.createRadialGradient(width * 0.5, height * 0.52, 0, width * 0.5, height * 0.52, width * 0.72);
+        background.addColorStop(0, 'rgba(8, 38, 38, 0.72)');
+        background.addColorStop(1, 'rgba(1, 7, 10, 0.98)');
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, width, height);
+
+        const cellWidth = 46;
+        const cellHeight = 26;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        ctx.lineWidth = 0.6;
+        ctx.strokeStyle = 'rgba(0, 247, 194, 0.105)';
+        for (let x = centerX % cellWidth; x < width; x += cellWidth) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.stroke();
+        }
+        for (let y = centerY % cellHeight; y < height; y += cellHeight) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+        }
+        ctx.strokeStyle = 'rgba(0, 247, 194, 0.22)';
+        ctx.beginPath();
+        ctx.moveTo(centerX, 0);
+        ctx.lineTo(centerX, height);
+        ctx.stroke();
+
+        const playing = radioMode === 'episode' && !radioAudio.paused && radioAnalyser;
+        if (playing) radioAnalyser.getByteTimeDomainData(radioScopeData);
+        const samples = playing ? radioScopeData.length : 512;
+        const amplitude = Math.min(height * 0.33, 82);
+        const points = [];
+        for (let index = 0; index < samples; index += 1) {
+            const x = index / (samples - 1) * width;
+            const normalized = playing
+                ? (radioScopeData[index] - 128) / 128
+                : (Math.sin((index / samples) * Math.PI * 8) * 0.006 + (Math.random() - 0.5) * 0.008);
+            points.push([x, centerY + normalized * amplitude]);
+        }
+
+        const strokeTrace = (lineWidth, color, blur) => {
+            ctx.save();
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = color;
+            ctx.shadowColor = '#00f7c2';
+            ctx.shadowBlur = blur;
+            ctx.beginPath();
+            points.forEach(([x, y], index) => {
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            ctx.restore();
+        };
+        strokeTrace(5, 'rgba(0, 247, 194, 0.08)', 22);
+        strokeTrace(2, 'rgba(0, 247, 194, 0.72)', 10);
+        strokeTrace(0.75, 'rgba(224, 255, 239, 0.96)', 2);
+
+        ctx.fillStyle = 'rgba(229, 189, 117, 0.68)';
+        [0.25, 0.75].forEach((fraction) => {
+            ctx.fillRect(width * fraction - 0.5, height - 9, 1, 4);
+        });
+        radioScopeAnimation = window.requestAnimationFrame(drawRadioOscilloscope);
+    }
+
+    function startRadioOscilloscope() {
+        window.cancelAnimationFrame(radioScopeAnimation);
+        radioScopeAnimation = window.requestAnimationFrame(drawRadioOscilloscope);
+    }
+
+    function stopRadioOscilloscope() {
+        window.cancelAnimationFrame(radioScopeAnimation);
+        radioScopeAnimation = 0;
+    }
+
+    function loadRadioEpisode(index, options) {
+        const settings = options || {};
+        currentRadioEpisode = (index + RADIO_EPISODES.length) % RADIO_EPISODES.length;
+        const episode = RADIO_EPISODES[currentRadioEpisode];
+        radioMode = 'episode';
+        radioAudio.pause();
+        radioAudio.src = episode.file;
+        radioAudio.preload = 'metadata';
+        radioAudio.load();
+        radioEpisodeNumber.textContent = `TRANSMISSION ${String(currentRadioEpisode + 1).padStart(2, '0')} / ${String(RADIO_EPISODES.length).padStart(2, '0')}`;
+        radioNowPlaying.textContent = episode.title;
+        radioEpisodeDate.textContent = episode.date;
+        radioPlaylist.querySelectorAll('[data-radio-episode]').forEach((button, buttonIndex) => {
+            const active = buttonIndex === currentRadioEpisode;
+            button.classList.toggle('is-active', active);
+            button.setAttribute('aria-pressed', String(active));
+        });
+        syncRadioProgress();
+        setRadioPlayState();
+        if (settings.autoplay) playRadioEpisode();
+    }
+
+    function playRadioEpisode() {
+        if (radioMode !== 'episode') loadRadioEpisode(currentRadioEpisode);
+        if (!soundEnabled) {
+            soundEnabled = true;
+            localStorage.setItem('bt-sound-enabled', 'true');
+        }
+        tape25Audio.pause();
+        ensureRadioAnalyser();
+        radioAudio.volume = 0.92;
+        radioAudio.play().catch(() => showStatus('The archive needs another click before it will play.'));
+    }
+
+    function toggleRadioEpisode() {
+        if (radioAudio.paused || radioMode !== 'episode') playRadioEpisode();
+        else radioAudio.pause();
+    }
+
+    function renderRadioPlaylist() {
+        if (radioPlaylist.childElementCount) return;
+        RADIO_EPISODES.forEach((episode, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'bt-radio-episode';
+            button.dataset.radioEpisode = String(index);
+            button.setAttribute('aria-pressed', 'false');
+
+            const number = document.createElement('b');
+            number.textContent = String(index + 1).padStart(2, '0');
+            const copy = document.createElement('span');
+            copy.className = 'bt-radio-episode-copy';
+            const title = document.createElement('strong');
+            title.textContent = episode.title;
+            const date = document.createElement('small');
+            date.textContent = episode.date;
+            const duration = document.createElement('small');
+            duration.textContent = episode.duration;
+            copy.append(title, date);
+            button.append(number, copy, duration);
+            button.addEventListener('click', () => loadRadioEpisode(index, { autoplay: true }));
+            radioPlaylist.appendChild(button);
+        });
+    }
+
+    function openRadioArchive() {
+        if (!hasBoatCassette) {
+            openPanel('radio');
+            return;
+        }
+        if (infoDialog.open) closeDialog(infoDialog);
+        renderRadioPlaylist();
+        if (radioMode !== 'episode') loadRadioEpisode(currentRadioEpisode);
+        openDialog(radioDialog);
+        startRadioOscilloscope();
+        window.setTimeout(() => radioPlay.focus({ preventScroll: true }), 80);
+    }
+
     function tuneRadio() {
         animateLayer(radioHotspot, 'is-tuning', 680);
         if (!soundEnabled) {
             showStatus('Sound is off. The dial moves silently.');
             return;
         }
+        radioMode = 'tuning';
         let nextTrack = TUNING_TRACKS[Math.floor(Math.random() * TUNING_TRACKS.length)];
         if (radioAudio.src.endsWith(nextTrack) && TUNING_TRACKS.length > 1) {
             nextTrack = TUNING_TRACKS[(TUNING_TRACKS.indexOf(nextTrack) + 1) % TUNING_TRACKS.length];
@@ -3758,6 +4091,7 @@
             if (action === 'lobby') leaveGameRoom();
             if (action === 'binder') openGameBinder();
             if (action === 'mocap') cueMocapGif();
+            if (action === 'collect-cassette') collectBoatCassette();
         });
     });
 
@@ -3800,6 +4134,12 @@
             const action = button.dataset.action;
             if (action === 'bell') ringBell();
             if (action === 'radio') {
+                if (hasBoatCassette) {
+                    animateLayer(radioHotspot, 'is-tuning', 680);
+                    if (prefersReducedMotion.matches) openRadioArchive();
+                    else window.setTimeout(openRadioArchive, 260);
+                    return;
+                }
                 tuneRadio();
                 if (prefersReducedMotion.matches) {
                     openPanel('radio');
@@ -3850,7 +4190,7 @@
         button.addEventListener('click', () => closeDialog(button.closest('dialog')));
     });
 
-    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog, gameBinderDialog].forEach((dialog) => {
+    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog, gameBinderDialog, radioDialog].forEach((dialog) => {
         dialog.addEventListener('click', (event) => {
             if (event.target === dialog) closeDialog(dialog);
         });
@@ -3991,6 +4331,28 @@
         }
         setInventoryQuarterSelected(!inventoryQuarterSelected);
     });
+    lobbyInventoryCassette.addEventListener('click', openRadioArchive);
+
+    radioPlay.addEventListener('click', toggleRadioEpisode);
+    radioPrev.addEventListener('click', () => loadRadioEpisode(currentRadioEpisode - 1, { autoplay: true }));
+    radioNext.addEventListener('click', () => loadRadioEpisode(currentRadioEpisode + 1, { autoplay: true }));
+    radioOscilloscopeFrame.addEventListener('click', (event) => {
+        if (event.target.closest('button, input')) return;
+        toggleRadioEpisode();
+    });
+    radioSeek.addEventListener('input', () => {
+        if (!Number.isFinite(radioAudio.duration) || radioAudio.duration <= 0) return;
+        radioAudio.currentTime = Number(radioSeek.value) / 1000 * radioAudio.duration;
+        syncRadioProgress();
+    });
+    radioAudio.addEventListener('loadedmetadata', syncRadioProgress);
+    radioAudio.addEventListener('timeupdate', syncRadioProgress);
+    radioAudio.addEventListener('play', setRadioPlayState);
+    radioAudio.addEventListener('pause', setRadioPlayState);
+    radioDialog.addEventListener('close', () => {
+        radioAudio.pause();
+        stopRadioOscilloscope();
+    });
 
     mobileRoomExit.addEventListener('click', () => {
         if (activeRoom === 'alchemy') leaveAlchemyRoom();
@@ -4000,7 +4362,16 @@
     });
 
     radioAudio.addEventListener('ended', () => {
-        showStatus('Only static for now. The old broadcasts are still hiding somewhere.');
+        if (radioMode === 'episode') {
+            if (currentRadioEpisode < RADIO_EPISODES.length - 1) {
+                loadRadioEpisode(currentRadioEpisode + 1, { autoplay: true });
+            } else {
+                setRadioPlayState();
+                showStatus('End of the recovered transmission archive.', 3200);
+            }
+            return;
+        }
+        showStatus('Only static for now. Something on the Game Development desk might fit the cassette slot.');
     });
 
     document.addEventListener('visibilitychange', () => {
@@ -4026,11 +4397,13 @@
     contentQuarterLocation = hasContentQuarter && savedInventory.contentQuarterLocation === 'newsstand'
         ? 'newsstand'
         : (hasContentQuarter ? 'inventory' : 'room');
+    hasBoatCassette = savedInventory.boatCassette === true;
     const savedKnowledge = readKnowledgeState();
     knowledgeContext = new Set(savedKnowledge.context);
     knowledgeBreached = savedKnowledge.breached;
     syncPenInventory();
     syncQuarterInventory();
+    syncBoatCassetteInventory();
     syncKnowledgeState();
     renderAlchemyPlaylist();
     initializeGameMonitorKeystones();

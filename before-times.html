@@ -61,11 +61,12 @@
     <link rel="preload" as="image" href="/images/before-times/absurd-alchemy-clean-v4-no-pen.webp?v=20260719a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/games/game-development-room-v2-no-lamp.webp?v=20260721a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/games/game-development-lamp-v1.webp?v=20260721a" type="image/webp">
+    <link rel="preload" as="image" href="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/content-factory-room-v1.webp?v=20260718a" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/knowledge-maze/knowledge-maze-contained-v3.webp?v=20260722b" type="image/webp">
     <link rel="preload" as="image" href="/images/before-times/knowledge-maze/knowledge-maze-breached-v2.webp?v=20260722b" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260722i">
+    <link rel="stylesheet" href="/before-times.css?v=20260722k">
     <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
@@ -161,6 +162,10 @@
                 <button class="bt-lobby-inventory-item bt-lobby-inventory-quarter" id="bt-lobby-inventory-quarter" type="button" aria-label="Select the collected Doc quarter" aria-pressed="false" draggable="true" hidden>
                     <img src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="">
                     <span aria-hidden="true">Doc quarter</span>
+                </button>
+                <button class="bt-lobby-inventory-item bt-lobby-inventory-cassette" id="bt-lobby-inventory-cassette" type="button" aria-label="Open the radio unlocked by The Boat cassette" hidden>
+                    <img src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="">
+                    <span aria-hidden="true">The Boat cassette</span>
                 </button>
 
                 <div class="bt-scene-status" id="bt-scene-status" role="status" aria-live="polite"></div>
@@ -267,7 +272,7 @@
         <div class="bt-lobby-scroll bt-game-scroll" id="bt-game-scroll" hidden>
             <section class="bt-lobby-scene bt-game-scene" id="bt-game-scene" aria-label="Game Development room" aria-describedby="bt-game-instructions">
                 <p class="bt-sr-only" id="bt-game-instructions">
-                    Eight game cases select official trailers for the right monitor while the left monitor states Charles Wilke's role. The writing binder, motion-capture mannequin, and doorway back to the lobby are also interactive.
+                    Eight game cases select official trailers for the right monitor while the left monitor states Charles Wilke's role. The writing binder, motion-capture mannequin, a hidden cassette on the front-right desk, and doorway back to the lobby are also interactive.
                 </p>
                 <img
                     class="bt-lobby-art bt-game-art"
@@ -357,6 +362,9 @@
 
                 <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-binder" type="button" data-game-action="binder" data-label="Game-writing binder" aria-label="Inspect the game-writing binder"></button>
                 <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-mocap" type="button" data-game-action="mocap" data-label="Motion-capture archive" aria-label="Inspect the motion-capture mannequin"></button>
+                <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-cassette" id="bt-game-cassette" type="button" data-game-action="collect-cassette" data-label="A hand-labeled cassette" aria-label="Take The Boat cassette and add it to inventory">
+                    <img class="bt-game-cassette-sprite" src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="" aria-hidden="true">
+                </button>
                 <button class="bt-hotspot bt-game-hotspot bt-game-hotspot-door" type="button" data-game-action="lobby" data-label="Back to the lobby" aria-label="Return to the Before Times lobby">
                     <span class="bt-door-light" aria-hidden="true"></span>
                 </button>
@@ -560,7 +568,10 @@
                     <img src="/images/before-times/inventory/content-quarter-doc-v1.webp?v=20260719b" width="1254" height="1254" alt="Silver novelty quarter embossed with Doc from The Content Factory">
                     <span>Doc quarter</span>
                 </div>
-                <div class="bt-inventory-slot" aria-hidden="true"></div>
+                <div class="bt-inventory-slot bt-inventory-slot-cassette" id="bt-inventory-slot-cassette">
+                    <img src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="Scuffed black cassette hand-labeled The Boat">
+                    <span>The Boat cassette</span>
+                </div>
             </div>
         </aside>
 
@@ -660,6 +671,47 @@
         </article>
     </dialog>
 
+    <dialog class="bt-dialog bt-radio-dialog" id="bt-radio-dialog" aria-labelledby="bt-radio-title">
+        <article class="bt-dialog-card bt-radio-card">
+            <button class="bt-dialog-close bt-radio-close" type="button" data-dialog-close aria-label="Close The Boat radio archive">×</button>
+            <header class="bt-radio-header">
+                <p class="bt-radio-path">ARCHIVE RECEIVER // CASSETTE INPUT 01</p>
+                <div class="bt-radio-heading-row">
+                    <div>
+                        <span class="bt-radio-lock-state"><i aria-hidden="true"></i> SIGNAL RECOVERED</span>
+                        <h1 id="bt-radio-title">The Boat</h1>
+                    </div>
+                    <p>NIU radio · 2004<br>Chaz Wilke · John Ugolini<br>Brayton Cameron</p>
+                </div>
+            </header>
+            <div class="bt-radio-layout">
+                <section class="bt-radio-console" aria-label="The Boat episode player">
+                    <div class="bt-radio-oscilloscope-frame" id="bt-radio-oscilloscope-frame">
+                        <canvas class="bt-radio-oscilloscope" id="bt-radio-oscilloscope" aria-label="Live audio waveform"></canvas>
+                        <div class="bt-radio-scope-copy" aria-live="polite">
+                            <span id="bt-radio-episode-number">TRANSMISSION 01 / 05</span>
+                            <strong id="bt-radio-now-playing">Walken on Water</strong>
+                            <small id="bt-radio-episode-date">First episode · 2004</small>
+                        </div>
+                        <span class="bt-radio-scope-glass" aria-hidden="true"></span>
+                    </div>
+                    <div class="bt-radio-transport">
+                        <button type="button" id="bt-radio-prev" aria-label="Previous episode">‹‹</button>
+                        <button class="bt-radio-play" type="button" id="bt-radio-play" aria-label="Play episode" aria-pressed="false"><span aria-hidden="true">▶</span></button>
+                        <button type="button" id="bt-radio-next" aria-label="Next episode">››</button>
+                        <label class="bt-radio-progress">
+                            <span class="bt-sr-only">Episode progress</span>
+                            <input id="bt-radio-seek" type="range" min="0" max="1000" value="0" step="1">
+                        </label>
+                        <output class="bt-radio-time" id="bt-radio-time">00:00 / --:--</output>
+                    </div>
+                    <p class="bt-radio-player-note">Recovered from the original cassette archive. Click the scope or the center control to play and pause.</p>
+                </section>
+                <nav class="bt-radio-playlist" id="bt-radio-playlist" aria-label="The Boat episodes"></nav>
+            </div>
+        </article>
+    </dialog>
+
     <dialog class="bt-dialog bt-guestbook-dialog" id="bt-guestbook-dialog" aria-labelledby="bt-guestbook-title">
         <article class="bt-dialog-card bt-guestbook-card">
             <button class="bt-dialog-close" type="button" data-dialog-close aria-label="Close">×</button>
@@ -707,6 +759,6 @@
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260719i" defer></script>
     <script src="/before-times-game-binder.js?v=20260722a" defer></script>
-    <script src="/before-times.js?v=20260722k" defer></script>
+    <script src="/before-times.js?v=20260722l" defer></script>
 </body>
 </html>

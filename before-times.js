@@ -29,25 +29,32 @@
             title: 'Game Development',
             copy: [
                 'A cinematic engine room full of narrative tools, debug geometry, motion-capture cleanup, version-control rituals, and characters waiting for their animation pass.',
-                'The artifacts here will trace the path from cinematic support and QA into scripting and pipeline work across several AAA productions.'
+                'The eight illuminated cases trace the path from quality assurance into cinematic support and scripting. Each one wakes the dual-monitor workstation: the official trailer on the right, the credited role on the left.',
+                'The binder is reserved for recovered game-writing artifacts. The motion-capture mannequin already has a screen waiting for the tape when it resurfaces.'
             ],
-            facts: ['Ratchet & Clank Future: A Crack in Time', 'Resistance 3', 'Sunset Overdrive', 'MotionBuilder, Maya, Perforce, and internal narrative tools']
+            facts: [
+                'Quality Assurance · Quest for Booty',
+                'Quality Assurance + Cinematic Support · Resistance 2',
+                'Cinematic Scripter · six releases from 2009–2013',
+                'MotionBuilder, Maya, Perforce, and internal narrative tools'
+            ]
         },
         content: {
             kicker: 'Door 03 // 2013–2022',
             title: 'The Content Factory',
             copy: [
                 'A cheerful industrial accident producing blogs, landing pages, campaign copy, websites, search traffic, and the occasional viral object.',
-                'The archive now opens in layers: a fast taste, the reason each piece survived, then a full reading edition, strategy system, or annotated before-and-after proof.'
+                'The archive now opens in layers: a fast taste, the reason each piece survived, then a full reading edition, strategy system, or annotated before-and-after proof. Below the restored pieces, a card catalog logs the rest of the factory output by client.'
             ],
-            facts: ['13 recovered reading paths in the current archive', 'Hundreds of B2B and B2C content pieces', 'Corporate websites and digital assets', 'A 240% organic-traffic increase at FieldEdge']
+            facts: ['13 recovered reading paths in the current archive', 'A card catalog logging 195 pieces across eight clients', 'Corporate websites and digital assets', 'A 240% organic-traffic increase at FieldEdge']
         },
         docs: {
             kicker: 'Door 04 // remote // 2022–2024',
             title: 'The Knowledge Maze',
             copy: [
                 'A documentation labyrinth where every corridor leads to another edge case, style decision, customer question, or stakeholder with a very reasonable concern.',
-                'The GoDaddy chapter is where content craft met product systems at scale—and where the first chatbot-shaped shadows started appearing on the walls.'
+                'The GoDaddy chapter is where content craft met product systems at scale—and where the first chatbot-shaped shadows started appearing on the walls.',
+                'Inside, three evidence stations restore the human context an early assistance prototype is missing. Give it a person, a goal, and the thing standing in the way; it may find a path the old maze never anticipated.'
             ],
             facts: ['Websites + Marketing knowledge systems', 'Unified voice-and-tone guidance', '93% reduction in customer-care escalations']
         },
@@ -91,7 +98,7 @@
         floorplan: {
             kicker: 'Inventory // permanent item',
             title: 'Floor plan',
-            copy: ['The lobby is open. Absurd Alchemy and The Content Factory are ready to enter; the remaining career rooms are still being excavated.'],
+            copy: ['The lobby and all four career rooms are open. The Knowledge Maze contains a second route to the present for anyone willing to give the machine enough human context.'],
             routes: [
                 { id: 'alchemy', label: '01 · Absurd Alchemy' },
                 { id: 'games', label: '02 · Game Development' },
@@ -105,7 +112,72 @@
         }
     };
 
+    const KNOWLEDGE_EXHIBITS = {
+        human: {
+            kicker: 'Evidence 01 // voice and tone',
+            title: 'There is a person inside the query',
+            copy: [
+                'A useful answer changes with the person receiving it. Someone opening their first business site needs different language, pacing, and reassurance than an experienced developer fixing a configuration problem.',
+                'The unified guidance was not a coat of friendly paint. It was a system for recognizing confidence, urgency, emotional state, and the amount of knowledge an answer could safely assume.'
+            ],
+            facts: ['Context recovered: WHO', 'A new business owner', 'Human state before institutional vocabulary'],
+            contextValue: 'A NEW BUSINESS OWNER'
+        },
+        goal: {
+            kicker: 'Evidence 02 // before and after',
+            title: 'Start with the job, not the interface',
+            copy: [
+                'The paired GoDaddy panels preserve a recurring transformation: procedural pages organized around product controls became guidance organized around what a customer was actually trying to accomplish.',
+                'That shift turns documentation into product design. The writer is no longer describing the maze from above; they are walking beside someone who needs to get somewhere.'
+            ],
+            facts: ['Context recovered: GOAL', 'Help customers find the business', 'Recovered Websites + Marketing article rewrites'],
+            contextValue: 'HELP CUSTOMERS FIND THE BUSINESS'
+        },
+        friction: {
+            kicker: 'Evidence 03 // measured outcome',
+            title: 'Find what is really in the way',
+            copy: [
+                'The pressure gauge tracks a 93% reduction in customer-care escalations after one support experience was redesigned. The words mattered because they removed uncertainty at the moment it was becoming expensive.',
+                'The obstacle was not a lack of intelligence. It was unfamiliar language, unclear consequences, and no confidence about the next step.'
+            ],
+            facts: ['Context recovered: FRICTION', 'Unfamiliar SEO language', '93% fewer customer-care escalations'],
+            contextValue: 'UNFAMILIAR SEO LANGUAGE'
+        }
+    };
+
     const TUNING_TRACKS = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => `/audio/radio_tuning${number}.mp3`);
+    const RADIO_EPISODES = [
+        {
+            title: 'Walken on Water',
+            date: 'First episode · 2004',
+            duration: '53:03',
+            file: '/audio/before-times/the-boat/01-walken-on-water.mp3'
+        },
+        {
+            title: 'Elections',
+            date: 'February 24, 2004',
+            duration: '21:05',
+            file: '/audio/before-times/the-boat/02-elections.mp3'
+        },
+        {
+            title: 'Robotic Brayton',
+            date: 'March 16, 2004',
+            duration: '25:23',
+            file: '/audio/before-times/the-boat/03-robotic-brayton.mp3'
+        },
+        {
+            title: 'Burnt Sienna',
+            date: '2004',
+            duration: '26:36',
+            file: '/audio/before-times/the-boat/04-burnt-sienna.mp3'
+        },
+        {
+            title: 'Viva Variety',
+            date: '2004',
+            duration: '26:56',
+            file: '/audio/before-times/the-boat/05-viva-variety.mp3'
+        }
+    ];
     const TAPE_25_CLIPS = [
         '/audio/before-times/tape25-fart-1.mp3',
         '/audio/before-times/tape25-fart-2.mp3'
@@ -329,6 +401,141 @@
             description: 'One pill to binge them all.'
         }
     ];
+    const GAME_PROJECTS = [
+        {
+            key: 'quest-for-booty',
+            yt: 'Wuql7jRIn6Y',
+            title: 'Quest for Booty',
+            fullTitle: 'Ratchet & Clank Future: Quest for Booty',
+            year: '2008',
+            role: ['Quality Assurance'],
+            glow: '71 190 205',
+            glowHi: '145 235 244'
+        },
+        {
+            key: 'resistance-2',
+            yt: 'hnk_zWmBK6Y',
+            title: 'Resistance 2',
+            fullTitle: 'Resistance 2',
+            year: '2008',
+            role: ['Quality Assurance', 'Cinematic Support'],
+            glow: '214 146 67',
+            glowHi: '255 211 126'
+        },
+        {
+            key: 'crack-in-time',
+            yt: 'trDZcBShFl0',
+            title: 'A Crack in Time',
+            fullTitle: 'Ratchet & Clank Future: A Crack in Time',
+            year: '2009',
+            role: ['Cinematic Scripter'],
+            glow: '83 190 232',
+            glowHi: '158 236 255'
+        },
+        {
+            key: 'all-4-one',
+            yt: 'D_7W4-9Rfsc',
+            title: 'All 4 One',
+            fullTitle: 'Ratchet & Clank: All 4 One',
+            year: '2011',
+            role: ['Cinematic Scripter'],
+            glow: '231 146 52',
+            glowHi: '255 215 125'
+        },
+        {
+            key: 'resistance-3',
+            yt: '3t8ZoFCGfyQ',
+            title: 'Resistance 3',
+            fullTitle: 'Resistance 3',
+            year: '2011',
+            role: ['Cinematic Scripter'],
+            glow: '205 69 43',
+            glowHi: '255 151 96'
+        },
+        {
+            key: 'full-frontal-assault',
+            yt: 'ZY1aeurQ2z4',
+            title: 'Full Frontal Assault',
+            fullTitle: 'Ratchet & Clank: Full Frontal Assault',
+            year: '2012',
+            role: ['Cinematic Scripter'],
+            glow: '72 157 222',
+            glowHi: '147 218 255'
+        },
+        {
+            key: 'fuse',
+            yt: '4JyokG3aHVo',
+            title: 'Fuse',
+            fullTitle: 'Fuse',
+            year: '2013',
+            role: ['Cinematic Scripter'],
+            glow: '220 118 54',
+            glowHi: '255 190 116'
+        },
+        {
+            key: 'into-the-nexus',
+            yt: '4RZpGvGgdZA',
+            title: 'Into the Nexus',
+            fullTitle: 'Ratchet & Clank: Into the Nexus',
+            year: '2013',
+            role: ['Cinematic Scripter'],
+            glow: '143 86 210',
+            glowHi: '211 157 255'
+        }
+    ];
+    const MOCAP_GIFS = [
+        {
+            src: '/bt-assets/mocap/mocap-performance-pair-1-v1.gif?v=20260722b',
+            durationMs: 3000,
+            label: 'Motion-capture performance paired with its in-engine character pass'
+        },
+        {
+            src: '/bt-assets/mocap/mocap-performance-pair-2-v1.gif?v=20260722b',
+            durationMs: 3500,
+            label: 'A second motion-capture performance paired with its in-engine character pass'
+        },
+        {
+            src: '/bt-assets/mocap/kevin-manly-fall-v1.gif?v=20260722b',
+            durationMs: 6700,
+            label: 'Kevin takes a manly fall beside the crash mat'
+        }
+    ];
+    const MONITOR_CALIBRATION_STORAGE_KEY = 'bt-monitor-calibration-v1';
+    const MONITOR_CALIBRATION_DEFAULTS = {
+        left: {
+            tl: [20.3, 28.35],
+            tr: [37.88, 29.41],
+            br: [37.88, 48.19],
+            bl: [20.29, 50.55]
+        },
+        right: {
+            tl: [39.01, 29.74],
+            tr: [55.16, 29.72],
+            br: [55.26, 47.63],
+            bl: [38.97, 47.92]
+        }
+    };
+    const DOCUMENT_CALIBRATION_STORAGE_KEY = 'bt-document-calibration-v1';
+    const DOCUMENT_CALIBRATION_DEFAULTS = {
+        before: {
+            tl: [4.77, 16.64],
+            tr: [13.89, 18.34],
+            br: [13.82, 46.34],
+            bl: [4.79, 47.37]
+        },
+        after: {
+            tl: [16.33, 18.87],
+            tr: [23.96, 20.21],
+            br: [24.04, 44.53],
+            bl: [16.24, 45.84]
+        },
+        terminal: {
+            tl: [39.38, 51.79],
+            tr: [62.06, 51.51],
+            br: [63.3, 73.03],
+            bl: [38.06, 73.25]
+        }
+    };
     const PRODUCTION_LOOPS = [
         {
             src: '/images/before-times/production/fragment-lucifer-2-v1.mp4',
@@ -555,36 +762,49 @@
             label: 'A third Pricks fragment'
         }
     ];
-    const archiveGate = document.getElementById('bt-gate');
-    const archiveGateForm = document.getElementById('bt-gate-form');
-    const archiveGatePassword = document.getElementById('bt-gate-password');
-    const archiveGateStatus = document.getElementById('bt-gate-status');
-    const archiveExperience = document.getElementById('bt-lobby');
     const mobileOrientationPrompt = document.getElementById('bt-mobile-orientation');
     const mobileOrientationFullscreen = document.getElementById('bt-mobile-orientation-fullscreen');
     const mobileOrientationContinue = document.getElementById('bt-mobile-orientation-continue');
     const mobileImmersiveButton = document.getElementById('bt-mobile-immersive');
-    const archivePasswords = new Set(['p33k', 'tootsie', 'doc', 'astro']);
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
+    const gameSceneStatus = document.getElementById('bt-game-scene-status');
     const contentSceneStatus = document.getElementById('bt-content-scene-status');
+    const knowledgeSceneStatus = document.getElementById('bt-knowledge-scene-status');
     const infoDialog = document.getElementById('bt-info-dialog');
     const guestbookDialog = document.getElementById('bt-guestbook-dialog');
     const alchemyMenuDialog = document.getElementById('bt-alchemy-menu-dialog');
     const archiveDialog = document.getElementById('bt-archive-dialog');
     const archiveKicker = document.getElementById('bt-archive-kicker');
     const archiveTitle = document.getElementById('bt-archive-title');
-    const archiveIntro = document.getElementById('bt-archive-intro');
     const archiveIndex = document.getElementById('bt-archive-index');
     const archiveDetail = document.getElementById('bt-archive-detail');
+    const gameBinderDialog = document.getElementById('bt-game-binder-dialog');
+    const gameBinderIndex = document.getElementById('bt-game-binder-index');
+    const gameBinderDetail = document.getElementById('bt-game-binder-detail');
+    const gameBinderPosition = document.getElementById('bt-game-binder-position');
+    const radioDialog = document.getElementById('bt-radio-dialog');
     const radioAudio = document.getElementById('bt-radio-audio');
+    const radioPlaylist = document.getElementById('bt-radio-playlist');
+    const radioOscilloscopeFrame = document.getElementById('bt-radio-oscilloscope-frame');
+    const radioOscilloscope = document.getElementById('bt-radio-oscilloscope');
+    const radioEpisodeNumber = document.getElementById('bt-radio-episode-number');
+    const radioNowPlaying = document.getElementById('bt-radio-now-playing');
+    const radioEpisodeDate = document.getElementById('bt-radio-episode-date');
+    const radioPrev = document.getElementById('bt-radio-prev');
+    const radioPlay = document.getElementById('bt-radio-play');
+    const radioNext = document.getElementById('bt-radio-next');
+    const radioSeek = document.getElementById('bt-radio-seek');
+    const radioTime = document.getElementById('bt-radio-time');
     const infoKicker = document.getElementById('bt-dialog-kicker');
     const infoTitle = document.getElementById('bt-dialog-title');
+    const knowledgeDocumentViewer = document.getElementById('bt-knowledge-document-viewer');
     const infoCopy = document.getElementById('bt-dialog-copy');
     const infoFacts = document.getElementById('bt-dialog-facts');
     const infoRoutes = document.getElementById('bt-dialog-routes');
     const infoAction = document.getElementById('bt-dialog-action');
     const infoButton = document.getElementById('bt-dialog-button');
+    const infoSecondary = infoDialog.querySelector('.bt-dialog-secondary');
     const guestbookForm = document.getElementById('bt-guestbook-form');
     const guestbookMessage = document.getElementById('bt-guest-message');
     const guestbookCount = document.getElementById('bt-guest-count');
@@ -606,8 +826,13 @@
     const alchemyTwentyFiveHotspot = document.querySelector('.bt-alchemy-hotspot-25');
     const alchemyPenHotspot = document.getElementById('bt-alchemy-pen');
     const alchemyArtNoPen = document.getElementById('bt-alchemy-art-no-pen');
+    const gameDoorHotspot = document.querySelector('.bt-hotspot-games');
+    const gameCaseHotspots = Array.from(document.querySelectorAll('[data-game-key]'));
+    const gameCassetteHotspot = document.getElementById('bt-game-cassette');
     const lobbyInventoryPen = document.getElementById('bt-lobby-inventory-pen');
     const inventoryPenSlot = document.getElementById('bt-inventory-slot-pen');
+    const lobbyInventoryCassette = document.getElementById('bt-lobby-inventory-cassette');
+    const inventoryCassetteSlot = document.getElementById('bt-inventory-slot-cassette');
     const contentDoorHotspot = document.querySelector('.bt-hotspot-content');
     const contentExitHotspot = document.querySelector('.bt-content-hotspot-door');
     const contentConsoleHotspot = document.querySelector('.bt-content-hotspot-console');
@@ -622,9 +847,63 @@
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
     const alchemyScene = document.getElementById('bt-alchemy-scene');
     const alchemyArt = document.querySelector('.bt-alchemy-art');
+    const gameScroll = document.getElementById('bt-game-scroll');
+    const gameScene = document.getElementById('bt-game-scene');
+    const gameArt = document.querySelector('.bt-game-art');
+    const gameRoleScreen = document.getElementById('bt-game-role-screen');
+    const gameRoleTerminal = document.querySelector('.bt-game-role-terminal');
+    const gameTrailerScreen = document.getElementById('bt-game-trailer-screen');
+    const gameVideoPlane = document.querySelector('.bt-game-video-plane');
+    const gameIframe = document.getElementById('bt-game-player');
+    const gameMocapGif = document.getElementById('bt-game-mocap-gif');
+    const gamePlayFallback = document.getElementById('bt-game-play-fallback');
+    const gameRoleCase = document.getElementById('bt-game-role-case');
+    const gameRoleTitle = document.getElementById('bt-game-role-title');
+    const gameRoleYear = document.getElementById('bt-game-role-year');
+    const gameRoleCopy = document.getElementById('bt-game-role-copy');
+    const gameRoleState = document.getElementById('bt-game-role-state');
+    const monitorCalibrationLayer = document.getElementById('bt-monitor-calibration');
+    const monitorCalibrationOutput = document.getElementById('bt-monitor-calibration-output');
+    const monitorCalibrationCopy = document.getElementById('bt-monitor-calibration-copy');
+    const monitorCalibrationReset = document.getElementById('bt-monitor-calibration-reset');
+    const monitorCalibrationScreens = document.getElementById('bt-monitor-calibration-screens');
+    const monitorCalibrationVisibilityToggles = Array.from(document.querySelectorAll('[data-calibration-visibility]'));
+    const monitorCalibrationHandles = Array.from(document.querySelectorAll('[data-calibration-corner]'));
+    const monitorCalibrationPolygons = Array.from(document.querySelectorAll('[data-calibration-polygon]'));
     const contentScroll = document.getElementById('bt-content-scroll');
     const contentScene = document.getElementById('bt-content-scene');
     const contentArt = document.querySelector('.bt-content-art');
+    const knowledgeDoorHotspot = document.querySelector('.bt-hotspot-docs');
+    const knowledgeScroll = document.getElementById('bt-knowledge-scroll');
+    const knowledgeScene = document.getElementById('bt-knowledge-scene');
+    const knowledgeArt = document.querySelector('.bt-knowledge-art-contained');
+    const knowledgeTerminal = document.getElementById('bt-knowledge-terminal');
+    const knowledgeContextCount = document.getElementById('bt-knowledge-context-count');
+    const knowledgeTerminalRequest = document.getElementById('bt-knowledge-terminal-request');
+    const knowledgeTerminalResponse = document.getElementById('bt-knowledge-terminal-response');
+    const knowledgeAsk = document.getElementById('bt-knowledge-ask');
+    const knowledgePresentPortal = document.getElementById('bt-knowledge-present-portal');
+    const knowledgePresentVideo = document.getElementById('bt-knowledge-present-video');
+    const knowledgeDocumentSurfaces = {
+        before: document.querySelector('[data-knowledge-document-surface="before"]'),
+        after: document.querySelector('[data-knowledge-document-surface="after"]'),
+        terminal: document.getElementById('bt-knowledge-terminal-surface')
+    };
+    const documentCalibrationLayer = document.getElementById('bt-document-calibration');
+    const documentCalibrationOutput = document.getElementById('bt-document-calibration-output');
+    const documentCalibrationCopy = document.getElementById('bt-document-calibration-copy');
+    const documentCalibrationReset = document.getElementById('bt-document-calibration-reset');
+    const documentCalibrationArt = document.getElementById('bt-document-calibration-art');
+    const documentCalibrationVisibilityToggles = Array.from(document.querySelectorAll('[data-document-calibration-visibility]'));
+    const documentCalibrationHandles = Array.from(document.querySelectorAll('[data-document-calibration-corner]'));
+    const documentCalibrationPolygons = Array.from(document.querySelectorAll('[data-document-calibration-polygon]'));
+    const knowledgeContextElements = {
+        human: document.getElementById('bt-knowledge-context-human'),
+        goal: document.getElementById('bt-knowledge-context-goal'),
+        friction: document.getElementById('bt-knowledge-context-friction')
+    };
+    const knowledgeEvidenceHotspots = Array.from(document.querySelectorAll('[data-knowledge-key]'));
+    const knowledgeExitHotspot = document.querySelector('[data-knowledge-action="lobby"]');
     const alchemyChairLayer = document.getElementById('bt-alchemy-chair-layer');
     const alchemyCrateLayer = document.getElementById('bt-alchemy-crate-layer');
     const alchemySolarLayer = document.getElementById('bt-alchemy-solar-layer');
@@ -652,6 +931,13 @@
     const tape25Audio = new Audio();
     tape25Audio.preload = 'none';
     let lastTape25ClipIndex = -1;
+    let currentRadioEpisode = 0;
+    let radioMode = 'tuning';
+    let radioAudioContext = null;
+    let radioAnalyser = null;
+    let radioAudioSource = null;
+    let radioScopeAnimation = 0;
+    let radioScopeData = null;
     let activeRoom = 'lobby';
     let alchemyPlayer = null;
     let loadedAlchemyVideoKey = null;
@@ -661,11 +947,29 @@
     let ytGlowPoll = 0;
     let ytCaptionsClearedFor = null;
     let heroSource = 'vimeo';
+    let gamePlayer = null;
+    let gamePlayerPromise = null;
+    let loadedGameKey = null;
+    let currentGameProject = null;
+    let gameFallbackTimer = 0;
+    let lastMocapGifIndex = -1;
+    let mocapPlaybackTimer = 0;
+    let monitorCalibration = null;
+    let documentCalibration = null;
     let productionTimer = null;
     let lastProductionLoop = -1;
     let productionDeck = [];
     let alchemyRoomOpening = false;
+    let gameRoomOpening = false;
     let contentRoomOpening = false;
+    let knowledgeRoomOpening = false;
+    let knowledgeContext = new Set();
+    let knowledgeBreached = false;
+    let knowledgeRuptureTimer = 0;
+    let gameBinderInitialized = false;
+    let currentGameBinderFile = null;
+    let gameMonitorResizeObserver = null;
+    let knowledgeDocumentResizeObserver = null;
     let inventoryCloseTimer = 0;
     let hasAlchemyPen = false;
     let alchemyPenLocation = 'room';
@@ -687,6 +991,7 @@
     let quarterPointerStartY = 0;
     let quarterPointerLastX = 0;
     let quarterPointerLastY = 0;
+    let hasBoatCassette = false;
     let portraitPromptDismissed = false;
 
     function fullscreenElement() {
@@ -705,17 +1010,12 @@
         }
     }
 
-    function archiveIsOpen() {
-        return archiveGate.hidden || document.documentElement.classList.contains('bt-gate-bypassed');
-    }
-
     function syncMobileImmersiveControls() {
         const isTouchscreen = usesTouchscreenLayout.matches;
         const canRequestFullscreen = typeof fullscreenRequest() === 'function';
         const isFullscreen = Boolean(fullscreenElement()) || isStandaloneDisplay.matches || navigator.standalone === true;
         const showOrientationPrompt = isTouchscreen
             && isPortraitOrientation.matches
-            && archiveIsOpen()
             && !portraitPromptDismissed;
 
         mobileOrientationPrompt.hidden = !showOrientationPrompt;
@@ -723,7 +1023,6 @@
         mobileImmersiveButton.hidden = !isTouchscreen
             || !canRequestFullscreen
             || isFullscreen
-            || !archiveIsOpen()
             || showOrientationPrompt;
     }
 
@@ -752,88 +1051,6 @@
         syncMobileImmersiveControls();
     }
 
-    function makeArchiveExperienceAccessible() {
-        archiveExperience.removeAttribute('inert');
-        archiveExperience.removeAttribute('aria-hidden');
-    }
-
-    function initializeArchiveGate() {
-        const wasUnlocked = document.documentElement.classList.contains('bt-gate-bypassed');
-
-        if (wasUnlocked) {
-            archiveGate.hidden = true;
-            makeArchiveExperienceAccessible();
-            syncMobileImmersiveControls();
-            return;
-        }
-
-        const denyEntry = () => {
-            archiveGate.classList.remove('is-denied');
-            void archiveGate.offsetWidth;
-            archiveGate.classList.add('is-denied');
-            archiveGatePassword.setAttribute('aria-invalid', 'true');
-            archiveGateStatus.textContent = 'The ward does not know that word.';
-            archiveGatePassword.focus({ preventScroll: true });
-            archiveGatePassword.select();
-        };
-
-        archiveGateForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            if (!archivePasswords.has(archiveGatePassword.value.trim().toLowerCase())) {
-                denyEntry();
-                return;
-            }
-
-            archiveGatePassword.removeAttribute('aria-invalid');
-            archiveGateStatus.textContent = 'The old locks remember.';
-            requestMobileImmersiveMode();
-            archiveGate.classList.remove('is-denied');
-            archiveGate.classList.add('is-accepting');
-            archiveGatePassword.blur();
-            archiveGateForm.querySelector('button[type="submit"]').disabled = true;
-
-            try {
-                sessionStorage.setItem('bt-gate-unlocked-v1', 'true');
-            } catch (error) {
-                // The password still opens this page view when storage is unavailable.
-            }
-
-            window.setTimeout(() => {
-                archiveGate.classList.add('is-unlocking');
-                document.documentElement.classList.add('bt-gate-open');
-            }, prefersReducedMotion.matches ? 0 : 180);
-
-            window.setTimeout(() => {
-                archiveGate.hidden = true;
-                makeArchiveExperienceAccessible();
-                syncMobileImmersiveControls();
-            }, prefersReducedMotion.matches ? 300 : 1770);
-        });
-
-        archiveGatePassword.addEventListener('input', () => {
-            archiveGatePassword.removeAttribute('aria-invalid');
-            archiveGateStatus.textContent = '';
-        });
-
-        archiveGate.addEventListener('keydown', (event) => {
-            if (event.key !== 'Tab') return;
-            const controls = Array.from(archiveGateForm.querySelectorAll('input, button:not(:disabled)'));
-            if (!controls.length) return;
-            const first = controls[0];
-            const last = controls[controls.length - 1];
-            if (event.shiftKey && document.activeElement === first) {
-                event.preventDefault();
-                last.focus();
-            } else if (!event.shiftKey && document.activeElement === last) {
-                event.preventDefault();
-                first.focus();
-            }
-        });
-
-        window.requestAnimationFrame(() => archiveGatePassword.focus({ preventScroll: true }));
-    }
-
     mobileOrientationFullscreen.addEventListener('click', requestMobileImmersiveMode);
     mobileImmersiveButton.addEventListener('click', requestMobileImmersiveMode);
     mobileOrientationContinue.addEventListener('click', () => {
@@ -846,6 +1063,7 @@
     listenForMediaQueryChange(isPortraitOrientation, syncMobileImmersiveControls);
     listenForMediaQueryChange(usesTouchscreenLayout, syncMobileImmersiveControls);
     listenForMediaQueryChange(isStandaloneDisplay, syncMobileImmersiveControls);
+    syncMobileImmersiveControls();
 
     function readInventory() {
         try {
@@ -880,8 +1098,12 @@
         return hasContentQuarter && contentQuarterLocation === 'newsstand';
     }
 
+    function boatCassetteIsInInventory() {
+        return hasBoatCassette;
+    }
+
     function inventoryHasItems() {
-        return penIsInInventory() || quarterIsInInventory();
+        return penIsInInventory() || quarterIsInInventory() || boatCassetteIsInInventory();
     }
 
     function savePenState() {
@@ -895,6 +1117,12 @@
         const inventory = readInventory();
         inventory.contentQuarter = hasContentQuarter;
         inventory.contentQuarterLocation = contentQuarterLocation;
+        writeInventory(inventory);
+    }
+
+    function saveBoatCassetteState() {
+        const inventory = readInventory();
+        inventory.boatCassette = hasBoatCassette;
         writeInventory(inventory);
     }
 
@@ -1126,10 +1354,198 @@
         if (shouldInsert) insertQuarterIntoNewsstand();
     }
 
+    function syncRadioAccess() {
+        const unlocked = boatCassetteIsInInventory();
+        radioHotspot.classList.toggle('is-unlocked', unlocked);
+        gameCassetteHotspot.hidden = unlocked;
+        inventoryCassetteSlot.classList.toggle('bt-inventory-slot-filled', unlocked);
+        lobbyInventoryCassette.hidden = !unlocked;
+
+        if (unlocked) {
+            radioHotspot.dataset.label = 'The Boat radio archive · unlocked';
+            radioHotspot.setAttribute('aria-label', 'Open the unlocked archive of The Boat radio show');
+            PANELS.radio.kicker = 'Lobby exhibit // signal recovered';
+            PANELS.radio.title = 'The Boat is on the air';
+            PANELS.radio.copy = [
+                'The hand-labeled cassette from the Game Development desk fits the receiver. Five broadcasts from 2004 have come back through the static.',
+                'The recovered archive includes the first episode, Walken on Water, plus Elections, Robotic Brayton, Burnt Sienna, and Viva Variety.'
+            ];
+            PANELS.radio.facts = ['Five complete recovered broadcasts', 'Chaz Wilke · John Ugolini · Brayton Cameron', 'Live CRT oscilloscope playback'];
+            PANELS.radio.button = { label: 'Open The Boat archive', action: 'broadcasts' };
+        }
+    }
+
+    function syncBoatCassetteInventory(options) {
+        const settings = options || {};
+        syncRadioAccess();
+        syncInventoryDrawer();
+        if (settings.openDrawer && hasBoatCassette) setInventoryDrawerOpen(true, true);
+    }
+
+    function collectBoatCassette() {
+        if (hasBoatCassette) {
+            setInventoryDrawerOpen(true, true);
+            return;
+        }
+
+        hasBoatCassette = true;
+        saveBoatCassetteState();
+        inventoryCassetteSlot.classList.add('bt-inventory-slot-filled');
+        lobbyInventoryCassette.hidden = false;
+        animateLayer(gameCassetteHotspot, 'is-collecting', 740);
+        window.setTimeout(() => {
+            gameCassetteHotspot.hidden = true;
+            syncBoatCassetteInventory({ openDrawer: true });
+        }, prefersReducedMotion.matches ? 0 : 420);
+        showStatus('“THE BOAT.” Five old broadcasts just unlocked the lobby radio.', 4600);
+    }
+
+    function readKnowledgeState() {
+        try {
+            const saved = JSON.parse(sessionStorage.getItem('bt-knowledge-v1') || '{}');
+            return {
+                context: Array.isArray(saved.context)
+                    ? saved.context.filter((key) => Object.prototype.hasOwnProperty.call(KNOWLEDGE_EXHIBITS, key))
+                    : [],
+                breached: saved.breached === true
+            };
+        } catch (error) {
+            return { context: [], breached: false };
+        }
+    }
+
+    function saveKnowledgeState() {
+        try {
+            sessionStorage.setItem('bt-knowledge-v1', JSON.stringify({
+                context: Array.from(knowledgeContext),
+                breached: knowledgeBreached
+            }));
+        } catch (error) {
+            // Session storage can be unavailable; the room still works in memory.
+        }
+    }
+
+    function syncKnowledgeState() {
+        const count = knowledgeContext.size;
+        const ready = count === Object.keys(KNOWLEDGE_EXHIBITS).length;
+        const portalWasHidden = knowledgePresentPortal.hidden;
+        knowledgePresentPortal.hidden = !knowledgeBreached;
+        if (knowledgeBreached && portalWasHidden && activeRoom === 'knowledge') {
+            void knowledgePresentPortal.offsetWidth;
+        }
+        knowledgeContextCount.textContent = `CONTEXT ${count} / 3`;
+        knowledgeScene.dataset.contextCount = String(count);
+        knowledgeScene.classList.toggle('has-context', count > 0);
+        knowledgeScene.classList.toggle('is-context-ready', ready && !knowledgeBreached);
+        knowledgeScene.classList.toggle('is-breached', knowledgeBreached);
+        knowledgeDoorHotspot.classList.toggle('bt-is-breached', knowledgeBreached);
+
+        Object.entries(knowledgeContextElements).forEach(([key, element]) => {
+            const recovered = knowledgeContext.has(key);
+            const row = element.closest('[data-knowledge-context]');
+            element.textContent = recovered ? KNOWLEDGE_EXHIBITS[key].contextValue : 'MISSING';
+            row.classList.toggle('is-recovered', recovered);
+            const hotspot = knowledgeEvidenceHotspots.find((item) => item.dataset.knowledgeKey === key);
+            if (hotspot) hotspot.classList.toggle('is-recovered', recovered);
+        });
+
+        knowledgeAsk.hidden = knowledgeBreached;
+        knowledgeAsk.disabled = !ready || knowledgeBreached;
+
+        if (knowledgeBreached) {
+            knowledgeTerminalRequest.textContent = 'I’M A NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            knowledgeTerminalResponse.textContent = 'I found a shorter path. The present has been looking for you.';
+            knowledgeDoorHotspot.dataset.label = 'The Knowledge Maze · breach open';
+            knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze; its path to the present is open');
+            if (activeRoom === 'knowledge' && !document.hidden && !prefersReducedMotion.matches) {
+                knowledgePresentVideo.play().catch(() => {});
+            }
+            return;
+        }
+
+        knowledgePresentVideo.pause();
+
+        knowledgeDoorHotspot.dataset.label = 'Enter The Knowledge Maze';
+        knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze documentation room');
+        if (ready) {
+            knowledgeTerminalRequest.textContent = 'I’M A NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            knowledgeTerminalResponse.textContent = 'Context complete. The old route still works. I may have found a shorter one.';
+        } else if (count > 0) {
+            const remaining = 3 - count;
+            knowledgeTerminalRequest.textContent = 'HELP ME WITH MY WEBSITE.';
+            knowledgeTerminalResponse.textContent = `${remaining} piece${remaining === 1 ? '' : 's'} of human context still missing.`;
+        } else {
+            knowledgeTerminalRequest.textContent = 'HELP ME WITH MY WEBSITE.';
+            knowledgeTerminalResponse.textContent = 'A useful answer needs a person, a goal, and the thing standing in the way.';
+        }
+    }
+
+    function openKnowledgeExhibit(key) {
+        const panel = KNOWLEDGE_EXHIBITS[key];
+        if (!panel) return;
+
+        const wasRecovered = knowledgeContext.has(key);
+        knowledgeContext.add(key);
+        saveKnowledgeState();
+        syncKnowledgeState();
+
+        infoKicker.textContent = panel.kicker;
+        infoTitle.textContent = panel.title;
+        const showDocumentViewer = key === 'goal';
+        knowledgeDocumentViewer.hidden = !showDocumentViewer;
+        infoDialog.classList.toggle('bt-knowledge-documents-dialog', showDocumentViewer);
+        infoCopy.replaceChildren(...panel.copy.map(makeParagraph));
+        infoFacts.replaceChildren();
+        panel.facts.forEach((fact) => {
+            const item = document.createElement('li');
+            item.textContent = fact;
+            infoFacts.appendChild(item);
+        });
+        infoRoutes.replaceChildren();
+        infoAction.hidden = true;
+        infoButton.hidden = true;
+        infoButton.onclick = null;
+        infoSecondary.textContent = 'Back to the room';
+        openDialog(infoDialog);
+
+        if (!wasRecovered) {
+            showStatus(`Human context recovered: ${key.toUpperCase()}.`, 3200);
+        }
+    }
+
+    function openKnowledgeBreach() {
+        if (knowledgeBreached || knowledgeAsk.disabled) return;
+        window.clearTimeout(knowledgeRuptureTimer);
+        knowledgeAsk.disabled = true;
+        knowledgeTerminal.classList.add('is-answering');
+        knowledgeTerminalResponse.textContent = 'Looking past the prescribed route…';
+        showStatus('The terminal is searching the walls instead of the maze.', 4200);
+
+        const beginRupture = () => {
+            knowledgeScene.classList.add('is-rupturing');
+            knowledgeTerminalResponse.textContent = 'I found a shorter path.';
+            knowledgeRuptureTimer = window.setTimeout(() => {
+                knowledgeBreached = true;
+                saveKnowledgeState();
+                syncKnowledgeState();
+                knowledgeTerminal.classList.remove('is-answering');
+                knowledgeScene.classList.remove('is-rupturing');
+                showStatus('There you are. The present has been looking for you.', 5200);
+                window.setTimeout(() => knowledgePresentPortal.focus({ preventScroll: true }), 180);
+            }, prefersReducedMotion.matches ? 0 : 1350);
+        };
+
+        knowledgeRuptureTimer = window.setTimeout(beginRupture, prefersReducedMotion.matches ? 0 : 620);
+    }
+
     function showStatus(message, duration) {
         const sceneStatus = activeRoom === 'alchemy'
             ? alchemySceneStatus
-            : (activeRoom === 'content' ? contentSceneStatus : lobbySceneStatus);
+            : (activeRoom === 'games'
+                ? gameSceneStatus
+                : (activeRoom === 'content'
+                    ? contentSceneStatus
+                    : (activeRoom === 'knowledge' ? knowledgeSceneStatus : lobbySceneStatus)));
         window.clearTimeout(statusTimer);
         sceneStatus.textContent = message;
         sceneStatus.classList.add('is-visible');
@@ -1163,6 +1579,162 @@
         if (className) element.className = className;
         if (text) element.textContent = text;
         return element;
+    }
+
+    function makeGameBinderElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+    }
+
+    function renderGameBinderBlock(block) {
+        const section = makeGameBinderElement('section', `bt-game-binder-block bt-game-binder-${block.type}`);
+
+        if (block.type === 'screenplay') {
+            block.lines.forEach(([kind, line]) => {
+                section.appendChild(makeGameBinderElement(
+                    'p',
+                    `bt-game-binder-script-line bt-game-binder-script-${kind}`,
+                    line
+                ));
+            });
+            return section;
+        }
+
+        if (block.title) section.appendChild(makeGameBinderElement('h3', '', block.title));
+
+        if (block.type === 'section') {
+            block.entries.forEach(([label, copy]) => {
+                const entry = makeGameBinderElement('div', 'bt-game-binder-entry');
+                entry.appendChild(makeGameBinderElement('h4', '', label));
+                entry.appendChild(makeGameBinderElement('p', '', copy));
+                section.appendChild(entry);
+            });
+            if (block.note) {
+                section.appendChild(makeGameBinderElement('p', 'bt-game-binder-recovery-note', block.note));
+            }
+            return section;
+        }
+
+        (block.paragraphs || []).forEach((paragraph) => {
+            section.appendChild(makeGameBinderElement('p', '', paragraph));
+        });
+        return section;
+    }
+
+    function selectGameBinderFile(fileId, options) {
+        const files = Array.isArray(window.BEFORE_TIMES_GAME_BINDER)
+            ? window.BEFORE_TIMES_GAME_BINDER
+            : [];
+        const file = files.find((item) => item.id === fileId);
+        if (!file) return;
+        const settings = options || {};
+        currentGameBinderFile = file;
+
+        gameBinderIndex.querySelectorAll('[data-game-binder-file]').forEach((button) => {
+            const isActive = button.dataset.gameBinderFile === file.id;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-pressed', String(isActive));
+        });
+
+        const header = makeGameBinderElement('header', 'bt-game-binder-file-header');
+        header.appendChild(makeGameBinderElement(
+            'p',
+            'bt-game-binder-file-eyebrow',
+            `RECORD ${file.number} // ${file.statusLabel.toUpperCase()}`
+        ));
+        header.appendChild(makeGameBinderElement('h2', '', file.title));
+        header.appendChild(makeGameBinderElement('p', 'bt-game-binder-file-subtitle', file.subtitle));
+
+        const metadata = makeGameBinderElement('dl', 'bt-game-binder-metadata');
+        [
+            ['PROJECT', file.project],
+            ['DATE', file.year],
+            ['FORMAT', file.format],
+            ['SOURCE', file.source]
+        ].forEach(([label, value]) => {
+            const field = document.createElement('div');
+            field.appendChild(makeGameBinderElement('dt', '', label));
+            field.appendChild(makeGameBinderElement('dd', '', value));
+            metadata.appendChild(field);
+        });
+        header.appendChild(metadata);
+        header.appendChild(makeGameBinderElement('p', 'bt-game-binder-summary', file.summary));
+
+        const body = makeGameBinderElement('div', 'bt-game-binder-file-body');
+        file.blocks.forEach((block) => body.appendChild(renderGameBinderBlock(block)));
+        gameBinderDetail.replaceChildren(header, body);
+        gameBinderDetail.scrollTop = 0;
+        gameBinderPosition.textContent = `RECORD ${file.number} / ${String(files.length).padStart(2, '0')} // ${file.status}`;
+        gameBinderDetail.classList.remove('is-refreshing');
+        void gameBinderDetail.offsetWidth;
+        gameBinderDetail.classList.add('is-refreshing');
+        if (settings.focusDetail) gameBinderDetail.focus({ preventScroll: true });
+    }
+
+    function initializeGameBinder() {
+        if (gameBinderInitialized) return;
+        const files = Array.isArray(window.BEFORE_TIMES_GAME_BINDER)
+            ? window.BEFORE_TIMES_GAME_BINDER
+            : [];
+        gameBinderInitialized = true;
+
+        if (!files.length) {
+            gameBinderDetail.appendChild(makeGameBinderElement(
+                'p',
+                'bt-game-binder-empty',
+                'ERROR 404 // No recovered narrative records found.'
+            ));
+            return;
+        }
+
+        files.forEach((file) => {
+            const button = makeGameBinderElement('button', 'bt-game-binder-index-item');
+            button.type = 'button';
+            button.dataset.gameBinderFile = file.id;
+            button.setAttribute('aria-pressed', 'false');
+            button.appendChild(makeGameBinderElement('span', 'bt-game-binder-index-code', `${file.number} / ${file.status}`));
+            button.appendChild(makeGameBinderElement('strong', '', file.title));
+            button.appendChild(makeGameBinderElement('span', 'bt-game-binder-index-subtitle', file.subtitle));
+            button.appendChild(makeGameBinderElement('span', 'bt-game-binder-index-meta', `${file.year} · ${file.format}`));
+            button.addEventListener('click', () => selectGameBinderFile(file.id));
+            gameBinderIndex.appendChild(button);
+        });
+
+        gameBinderIndex.addEventListener('keydown', (event) => {
+            if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+            const buttons = Array.from(gameBinderIndex.querySelectorAll('[data-game-binder-file]'));
+            const currentIndex = Math.max(0, buttons.indexOf(document.activeElement));
+            let nextIndex = currentIndex;
+            if (event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % buttons.length;
+            if (event.key === 'ArrowUp') nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+            if (event.key === 'Home') nextIndex = 0;
+            if (event.key === 'End') nextIndex = buttons.length - 1;
+            event.preventDefault();
+            buttons[nextIndex].focus({ preventScroll: true });
+            buttons[nextIndex].click();
+            buttons[nextIndex].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        });
+
+        selectGameBinderFile(files[0].id);
+    }
+
+    function openGameBinder() {
+        initializeGameBinder();
+        openDialog(gameBinderDialog);
+        const card = gameBinderDialog.querySelector('.bt-game-binder-card');
+        card.classList.remove('is-booting');
+        void card.offsetWidth;
+        card.classList.add('is-booting');
+        window.setTimeout(() => card.classList.remove('is-booting'), 520);
+        window.requestAnimationFrame(() => {
+            const activeFile = currentGameBinderFile && currentGameBinderFile.id;
+            const activeButton = activeFile
+                ? gameBinderIndex.querySelector(`[data-game-binder-file="${activeFile}"]`)
+                : gameBinderIndex.querySelector('button');
+            if (activeButton) activeButton.focus({ preventScroll: true });
+        });
     }
 
     function renderArchiveBody(blocks) {
@@ -1373,18 +1945,17 @@
         archiveDetail.scrollTop = 0;
     }
 
-    function renderArchivePiece(collectionName, pieceId) {
+    function renderArchiveIndex(collectionName, activeId) {
         const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
         if (!collection || !collection.length) return;
-        const piece = collection.find((item) => item.id === pieceId) || collection[0];
 
         archiveIndex.replaceChildren();
         collection.forEach((item, index) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'bt-archive-index-item';
-            button.classList.toggle('is-active', item.id === piece.id);
-            button.setAttribute('aria-current', item.id === piece.id ? 'true' : 'false');
+            button.classList.toggle('is-active', item.id === activeId);
+            button.setAttribute('aria-current', item.id === activeId ? 'true' : 'false');
             button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', String(index + 1).padStart(2, '0')));
             button.appendChild(makeArchiveElement('strong', '', item.title));
             button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', item.eyebrow.replace(' // ', ' · ')));
@@ -1392,6 +1963,103 @@
             button.addEventListener('click', () => renderArchivePiece(collectionName, item.id));
             archiveIndex.appendChild(button);
         });
+
+        const catalog = collectionName === 'content'
+            ? window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog
+            : null;
+        if (catalog && catalog.length) {
+            archiveIndex.appendChild(makeArchiveElement('p', 'bt-archive-index-divider', 'The card catalog // by client'));
+            catalog.forEach((group, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'bt-archive-index-item bt-archive-catalog-tab';
+                button.classList.toggle('is-active', group.id === activeId);
+                button.setAttribute('aria-current', group.id === activeId ? 'true' : 'false');
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', 'D' + (index + 1)));
+                button.appendChild(makeArchiveElement('strong', '', group.client));
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', `${group.years} · ${group.pieces} pieces logged`));
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-depth', 'Catalog card'));
+                button.addEventListener('click', () => renderCatalogCard(group.id));
+                archiveIndex.appendChild(button);
+            });
+        }
+
+        const activeItem = archiveIndex.querySelector('.bt-archive-index-item.is-active');
+        if (activeItem) activeItem.scrollIntoView({ block: 'nearest' });
+    }
+
+    function renderCatalogCard(groupId) {
+        const catalog = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog;
+        if (!catalog || !catalog.length) return;
+        const group = catalog.find((item) => item.id === groupId) || catalog[0];
+        renderArchiveIndex('content', group.id);
+
+        const heading = makeArchiveElement('header', 'bt-archive-piece-header');
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', `Card catalog // ${group.years}`));
+        heading.appendChild(makeArchiveElement('span', 'bt-archive-mode-chip', 'Catalog card'));
+        heading.appendChild(makeArchiveElement('h2', '', group.client));
+        heading.appendChild(makeArchiveElement('p', 'bt-archive-dek', group.summary));
+
+        const meta = makeArchiveElement('dl', 'bt-archive-meta');
+        [
+            ['Engagement', group.years],
+            ['Pieces logged', String(group.pieces)],
+            ['Formats', group.formats]
+        ].forEach(([term, description]) => {
+            meta.appendChild(makeArchiveElement('dt', '', term));
+            meta.appendChild(makeArchiveElement('dd', '', description));
+        });
+
+        const children = [heading, meta];
+
+        const samples = makeArchiveElement('section', 'bt-archive-catalog-samples');
+        samples.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'Pulled from the drawer'));
+        const sampleList = makeArchiveElement('ul', '');
+        (group.samples || []).forEach((title) => {
+            sampleList.appendChild(makeArchiveElement('li', '', title));
+        });
+        samples.appendChild(sampleList);
+        children.push(samples);
+
+        const restoredIds = group.restored || [];
+        if (restoredIds.length) {
+            const restored = makeArchiveElement('section', 'bt-archive-catalog-restored');
+            restored.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'Restored from this drawer'));
+            restoredIds.forEach((pieceId) => {
+                const piece = (window.BEFORE_TIMES_ARCHIVE.content || []).find((item) => item.id === pieceId);
+                if (!piece) return;
+                const link = makeArchiveElement('button', 'bt-archive-restored-link', piece.title);
+                link.type = 'button';
+                link.addEventListener('click', () => renderArchivePiece('content', piece.id));
+                restored.appendChild(link);
+            });
+            children.push(restored);
+        }
+
+        const note = makeArchiveElement('aside', 'bt-archive-curator');
+        note.appendChild(makeArchiveElement('strong', '', 'Restoration status'));
+        note.appendChild(makeArchiveElement('p', '', restoredIds.length
+            ? `${restoredIds.length} of the ${group.pieces} logged pieces ${restoredIds.length === 1 ? 'has' : 'have'} been fully restored. The rest wait, labeled and preserved, for a turn on the bench.`
+            : `None of the ${group.pieces} logged pieces has been fully restored yet. Each one waits, labeled and preserved, for a turn on the bench.`));
+        children.push(note);
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+        children.push(actions);
+
+        archiveDetail.replaceChildren(...children);
+        archiveDetail.scrollTop = 0;
+    }
+
+    function renderArchivePiece(collectionName, pieceId) {
+        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
+        if (!collection || !collection.length) return;
+        const piece = collection.find((item) => item.id === pieceId) || collection[0];
+
+        renderArchiveIndex(collectionName, piece.id);
 
         const heading = makeArchiveElement('header', 'bt-archive-piece-header');
         heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', piece.eyebrow));
@@ -1454,15 +2122,10 @@
 
     function openArchive(collectionName, pieceId) {
         const isAlchemy = collectionName === 'alchemy';
-        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
-        const pieceCount = collection ? collection.length : 0;
         archiveKicker.textContent = isAlchemy
             ? 'Absurd Alchemy // project file'
             : 'Content Factory // recovered work';
         archiveTitle.textContent = isAlchemy ? 'The mutation archive' : 'The output archive';
-        archiveIntro.textContent = isAlchemy
-            ? 'Scripts, strange decisions, and the finished creatures they became.'
-            : `${pieceCount} recovered pieces. Start with the quick version, then keep going into a reading edition or editorial comparison.`;
         renderArchivePiece(collectionName, pieceId);
         openDialog(archiveDialog);
     }
@@ -1860,6 +2523,714 @@
         }
     }
 
+    function updateGameRole(project) {
+        const projectIndex = GAME_PROJECTS.findIndex((item) => item.key === project.key);
+        currentGameProject = project;
+        gameRoleCase.textContent = `${String(projectIndex + 1).padStart(2, '0')} / ${String(GAME_PROJECTS.length).padStart(2, '0')}`;
+        gameRoleTitle.textContent = project.title;
+        gameRoleYear.textContent = project.year;
+        gameRoleCopy.replaceChildren(...project.role.map((role, index) => {
+            const row = document.createElement('span');
+            const number = document.createElement('b');
+            const label = document.createElement('span');
+            row.className = 'bt-game-role-credit-row';
+            number.textContent = String(index + 1).padStart(2, '0');
+            label.textContent = role;
+            row.append(number, label);
+            return row;
+        }));
+        gameRoleState.textContent = 'CASE LOADED';
+        gameScene.style.setProperty('--bt-game-glow-rgb', project.glow);
+        gameScene.style.setProperty('--bt-game-glow-hi-rgb', project.glowHi);
+        gameScene.classList.add('has-game-selection');
+    }
+
+    function updateMocapRole() {
+        const row = document.createElement('span');
+        const number = document.createElement('b');
+        const label = document.createElement('span');
+        currentGameProject = null;
+        gameRoleCase.textContent = 'MC / 03';
+        gameRoleTitle.textContent = 'MOCAP ARCHIVE';
+        gameRoleYear.textContent = 'BTS';
+        row.className = 'bt-game-role-credit-row';
+        number.textContent = '01';
+        label.textContent = 'Motion-Capture Performer';
+        row.append(number, label);
+        gameRoleCopy.replaceChildren(row);
+        gameRoleState.textContent = 'FIELD TAPE ROLLING';
+        gameScene.style.setProperty('--bt-game-glow-rgb', '143 86 210');
+        gameScene.style.setProperty('--bt-game-glow-hi-rgb', '211 157 255');
+        gameScene.classList.add('has-game-selection');
+        setGameCaseState('');
+    }
+
+    function cloneMonitorCalibrationDefaults() {
+        return JSON.parse(JSON.stringify(MONITOR_CALIBRATION_DEFAULTS));
+    }
+
+    function readMonitorCalibration() {
+        const calibration = cloneMonitorCalibrationDefaults();
+
+        try {
+            const saved = JSON.parse(localStorage.getItem(MONITOR_CALIBRATION_STORAGE_KEY) || 'null');
+            ['left', 'right'].forEach((monitor) => {
+                ['tl', 'tr', 'br', 'bl'].forEach((corner) => {
+                    const point = saved && saved[monitor] && saved[monitor][corner];
+                    if (!Array.isArray(point) || point.length !== 2) return;
+                    const x = Number(point[0]);
+                    const y = Number(point[1]);
+                    if (Number.isFinite(x) && Number.isFinite(y)) {
+                        calibration[monitor][corner] = [x, y];
+                    }
+                });
+            });
+        } catch (error) {
+            // The default guide remains usable when local storage is unavailable.
+        }
+
+        return calibration;
+    }
+
+    function saveMonitorCalibration() {
+        try {
+            localStorage.setItem(MONITOR_CALIBRATION_STORAGE_KEY, JSON.stringify(monitorCalibration));
+        } catch (error) {
+            // Calibration still works for the current page view without persistence.
+        }
+    }
+
+    function roundMonitorCalibration(value) {
+        return Math.round(value * 100) / 100;
+    }
+
+    function createRectangleToQuadMatrix(sourceWidth, sourceHeight, quad) {
+        const [tl, tr, br, bl] = quad;
+        const dx1 = tr.x - br.x;
+        const dx2 = bl.x - br.x;
+        const dx3 = tl.x - tr.x + br.x - bl.x;
+        const dy1 = tr.y - br.y;
+        const dy2 = bl.y - br.y;
+        const dy3 = tl.y - tr.y + br.y - bl.y;
+        let projectiveX = 0;
+        let projectiveY = 0;
+
+        if (Math.abs(dx3) > 1e-8 || Math.abs(dy3) > 1e-8) {
+            const denominator = dx1 * dy2 - dx2 * dy1;
+            if (Math.abs(denominator) < 1e-8) return null;
+            projectiveX = (dx3 * dy2 - dx2 * dy3) / denominator;
+            projectiveY = (dx1 * dy3 - dx3 * dy1) / denominator;
+        }
+
+        const scaleX = tr.x - tl.x + projectiveX * tr.x;
+        const shearX = bl.x - tl.x + projectiveY * bl.x;
+        const scaleY = tr.y - tl.y + projectiveX * tr.y;
+        const shearY = bl.y - tl.y + projectiveY * bl.y;
+        const homography = {
+            h11: scaleX / sourceWidth,
+            h12: shearX / sourceHeight,
+            h13: tl.x,
+            h21: scaleY / sourceWidth,
+            h22: shearY / sourceHeight,
+            h23: tl.y,
+            h31: projectiveX / sourceWidth,
+            h32: projectiveY / sourceHeight
+        };
+
+        return [
+            homography.h11, homography.h21, 0, homography.h31,
+            homography.h12, homography.h22, 0, homography.h32,
+            0, 0, 1, 0,
+            homography.h13, homography.h23, 0, 1
+        ];
+    }
+
+    function applyMonitorKeystone(monitor, screen, plane) {
+        const screenWidth = screen.clientWidth;
+        const screenHeight = screen.clientHeight;
+        const sourceWidth = plane.offsetWidth;
+        const sourceHeight = plane.offsetHeight;
+        if (!screenWidth || !screenHeight || !sourceWidth || !sourceHeight) return;
+
+        const points = MONITOR_CALIBRATION_DEFAULTS[monitor];
+        const corners = ['tl', 'tr', 'br', 'bl'];
+        const xs = corners.map((corner) => points[corner][0]);
+        const ys = corners.map((corner) => points[corner][1]);
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+        const quad = corners.map((corner) => ({
+            x: ((points[corner][0] - minX) / (maxX - minX)) * screenWidth,
+            y: ((points[corner][1] - minY) / (maxY - minY)) * screenHeight
+        }));
+        const matrix = createRectangleToQuadMatrix(sourceWidth, sourceHeight, quad);
+        if (!matrix) return;
+
+        const formatted = matrix.map((value) => Math.abs(value) < 1e-10 ? 0 : Number(value.toFixed(10)));
+        plane.style.transform = `matrix3d(${formatted.join(',')})`;
+    }
+
+    function applyGameMonitorKeystones() {
+        applyMonitorKeystone('left', gameRoleScreen, gameRoleTerminal);
+        applyMonitorKeystone('right', gameTrailerScreen, gameVideoPlane);
+    }
+
+    function initializeGameMonitorKeystones() {
+        if ('ResizeObserver' in window) {
+            gameMonitorResizeObserver = new ResizeObserver(applyGameMonitorKeystones);
+            gameMonitorResizeObserver.observe(gameScene);
+        } else {
+            window.addEventListener('resize', applyGameMonitorKeystones);
+        }
+    }
+
+    function updateMonitorCalibrationView() {
+        if (!monitorCalibration) return;
+        const cornerOrder = ['tl', 'tr', 'br', 'bl'];
+
+        monitorCalibrationHandles.forEach((handle) => {
+            const point = monitorCalibration[handle.dataset.calibrationMonitor][handle.dataset.calibrationCorner];
+            handle.style.left = `${point[0]}%`;
+            handle.style.top = `${point[1]}%`;
+        });
+
+        monitorCalibrationPolygons.forEach((polygon) => {
+            const points = cornerOrder
+                .map((corner) => monitorCalibration[polygon.dataset.calibrationPolygon][corner].join(','))
+                .join(' ');
+            polygon.setAttribute('points', points);
+        });
+
+        monitorCalibrationOutput.textContent = JSON.stringify(monitorCalibration, null, 2);
+    }
+
+    function moveMonitorCalibrationHandle(handle, clientX, clientY) {
+        const sceneBounds = gameScene.getBoundingClientRect();
+        if (!sceneBounds.width || !sceneBounds.height) return;
+        const monitor = handle.dataset.calibrationMonitor;
+        const corner = handle.dataset.calibrationCorner;
+        const x = Math.min(100, Math.max(0, ((clientX - sceneBounds.left) / sceneBounds.width) * 100));
+        const y = Math.min(100, Math.max(0, ((clientY - sceneBounds.top) / sceneBounds.height) * 100));
+        monitorCalibration[monitor][corner] = [roundMonitorCalibration(x), roundMonitorCalibration(y)];
+        updateMonitorCalibrationView();
+        saveMonitorCalibration();
+    }
+
+    function initializeMonitorCalibration() {
+        if (new URLSearchParams(window.location.search).get('calibrate') !== 'monitors') return;
+        if (!monitorCalibrationLayer || !monitorCalibrationOutput) return;
+
+        const calibrationPointerIds = new WeakMap();
+        monitorCalibration = readMonitorCalibration();
+        monitorCalibrationLayer.hidden = false;
+        document.body.classList.add('bt-calibrating-monitors');
+        updateMonitorCalibrationView();
+
+        monitorCalibrationVisibilityToggles.forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+                const monitor = toggle.dataset.calibrationVisibility;
+                const visible = toggle.getAttribute('aria-pressed') !== 'true';
+                monitorCalibrationLayer.classList.toggle(`is-${monitor}-hidden`, !visible);
+                toggle.setAttribute('aria-pressed', String(visible));
+                toggle.textContent = `${monitor === 'left' ? 'Left' : 'Right'} guides: ${visible ? 'on' : 'off'}`;
+            });
+        });
+
+        monitorCalibrationScreens.addEventListener('click', () => {
+            const visible = monitorCalibrationScreens.getAttribute('aria-pressed') !== 'true';
+            document.body.classList.toggle('bt-calibration-hide-screens', !visible);
+            monitorCalibrationScreens.setAttribute('aria-pressed', String(visible));
+            monitorCalibrationScreens.textContent = `Screen overlays: ${visible ? 'on' : 'off'}`;
+        });
+
+        monitorCalibrationHandles.forEach((handle) => {
+            handle.addEventListener('pointerdown', (event) => {
+                if (event.button !== 0) return;
+                event.preventDefault();
+                calibrationPointerIds.set(handle, event.pointerId);
+                handle.setPointerCapture(event.pointerId);
+                handle.classList.add('is-dragging');
+                moveMonitorCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            handle.addEventListener('pointermove', (event) => {
+                if (calibrationPointerIds.get(handle) !== event.pointerId) return;
+                event.preventDefault();
+                moveMonitorCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            const finishDrag = (event) => {
+                if (calibrationPointerIds.get(handle) !== event.pointerId) return;
+                calibrationPointerIds.delete(handle);
+                handle.classList.remove('is-dragging');
+                if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+                saveMonitorCalibration();
+            };
+            handle.addEventListener('pointerup', finishDrag);
+            handle.addEventListener('pointercancel', finishDrag);
+            handle.addEventListener('keydown', (event) => {
+                const offsets = {
+                    ArrowLeft: [-1, 0],
+                    ArrowRight: [1, 0],
+                    ArrowUp: [0, -1],
+                    ArrowDown: [0, 1]
+                };
+                if (!offsets[event.key]) return;
+                event.preventDefault();
+                const monitor = handle.dataset.calibrationMonitor;
+                const corner = handle.dataset.calibrationCorner;
+                const point = monitorCalibration[monitor][corner];
+                const step = event.shiftKey ? 0.1 : 0.25;
+                monitorCalibration[monitor][corner] = [
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[0] + offsets[event.key][0] * step))),
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[1] + offsets[event.key][1] * step)))
+                ];
+                updateMonitorCalibrationView();
+                saveMonitorCalibration();
+            });
+        });
+
+        monitorCalibrationCopy.addEventListener('click', async () => {
+            const payload = JSON.stringify(monitorCalibration, null, 2);
+            const originalLabel = monitorCalibrationCopy.textContent;
+            try {
+                await navigator.clipboard.writeText(payload);
+                monitorCalibrationCopy.textContent = 'Copied — paste into chat';
+            } catch (error) {
+                monitorCalibrationCopy.textContent = 'Select the JSON above';
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(monitorCalibrationOutput);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            window.setTimeout(() => {
+                monitorCalibrationCopy.textContent = originalLabel;
+            }, 2200);
+        });
+
+        monitorCalibrationReset.addEventListener('click', () => {
+            monitorCalibration = cloneMonitorCalibrationDefaults();
+            updateMonitorCalibrationView();
+            saveMonitorCalibration();
+            monitorCalibrationHandles[0].focus({ preventScroll: true });
+        });
+    }
+
+    function cloneDocumentCalibrationDefaults() {
+        return JSON.parse(JSON.stringify(DOCUMENT_CALIBRATION_DEFAULTS));
+    }
+
+    function readDocumentCalibration() {
+        const calibration = cloneDocumentCalibrationDefaults();
+
+        try {
+            const saved = JSON.parse(localStorage.getItem(DOCUMENT_CALIBRATION_STORAGE_KEY) || 'null');
+            ['before', 'after', 'terminal'].forEach((surface) => {
+                ['tl', 'tr', 'br', 'bl'].forEach((corner) => {
+                    const point = saved && saved[surface] && saved[surface][corner];
+                    if (!Array.isArray(point) || point.length !== 2) return;
+                    const x = Number(point[0]);
+                    const y = Number(point[1]);
+                    if (Number.isFinite(x) && Number.isFinite(y)) {
+                        calibration[surface][corner] = [x, y];
+                    }
+                });
+            });
+        } catch (error) {
+            // The default document keystones remain usable when storage is unavailable.
+        }
+
+        return calibration;
+    }
+
+    function saveDocumentCalibration() {
+        try {
+            localStorage.setItem(DOCUMENT_CALIBRATION_STORAGE_KEY, JSON.stringify(documentCalibration));
+        } catch (error) {
+            // Calibration still works for the current page view without persistence.
+        }
+    }
+
+    function applyKnowledgeDocumentKeystone(surfaceName) {
+        const surface = knowledgeDocumentSurfaces[surfaceName];
+        const points = documentCalibration && documentCalibration[surfaceName];
+        const plane = surfaceName === 'terminal'
+            ? surface
+            : surface && surface.querySelector('.bt-knowledge-document-plane');
+        if (!surface || !points || !plane) return;
+
+        const corners = ['tl', 'tr', 'br', 'bl'];
+        const xs = corners.map((corner) => points[corner][0]);
+        const ys = corners.map((corner) => points[corner][1]);
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+        if (maxX - minX < 0.01 || maxY - minY < 0.01) return;
+
+        surface.style.left = `${minX}%`;
+        surface.style.top = `${minY}%`;
+        surface.style.width = `${maxX - minX}%`;
+        surface.style.height = `${maxY - minY}%`;
+
+        const surfaceWidth = surface.clientWidth;
+        const surfaceHeight = surface.clientHeight;
+        const sourceWidth = plane.offsetWidth;
+        const sourceHeight = plane.offsetHeight;
+        if (!surfaceWidth || !surfaceHeight || !sourceWidth || !sourceHeight) return;
+
+        const quad = corners.map((corner) => ({
+            x: ((points[corner][0] - minX) / (maxX - minX)) * surfaceWidth,
+            y: ((points[corner][1] - minY) / (maxY - minY)) * surfaceHeight
+        }));
+        const matrix = createRectangleToQuadMatrix(sourceWidth, sourceHeight, quad);
+        if (!matrix) return;
+        const formatted = matrix.map((value) => Math.abs(value) < 1e-10 ? 0 : Number(value.toFixed(10)));
+        plane.style.transform = `matrix3d(${formatted.join(',')})`;
+    }
+
+    function applyKnowledgeDocumentKeystones() {
+        applyKnowledgeDocumentKeystone('before');
+        applyKnowledgeDocumentKeystone('after');
+        applyKnowledgeDocumentKeystone('terminal');
+    }
+
+    function initializeKnowledgeDocumentKeystones() {
+        documentCalibration = readDocumentCalibration();
+        applyKnowledgeDocumentKeystones();
+        if ('ResizeObserver' in window) {
+            knowledgeDocumentResizeObserver = new ResizeObserver(applyKnowledgeDocumentKeystones);
+            knowledgeDocumentResizeObserver.observe(knowledgeScene);
+        } else {
+            window.addEventListener('resize', applyKnowledgeDocumentKeystones);
+        }
+    }
+
+    function updateDocumentCalibrationView() {
+        if (!documentCalibration) return;
+        const cornerOrder = ['tl', 'tr', 'br', 'bl'];
+
+        documentCalibrationHandles.forEach((handle) => {
+            const point = documentCalibration[handle.dataset.documentCalibrationSurface][handle.dataset.documentCalibrationCorner];
+            handle.style.left = `${point[0]}%`;
+            handle.style.top = `${point[1]}%`;
+        });
+
+        documentCalibrationPolygons.forEach((polygon) => {
+            const points = cornerOrder
+                .map((corner) => documentCalibration[polygon.dataset.documentCalibrationPolygon][corner].join(','))
+                .join(' ');
+            polygon.setAttribute('points', points);
+        });
+
+        documentCalibrationOutput.textContent = JSON.stringify(documentCalibration, null, 2);
+        applyKnowledgeDocumentKeystones();
+    }
+
+    function moveDocumentCalibrationHandle(handle, clientX, clientY) {
+        const sceneBounds = knowledgeScene.getBoundingClientRect();
+        if (!sceneBounds.width || !sceneBounds.height) return;
+        const surface = handle.dataset.documentCalibrationSurface;
+        const corner = handle.dataset.documentCalibrationCorner;
+        const x = Math.min(100, Math.max(0, ((clientX - sceneBounds.left) / sceneBounds.width) * 100));
+        const y = Math.min(100, Math.max(0, ((clientY - sceneBounds.top) / sceneBounds.height) * 100));
+        documentCalibration[surface][corner] = [roundMonitorCalibration(x), roundMonitorCalibration(y)];
+        updateDocumentCalibrationView();
+        saveDocumentCalibration();
+    }
+
+    function initializeDocumentCalibration() {
+        if (new URLSearchParams(window.location.search).get('calibrate') !== 'documents') return;
+        if (!documentCalibrationLayer || !documentCalibrationOutput) return;
+
+        const pointerIds = new WeakMap();
+        documentCalibrationLayer.hidden = false;
+        document.body.classList.add('bt-calibrating-documents');
+        updateDocumentCalibrationView();
+
+        documentCalibrationVisibilityToggles.forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+                const surface = toggle.dataset.documentCalibrationVisibility;
+                const visible = toggle.getAttribute('aria-pressed') !== 'true';
+                documentCalibrationLayer.classList.toggle(`is-${surface}-hidden`, !visible);
+                toggle.setAttribute('aria-pressed', String(visible));
+                const labels = { before: 'Before', after: 'After', terminal: 'Interface' };
+                toggle.textContent = `${labels[surface]} guides: ${visible ? 'on' : 'off'}`;
+            });
+        });
+
+        documentCalibrationArt.addEventListener('click', () => {
+            const visible = documentCalibrationArt.getAttribute('aria-pressed') !== 'true';
+            document.body.classList.toggle('bt-calibration-hide-documents', !visible);
+            documentCalibrationArt.setAttribute('aria-pressed', String(visible));
+            documentCalibrationArt.textContent = `Document art: ${visible ? 'on' : 'off'}`;
+        });
+
+        documentCalibrationHandles.forEach((handle) => {
+            handle.addEventListener('pointerdown', (event) => {
+                if (event.button !== 0) return;
+                event.preventDefault();
+                pointerIds.set(handle, event.pointerId);
+                handle.setPointerCapture(event.pointerId);
+                handle.classList.add('is-dragging');
+                moveDocumentCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            handle.addEventListener('pointermove', (event) => {
+                if (pointerIds.get(handle) !== event.pointerId) return;
+                event.preventDefault();
+                moveDocumentCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            const finishDrag = (event) => {
+                if (pointerIds.get(handle) !== event.pointerId) return;
+                pointerIds.delete(handle);
+                handle.classList.remove('is-dragging');
+                if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+                saveDocumentCalibration();
+            };
+            handle.addEventListener('pointerup', finishDrag);
+            handle.addEventListener('pointercancel', finishDrag);
+            handle.addEventListener('keydown', (event) => {
+                const offsets = {
+                    ArrowLeft: [-1, 0],
+                    ArrowRight: [1, 0],
+                    ArrowUp: [0, -1],
+                    ArrowDown: [0, 1]
+                };
+                if (!offsets[event.key]) return;
+                event.preventDefault();
+                const surface = handle.dataset.documentCalibrationSurface;
+                const corner = handle.dataset.documentCalibrationCorner;
+                const point = documentCalibration[surface][corner];
+                const step = event.shiftKey ? 0.1 : 0.25;
+                documentCalibration[surface][corner] = [
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[0] + offsets[event.key][0] * step))),
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[1] + offsets[event.key][1] * step)))
+                ];
+                updateDocumentCalibrationView();
+                saveDocumentCalibration();
+            });
+        });
+
+        documentCalibrationCopy.addEventListener('click', async () => {
+            const payload = JSON.stringify(documentCalibration, null, 2);
+            const originalLabel = documentCalibrationCopy.textContent;
+            try {
+                await navigator.clipboard.writeText(payload);
+                documentCalibrationCopy.textContent = 'Copied — paste into chat';
+            } catch (error) {
+                documentCalibrationCopy.textContent = 'Select the JSON above';
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(documentCalibrationOutput);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            window.setTimeout(() => {
+                documentCalibrationCopy.textContent = originalLabel;
+            }, 2200);
+        });
+
+        documentCalibrationReset.addEventListener('click', () => {
+            documentCalibration = cloneDocumentCalibrationDefaults();
+            updateDocumentCalibrationView();
+            saveDocumentCalibration();
+            documentCalibrationHandles[0].focus({ preventScroll: true });
+        });
+    }
+
+    function setGameCaseState(state) {
+        const roleStates = {
+            loading: 'LINKING TRAILER',
+            playing: 'TRAILER ROLLING',
+            paused: 'TRAILER PAUSED',
+            ended: 'TRAILER COMPLETE'
+        };
+        if (currentGameProject) gameRoleState.textContent = roleStates[state] || 'CASE LOADED';
+        gameCaseHotspots.forEach((button) => {
+            const isCurrent = currentGameProject && button.dataset.gameKey === currentGameProject.key;
+            button.classList.remove('is-loading', 'is-playing', 'is-paused');
+            button.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
+            if (isCurrent && ['loading', 'playing', 'paused'].includes(state)) button.classList.add(`is-${state}`);
+        });
+    }
+
+    function powerDownGameScreen() {
+        gameTrailerScreen.classList.remove('is-playing', 'is-loading');
+        gameTrailerScreen.classList.add('is-powering-off');
+        gameScene.classList.remove('is-trailer-playing');
+        window.setTimeout(() => gameTrailerScreen.classList.remove('is-loaded'), 140);
+        window.setTimeout(() => gameTrailerScreen.classList.remove('is-powering-off'), 700);
+    }
+
+    function handleGamePlayerState(event) {
+        if (!window.YT || !currentGameProject) return;
+        const states = window.YT.PlayerState;
+        window.clearTimeout(gameFallbackTimer);
+
+        if (event.data === states.PLAYING) {
+            disableYtCaptions(gamePlayer);
+            gameTrailerScreen.classList.add('is-loaded', 'is-playing');
+            gameTrailerScreen.classList.remove('is-loading', 'is-powering-off');
+            gameScene.classList.add('is-trailer-playing');
+            gamePlayFallback.hidden = true;
+            setGameCaseState('playing');
+            return;
+        }
+
+        if (event.data === states.PAUSED) {
+            gameTrailerScreen.classList.remove('is-playing', 'is-loading');
+            gameScene.classList.remove('is-trailer-playing');
+            gamePlayFallback.hidden = true;
+            setGameCaseState('paused');
+            return;
+        }
+
+        if (event.data === states.ENDED) {
+            setGameCaseState('ended');
+            powerDownGameScreen();
+            showStatus(`${currentGameProject.title} clicks to a stop. Choose another case or replay it.`, 4000);
+            return;
+        }
+
+        if (event.data === states.BUFFERING) {
+            gameTrailerScreen.classList.add('is-loaded', 'is-loading');
+            setGameCaseState('loading');
+        }
+    }
+
+    function primeGamePlayer(project) {
+        if (gamePlayer) return Promise.resolve(gamePlayer);
+        if (gamePlayerPromise) return gamePlayerPromise;
+
+        gamePlayerPromise = loadYouTubeApi().then((api) => new Promise((resolve) => {
+            gameIframe.src =
+                `https://www.youtube.com/embed/${project.yt}?enablejsapi=1&playsinline=1&rel=0&modestbranding=1` +
+                `&origin=${encodeURIComponent(window.location.origin)}`;
+            const player = new api.Player(gameIframe, {
+                events: {
+                    onReady: () => {
+                        gamePlayer = player;
+                        loadedGameKey = project.key;
+                        disableYtCaptions(player);
+                        resolve(player);
+                    },
+                    onStateChange: handleGamePlayerState
+                }
+            });
+        })).catch((error) => {
+            gamePlayerPromise = null;
+            throw error;
+        });
+
+        return gamePlayerPromise;
+    }
+
+    async function cueGameTrailer(gameKey) {
+        const project = GAME_PROJECTS.find((item) => item.key === gameKey);
+        if (!project) return;
+        const restartCurrent = currentGameProject && currentGameProject.key === project.key;
+
+        stopMocapGif();
+        updateGameRole(project);
+        setGameCaseState('loading');
+        gamePlayFallback.hidden = true;
+        gameTrailerScreen.classList.remove('is-powering-off');
+        gameTrailerScreen.classList.add('is-loading');
+        showStatus(`Loading the official ${project.title} trailer…`, 3200);
+
+        try {
+            const player = await primeGamePlayer(project);
+            if (loadedGameKey !== project.key) {
+                player.loadVideoById(project.yt);
+                loadedGameKey = project.key;
+            } else {
+                if (restartCurrent) player.seekTo(0, true);
+                player.playVideo();
+            }
+            gameTrailerScreen.classList.add('is-loaded');
+
+            window.clearTimeout(gameFallbackTimer);
+            gameFallbackTimer = window.setTimeout(() => {
+                if (!window.YT || !gamePlayer) return;
+                const state = gamePlayer.getPlayerState();
+                if (state !== window.YT.PlayerState.PLAYING && state !== window.YT.PlayerState.BUFFERING) {
+                    gamePlayFallback.hidden = false;
+                }
+            }, 1700);
+        } catch (error) {
+            gameTrailerScreen.classList.add('is-loaded');
+            gamePlayFallback.hidden = false;
+            showStatus('The browser wants one more press directly on the monitor.', 4200);
+        } finally {
+            window.setTimeout(() => gameTrailerScreen.classList.remove('is-loading'), 720);
+        }
+    }
+
+    function retryGamePlayback() {
+        if (!currentGameProject) return;
+        if (!gamePlayer || typeof gamePlayer.playVideo !== 'function') {
+            cueGameTrailer(currentGameProject.key);
+            return;
+        }
+        gamePlayer.playVideo();
+        gamePlayFallback.hidden = true;
+    }
+
+    function chooseMocapGif() {
+        let index = Math.floor(Math.random() * MOCAP_GIFS.length);
+        if (MOCAP_GIFS.length > 1 && index === lastMocapGifIndex) {
+            index = (index + 1 + Math.floor(Math.random() * (MOCAP_GIFS.length - 1))) % MOCAP_GIFS.length;
+        }
+        lastMocapGifIndex = index;
+        return MOCAP_GIFS[index];
+    }
+
+    function stopMocapGif() {
+        window.clearTimeout(mocapPlaybackTimer);
+        mocapPlaybackTimer = 0;
+        const wasActive = gameTrailerScreen.classList.contains('is-mocap');
+        gameTrailerScreen.classList.remove('is-mocap');
+        if (wasActive) {
+            gameTrailerScreen.classList.remove('is-loaded', 'is-playing');
+            gameScene.classList.remove('is-trailer-playing');
+        }
+        if (!gameMocapGif) return;
+        gameMocapGif.onload = null;
+        gameMocapGif.hidden = true;
+        gameMocapGif.removeAttribute('src');
+        gameMocapGif.alt = '';
+    }
+
+    function finishMocapGif() {
+        if (!gameTrailerScreen.classList.contains('is-mocap')) return;
+        stopMocapGif();
+        gameRoleState.textContent = 'FIELD TAPE COMPLETE';
+        gameTrailerScreen.classList.add('is-powering-off');
+        window.setTimeout(() => gameTrailerScreen.classList.remove('is-powering-off'), 700);
+    }
+
+    function cueMocapGif() {
+        const clip = chooseMocapGif();
+        window.clearTimeout(gameFallbackTimer);
+        stopMocapGif();
+        updateMocapRole();
+        if (gamePlayer && typeof gamePlayer.pauseVideo === 'function') gamePlayer.pauseVideo();
+        gamePlayFallback.hidden = true;
+        gameMocapGif.alt = clip.label;
+        gameMocapGif.onload = () => {
+            if (!gameTrailerScreen.classList.contains('is-mocap')) return;
+            if (gameMocapGif.getAttribute('src') !== clip.src) return;
+            window.clearTimeout(mocapPlaybackTimer);
+            mocapPlaybackTimer = window.setTimeout(finishMocapGif, clip.durationMs);
+        };
+        gameMocapGif.src = clip.src;
+        gameMocapGif.hidden = false;
+        gameTrailerScreen.classList.remove('is-loading', 'is-powering-off');
+        gameTrailerScreen.classList.add('is-loaded', 'is-playing', 'is-mocap');
+        gameScene.classList.add('is-trailer-playing');
+        showStatus(`${clip.label}. Select the mocap suit again for another field tape.`, 4600);
+    }
+
     function deactivateProductionScreen(screen, withBlip) {
         window.clearTimeout(screen.btGhostTimer);
         window.clearTimeout(screen.btRevealTimer);
@@ -2021,6 +3392,71 @@
         window.setTimeout(() => alchemyDoorHotspot.focus({ preventScroll: true }), 60);
     }
 
+    async function enterGameRoom(options) {
+        const settings = options || {};
+        if (activeRoom === 'games' || gameRoomOpening) return;
+        gameRoomOpening = true;
+        if (!gameArt.complete || !gameArt.naturalWidth) {
+            showStatus('Booting the development room…', 3200);
+            try {
+                await gameArt.decode();
+            } catch (error) {
+                // The image element will still show its normal fallback behavior.
+            }
+        }
+        gameRoomOpening = false;
+        if (infoDialog.open) closeDialog(infoDialog);
+        radioAudio.pause();
+        activeRoom = 'games';
+        lobbyScroll.hidden = true;
+        gameScroll.hidden = false;
+        applyGameMonitorKeystones();
+        mobileFloorplan.hidden = true;
+        mobileRoomExit.hidden = false;
+        document.body.classList.add('bt-room-games');
+        gameScene.classList.remove('is-entering');
+        void gameScene.offsetWidth;
+        gameScene.classList.add('is-entering');
+        gameScroll.scrollLeft = 0;
+        primeGamePlayer(GAME_PROJECTS[0]).catch(() => {});
+
+        if (settings.updateHistory !== false && window.location.hash !== '#game-development') {
+            window.history.pushState({ btRoom: 'games' }, '', '#game-development');
+        }
+        showStatus('Game Development. Choose a case to load its role and official trailer.', 4600);
+        window.setTimeout(() => gameCaseHotspots[0].focus({ preventScroll: true }), 380);
+    }
+
+    function leaveGameRoom(options) {
+        const settings = options || {};
+        if (activeRoom !== 'games') return;
+        if (gameBinderDialog.open) closeDialog(gameBinderDialog);
+        setInventoryDrawerOpen(false, false);
+        activeRoom = 'lobby';
+        window.clearTimeout(gameFallbackTimer);
+        if (gamePlayer && typeof gamePlayer.pauseVideo === 'function') gamePlayer.pauseVideo();
+        stopMocapGif();
+        gamePlayFallback.hidden = true;
+        gameTrailerScreen.classList.remove('is-loading', 'is-playing');
+        gameScene.classList.remove('is-trailer-playing');
+        if (currentGameProject) setGameCaseState('paused');
+        gameScroll.hidden = true;
+        lobbyScroll.hidden = false;
+        mobileFloorplan.hidden = false;
+        mobileRoomExit.hidden = true;
+        document.body.classList.remove('bt-room-games');
+
+        if (settings.updateHistory !== false) {
+            if (window.history.state && window.history.state.btRoom === 'games') {
+                window.history.back();
+            } else {
+                window.history.replaceState({ btRoom: 'lobby' }, '', `${window.location.pathname}${window.location.search}`);
+            }
+        }
+        showStatus('Back in the lobby.', 2200);
+        window.setTimeout(() => gameDoorHotspot.focus({ preventScroll: true }), 60);
+    }
+
     async function enterContentRoom(options) {
         const settings = options || {};
         if (activeRoom === 'content' || contentRoomOpening) return;
@@ -2077,19 +3513,106 @@
         window.setTimeout(() => contentDoorHotspot.focus({ preventScroll: true }), 60);
     }
 
+    async function enterKnowledgeRoom(options) {
+        const settings = options || {};
+        if (activeRoom === 'knowledge' || knowledgeRoomOpening) return;
+        knowledgeRoomOpening = true;
+        if (!knowledgeArt.complete || !knowledgeArt.naturalWidth) {
+            showStatus('Mapping the documentation labyrinth…', 3200);
+            try {
+                await knowledgeArt.decode();
+            } catch (error) {
+                // The image element will still show its normal fallback behavior.
+            }
+        }
+        knowledgeRoomOpening = false;
+        if (infoDialog.open) closeDialog(infoDialog);
+        radioAudio.pause();
+        activeRoom = 'knowledge';
+        lobbyScroll.hidden = true;
+        knowledgeScroll.hidden = false;
+        mobileFloorplan.hidden = true;
+        mobileRoomExit.hidden = false;
+        document.body.classList.add('bt-room-knowledge');
+        knowledgeScene.classList.remove('is-entering');
+        void knowledgeScene.offsetWidth;
+        knowledgeScene.classList.add('is-entering');
+        knowledgeScroll.scrollLeft = 0;
+        syncKnowledgeState();
+
+        if (settings.updateHistory !== false && window.location.hash !== '#knowledge-maze') {
+            window.history.pushState({ btRoom: 'knowledge' }, '', '#knowledge-maze');
+        }
+        showStatus(
+            knowledgeBreached
+                ? 'The Knowledge Maze. The path back to the present remains open.'
+                : 'The Knowledge Maze. Three evidence stations can restore the terminal’s missing context.',
+            4800
+        );
+        const focusTarget = knowledgeBreached
+            ? knowledgePresentPortal
+            : (knowledgeEvidenceHotspots.find((hotspot) => !knowledgeContext.has(hotspot.dataset.knowledgeKey)) || knowledgeAsk);
+        window.setTimeout(() => focusTarget.focus({ preventScroll: true }), 380);
+    }
+
+    function leaveKnowledgeRoom(options) {
+        const settings = options || {};
+        if (activeRoom !== 'knowledge') return;
+        window.clearTimeout(knowledgeRuptureTimer);
+        knowledgeTerminal.classList.remove('is-answering');
+        knowledgeScene.classList.remove('is-rupturing');
+        knowledgePresentVideo.pause();
+        activeRoom = 'lobby';
+        knowledgeScroll.hidden = true;
+        lobbyScroll.hidden = false;
+        mobileFloorplan.hidden = false;
+        mobileRoomExit.hidden = true;
+        document.body.classList.remove('bt-room-knowledge');
+
+        if (settings.updateHistory !== false) {
+            if (window.history.state && window.history.state.btRoom === 'knowledge') {
+                window.history.back();
+            } else {
+                window.history.replaceState({ btRoom: 'lobby' }, '', `${window.location.pathname}${window.location.search}`);
+            }
+        }
+        showStatus('Back in the lobby. The fracture remains.', 2400);
+        window.setTimeout(() => knowledgeDoorHotspot.focus({ preventScroll: true }), 60);
+    }
+
     function syncRoomFromLocation() {
         if (window.location.hash === '#absurd-alchemy') {
+            if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
             if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+            if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
             enterAlchemyRoom({ updateHistory: false });
+            return;
+        }
+        if (window.location.hash === '#game-development') {
+            if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+            if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+            if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
+            enterGameRoom({ updateHistory: false });
             return;
         }
         if (window.location.hash === '#content-factory') {
             if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+            if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
+            if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
             enterContentRoom({ updateHistory: false });
             return;
         }
+        if (window.location.hash === '#knowledge-maze') {
+            if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+            if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
+            if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+            enterKnowledgeRoom({ updateHistory: false });
+            return;
+        }
         if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+        if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
         if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+        if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
     }
 
     function playTapeTwentyFive() {
@@ -2114,6 +3637,10 @@
         const panel = PANELS[panelId];
         if (!panel) return;
 
+        infoSecondary.textContent = 'Back to the lobby';
+        knowledgeDocumentViewer.hidden = true;
+        infoDialog.classList.remove('bt-knowledge-documents-dialog');
+
         infoKicker.textContent = panel.kicker || '';
         infoTitle.textContent = panel.title;
         infoCopy.replaceChildren(...(panel.copy || []).map(makeParagraph));
@@ -2137,8 +3664,16 @@
                     window.setTimeout(() => enterAlchemyRoom(), 30);
                     return;
                 }
+                if (route.id === 'games') {
+                    window.setTimeout(() => enterGameRoom(), 30);
+                    return;
+                }
                 if (route.id === 'content') {
                     window.setTimeout(() => enterContentRoom(), 30);
+                    return;
+                }
+                if (route.id === 'docs') {
+                    window.setTimeout(() => enterKnowledgeRoom(), 30);
                     return;
                 }
                 window.setTimeout(() => openPanel(route.id), 30);
@@ -2168,6 +3703,7 @@
             infoButton.hidden = false;
             infoButton.onclick = () => {
                 if (panel.button.action === 'tune') tuneRadio();
+                if (panel.button.action === 'broadcasts') openRadioArchive();
                 if (panel.button.action === 'sound') toggleSound();
             };
         }
@@ -2186,12 +3722,233 @@
         showStatus(soundEnabled ? 'Lobby sound is on.' : 'Lobby sound is off.');
     }
 
+    function formatRadioTime(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) return '--:--';
+        const whole = Math.floor(seconds);
+        const hours = Math.floor(whole / 3600);
+        const minutes = Math.floor((whole % 3600) / 60);
+        const secs = whole % 60;
+        return hours
+            ? `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+            : `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function setRadioPlayState() {
+        const playing = radioMode === 'episode' && !radioAudio.paused;
+        radioPlay.setAttribute('aria-pressed', String(playing));
+        radioPlay.setAttribute('aria-label', playing ? 'Pause episode' : 'Play episode');
+        radioPlay.querySelector('span').textContent = playing ? '❚❚' : '▶';
+        radioOscilloscopeFrame.classList.toggle('is-playing', playing);
+    }
+
+    function syncRadioProgress() {
+        const duration = Number.isFinite(radioAudio.duration) ? radioAudio.duration : 0;
+        const current = Number.isFinite(radioAudio.currentTime) ? radioAudio.currentTime : 0;
+        const progress = duration ? current / duration : 0;
+        radioSeek.value = String(Math.round(progress * 1000));
+        radioSeek.style.setProperty('--bt-radio-progress', `${progress * 100}%`);
+        radioTime.textContent = `${formatRadioTime(current)} / ${duration ? formatRadioTime(duration) : '--:--'}`;
+    }
+
+    function ensureRadioAnalyser() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        if (!radioAudioContext) {
+            radioAudioContext = new AudioContextClass();
+            radioAnalyser = radioAudioContext.createAnalyser();
+            radioAnalyser.fftSize = 2048;
+            radioAnalyser.smoothingTimeConstant = 0.76;
+            radioAudioSource = radioAudioContext.createMediaElementSource(radioAudio);
+            radioAudioSource.connect(radioAnalyser);
+            radioAnalyser.connect(radioAudioContext.destination);
+            radioScopeData = new Uint8Array(radioAnalyser.fftSize);
+        }
+        if (radioAudioContext.state === 'suspended') radioAudioContext.resume().catch(() => {});
+        return radioAnalyser;
+    }
+
+    function resizeRadioOscilloscope() {
+        const rect = radioOscilloscope.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(1, Math.round(rect.width * dpr));
+        const height = Math.max(1, Math.round(rect.height * dpr));
+        if (radioOscilloscope.width !== width || radioOscilloscope.height !== height) {
+            radioOscilloscope.width = width;
+            radioOscilloscope.height = height;
+        }
+        return { width: rect.width, height: rect.height, dpr };
+    }
+
+    function drawRadioOscilloscope() {
+        const ctx = radioOscilloscope.getContext('2d');
+        const dimensions = resizeRadioOscilloscope();
+        const { width, height, dpr } = dimensions;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+
+        const background = ctx.createRadialGradient(width * 0.5, height * 0.52, 0, width * 0.5, height * 0.52, width * 0.72);
+        background.addColorStop(0, 'rgba(8, 38, 38, 0.72)');
+        background.addColorStop(1, 'rgba(1, 7, 10, 0.98)');
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, width, height);
+
+        const cellWidth = 46;
+        const cellHeight = 26;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        ctx.lineWidth = 0.6;
+        ctx.strokeStyle = 'rgba(0, 247, 194, 0.105)';
+        for (let x = centerX % cellWidth; x < width; x += cellWidth) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.stroke();
+        }
+        for (let y = centerY % cellHeight; y < height; y += cellHeight) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+        }
+        ctx.strokeStyle = 'rgba(0, 247, 194, 0.22)';
+        ctx.beginPath();
+        ctx.moveTo(centerX, 0);
+        ctx.lineTo(centerX, height);
+        ctx.stroke();
+
+        const playing = radioMode === 'episode' && !radioAudio.paused && radioAnalyser;
+        if (playing) radioAnalyser.getByteTimeDomainData(radioScopeData);
+        const samples = playing ? radioScopeData.length : 512;
+        const amplitude = Math.min(height * 0.33, 82);
+        const points = [];
+        for (let index = 0; index < samples; index += 1) {
+            const x = index / (samples - 1) * width;
+            const normalized = playing
+                ? (radioScopeData[index] - 128) / 128
+                : (Math.sin((index / samples) * Math.PI * 8) * 0.006 + (Math.random() - 0.5) * 0.008);
+            points.push([x, centerY + normalized * amplitude]);
+        }
+
+        const strokeTrace = (lineWidth, color, blur) => {
+            ctx.save();
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = color;
+            ctx.shadowColor = '#00f7c2';
+            ctx.shadowBlur = blur;
+            ctx.beginPath();
+            points.forEach(([x, y], index) => {
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            ctx.restore();
+        };
+        strokeTrace(5, 'rgba(0, 247, 194, 0.08)', 22);
+        strokeTrace(2, 'rgba(0, 247, 194, 0.72)', 10);
+        strokeTrace(0.75, 'rgba(224, 255, 239, 0.96)', 2);
+
+        ctx.fillStyle = 'rgba(229, 189, 117, 0.68)';
+        [0.25, 0.75].forEach((fraction) => {
+            ctx.fillRect(width * fraction - 0.5, height - 9, 1, 4);
+        });
+        radioScopeAnimation = window.requestAnimationFrame(drawRadioOscilloscope);
+    }
+
+    function startRadioOscilloscope() {
+        window.cancelAnimationFrame(radioScopeAnimation);
+        radioScopeAnimation = window.requestAnimationFrame(drawRadioOscilloscope);
+    }
+
+    function stopRadioOscilloscope() {
+        window.cancelAnimationFrame(radioScopeAnimation);
+        radioScopeAnimation = 0;
+    }
+
+    function loadRadioEpisode(index, options) {
+        const settings = options || {};
+        currentRadioEpisode = (index + RADIO_EPISODES.length) % RADIO_EPISODES.length;
+        const episode = RADIO_EPISODES[currentRadioEpisode];
+        radioMode = 'episode';
+        radioAudio.pause();
+        radioAudio.src = episode.file;
+        radioAudio.preload = 'metadata';
+        radioAudio.load();
+        radioEpisodeNumber.textContent = `TRANSMISSION ${String(currentRadioEpisode + 1).padStart(2, '0')} / ${String(RADIO_EPISODES.length).padStart(2, '0')}`;
+        radioNowPlaying.textContent = episode.title;
+        radioEpisodeDate.textContent = episode.date;
+        radioPlaylist.querySelectorAll('[data-radio-episode]').forEach((button, buttonIndex) => {
+            const active = buttonIndex === currentRadioEpisode;
+            button.classList.toggle('is-active', active);
+            button.setAttribute('aria-pressed', String(active));
+        });
+        syncRadioProgress();
+        setRadioPlayState();
+        if (settings.autoplay) playRadioEpisode();
+    }
+
+    function playRadioEpisode() {
+        if (radioMode !== 'episode') loadRadioEpisode(currentRadioEpisode);
+        if (!soundEnabled) {
+            soundEnabled = true;
+            localStorage.setItem('bt-sound-enabled', 'true');
+        }
+        tape25Audio.pause();
+        ensureRadioAnalyser();
+        radioAudio.volume = 0.92;
+        radioAudio.play().catch(() => showStatus('The archive needs another click before it will play.'));
+    }
+
+    function toggleRadioEpisode() {
+        if (radioAudio.paused || radioMode !== 'episode') playRadioEpisode();
+        else radioAudio.pause();
+    }
+
+    function renderRadioPlaylist() {
+        if (radioPlaylist.childElementCount) return;
+        RADIO_EPISODES.forEach((episode, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'bt-radio-episode';
+            button.dataset.radioEpisode = String(index);
+            button.setAttribute('aria-pressed', 'false');
+
+            const number = document.createElement('b');
+            number.textContent = String(index + 1).padStart(2, '0');
+            const copy = document.createElement('span');
+            copy.className = 'bt-radio-episode-copy';
+            const title = document.createElement('strong');
+            title.textContent = episode.title;
+            const date = document.createElement('small');
+            date.textContent = episode.date;
+            const duration = document.createElement('small');
+            duration.textContent = episode.duration;
+            copy.append(title, date);
+            button.append(number, copy, duration);
+            button.addEventListener('click', () => loadRadioEpisode(index, { autoplay: true }));
+            radioPlaylist.appendChild(button);
+        });
+    }
+
+    function openRadioArchive() {
+        if (!hasBoatCassette) {
+            openPanel('radio');
+            return;
+        }
+        if (infoDialog.open) closeDialog(infoDialog);
+        renderRadioPlaylist();
+        if (radioMode !== 'episode') loadRadioEpisode(currentRadioEpisode);
+        openDialog(radioDialog);
+        startRadioOscilloscope();
+        window.setTimeout(() => radioPlay.focus({ preventScroll: true }), 80);
+    }
+
     function tuneRadio() {
         animateLayer(radioHotspot, 'is-tuning', 680);
         if (!soundEnabled) {
             showStatus('Sound is off. The dial moves silently.');
             return;
         }
+        radioMode = 'tuning';
         let nextTrack = TUNING_TRACKS[Math.floor(Math.random() * TUNING_TRACKS.length)];
         if (radioAudio.src.endsWith(nextTrack) && TUNING_TRACKS.length > 1) {
             nextTrack = TUNING_TRACKS[(TUNING_TRACKS.indexOf(nextTrack) + 1) % TUNING_TRACKS.length];
@@ -2345,12 +4102,30 @@
                 }
                 return;
             }
+            if (panelId === 'games') {
+                animateLayer(button, 'is-activating', 680);
+                if (prefersReducedMotion.matches) {
+                    enterGameRoom();
+                } else {
+                    window.setTimeout(() => enterGameRoom(), 360);
+                }
+                return;
+            }
             if (panelId === 'content') {
                 animateLayer(button, 'is-activating', 680);
                 if (prefersReducedMotion.matches) {
                     enterContentRoom();
                 } else {
                     window.setTimeout(() => enterContentRoom(), 360);
+                }
+                return;
+            }
+            if (panelId === 'docs') {
+                animateLayer(button, 'is-activating', 680);
+                if (prefersReducedMotion.matches) {
+                    enterKnowledgeRoom();
+                } else {
+                    window.setTimeout(() => enterKnowledgeRoom(), 360);
                 }
                 return;
             }
@@ -2396,6 +4171,20 @@
         button.addEventListener('click', () => openArchive('content', button.dataset.contentArchive));
     });
 
+    gameCaseHotspots.forEach((button) => {
+        button.addEventListener('click', () => cueGameTrailer(button.dataset.gameKey));
+    });
+
+    document.querySelectorAll('[data-game-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const action = button.dataset.gameAction;
+            if (action === 'lobby') leaveGameRoom();
+            if (action === 'binder') openGameBinder();
+            if (action === 'mocap') cueMocapGif();
+            if (action === 'collect-cassette') collectBoatCassette();
+        });
+    });
+
     document.querySelectorAll('[data-content-action]').forEach((button) => {
         button.addEventListener('click', () => {
             const action = button.dataset.contentAction;
@@ -2407,6 +4196,18 @@
         });
     });
 
+    knowledgeEvidenceHotspots.forEach((button) => {
+        button.addEventListener('click', () => openKnowledgeExhibit(button.dataset.knowledgeKey));
+    });
+
+    document.querySelectorAll('[data-knowledge-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+            if (button.dataset.knowledgeAction === 'lobby') leaveKnowledgeRoom();
+        });
+    });
+
+    knowledgeAsk.addEventListener('click', openKnowledgeBreach);
+
     productionScreens.forEach((screen, index) => {
         screen.addEventListener('click', () => triggerProductionGhost(index));
         screen.querySelector('video').addEventListener('ended', () => {
@@ -2416,12 +4217,19 @@
 
     alchemyPlayFallback.addEventListener('click', retryAlchemyPlayback);
     alchemyTapToggle.addEventListener('click', toggleAlchemyPlayback);
+    gamePlayFallback.addEventListener('click', retryGamePlayback);
 
     document.querySelectorAll('[data-action]').forEach((button) => {
         button.addEventListener('click', () => {
             const action = button.dataset.action;
             if (action === 'bell') ringBell();
             if (action === 'radio') {
+                if (hasBoatCassette) {
+                    animateLayer(radioHotspot, 'is-tuning', 680);
+                    if (prefersReducedMotion.matches) openRadioArchive();
+                    else window.setTimeout(openRadioArchive, 260);
+                    return;
+                }
                 tuneRadio();
                 if (prefersReducedMotion.matches) {
                     openPanel('radio');
@@ -2472,7 +4280,7 @@
         button.addEventListener('click', () => closeDialog(button.closest('dialog')));
     });
 
-    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog].forEach((dialog) => {
+    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog, gameBinderDialog, radioDialog].forEach((dialog) => {
         dialog.addEventListener('click', (event) => {
             if (event.target === dialog) closeDialog(dialog);
         });
@@ -2613,22 +4421,61 @@
         }
         setInventoryQuarterSelected(!inventoryQuarterSelected);
     });
+    lobbyInventoryCassette.addEventListener('click', openRadioArchive);
+
+    radioPlay.addEventListener('click', toggleRadioEpisode);
+    radioPrev.addEventListener('click', () => loadRadioEpisode(currentRadioEpisode - 1, { autoplay: true }));
+    radioNext.addEventListener('click', () => loadRadioEpisode(currentRadioEpisode + 1, { autoplay: true }));
+    radioOscilloscopeFrame.addEventListener('click', (event) => {
+        if (event.target.closest('button, input')) return;
+        toggleRadioEpisode();
+    });
+    radioSeek.addEventListener('input', () => {
+        if (!Number.isFinite(radioAudio.duration) || radioAudio.duration <= 0) return;
+        radioAudio.currentTime = Number(radioSeek.value) / 1000 * radioAudio.duration;
+        syncRadioProgress();
+    });
+    radioAudio.addEventListener('loadedmetadata', syncRadioProgress);
+    radioAudio.addEventListener('timeupdate', syncRadioProgress);
+    radioAudio.addEventListener('play', setRadioPlayState);
+    radioAudio.addEventListener('pause', setRadioPlayState);
+    radioDialog.addEventListener('close', () => {
+        radioAudio.pause();
+        stopRadioOscilloscope();
+    });
 
     mobileRoomExit.addEventListener('click', () => {
         if (activeRoom === 'alchemy') leaveAlchemyRoom();
+        if (activeRoom === 'games') leaveGameRoom();
         if (activeRoom === 'content') leaveContentRoom();
+        if (activeRoom === 'knowledge') leaveKnowledgeRoom();
     });
 
     radioAudio.addEventListener('ended', () => {
-        showStatus('Only static for now. The old broadcasts are still hiding somewhere.');
+        if (radioMode === 'episode') {
+            if (currentRadioEpisode < RADIO_EPISODES.length - 1) {
+                loadRadioEpisode(currentRadioEpisode + 1, { autoplay: true });
+            } else {
+                setRadioPlayState();
+                showStatus('End of the recovered transmission archive.', 3200);
+            }
+            return;
+        }
+        showStatus('Only static for now. Something on the Game Development desk might fit the cassette slot.');
     });
 
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             window.clearTimeout(productionTimer);
             stopProductionScreens();
+            knowledgePresentVideo.pause();
+            if (activeRoom === 'games' && gamePlayer && typeof gamePlayer.pauseVideo === 'function') {
+                gamePlayer.pauseVideo();
+            }
         } else if (activeRoom === 'alchemy') {
             scheduleProductionGhost(2400);
+        } else if (activeRoom === 'knowledge' && knowledgeBreached && !prefersReducedMotion.matches) {
+            knowledgePresentVideo.play().catch(() => {});
         }
     });
 
@@ -2640,10 +4487,18 @@
     contentQuarterLocation = hasContentQuarter && savedInventory.contentQuarterLocation === 'newsstand'
         ? 'newsstand'
         : (hasContentQuarter ? 'inventory' : 'room');
+    hasBoatCassette = savedInventory.boatCassette === true;
+    const savedKnowledge = readKnowledgeState();
+    knowledgeContext = new Set(savedKnowledge.context);
+    knowledgeBreached = savedKnowledge.breached;
     syncPenInventory();
     syncQuarterInventory();
+    syncBoatCassetteInventory();
+    syncKnowledgeState();
     renderAlchemyPlaylist();
+    initializeGameMonitorKeystones();
+    initializeMonitorCalibration();
+    initializeKnowledgeDocumentKeystones();
+    initializeDocumentCalibration();
     syncRoomFromLocation();
-    initializeArchiveGate();
-
 }());

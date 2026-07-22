@@ -1396,6 +1396,134 @@
                 }
             }
         ],
+        contentCatalog: [
+            {
+                id: 'catalog-chromologist',
+                client: 'The Chromologist',
+                years: '2014',
+                pieces: 3,
+                formats: 'Design coverage and photo essays',
+                summary: 'A small drawer of color-forward design writing: trade-show coverage from Dwell on Design, an artist profile, and the Eagle Rock stair walk that earned a full restoration.',
+                samples: [
+                    'Dwell on Design Los Angeles 2014',
+                    "Nigel Evan Dennis' The Day's Color",
+                    "Urban Climb // Eagle Rock's Secret Stairs"
+                ],
+                restored: ['urban-climb-eagle-rock']
+            },
+            {
+                id: 'catalog-t3leads',
+                client: 'T3leads',
+                years: '2014–2015',
+                pieces: 41,
+                formats: 'SEO articles, marketing explainers, and a weekly tech desk',
+                summary: 'The first heavy machine on the factory floor: a lead-generation marketplace that needed a constant supply of affiliate-marketing explainers, SEO experiments, and tech news. The strangest pieces aged best, including an early dispatch about a Google AI that dreamed.',
+                samples: [
+                    '11 Ways to Generate Leads Online // Parts I & II',
+                    'Heavyweight Bout: Traditional Publicity vs. Content Marketing',
+                    'Switching to HTML5 in a Flash! A Tale of Two Rich Internet Platforms',
+                    'Google in 2014: Hummingbird and Black Hat',
+                    'Yes, You CAN Make Money Blogging'
+                ],
+                restored: ['social-media-metric-mirage', 'google-glass-slow-death', 'deepmind-deepdream-2015']
+            },
+            {
+                id: 'catalog-emortgagerates',
+                client: 'eMortgageRates',
+                years: '2014–2015',
+                pieces: 21,
+                formats: 'Feature articles and evergreen mortgage explainer pages',
+                summary: 'A mortgage-rate site that let its blog wander wonderfully off-brief: architect spotlights, lavish estates, and neighborhood anthropology, all backed by fifteen patient static pages walking first-time buyers through the loan process.',
+                samples: [
+                    '5 Wildly Lavish Private Estates',
+                    "You'll Never Guess What I Found In My Backyard",
+                    'City Spotlight: Welcome to Portland',
+                    'Google Acquires Nest: Inching Towards the Home of the Future',
+                    'Fixed vs. Adjustable, plus fourteen more static explainer pages'
+                ],
+                restored: ['hip-neighborhood-bubble', 'frank-lloyd-wright-spotlight']
+            },
+            {
+                id: 'catalog-destination-leads',
+                client: 'Destination Leads',
+                years: '2015',
+                pieces: 6,
+                formats: 'B2B sales psychology and lead-buying guides',
+                summary: 'A compact drawer of sales-floor science: a four-part Business Psychology series on eye contact, posture, multitasking, and workplace conflict, plus two unapologetically practical guides to buying internet mortgage leads.',
+                samples: [
+                    'Business Psychology: Eye Contact',
+                    'Business Psychology: Posture',
+                    'Live Call Transfers: How To Make Your Phone Ring!',
+                    'Speed to Contact: Crucial When Buying Internet Mortgage Leads'
+                ],
+                restored: []
+            },
+            {
+                id: 'catalog-solar-me-home',
+                client: 'Solar Me Home',
+                years: '2015',
+                pieces: 26,
+                formats: 'Consumer solar news and energy features',
+                summary: 'A consumer solar news desk during the 2015 boom: policy fights, battery breakthroughs, utility drama, and the occasional carbon-negative trek across America. The Eames do-nothing machine came out of this drawer.',
+                samples: [
+                    'Tesla Powerwall: One Week In',
+                    "Meet Facebook's Solar-Powered Internet-Beaming Drone, Aquila",
+                    'Odd Bedfellows: Tea Partiers and Solar Panels',
+                    '21st Century Johnny Appleseed: A Carbon-Negative Trek Across America',
+                    'The Birth of Solar Panels'
+                ],
+                restored: ['solars-retro-future']
+            },
+            {
+                id: 'catalog-home-living-101',
+                client: 'Home Living 101',
+                years: '2015',
+                pieces: 33,
+                formats: 'Home, real estate, and lifestyle features',
+                summary: 'The most cheerfully unhinged drawer in the cabinet. Ostensibly a home-living blog, it kept producing haunted meth labs, epic neighbor feuds, floating fortresses, and coyote protocol between the slow-cooker roundups.',
+                samples: [
+                    'How To Sell a Haunted Meth Lab',
+                    'Get off my lawn! Epic Neighbor Feuds and How to Avoid Them',
+                    'Floating Fantasy Fortresses',
+                    'Coyote Encounters: What to do When Walking Your Dog',
+                    'Xeriscapes: Drought-Friendly Landscapes'
+                ],
+                restored: ['trimming-fringe-suburbia', 'the-watcher', 'forty-hour-workweek']
+            },
+            {
+                id: 'catalog-review-weekly',
+                client: 'Review Weekly // EquateMedia',
+                years: '2015–2016',
+                pieces: 15,
+                formats: 'Dating features, city guides, and gadget reviews',
+                summary: 'Lifestyle and tech work that ran under the Review Weekly banner: dating-profile forensics, LA weekend event guides, Chicago pub crawls, and hands-on gadget reviews. The State of Dating in 2016 was pulled from this drawer for full restoration.',
+                samples: [
+                    'Hooking Up at Coachella',
+                    '5 Common Grammatical Errors Sink your Dating Profile',
+                    "The 10 Best Office Pranks that (Probably) Won't Get You Arrested",
+                    'What is IFTTT and How Can It Set You Free?',
+                    "LG G5's Modular Smartphone Review"
+                ],
+                restored: ['state-of-dating-2016']
+            },
+            {
+                id: 'catalog-fieldedge',
+                client: 'FieldEdge',
+                years: '2020–2022',
+                pieces: 50,
+                formats: 'SEO articles, license and salary guides, sales enablement, editorial rebuilds',
+                summary: 'The mature factory line: a field-service software company where content became a measured system. The drawer holds HVAC, plumbing, and electrical marketing guides, fifty-state license references, cold-calling talk tracks, and thirteen annotated before-and-after rebuilds of the inherited blog. Organic traffic rose 240%.',
+                samples: [
+                    'HVAC License Guide for Every State in 2022',
+                    'Complete Electrician Hiring Handbook for Employers',
+                    'The 2022 Plumber Salary Guide',
+                    'HVAC Cold Calling Talk Tracks',
+                    'Section 179 Tax Incentives 2021',
+                    'Thirteen before-and-after editorial rebuilds'
+                ],
+                restored: ['hvac-blog-strategy-guide', 'mechanical-locks-rebuild']
+            }
+        ],
         alchemy: [
             {
                 id: 'french-kitty-lineage',

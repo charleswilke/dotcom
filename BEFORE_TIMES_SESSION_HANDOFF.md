@@ -6,23 +6,17 @@ the July 16–17, 2026 sessions.
 
 ## Current state
 
-The experience now begins behind a theatrical dog-guardian archive gate. It is
-a client-side threshold rather than a security boundary: the passwords are
-`p33k`, `tootsie`, `doc`, and `astro`; capitalization and surrounding whitespace
-are ignored. A successful unlock is remembered in `sessionStorage` under
-`bt-gate-unlocked-v1`, and a fresh tab shows the gate again. The underlying
-archive remains `inert` and `aria-hidden` until the gate opens. The form traps
-focus between its password field and submit control, announces rejected words,
-and has a reduced-motion path.
-
-The gate artwork is intentionally split into two transparent runtime layers:
+The experience now opens directly into the archive lobby. The former
+dog-guardian password gate was retired before launch; there is no client-side
+password, session gate state, inert lobby, or blocking threshold. Its artwork
+remains preserved rather than deleted: the original gate was split into two
+transparent runtime layers.
 `images/before-times/gate/dog-medallion-v1.webp` holds the dog portraits and
-live HTML field recess, while `dog-shackle-v1.webp` lifts and cants away before
-the medallion drops. Full-resolution transparent PNG masters live beside those
-WebPs. The original magenta chroma renders are retained in
-`tools/before-times-clean-patches/gate-*-chroma-v1.png`. Keep the password and
-status copy in HTML; do not bake text into either raster. Short landscape
-viewports use a side-by-side gate layout so the input remains reachable.
+field recess, while `dog-shackle-v1.webp` holds the separate shackle. The
+full-resolution transparent PNG masters live beside those WebPs, and the
+original magenta chroma renders remain in
+`tools/before-times-clean-patches/gate-*-chroma-v1.png` if the threshold is ever
+revisited as a non-blocking introduction.
 
 The first lobby is now built as a clean background plate plus independent
 interactive raster layers. The visible career doors are not warped crops. Each
@@ -872,11 +866,20 @@ glow. It becomes persistent when selected, breathes while the trailer plays,
 and settles to a lower intensity when paused. Each case supplies its own glow
 RGB so the light relates to the cover instead of washing every case purple.
 
-The binder opens the Game Development information panel. The mocap mannequin
-currently reports that its tape source is still missing; it is already a
-dedicated hotspot so the recovered video can be mapped there without changing
-the room geometry. The right-side reverse door and the fixed mobile Lobby
-button both return to the lobby and pause the active trailer.
+The binder remains baked into the room plate and now opens a dedicated
+read-only Game-Writing Terminal rather than the generic Game Development panel.
+Its six recovered records live in `before-times-game-binder.js`: the Dark Eden
+spec teaser, Kulture Captain Peters journal, FUSE Xenotech intel, FUSE
+Interrogation scene, FUSE Inner Sanctum scene, and the 2012 Insomniac
+self-review. Source spelling is preserved; the old personal contact information
+on the Dark Eden title page is intentionally not exposed. The modal supports
+click/tap plus Arrow Up/Down, Home, and End navigation, uses a horizontal file
+rail on narrow screens, and gives screenplay, journal, intel, and prose records
+their own readable treatments inside the CRT-terminal shell. The mocap
+mannequin currently reports that its tape source is still missing; it is already
+a dedicated hotspot so the recovered video can be mapped there without changing
+the room geometry. The right-side reverse door and the fixed mobile Lobby button
+both return to the lobby and pause the active trailer.
 
 ## Content Factory room and quarter path
 
@@ -940,15 +943,115 @@ state the logged totals; update `contentCatalog` counts if clippings are added.
 Promoting a piece to full restoration means adding it to `content` and listing
 its id in the owning drawer's `restored` array.
 
+## Knowledge Maze room and retrieval path
+
+The Knowledge Maze is now a navigable fourth room at `#knowledge-maze`. Its
+contained runtime plate is
+`images/before-times/knowledge-maze/knowledge-maze-contained-v3.webp`
+(`1672 × 941`); the PNG beside it is the generated master. The room uses a
+large wall-mounted circular maze, paired blank document panels, a three-control
+voice-and-tone apparatus, an impact gauge, and a foreground terminal whose
+screen is deliberately empty in the raster so the live HTML interface stays
+sharp and accessible.
+
+The two formerly blank document panels now hold separate image-generated K-27
+field-manual artifacts. `knowledge-answer-exists-v1.webp` is a dense, tangled
+archive dossier; `knowledge-answer-arrives-v1.webp` resolves the same material
+into WHO, GOAL, FRICTION, and NEXT STEP. Their PNG masters remain beside the
+runtime WebPs. Both pages are additive scene layers, so the before dossier can
+jitter/search independently while the after page breathes and lifts toward the
+terminal. Selecting the paired panels opens a wider evidence viewer with the
+two high-resolution pages side by side; each links to its full `1024 × 1536`
+PNG. On phones the pair becomes a two-stop horizontal swipe rail without making
+the page itself overflow.
+
+The two room-scale documents use the same rectangle-to-quad `matrix3d`
+homography as the Game Development monitors. Their authoritative four-corner
+defaults are `DOCUMENT_CALIBRATION_DEFAULTS` in `before-times.js`; local working
+points persist under `bt-document-calibration-v1`. Open
+`/before-times.html?calibrate=documents#knowledge-maze` to tune them. The mode
+provides eight draggable handles, arrow-key nudging (`0.25%`, or `0.1%` while
+holding Shift), independent guide toggles, an art visibility toggle, reset, and
+copyable JSON. The page art keystones live while handles move. Each image keeps
+its ambient animation on an inner layer, so calibration transforms and motion
+do not fight over the same CSS `transform` property.
+
+The far-right reverse doorway was corrected as a spatially distinct sightline
+from Door 04. It now looks diagonally across the lobby: the back edge of the
+reception desk and archive chair occupy the near field, the wooden newspaper
+dispenser remains visible farther across the room, and a narrow bulletin-board
+wall fragment establishes depth. Do not restore the generic desk-and-bell view
+used by earlier room concepts or isolate the dispenser in an empty corridor.
+
+Three room hotspots supply the early assistance prototype with the context
+missing from `HELP ME WITH MY WEBSITE`:
+
+- The voice-and-tone controls recover `WHO // A NEW BUSINESS OWNER`.
+- The before/after documentation panels recover
+  `GOAL // HELP CUSTOMERS FIND THE BUSINESS`.
+- The impact gauge recovers `FRICTION // UNFAMILIAR SEO LANGUAGE` and explains
+  the 93% customer-care-escalation reduction.
+
+Every recovered piece illuminates another SVG fracture from the maze center.
+After all three are present, `Ask a better question` starts the rupture. The
+contained plate crossfades to
+`images/before-times/knowledge-maze/knowledge-maze-breached-v2.webp`; its dark
+aperture is filled by a muted, looping six-second screen recording of the real
+present-day homepage at a `390 × 844` phone viewport. The viewport remains
+locked at the top of the page and captures only the site's native ambient
+animation, making the breach feel like the present is alive just beyond the
+wall without turning the portal into a scrolling demo. The optimized H.264 recording is
+`images/before-times/knowledge-maze/present-site-peek-v1.mp4`; its reduced-motion
+and loading fallback is `present-site-peek-poster-v1.webp`. The video pauses
+outside the room and whenever reduced motion is requested. The portal goes to
+`/#portfolio`, so the destination is the real present rather than an abstract
+sci-fi landscape.
+
+The recording is reproducible: run the local site on port 8080, then run
+`node tools/capture-knowledge-maze-present.mjs`. The script records 96 real
+Chrome frames at 16 fps, encodes the MP4 with ffmpeg, and builds the poster with
+cwebp. The generated breach source and deterministic doorway composite are
+preserved in the same asset directory; rerun
+`python3 tools/build-knowledge-maze-states.py` and then rebuild the WebP if the
+reverse-lobby sightline changes.
+
+Puzzle state lives in session storage under `bt-knowledge-v1` as a recovered
+context-key array plus `breached`. Once solved, the room reopens in its breached
+state and the lobby's circular Knowledge Maze medallion keeps a mint vertical
+scar for the session. This is intentionally not a security or progress gate:
+the normal lobby doorway and the permanent Return portal remain available.
+
+The exact built-in image-generation prompts, including both K-27 documents, are recorded in
+`tools/knowledge-maze-imagegen-prompts.md`. Intermediate cracks, debris, the
+terminal, the present-day portal, and the lobby scar are code-native layers;
+do not regenerate full plates to tune their placement, glow, copy, or timing.
+
 ## Verification completed this session
 
 - The page was repeatedly tested at `http://localhost:8080/before-times.html`.
+- The Knowledge Maze was tested from a fresh direct `#knowledge-maze` load:
+  all three evidence dialogs opened, context advanced from 0/3 to 3/3, the
+  rupture persisted in session storage, the live present-day portal rendered,
+  and activating it landed on `/#portfolio` with the current Charles Wilke
+  header and portfolio present. Returning through the reverse door restored the
+  lobby and left the maze-medallion scar visible. The same solved room was
+  checked at a 390×844 mobile viewport on the existing 1000px horizontal stage;
+  the room remained swipeable and the fixed Lobby control remained available.
+  The recorded portal was then rechecked in Chrome: the `390 × 844` H.264 source
+  reached ready state 4, advanced during normal playback, paused under reduced
+  motion, and still navigated to `/#portfolio`. No runtime exceptions or error
+  overlays were detected.
 - The Game Development room was tested from a fresh direct hash load. All eight
   case hotspots selected the expected title, year, role, and case state; live
   YouTube playback rendered on the right monitor; the binder, mocap status, and
   reverse door were exercised; and the browser reported no console errors or
   error overlays. A binder/case hotspot overlap found during this pass was fixed
   by keeping the case layer above the foreground prop hotspots.
+- The rebuilt game-writing binder was opened from its existing baked-book
+  hotspot at desktop and 390px phone widths. All six records rendered, Arrow
+  Down changed the selected file and detail in sync, the phone file rail became
+  the only horizontal scroller, the page itself did not overflow, and the live
+  browser reported no console errors.
 - The dossier redesign was visually checked with Resistance 2's two credit rows
   and Full Frontal Assault's wrapped title. Neither overflows the mapped screen.
   Insomniac's replacement Resistance 2 trailer played inside the monitor without

@@ -53,7 +53,8 @@
             title: 'The Knowledge Maze',
             copy: [
                 'A documentation labyrinth where every corridor leads to another edge case, style decision, customer question, or stakeholder with a very reasonable concern.',
-                'The GoDaddy chapter is where content craft met product systems at scale—and where the first chatbot-shaped shadows started appearing on the walls.'
+                'The GoDaddy chapter is where content craft met product systems at scale—and where the first chatbot-shaped shadows started appearing on the walls.',
+                'Inside, three evidence stations restore the human context an early assistance prototype is missing. Give it a person, a goal, and the thing standing in the way; it may find a path the old maze never anticipated.'
             ],
             facts: ['Websites + Marketing knowledge systems', 'Unified voice-and-tone guidance', '93% reduction in customer-care escalations']
         },
@@ -97,7 +98,7 @@
         floorplan: {
             kicker: 'Inventory // permanent item',
             title: 'Floor plan',
-            copy: ['The lobby is open. Absurd Alchemy, Game Development, and The Content Factory are ready to enter; The Knowledge Maze is still being excavated.'],
+            copy: ['The lobby and all four career rooms are open. The Knowledge Maze contains a second route to the present for anyone willing to give the machine enough human context.'],
             routes: [
                 { id: 'alchemy', label: '01 · Absurd Alchemy' },
                 { id: 'games', label: '02 · Game Development' },
@@ -108,6 +109,39 @@
                 { id: 'photography', label: 'Lobby · Photography' },
                 { id: 'radio', label: 'Lobby · Radio archive' }
             ]
+        }
+    };
+
+    const KNOWLEDGE_EXHIBITS = {
+        human: {
+            kicker: 'Evidence 01 // voice and tone',
+            title: 'There is a person inside the query',
+            copy: [
+                'A useful answer changes with the person receiving it. Someone opening their first business site needs different language, pacing, and reassurance than an experienced developer fixing a configuration problem.',
+                'The unified guidance was not a coat of friendly paint. It was a system for recognizing confidence, urgency, emotional state, and the amount of knowledge an answer could safely assume.'
+            ],
+            facts: ['Context recovered: WHO', 'A new business owner', 'Human state before institutional vocabulary'],
+            contextValue: 'A NEW BUSINESS OWNER'
+        },
+        goal: {
+            kicker: 'Evidence 02 // before and after',
+            title: 'Start with the job, not the interface',
+            copy: [
+                'The paired GoDaddy panels preserve a recurring transformation: procedural pages organized around product controls became guidance organized around what a customer was actually trying to accomplish.',
+                'That shift turns documentation into product design. The writer is no longer describing the maze from above; they are walking beside someone who needs to get somewhere.'
+            ],
+            facts: ['Context recovered: GOAL', 'Help customers find the business', 'Recovered Websites + Marketing article rewrites'],
+            contextValue: 'HELP CUSTOMERS FIND THE BUSINESS'
+        },
+        friction: {
+            kicker: 'Evidence 03 // measured outcome',
+            title: 'Find what is really in the way',
+            copy: [
+                'The pressure gauge tracks a 93% reduction in customer-care escalations after one support experience was redesigned. The words mattered because they removed uncertainty at the moment it was becoming expensive.',
+                'The obstacle was not a lack of intelligence. It was unfamiliar language, unclear consequences, and no confidence about the next step.'
+            ],
+            facts: ['Context recovered: FRICTION', 'Unfamiliar SEO language', '93% fewer customer-care escalations'],
+            contextValue: 'UNFAMILIAR SEO LANGUAGE'
         }
     };
 
@@ -417,6 +451,23 @@
             glowHi: '211 157 255'
         }
     ];
+    const MOCAP_GIFS = [
+        {
+            src: '/bt-assets/mocap/mocap-performance-pair-1-v1.gif?v=20260722b',
+            durationMs: 3000,
+            label: 'Motion-capture performance paired with its in-engine character pass'
+        },
+        {
+            src: '/bt-assets/mocap/mocap-performance-pair-2-v1.gif?v=20260722b',
+            durationMs: 3500,
+            label: 'A second motion-capture performance paired with its in-engine character pass'
+        },
+        {
+            src: '/bt-assets/mocap/kevin-manly-fall-v1.gif?v=20260722b',
+            durationMs: 6700,
+            label: 'Kevin takes a manly fall beside the crash mat'
+        }
+    ];
     const MONITOR_CALIBRATION_STORAGE_KEY = 'bt-monitor-calibration-v1';
     const MONITOR_CALIBRATION_DEFAULTS = {
         left: {
@@ -430,6 +481,21 @@
             tr: [55.16, 29.72],
             br: [55.26, 47.63],
             bl: [38.97, 47.92]
+        }
+    };
+    const DOCUMENT_CALIBRATION_STORAGE_KEY = 'bt-document-calibration-v1';
+    const DOCUMENT_CALIBRATION_DEFAULTS = {
+        before: {
+            tl: [4.77, 16.64],
+            tr: [13.89, 18.34],
+            br: [13.82, 46.34],
+            bl: [4.79, 47.37]
+        },
+        after: {
+            tl: [16.33, 18.87],
+            tr: [23.96, 20.21],
+            br: [24.04, 44.53],
+            bl: [16.24, 45.84]
         }
     };
     const PRODUCTION_LOOPS = [
@@ -658,16 +724,11 @@
             label: 'A third Pricks fragment'
         }
     ];
-    const archiveGate = document.getElementById('bt-gate');
-    const archiveGateForm = document.getElementById('bt-gate-form');
-    const archiveGatePassword = document.getElementById('bt-gate-password');
-    const archiveGateStatus = document.getElementById('bt-gate-status');
-    const archiveExperience = document.getElementById('bt-lobby');
-    const archivePasswords = new Set(['p33k', 'tootsie', 'doc', 'astro']);
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
     const gameSceneStatus = document.getElementById('bt-game-scene-status');
     const contentSceneStatus = document.getElementById('bt-content-scene-status');
+    const knowledgeSceneStatus = document.getElementById('bt-knowledge-scene-status');
     const infoDialog = document.getElementById('bt-info-dialog');
     const guestbookDialog = document.getElementById('bt-guestbook-dialog');
     const alchemyMenuDialog = document.getElementById('bt-alchemy-menu-dialog');
@@ -676,14 +737,20 @@
     const archiveTitle = document.getElementById('bt-archive-title');
     const archiveIndex = document.getElementById('bt-archive-index');
     const archiveDetail = document.getElementById('bt-archive-detail');
+    const gameBinderDialog = document.getElementById('bt-game-binder-dialog');
+    const gameBinderIndex = document.getElementById('bt-game-binder-index');
+    const gameBinderDetail = document.getElementById('bt-game-binder-detail');
+    const gameBinderPosition = document.getElementById('bt-game-binder-position');
     const radioAudio = document.getElementById('bt-radio-audio');
     const infoKicker = document.getElementById('bt-dialog-kicker');
     const infoTitle = document.getElementById('bt-dialog-title');
+    const knowledgeDocumentViewer = document.getElementById('bt-knowledge-document-viewer');
     const infoCopy = document.getElementById('bt-dialog-copy');
     const infoFacts = document.getElementById('bt-dialog-facts');
     const infoRoutes = document.getElementById('bt-dialog-routes');
     const infoAction = document.getElementById('bt-dialog-action');
     const infoButton = document.getElementById('bt-dialog-button');
+    const infoSecondary = infoDialog.querySelector('.bt-dialog-secondary');
     const guestbookForm = document.getElementById('bt-guestbook-form');
     const guestbookMessage = document.getElementById('bt-guest-message');
     const guestbookCount = document.getElementById('bt-guest-count');
@@ -731,6 +798,7 @@
     const gameTrailerScreen = document.getElementById('bt-game-trailer-screen');
     const gameVideoPlane = document.querySelector('.bt-game-video-plane');
     const gameIframe = document.getElementById('bt-game-player');
+    const gameMocapGif = document.getElementById('bt-game-mocap-gif');
     const gamePlayFallback = document.getElementById('bt-game-play-fallback');
     const gameRoleCase = document.getElementById('bt-game-role-case');
     const gameRoleTitle = document.getElementById('bt-game-role-title');
@@ -748,6 +816,36 @@
     const contentScroll = document.getElementById('bt-content-scroll');
     const contentScene = document.getElementById('bt-content-scene');
     const contentArt = document.querySelector('.bt-content-art');
+    const knowledgeDoorHotspot = document.querySelector('.bt-hotspot-docs');
+    const knowledgeScroll = document.getElementById('bt-knowledge-scroll');
+    const knowledgeScene = document.getElementById('bt-knowledge-scene');
+    const knowledgeArt = document.querySelector('.bt-knowledge-art-contained');
+    const knowledgeTerminal = document.getElementById('bt-knowledge-terminal');
+    const knowledgeContextCount = document.getElementById('bt-knowledge-context-count');
+    const knowledgeTerminalRequest = document.getElementById('bt-knowledge-terminal-request');
+    const knowledgeTerminalResponse = document.getElementById('bt-knowledge-terminal-response');
+    const knowledgeAsk = document.getElementById('bt-knowledge-ask');
+    const knowledgePresentPortal = document.getElementById('bt-knowledge-present-portal');
+    const knowledgePresentVideo = document.getElementById('bt-knowledge-present-video');
+    const knowledgeDocumentSurfaces = {
+        before: document.querySelector('[data-knowledge-document-surface="before"]'),
+        after: document.querySelector('[data-knowledge-document-surface="after"]')
+    };
+    const documentCalibrationLayer = document.getElementById('bt-document-calibration');
+    const documentCalibrationOutput = document.getElementById('bt-document-calibration-output');
+    const documentCalibrationCopy = document.getElementById('bt-document-calibration-copy');
+    const documentCalibrationReset = document.getElementById('bt-document-calibration-reset');
+    const documentCalibrationArt = document.getElementById('bt-document-calibration-art');
+    const documentCalibrationVisibilityToggles = Array.from(document.querySelectorAll('[data-document-calibration-visibility]'));
+    const documentCalibrationHandles = Array.from(document.querySelectorAll('[data-document-calibration-corner]'));
+    const documentCalibrationPolygons = Array.from(document.querySelectorAll('[data-document-calibration-polygon]'));
+    const knowledgeContextElements = {
+        human: document.getElementById('bt-knowledge-context-human'),
+        goal: document.getElementById('bt-knowledge-context-goal'),
+        friction: document.getElementById('bt-knowledge-context-friction')
+    };
+    const knowledgeEvidenceHotspots = Array.from(document.querySelectorAll('[data-knowledge-key]'));
+    const knowledgeExitHotspot = document.querySelector('[data-knowledge-action="lobby"]');
     const alchemyChairLayer = document.getElementById('bt-alchemy-chair-layer');
     const alchemyCrateLayer = document.getElementById('bt-alchemy-crate-layer');
     const alchemySolarLayer = document.getElementById('bt-alchemy-solar-layer');
@@ -786,14 +884,24 @@
     let loadedGameKey = null;
     let currentGameProject = null;
     let gameFallbackTimer = 0;
+    let lastMocapGifIndex = -1;
+    let mocapPlaybackTimer = 0;
     let monitorCalibration = null;
+    let documentCalibration = null;
     let productionTimer = null;
     let lastProductionLoop = -1;
     let productionDeck = [];
     let alchemyRoomOpening = false;
     let gameRoomOpening = false;
     let contentRoomOpening = false;
+    let knowledgeRoomOpening = false;
+    let knowledgeContext = new Set();
+    let knowledgeBreached = false;
+    let knowledgeRuptureTimer = 0;
+    let gameBinderInitialized = false;
+    let currentGameBinderFile = null;
     let gameMonitorResizeObserver = null;
+    let knowledgeDocumentResizeObserver = null;
     let inventoryCloseTimer = 0;
     let hasAlchemyPen = false;
     let alchemyPenLocation = 'room';
@@ -815,85 +923,6 @@
     let quarterPointerStartY = 0;
     let quarterPointerLastX = 0;
     let quarterPointerLastY = 0;
-
-    function makeArchiveExperienceAccessible() {
-        archiveExperience.removeAttribute('inert');
-        archiveExperience.removeAttribute('aria-hidden');
-    }
-
-    function initializeArchiveGate() {
-        const wasUnlocked = document.documentElement.classList.contains('bt-gate-bypassed');
-
-        if (wasUnlocked) {
-            archiveGate.hidden = true;
-            makeArchiveExperienceAccessible();
-            return;
-        }
-
-        const denyEntry = () => {
-            archiveGate.classList.remove('is-denied');
-            void archiveGate.offsetWidth;
-            archiveGate.classList.add('is-denied');
-            archiveGatePassword.setAttribute('aria-invalid', 'true');
-            archiveGateStatus.textContent = 'The ward does not know that word.';
-            archiveGatePassword.focus({ preventScroll: true });
-            archiveGatePassword.select();
-        };
-
-        archiveGateForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            if (!archivePasswords.has(archiveGatePassword.value.trim().toLowerCase())) {
-                denyEntry();
-                return;
-            }
-
-            archiveGatePassword.removeAttribute('aria-invalid');
-            archiveGateStatus.textContent = 'The old locks remember.';
-            archiveGate.classList.remove('is-denied');
-            archiveGate.classList.add('is-accepting');
-            archiveGatePassword.blur();
-            archiveGateForm.querySelector('button[type="submit"]').disabled = true;
-
-            try {
-                sessionStorage.setItem('bt-gate-unlocked-v1', 'true');
-            } catch (error) {
-                // The password still opens this page view when storage is unavailable.
-            }
-
-            window.setTimeout(() => {
-                archiveGate.classList.add('is-unlocking');
-                document.documentElement.classList.add('bt-gate-open');
-            }, prefersReducedMotion.matches ? 0 : 180);
-
-            window.setTimeout(() => {
-                archiveGate.hidden = true;
-                makeArchiveExperienceAccessible();
-            }, prefersReducedMotion.matches ? 300 : 1770);
-        });
-
-        archiveGatePassword.addEventListener('input', () => {
-            archiveGatePassword.removeAttribute('aria-invalid');
-            archiveGateStatus.textContent = '';
-        });
-
-        archiveGate.addEventListener('keydown', (event) => {
-            if (event.key !== 'Tab') return;
-            const controls = Array.from(archiveGateForm.querySelectorAll('input, button:not(:disabled)'));
-            if (!controls.length) return;
-            const first = controls[0];
-            const last = controls[controls.length - 1];
-            if (event.shiftKey && document.activeElement === first) {
-                event.preventDefault();
-                last.focus();
-            } else if (!event.shiftKey && document.activeElement === last) {
-                event.preventDefault();
-                first.focus();
-            }
-        });
-
-        window.requestAnimationFrame(() => archiveGatePassword.focus({ preventScroll: true }));
-    }
 
     function readInventory() {
         try {
@@ -1174,12 +1203,152 @@
         if (shouldInsert) insertQuarterIntoNewsstand();
     }
 
+    function readKnowledgeState() {
+        try {
+            const saved = JSON.parse(sessionStorage.getItem('bt-knowledge-v1') || '{}');
+            return {
+                context: Array.isArray(saved.context)
+                    ? saved.context.filter((key) => Object.prototype.hasOwnProperty.call(KNOWLEDGE_EXHIBITS, key))
+                    : [],
+                breached: saved.breached === true
+            };
+        } catch (error) {
+            return { context: [], breached: false };
+        }
+    }
+
+    function saveKnowledgeState() {
+        try {
+            sessionStorage.setItem('bt-knowledge-v1', JSON.stringify({
+                context: Array.from(knowledgeContext),
+                breached: knowledgeBreached
+            }));
+        } catch (error) {
+            // Session storage can be unavailable; the room still works in memory.
+        }
+    }
+
+    function syncKnowledgeState() {
+        const count = knowledgeContext.size;
+        const ready = count === Object.keys(KNOWLEDGE_EXHIBITS).length;
+        const portalWasHidden = knowledgePresentPortal.hidden;
+        knowledgePresentPortal.hidden = !knowledgeBreached;
+        if (knowledgeBreached && portalWasHidden && activeRoom === 'knowledge') {
+            void knowledgePresentPortal.offsetWidth;
+        }
+        knowledgeContextCount.textContent = `CONTEXT ${count} / 3`;
+        knowledgeScene.dataset.contextCount = String(count);
+        knowledgeScene.classList.toggle('has-context', count > 0);
+        knowledgeScene.classList.toggle('is-context-ready', ready && !knowledgeBreached);
+        knowledgeScene.classList.toggle('is-breached', knowledgeBreached);
+        knowledgeDoorHotspot.classList.toggle('bt-is-breached', knowledgeBreached);
+
+        Object.entries(knowledgeContextElements).forEach(([key, element]) => {
+            const recovered = knowledgeContext.has(key);
+            const row = element.closest('[data-knowledge-context]');
+            element.textContent = recovered ? KNOWLEDGE_EXHIBITS[key].contextValue : 'MISSING';
+            row.classList.toggle('is-recovered', recovered);
+            const hotspot = knowledgeEvidenceHotspots.find((item) => item.dataset.knowledgeKey === key);
+            if (hotspot) hotspot.classList.toggle('is-recovered', recovered);
+        });
+
+        knowledgeAsk.hidden = knowledgeBreached;
+        knowledgeAsk.disabled = !ready || knowledgeBreached;
+
+        if (knowledgeBreached) {
+            knowledgeTerminalRequest.textContent = 'I’M A NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            knowledgeTerminalResponse.textContent = 'I found a shorter path. The present has been looking for you.';
+            knowledgeDoorHotspot.dataset.label = 'The Knowledge Maze · breach open';
+            knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze; its path to the present is open');
+            if (activeRoom === 'knowledge' && !document.hidden && !prefersReducedMotion.matches) {
+                knowledgePresentVideo.play().catch(() => {});
+            }
+            return;
+        }
+
+        knowledgePresentVideo.pause();
+
+        knowledgeDoorHotspot.dataset.label = 'Enter The Knowledge Maze';
+        knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze documentation room');
+        if (ready) {
+            knowledgeTerminalRequest.textContent = 'I’M A NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            knowledgeTerminalResponse.textContent = 'Context complete. The old route still works. I may have found a shorter one.';
+        } else if (count > 0) {
+            const remaining = 3 - count;
+            knowledgeTerminalRequest.textContent = 'HELP ME WITH MY WEBSITE.';
+            knowledgeTerminalResponse.textContent = `${remaining} piece${remaining === 1 ? '' : 's'} of human context still missing.`;
+        } else {
+            knowledgeTerminalRequest.textContent = 'HELP ME WITH MY WEBSITE.';
+            knowledgeTerminalResponse.textContent = 'A useful answer needs a person, a goal, and the thing standing in the way.';
+        }
+    }
+
+    function openKnowledgeExhibit(key) {
+        const panel = KNOWLEDGE_EXHIBITS[key];
+        if (!panel) return;
+
+        const wasRecovered = knowledgeContext.has(key);
+        knowledgeContext.add(key);
+        saveKnowledgeState();
+        syncKnowledgeState();
+
+        infoKicker.textContent = panel.kicker;
+        infoTitle.textContent = panel.title;
+        const showDocumentViewer = key === 'goal';
+        knowledgeDocumentViewer.hidden = !showDocumentViewer;
+        infoDialog.classList.toggle('bt-knowledge-documents-dialog', showDocumentViewer);
+        infoCopy.replaceChildren(...panel.copy.map(makeParagraph));
+        infoFacts.replaceChildren();
+        panel.facts.forEach((fact) => {
+            const item = document.createElement('li');
+            item.textContent = fact;
+            infoFacts.appendChild(item);
+        });
+        infoRoutes.replaceChildren();
+        infoAction.hidden = true;
+        infoButton.hidden = true;
+        infoButton.onclick = null;
+        infoSecondary.textContent = 'Back to the room';
+        openDialog(infoDialog);
+
+        if (!wasRecovered) {
+            showStatus(`Human context recovered: ${key.toUpperCase()}.`, 3200);
+        }
+    }
+
+    function openKnowledgeBreach() {
+        if (knowledgeBreached || knowledgeAsk.disabled) return;
+        window.clearTimeout(knowledgeRuptureTimer);
+        knowledgeAsk.disabled = true;
+        knowledgeTerminal.classList.add('is-answering');
+        knowledgeTerminalResponse.textContent = 'Looking past the prescribed route…';
+        showStatus('The terminal is searching the walls instead of the maze.', 4200);
+
+        const beginRupture = () => {
+            knowledgeScene.classList.add('is-rupturing');
+            knowledgeTerminalResponse.textContent = 'I found a shorter path.';
+            knowledgeRuptureTimer = window.setTimeout(() => {
+                knowledgeBreached = true;
+                saveKnowledgeState();
+                syncKnowledgeState();
+                knowledgeTerminal.classList.remove('is-answering');
+                knowledgeScene.classList.remove('is-rupturing');
+                showStatus('There you are. The present has been looking for you.', 5200);
+                window.setTimeout(() => knowledgePresentPortal.focus({ preventScroll: true }), 180);
+            }, prefersReducedMotion.matches ? 0 : 1350);
+        };
+
+        knowledgeRuptureTimer = window.setTimeout(beginRupture, prefersReducedMotion.matches ? 0 : 620);
+    }
+
     function showStatus(message, duration) {
         const sceneStatus = activeRoom === 'alchemy'
             ? alchemySceneStatus
             : (activeRoom === 'games'
                 ? gameSceneStatus
-                : (activeRoom === 'content' ? contentSceneStatus : lobbySceneStatus));
+                : (activeRoom === 'content'
+                    ? contentSceneStatus
+                    : (activeRoom === 'knowledge' ? knowledgeSceneStatus : lobbySceneStatus)));
         window.clearTimeout(statusTimer);
         sceneStatus.textContent = message;
         sceneStatus.classList.add('is-visible');
@@ -1213,6 +1382,162 @@
         if (className) element.className = className;
         if (text) element.textContent = text;
         return element;
+    }
+
+    function makeGameBinderElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+    }
+
+    function renderGameBinderBlock(block) {
+        const section = makeGameBinderElement('section', `bt-game-binder-block bt-game-binder-${block.type}`);
+
+        if (block.type === 'screenplay') {
+            block.lines.forEach(([kind, line]) => {
+                section.appendChild(makeGameBinderElement(
+                    'p',
+                    `bt-game-binder-script-line bt-game-binder-script-${kind}`,
+                    line
+                ));
+            });
+            return section;
+        }
+
+        if (block.title) section.appendChild(makeGameBinderElement('h3', '', block.title));
+
+        if (block.type === 'section') {
+            block.entries.forEach(([label, copy]) => {
+                const entry = makeGameBinderElement('div', 'bt-game-binder-entry');
+                entry.appendChild(makeGameBinderElement('h4', '', label));
+                entry.appendChild(makeGameBinderElement('p', '', copy));
+                section.appendChild(entry);
+            });
+            if (block.note) {
+                section.appendChild(makeGameBinderElement('p', 'bt-game-binder-recovery-note', block.note));
+            }
+            return section;
+        }
+
+        (block.paragraphs || []).forEach((paragraph) => {
+            section.appendChild(makeGameBinderElement('p', '', paragraph));
+        });
+        return section;
+    }
+
+    function selectGameBinderFile(fileId, options) {
+        const files = Array.isArray(window.BEFORE_TIMES_GAME_BINDER)
+            ? window.BEFORE_TIMES_GAME_BINDER
+            : [];
+        const file = files.find((item) => item.id === fileId);
+        if (!file) return;
+        const settings = options || {};
+        currentGameBinderFile = file;
+
+        gameBinderIndex.querySelectorAll('[data-game-binder-file]').forEach((button) => {
+            const isActive = button.dataset.gameBinderFile === file.id;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-pressed', String(isActive));
+        });
+
+        const header = makeGameBinderElement('header', 'bt-game-binder-file-header');
+        header.appendChild(makeGameBinderElement(
+            'p',
+            'bt-game-binder-file-eyebrow',
+            `RECORD ${file.number} // ${file.statusLabel.toUpperCase()}`
+        ));
+        header.appendChild(makeGameBinderElement('h2', '', file.title));
+        header.appendChild(makeGameBinderElement('p', 'bt-game-binder-file-subtitle', file.subtitle));
+
+        const metadata = makeGameBinderElement('dl', 'bt-game-binder-metadata');
+        [
+            ['PROJECT', file.project],
+            ['DATE', file.year],
+            ['FORMAT', file.format],
+            ['SOURCE', file.source]
+        ].forEach(([label, value]) => {
+            const field = document.createElement('div');
+            field.appendChild(makeGameBinderElement('dt', '', label));
+            field.appendChild(makeGameBinderElement('dd', '', value));
+            metadata.appendChild(field);
+        });
+        header.appendChild(metadata);
+        header.appendChild(makeGameBinderElement('p', 'bt-game-binder-summary', file.summary));
+
+        const body = makeGameBinderElement('div', 'bt-game-binder-file-body');
+        file.blocks.forEach((block) => body.appendChild(renderGameBinderBlock(block)));
+        gameBinderDetail.replaceChildren(header, body);
+        gameBinderDetail.scrollTop = 0;
+        gameBinderPosition.textContent = `RECORD ${file.number} / ${String(files.length).padStart(2, '0')} // ${file.status}`;
+        gameBinderDetail.classList.remove('is-refreshing');
+        void gameBinderDetail.offsetWidth;
+        gameBinderDetail.classList.add('is-refreshing');
+        if (settings.focusDetail) gameBinderDetail.focus({ preventScroll: true });
+    }
+
+    function initializeGameBinder() {
+        if (gameBinderInitialized) return;
+        const files = Array.isArray(window.BEFORE_TIMES_GAME_BINDER)
+            ? window.BEFORE_TIMES_GAME_BINDER
+            : [];
+        gameBinderInitialized = true;
+
+        if (!files.length) {
+            gameBinderDetail.appendChild(makeGameBinderElement(
+                'p',
+                'bt-game-binder-empty',
+                'ERROR 404 // No recovered narrative records found.'
+            ));
+            return;
+        }
+
+        files.forEach((file) => {
+            const button = makeGameBinderElement('button', 'bt-game-binder-index-item');
+            button.type = 'button';
+            button.dataset.gameBinderFile = file.id;
+            button.setAttribute('aria-pressed', 'false');
+            button.appendChild(makeGameBinderElement('span', 'bt-game-binder-index-code', `${file.number} / ${file.status}`));
+            button.appendChild(makeGameBinderElement('strong', '', file.title));
+            button.appendChild(makeGameBinderElement('span', 'bt-game-binder-index-subtitle', file.subtitle));
+            button.appendChild(makeGameBinderElement('span', 'bt-game-binder-index-meta', `${file.year} · ${file.format}`));
+            button.addEventListener('click', () => selectGameBinderFile(file.id));
+            gameBinderIndex.appendChild(button);
+        });
+
+        gameBinderIndex.addEventListener('keydown', (event) => {
+            if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+            const buttons = Array.from(gameBinderIndex.querySelectorAll('[data-game-binder-file]'));
+            const currentIndex = Math.max(0, buttons.indexOf(document.activeElement));
+            let nextIndex = currentIndex;
+            if (event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % buttons.length;
+            if (event.key === 'ArrowUp') nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+            if (event.key === 'Home') nextIndex = 0;
+            if (event.key === 'End') nextIndex = buttons.length - 1;
+            event.preventDefault();
+            buttons[nextIndex].focus({ preventScroll: true });
+            buttons[nextIndex].click();
+            buttons[nextIndex].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        });
+
+        selectGameBinderFile(files[0].id);
+    }
+
+    function openGameBinder() {
+        initializeGameBinder();
+        openDialog(gameBinderDialog);
+        const card = gameBinderDialog.querySelector('.bt-game-binder-card');
+        card.classList.remove('is-booting');
+        void card.offsetWidth;
+        card.classList.add('is-booting');
+        window.setTimeout(() => card.classList.remove('is-booting'), 520);
+        window.requestAnimationFrame(() => {
+            const activeFile = currentGameBinderFile && currentGameBinderFile.id;
+            const activeButton = activeFile
+                ? gameBinderIndex.querySelector(`[data-game-binder-file="${activeFile}"]`)
+                : gameBinderIndex.querySelector('button');
+            if (activeButton) activeButton.focus({ preventScroll: true });
+        });
     }
 
     function renderArchiveBody(blocks) {
@@ -2023,6 +2348,26 @@
         gameScene.classList.add('has-game-selection');
     }
 
+    function updateMocapRole() {
+        const row = document.createElement('span');
+        const number = document.createElement('b');
+        const label = document.createElement('span');
+        currentGameProject = null;
+        gameRoleCase.textContent = 'MC / 03';
+        gameRoleTitle.textContent = 'MOCAP ARCHIVE';
+        gameRoleYear.textContent = 'BTS';
+        row.className = 'bt-game-role-credit-row';
+        number.textContent = '01';
+        label.textContent = 'Motion-Capture Performer';
+        row.append(number, label);
+        gameRoleCopy.replaceChildren(row);
+        gameRoleState.textContent = 'FIELD TAPE ROLLING';
+        gameScene.style.setProperty('--bt-game-glow-rgb', '143 86 210');
+        gameScene.style.setProperty('--bt-game-glow-hi-rgb', '211 157 255');
+        gameScene.classList.add('has-game-selection');
+        setGameCaseState('');
+    }
+
     function cloneMonitorCalibrationDefaults() {
         return JSON.parse(JSON.stringify(MONITOR_CALIBRATION_DEFAULTS));
     }
@@ -2274,6 +2619,224 @@
         });
     }
 
+    function cloneDocumentCalibrationDefaults() {
+        return JSON.parse(JSON.stringify(DOCUMENT_CALIBRATION_DEFAULTS));
+    }
+
+    function readDocumentCalibration() {
+        const calibration = cloneDocumentCalibrationDefaults();
+
+        try {
+            const saved = JSON.parse(localStorage.getItem(DOCUMENT_CALIBRATION_STORAGE_KEY) || 'null');
+            ['before', 'after'].forEach((surface) => {
+                ['tl', 'tr', 'br', 'bl'].forEach((corner) => {
+                    const point = saved && saved[surface] && saved[surface][corner];
+                    if (!Array.isArray(point) || point.length !== 2) return;
+                    const x = Number(point[0]);
+                    const y = Number(point[1]);
+                    if (Number.isFinite(x) && Number.isFinite(y)) {
+                        calibration[surface][corner] = [x, y];
+                    }
+                });
+            });
+        } catch (error) {
+            // The default document keystones remain usable when storage is unavailable.
+        }
+
+        return calibration;
+    }
+
+    function saveDocumentCalibration() {
+        try {
+            localStorage.setItem(DOCUMENT_CALIBRATION_STORAGE_KEY, JSON.stringify(documentCalibration));
+        } catch (error) {
+            // Calibration still works for the current page view without persistence.
+        }
+    }
+
+    function applyKnowledgeDocumentKeystone(surfaceName) {
+        const surface = knowledgeDocumentSurfaces[surfaceName];
+        const points = documentCalibration && documentCalibration[surfaceName];
+        const plane = surface && surface.querySelector('.bt-knowledge-document-plane');
+        if (!surface || !points || !plane) return;
+
+        const corners = ['tl', 'tr', 'br', 'bl'];
+        const xs = corners.map((corner) => points[corner][0]);
+        const ys = corners.map((corner) => points[corner][1]);
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+        if (maxX - minX < 0.01 || maxY - minY < 0.01) return;
+
+        surface.style.left = `${minX}%`;
+        surface.style.top = `${minY}%`;
+        surface.style.width = `${maxX - minX}%`;
+        surface.style.height = `${maxY - minY}%`;
+
+        const surfaceWidth = surface.clientWidth;
+        const surfaceHeight = surface.clientHeight;
+        const sourceWidth = plane.offsetWidth;
+        const sourceHeight = plane.offsetHeight;
+        if (!surfaceWidth || !surfaceHeight || !sourceWidth || !sourceHeight) return;
+
+        const quad = corners.map((corner) => ({
+            x: ((points[corner][0] - minX) / (maxX - minX)) * surfaceWidth,
+            y: ((points[corner][1] - minY) / (maxY - minY)) * surfaceHeight
+        }));
+        const matrix = createRectangleToQuadMatrix(sourceWidth, sourceHeight, quad);
+        if (!matrix) return;
+        const formatted = matrix.map((value) => Math.abs(value) < 1e-10 ? 0 : Number(value.toFixed(10)));
+        plane.style.transform = `matrix3d(${formatted.join(',')})`;
+    }
+
+    function applyKnowledgeDocumentKeystones() {
+        applyKnowledgeDocumentKeystone('before');
+        applyKnowledgeDocumentKeystone('after');
+    }
+
+    function initializeKnowledgeDocumentKeystones() {
+        documentCalibration = readDocumentCalibration();
+        applyKnowledgeDocumentKeystones();
+        if ('ResizeObserver' in window) {
+            knowledgeDocumentResizeObserver = new ResizeObserver(applyKnowledgeDocumentKeystones);
+            knowledgeDocumentResizeObserver.observe(knowledgeScene);
+        } else {
+            window.addEventListener('resize', applyKnowledgeDocumentKeystones);
+        }
+    }
+
+    function updateDocumentCalibrationView() {
+        if (!documentCalibration) return;
+        const cornerOrder = ['tl', 'tr', 'br', 'bl'];
+
+        documentCalibrationHandles.forEach((handle) => {
+            const point = documentCalibration[handle.dataset.documentCalibrationSurface][handle.dataset.documentCalibrationCorner];
+            handle.style.left = `${point[0]}%`;
+            handle.style.top = `${point[1]}%`;
+        });
+
+        documentCalibrationPolygons.forEach((polygon) => {
+            const points = cornerOrder
+                .map((corner) => documentCalibration[polygon.dataset.documentCalibrationPolygon][corner].join(','))
+                .join(' ');
+            polygon.setAttribute('points', points);
+        });
+
+        documentCalibrationOutput.textContent = JSON.stringify(documentCalibration, null, 2);
+        applyKnowledgeDocumentKeystones();
+    }
+
+    function moveDocumentCalibrationHandle(handle, clientX, clientY) {
+        const sceneBounds = knowledgeScene.getBoundingClientRect();
+        if (!sceneBounds.width || !sceneBounds.height) return;
+        const surface = handle.dataset.documentCalibrationSurface;
+        const corner = handle.dataset.documentCalibrationCorner;
+        const x = Math.min(100, Math.max(0, ((clientX - sceneBounds.left) / sceneBounds.width) * 100));
+        const y = Math.min(100, Math.max(0, ((clientY - sceneBounds.top) / sceneBounds.height) * 100));
+        documentCalibration[surface][corner] = [roundMonitorCalibration(x), roundMonitorCalibration(y)];
+        updateDocumentCalibrationView();
+        saveDocumentCalibration();
+    }
+
+    function initializeDocumentCalibration() {
+        if (new URLSearchParams(window.location.search).get('calibrate') !== 'documents') return;
+        if (!documentCalibrationLayer || !documentCalibrationOutput) return;
+
+        const pointerIds = new WeakMap();
+        documentCalibrationLayer.hidden = false;
+        document.body.classList.add('bt-calibrating-documents');
+        updateDocumentCalibrationView();
+
+        documentCalibrationVisibilityToggles.forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+                const surface = toggle.dataset.documentCalibrationVisibility;
+                const visible = toggle.getAttribute('aria-pressed') !== 'true';
+                documentCalibrationLayer.classList.toggle(`is-${surface}-hidden`, !visible);
+                toggle.setAttribute('aria-pressed', String(visible));
+                toggle.textContent = `${surface === 'before' ? 'Before' : 'After'} guides: ${visible ? 'on' : 'off'}`;
+            });
+        });
+
+        documentCalibrationArt.addEventListener('click', () => {
+            const visible = documentCalibrationArt.getAttribute('aria-pressed') !== 'true';
+            document.body.classList.toggle('bt-calibration-hide-documents', !visible);
+            documentCalibrationArt.setAttribute('aria-pressed', String(visible));
+            documentCalibrationArt.textContent = `Document art: ${visible ? 'on' : 'off'}`;
+        });
+
+        documentCalibrationHandles.forEach((handle) => {
+            handle.addEventListener('pointerdown', (event) => {
+                if (event.button !== 0) return;
+                event.preventDefault();
+                pointerIds.set(handle, event.pointerId);
+                handle.setPointerCapture(event.pointerId);
+                handle.classList.add('is-dragging');
+                moveDocumentCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            handle.addEventListener('pointermove', (event) => {
+                if (pointerIds.get(handle) !== event.pointerId) return;
+                event.preventDefault();
+                moveDocumentCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            const finishDrag = (event) => {
+                if (pointerIds.get(handle) !== event.pointerId) return;
+                pointerIds.delete(handle);
+                handle.classList.remove('is-dragging');
+                if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+                saveDocumentCalibration();
+            };
+            handle.addEventListener('pointerup', finishDrag);
+            handle.addEventListener('pointercancel', finishDrag);
+            handle.addEventListener('keydown', (event) => {
+                const offsets = {
+                    ArrowLeft: [-1, 0],
+                    ArrowRight: [1, 0],
+                    ArrowUp: [0, -1],
+                    ArrowDown: [0, 1]
+                };
+                if (!offsets[event.key]) return;
+                event.preventDefault();
+                const surface = handle.dataset.documentCalibrationSurface;
+                const corner = handle.dataset.documentCalibrationCorner;
+                const point = documentCalibration[surface][corner];
+                const step = event.shiftKey ? 0.1 : 0.25;
+                documentCalibration[surface][corner] = [
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[0] + offsets[event.key][0] * step))),
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[1] + offsets[event.key][1] * step)))
+                ];
+                updateDocumentCalibrationView();
+                saveDocumentCalibration();
+            });
+        });
+
+        documentCalibrationCopy.addEventListener('click', async () => {
+            const payload = JSON.stringify(documentCalibration, null, 2);
+            const originalLabel = documentCalibrationCopy.textContent;
+            try {
+                await navigator.clipboard.writeText(payload);
+                documentCalibrationCopy.textContent = 'Copied — paste into chat';
+            } catch (error) {
+                documentCalibrationCopy.textContent = 'Select the JSON above';
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(documentCalibrationOutput);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            window.setTimeout(() => {
+                documentCalibrationCopy.textContent = originalLabel;
+            }, 2200);
+        });
+
+        documentCalibrationReset.addEventListener('click', () => {
+            documentCalibration = cloneDocumentCalibrationDefaults();
+            updateDocumentCalibrationView();
+            saveDocumentCalibration();
+            documentCalibrationHandles[0].focus({ preventScroll: true });
+        });
+    }
+
     function setGameCaseState(state) {
         const roleStates = {
             loading: 'LINKING TRAILER',
@@ -2366,6 +2929,7 @@
         if (!project) return;
         const restartCurrent = currentGameProject && currentGameProject.key === project.key;
 
+        stopMocapGif();
         updateGameRole(project);
         setGameCaseState('loading');
         gamePlayFallback.hidden = true;
@@ -2409,6 +2973,61 @@
         }
         gamePlayer.playVideo();
         gamePlayFallback.hidden = true;
+    }
+
+    function chooseMocapGif() {
+        let index = Math.floor(Math.random() * MOCAP_GIFS.length);
+        if (MOCAP_GIFS.length > 1 && index === lastMocapGifIndex) {
+            index = (index + 1 + Math.floor(Math.random() * (MOCAP_GIFS.length - 1))) % MOCAP_GIFS.length;
+        }
+        lastMocapGifIndex = index;
+        return MOCAP_GIFS[index];
+    }
+
+    function stopMocapGif() {
+        window.clearTimeout(mocapPlaybackTimer);
+        mocapPlaybackTimer = 0;
+        const wasActive = gameTrailerScreen.classList.contains('is-mocap');
+        gameTrailerScreen.classList.remove('is-mocap');
+        if (wasActive) {
+            gameTrailerScreen.classList.remove('is-loaded', 'is-playing');
+            gameScene.classList.remove('is-trailer-playing');
+        }
+        if (!gameMocapGif) return;
+        gameMocapGif.onload = null;
+        gameMocapGif.hidden = true;
+        gameMocapGif.removeAttribute('src');
+        gameMocapGif.alt = '';
+    }
+
+    function finishMocapGif() {
+        if (!gameTrailerScreen.classList.contains('is-mocap')) return;
+        stopMocapGif();
+        gameRoleState.textContent = 'FIELD TAPE COMPLETE';
+        gameTrailerScreen.classList.add('is-powering-off');
+        window.setTimeout(() => gameTrailerScreen.classList.remove('is-powering-off'), 700);
+    }
+
+    function cueMocapGif() {
+        const clip = chooseMocapGif();
+        window.clearTimeout(gameFallbackTimer);
+        stopMocapGif();
+        updateMocapRole();
+        if (gamePlayer && typeof gamePlayer.pauseVideo === 'function') gamePlayer.pauseVideo();
+        gamePlayFallback.hidden = true;
+        gameMocapGif.alt = clip.label;
+        gameMocapGif.onload = () => {
+            if (!gameTrailerScreen.classList.contains('is-mocap')) return;
+            if (gameMocapGif.getAttribute('src') !== clip.src) return;
+            window.clearTimeout(mocapPlaybackTimer);
+            mocapPlaybackTimer = window.setTimeout(finishMocapGif, clip.durationMs);
+        };
+        gameMocapGif.src = clip.src;
+        gameMocapGif.hidden = false;
+        gameTrailerScreen.classList.remove('is-loading', 'is-powering-off');
+        gameTrailerScreen.classList.add('is-loaded', 'is-playing', 'is-mocap');
+        gameScene.classList.add('is-trailer-playing');
+        showStatus(`${clip.label}. Select the mocap suit again for another field tape.`, 4600);
     }
 
     function deactivateProductionScreen(screen, withBlip) {
@@ -2610,10 +3229,12 @@
     function leaveGameRoom(options) {
         const settings = options || {};
         if (activeRoom !== 'games') return;
+        if (gameBinderDialog.open) closeDialog(gameBinderDialog);
         setInventoryDrawerOpen(false, false);
         activeRoom = 'lobby';
         window.clearTimeout(gameFallbackTimer);
         if (gamePlayer && typeof gamePlayer.pauseVideo === 'function') gamePlayer.pauseVideo();
+        stopMocapGif();
         gamePlayFallback.hidden = true;
         gameTrailerScreen.classList.remove('is-loading', 'is-playing');
         gameScene.classList.remove('is-trailer-playing');
@@ -2691,28 +3312,106 @@
         window.setTimeout(() => contentDoorHotspot.focus({ preventScroll: true }), 60);
     }
 
+    async function enterKnowledgeRoom(options) {
+        const settings = options || {};
+        if (activeRoom === 'knowledge' || knowledgeRoomOpening) return;
+        knowledgeRoomOpening = true;
+        if (!knowledgeArt.complete || !knowledgeArt.naturalWidth) {
+            showStatus('Mapping the documentation labyrinth…', 3200);
+            try {
+                await knowledgeArt.decode();
+            } catch (error) {
+                // The image element will still show its normal fallback behavior.
+            }
+        }
+        knowledgeRoomOpening = false;
+        if (infoDialog.open) closeDialog(infoDialog);
+        radioAudio.pause();
+        activeRoom = 'knowledge';
+        lobbyScroll.hidden = true;
+        knowledgeScroll.hidden = false;
+        mobileFloorplan.hidden = true;
+        mobileRoomExit.hidden = false;
+        document.body.classList.add('bt-room-knowledge');
+        knowledgeScene.classList.remove('is-entering');
+        void knowledgeScene.offsetWidth;
+        knowledgeScene.classList.add('is-entering');
+        knowledgeScroll.scrollLeft = 0;
+        syncKnowledgeState();
+
+        if (settings.updateHistory !== false && window.location.hash !== '#knowledge-maze') {
+            window.history.pushState({ btRoom: 'knowledge' }, '', '#knowledge-maze');
+        }
+        showStatus(
+            knowledgeBreached
+                ? 'The Knowledge Maze. The path back to the present remains open.'
+                : 'The Knowledge Maze. Three evidence stations can restore the terminal’s missing context.',
+            4800
+        );
+        const focusTarget = knowledgeBreached
+            ? knowledgePresentPortal
+            : (knowledgeEvidenceHotspots.find((hotspot) => !knowledgeContext.has(hotspot.dataset.knowledgeKey)) || knowledgeAsk);
+        window.setTimeout(() => focusTarget.focus({ preventScroll: true }), 380);
+    }
+
+    function leaveKnowledgeRoom(options) {
+        const settings = options || {};
+        if (activeRoom !== 'knowledge') return;
+        window.clearTimeout(knowledgeRuptureTimer);
+        knowledgeTerminal.classList.remove('is-answering');
+        knowledgeScene.classList.remove('is-rupturing');
+        knowledgePresentVideo.pause();
+        activeRoom = 'lobby';
+        knowledgeScroll.hidden = true;
+        lobbyScroll.hidden = false;
+        mobileFloorplan.hidden = false;
+        mobileRoomExit.hidden = true;
+        document.body.classList.remove('bt-room-knowledge');
+
+        if (settings.updateHistory !== false) {
+            if (window.history.state && window.history.state.btRoom === 'knowledge') {
+                window.history.back();
+            } else {
+                window.history.replaceState({ btRoom: 'lobby' }, '', `${window.location.pathname}${window.location.search}`);
+            }
+        }
+        showStatus('Back in the lobby. The fracture remains.', 2400);
+        window.setTimeout(() => knowledgeDoorHotspot.focus({ preventScroll: true }), 60);
+    }
+
     function syncRoomFromLocation() {
         if (window.location.hash === '#absurd-alchemy') {
             if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
             if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+            if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
             enterAlchemyRoom({ updateHistory: false });
             return;
         }
         if (window.location.hash === '#game-development') {
             if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
             if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+            if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
             enterGameRoom({ updateHistory: false });
             return;
         }
         if (window.location.hash === '#content-factory') {
             if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
             if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
+            if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
             enterContentRoom({ updateHistory: false });
+            return;
+        }
+        if (window.location.hash === '#knowledge-maze') {
+            if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
+            if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
+            if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+            enterKnowledgeRoom({ updateHistory: false });
             return;
         }
         if (activeRoom === 'alchemy') leaveAlchemyRoom({ updateHistory: false });
         if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
         if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
+        if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
     }
 
     function playTapeTwentyFive() {
@@ -2737,6 +3436,10 @@
         const panel = PANELS[panelId];
         if (!panel) return;
 
+        infoSecondary.textContent = 'Back to the lobby';
+        knowledgeDocumentViewer.hidden = true;
+        infoDialog.classList.remove('bt-knowledge-documents-dialog');
+
         infoKicker.textContent = panel.kicker || '';
         infoTitle.textContent = panel.title;
         infoCopy.replaceChildren(...(panel.copy || []).map(makeParagraph));
@@ -2760,8 +3463,16 @@
                     window.setTimeout(() => enterAlchemyRoom(), 30);
                     return;
                 }
+                if (route.id === 'games') {
+                    window.setTimeout(() => enterGameRoom(), 30);
+                    return;
+                }
                 if (route.id === 'content') {
                     window.setTimeout(() => enterContentRoom(), 30);
+                    return;
+                }
+                if (route.id === 'docs') {
+                    window.setTimeout(() => enterKnowledgeRoom(), 30);
                     return;
                 }
                 window.setTimeout(() => openPanel(route.id), 30);
@@ -2986,6 +3697,15 @@
                 }
                 return;
             }
+            if (panelId === 'docs') {
+                animateLayer(button, 'is-activating', 680);
+                if (prefersReducedMotion.matches) {
+                    enterKnowledgeRoom();
+                } else {
+                    window.setTimeout(() => enterKnowledgeRoom(), 360);
+                }
+                return;
+            }
             const hasDoorwayAnimation = panelId === 'portal' || button.classList.contains('bt-layered-doorway');
             if (!hasDoorwayAnimation) {
                 openPanel(panelId);
@@ -3036,10 +3756,8 @@
         button.addEventListener('click', () => {
             const action = button.dataset.gameAction;
             if (action === 'lobby') leaveGameRoom();
-            if (action === 'binder') openPanel('games');
-            if (action === 'mocap') {
-                showStatus('The mocap tape has a home. Its source file is still hiding in the physical archive.', 4400);
-            }
+            if (action === 'binder') openGameBinder();
+            if (action === 'mocap') cueMocapGif();
         });
     });
 
@@ -3053,6 +3771,18 @@
             }
         });
     });
+
+    knowledgeEvidenceHotspots.forEach((button) => {
+        button.addEventListener('click', () => openKnowledgeExhibit(button.dataset.knowledgeKey));
+    });
+
+    document.querySelectorAll('[data-knowledge-action]').forEach((button) => {
+        button.addEventListener('click', () => {
+            if (button.dataset.knowledgeAction === 'lobby') leaveKnowledgeRoom();
+        });
+    });
+
+    knowledgeAsk.addEventListener('click', openKnowledgeBreach);
 
     productionScreens.forEach((screen, index) => {
         screen.addEventListener('click', () => triggerProductionGhost(index));
@@ -3120,7 +3850,7 @@
         button.addEventListener('click', () => closeDialog(button.closest('dialog')));
     });
 
-    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog].forEach((dialog) => {
+    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog, gameBinderDialog].forEach((dialog) => {
         dialog.addEventListener('click', (event) => {
             if (event.target === dialog) closeDialog(dialog);
         });
@@ -3266,6 +3996,7 @@
         if (activeRoom === 'alchemy') leaveAlchemyRoom();
         if (activeRoom === 'games') leaveGameRoom();
         if (activeRoom === 'content') leaveContentRoom();
+        if (activeRoom === 'knowledge') leaveKnowledgeRoom();
     });
 
     radioAudio.addEventListener('ended', () => {
@@ -3276,11 +4007,14 @@
         if (document.hidden) {
             window.clearTimeout(productionTimer);
             stopProductionScreens();
+            knowledgePresentVideo.pause();
             if (activeRoom === 'games' && gamePlayer && typeof gamePlayer.pauseVideo === 'function') {
                 gamePlayer.pauseVideo();
             }
         } else if (activeRoom === 'alchemy') {
             scheduleProductionGhost(2400);
+        } else if (activeRoom === 'knowledge' && knowledgeBreached && !prefersReducedMotion.matches) {
+            knowledgePresentVideo.play().catch(() => {});
         }
     });
 
@@ -3292,12 +4026,16 @@
     contentQuarterLocation = hasContentQuarter && savedInventory.contentQuarterLocation === 'newsstand'
         ? 'newsstand'
         : (hasContentQuarter ? 'inventory' : 'room');
+    const savedKnowledge = readKnowledgeState();
+    knowledgeContext = new Set(savedKnowledge.context);
+    knowledgeBreached = savedKnowledge.breached;
     syncPenInventory();
     syncQuarterInventory();
+    syncKnowledgeState();
     renderAlchemyPlaylist();
     initializeGameMonitorKeystones();
     initializeMonitorCalibration();
+    initializeKnowledgeDocumentKeystones();
+    initializeDocumentCalibration();
     syncRoomFromLocation();
-    initializeArchiveGate();
-
 }());

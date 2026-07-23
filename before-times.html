@@ -287,6 +287,44 @@
                 </button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-scripts" type="button" data-alchemy-action="scripts" data-label="Project files" aria-label="Open the Absurd Alchemy project files"></button>
 
+                <div class="bt-monitor-calibration bt-production-calibration" id="bt-production-calibration" hidden>
+                    <svg class="bt-monitor-calibration-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                        <polygon data-production-calibration-quad="upper" points=""></polygon>
+                        <polygon data-production-calibration-quad="lower" points=""></polygon>
+                        <polygon data-production-calibration-contour="upper" points=""></polygon>
+                        <polygon data-production-calibration-contour="lower" points=""></polygon>
+                    </svg>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="upper" data-production-calibration-corner="tl" data-label="UPPER TL" aria-label="Move the upper monitor top-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="upper" data-production-calibration-corner="tr" data-label="UPPER TR" aria-label="Move the upper monitor top-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="upper" data-production-calibration-corner="br" data-label="UPPER BR" aria-label="Move the upper monitor bottom-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="upper" data-production-calibration-corner="bl" data-label="UPPER BL" aria-label="Move the upper monitor bottom-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="lower" data-production-calibration-corner="tl" data-label="LOWER TL" aria-label="Move the lower monitor top-left corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="lower" data-production-calibration-corner="tr" data-label="LOWER TR" aria-label="Move the lower monitor top-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="lower" data-production-calibration-corner="br" data-label="LOWER BR" aria-label="Move the lower monitor bottom-right corner"></button>
+                    <button class="bt-calibration-handle" type="button" data-production-calibration-monitor="lower" data-production-calibration-corner="bl" data-label="LOWER BL" aria-label="Move the lower monitor bottom-left corner"></button>
+                    <aside class="bt-monitor-calibration-panel bt-production-calibration-panel" aria-label="Production monitor contour calibration controls">
+                        <strong>Production monitor contours</strong>
+                        <p>Drag each handle to the true corner of the painted tube — where the straight edges would meet. The dashed quad is your corners; the solid line is the generated convex-glass contour. Tune the curvature with the sliders.</p>
+                        <pre id="bt-production-calibration-output" aria-live="polite"></pre>
+                        <label class="bt-production-calibration-slider">Corner radius
+                            <input type="range" id="bt-production-calibration-radius" min="0" max="0.35" step="0.005">
+                            <output id="bt-production-calibration-radius-value"></output>
+                        </label>
+                        <label class="bt-production-calibration-slider">Edge bulge
+                            <input type="range" id="bt-production-calibration-bulge" min="0" max="0.08" step="0.001">
+                            <output id="bt-production-calibration-bulge-value"></output>
+                        </label>
+                        <div>
+                            <button type="button" data-production-calibration-visibility="upper" aria-pressed="true">Upper guides: on</button>
+                            <button type="button" data-production-calibration-visibility="lower" aria-pressed="true">Lower guides: on</button>
+                            <button type="button" id="bt-production-calibration-screens" aria-controls="bt-production-calibration" aria-pressed="true">Screen overlays: on</button>
+                            <button type="button" id="bt-production-calibration-copy">Copy points</button>
+                            <button type="button" id="bt-production-calibration-reset">Reset</button>
+                            <a href="/before-times.html#absurd-alchemy">Exit calibration</a>
+                        </div>
+                    </aside>
+                </div>
+
                 <div class="bt-scene-status bt-alchemy-scene-status" id="bt-alchemy-scene-status" role="status" aria-live="polite"></div>
             </section>
         </div>

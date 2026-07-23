@@ -212,6 +212,33 @@ with immutable caching. The old thumbnail-derived
 `sagan-production-fragment-a/b.mp4` files remain on disk but are out of the
 rotation.
 
+For re-measuring the two production monitors' glass, open
+`/before-times.html?calibrate=production#absurd-alchemy`. This is the
+generalized four-corner tool the game room's `?calibrate=monitors` pioneered,
+with one twist for these convex tubes: the four handles per monitor mark the
+TRUE corners (where the straight edges would meet), and the overlay generates
+the actual glass silhouette from them — quadratic corner arcs plus edges bowed
+outward along their normals, tuned by the panel's Corner radius (fraction of
+the shorter adjacent edge, ≤0.35) and Edge bulge (fraction of edge length,
+≤0.08) sliders. The dashed quad shows the corners; the solid line is the
+generated contour. Contour math runs aspect-corrected against the 1672×941
+plate so curves read circular on screen. State autosaves under
+`bt-production-calibration-v1`; Copy points exports the corners, curvature
+params, and a `generated` block with each monitor's element box
+(left/top/width/height scene %) and a 64-point local `polygon()` ready for
+`--bt-production-upper/lower-shape`. Like the game tool it is measuring-only:
+nothing touches the live CSS until the exported values are applied by hand.
+
+The accepted July 23 measurement (third pass, same day) is applied to the
+CSS and stored as the Reset default: upper `TL [51.63,15.4]`,
+`TR [61.51,15.37]`, `BR [61.36,29.25]`, `BL [51.84,29.28]`; lower
+`TL [51.03,35.62]`, `TR [60.84,36.12]`, `BR [60.8,49.75]`,
+`BL [50.99,49.53]`; cornerRadius `0.16`, edgeBulge `0.025`. Both tubes sit
+far more upright than the original hand-drawn polygons assumed, so the
+inner-video and power-line skews were retuned to the measured edges: the
+upper monitor sits dead level (no skew), the lower eased from `1.7deg` to
+`1.2deg`.
+
 ## July 16–17 finishing-pass notes
 
 ### Layer choices that held up

@@ -536,6 +536,34 @@
             bl: [38.06, 73.25]
         }
     };
+    const PRODUCTION_CALIBRATION_STORAGE_KEY = 'bt-production-calibration-v1';
+    // Corner points are scene percentages at the TRUE corners of each painted
+    // tube — where the straight edges would meet if the glass were flat. The
+    // convex contour (rounded corners, outward-bowed edges) is generated from
+    // them; cornerRadius is a fraction of the shorter adjacent edge, edgeBulge
+    // a fraction of each edge's length. Defaults are the accepted July 23
+    // measurement, which the shipped --bt-production-*-shape polygons and
+    // element boxes were generated from.
+    const PRODUCTION_CALIBRATION_DEFAULTS = {
+        upper: {
+            tl: [51.63, 15.4],
+            tr: [61.51, 15.37],
+            br: [61.36, 29.25],
+            bl: [51.84, 29.28]
+        },
+        lower: {
+            tl: [51.03, 35.62],
+            tr: [60.84, 36.12],
+            br: [60.8, 49.75],
+            bl: [50.99, 49.53]
+        },
+        cornerRadius: 0.16,
+        edgeBulge: 0.025
+    };
+    // Room plate is 1672×941; contour math runs in aspect-corrected space so
+    // rounding and bulge read as circular on screen, not squashed by the
+    // percentage grid.
+    const PRODUCTION_CALIBRATION_ASPECT = 1672 / 941;
     const PRODUCTION_LOOPS = [
         {
             src: '/images/before-times/production/fragment-lucifer-2-v1.mp4',
@@ -898,6 +926,19 @@
     const documentCalibrationVisibilityToggles = Array.from(document.querySelectorAll('[data-document-calibration-visibility]'));
     const documentCalibrationHandles = Array.from(document.querySelectorAll('[data-document-calibration-corner]'));
     const documentCalibrationPolygons = Array.from(document.querySelectorAll('[data-document-calibration-polygon]'));
+    const productionCalibrationLayer = document.getElementById('bt-production-calibration');
+    const productionCalibrationOutput = document.getElementById('bt-production-calibration-output');
+    const productionCalibrationCopy = document.getElementById('bt-production-calibration-copy');
+    const productionCalibrationReset = document.getElementById('bt-production-calibration-reset');
+    const productionCalibrationScreens = document.getElementById('bt-production-calibration-screens');
+    const productionCalibrationRadius = document.getElementById('bt-production-calibration-radius');
+    const productionCalibrationRadiusValue = document.getElementById('bt-production-calibration-radius-value');
+    const productionCalibrationBulge = document.getElementById('bt-production-calibration-bulge');
+    const productionCalibrationBulgeValue = document.getElementById('bt-production-calibration-bulge-value');
+    const productionCalibrationVisibilityToggles = Array.from(document.querySelectorAll('[data-production-calibration-visibility]'));
+    const productionCalibrationHandles = Array.from(document.querySelectorAll('[data-production-calibration-corner]'));
+    const productionCalibrationQuads = Array.from(document.querySelectorAll('[data-production-calibration-quad]'));
+    const productionCalibrationContours = Array.from(document.querySelectorAll('[data-production-calibration-contour]'));
     const knowledgeContextElements = {
         human: document.getElementById('bt-knowledge-context-human'),
         goal: document.getElementById('bt-knowledge-context-goal'),
@@ -957,6 +998,7 @@
     let mocapPlaybackTimer = 0;
     let monitorCalibration = null;
     let documentCalibration = null;
+    let productionCalibration = null;
     let productionTimer = null;
     let lastProductionLoop = -1;
     let productionDeck = [];
@@ -3127,6 +3169,310 @@
         });
     }
 
+    function cloneProductionCalibrationDefaults() {
+        return JSON.parse(JSON.stringify(PRODUCTION_CALIBRATION_DEFAULTS));
+    }
+
+    function readProductionCalibration() {
+        const calibration = cloneProductionCalibrationDefaults();
+
+        try {
+            const saved = JSON.parse(localStorage.getItem(PRODUCTION_CALIBRATION_STORAGE_KEY) || 'null');
+            ['upper', 'lower'].forEach((monitor) => {
+                ['tl', 'tr', 'br', 'bl'].forEach((corner) => {
+                    const point = saved && saved[monitor] && saved[monitor][corner];
+                    if (!Array.isArray(point) || point.length !== 2) return;
+                    const x = Number(point[0]);
+                    const y = Number(point[1]);
+                    if (Number.isFinite(x) && Number.isFinite(y)) {
+                        calibration[monitor][corner] = [x, y];
+                    }
+                });
+            });
+            if (saved) {
+                const radius = Number(saved.cornerRadius);
+                const bulge = Number(saved.edgeBulge);
+                if (Number.isFinite(radius)) calibration.cornerRadius = Math.min(0.35, Math.max(0, radius));
+                if (Number.isFinite(bulge)) calibration.edgeBulge = Math.min(0.08, Math.max(0, bulge));
+            }
+        } catch (error) {
+            // The default contours remain usable when local storage is unavailable.
+        }
+
+        return calibration;
+    }
+
+    function saveProductionCalibration() {
+        try {
+            localStorage.setItem(PRODUCTION_CALIBRATION_STORAGE_KEY, JSON.stringify(productionCalibration));
+        } catch (error) {
+            // Calibration still works for the current page view without persistence.
+        }
+    }
+
+    function buildProductionContour(points, cornerRadius, edgeBulge) {
+        // Sampled convex-tube silhouette: quadratic edges bowed outward along
+        // their normals, joined by quadratic corner arcs. Corners run
+        // clockwise (tl → tr → br → bl) in y-down scene space, so the outward
+        // normal of an edge (dx, dy) is (dy, -dx).
+        const corners = ['tl', 'tr', 'br', 'bl'].map((corner) => ({
+            x: points[corner][0] * PRODUCTION_CALIBRATION_ASPECT,
+            y: points[corner][1]
+        }));
+        const toScene = (point) => [
+            roundMonitorCalibration(point.x / PRODUCTION_CALIBRATION_ASPECT),
+            roundMonitorCalibration(point.y)
+        ];
+        const edges = corners.map((corner, index) => {
+            const next = corners[(index + 1) % 4];
+            const dx = next.x - corner.x;
+            const dy = next.y - corner.y;
+            const length = Math.hypot(dx, dy);
+            return { dx, dy, length };
+        });
+        if (edges.some((edge) => edge.length < 1e-6)) return corners.map(toScene);
+
+        // cornerRadius caps at 0.35 of the shorter adjacent edge, so the two
+        // trims on one edge can never consume its full length.
+        const trims = corners.map((corner, index) =>
+            cornerRadius * Math.min(edges[(index + 3) % 4].length, edges[index].length));
+        const starts = corners.map((corner, index) => ({
+            x: corner.x + (edges[index].dx / edges[index].length) * trims[index],
+            y: corner.y + (edges[index].dy / edges[index].length) * trims[index]
+        }));
+        const ends = corners.map((corner, index) => {
+            const next = (index + 1) % 4;
+            return {
+                x: corners[next].x - (edges[index].dx / edges[index].length) * trims[next],
+                y: corners[next].y - (edges[index].dy / edges[index].length) * trims[next]
+            };
+        });
+
+        const contour = [starts[0]];
+        const sampleQuadratic = (start, control, end, steps) => {
+            for (let step = 1; step <= steps; step += 1) {
+                const t = step / steps;
+                const a = (1 - t) * (1 - t);
+                const b = 2 * (1 - t) * t;
+                const c = t * t;
+                contour.push({
+                    x: a * start.x + b * control.x + c * end.x,
+                    y: a * start.y + b * control.y + c * end.y
+                });
+            }
+        };
+
+        for (let index = 0; index < 4; index += 1) {
+            const edge = edges[index];
+            const next = (index + 1) % 4;
+            // The quadratic apex sits halfway to its control point, so the
+            // control offset is twice the requested bulge.
+            const apex = 2 * edgeBulge * edge.length;
+            sampleQuadratic(starts[index], {
+                x: (starts[index].x + ends[index].x) / 2 + (edge.dy / edge.length) * apex,
+                y: (starts[index].y + ends[index].y) / 2 - (edge.dx / edge.length) * apex
+            }, ends[index], 10);
+            sampleQuadratic(ends[index], corners[next], starts[next], 6);
+        }
+        contour.pop(); // The final corner arc lands back on starts[0].
+
+        return contour.map(toScene);
+    }
+
+    function productionContourScenePoints(monitor) {
+        return buildProductionContour(
+            productionCalibration[monitor],
+            productionCalibration.cornerRadius,
+            productionCalibration.edgeBulge
+        );
+    }
+
+    function buildProductionContourCss(scenePoints) {
+        // Convert the scene-percent contour into the element box plus the
+        // local clip-path polygon, following the handoff's four-corner recipe.
+        const xs = scenePoints.map((point) => point[0]);
+        const ys = scenePoints.map((point) => point[1]);
+        const left = Math.min(...xs);
+        const top = Math.min(...ys);
+        const width = Math.max(...xs) - left;
+        const height = Math.max(...ys) - top;
+        if (!width || !height) return null;
+        const polygon = scenePoints
+            .map(([x, y]) => `${roundMonitorCalibration(((x - left) / width) * 100)}% ${roundMonitorCalibration(((y - top) / height) * 100)}%`)
+            .join(', ');
+        return {
+            box: {
+                left: `${roundMonitorCalibration(left)}%`,
+                top: `${roundMonitorCalibration(top)}%`,
+                width: `${roundMonitorCalibration(width)}%`,
+                height: `${roundMonitorCalibration(height)}%`
+            },
+            clipPath: `polygon(${polygon})`
+        };
+    }
+
+    function updateProductionCalibrationView() {
+        if (!productionCalibration) return;
+        const cornerOrder = ['tl', 'tr', 'br', 'bl'];
+
+        productionCalibrationHandles.forEach((handle) => {
+            const point = productionCalibration[handle.dataset.productionCalibrationMonitor][handle.dataset.productionCalibrationCorner];
+            handle.style.left = `${point[0]}%`;
+            handle.style.top = `${point[1]}%`;
+        });
+
+        productionCalibrationQuads.forEach((polygon) => {
+            const points = cornerOrder
+                .map((corner) => productionCalibration[polygon.dataset.productionCalibrationQuad][corner].join(','))
+                .join(' ');
+            polygon.setAttribute('points', points);
+        });
+
+        productionCalibrationContours.forEach((polygon) => {
+            const points = productionContourScenePoints(polygon.dataset.productionCalibrationContour)
+                .map((point) => point.join(','))
+                .join(' ');
+            polygon.setAttribute('points', points);
+        });
+
+        productionCalibrationRadius.value = String(productionCalibration.cornerRadius);
+        productionCalibrationBulge.value = String(productionCalibration.edgeBulge);
+        productionCalibrationRadiusValue.textContent = productionCalibration.cornerRadius.toFixed(3);
+        productionCalibrationBulgeValue.textContent = productionCalibration.edgeBulge.toFixed(3);
+        productionCalibrationOutput.textContent = JSON.stringify(productionCalibration, null, 2);
+    }
+
+    function moveProductionCalibrationHandle(handle, clientX, clientY) {
+        const sceneBounds = alchemyScene.getBoundingClientRect();
+        if (!sceneBounds.width || !sceneBounds.height) return;
+        const monitor = handle.dataset.productionCalibrationMonitor;
+        const corner = handle.dataset.productionCalibrationCorner;
+        const x = Math.min(100, Math.max(0, ((clientX - sceneBounds.left) / sceneBounds.width) * 100));
+        const y = Math.min(100, Math.max(0, ((clientY - sceneBounds.top) / sceneBounds.height) * 100));
+        productionCalibration[monitor][corner] = [roundMonitorCalibration(x), roundMonitorCalibration(y)];
+        updateProductionCalibrationView();
+        saveProductionCalibration();
+    }
+
+    function initializeProductionCalibration() {
+        if (new URLSearchParams(window.location.search).get('calibrate') !== 'production') return;
+        if (!productionCalibrationLayer || !productionCalibrationOutput) return;
+
+        const calibrationPointerIds = new WeakMap();
+        productionCalibration = readProductionCalibration();
+        productionCalibrationLayer.hidden = false;
+        document.body.classList.add('bt-calibrating-production');
+        updateProductionCalibrationView();
+
+        productionCalibrationVisibilityToggles.forEach((toggle) => {
+            toggle.addEventListener('click', () => {
+                const monitor = toggle.dataset.productionCalibrationVisibility;
+                const visible = toggle.getAttribute('aria-pressed') !== 'true';
+                productionCalibrationLayer.classList.toggle(`is-${monitor}-hidden`, !visible);
+                toggle.setAttribute('aria-pressed', String(visible));
+                toggle.textContent = `${monitor === 'upper' ? 'Upper' : 'Lower'} guides: ${visible ? 'on' : 'off'}`;
+            });
+        });
+
+        productionCalibrationScreens.addEventListener('click', () => {
+            const visible = productionCalibrationScreens.getAttribute('aria-pressed') !== 'true';
+            document.body.classList.toggle('bt-production-calibration-hide-screens', !visible);
+            productionCalibrationScreens.setAttribute('aria-pressed', String(visible));
+            productionCalibrationScreens.textContent = `Screen overlays: ${visible ? 'on' : 'off'}`;
+        });
+
+        [productionCalibrationRadius, productionCalibrationBulge].forEach((slider) => {
+            slider.addEventListener('input', () => {
+                const value = Number(slider.value);
+                if (!Number.isFinite(value)) return;
+                if (slider === productionCalibrationRadius) {
+                    productionCalibration.cornerRadius = Math.min(0.35, Math.max(0, value));
+                } else {
+                    productionCalibration.edgeBulge = Math.min(0.08, Math.max(0, value));
+                }
+                updateProductionCalibrationView();
+                saveProductionCalibration();
+            });
+        });
+
+        productionCalibrationHandles.forEach((handle) => {
+            handle.addEventListener('pointerdown', (event) => {
+                if (event.button !== 0) return;
+                event.preventDefault();
+                calibrationPointerIds.set(handle, event.pointerId);
+                handle.setPointerCapture(event.pointerId);
+                handle.classList.add('is-dragging');
+                moveProductionCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            handle.addEventListener('pointermove', (event) => {
+                if (calibrationPointerIds.get(handle) !== event.pointerId) return;
+                event.preventDefault();
+                moveProductionCalibrationHandle(handle, event.clientX, event.clientY);
+            });
+            const finishDrag = (event) => {
+                if (calibrationPointerIds.get(handle) !== event.pointerId) return;
+                calibrationPointerIds.delete(handle);
+                handle.classList.remove('is-dragging');
+                if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+                saveProductionCalibration();
+            };
+            handle.addEventListener('pointerup', finishDrag);
+            handle.addEventListener('pointercancel', finishDrag);
+            handle.addEventListener('keydown', (event) => {
+                const offsets = {
+                    ArrowLeft: [-1, 0],
+                    ArrowRight: [1, 0],
+                    ArrowUp: [0, -1],
+                    ArrowDown: [0, 1]
+                };
+                if (!offsets[event.key]) return;
+                event.preventDefault();
+                const monitor = handle.dataset.productionCalibrationMonitor;
+                const corner = handle.dataset.productionCalibrationCorner;
+                const point = productionCalibration[monitor][corner];
+                const step = event.shiftKey ? 0.1 : 0.25;
+                productionCalibration[monitor][corner] = [
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[0] + offsets[event.key][0] * step))),
+                    roundMonitorCalibration(Math.min(100, Math.max(0, point[1] + offsets[event.key][1] * step)))
+                ];
+                updateProductionCalibrationView();
+                saveProductionCalibration();
+            });
+        });
+
+        productionCalibrationCopy.addEventListener('click', async () => {
+            const payload = JSON.stringify({
+                ...JSON.parse(JSON.stringify(productionCalibration)),
+                generated: {
+                    upper: buildProductionContourCss(productionContourScenePoints('upper')),
+                    lower: buildProductionContourCss(productionContourScenePoints('lower'))
+                }
+            }, null, 2);
+            const originalLabel = productionCalibrationCopy.textContent;
+            try {
+                await navigator.clipboard.writeText(payload);
+                productionCalibrationCopy.textContent = 'Copied — paste into chat';
+            } catch (error) {
+                productionCalibrationCopy.textContent = 'Select the JSON above';
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(productionCalibrationOutput);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            window.setTimeout(() => {
+                productionCalibrationCopy.textContent = originalLabel;
+            }, 2200);
+        });
+
+        productionCalibrationReset.addEventListener('click', () => {
+            productionCalibration = cloneProductionCalibrationDefaults();
+            updateProductionCalibrationView();
+            saveProductionCalibration();
+            productionCalibrationHandles[0].focus({ preventScroll: true });
+        });
+    }
+
     function setGameCaseState(state) {
         const roleStates = {
             loading: 'LINKING TRAILER',
@@ -4664,5 +5010,6 @@
     initializeMonitorCalibration();
     initializeKnowledgeDocumentKeystones();
     initializeDocumentCalibration();
+    initializeProductionCalibration();
     syncRoomFromLocation();
 }());

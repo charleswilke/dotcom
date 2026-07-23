@@ -1536,8 +1536,8 @@
         knowledgeAsk.disabled = !ready || knowledgeBreached;
 
         if (knowledgeBreached) {
-            knowledgeTerminalRequest.textContent = 'I’M A NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
-            knowledgeTerminalResponse.textContent = 'I found a shorter path. The present has been looking for you.';
+            knowledgeTerminalRequest.textContent = 'NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            knowledgeTerminalResponse.textContent = 'New path found. The present awaits!';
             knowledgeDoorHotspot.dataset.label = 'The Knowledge Maze · breach open';
             knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze; its path to the present is open');
             if (activeRoom === 'knowledge' && !document.hidden && !prefersReducedMotion.matches) {
@@ -1551,7 +1551,7 @@
         knowledgeDoorHotspot.dataset.label = 'Enter The Knowledge Maze';
         knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze documentation room');
         if (ready) {
-            knowledgeTerminalRequest.textContent = 'I’M A NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            knowledgeTerminalRequest.textContent = 'NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
             knowledgeTerminalResponse.textContent = 'Context complete. New route discovered.';
         } else if (count > 0) {
             const remaining = 3 - count;

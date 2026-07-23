@@ -2352,10 +2352,6 @@ body.bt-calibrating-documents.bt-calibration-hide-documents .bt-knowledge-docume
     will-change: transform, filter;
 }
 
-.bt-knowledge-document-before {
-    animation: bt-knowledge-document-search 8.6s steps(1, end) infinite;
-}
-
 .bt-knowledge-document-after {
     animation: bt-knowledge-document-route 5.4s ease-in-out infinite alternate;
 }
@@ -2747,24 +2743,6 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     pointer-events: none;
 }
 
-.bt-knowledge-present-call {
-    position: absolute;
-    z-index: 2;
-    right: 7%;
-    bottom: 5%;
-    left: 7%;
-    padding: 0.42cqw 0.3cqw;
-    color: #081419;
-    background: rgba(0, 247, 194, 0.94);
-    border: 1px solid rgba(248, 235, 210, 0.88);
-    box-shadow: 0 0 0.7cqw rgba(0, 247, 194, 0.28);
-    font-size: 0.31cqw;
-    font-weight: 700;
-    line-height: 1.2;
-    text-align: center;
-    text-transform: uppercase;
-}
-
 .bt-knowledge-present-portal:hover,
 .bt-knowledge-present-portal:focus-visible {
     outline: none;
@@ -2795,13 +2773,6 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
 @keyframes bt-knowledge-enter {
     from { opacity: 0; transform: scale(1.025); filter: brightness(0.54) saturate(0.68); }
     to { opacity: 1; transform: scale(1); filter: brightness(1) saturate(1); }
-}
-
-@keyframes bt-knowledge-document-search {
-    0%, 77%, 100% { transform: translate(0, 0) rotate(0deg); }
-    79% { transform: translate(-0.08cqw, 0.04cqw) rotate(-0.22deg); }
-    82% { transform: translate(0.07cqw, -0.05cqw) rotate(0.18deg); }
-    85% { transform: translate(-0.03cqw, 0.02cqw) rotate(-0.08deg); }
 }
 
 @keyframes bt-knowledge-document-route {

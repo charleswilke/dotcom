@@ -2442,17 +2442,21 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
     animation: bt-knowledge-document-route 5.4s ease-in-out infinite alternate;
 }
 
+/* The before-doc only brightens under the spotlight — no nudge; the framed
+   page shouldn't move against its own frame. */
 .bt-knowledge-scene:has(.bt-knowledge-hotspot-docs:hover) .bt-knowledge-document-before,
 .bt-knowledge-scene:has(.bt-knowledge-hotspot-docs:focus-visible) .bt-knowledge-document-before {
     filter: brightness(1.02) saturate(0.92) contrast(1.08) drop-shadow(0 0 0.55cqw rgba(255, 185, 58, 0.25));
-    transform: translate(-0.22cqw, -0.16cqw) rotate(-0.45deg);
 }
 
+/* Same for the after-doc: spotlight only, no lift. The route animation owns
+   `filter` while it runs and would override the glow below, so it stops here —
+   otherwise this rule would do nothing visible at all. */
 .bt-knowledge-scene:has(.bt-knowledge-hotspot-docs:hover) .bt-knowledge-document-after,
 .bt-knowledge-scene:has(.bt-knowledge-hotspot-docs:focus-visible) .bt-knowledge-document-after,
 .bt-knowledge-scene:has(.bt-knowledge-hotspot-docs.is-recovered) .bt-knowledge-document-after {
+    animation: none;
     filter: brightness(1.08) saturate(0.94) contrast(1.06) drop-shadow(0 0 0.75cqw rgba(0, 247, 194, 0.28));
-    transform: translate(0, -0.2cqw) scale(1.012);
 }
 
 .bt-knowledge-scene.is-entering {

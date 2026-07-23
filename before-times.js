@@ -145,6 +145,17 @@
         }
     };
 
+    // The compiled "better question." Each keyed fragment is colour-coded and fills
+    // in as its evidence is recovered; the joiners are the always-present scaffolding.
+    const KNOWLEDGE_REQUEST = [
+        { key: 'human', text: 'NEW BUSINESS OWNER' },
+        { joiner: ' TRYING TO ' },
+        { key: 'goal', text: 'HELP CUSTOMERS FIND THEM' },
+        { joiner: ', BUT ' },
+        { key: 'friction', text: 'I DON’T UNDERSTAND SEO' },
+        { joiner: '.' }
+    ];
+
     const TUNING_TRACKS = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => `/audio/radio_tuning${number}.mp3`);
     const RADIO_EPISODES = [
         {
@@ -1553,6 +1564,35 @@
         }
     }
 
+    function renderKnowledgeRequest() {
+        const nodes = KNOWLEDGE_REQUEST.map((part) => {
+            if (part.joiner) return document.createTextNode(part.joiner);
+            const recovered = knowledgeContext.has(part.key);
+            const span = document.createElement('span');
+            span.className = `bt-ctx-fragment bt-ctx-${part.key}${recovered ? '' : ' is-pending'}`;
+            span.dataset.knowledgeFragment = part.key;
+            if (recovered) {
+                span.textContent = part.text;
+            } else {
+                // Redact each glyph (keep word spacing) — Space Mono keeps the width
+                // identical, so the real phrase drops in with no reflow.
+                span.textContent = part.text.replace(/\S/g, '▓');
+                span.setAttribute('aria-hidden', 'true');
+            }
+            return span;
+        });
+        knowledgeTerminalRequest.replaceChildren(...nodes);
+    }
+
+    function revealKnowledgeFragment(key) {
+        const fragment = knowledgeTerminalRequest.querySelector(`[data-knowledge-fragment="${key}"]`);
+        if (!fragment) return;
+        fragment.classList.remove('is-revealing');
+        void fragment.offsetWidth;
+        fragment.classList.add('is-revealing');
+        window.setTimeout(() => fragment.classList.remove('is-revealing'), 1400);
+    }
+
     function syncKnowledgeState() {
         const count = knowledgeContext.size;
         const ready = count === Object.keys(KNOWLEDGE_EXHIBITS).length;
@@ -1581,7 +1621,7 @@
         knowledgeAsk.disabled = !ready || knowledgeBreached;
 
         if (knowledgeBreached) {
-            knowledgeTerminalRequest.textContent = 'NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            renderKnowledgeRequest();
             knowledgeTerminalResponse.textContent = 'New path found. The present awaits!';
             knowledgeDoorHotspot.dataset.label = 'The Knowledge Maze · breach open';
             knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze; its path to the present is open');
@@ -1596,11 +1636,12 @@
         knowledgeDoorHotspot.dataset.label = 'Enter The Knowledge Maze';
         knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze documentation room');
         if (ready) {
-            knowledgeTerminalRequest.textContent = 'NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
+            renderKnowledgeRequest();
             knowledgeTerminalResponse.textContent = 'Context complete. New route discovered.';
         } else if (count > 0) {
+            // The sentence assembles itself: recovered slots fill in, the rest stay redacted.
+            renderKnowledgeRequest();
             const remaining = 3 - count;
-            knowledgeTerminalRequest.textContent = 'HELP ME WITH MY WEBSITE.';
             knowledgeTerminalResponse.textContent = `${remaining} piece${remaining === 1 ? '' : 's'} of human context still missing.`;
         } else {
             knowledgeTerminalRequest.textContent = 'HELP ME WITH MY WEBSITE.';
@@ -4799,7 +4840,10 @@
     infoDialog.addEventListener('close', () => {
         if (knowledgeFlashKey && activeRoom === 'knowledge') {
             const key = knowledgeFlashKey;
-            window.setTimeout(() => flashKnowledgeRow(key), prefersReducedMotion.matches ? 0 : 130);
+            window.setTimeout(() => {
+                flashKnowledgeRow(key);
+                revealKnowledgeFragment(key);
+            }, prefersReducedMotion.matches ? 0 : 130);
         }
         knowledgeFlashKey = null;
     });

@@ -8,6 +8,11 @@
     --bt-orange: #ff5a36;
     --bt-mint: #00f7c2;
     --bt-lavender: #b89ad8;
+    /* Knowledge Maze context colours — one per recovered piece, reused by the
+       terminal rows and the fragments they compile into in the request sentence. */
+    --bt-ctx-human: #35efd0;
+    --bt-ctx-goal: #ffce5e;
+    --bt-ctx-friction: #ff8763;
 }
 
 * {
@@ -2663,6 +2668,52 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     line-height: 1.18;
 }
 
+/* Colour-coded pieces of the compiled request — each matches its context row. */
+.bt-ctx-fragment {
+    transition: filter 200ms ease;
+}
+
+.bt-ctx-human { color: var(--bt-ctx-human); }
+.bt-ctx-goal { color: var(--bt-ctx-goal); }
+.bt-ctx-friction { color: var(--bt-ctx-friction); }
+
+.bt-ctx-fragment:not(.is-pending) {
+    text-shadow: 0 0 0.5cqw color-mix(in srgb, currentColor 45%, transparent);
+}
+
+/* Not yet recovered: a dim, redacted block that pulses like it is still searching. */
+.bt-ctx-fragment.is-pending {
+    opacity: 0.3;
+    letter-spacing: 0.02em;
+    text-shadow: none;
+    animation: bt-ctx-pending-pulse 1.9s ease-in-out infinite;
+}
+
+/* The moment a piece drops in (fired when the evidence modal closes). */
+.bt-ctx-fragment.is-revealing {
+    animation: bt-ctx-reveal 1s ease-out;
+}
+
+@keyframes bt-ctx-pending-pulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.42; }
+}
+
+@keyframes bt-ctx-reveal {
+    0% { filter: brightness(2); text-shadow: 0 0 0.9cqw currentColor; }
+    100% { filter: brightness(1); text-shadow: 0 0 0.5cqw color-mix(in srgb, currentColor 45%, transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bt-ctx-fragment.is-pending,
+    .bt-ctx-fragment.is-revealing {
+        animation: none;
+    }
+    .bt-ctx-fragment.is-pending {
+        opacity: 0.34;
+    }
+}
+
 /* Full-width rows (label · value) instead of three cramped columns — the
    recovered phrases get the whole screen width to sit on one line. */
 .bt-knowledge-context-list {
@@ -2692,7 +2743,7 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
 }
 
 .bt-knowledge-context-list span {
-    color: #b89ad8;
+    color: color-mix(in srgb, var(--ctx, var(--bt-lavender)) 42%, var(--bt-lavender));
     font-size: 0.54cqw;
     letter-spacing: 0.12em;
 }
@@ -2706,17 +2757,27 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     text-overflow: ellipsis;
 }
 
+/* One colour per context slot — shared with the request-sentence fragments the
+   pieces compile into, so the mapping reads at a glance. */
+.bt-knowledge-context-list p[data-knowledge-context="human"] { --ctx: var(--bt-ctx-human); }
+.bt-knowledge-context-list p[data-knowledge-context="goal"] { --ctx: var(--bt-ctx-goal); }
+.bt-knowledge-context-list p[data-knowledge-context="friction"] { --ctx: var(--bt-ctx-friction); }
+
 .bt-knowledge-context-list p.is-recovered {
-    background: rgba(0, 247, 194, 0.08);
-    border-color: rgba(0, 247, 194, 0.42);
+    background: color-mix(in srgb, var(--ctx) 12%, transparent);
+    border-color: color-mix(in srgb, var(--ctx) 46%, transparent);
+}
+
+.bt-knowledge-context-list p.is-recovered span {
+    color: color-mix(in srgb, var(--ctx) 82%, var(--bt-paper));
 }
 
 .bt-knowledge-context-list p.is-recovered b {
-    color: #d7fcec;
+    color: var(--ctx);
 }
 
 /* One-shot flash when a row's context lands back in the room after the evidence
-   modal closes — the terminal echoes the "you did it" beat. */
+   modal closes — the terminal echoes the "you did it" beat in the slot's colour. */
 .bt-knowledge-context-list p.is-just-recovered {
     animation: bt-knowledge-row-flash 1.4s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform, box-shadow;
@@ -2728,28 +2789,28 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
 
 @keyframes bt-knowledge-row-flash {
     0% {
-        background: rgba(0, 247, 194, 0.55);
-        border-color: rgba(0, 247, 194, 0.95);
-        box-shadow: 0 0 0.14cqw rgba(0, 247, 194, 0.9), 0 0 1.7cqw rgba(0, 247, 194, 0.7);
+        background: color-mix(in srgb, var(--ctx) 55%, transparent);
+        border-color: var(--ctx);
+        box-shadow: 0 0 0.14cqw var(--ctx), 0 0 1.7cqw color-mix(in srgb, var(--ctx) 70%, transparent);
         transform: scale(1.025);
     }
     28% {
-        background: rgba(0, 247, 194, 0.32);
-        border-color: rgba(0, 247, 194, 0.85);
-        box-shadow: 0 0 0.1cqw rgba(0, 247, 194, 0.7), 0 0 1.1cqw rgba(0, 247, 194, 0.5);
+        background: color-mix(in srgb, var(--ctx) 32%, transparent);
+        border-color: color-mix(in srgb, var(--ctx) 85%, transparent);
+        box-shadow: 0 0 0.1cqw color-mix(in srgb, var(--ctx) 70%, transparent), 0 0 1.1cqw color-mix(in srgb, var(--ctx) 50%, transparent);
         transform: scale(1.01);
     }
     100% {
-        background: rgba(0, 247, 194, 0.08);
-        border-color: rgba(0, 247, 194, 0.42);
-        box-shadow: 0 0 0 rgba(0, 247, 194, 0);
+        background: color-mix(in srgb, var(--ctx) 12%, transparent);
+        border-color: color-mix(in srgb, var(--ctx) 46%, transparent);
+        box-shadow: 0 0 0 transparent;
         transform: scale(1);
     }
 }
 
 @keyframes bt-knowledge-row-flash-value {
-    0% { color: #ffffff; text-shadow: 0 0 0.6cqw rgba(0, 247, 194, 0.85); }
-    100% { color: #d7fcec; text-shadow: none; }
+    0% { color: #ffffff; text-shadow: 0 0 0.6cqw var(--ctx); }
+    100% { color: var(--ctx); text-shadow: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

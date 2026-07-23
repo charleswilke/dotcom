@@ -145,14 +145,14 @@
         }
     };
 
-    // The compiled "better question." Each keyed fragment is colour-coded and fills
+    // The compiled "revised question." Each keyed fragment is colour-coded and fills
     // in as its evidence is recovered; the joiners are the always-present scaffolding.
     const KNOWLEDGE_REQUEST = [
         { key: 'human', text: 'NEW BUSINESS OWNER' },
-        { joiner: ' TRYING TO ' },
-        { key: 'goal', text: 'HELP CUSTOMERS FIND THEM' },
+        { joiner: ' SEEKING HELP ' },
+        { key: 'goal', text: 'FINDING CUSTOMERS' },
         { joiner: ', BUT ' },
-        { key: 'friction', text: 'I DON’T UNDERSTAND SEO' },
+        { key: 'friction', text: 'DOESN’T UNDERSTAND SEO' },
         { joiner: '.' }
     ];
 

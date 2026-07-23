@@ -1552,7 +1552,7 @@
         knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze documentation room');
         if (ready) {
             knowledgeTerminalRequest.textContent = 'I’M A NEW BUSINESS OWNER TRYING TO HELP CUSTOMERS FIND ME, BUT I DON’T UNDERSTAND SEO.';
-            knowledgeTerminalResponse.textContent = 'Context complete. The old route still works. I may have found a shorter one.';
+            knowledgeTerminalResponse.textContent = 'Context complete. New route discovered.';
         } else if (count > 0) {
             const remaining = 3 - count;
             knowledgeTerminalRequest.textContent = 'HELP ME WITH MY WEBSITE.';

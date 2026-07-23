@@ -841,6 +841,7 @@
     const inventoryQuarterSlot = document.getElementById('bt-inventory-slot-quarter');
     const inventoryDragGhost = document.getElementById('bt-inventory-drag-ghost');
     const inventoryQuarterDragGhost = document.getElementById('bt-inventory-quarter-drag-ghost');
+    const inventoryCassetteDragGhost = document.getElementById('bt-inventory-cassette-drag-ghost');
     const inventoryDrawer = document.getElementById('bt-inventory-drawer');
     const inventoryHandle = document.getElementById('bt-inventory-handle');
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
@@ -992,6 +993,15 @@
     let quarterPointerLastX = 0;
     let quarterPointerLastY = 0;
     let hasBoatCassette = false;
+    let boatCassetteLocation = 'room';
+    let inventoryCassetteSelected = false;
+    let cassettePointerId = null;
+    let cassetteDragStarted = false;
+    let suppressCassetteClick = false;
+    let cassettePointerStartX = 0;
+    let cassettePointerStartY = 0;
+    let cassettePointerLastX = 0;
+    let cassettePointerLastY = 0;
     let portraitPromptDismissed = false;
 
     function fullscreenElement() {
@@ -1099,7 +1109,11 @@
     }
 
     function boatCassetteIsInInventory() {
-        return hasBoatCassette;
+        return hasBoatCassette && boatCassetteLocation === 'inventory';
+    }
+
+    function boatCassetteIsInRadio() {
+        return hasBoatCassette && boatCassetteLocation === 'radio';
     }
 
     function inventoryHasItems() {
@@ -1123,6 +1137,7 @@
     function saveBoatCassetteState() {
         const inventory = readInventory();
         inventory.boatCassette = hasBoatCassette;
+        inventory.boatCassetteLocation = boatCassetteLocation;
         writeInventory(inventory);
     }
 
@@ -1202,6 +1217,7 @@
 
     function setInventoryPenSelected(selected) {
         if (selected && inventoryQuarterSelected) setInventoryQuarterSelected(false);
+        if (selected && inventoryCassetteSelected) setInventoryCassetteSelected(false);
         inventoryPenSelected = Boolean(selected && penIsInInventory());
         lobbyInventoryPen.classList.toggle('is-selected', inventoryPenSelected);
         lobbyInventoryPen.setAttribute('aria-pressed', String(inventoryPenSelected));
@@ -1305,6 +1321,7 @@
 
     function setInventoryQuarterSelected(selected) {
         if (selected && inventoryPenSelected) setInventoryPenSelected(false);
+        if (selected && inventoryCassetteSelected) setInventoryCassetteSelected(false);
         inventoryQuarterSelected = Boolean(selected && quarterIsInInventory());
         lobbyInventoryQuarter.classList.toggle('is-selected', inventoryQuarterSelected);
         lobbyInventoryQuarter.setAttribute('aria-pressed', String(inventoryQuarterSelected));
@@ -1355,11 +1372,19 @@
     }
 
     function syncRadioAccess() {
-        const unlocked = boatCassetteIsInInventory();
+        const unlocked = boatCassetteIsInRadio();
+        const cassetteReady = boatCassetteIsInInventory();
         radioHotspot.classList.toggle('is-unlocked', unlocked);
-        gameCassetteHotspot.hidden = unlocked;
-        inventoryCassetteSlot.classList.toggle('bt-inventory-slot-filled', unlocked);
-        lobbyInventoryCassette.hidden = !unlocked;
+        gameCassetteHotspot.hidden = hasBoatCassette;
+        inventoryCassetteSlot.classList.toggle('bt-inventory-slot-filled', cassetteReady);
+        lobbyInventoryCassette.hidden = !cassetteReady;
+
+        if (!cassetteReady) {
+            inventoryCassetteSelected = false;
+            lobbyInventoryCassette.classList.remove('is-selected');
+            lobbyInventoryCassette.setAttribute('aria-pressed', 'false');
+            radioHotspot.classList.remove('is-drop-target', 'is-drop-over');
+        }
 
         if (unlocked) {
             radioHotspot.dataset.label = 'The Boat radio archive · unlocked';
@@ -1372,6 +1397,9 @@
             ];
             PANELS.radio.facts = ['Five complete recovered broadcasts', 'Chaz Wilke · John Ugolini · Brayton Cameron', 'Live CRT oscilloscope playback'];
             PANELS.radio.button = { label: 'Open The Boat archive', action: 'broadcasts' };
+        } else if (cassetteReady) {
+            radioHotspot.dataset.label = 'Radio · insert The Boat cassette';
+            radioHotspot.setAttribute('aria-label', 'Drop The Boat cassette from inventory onto the radio');
         }
     }
 
@@ -1379,7 +1407,7 @@
         const settings = options || {};
         syncRadioAccess();
         syncInventoryDrawer();
-        if (settings.openDrawer && hasBoatCassette) setInventoryDrawerOpen(true, true);
+        if (settings.openDrawer && boatCassetteIsInInventory()) setInventoryDrawerOpen(true, true);
     }
 
     function collectBoatCassette() {
@@ -1389,6 +1417,7 @@
         }
 
         hasBoatCassette = true;
+        boatCassetteLocation = 'inventory';
         saveBoatCassetteState();
         inventoryCassetteSlot.classList.add('bt-inventory-slot-filled');
         lobbyInventoryCassette.hidden = false;
@@ -1397,7 +1426,61 @@
             gameCassetteHotspot.hidden = true;
             syncBoatCassetteInventory({ openDrawer: true });
         }, prefersReducedMotion.matches ? 0 : 420);
-        showStatus('“THE BOAT.” Five old broadcasts just unlocked the lobby radio.', 4600);
+        showStatus('“THE BOAT.” Cassette added to inventory. The lobby radio looks ready for it.', 4600);
+    }
+
+    function setInventoryCassetteSelected(selected) {
+        if (selected && inventoryPenSelected) setInventoryPenSelected(false);
+        if (selected && inventoryQuarterSelected) setInventoryQuarterSelected(false);
+        inventoryCassetteSelected = Boolean(selected && boatCassetteIsInInventory());
+        lobbyInventoryCassette.classList.toggle('is-selected', inventoryCassetteSelected);
+        lobbyInventoryCassette.setAttribute('aria-pressed', String(inventoryCassetteSelected));
+        radioHotspot.classList.toggle('is-drop-target', inventoryCassetteSelected);
+        if (inventoryCassetteSelected) {
+            showStatus('Cassette selected. Drag it onto the radio, or activate the radio to insert it.', 4400);
+        }
+    }
+
+    function insertBoatCassetteIntoRadio() {
+        if (!boatCassetteIsInInventory()) return;
+        boatCassetteLocation = 'radio';
+        saveBoatCassetteState();
+        setInventoryCassetteSelected(false);
+        syncBoatCassetteInventory();
+        animateLayer(radioHotspot, 'is-tuning', 780);
+        showStatus('The cassette clicks into place. The Boat is back on the air.', 3600);
+        window.setTimeout(openRadioArchive, prefersReducedMotion.matches ? 0 : 420);
+    }
+
+    function pointerIsOverRadio(clientX, clientY) {
+        if (activeRoom !== 'lobby') return false;
+        const rect = radioHotspot.getBoundingClientRect();
+        return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
+    }
+
+    function moveCassetteDragGhost(clientX, clientY) {
+        inventoryCassetteDragGhost.style.left = `${clientX}px`;
+        inventoryCassetteDragGhost.style.top = `${clientY}px`;
+        radioHotspot.classList.toggle('is-drop-over', pointerIsOverRadio(clientX, clientY));
+    }
+
+    function finishCassetteDrag(event, cancelled) {
+        if (event.pointerId !== cassettePointerId) return;
+        const shouldInsert = !cancelled
+            && cassetteDragStarted
+            && pointerIsOverRadio(cassettePointerLastX, cassettePointerLastY);
+        if (lobbyInventoryCassette.hasPointerCapture && lobbyInventoryCassette.hasPointerCapture(event.pointerId)) {
+            lobbyInventoryCassette.releasePointerCapture(event.pointerId);
+        }
+        inventoryCassetteDragGhost.hidden = true;
+        radioHotspot.classList.remove('is-drop-over');
+        cassettePointerId = null;
+        if (cassetteDragStarted) {
+            suppressCassetteClick = true;
+            window.setTimeout(() => { suppressCassetteClick = false; }, 0);
+        }
+        cassetteDragStarted = false;
+        if (shouldInsert) insertBoatCassetteIntoRadio();
     }
 
     function readKnowledgeState() {
@@ -3930,7 +4013,7 @@
     }
 
     function openRadioArchive() {
-        if (!hasBoatCassette) {
+        if (!boatCassetteIsInRadio()) {
             openPanel('radio');
             return;
         }
@@ -4224,10 +4307,18 @@
             const action = button.dataset.action;
             if (action === 'bell') ringBell();
             if (action === 'radio') {
-                if (hasBoatCassette) {
+                if (boatCassetteIsInRadio()) {
                     animateLayer(radioHotspot, 'is-tuning', 680);
                     if (prefersReducedMotion.matches) openRadioArchive();
                     else window.setTimeout(openRadioArchive, 260);
+                    return;
+                }
+                if (boatCassetteIsInInventory() && inventoryCassetteSelected) {
+                    insertBoatCassetteIntoRadio();
+                    return;
+                }
+                if (boatCassetteIsInInventory()) {
+                    showStatus('The radio is waiting for The Boat cassette. Drag it from inventory, or select it and activate the radio.', 5200);
                     return;
                 }
                 tuneRadio();
@@ -4421,7 +4512,69 @@
         }
         setInventoryQuarterSelected(!inventoryQuarterSelected);
     });
-    lobbyInventoryCassette.addEventListener('click', openRadioArchive);
+    lobbyInventoryCassette.addEventListener('pointerdown', (event) => {
+        if (!boatCassetteIsInInventory() || event.button !== 0 || event.pointerType === 'mouse') return;
+        cassettePointerId = event.pointerId;
+        cassettePointerStartX = event.clientX;
+        cassettePointerStartY = event.clientY;
+        cassettePointerLastX = event.clientX;
+        cassettePointerLastY = event.clientY;
+        cassetteDragStarted = false;
+        if (lobbyInventoryCassette.setPointerCapture) lobbyInventoryCassette.setPointerCapture(event.pointerId);
+    });
+    lobbyInventoryCassette.addEventListener('pointermove', (event) => {
+        if (event.pointerId !== cassettePointerId) return;
+        cassettePointerLastX = event.clientX;
+        cassettePointerLastY = event.clientY;
+        const distance = Math.hypot(event.clientX - cassettePointerStartX, event.clientY - cassettePointerStartY);
+        if (!cassetteDragStarted && distance > 6) {
+            cassetteDragStarted = true;
+            setInventoryCassetteSelected(true);
+            inventoryCassetteDragGhost.hidden = false;
+        }
+        if (cassetteDragStarted) {
+            event.preventDefault();
+            moveCassetteDragGhost(event.clientX, event.clientY);
+        }
+    });
+    lobbyInventoryCassette.addEventListener('pointerup', (event) => finishCassetteDrag(event, false));
+    lobbyInventoryCassette.addEventListener('pointercancel', (event) => finishCassetteDrag(event, true));
+    lobbyInventoryCassette.addEventListener('dragstart', (event) => {
+        if (!boatCassetteIsInInventory()) {
+            event.preventDefault();
+            return;
+        }
+        setInventoryCassetteSelected(true);
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', 'the-boat-cassette');
+    });
+    lobbyInventoryCassette.addEventListener('dragend', () => {
+        radioHotspot.classList.remove('is-drop-over');
+    });
+    radioHotspot.addEventListener('dragover', (event) => {
+        if (!boatCassetteIsInInventory()) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+        radioHotspot.classList.add('is-drop-over');
+    });
+    radioHotspot.addEventListener('dragleave', (event) => {
+        if (!radioHotspot.contains(event.relatedTarget)) {
+            radioHotspot.classList.remove('is-drop-over');
+        }
+    });
+    radioHotspot.addEventListener('drop', (event) => {
+        if (!boatCassetteIsInInventory()) return;
+        event.preventDefault();
+        radioHotspot.classList.remove('is-drop-over');
+        insertBoatCassetteIntoRadio();
+    });
+    lobbyInventoryCassette.addEventListener('click', (event) => {
+        if (suppressCassetteClick) {
+            event.preventDefault();
+            return;
+        }
+        setInventoryCassetteSelected(!inventoryCassetteSelected);
+    });
 
     radioPlay.addEventListener('click', toggleRadioEpisode);
     radioPrev.addEventListener('click', () => loadRadioEpisode(currentRadioEpisode - 1, { autoplay: true }));
@@ -4461,7 +4614,9 @@
             }
             return;
         }
-        showStatus('Only static for now. Something on the Game Development desk might fit the cassette slot.');
+        showStatus(boatCassetteIsInInventory()
+            ? 'Only static. The Boat cassette in inventory looks like it fits the slot.'
+            : 'Only static for now. Something on the Game Development desk might fit the cassette slot.');
     });
 
     document.addEventListener('visibilitychange', () => {
@@ -4488,6 +4643,9 @@
         ? 'newsstand'
         : (hasContentQuarter ? 'inventory' : 'room');
     hasBoatCassette = savedInventory.boatCassette === true;
+    boatCassetteLocation = hasBoatCassette && savedInventory.boatCassetteLocation === 'radio'
+        ? 'radio'
+        : (hasBoatCassette ? 'inventory' : 'room');
     const savedKnowledge = readKnowledgeState();
     knowledgeContext = new Set(savedKnowledge.context);
     knowledgeBreached = savedKnowledge.breached;

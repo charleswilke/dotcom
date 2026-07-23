@@ -827,6 +827,7 @@
     const infoKicker = document.getElementById('bt-dialog-kicker');
     const infoTitle = document.getElementById('bt-dialog-title');
     const knowledgeDocumentViewer = document.getElementById('bt-knowledge-document-viewer');
+    const infoRecovery = document.getElementById('bt-dialog-recovery');
     const infoCopy = document.getElementById('bt-dialog-copy');
     const infoFacts = document.getElementById('bt-dialog-facts');
     const infoRoutes = document.getElementById('bt-dialog-routes');
@@ -1009,6 +1010,8 @@
     let knowledgeContext = new Set();
     let knowledgeBreached = false;
     let knowledgeRuptureTimer = 0;
+    let knowledgeFlashKey = null;
+    let knowledgeFlashTimer = 0;
     let gameBinderInitialized = false;
     let currentGameBinderFile = null;
     let gameMonitorResizeObserver = null;
@@ -1605,6 +1608,58 @@
         }
     }
 
+    function showKnowledgeRecoveryBadge(value) {
+        const total = Object.keys(KNOWLEDGE_EXHIBITS).length;
+        const count = knowledgeContext.size;
+        const complete = count >= total;
+
+        const badge = document.createElement('div');
+        badge.className = 'bt-recovery-badge';
+        badge.classList.toggle('is-complete', complete);
+
+        const glyph = document.createElement('span');
+        glyph.className = 'bt-recovery-badge-glyph';
+        glyph.setAttribute('aria-hidden', 'true');
+        glyph.textContent = '✓';
+
+        const text = document.createElement('span');
+        text.className = 'bt-recovery-badge-text';
+
+        const label = document.createElement('span');
+        label.className = 'bt-recovery-badge-label';
+        label.textContent = complete ? 'Context complete' : 'Context recovered';
+
+        const readout = document.createElement('span');
+        readout.className = 'bt-recovery-badge-value';
+        readout.textContent = value;
+
+        text.append(label, readout);
+
+        const progress = document.createElement('span');
+        progress.className = 'bt-recovery-badge-progress';
+        const done = document.createElement('b');
+        done.textContent = String(count);
+        progress.append(done, ` / ${total}`);
+
+        badge.append(glyph, text, progress);
+        // Re-trigger the entrance animation on every open (the node is fresh each time).
+        infoRecovery.replaceChildren(badge);
+        infoRecovery.hidden = false;
+    }
+
+    function flashKnowledgeRow(key) {
+        const element = knowledgeContextElements[key];
+        if (!element) return;
+        const row = element.closest('[data-knowledge-context]');
+        if (!row) return;
+        window.clearTimeout(knowledgeFlashTimer);
+        row.classList.remove('is-just-recovered');
+        // Force a reflow so the animation restarts on back-to-back recoveries.
+        void row.offsetWidth;
+        row.classList.add('is-just-recovered');
+        knowledgeFlashTimer = window.setTimeout(() => row.classList.remove('is-just-recovered'), 1500);
+    }
+
     function openKnowledgeExhibit(key) {
         const panel = KNOWLEDGE_EXHIBITS[key];
         if (!panel) return;
@@ -1622,9 +1677,14 @@
         infoCopy.replaceChildren(...panel.copy.map(makeParagraph));
         infoFacts.replaceChildren();
         panel.facts.forEach((fact) => {
-            const item = document.createElement('li');
-            item.textContent = fact;
-            infoFacts.appendChild(item);
+            const recoveredMatch = /^Context recovered:\s*(.+)$/i.exec(fact);
+            if (recoveredMatch) {
+                showKnowledgeRecoveryBadge(recoveredMatch[1]);
+            } else {
+                const item = document.createElement('li');
+                item.textContent = fact;
+                infoFacts.appendChild(item);
+            }
         });
         infoRoutes.replaceChildren();
         infoAction.hidden = true;
@@ -1634,7 +1694,9 @@
         openDialog(infoDialog);
 
         if (!wasRecovered) {
-            showStatus(`Human context recovered: ${key.toUpperCase()}.`, 3200);
+            // Remember this piece so its terminal row flashes when the modal closes.
+            knowledgeFlashKey = key;
+            showStatus(`Human context recovered: ${key.toUpperCase()}.`, 3200, 'recovery');
         }
     }
 
@@ -1663,7 +1725,7 @@
         knowledgeRuptureTimer = window.setTimeout(beginRupture, prefersReducedMotion.matches ? 0 : 620);
     }
 
-    function showStatus(message, duration) {
+    function showStatus(message, duration, variant) {
         const sceneStatus = activeRoom === 'alchemy'
             ? alchemySceneStatus
             : (activeRoom === 'games'
@@ -1673,6 +1735,7 @@
                     : (activeRoom === 'knowledge' ? knowledgeSceneStatus : lobbySceneStatus)));
         window.clearTimeout(statusTimer);
         sceneStatus.textContent = message;
+        sceneStatus.classList.toggle('is-recovery', variant === 'recovery');
         sceneStatus.classList.add('is-visible');
         statusTimer = window.setTimeout(() => sceneStatus.classList.remove('is-visible'), duration || 2800);
     }
@@ -4074,6 +4137,8 @@
 
         infoSecondary.textContent = 'Back to the lobby';
         knowledgeDocumentViewer.hidden = true;
+        infoRecovery.hidden = true;
+        infoRecovery.replaceChildren();
         infoDialog.classList.remove('bt-knowledge-documents-dialog');
 
         infoKicker.textContent = panel.kicker || '';
@@ -4727,6 +4792,16 @@
         dialog.addEventListener('click', (event) => {
             if (event.target === dialog) closeDialog(dialog);
         });
+    });
+
+    // When a freshly recovered evidence dialog closes, punch its terminal row so the
+    // "you did it" beat lands back in the room the moment the modal clears.
+    infoDialog.addEventListener('close', () => {
+        if (knowledgeFlashKey && activeRoom === 'knowledge') {
+            const key = knowledgeFlashKey;
+            window.setTimeout(() => flashKnowledgeRow(key), prefersReducedMotion.matches ? 0 : 130);
+        }
+        knowledgeFlashKey = null;
     });
 
     guestbookMessage.addEventListener('input', () => {

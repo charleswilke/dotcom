@@ -644,9 +644,11 @@ Keep prop hover effects to restrained brightness/saturation until the props get
 true per-object background repairs and cleaner mattes.
 
 The radio is the exception only through a separate `.bt-radio-aura` layer. Its
-elliptical body pool and diagonal antenna trace sit behind the extracted raster,
-so the selection glow has breathing room without outlining the dirty matte or
-being clipped by the radio image bounds. Do not fold this effect back into an
+hover treatment is now a soft elliptical mint-and-amber pool centered over the
+radio face with `mix-blend-mode: screen`; the old diagonal antenna trace was
+removed because it read as a stray stripe. The same aura strengthens when the
+radio is a cassette drop target, without outlining the dirty matte or being
+clipped by the radio image bounds. Do not fold the base effect back into an
 image `drop-shadow()`.
 
 The live bell uses `images/before-times/layers/bell-v4.*`, a fresh generated
@@ -900,12 +902,15 @@ master lives beside it and the flat-green generation source is
 position is intentionally an HTML layer rather than a baked plate edit, so the
 same asset can animate into inventory and disappear cleanly after collection.
 
-The cassette shares `bt-inventory-v1` through the `boatCassette` boolean. It is
-a permanent inventory key rather than a consumable location-state item. Once
-collected, the lobby radio changes from its static/tuning panel to the unlocked
-five-episode archive, and the cassette remains visible in both the drawer and
-the lobby inventory row. Clicking either the unlocked radio or the cassette
-opens the dedicated receiver dialog.
+The cassette shares `bt-inventory-v1` through the `boatCassette` boolean and
+`boatCassetteLocation`, which moves from `room` to `inventory` to `radio`.
+Collecting it leaves the lobby radio locked and shows the cassette in both the
+drawer and the centered fourth lobby inventory bay. Mouse and touch visitors
+can drag it onto the radio; click/keyboard visitors can select the cassette and
+then activate the radio. Inserting it removes the cassette from inventory,
+marks the radio as unlocked, and opens the dedicated receiver dialog. Older
+session records with only `boatCassette: true` migrate to the inventory step so
+the insertion can still be played.
 
 The Boat player uses the existing album-player vocabulary: a live mint CRT
 oscilloscope, persistent title/date glass copy, five-track list, previous/play/

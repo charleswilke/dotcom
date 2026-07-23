@@ -235,12 +235,13 @@ a {
 
 .bt-radio-aura {
     position: absolute;
-    z-index: 0;
-    inset: -24% -8% -15% -7%;
+    z-index: 2;
+    inset: -20% -9% -14%;
     pointer-events: none;
     opacity: 0;
+    mix-blend-mode: screen;
     transform: scale(0.965);
-    transform-origin: 52% 70%;
+    transform-origin: 50% 62%;
     transition: opacity 180ms ease, transform 220ms ease;
 }
 
@@ -252,35 +253,29 @@ a {
 }
 
 .bt-radio-aura::before {
-    top: 33%;
-    right: 0;
-    bottom: 4%;
-    left: 0;
-    border-radius: 50%;
+    inset: 22% 1% 4%;
+    border-radius: 48%;
     background: radial-gradient(
-        ellipse at 52% 58%,
-        transparent 0 43%,
-        rgba(255, 216, 135, 0.13) 49%,
-        rgba(0, 247, 194, 0.32) 58%,
-        rgba(0, 247, 194, 0.08) 69%,
-        transparent 80%
+        ellipse at 50% 55%,
+        rgba(255, 216, 135, 0.28) 0 17%,
+        rgba(0, 247, 194, 0.4) 38%,
+        rgba(0, 247, 194, 0.16) 58%,
+        transparent 76%
     );
-    filter: blur(5px);
+    filter: blur(10px);
 }
 
 .bt-radio-aura::after {
-    top: 33%;
-    left: 16%;
-    width: 52%;
-    height: 4px;
-    border-radius: 999px;
-    background: rgba(0, 247, 194, 0.22);
+    top: 46%;
+    left: 27%;
+    width: 46%;
+    height: 30%;
+    border-radius: 50%;
+    background: rgba(0, 247, 194, 0.24);
     box-shadow:
-        0 0 8px rgba(255, 216, 135, 0.58),
-        0 0 17px rgba(0, 247, 194, 0.62);
-    filter: blur(3.5px);
-    transform: rotate(-20.5deg);
-    transform-origin: 0 50%;
+        0 0 22px rgba(255, 216, 135, 0.34),
+        0 0 42px rgba(0, 247, 194, 0.38);
+    filter: blur(13px);
 }
 
 .bt-object-layer-prop {
@@ -730,7 +725,7 @@ a {
 }
 
 .bt-lobby-inventory-cassette {
-    left: 41.35%;
+    left: 44.05%;
 }
 
 .bt-lobby-inventory-item:active {
@@ -835,6 +830,11 @@ a {
 .bt-inventory-quarter-drag-ghost {
     width: clamp(4.5rem, 8vw, 6.5rem);
     transform: translate(-50%, -50%) rotate(9deg) scale(1.06);
+}
+
+.bt-inventory-cassette-drag-ghost {
+    width: clamp(8rem, 14vw, 12rem);
+    transform: translate(-50%, -50%) rotate(-4deg) scale(1.06);
 }
 
 @keyframes bt-portal-breathe {
@@ -4594,8 +4594,37 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 }
 
 .bt-hotspot-radio.is-unlocked .bt-radio-aura {
-    opacity: 0.72;
+    opacity: 0.48;
     filter: hue-rotate(-34deg) saturate(1.2);
+}
+
+.bt-hotspot-radio.is-unlocked:hover .bt-radio-aura,
+.bt-hotspot-radio.is-unlocked:focus-visible .bt-radio-aura,
+.bt-hotspot-radio.is-unlocked.is-tuning .bt-radio-aura {
+    opacity: 0.9;
+    transform: scale(1);
+}
+
+.bt-hotspot-radio.is-drop-target .bt-radio-aura {
+    opacity: 0.86;
+    transform: scale(1.025);
+}
+
+.bt-hotspot-radio.is-drop-target .bt-object-layer-radio {
+    filter: brightness(1.12) saturate(1.14);
+}
+
+.bt-hotspot-radio.is-drop-over .bt-radio-aura {
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+.bt-hotspot-radio.is-drop-over .bt-object-layer-radio {
+    filter:
+        brightness(1.18)
+        saturate(1.2)
+        drop-shadow(0 0 10px rgba(0, 247, 194, 0.72));
+    transform: translateZ(0) scale(1.018);
 }
 
 @keyframes bt-radio-signal-pulse {

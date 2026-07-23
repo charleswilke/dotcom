@@ -2482,7 +2482,7 @@ body.bt-calibrating-documents.bt-calibration-hide-documents .bt-knowledge-docume
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
     gap: 0.34cqw;
     padding: 1.15% 1.35% 1.05%;
     overflow: hidden;
@@ -2514,8 +2514,7 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
 .bt-knowledge-terminal header,
 .bt-knowledge-terminal-request,
 .bt-knowledge-context-list,
-.bt-knowledge-terminal-response,
-.bt-knowledge-ask {
+.bt-knowledge-terminal-footer {
     position: relative;
     z-index: 1;
 }
@@ -2528,35 +2527,41 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     padding-bottom: 0.34cqw;
     color: rgba(215, 252, 236, 0.72);
     border-bottom: 1px solid rgba(0, 247, 194, 0.25);
-    font-size: 0.49cqw;
+    font-size: 0.6cqw;
     letter-spacing: 0.07em;
 }
 
 .bt-knowledge-terminal header strong {
     color: #ffcf77;
-    font-size: 0.55cqw;
+    font-size: 0.66cqw;
     white-space: nowrap;
 }
 
 .bt-knowledge-terminal-request {
     margin: 0;
     color: #f8ebd2;
-    font-size: 0.69cqw;
+    font-size: 0.92cqw;
     font-weight: 700;
     line-height: 1.18;
 }
 
+/* Full-width rows (label · value) instead of three cramped columns — the
+   recovered phrases get the whole screen width to sit on one line. */
 .bt-knowledge-context-list {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.38cqw;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 0.3cqw;
     min-height: 0;
 }
 
 .bt-knowledge-context-list p {
+    display: grid;
+    grid-template-columns: 4.6cqw minmax(0, 1fr);
+    align-items: center;
+    gap: 0.55cqw;
     min-width: 0;
     margin: 0;
-    padding: 0.32cqw 0.38cqw;
+    padding: 0.24cqw 0.5cqw;
     overflow: hidden;
     background: rgba(91, 63, 121, 0.2);
     border: 1px solid rgba(184, 154, 216, 0.22);
@@ -2570,16 +2575,16 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
 
 .bt-knowledge-context-list span {
     color: #b89ad8;
-    font-size: 0.42cqw;
+    font-size: 0.54cqw;
     letter-spacing: 0.12em;
 }
 
 .bt-knowledge-context-list b {
-    margin-top: 0.18cqw;
     overflow: hidden;
     color: rgba(248, 235, 210, 0.42);
-    font-size: 0.51cqw;
+    font-size: 0.76cqw;
     line-height: 1.16;
+    white-space: nowrap;
     text-overflow: ellipsis;
 }
 
@@ -2592,18 +2597,25 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     color: #d7fcec;
 }
 
+.bt-knowledge-terminal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8cqw;
+}
+
 .bt-knowledge-terminal-response {
-    min-height: 1.45em;
+    min-height: 1.2em;
     margin: 0;
     color: rgba(215, 252, 236, 0.78);
-    font-size: 0.53cqw;
-    line-height: 1.2;
+    font-size: 0.66cqw;
+    line-height: 1.25;
 }
 
 .bt-knowledge-ask {
-    justify-self: end;
-    min-height: 1.55cqw;
-    padding: 0.22cqw 0.58cqw;
+    flex-shrink: 0;
+    min-height: 1.7cqw;
+    padding: 0.26cqw 0.66cqw;
     color: #070819;
     background: #00f7c2;
     border: 1px solid #bfffea;
@@ -2611,7 +2623,7 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     box-shadow: 0 0 0.7cqw rgba(0, 247, 194, 0.28);
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.53cqw;
+    font-size: 0.62cqw;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -4024,6 +4036,8 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 
 .bt-knowledge-document-viewer a {
     display: block;
+    width: fit-content;
+    margin-inline: auto;
     overflow: hidden;
     background: #1a1422;
     border: 1px solid rgba(248, 235, 210, 0.32);
@@ -4035,10 +4049,13 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 }
 
 .bt-knowledge-document-viewer img {
-    width: 100%;
-    max-height: 58vh;
+    /* Both dimensions capped with height:auto so the box always keeps the
+       image's aspect ratio — no letterboxed dead space inside the frame. */
     display: block;
-    object-fit: contain;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 58vh;
     transition: transform 220ms ease, filter 220ms ease;
 }
 
@@ -4148,6 +4165,15 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     font-size: clamp(2.15rem, 7vw, 4.5rem);
     font-weight: 400;
     line-height: 0.95;
+}
+
+/* Sentence-length titles (Knowledge Maze evidence, lobby terminal) wrap badly at
+   signage scale; drop them to the archive-piece scale and let the dialog width
+   set the measure — the longest title is ~37ch, so no cap is needed. */
+.bt-dialog.bt-dialog-long-title h1 {
+    max-width: none;
+    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+    line-height: 1.05;
 }
 
 .bt-dialog-copy {

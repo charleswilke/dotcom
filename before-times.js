@@ -1573,7 +1573,7 @@
         syncKnowledgeState();
 
         infoKicker.textContent = panel.kicker;
-        infoTitle.textContent = panel.title;
+        setInfoTitle(panel.title);
         const showDocumentViewer = key === 'goal';
         knowledgeDocumentViewer.hidden = !showDocumentViewer;
         infoDialog.classList.toggle('bt-knowledge-documents-dialog', showDocumentViewer);
@@ -1655,6 +1655,12 @@
         const paragraph = document.createElement('p');
         paragraph.textContent = text;
         return paragraph;
+    }
+
+    function setInfoTitle(text) {
+        infoTitle.textContent = text;
+        // Sentence-length titles drop to a smaller scale (see .bt-dialog-long-title).
+        infoDialog.classList.toggle('bt-dialog-long-title', text.length > 28);
     }
 
     function makeArchiveElement(tag, className, text) {
@@ -3725,7 +3731,7 @@
         infoDialog.classList.remove('bt-knowledge-documents-dialog');
 
         infoKicker.textContent = panel.kicker || '';
-        infoTitle.textContent = panel.title;
+        setInfoTitle(panel.title);
         infoCopy.replaceChildren(...(panel.copy || []).map(makeParagraph));
 
         infoFacts.replaceChildren();

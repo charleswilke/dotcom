@@ -140,8 +140,8 @@
                 'The pressure gauge tracks a 93% reduction in customer-care escalations after one support experience was redesigned. The words mattered because they removed uncertainty at the moment it was becoming expensive.',
                 'The obstacle was not a lack of intelligence. It was unfamiliar language, unclear consequences, and no confidence about the next step.'
             ],
-            facts: ['Context recovered: FRICTION', 'Unfamiliar SEO language', '93% fewer customer-care escalations'],
-            contextValue: 'UNFAMILIAR SEO LANGUAGE'
+            facts: ['Context recovered: FRICTION', 'Unfamiliar with SEO', '93% fewer customer-care escalations'],
+            contextValue: 'UNFAMILIAR WITH SEO'
         }
     };
 
@@ -1637,7 +1637,11 @@
         knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze documentation room');
         if (ready) {
             renderKnowledgeRequest();
-            knowledgeTerminalResponse.textContent = 'Context complete. New route discovered.';
+            knowledgeTerminalResponse.replaceChildren(
+                document.createTextNode('Context complete.'),
+                document.createElement('br'),
+                document.createTextNode('New route discovered.')
+            );
         } else if (count > 0) {
             // The sentence assembles itself: recovered slots fill in, the rest stay redacted.
             renderKnowledgeRequest();

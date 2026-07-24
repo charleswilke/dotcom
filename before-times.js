@@ -865,7 +865,7 @@
     const alchemyHandHotspot = document.querySelector('.bt-alchemy-hotspot-hand');
     const alchemyTwentyFiveHotspot = document.querySelector('.bt-alchemy-hotspot-25');
     const alchemyPenHotspot = document.getElementById('bt-alchemy-pen');
-    const alchemyArtNoPen = document.getElementById('bt-alchemy-art-no-pen');
+    const alchemyPenOverlay = document.getElementById('bt-alchemy-pen-overlay');
     const gameDoorHotspot = document.querySelector('.bt-hotspot-games');
     const gameCaseHotspots = Array.from(document.querySelectorAll('[data-game-key]'));
     const gameCassetteHotspot = document.getElementById('bt-game-cassette');
@@ -1238,7 +1238,7 @@
         inventoryPenSlot.classList.toggle('bt-inventory-slot-filled', penReady);
         lobbyInventoryPen.hidden = !penReady;
         alchemyPenHotspot.hidden = hasAlchemyPen;
-        alchemyArtNoPen.classList.toggle('is-active', hasAlchemyPen);
+        alchemyPenOverlay.classList.toggle('is-active', hasAlchemyPen);
         if (!penReady) {
             inventoryPenSelected = false;
             lobbyInventoryPen.classList.remove('is-selected');
@@ -1260,7 +1260,7 @@
         savePenState();
         inventoryPenSlot.classList.add('bt-inventory-slot-filled');
         lobbyInventoryPen.hidden = false;
-        alchemyArtNoPen.classList.add('is-active');
+        alchemyPenOverlay.classList.add('is-active');
         syncInventoryDrawer();
         syncGuestbookAccess();
         animateLayer(alchemyPenHotspot, 'is-collecting', 740);
@@ -3904,6 +3904,9 @@
         if (!alchemyArt.complete || !alchemyArt.naturalWidth) {
             showStatus('Unlocking the production room…', 3200);
             try {
+                // Room art is lazy, so this <img> has not begun loading while its
+                // room is hidden and decode() would never settle. Promote it first.
+                if (alchemyArt.loading === 'lazy') alchemyArt.loading = 'eager';
                 await alchemyArt.decode();
             } catch (error) {
                 // The image element will still show its normal fallback behavior.
@@ -3972,6 +3975,9 @@
         if (!gameArt.complete || !gameArt.naturalWidth) {
             showStatus('Booting the development room…', 3200);
             try {
+                // Room art is lazy, so this <img> has not begun loading while its
+                // room is hidden and decode() would never settle. Promote it first.
+                if (gameArt.loading === 'lazy') gameArt.loading = 'eager';
                 await gameArt.decode();
             } catch (error) {
                 // The image element will still show its normal fallback behavior.
@@ -4037,6 +4043,9 @@
         if (!contentArt.complete || !contentArt.naturalWidth) {
             showStatus('Starting the conveyor line…', 3200);
             try {
+                // Room art is lazy, so this <img> has not begun loading while its
+                // room is hidden and decode() would never settle. Promote it first.
+                if (contentArt.loading === 'lazy') contentArt.loading = 'eager';
                 await contentArt.decode();
             } catch (error) {
                 // The image element will still show its normal fallback behavior.
@@ -4093,6 +4102,9 @@
         if (!knowledgeArt.complete || !knowledgeArt.naturalWidth) {
             showStatus('Mapping the documentation labyrinth…', 3200);
             try {
+                // Room art is lazy, so this <img> has not begun loading while its
+                // room is hidden and decode() would never settle. Promote it first.
+                if (knowledgeArt.loading === 'lazy') knowledgeArt.loading = 'eager';
                 await knowledgeArt.decode();
             } catch (error) {
                 // The image element will still show its normal fallback behavior.
@@ -5139,6 +5151,54 @@
         }
     });
 
+    /* Room art is deferred — the room images carry loading="lazy" and are no longer
+       preloaded, so the lobby paints on its own budget instead of queueing behind
+       ~4MB of art for doors the visitor may never open. Once the lobby has finished
+       loading and the main thread goes idle, we quietly warm those same URLs at low
+       priority so opening a door still feels instant. The list is read from the DOM
+       rather than hard-coded, so it stays correct as rooms gain or lose art. */
+    function warmRoomArt() {
+        const connection = navigator.connection;
+        if (connection && (connection.saveData
+            || /(^|-)(slow-)?2g$/.test(connection.effectiveType || ''))) {
+            return;
+        }
+
+        const sources = Array.from(
+            document.querySelectorAll('.bt-lobby-scroll[hidden] img[src]')
+        ).map((img) => img.getAttribute('src'));
+        const queue = Array.from(new Set(sources));
+        if (!queue.length) return;
+
+        const BATCH = 3;
+        let index = 0;
+
+        function warmBatch() {
+            for (let i = 0; i < BATCH && index < queue.length; i += 1) {
+                const img = new Image();
+                img.decoding = 'async';
+                img.fetchPriority = 'low';
+                img.src = queue[index];
+                index += 1;
+            }
+            if (index < queue.length) schedule();
+        }
+
+        function schedule() {
+            if (typeof window.requestIdleCallback === 'function') {
+                window.requestIdleCallback(warmBatch, { timeout: 2500 });
+            } else {
+                window.setTimeout(warmBatch, 250);
+            }
+        }
+
+        if (document.readyState === 'complete') {
+            schedule();
+        } else {
+            window.addEventListener('load', schedule, { once: true });
+        }
+    }
+
     window.addEventListener('popstate', syncRoomFromLocation);
     const savedInventory = readInventory();
     hasAlchemyPen = savedInventory.alchemyPen === true;
@@ -5165,4 +5225,5 @@
     initializeDocumentCalibration();
     initializeProductionCalibration();
     syncRoomFromLocation();
+    warmRoomArt();
 }());

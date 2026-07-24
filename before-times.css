@@ -3251,20 +3251,31 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     transform-origin: 77% 89%;
 }
 
-.bt-alchemy-art-no-pen {
+/* The pen is a small overlay cropped from the original with-pen artwork and
+   positioned back over the (pen-less) backdrop. Percentages are relative to the
+   1672x941 scene, so it tracks the backdrop at every viewport size. Visibility is
+   the inverse of the old two-backdrop swap: the pen shows by default and hides
+   once it has been collected, or while the hotspot is hovered/focused so the
+   glowing .bt-alchemy-pen-sprite can take its place. */
+.bt-alchemy-pen-overlay {
     position: absolute;
     z-index: 1;
-    inset: 0;
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.bt-alchemy-art-no-pen.is-active,
-.bt-alchemy-scene:has(.bt-alchemy-hotspot-pen:hover) .bt-alchemy-art-no-pen,
-.bt-alchemy-scene:has(.bt-alchemy-hotspot-pen:focus-visible) .bt-alchemy-art-no-pen {
+    left: 5.9211%;
+    top: 61.5303%;
+    width: 5.2033%;
+    height: 3.6132%;
     visibility: visible;
     opacity: 1;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.bt-alchemy-pen-overlay.is-active,
+.bt-alchemy-scene:has(.bt-alchemy-hotspot-pen:hover) .bt-alchemy-pen-overlay,
+.bt-alchemy-scene:has(.bt-alchemy-hotspot-pen:focus-visible) .bt-alchemy-pen-overlay {
+    visibility: hidden;
+    opacity: 0;
 }
 
 .bt-alchemy-curio-layer {

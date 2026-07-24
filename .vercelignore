@@ -33,6 +33,11 @@ games/ChessBlaster/build
 games/ChessBlaster/public
 games/ChessBlaster/vite.config.ts
 
+# Source art for the Sound Stage pen overlay. The page ships the pen-less backdrop
+# plus a 4KB overlay cropped from this file; this 1.5MB original is only needed
+# locally by tools/build-alchemy-pen-overlay.py, so it stays in git but not in the deploy.
+images/before-times/absurd-alchemy-clean-v4.webp
+
 # Unused archives & OS noise
 images/archive/
 .DS_Store

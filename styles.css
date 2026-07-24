@@ -1719,19 +1719,23 @@ section.production-header.alice .production-details p strong {
 .showcase-item-game  { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
 .showcase-item-s2i   { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
 
+/* Bob only, no --tile-rot: these cards carry 1px scanline textures (card body
+   at 3px pitch, media overlay at 5px pitch), and rasterizing hairlines at even
+   a ±0.4deg tilt shreds them into moiré bands. The cartridges can tilt because
+   their shells have no hairline patterns. */
 @keyframes showcase-float-a {
-    0%, 100% { --tile-y: 0px;   --tile-rot: -0.4deg; }
-    50%      { --tile-y: -9px;  --tile-rot: 0.4deg; }
+    0%, 100% { --tile-y: 0px; }
+    50%      { --tile-y: -9px; }
 }
 
 @keyframes showcase-float-b {
-    0%, 100% { --tile-y: -7px;  --tile-rot: 0.5deg; }
-    50%      { --tile-y: 4px;   --tile-rot: -0.3deg; }
+    0%, 100% { --tile-y: -7px; }
+    50%      { --tile-y: 4px; }
 }
 
 @keyframes showcase-float-c {
-    0%, 100% { --tile-y: 3px;   --tile-rot: -0.3deg; }
-    50%      { --tile-y: -8px;  --tile-rot: 0.45deg; }
+    0%, 100% { --tile-y: 3px; }
+    50%      { --tile-y: -8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

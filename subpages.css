@@ -1,8 +1,15 @@
-/* subpages.css — generated subset of styles.css for faq.html,
-   alice-in-wonderland.html, jersey-boys.html, and before-times.html.
-   These pages use ~15% of the full sheet; index.html keeps styles.css.
-   Regenerated from styles.css by rule-usage analysis — if styles shared
-   with these pages change in styles.css, mirror the change here. */
+/* subpages.css — hand-maintained subset of styles.css for faq.html,
+   alice-in-wonderland.html and jersey-boys.html. These pages use ~15% of the
+   full sheet; index.html keeps styles.css. (before-times.html used to load this
+   too and no longer does — it has its own before-times.css.)
+
+   Nothing generates this file. If you change a rule in styles.css that these
+   pages also use, mirror the change here, then run:
+
+       python3 tools/check-subpages-css.py
+
+   which compares every selector the two sheets share and fails on any that has
+   drifted. */
 
 :root {
     --primary: #1a1550;

@@ -1655,15 +1655,10 @@ section.production-header.alice .production-details p strong {
     --tile-y: 0px;
     --tile-scale: 1;
     transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(var(--tile-scale));
+    /* Scanlines live on ::after (counter-rotated against the float's tilt),
+       not here — a background would tilt with the card, and hard 1px lines
+       rasterized off-axis moiré against the pixel grid. */
     background:
-        /* Soft-edged scan bands, not hard 1px lines: smooth ramps have no
-           high-frequency edges to moiré when the float tilts the card. */
-        repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.18) 0px,
-            transparent 3px,
-            rgba(0, 0, 0, 0.18) 6px
-        ),
         radial-gradient(ellipse at var(--crt-cool), rgba(58, 42, 140, 0.95) 0%, transparent 55%),
         radial-gradient(ellipse at var(--crt-warm), rgba(255, 90, 54, 0.55) 0%, transparent 60%),
         linear-gradient(135deg, #1a1550, #0d0a35);
@@ -1699,9 +1694,11 @@ section.production-header.alice .production-details p strong {
    the same --tile-rot/--tile-y the base + hover transforms already read — the
    hover-scale composes on top instead of snapping the bob off. Each card runs a
    different period + negative delay so they drift out of phase. */
+/* inherits: true so the scanline pseudos can read the animated tilt and
+   counter-rotate against it (see .showcase-item::after / .showcase-media::before). */
 @property --tile-rot {
     syntax: "<angle>";
-    inherits: false;
+    inherits: true;
     initial-value: 0deg;
 }
 
@@ -1722,10 +1719,11 @@ section.production-header.alice .production-details p strong {
 .showcase-item-game  { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
 .showcase-item-s2i   { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
 
-/* The tilt is safe only because the card textures are soft-edged: hard 1px
-   scanlines rasterized at a fraction of a degree beat against the pixel grid
-   and moiré. If a hairline pattern ever comes back to these cards, the
-   rotation here is what will smear it. */
+/* The tilt is safe only because the scanline layers counter-rotate against
+   --tile-rot (see .showcase-item::after and .showcase-media::before): hard
+   1px lines rasterized at a fraction of a degree would otherwise beat
+   against the pixel grid and moiré. Any new hairline texture added to these
+   cards needs the same counter-rotation. */
 @keyframes showcase-float-a {
     0%, 100% { --tile-y: 0px;   --tile-rot: -0.4deg; }
     50%      { --tile-y: -9px;  --tile-rot: 0.4deg; }
@@ -1759,6 +1757,26 @@ section.production-header.alice .production-details p strong {
     pointer-events: none;
     opacity: 0.16;
     z-index: 0;
+}
+
+/* The card-body scanlines, counter-rotated against the float's tilt so the
+   hard 1px lines stay locked to screen pixel rows (tilting them is what
+   caused the moiré). z-index -1 paints above the card's own background but
+   under the caption/media — same layering the old background texture had. */
+.showcase-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0 2px,
+        rgba(0, 0, 0, 0.22) 2px 3px
+    );
+    transform: rotate(calc(var(--tile-rot) * -1));
+    will-change: transform;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .showcase-signal {
@@ -1875,15 +1893,21 @@ section.production-header.alice .production-details p strong {
 .showcase-media::before {
     content: '';
     position: absolute;
-    inset: 0;
+    /* inset bleed + counter-rotation: the float tilts the card, this layer
+       rotates back by the same (inherited) angle, so the 1px scanlines stay
+       locked to the screen's pixel rows — crisp at any tilt, no moiré. The
+       bleed covers the corner wedges; .showcase-media's overflow clips it. */
+    inset: -8px;
+    transform: rotate(calc(var(--tile-rot) * -1));
+    will-change: transform;
     background:
         linear-gradient(180deg, rgba(248, 233, 210, 0.09), transparent 22%),
-        /* Soft ramps instead of 1px lines so the float's tilt can't moiré them. */
         repeating-linear-gradient(
             180deg,
-            rgba(248, 233, 210, 0.05) 0px,
-            transparent 3.5px,
-            rgba(248, 233, 210, 0.05) 7px
+            rgba(248, 233, 210, 0.035) 0,
+            rgba(248, 233, 210, 0.035) 1px,
+            transparent 1px,
+            transparent 5px
         );
     pointer-events: none;
     z-index: 2;

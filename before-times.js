@@ -16,9 +16,9 @@
         },
         alchemy: {
             kicker: 'Door 01 // Los Angeles // 2013–2017',
-            title: 'Absurd Alchemy',
+            title: 'The Sound Stage',
             copy: [
-                'The crooked production office: scripts, short films, web series, questionable props, and twenty-five projects shepherded from idea to finished thing.',
+                'The crooked production office of the film years — scripts, short films, web series, questionable props, and twenty-five projects shepherded from idea to finished thing, most of them under the Absurd Alchemy banner.',
                 'Its project files now connect the working title of French Kitty to the finished film, open the production machinery inside The NoHo Rag, and follow Call Me Lucifer from broadcast scandal into Burbank exile.'
             ],
             facts: ['Writer / producer', 'French Kitty, featuring Chloe Fineman', 'The NoHo Rag + Call Me Lucifer', 'Distributed by Troma Entertainment'],
@@ -100,7 +100,7 @@
             title: 'Floor plan',
             copy: ['The lobby and all four career rooms are open. The Knowledge Maze contains a second route to the present for anyone willing to give the machine enough human context.'],
             routes: [
-                { id: 'alchemy', label: '01 · Absurd Alchemy' },
+                { id: 'alchemy', label: '01 · The Sound Stage' },
                 { id: 'games', label: '02 · Game Development' },
                 { id: 'content', label: '03 · The Content Factory' },
                 { id: 'docs', label: '04 · The Knowledge Maze' },
@@ -3899,7 +3899,7 @@
         if (settings.updateHistory !== false && window.location.hash !== '#absurd-alchemy') {
             window.history.pushState({ btRoom: 'alchemy' }, '', '#absurd-alchemy');
         }
-        showStatus('Absurd Alchemy. The director’s chair controls the big screen.', 4200);
+        showStatus('The Sound Stage. The director’s chair controls the big screen.', 4200);
         window.setTimeout(() => alchemyChairHotspot.focus({ preventScroll: true }), 380);
     }
 

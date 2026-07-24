@@ -184,6 +184,8 @@ a {
 
 .bt-hotspot:hover,
 .bt-hotspot:focus-visible {
+    /* Above sibling hotspots (z-index 3) so the label isn't buried under later-DOM prop art */
+    z-index: 4;
     border-color: rgba(0, 247, 194, 0.92);
     background: rgba(0, 247, 194, 0.075);
     box-shadow:

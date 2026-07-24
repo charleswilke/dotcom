@@ -37,3 +37,9 @@ games/ChessBlaster/vite.config.ts
 images/archive/
 .DS_Store
 **/.DS_Store
+
+# Sisters Hayes: only the scrubbed PDFs are served. The .fdx sources still
+# carry personal contact info on their title pages, and The Assistant docs
+# are a different unreleased project.
+*.fdx
+bt-assets/The Sisters Hayes - short/The Assistant*.docx

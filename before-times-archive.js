@@ -1526,6 +1526,147 @@
         ],
         alchemy: [
             {
+                id: 'sisters-hayes-development',
+                eyebrow: 'Outside the banner // fall 2013',
+                title: 'The Sisters Hayes // Blood for Blood',
+                publication: 'Independent short — unproduced',
+                credit: 'Written by Chaz Wilke',
+                format: 'Two drafts, three trailer scripts, one page of notes',
+                depthLabel: 'Development file',
+                dek: 'A broke personal assistant, two retired Broadway sisters, and one shattered Hummel figurine. The oldest script in this filing cabinet, written before the Absurd Alchemy banner went up.',
+                curator: 'The only project in the room that survives as a complete development loop: a twenty-page first draft, a revision four days later, an outside reader’s notes, and three attempts to sell the film in under a minute. The instinct is already fully formed—find one house, two faded stars, and a single breakable object, then aim the whole movie at it.',
+                lineage: [
+                    { year: 'Oct 4, 2013', label: 'First draft', detail: 'Twenty pages; Frederick is dead by page seven' },
+                    { year: 'Oct 8, 2013', label: 'Second draft', detail: 'The chase tightens four days later' },
+                    { year: 'Nov 11, 2013', label: 'The trailers', detail: 'Three scripts shrink the pitch to a single dolly shot' }
+                ],
+                action: {
+                    label: 'Read the first draft (PDF)',
+                    href: '/bt-assets/The%20Sisters%20Hayes%20-%20short/The%20Sisters%20Hayes%20-%20First%20Draft.pdf'
+                },
+                body: [
+                    {
+                        type: 'screenplay',
+                        character: 'SOPHIA',
+                        text: 'She killed him, Scar! They don’t care if it was an accident. Blood for blood.'
+                    },
+                    {
+                        type: 'screenplay',
+                        character: 'SCARLETTE',
+                        text: 'We’re not arguing with you on that. We understand you didn’t mean to kill Frederick, but they require your blood for his.'
+                    },
+                    {
+                        type: 'screenplay',
+                        character: 'CHLOE',
+                        text: 'You’re both fucking insane! You know that?!'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Open the development file',
+                    meta: 'Two drafts + notes + three trailers // fall 2013',
+                    intro: 'A guided read through the whole surviving loop: the twenty-page first draft, the four-day revision, one page of notes from an outside reader, and the three trailer scripts that tried to sell the film before a frame was shot.',
+                    body: [
+                        { type: 'subhead', text: 'THE SETUP // A CRAIGSLIST JOB' },
+                        {
+                            type: 'paragraph',
+                            text: 'Chloe, 27, hurtles through an idyllic subdivision doing her makeup at the wheel, on her way to a part-time personal-assistant gig she found on Craigslist: working for Scarlette Hayes, one half of a child sister act that once owned Broadway. She nearly runs over a seven-year-old before she reaches the driveway.'
+                        },
+                        { type: 'screenplay', character: 'AMBER (O.S.)', text: 'It’d be a good idea not to kill someone on your first day, Chloe.' },
+                        { type: 'subhead', text: 'FREDERICK // PAGE SEVEN' },
+                        {
+                            type: 'paragraph',
+                            text: 'Inside the Hayes residence: framed Playbills, two child-sized sequined dresses on the wall, and a table of Hummel figurines. Sister Sophia leaves to make tea, Chloe picks one up to admire it, and a bellowed PUT THAT DOWN does the rest. Sophia scoops the bloody porcelain shards into her hands and holds a one-sided conversation with the survivors.'
+                        },
+                        { type: 'screenplay', character: 'SOPHIA', text: 'Frederick! You killed Frederick!' },
+                        {
+                            type: 'screenplay',
+                            character: 'SOPHIA',
+                            text: 'But, she didn’t know any better, Frederick... I... I’m sorry... She’s... Yes. Yes, I understand.'
+                        },
+                        { type: 'subhead', text: 'BLOOD FOR BLOOD // THE HOUSE TURNS' },
+                        {
+                            type: 'paragraph',
+                            text: 'Scarlette comes home, hears both sides like the adult in the room, consults the figurines herself, and calmly returns their verdict. The front door is already locked from the inside; the keys are in her pocket; Sophia finds the knife drawer.'
+                        },
+                        {
+                            type: 'screenplay',
+                            character: 'SCARLETTE',
+                            text: 'Don’t worry honey. Sophia is great with a knife, she’ll make it quick. Won’t you sister?'
+                        },
+                        { type: 'subhead', text: 'THE CLOSET // WHAT THE WALLS KNOW' },
+                        {
+                            type: 'paragraph',
+                            text: 'Hiding in a bedroom closet, Chloe learns how far back the sisters’ arrangement goes — and where their parents are buried.'
+                        },
+                        {
+                            type: 'screenplay',
+                            character: 'SCARLETTE',
+                            text: 'You need me. You needed me when we killed them and you still need me now. Don’t be so damned dramatic.'
+                        },
+                        { type: 'subhead', text: 'THE NEIGHBOR AT THE DOOR' },
+                        {
+                            type: 'paragraph',
+                            text: 'A knock: Mike, father of the nearly-flattened kid, can hear the commotion down the street. Scarlette dons the old-Hollywood persona mid-staircase and explains they are simply rehearsing a horror film for the world-renowned director H.R. Grimly.'
+                        },
+                        { type: 'screenplay', character: 'MIKE', text: 'Fucking actors.' },
+                        { type: 'subhead', text: 'CURTAIN CALL' },
+                        {
+                            type: 'paragraph',
+                            text: 'The climax trades the knife back and forth until it finds the wrong sister. Scarlette’s grief curdles into rage; Chloe discovers the only weapon in the house that matters and smashes the figurines one at a time, walking Scarlette backward off her own knife. The last page leaves both sisters motionless among the porcelain.'
+                        },
+                        {
+                            type: 'screenplay',
+                            character: 'SCARLETTE',
+                            text: 'Once the applause faded and the lights dimmed on our careers, the phone stopped ringing with calls from our managers and agents, and we were left with almost nothing! Those figurines were all we had!'
+                        },
+                        { type: 'screenplay', character: 'CHLOE', text: 'Stay back. You wouldn’t want any more accidents today, would you?' },
+                        { type: 'screenplay', character: 'CHLOE', text: 'I quit!' },
+                        { type: 'subhead', text: 'THE NOTES // AN OUTSIDE READER' },
+                        {
+                            type: 'paragraph',
+                            text: 'One page of notes survives from a reader named Nick: it compares the script to What Ever Happened to Baby Jane?, assigns Play Misty for Me as homework, suggests plantation shutters to lock the house down and a room caked in papers for a hoarder’s claustrophobia, and flags line-level cuts — the ending, he writes, is “Chloe’s power hour,” and she shouldn’t linger in that room.'
+                        },
+                        { type: 'subhead', text: 'THE TRAILERS // SELLING IT IN A MINUTE' },
+                        {
+                            type: 'paragraph',
+                            text: 'A month later, three trailer scripts try to raise the film before shooting it. Trailer 1 is a single slow dolly toward the figurines while the fight plays offscreen, ending in blood splattered across the porcelain. Trailer 2 adds a pan across the Broadway relics first. Trailer 3 restages the opening as a mini-scene — Amber becomes Chloe’s dad, the seventies become the eighties — and cuts to black on the first grab. The film was never shot; the development file is the film.'
+                        },
+                        {
+                            type: 'links',
+                            title: 'The recovered documents',
+                            items: [
+                                {
+                                    label: 'The first draft',
+                                    href: '/bt-assets/The%20Sisters%20Hayes%20-%20short/The%20Sisters%20Hayes%20-%20First%20Draft.pdf',
+                                    meta: 'PDF · 20 pages · October 4, 2013'
+                                },
+                                {
+                                    label: 'The second draft',
+                                    href: '/bt-assets/The%20Sisters%20Hayes%20-%20short/The.Sisters.Hayes-100813.pdf',
+                                    meta: 'PDF · October 8, 2013'
+                                },
+                                {
+                                    label: 'Trailer script 1 — the dolly shot',
+                                    href: '/bt-assets/The%20Sisters%20Hayes%20-%20short/The%20Sisters%20Hayes%20-%20Trailer%201.pdf',
+                                    meta: 'PDF · November 11, 2013'
+                                },
+                                {
+                                    label: 'Trailer script 2 — the Broadway wall',
+                                    href: '/bt-assets/The%20Sisters%20Hayes%20-%20short/The%20Sisters%20Hayes%20-%20Trailer%202.pdf',
+                                    meta: 'PDF · November 11, 2013'
+                                },
+                                {
+                                    label: 'Trailer script 3 — the mini-scene',
+                                    href: '/bt-assets/The%20Sisters%20Hayes%20-%20short/The%20Sisters%20Hayes%20-%20Trailer%203.pdf',
+                                    meta: 'PDF · November 11, 2013'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
                 id: 'french-kitty-lineage',
                 eyebrow: 'Absurd Alchemy // 2015–2017',
                 title: 'How to Invoke Love at First Sight → French Kitty',

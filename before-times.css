@@ -5500,6 +5500,35 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     padding-left: 1.2rem;
 }
 
+.bt-archive-documents {
+    background: rgba(0, 247, 194, 0.06);
+    border-color: rgba(26, 21, 80, 0.45);
+}
+
+.bt-archive-document-link {
+    color: var(--bt-indigo);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
+}
+
+.bt-archive-document-link:hover,
+.bt-archive-document-link:focus-visible {
+    color: var(--bt-ink);
+    background: var(--bt-mint);
+    outline: 2px solid var(--bt-ink);
+    outline-offset: 1px;
+}
+
+.bt-archive-document-meta {
+    margin-left: 0.5rem;
+    color: rgba(61, 48, 55, 0.85);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
 .bt-archive-curator {
     max-width: 48rem;
     margin-top: 1.25rem;

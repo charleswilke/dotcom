@@ -19,9 +19,9 @@
             title: 'The Sound Stage',
             copy: [
                 'The crooked production office of the film years — scripts, short films, web series, questionable props, and twenty-five projects shepherded from idea to finished thing, most of them under the Absurd Alchemy banner.',
-                'Its project files now connect the working title of French Kitty to the finished film, open the production machinery inside The NoHo Rag, and follow Call Me Lucifer from broadcast scandal into Burbank exile.'
+                'Its project files now connect the working title of French Kitty to the finished film, open the production machinery inside The NoHo Rag, follow Call Me Lucifer from broadcast scandal into Burbank exile — and preserve The Sisters Hayes, the unproduced horror short whose whole development file survived.'
             ],
-            facts: ['Writer / producer', 'French Kitty, featuring Chloe Fineman', 'The NoHo Rag + Call Me Lucifer', 'Distributed by Troma Entertainment'],
+            facts: ['Writer / producer', 'French Kitty, featuring Chloe Fineman', 'The NoHo Rag + Call Me Lucifer', 'The Sisters Hayes — unproduced short, 2013', 'Distributed by Troma Entertainment'],
             action: { label: 'Visit the surviving Vimeo archive', href: 'https://vimeo.com/absurdalchemy', external: true }
         },
         games: {
@@ -2000,6 +2000,24 @@
                 body.appendChild(section);
                 return;
             }
+            if (block.type === 'links') {
+                const section = makeArchiveElement('section', 'bt-archive-notes bt-archive-documents');
+                section.appendChild(makeArchiveElement('h3', '', block.title));
+                const list = document.createElement('ul');
+                block.items.forEach((item) => {
+                    const entry = document.createElement('li');
+                    const anchor = makeArchiveElement('a', 'bt-archive-document-link', item.label);
+                    anchor.href = item.href;
+                    anchor.target = '_blank';
+                    anchor.rel = 'noopener';
+                    entry.appendChild(anchor);
+                    if (item.meta) entry.appendChild(makeArchiveElement('span', 'bt-archive-document-meta', item.meta));
+                    list.appendChild(entry);
+                });
+                section.appendChild(list);
+                body.appendChild(section);
+                return;
+            }
             if (block.type === 'screenplay') {
                 const excerpt = makeArchiveElement('blockquote', 'bt-archive-screenplay');
                 excerpt.appendChild(makeArchiveElement('strong', '', block.character));
@@ -2168,6 +2186,12 @@
                 closeDialog(archiveDialog);
                 cueAlchemyVideo(piece.action.video);
             });
+            actions.appendChild(action);
+        } else if (piece.action && piece.action.href) {
+            const action = makeArchiveElement('a', 'bt-dialog-action', piece.action.label);
+            action.href = piece.action.href;
+            action.target = '_blank';
+            action.rel = 'noopener';
             actions.appendChild(action);
         }
         const previewBack = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the preview');
@@ -2348,6 +2372,12 @@
                 cueAlchemyVideo(piece.action.video);
             });
             actions.appendChild(action);
+        } else if (piece.action && piece.action.href) {
+            const action = makeArchiveElement('a', 'bt-dialog-action', piece.action.label);
+            action.href = piece.action.href;
+            action.target = '_blank';
+            action.rel = 'noopener';
+            actions.appendChild(action);
         }
         const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
         close.type = 'button';
@@ -2362,7 +2392,7 @@
     function openArchive(collectionName, pieceId) {
         const isAlchemy = collectionName === 'alchemy';
         archiveKicker.textContent = isAlchemy
-            ? 'Absurd Alchemy // project file'
+            ? 'The Sound Stage // project file'
             : 'Content Factory // recovered work';
         archiveTitle.textContent = isAlchemy ? 'The mutation archive' : 'The output archive';
         renderArchivePiece(collectionName, pieceId);

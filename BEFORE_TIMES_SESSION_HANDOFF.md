@@ -1067,10 +1067,18 @@ missing from `HELP ME WITH MY WEBSITE`:
 - The impact gauge recovers `FRICTION // UNFAMILIAR SEO LANGUAGE` and explains
   the 93% customer-care-escalation reduction.
 
-Every recovered piece illuminates another SVG fracture from the maze center.
-After all three are present, `Ask a better question` starts the rupture. The
-contained plate crossfades to
-`images/before-times/knowledge-maze/knowledge-maze-breached-v2.webp`; its dark
+Every recovered piece now advances a matched image-generated background plate:
+`knowledge-maze-crack-stage-{1,2,3}-v1.webp`. The sequence moves from a physical
+hairline fissure to branching ring damage to a heavily separated pre-breach
+state. The SVG fractures are gone entirely: the rupture is sold physically
+instead, with a short decaying room shake, a mint light bloom that flares out
+of the fissure, and twelve soft CSS smoke puffs (plus the original debris
+chips) that escape along the crack line. All rupture animations are wrapped in
+`prefers-reduced-motion: no-preference`, and every smoke delay + duration
+resolves inside the 1350ms `is-rupturing` window so nothing is cut off. After
+all three pieces are present, `Ask a better question` starts the rupture. The
+final plate crossfades to
+`images/before-times/knowledge-maze/knowledge-maze-breached-v3.webp`; its dark
 aperture is filled by a muted, looping six-second screen recording of the real
 present-day homepage at a `390 × 844` phone viewport. The viewport remains
 locked at the top of the page and captures only the site's native ambient
@@ -1085,10 +1093,13 @@ sci-fi landscape.
 The recording is reproducible: run the local site on port 8080, then run
 `node tools/capture-knowledge-maze-present.mjs`. The script records 96 real
 Chrome frames at 16 fps, encodes the MP4 with ffmpeg, and builds the poster with
-cwebp. The generated breach source and deterministic doorway composite are
-preserved in the same asset directory; rerun
-`python3 tools/build-knowledge-maze-states.py` and then rebuild the WebP if the
-reverse-lobby sightline changes.
+cwebp. The four image-generated full-room sources and deterministic runtime
+composites are preserved in the same asset directory.
+`tools/build-knowledge-maze-states.py` uses a feathered maze-wall mask over the
+locked contained plate, so the terminal, evidence stations, furniture, and
+reverse-lobby doorway remain pixel-identical across all five states. Run it
+with the bundled workspace Python (the system Python may not include Pillow),
+then rebuild the four WebPs with `cwebp` if a source changes.
 
 Puzzle state lives in session storage under `bt-knowledge-v1` as a recovered
 context-key array plus `breached`. Once solved, the room reopens in its breached
@@ -1096,10 +1107,12 @@ state and the lobby's circular Knowledge Maze medallion keeps a mint vertical
 scar for the session. This is intentionally not a security or progress gate:
 the normal lobby doorway and the permanent Return portal remain available.
 
-The exact built-in image-generation prompts, including both K-27 documents, are recorded in
-`tools/knowledge-maze-imagegen-prompts.md`. Intermediate cracks, debris, the
-terminal, the present-day portal, and the lobby scar are code-native layers;
-do not regenerate full plates to tune their placement, glow, copy, or timing.
+The exact built-in image-generation prompts, including the three crack stages,
+broken doorway, and both K-27 documents, are recorded in
+`tools/knowledge-maze-imagegen-prompts.md`. The terminal, present-day portal,
+rupture shake/bloom/smoke/debris, and lobby scar remain code-native layers.
+Tune placement, copy, and timing in HTML/CSS/JS; rebuild the masked plates only
+when changing the physical maze damage.
 
 ## Verification completed this session
 

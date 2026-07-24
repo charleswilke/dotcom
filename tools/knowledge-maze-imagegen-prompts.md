@@ -70,6 +70,69 @@ Style: Match the existing hand-inked graphic-novel perspective, violet-blue lobb
 Constraints: no people, no logos, no readable text, no empty blue corridor, no isolated single-object display, no new objects in the Knowledge Maze, no whole-scene redesign, no changed terminal screen, no changed circular maze, no watermark.
 ```
 
+## Image-generated cracking progression
+
+All four plates were created with the built-in image-generation edit flow at
+`1672 × 941`. Each call used the preceding accepted plate as Image 1 and the
+previous breached plate as the endpoint reference in Image 2. The generated
+full-room sources are preserved beside the runtime plates. The build script
+then composites only the maze-wall region over the locked contained room so
+unrelated scene pixels never drift between states.
+
+### Stage 1 // hairline
+
+```text
+Use case: precise-object-edit
+Asset type: 16:9 intermediate progression background plate for an interactive illustrated website room, intended to align pixel-for-pixel with a 1672×941 endpoint sequence.
+Input images: Image 1 is the edit target and immutable composition reference (intact Knowledge Maze room). Image 2 is the final breached endpoint reference; use it only to understand the later fracture direction, material breakup, and mint edge light.
+Primary request: Create STAGE 1 OF 3 of the circular maze cracking progression. Change only the monumental circular maze and a very small area of wall immediately around its exact center.
+Crack state: the maze is still fully closed and structurally intact. From the tiny existing mint center fissure, form a believable narrow roughly vertical hairline fracture with two or three short asymmetric branches, crossing only the innermost maze rings. A few hair-thin stress lines may follow mortar seams. No missing chunks, no opening, no visible recess, no debris, and no separated pieces yet. The crack should feel physically cut into stone and metal, not like a glowing line drawn on top.
+Lighting: restrained electric-mint light glows from within the hairline and catches only the nearest chipped edges. Keep the overall room exposure and violet/charcoal palette unchanged.
+Invariants: keep camera, crop, dimensions, perspective, terminal, blank terminal screen, foreground console, left document boards, gauge, selector apparatus, file drawers, lamps, pipes, floor, papers, and the entire far-right lobby doorway visually unchanged. Preserve the exact hand-inked graphic-novel linework, painterly cel shading, wear, density, and palette outside the localized center fracture.
+Constraints: no people, no text, no watermark, no whole-scene redesign, no changed furniture, no changed terminal screen, no portal, no giant beam, no rubble on the floor. Output only the finished full-room plate.
+```
+
+### Stage 2 // branching rings
+
+```text
+Use case: precise-object-edit
+Asset type: 16:9 intermediate progression background plate for an interactive illustrated website room, intended to align pixel-for-pixel with a 1672×941 sequence.
+Input images: Image 1 is the edit target and the accepted STAGE 1 plate. Image 2 is the final breached endpoint reference; use it only to understand the later rupture direction, masonry construction, and mint edge light.
+Primary request: Advance only the monumental circular maze from STAGE 1 to STAGE 2 OF 3. Keep the complete room composition and every object outside the maze unchanged.
+Crack state: widen the existing center-origin fracture slightly and extend it roughly vertically through more of the inner and middle maze rings. Add several natural asymmetric branching stress cracks, a few small chipped corners, and two or three subtly displaced maze segments still held in place. The maze remains closed: no doorway-sized opening, no visible recess, and no view through the wall. The damage must feel physically fractured into the stone-and-metal maze rather than painted over it.
+Lighting: mint light now leaks through the main fracture and catches a modest number of newly chipped surfaces, brighter than Stage 1 but still restrained. The wider room stays dark violet/charcoal with unchanged exposure.
+Invariants: preserve the exact camera, crop, dimensions, perspective, foreground terminal and blank screen, left document boards, gauge, selector apparatus, file drawers, lamps, pipes, floor, papers, and far-right lobby doorway. Preserve the hand-inked graphic-novel linework, painterly cel shading, material wear, density, and palette everywhere outside the localized maze damage.
+Constraints: no people, no text, no watermark, no whole-scene redesign, no changed furniture, no changed terminal, no open portal, no giant beam, no rubble on the floor. Output only the finished full-room plate.
+```
+
+### Stage 3 // pre-breach
+
+```text
+Use case: precise-object-edit
+Asset type: 16:9 final pre-breach progression background plate for an interactive illustrated website room, intended to align pixel-for-pixel with a 1672×941 sequence.
+Input images: Image 1 is the edit target and accepted STAGE 2 plate. Image 2 is the final open breach reference; use it to make the next damage state feel one decisive beat before that endpoint.
+Primary request: Advance only the monumental circular maze from Stage 2 to STAGE 3 OF 3—the heavily cracked, pressure-loaded state immediately before it breaks open. Keep the room composition and all objects outside the maze unchanged.
+Crack state: the center-origin roughly vertical fracture is now broader and travels across the complete circular maze from its upper rim toward its lower edge, with substantial asymmetric branching through many rings. Several maze blocks and ring segments have split, tilted, or shifted outward by a small believable amount. Create a narrow dark seam at the very center and a few tiny gaps between broken inner pieces, but the wall is NOT yet an open doorway and the live destination cannot be seen. Keep most of the circular maze recognizable and in place. Add small embedded chips and a few suspended crumbs close to the fracture; no large rubble pile.
+Lighting: stronger electric-mint light leaks from behind the cracks and grazes jagged stone/metal edges, nearby ring surfaces, and the upper rim of the foreground terminal. It should feel charged and exhilarating, not toxic or apocalyptic. Avoid a giant beam or overexposing the room.
+Invariants: preserve exact camera, crop, dimensions, perspective, terminal and blank screen, left document boards, gauge, selector apparatus, file drawers, lamps, pipes, floor, papers, and the far-right lobby doorway. Preserve hand-inked graphic-novel linework, painterly cel shading, material wear, density, and the violet/charcoal/brass palette everywhere outside the localized maze rupture.
+Constraints: no people, no text, no watermark, no whole-scene redesign, no changed furniture, no changed terminal, no full portal, no destination imagery, no giant light column. Output only the finished full-room plate.
+```
+
+### Final // broken architectural doorway
+
+```text
+Use case: precise-object-edit
+Asset type: 16:9 fully solved background plate for an interactive illustrated website room, with a clean central compositing aperture for live present-day website content, intended for 1672×941 display.
+Input images: Image 1 is the edit target and accepted heavily cracked pre-breach stage. Image 2 is the existing solved endpoint and authoritative reference for the required aperture position and usable dark interior.
+Primary request: Complete the rupture. Change only the monumental circular maze and its immediately surrounding center-wall masonry. Turn the failed maze into a spectacular, believable BROKEN ARCHITECTURAL DOORWAY to the present.
+Doorway geometry: open one decisive tall, narrow, irregular roughly vertical passage at the exact center of the circular maze. The dark uninterrupted interior must occupy the same practical center strip as Image 2—approximately x 45% to 57% of the frame from the top down to just above the terminal—so the existing live HTML website video can fill it without visible rectangular edges. Keep the opening wide enough to read as a walkable door but narrow enough that substantial recognizable broken maze rings remain on both sides.
+Broken structure: fracture the maze rings and wall outward into a dimensional threshold. Use layered jagged stone-and-metal edges, exposed masonry depth, snapped ring segments, a few cantilevered blocks, and small embedded debris. The two remaining halves of the circular maze should visually frame the passage like a monumental ruined door, with a convincing lintel break at the top and a subtle threshold line just behind the terminal. Do not put loose rubble across the foreground console or floor.
+Opening interior: simple nearly black deep-indigo recess with very restrained soft texture only. No destination picture, landscape, interface, person, beam, hallway, or universe—the live website will be composited there.
+Lighting: electric mint light traces broken edges and exposed inner layers, with controlled spill onto nearby maze pieces, pipes, paper edges, and the upper rim of the foreground terminal. Make it exhilarating, magical, and beckoning while preserving the room’s dark violet mood. No giant light column and no blown-out neon.
+Invariants: preserve exact camera, crop, dimensions, perspective, terminal and blank screen, foreground console, left document boards, gauge, selector apparatus, file drawers, lamps, pipes, papers, floor, and the entire far-right reverse lobby doorway. Preserve the hand-inked graphic-novel linework, painterly cel shading, worn retro-industrial materials, density, and palette everywhere outside the localized center-wall breach.
+Constraints: no people, no readable text, no logos, no watermark, no whole-scene redesign, no changed furniture, no changed terminal, no destination content inside the aperture. Output only the finished full-room plate.
+```
+
 ## Before document // The Answer Exists
 
 Built-in image generation using the contained room plate as a style/world

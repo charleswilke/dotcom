@@ -38,6 +38,16 @@ games/ChessBlaster/vite.config.ts
 # locally by tools/build-alchemy-pen-overlay.py, so it stays in git but not in the deploy.
 images/before-times/absurd-alchemy-clean-v4.webp
 
+# PNG is the working/source format for this site's generated art; WebP is what
+# ships. Only the three PNGs below are actually served, so a new source PNG dropped
+# into images/ is kept out of the deploy automatically — no list to maintain.
+# If you ever add a PNG that must be public, add a !re-include line for it here,
+# or it will 404. (~132MB of source art, still in git and still syncing.)
+images/**/*.png
+!images/aiw/aiw1.png
+!images/before-times/knowledge-maze/knowledge-answer-arrives-v1.png
+!images/before-times/knowledge-maze/knowledge-answer-exists-v1.png
+
 # Unused archives & OS noise
 images/archive/
 .DS_Store

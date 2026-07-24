@@ -1656,10 +1656,13 @@ section.production-header.alice .production-details p strong {
     --tile-scale: 1;
     transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(var(--tile-scale));
     background:
+        /* Soft-edged scan bands, not hard 1px lines: smooth ramps have no
+           high-frequency edges to moiré when the float tilts the card. */
         repeating-linear-gradient(
             0deg,
-            transparent 0 2px,
-            rgba(0, 0, 0, 0.22) 2px 3px
+            rgba(0, 0, 0, 0.18) 0px,
+            transparent 3px,
+            rgba(0, 0, 0, 0.18) 6px
         ),
         radial-gradient(ellipse at var(--crt-cool), rgba(58, 42, 140, 0.95) 0%, transparent 55%),
         radial-gradient(ellipse at var(--crt-warm), rgba(255, 90, 54, 0.55) 0%, transparent 60%),
@@ -1719,23 +1722,23 @@ section.production-header.alice .production-details p strong {
 .showcase-item-game  { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
 .showcase-item-s2i   { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
 
-/* Bob only, no --tile-rot: these cards carry 1px scanline textures (card body
-   at 3px pitch, media overlay at 5px pitch), and rasterizing hairlines at even
-   a ±0.4deg tilt shreds them into moiré bands. The cartridges can tilt because
-   their shells have no hairline patterns. */
+/* The tilt is safe only because the card textures are soft-edged: hard 1px
+   scanlines rasterized at a fraction of a degree beat against the pixel grid
+   and moiré. If a hairline pattern ever comes back to these cards, the
+   rotation here is what will smear it. */
 @keyframes showcase-float-a {
-    0%, 100% { --tile-y: 0px; }
-    50%      { --tile-y: -9px; }
+    0%, 100% { --tile-y: 0px;   --tile-rot: -0.4deg; }
+    50%      { --tile-y: -9px;  --tile-rot: 0.4deg; }
 }
 
 @keyframes showcase-float-b {
-    0%, 100% { --tile-y: -7px; }
-    50%      { --tile-y: 4px; }
+    0%, 100% { --tile-y: -7px;  --tile-rot: 0.5deg; }
+    50%      { --tile-y: 4px;   --tile-rot: -0.3deg; }
 }
 
 @keyframes showcase-float-c {
-    0%, 100% { --tile-y: 3px; }
-    50%      { --tile-y: -8px; }
+    0%, 100% { --tile-y: 3px;   --tile-rot: -0.3deg; }
+    50%      { --tile-y: -8px;  --tile-rot: 0.45deg; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1875,12 +1878,12 @@ section.production-header.alice .production-details p strong {
     inset: 0;
     background:
         linear-gradient(180deg, rgba(248, 233, 210, 0.09), transparent 22%),
+        /* Soft ramps instead of 1px lines so the float's tilt can't moiré them. */
         repeating-linear-gradient(
             180deg,
-            rgba(248, 233, 210, 0.035) 0,
-            rgba(248, 233, 210, 0.035) 1px,
-            transparent 1px,
-            transparent 5px
+            rgba(248, 233, 210, 0.05) 0px,
+            transparent 3.5px,
+            rgba(248, 233, 210, 0.05) 7px
         );
     pointer-events: none;
     z-index: 2;

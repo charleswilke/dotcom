@@ -43,8 +43,21 @@ images/archive/
 .DS_Store
 **/.DS_Store
 
+# Before Times working material. bt-assets is a slushpile of source assets kept in
+# git so it syncs across machines, but only the few files the site actually links to
+# need to reach the deploy — mocap GIFs and the Sisters Hayes PDFs, ~4MB of ~526MB.
+# Same shape as the OMAxAI/* rule above: exclude the children, re-include the two
+# directories that are served. (Excluding "bt-assets/" itself would make the
+# !re-includes below impossible — a path under an excluded directory can't come back.)
+bt-assets/*
+!bt-assets/mocap
+!bt-assets/The Sisters Hayes - short
+
 # Sisters Hayes: only the scrubbed PDFs are served. The .fdx sources still
 # carry personal contact info on their title pages, and The Assistant docs
 # are a different unreleased project.
 *.fdx
 bt-assets/The Sisters Hayes - short/The Assistant*.docx
+# Nick's read-through notes: nothing links to them, and "only the scrubbed PDFs
+# are served" above should be literally true. Delete this line to publish them.
+bt-assets/The Sisters Hayes - short/nicks-notes-on-the-sisters-hayes.rtf

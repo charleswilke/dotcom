@@ -719,7 +719,7 @@ function ensureReaderOverlay() {
                                     <span class="byline-name">Charles Wilke</span>
                                     <span class="byline-date"></span>
                                 </div>
-                                <img class="byline-avatar" src="/images/cw4.webp" alt="Charles Wilke" width="40" height="40" loading="lazy" decoding="async">
+                                <img class="byline-avatar" src="/images/cw4-avatar.webp" alt="Charles Wilke" width="40" height="40" loading="lazy" decoding="async">
                             </div>
                         </div>
                         <div class="article-reader-tags"></div>
@@ -4218,7 +4218,7 @@ function initMixtapeLightbox() {
     ];
 
     const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.webp';
-    const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover.webp';
+    const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover-card.webp';
 
     // Both sides live in one continuous playlist. The first track of each side
     // carries an `act` label (the vertical container label) plus an `actClass`
@@ -4441,7 +4441,7 @@ function initJCLightbox() {
         { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', cover: 'audio/junkyard-cabaret/house-lights-title.webp?v=202607052117', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
         { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
         { title: 'How Dare It Rise', file: 'audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: 'audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
-        { title: 'Take Your Time', act: 'Intermission', actInline: true, file: 'audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: 'audio/junkyard-cabaret/junkyard-cabaret-cover.webp?v=202605120946', noShare: true, noNumber: true },
+        { title: 'Take Your Time', act: 'Intermission', actInline: true, file: 'audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: 'audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp', noShare: true, noNumber: true },
         { title: 'Everything Must Go', act: 'Act II', file: 'audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: 'audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
         { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606190959', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },

@@ -3385,7 +3385,7 @@ html {
         /* Safari can drop composited <img> layers when a tap combines clipping,
            filtering, and transforms. Paint the primary portrait on the stable
            parent layer as a fallback, then use a simple opacity crossfade. */
-        background: #f5e9d0 url('images/cw4.webp') center 20% / cover no-repeat;
+        background: #f5e9d0 url('images/cw4-card.webp') center 20% / cover no-repeat;
     }
 
     .image-compare,

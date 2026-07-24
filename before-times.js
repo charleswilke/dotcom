@@ -1624,7 +1624,7 @@
             renderKnowledgeRequest();
             knowledgeTerminalResponse.textContent = 'New path found. The present awaits!';
             knowledgeDoorHotspot.dataset.label = 'The Knowledge Maze · breach open';
-            knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze; its path to the present is open');
+            knowledgeDoorHotspot.setAttribute('aria-label', 'The Knowledge Maze; its path to the present is open');
             if (activeRoom === 'knowledge' && !document.hidden && !prefersReducedMotion.matches) {
                 knowledgePresentVideo.play().catch(() => {});
             }
@@ -1633,8 +1633,8 @@
 
         knowledgePresentVideo.pause();
 
-        knowledgeDoorHotspot.dataset.label = 'Enter The Knowledge Maze';
-        knowledgeDoorHotspot.setAttribute('aria-label', 'Enter The Knowledge Maze documentation room');
+        knowledgeDoorHotspot.dataset.label = 'The Knowledge Maze';
+        knowledgeDoorHotspot.setAttribute('aria-label', 'The Knowledge Maze documentation room');
         if (ready) {
             renderKnowledgeRequest();
             knowledgeTerminalResponse.replaceChildren(

@@ -40,14 +40,14 @@ It lives in the **Writing** section of the main site
 
 ## Where things live
 - **Station data:** `main.js`, inside `initTimeDial()` → the `recapStations`
-  array (~line 1496).
-- **Selected-on-load station:** `currentStation` in `main.js` (~line 1590).
-- **Date sync on load:** `syncInitialStation()` in `main.js` (~line 1961) copies
+  array (~line 1578).
+- **Selected-on-load station:** `currentStation` in `main.js` (~line 1684).
+- **Date sync on load:** `syncInitialStation()` in `main.js` (~line 2063) copies
   the current station's date into both date displays, so the HTML date defaults
   don't need to be kept in sync by hand.
-- **Dial markup:** `index.html`, the `.tuner-scale` block (~line 193).
+- **Dial markup:** `index.html`, the `.tuner-scale` block (~line 203).
 - **Default audio source:** `index.html`, `<audio id="recap-audio" src="…">`
-  (~line 233).
+  (~line 247).
 
 ### Station data shape
 ```javascript
@@ -80,50 +80,51 @@ Drop the MP3 in `/audio/` (e.g. `audio/jun-2026-substack-recap.mp3`). Use a
 consistent, chronological name.
 
 ### 2. Add the station to `main.js`
-Append an entry to the **end** of `recapStations` (~line 1496):
+Append an entry to the **end** of `recapStations` (~line 1578):
 ```javascript
 {
     angle: 0,                                   // value doesn't matter (unused)
-    date: 'June 2026',
-    file: 'audio/jun-2026-substack-recap.mp3',
-    label: 'JUN \'26'
+    date: 'July 2026',
+    file: 'audio/july-2026-substack-recap.mp3',
+    label: 'JUL \'26'
 }
 ```
 
 ### 3. Point `currentStation` at the new newest station
-Update `currentStation` (~line 1602) to the new last index so it loads selected:
+Update `currentStation` (~line 1684) to the new last index so it loads selected:
 ```javascript
-let currentStation = 13; // Start at the newest station
+let currentStation = 14; // Start at the newest station
 ```
 This one value now drives both the displayed dates *and* the initial needle/active
-marker position — the load-time `updateTunerIndicator(currentStation)` call (~line 1991)
+marker position — the load-time `updateTunerIndicator(currentStation)` call (~line 2073)
 derives from it, so there's no separate hardcoded index to bump.
 
 ### 4. Add the marker to `index.html`
-In the `.tuner-scale` block (~line 193): add a `.scale-marker.scale-minor` spacer,
+In the `.tuner-scale` block (~line 203): add a `.scale-marker.scale-minor` spacer,
 then the new major marker. Move the `active` class onto the new (newest) marker,
 and alternate `label-top` so labels keep staggering above/below the line:
 ```html
 <div class="scale-marker scale-minor"></div>
-<div class="scale-marker scale-major scale-clickable active" data-period="Jun '26" data-station="13">
-    <span class="marker-label">JUN<br>2026</span>
+<div class="scale-marker scale-major scale-clickable active" data-period="Jul '26" data-station="14">
+    <span class="marker-label">JUL<br>2026</span>
 </div>
 ```
 Remove `active` from the previous newest marker.
 
 ### 5. Update the default audio source
-Set the `<audio id="recap-audio">` `src` (~line 233) to the newest MP3 so the
+Set the `<audio id="recap-audio">` `src` (~line 247) to the newest MP3 so the
 right station is cued before JS runs:
 ```html
 <audio id="recap-audio" class="custom-audio"
-       src="audio/jun-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
+       src="audio/july-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
 ```
 
 ### 6. (Optional) Extend the animation stagger
-`styles.css` has a `--marker-index` list keyed by `:nth-child` (~line 5142) that
-staggers the idle "breathing" animation. It currently covers the first 19
-markers; add another `:nth-child` rule only if you've grown past that and want
-the new marker's animation staggered. Purely cosmetic.
+`styles.css` has a `--marker-index` list keyed by `:nth-child` (~line 5441) that
+staggers the idle "breathing" animation. It covers the first 19 `.scale-marker`
+children (majors *and* minors), so with 15 stations the dial already runs past
+it — the tail markers just share the default delay. Add more `:nth-child` rules
+only if you want the stagger to keep going. Purely cosmetic.
 
 ### What you do *not* need to touch
 The date displays auto-sync from the station data on load (`syncInitialStation`),
@@ -140,11 +141,11 @@ so you don't have to hand-edit the right-side date or the oscilloscope meta date
 
 ## Tips
 1. Keep file names chronological and consistent.
-2. The dial is getting dense (13+ stations on one line). If it gets too tight,
+2. The dial is getting dense (15 stations on one line). If it gets too tight,
    consider grouping by year, abbreviating labels, or paginating.
 3. If you replace an existing recap MP3 **in place** (same filename), run
    `./bump-cover.sh <file>.mp3` to cache-bust it — assets are served `immutable`.
 
 ---
 
-Last updated: 2026-07-01
+Last updated: 2026-07-25

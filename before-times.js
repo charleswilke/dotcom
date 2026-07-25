@@ -72,9 +72,10 @@
             title: 'The student press office',
             copy: [
                 'Before the career doors, there was a collegiate newspaper: deadlines, bylines, the strange authority of a press badge, and the discovery that asking a better question usually produced a better story.',
-                'The dispenser is ready for scanned clips once the old papers surface.'
+                'The Northern Star Weekender, 2003–2004. A standing column called NIU Review that graded campus furniture, weather and drinking fountains; film reviews; theater coverage; and the occasional real story about a real person.'
             ],
-            facts: ['Collegiate newspaper work', 'Early reporting and editing instincts', 'Future home for recovered bylines and scans']
+            facts: ['Northern Star Weekender, 2003–2004', 'NIU Review column, film and theater criticism', 'Clippings recovered and transcribed from the physical archive'],
+            button: { label: 'Open the clipping file', action: 'clippings' }
         },
         photography: {
             kicker: 'Lobby exhibit // contact sheets',
@@ -2404,12 +2405,16 @@
         archiveDetail.scrollTop = 0;
     }
 
+    const ARCHIVE_HEADERS = {
+        alchemy: { kicker: 'The Sound Stage // project file', title: 'The mutation archive' },
+        press: { kicker: 'Student press // recovered byline', title: 'The clipping file' },
+        content: { kicker: 'Content Factory // recovered work', title: 'The output archive' }
+    };
+
     function openArchive(collectionName, pieceId) {
-        const isAlchemy = collectionName === 'alchemy';
-        archiveKicker.textContent = isAlchemy
-            ? 'The Sound Stage // project file'
-            : 'Content Factory // recovered work';
-        archiveTitle.textContent = isAlchemy ? 'The mutation archive' : 'The output archive';
+        const header = ARCHIVE_HEADERS[collectionName] || ARCHIVE_HEADERS.content;
+        archiveKicker.textContent = header.kicker;
+        archiveTitle.textContent = header.title;
         renderArchivePiece(collectionName, pieceId);
         openDialog(archiveDialog);
     }
@@ -4306,6 +4311,10 @@
             infoButton.onclick = () => {
                 if (panel.button.action === 'tune') tuneRadio();
                 if (panel.button.action === 'broadcasts') openRadioArchive();
+                if (panel.button.action === 'clippings') {
+                    if (infoDialog.open) closeDialog(infoDialog);
+                    openArchive('press');
+                }
                 if (panel.button.action === 'sound') toggleSound();
             };
         }

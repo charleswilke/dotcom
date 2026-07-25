@@ -4879,7 +4879,7 @@
                     return;
                 }
                 if (!hasAlchemyPen) {
-                    showStatus('The guest book is waiting, but there is nothing to write with. Maybe Absurd Alchemy has a spare pen.', 4800);
+                    showStatus('The guest book is waiting, but there is nothing to write with. Maybe one of these rooms has a spare pen.', 4800);
                     return;
                 }
             }

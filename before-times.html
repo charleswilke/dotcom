@@ -125,6 +125,55 @@
                 <button class="bt-hotspot bt-hotspot-door bt-hotspot-docs bt-layered-hotspot bt-layered-doorway" type="button" data-panel="docs" data-label="The Knowledge Maze" aria-label="The Knowledge Maze documentation room">
                     <span class="bt-door-light" aria-hidden="true"></span>
                     <img class="bt-object-layer bt-object-layer-door-docs" src="/images/before-times/layers/door-docs-v1.webp?v=202607241328" width="680" height="1221" alt="" aria-hidden="true" decoding="async">
+                    <!-- The maze medallion comes apart once the room's wall is
+                         breached: the door art again, twice, each copy clipped to
+                         one side of the fracture. Same src as the layer above, so
+                         it costs a cache hit and no extra request. -->
+                    <span class="bt-door-break" aria-hidden="true">
+                        <span class="bt-door-break-void"></span>
+                        <span class="bt-door-break-slab bt-door-break-slab-left">
+                            <img class="bt-object-layer bt-object-layer-door-docs" src="/images/before-times/layers/door-docs-v1.webp?v=202607241328" width="680" height="1221" alt="" aria-hidden="true" decoding="async">
+                            <span class="bt-door-break-lip"><span class="bt-door-break-lip-core"></span></span>
+                        </span>
+                        <span class="bt-door-break-slab bt-door-break-slab-right">
+                            <img class="bt-object-layer bt-object-layer-door-docs" src="/images/before-times/layers/door-docs-v1.webp?v=202607241328" width="680" height="1221" alt="" aria-hidden="true" decoding="async">
+                            <span class="bt-door-break-lip"><span class="bt-door-break-lip-core"></span></span>
+                        </span>
+                        <span class="bt-door-break-glow"><span class="bt-door-break-glow-core"></span></span>
+                    </span>
+                    <!-- What escapes the crack. Sibling of the break layer, not a
+                         child: that one is masked to the medallion, and rays and
+                         falling grit have to leave the disc. -->
+                    <span class="bt-door-spill" aria-hidden="true">
+                        <span class="bt-door-rays">
+                            <span class="bt-door-ray"></span>
+                            <span class="bt-door-ray"></span>
+                            <span class="bt-door-ray"></span>
+                        </span>
+                        <span class="bt-door-dust">
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                            <span class="bt-door-mote"></span>
+                        </span>
+                    </span>
                 </button>
                 <button class="bt-hotspot bt-hotspot-door bt-hotspot-portal bt-layered-hotspot" type="button" data-panel="portal" data-label="Return to the AI era" aria-label="Inspect the glowing portal back to the present">
                     <span class="bt-door-light" aria-hidden="true"></span>

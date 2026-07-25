@@ -384,6 +384,32 @@ a {
     --bt-door-light-hover: 0.38;
 }
 
+/* Once the maze is breached the room beyond is lit by the present, not by the
+   archive: the door's ambient bloom and the puddle it throws on the lobby
+   floor go from purple to the same teal as the fracture, and come up. Without
+   this the wall gets torn open and the lighting never notices, which is most
+   of what made the old scar read as a decal. */
+.bt-hotspot-docs.bt-is-breached {
+    --bt-door-light-rgb: 44, 216, 194;
+    --bt-door-light-rest: 0.58;
+    --bt-door-light-hover: 0.78;
+}
+
+/* The bloom is drawn behind the door art, so at the default inset almost all
+   of it hides under the door and a colour change alone is invisible. The
+   breached door pushes the light further past the frame and widens the puddle
+   until it actually reaches the lobby floor. */
+.bt-hotspot-docs.bt-is-breached .bt-door-light {
+    inset: 4% 0 -13%;
+}
+
+.bt-hotspot-docs.bt-is-breached .bt-door-light::after {
+    right: -16%;
+    bottom: -11%;
+    left: -16%;
+    height: 42%;
+}
+
 .bt-construction-barricade {
     --bt-barricade-angle: -1.4deg;
     position: absolute;
@@ -3034,20 +3060,619 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     bottom: 6.6%;
 }
 
-.bt-hotspot-docs.bt-is-breached::before {
+/* ===== LOBBY ECHO OF THE BREACH =====
+
+   Inside the room the wall breaks as painted art (crack stages 1-3 into
+   knowledge-maze-breached-v3): the maze splits, the halves shove aside, and
+   teal shows up only as edge light on broken stone. The lobby door has to
+   break the same way, so the fracture is built out of the door art itself
+   rather than drawn on top of it.
+
+   The door layer is repeated twice inside .bt-door-break, each copy clipped to
+   one side of a single ragged tear. The two clip paths are the same path offset
+   by ±0.35%, so the broken faces interlock like real fracture faces. Each half
+   then rotates a couple of degrees about the TOP of the maze medallion, which
+   makes the displacement zero at the apex and largest at the bottom: the crack
+   opens downward, under its own weight, instead of being a constant-width bar.
+
+   Everything is masked to an ellipse over the medallion and feathered at its
+   rim, where the intact door layer underneath takes back over. So the disc's
+   outer rings stay registered with the wall and only the middle of the maze
+   comes apart -- and the halves' displacement (which grows with distance from
+   the pivot, i.e. worst at the rim) fades out exactly where it would otherwise
+   show as a seam.
+
+   Read order back to front: dark void, the two stone halves, then the light.
+   Dark first is what keeps it from reading as a neon sign. */
+
+.bt-door-break {
+    /* Medallion geometry in hotspot percentages, measured against
+       door-docs-v1 on the lobby's fixed 1672:941 stage: the medallion is a
+       circle at (339, 207) r=166 in the 680x1221 source. The image is
+       object-fit: contain inside the layer box, so cx/rx already account for
+       the ~2% letterbox on each side, and ry is the same circle expressed
+       against the layer's taller box. */
+    --bt-break-cx: 43.1%;
+    --bt-break-cy: 15%;
+    --bt-break-rx: 24%;
+    --bt-break-ry: 14.8%;
+    /* Rotation of each half about the medallion's top. Bigger angle = wider
+       crack at the bottom; the void polygon below is drawn with enough slack
+       to stay covered up to about 3.9deg, so tune within that. */
+    --bt-break-angle: 3.6deg;
+    /* Container context so the edge shadows can be sized in cqw and hold
+       their proportions from 760px up to the 1672px stage. */
+    container-type: inline-size;
     position: absolute;
-    z-index: 4;
-    top: -3%;
-    left: 47.5%;
-    width: 2.6%;
-    height: 38%;
-    content: "";
+    z-index: 2;
+    inset: 0;
     pointer-events: none;
-    background: linear-gradient(180deg, transparent, #00f7c2 18% 82%, transparent);
-    box-shadow: 0 0 5px #00f7c2, 0 0 13px rgba(0, 247, 194, 0.82), 0 0 25px rgba(0, 247, 194, 0.5);
-    clip-path: polygon(35% 0, 100% 0, 62% 16%, 95% 29%, 50% 42%, 84% 56%, 22% 71%, 66% 84%, 28% 100%, 0 100%, 31% 83%, 0 69%, 45% 55%, 12% 42%, 57% 28%, 26% 16%);
-    opacity: 0.92;
-    animation: bt-knowledge-lobby-scar 1.8s ease-in-out infinite alternate;
+    opacity: 0;
+    transition: opacity 420ms ease;
+    -webkit-mask-image: radial-gradient(
+        ellipse var(--bt-break-rx) var(--bt-break-ry) at var(--bt-break-cx) var(--bt-break-cy),
+        #000 0 72%,
+        rgba(0, 0, 0, 0.82) 86%,
+        rgba(0, 0, 0, 0.34) 95%,
+        transparent 100%
+    );
+    mask-image: radial-gradient(
+        ellipse var(--bt-break-rx) var(--bt-break-ry) at var(--bt-break-cx) var(--bt-break-cy),
+        #000 0 72%,
+        rgba(0, 0, 0, 0.82) 86%,
+        rgba(0, 0, 0, 0.34) 95%,
+        transparent 100%
+    );
+}
+
+/* bt-break-ready is set once both slab images have decoded (see
+   syncKnowledgeBreakArt) -- the shapes must not outrun the art they cut. */
+.bt-hotspot-docs.bt-is-breached.bt-break-ready .bt-door-break {
+    opacity: 1;
+}
+
+/* Hover lifts and swells the door art. The void and the light are shaped in
+   the layer's own coordinates, so they have to take that ride as a unit or
+   they slide off the fracture -- the whole break layer animates instead of
+   its two images, which would otherwise get the lift twice. */
+.bt-layered-doorway:hover .bt-door-break,
+.bt-layered-doorway:focus-visible .bt-door-break,
+.bt-layered-doorway:hover .bt-door-spill,
+.bt-layered-doorway:focus-visible .bt-door-spill {
+    /* Same lift and grade the door layer gets, so the halves stay part of it. */
+    filter: brightness(1.1) saturate(1.16);
+    transform-origin: 50% 72%;
+    animation: bt-doorway-hover 1.05s ease-in-out infinite alternate;
+}
+
+.bt-layered-doorway.is-activating .bt-door-break,
+.bt-layered-doorway.is-activating .bt-door-spill {
+    filter: brightness(1.14) saturate(1.2);
+    transform-origin: 50% 72%;
+    animation: bt-doorway-awaken 620ms cubic-bezier(0.2, 0.84, 0.32, 1) both;
+}
+
+.bt-layered-doorway:hover .bt-door-break-slab > img,
+.bt-layered-doorway:focus-visible .bt-door-break-slab > img,
+.bt-layered-doorway.is-activating .bt-door-break-slab > img {
+    filter: none;
+    transform: none;
+    animation: none;
+}
+
+/* The gap the stone left behind. Drawn deliberately wider than the halves
+   actually travel -- the surplus hides under them, and the hairline at the
+   apex is the only place it shows through on its own. */
+.bt-door-break-void {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(7, 6, 22, 0.94) 0 5%,
+        #050414 24% 70%,
+        rgba(6, 5, 20, 0.96) 100%
+    );
+    clip-path: polygon(
+        43.48% 0.4%, 44.19% 2.6%, 43.58% 5.4%, 44.35% 8%, 46.19% 10.4%,
+        45.86% 13%, 44.8% 15.4%, 45.92% 18.4%, 47.79% 21%, 47.02% 24%,
+        46.54% 27%, 48.07% 30%, 48% 33.8%,
+        38% 33.8%, 39.13% 30%, 38.46% 27%, 39.78% 24%, 41.41% 21%,
+        40.28% 18.4%, 40% 15.4%, 41.74% 13%, 42.81% 10.4%, 41.65% 8%,
+        41.62% 5.4%, 43.01% 2.6%, 42.92% 0.4%
+    );
+}
+
+.bt-door-break-slab {
+    position: absolute;
+    inset: 0;
+    transform-origin: var(--bt-break-cx) 0;
+}
+
+/* Clockwise for the left half: about a pivot at the top, clockwise walks the
+   bottom of the half to the LEFT, which is the direction it has to fall. The
+   uneven translateY is what sells it -- a pure rotation slides the two faces
+   apart while every maze ring stays at the same height on both sides, which
+   still reads as a line drawn over intact stone. Dropping one half a couple of
+   pixels further than the other breaks the rings across the gap, and that
+   mismatch is the thing the eye reads as displaced stone. */
+.bt-door-break-slab-left {
+    transform: rotate(var(--bt-break-angle)) translateY(0.55%);
+    /* Contact shadow at the lip. The filter sits on the wrapper so it reads
+       the clipped alpha of the child -- a filter on the image itself would be
+       clipped away by its own clip-path. */
+    filter: drop-shadow(0.14cqw 0 0.12cqw rgba(3, 4, 17, 0.66));
+}
+
+.bt-door-break-slab-right {
+    transform: rotate(calc(var(--bt-break-angle) * -1)) translateY(-0.3%);
+    filter: drop-shadow(-0.14cqw 0 0.12cqw rgba(3, 4, 17, 0.66));
+}
+
+/* Same tear, offset ±0.35% of the layer, so the two faces interlock. These
+   percentages are in the IMAGE's box, which is 104.25% x 110.75% of the layer
+   and offset (-9.14%, -3.65%) from it -- hence the conversion off the layer
+   coordinates used by the void and the glow above. */
+.bt-door-break-slab > img {
+    clip-path: polygon(
+        0 0, 49.87% 0, 49.87% 3.66%, 50.25% 5.64%, 49.29% 8.17%, 49.68% 10.52%,
+        51.12% 12.69%, 50.45% 15.03%, 49.1% 17.2%, 49.77% 19.91%, 51.21% 22.26%,
+        50.06% 24.97%, 49.2% 27.67%, 50.25% 30.38%, 49.68% 33.81%,
+        49.68% 100%, 0 100%
+    );
+}
+
+.bt-door-break-slab-right > img {
+    clip-path: polygon(
+        100% 0, 50.54% 0, 50.54% 3.66%, 50.93% 5.64%, 49.97% 8.17%, 50.35% 10.52%,
+        51.79% 12.69%, 51.12% 15.03%, 49.77% 17.2%, 50.45% 19.91%, 51.88% 22.26%,
+        50.73% 24.97%, 49.87% 27.67%, 50.93% 30.38%, 50.35% 33.81%,
+        50.35% 100%, 100% 100%
+    );
+}
+
+/* Edge light ON the broken stone. The lip lives INSIDE its slab, so it rides
+   the same rotation and stays welded to the face it lights, and it straddles
+   the tear: most of the band sits on the stone, a sliver spills into the gap.
+   Blur on the wrapper, shape on the child -- a filter on the shaped element
+   would have its blur clipped off by its own clip-path.
+
+   This is the part the old scar got backwards. Light belongs on the faces;
+   the gap between them stays dark, which is why the fracture doesn't widen
+   into a glowing bar as it opens. */
+.bt-door-break-lip {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: screen;
+    filter: blur(0.34cqw);
+}
+
+.bt-door-break-lip-core {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 247, 194, 0.16) 0 3%,
+        rgba(0, 247, 194, 0.5) 34%,
+        rgba(148, 255, 234, 0.78) 62%,
+        rgba(0, 247, 194, 0.4) 86%,
+        transparent 100%
+    );
+}
+
+/* Left face: band from centreline -1.7% to +0.35%. */
+.bt-door-break-slab-left .bt-door-break-lip-core {
+    clip-path: polygon(
+        43.55% 0.4%, 43.95% 2.6%, 42.95% 5.4%, 43.35% 8%, 44.85% 10.4%,
+        44.15% 13%, 42.75% 15.4%, 43.45% 18.4%, 44.95% 21%, 43.75% 24%,
+        42.85% 27%, 43.95% 30%, 43.35% 33.4%,
+        41.3% 33.4%, 41.9% 30%, 40.8% 27%, 41.7% 24%, 42.9% 21%,
+        41.4% 18.4%, 40.7% 15.4%, 42.1% 13%, 42.8% 10.4%, 41.3% 8%,
+        40.9% 5.4%, 41.9% 2.6%, 41.5% 0.4%
+    );
+}
+
+/* Right face: the mirror, -0.35% to +1.7%. */
+.bt-door-break-slab-right .bt-door-break-lip-core {
+    clip-path: polygon(
+        44.9% 0.4%, 45.3% 2.6%, 44.3% 5.4%, 44.7% 8%, 46.2% 10.4%,
+        45.5% 13%, 44.1% 15.4%, 44.8% 18.4%, 46.3% 21%, 45.1% 24%,
+        44.2% 27%, 45.3% 30%, 44.7% 33.4%,
+        42.65% 33.4%, 43.25% 30%, 42.15% 27%, 43.05% 24%, 44.25% 21%,
+        42.75% 18.4%, 42.05% 15.4%, 43.45% 13%, 44.15% 10.4%, 42.65% 8%,
+        42.25% 5.4%, 43.25% 2.6%, 42.85% 0.4%
+    );
+}
+
+/* A little of the room beyond, deep in the gap. Dim on purpose: it keeps the
+   crack from going flat black without lighting it like a sign. */
+.bt-door-break-glow {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: screen;
+    filter: blur(0.7cqw);
+}
+
+.bt-door-break-glow-core {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 0 8%,
+        rgba(0, 247, 194, 0.08) 38%,
+        rgba(0, 247, 194, 0.16) 66%,
+        rgba(0, 247, 194, 0.06) 88%,
+        transparent 100%
+    );
+    clip-path: polygon(
+        44.1% 0.4%, 44.5% 2.6%, 43.5% 5.4%, 43.9% 8%, 45.4% 10.4%,
+        44.7% 13%, 43.3% 15.4%, 44% 18.4%, 45.5% 21%, 44.3% 24%,
+        43.4% 27%, 44.5% 30%, 43.9% 33.4%,
+        42.1% 33.4%, 42.7% 30%, 41.6% 27%, 42.5% 24%, 43.7% 21%,
+        42.2% 18.4%, 41.5% 15.4%, 42.9% 13%, 43.6% 10.4%, 42.1% 8%,
+        41.7% 5.4%, 42.7% 2.6%, 42.3% 0.4%
+    );
+    /* Not a pulse. Stone doesn't idle on a 2s sine -- this is the odd
+       settle in the light, mostly imperceptible. */
+    animation: bt-knowledge-lobby-scar 11s steps(1, end) infinite;
+}
+
+/* ===== WHAT ESCAPES THE CRACK =====
+
+   Rays and grit sit OUTSIDE .bt-door-break, because that layer is masked to
+   the medallion and both of these have to leave the disc. Same hover ride and
+   the same bt-break-ready gate as the fracture itself. */
+
+.bt-door-spill {
+    container-type: inline-size;
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 420ms ease;
+}
+
+.bt-hotspot-docs.bt-is-breached.bt-break-ready .bt-door-spill {
+    opacity: 1;
+}
+
+/* Blur on the wrapper, shape on each ray -- a filter on the shaped element
+   would have its blur clipped off by its own clip-path. */
+.bt-door-rays {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: screen;
+    filter: blur(0.75cqw);
+}
+
+.bt-door-ray {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+}
+
+/* Three beams out of the widest stretch of the crack, none of them plumb and
+   none the same length -- a symmetrical fan reads as a graphic. Each drifts on
+   its own odd period so they never breathe together. */
+.bt-door-ray:nth-child(1) {
+    background: linear-gradient(
+        176deg,
+        rgba(0, 247, 194, 0.38) 0 6%,
+        rgba(0, 247, 194, 0.18) 44%,
+        transparent 92%
+    );
+    clip-path: polygon(42.8% 13%, 44.6% 13%, 48.5% 58%, 39.5% 58%);
+    animation: bt-door-ray-drift 13s ease-in-out infinite;
+}
+
+.bt-door-ray:nth-child(2) {
+    background: linear-gradient(
+        128deg,
+        rgba(0, 247, 194, 0.32) 0 8%,
+        rgba(0, 247, 194, 0.14) 48%,
+        transparent 94%
+    );
+    clip-path: polygon(43.6% 16%, 45.2% 16%, 62% 47%, 55% 51%);
+    animation: bt-door-ray-drift 17s ease-in-out infinite;
+    animation-delay: -6s;
+}
+
+.bt-door-ray:nth-child(3) {
+    background: linear-gradient(
+        226deg,
+        rgba(0, 247, 194, 0.27) 0 8%,
+        rgba(0, 247, 194, 0.12) 46%,
+        transparent 92%
+    );
+    clip-path: polygon(42.4% 18%, 43.8% 18%, 27% 52%, 22.5% 46.5%);
+    animation: bt-door-ray-drift 21s ease-in-out infinite;
+    animation-delay: -13s;
+}
+
+.bt-door-dust {
+    position: absolute;
+    inset: 0;
+}
+
+/* Grit shaken loose off the broken edges. Each mote spends most of its cycle
+   at opacity 0 -- the fall is the first fifth of a long period, so what you
+   get is the odd trickle rather than a steady snowfall. */
+.bt-door-mote {
+    position: absolute;
+    top: var(--bt-mote-y);
+    left: var(--bt-mote-x);
+    width: var(--bt-mote-size, 0.9cqw);
+    height: var(--bt-mote-size, 0.9cqw);
+    background: rgba(205, 255, 243, 0.78);
+    border-radius: 50%;
+    box-shadow: 0 0 0.7cqw rgba(0, 247, 194, 0.45);
+    opacity: 0;
+    animation: bt-door-mote-fall var(--bt-mote-life) linear infinite;
+    animation-delay: var(--bt-mote-delay);
+}
+
+/* A few of them are chips, not dust: grit that never catches the light. Not
+   black -- the door below the medallion is already dark, so an unlit chip
+   would simply vanish. */
+.bt-door-mote:nth-child(3),
+.bt-door-mote:nth-child(8),
+.bt-door-mote:nth-child(12),
+.bt-door-mote:nth-child(17),
+.bt-door-mote:nth-child(20) {
+    background: rgba(150, 158, 186, 0.8);
+    box-shadow: none;
+}
+
+.bt-door-mote:nth-child(1) {
+    --bt-mote-x: 44.3%;
+    --bt-mote-y: 9.8%;
+    --bt-mote-size: 0.82cqw;
+    --bt-mote-drift: -2.5cqw;
+    --bt-mote-fall: 45cqw;
+    --bt-mote-life: 24s;
+    --bt-mote-delay: -9s;
+}
+
+.bt-door-mote:nth-child(2) {
+    --bt-mote-x: 43.4%;
+    --bt-mote-y: 12.1%;
+    --bt-mote-size: 0.75cqw;
+    --bt-mote-drift: -3.1cqw;
+    --bt-mote-fall: 24cqw;
+    --bt-mote-life: 14s;
+    --bt-mote-delay: -1s;
+}
+
+.bt-door-mote:nth-child(3) {
+    --bt-mote-x: 43.6%;
+    --bt-mote-y: 19.6%;
+    --bt-mote-size: 0.68cqw;
+    --bt-mote-drift: -0.6cqw;
+    --bt-mote-fall: 20cqw;
+    --bt-mote-life: 33s;
+    --bt-mote-delay: -5s;
+}
+
+.bt-door-mote:nth-child(4) {
+    --bt-mote-x: 42.8%;
+    --bt-mote-y: 10.1%;
+    --bt-mote-size: 1.14cqw;
+    --bt-mote-drift: 2.4cqw;
+    --bt-mote-fall: 46cqw;
+    --bt-mote-life: 33s;
+    --bt-mote-delay: -25s;
+}
+
+.bt-door-mote:nth-child(5) {
+    --bt-mote-x: 42.2%;
+    --bt-mote-y: 19.3%;
+    --bt-mote-size: 1.25cqw;
+    --bt-mote-drift: -1.1cqw;
+    --bt-mote-fall: 38cqw;
+    --bt-mote-life: 25s;
+    --bt-mote-delay: -25s;
+}
+
+.bt-door-mote:nth-child(6) {
+    --bt-mote-x: 44.2%;
+    --bt-mote-y: 13.6%;
+    --bt-mote-size: 0.77cqw;
+    --bt-mote-drift: 0.3cqw;
+    --bt-mote-fall: 28cqw;
+    --bt-mote-life: 26s;
+    --bt-mote-delay: -20s;
+}
+
+.bt-door-mote:nth-child(7) {
+    --bt-mote-x: 42.4%;
+    --bt-mote-y: 16.5%;
+    --bt-mote-size: 0.89cqw;
+    --bt-mote-drift: 2.3cqw;
+    --bt-mote-fall: 44cqw;
+    --bt-mote-life: 28s;
+    --bt-mote-delay: -2s;
+}
+
+.bt-door-mote:nth-child(8) {
+    --bt-mote-x: 41.7%;
+    --bt-mote-y: 20.7%;
+    --bt-mote-size: 1.27cqw;
+    --bt-mote-drift: 0.9cqw;
+    --bt-mote-fall: 34cqw;
+    --bt-mote-life: 16s;
+    --bt-mote-delay: -7s;
+}
+
+.bt-door-mote:nth-child(9) {
+    --bt-mote-x: 44.8%;
+    --bt-mote-y: 26.1%;
+    --bt-mote-size: 0.84cqw;
+    --bt-mote-drift: 0.4cqw;
+    --bt-mote-fall: 47cqw;
+    --bt-mote-life: 29s;
+    --bt-mote-delay: -7s;
+}
+
+.bt-door-mote:nth-child(10) {
+    --bt-mote-x: 43.0%;
+    --bt-mote-y: 4.0%;
+    --bt-mote-size: 0.61cqw;
+    --bt-mote-drift: -3.0cqw;
+    --bt-mote-fall: 42cqw;
+    --bt-mote-life: 17s;
+    --bt-mote-delay: -6s;
+}
+
+.bt-door-mote:nth-child(11) {
+    --bt-mote-x: 41.7%;
+    --bt-mote-y: 28.8%;
+    --bt-mote-size: 0.92cqw;
+    --bt-mote-drift: 0.5cqw;
+    --bt-mote-fall: 46cqw;
+    --bt-mote-life: 11s;
+    --bt-mote-delay: -5s;
+}
+
+.bt-door-mote:nth-child(12) {
+    --bt-mote-x: 45.4%;
+    --bt-mote-y: 20.1%;
+    --bt-mote-size: 0.83cqw;
+    --bt-mote-drift: 2.1cqw;
+    --bt-mote-fall: 20cqw;
+    --bt-mote-life: 12s;
+    --bt-mote-delay: -11s;
+}
+
+.bt-door-mote:nth-child(13) {
+    --bt-mote-x: 44.1%;
+    --bt-mote-y: 13.6%;
+    --bt-mote-size: 0.93cqw;
+    --bt-mote-drift: 0.9cqw;
+    --bt-mote-fall: 37cqw;
+    --bt-mote-life: 31s;
+    --bt-mote-delay: -2s;
+}
+
+.bt-door-mote:nth-child(14) {
+    --bt-mote-x: 45.0%;
+    --bt-mote-y: 15.6%;
+    --bt-mote-size: 0.83cqw;
+    --bt-mote-drift: 0.8cqw;
+    --bt-mote-fall: 43cqw;
+    --bt-mote-life: 20s;
+    --bt-mote-delay: -16s;
+}
+
+.bt-door-mote:nth-child(15) {
+    --bt-mote-x: 41.7%;
+    --bt-mote-y: 10.1%;
+    --bt-mote-size: 1.14cqw;
+    --bt-mote-drift: -0.7cqw;
+    --bt-mote-fall: 31cqw;
+    --bt-mote-life: 16s;
+    --bt-mote-delay: -9s;
+}
+
+.bt-door-mote:nth-child(16) {
+    --bt-mote-x: 43.5%;
+    --bt-mote-y: 13.2%;
+    --bt-mote-size: 0.81cqw;
+    --bt-mote-drift: -1.5cqw;
+    --bt-mote-fall: 42cqw;
+    --bt-mote-life: 18s;
+    --bt-mote-delay: -6s;
+}
+
+.bt-door-mote:nth-child(17) {
+    --bt-mote-x: 45.2%;
+    --bt-mote-y: 10.0%;
+    --bt-mote-size: 1.06cqw;
+    --bt-mote-drift: -2.6cqw;
+    --bt-mote-fall: 37cqw;
+    --bt-mote-life: 13s;
+    --bt-mote-delay: -6s;
+}
+
+.bt-door-mote:nth-child(18) {
+    --bt-mote-x: 43.2%;
+    --bt-mote-y: 12.7%;
+    --bt-mote-size: 0.8cqw;
+    --bt-mote-drift: -2.2cqw;
+    --bt-mote-fall: 46cqw;
+    --bt-mote-life: 30s;
+    --bt-mote-delay: -13s;
+}
+
+.bt-door-mote:nth-child(19) {
+    --bt-mote-x: 41.8%;
+    --bt-mote-y: 29.5%;
+    --bt-mote-size: 1.17cqw;
+    --bt-mote-drift: -2.1cqw;
+    --bt-mote-fall: 32cqw;
+    --bt-mote-life: 23s;
+    --bt-mote-delay: -9s;
+}
+
+.bt-door-mote:nth-child(20) {
+    --bt-mote-x: 45.2%;
+    --bt-mote-y: 13.1%;
+    --bt-mote-size: 0.92cqw;
+    --bt-mote-drift: 0.6cqw;
+    --bt-mote-fall: 29cqw;
+    --bt-mote-life: 16s;
+    --bt-mote-delay: -4s;
+}
+
+.bt-door-mote:nth-child(21) {
+    --bt-mote-x: 43.5%;
+    --bt-mote-y: 28.7%;
+    --bt-mote-size: 0.75cqw;
+    --bt-mote-drift: -0.3cqw;
+    --bt-mote-fall: 45cqw;
+    --bt-mote-life: 13s;
+    --bt-mote-delay: -7s;
+}
+
+/* Slow, shallow, and off a different period per ray. */
+@keyframes bt-door-ray-drift {
+    0%, 100% { opacity: 0.5; }
+    31% { opacity: 0.92; }
+    44% { opacity: 0.68; }
+    67% { opacity: 1; }
+    82% { opacity: 0.6; }
+}
+
+/* The fall lives in the first fifth; the rest of the cycle is the wait. */
+@keyframes bt-door-mote-fall {
+    0% { opacity: 0; translate: 0 0; }
+    3% { opacity: 0.9; }
+    15% { opacity: 0.85; }
+    20% { opacity: 0; translate: var(--bt-mote-drift) var(--bt-mote-fall); }
+    100% { opacity: 0; translate: var(--bt-mote-drift) var(--bt-mote-fall); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bt-door-break {
+        transition: none;
+    }
+
+    .bt-door-break-glow-core {
+        animation: none;
+    }
+
+    /* Grit is motion for its own sake; the rays can just hold still. */
+    .bt-door-spill {
+        transition: none;
+    }
+
+    .bt-door-dust {
+        display: none;
+    }
+
+    .bt-door-ray {
+        opacity: 0.8;
+        animation: none;
+    }
 }
 
 @keyframes bt-knowledge-enter {
@@ -3101,9 +3726,17 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     100% { filter: brightness(1.18) hue-rotate(8deg); transform: translateX(1px); }
 }
 
+/* Irregular on purpose: uneven gaps and a small amplitude, so the light in the
+   crack settles now and then instead of breathing on a metronome. */
 @keyframes bt-knowledge-lobby-scar {
-    from { filter: brightness(0.86); opacity: 0.72; }
-    to { filter: brightness(1.22); opacity: 1; }
+    0%, 22% { opacity: 1; }
+    23% { opacity: 0.9; }
+    24%, 57% { opacity: 1; }
+    58% { opacity: 0.86; }
+    59% { opacity: 0.96; }
+    60%, 78% { opacity: 1; }
+    79% { opacity: 0.92; }
+    80%, 100% { opacity: 1; }
 }
 
 /* ===== ABSURD ALCHEMY ROOM ===== */

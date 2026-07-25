@@ -915,6 +915,7 @@
     const contentScene = document.getElementById('bt-content-scene');
     const contentArt = document.querySelector('.bt-content-art');
     const knowledgeDoorHotspot = document.querySelector('.bt-hotspot-docs');
+    const knowledgeBreakSlabs = Array.from(knowledgeDoorHotspot.querySelectorAll('.bt-door-break-slab img'));
     const knowledgeScroll = document.getElementById('bt-knowledge-scroll');
     const knowledgeScene = document.getElementById('bt-knowledge-scene');
     const knowledgeArt = document.querySelector('.bt-knowledge-art-contained');
@@ -1593,6 +1594,19 @@
         window.setTimeout(() => fragment.classList.remove('is-revealing'), 1400);
     }
 
+    // The lobby fracture is CSS geometry cut into two copies of the door art.
+    // The door layers pop in as they decode, and the shapes paint first, so
+    // without this the crack spends a beat floating on a bare wall. Hold it
+    // back until the stone it is cut from is actually on screen.
+    function syncKnowledgeBreakArt() {
+        const ready = knowledgeBreakSlabs.every((img) => img.complete && img.naturalWidth > 0);
+        knowledgeDoorHotspot.classList.toggle('bt-break-ready', ready);
+        if (ready) return;
+        knowledgeBreakSlabs.forEach((img) => {
+            img.addEventListener('load', syncKnowledgeBreakArt, { once: true });
+        });
+    }
+
     function syncKnowledgeState() {
         const count = knowledgeContext.size;
         const ready = count === Object.keys(KNOWLEDGE_EXHIBITS).length;
@@ -1607,6 +1621,7 @@
         knowledgeScene.classList.toggle('is-context-ready', ready && !knowledgeBreached);
         knowledgeScene.classList.toggle('is-breached', knowledgeBreached);
         knowledgeDoorHotspot.classList.toggle('bt-is-breached', knowledgeBreached);
+        syncKnowledgeBreakArt();
 
         Object.entries(knowledgeContextElements).forEach(([key, element]) => {
             const recovered = knowledgeContext.has(key);

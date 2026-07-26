@@ -5,7 +5,7 @@
 ## 📦 What's in the Box?
 
 - **Writing**: Essays, rants, and explorations on AI, creativity, and capitalism, served fresh from the [Exploring L.ai.bor](https://charleswilke.substack.com) Substack
-- **Music**: Full albums made with AI collaborators: *Grief without Ritual*, *Junkyard Cabaret*, and the Exploring L.ai.bor mixtape (plus Side Two and the B-Sides, because every mixtape needs a flip)
+- **Music**: AI-assisted albums: *Grief without Ritual*, *Junkyard Cabaret*, and the Exploring L.ai.bor mixtape (plus Side Two and the B-Sides, because every mixtape needs a flip)
 - **Games**: A hand-built Canvas arcade. [TootsJam](https://charleswilke.com/tootsjam) (hold-to-charge free throws), [SpaceToots](https://charleswilke.com/spacetoots) (synthwave shoot-em-up), and **Toots Quest**, a top-down adventure drawn entirely in code (zero image assets), currently in the workshop
 - **Theater**: Projection design for *Alice in Wonderland* and *Jersey Boys*
 - **Visuals**: French pop-art meets pulp-noir. Think moody ink sketches and retro-future vibes

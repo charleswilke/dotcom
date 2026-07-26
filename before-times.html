@@ -51,7 +51,7 @@
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.webp?v=20260718e" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=202607241328" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/guestbook-fresh-v1.webp?v=20260718d" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260725a">
+    <link rel="stylesheet" href="/before-times.css?v=20260726a">
     <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
@@ -774,6 +774,26 @@
         </article>
     </dialog>
 
+    <dialog class="bt-dialog bt-scan-dialog" id="bt-scan-dialog" aria-labelledby="bt-scan-title">
+        <article class="bt-dialog-card bt-scan-card">
+            <button class="bt-dialog-close" type="button" data-dialog-close aria-label="Close the scan">×</button>
+            <header class="bt-scan-header">
+                <div class="bt-scan-header-copy">
+                    <p class="bt-dialog-kicker" id="bt-scan-kicker">As printed</p>
+                    <h1 id="bt-scan-title">The scan</h1>
+                </div>
+                <div class="bt-scan-controls">
+                    <div class="bt-scan-pages" id="bt-scan-pages" role="group" aria-label="Choose a page"></div>
+                    <button class="bt-scan-fit" id="bt-scan-fit" type="button" aria-pressed="false">Actual size</button>
+                </div>
+            </header>
+            <div class="bt-scan-stage" id="bt-scan-stage" tabindex="0">
+                <img id="bt-scan-image" alt="" decoding="async">
+            </div>
+            <p class="bt-scan-caption" id="bt-scan-caption"></p>
+        </article>
+    </dialog>
+
     <dialog class="bt-dialog bt-game-binder-dialog" id="bt-game-binder-dialog" aria-labelledby="bt-game-binder-title">
         <article class="bt-dialog-card bt-game-binder-card">
             <button class="bt-dialog-close bt-game-binder-close" type="button" data-dialog-close aria-label="Close game-writing archive">×</button>
@@ -886,8 +906,8 @@
     <audio id="bt-radio-audio" preload="none"></audio>
     <noscript><p class="bt-noscript">This archive needs JavaScript for its doors and objects. The portal back home is at <a href="/">charleswilke.com</a>.</p></noscript>
     <script src="https://player.vimeo.com/api/player.js" defer></script>
-    <script src="/before-times-archive.js?v=20260719i" defer></script>
+    <script src="/before-times-archive.js?v=20260726a" defer></script>
     <script src="/before-times-game-binder.js?v=20260722a" defer></script>
-    <script src="/before-times.js?v=20260724b" defer></script>
+    <script src="/before-times.js?v=20260726a" defer></script>
 </body>
 </html>

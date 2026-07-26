@@ -1535,6 +1535,26 @@
                 depthLabel: 'Full feature',
                 image: '/images/before-times/archive/meet-sam-v1.webp',
                 imageAlt: 'The Weekender cover of "Meet Sam … He met two NIU students and changed their lives," white type reversed out of a dark photograph',
+                // The only multi-page clipping in the file. Reading order is cover
+                // → p2 left column → p3 left column → p2 right → p3 right, so the
+                // pages are listed as printed rather than as read.
+                pages: [
+                    {
+                        label: 'Cover',
+                        src: '/images/before-times/archive/meet-sam-v1.webp',
+                        alt: 'The Weekender cover of "Meet Sam … He met two NIU students and changed their lives," white type reversed out of a dark photograph'
+                    },
+                    {
+                        label: 'Page 2',
+                        src: '/images/before-times/archive/meet-sam-p2-v1.webp',
+                        alt: 'Page 2 of the feature, headlined "What started as an assignment became a passion," with a photo of the two filmmakers at an edit bay'
+                    },
+                    {
+                        label: 'Page 3',
+                        src: '/images/before-times/archive/meet-sam-p3-v1.webp',
+                        alt: 'Page 3 of the feature, two columns of text around a portrait of Sam Williams'
+                    }
+                ],
                 dek: 'Two NIU students set out to make a ten-minute class documentary about illegal drag racing. They ended up spending fourteen hours of footage on a boy with cerebral palsy, and winning a film festival.',
                 curator: 'The one straight feature in the clipping file, and the piece that shows what the byline could do when the assignment was not a joke. It opens at 2 a.m. in an edit bay, tracks a class project as it outgrows the class, and lets the two filmmakers say the uncomfortable thing out loud — that neither of them knew how to act around Sam before they met him. The subject of the documentary is treated as a person rather than a lesson, which is harder than it looks and is the whole reason this one survived.',
                 body: [
@@ -2580,7 +2600,7 @@
                 publication: 'Northern Star — Weekender, page 6 · “Save Them!: The Life of Paul Rader”',
                 credit: 'By Chaz Wilke, Weekender Reporter',
                 format: 'Documentary feature · NIU thesis film',
-                depthLabel: 'Clipping + pull quote',
+                depthLabel: 'Full feature',
                 image: '/images/before-times/archive/a-taste-of-radio-heaven-v1.webp',
                 imageAlt: 'The Dec. 4, 2003 clipping of "A taste of radio heaven"',
                 dek: 'An NIU graduate student’s 18-month documentary about a 1920s radio evangelist, and the $10,000 photo-rights problem standing between it and distribution.',
@@ -2589,7 +2609,27 @@
                     { type: 'paragraph', text: 'With the football season over, you’d think NIU would be done making news. But the communication department hopes to make a mark for NIU as well.' },
                     { type: 'quote', text: 'I need about $10,000 to fully complete the project. I need to procure the rights to 50 to 60 photographs.' },
                     { type: 'paragraph', text: 'No photo ran with this piece.' }
-                ]
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete feature',
+                    meta: 'Complete feature // about 2 minutes',
+                    intro: 'Transcribed from the original newsprint, page 6 of the Dec. 4, 2003 Weekender. Spelling and punctuation are preserved as printed, including the paper’s bracketed insertion in the closing quote. No photo ran with this piece.',
+                    body: [
+                        { type: 'paragraph', text: 'With the football season over, you’d think NIU would be done making news. But the communication department hopes to make a mark for NIU as well.' },
+                        { type: 'paragraph', text: 'Hot on the heels of the success of “Please Wait to be Seated,” another documentary is stirring up the West Coast.' },
+                        { type: 'paragraph', text: '“Save Them!: The Life of Paul Rader,” a documentary on the first Evangelist to hop on that odd new creation known as the “radio” back in the 1920s, was voted best documentary at the fourth annual “What You See is What You Get” Christian film fest.' },
+                        { type: 'paragraph', text: 'Paul Butler, a communication graduate student, created the film as his thesis project. Butler worked together with thesis directors Jeffrey Chown and Laura Vazquez for 18 grueling months to create the 60-minute piece.' },
+                        { type: 'paragraph', text: '“This project was a case study in producing a historical documentary in the visual style of Ken Burns, without the use of a narrator,” Butler said.' },
+                        { type: 'paragraph', text: 'Before shipping the final product off to San Francisco’s WYSIWYG festival, he screened a rough cut at last spring’s “Reality Bytes” film festival at NIU.' },
+                        { type: 'paragraph', text: 'The enthused audience received the piece with open arms.' },
+                        { type: 'paragraph', text: '“He was very dedicated in making a piece that was moving and interesting,” Vazquez said. “He accomplished that.”' },
+                        { type: 'paragraph', text: 'There was a screening at the Moody Bible Institute last Tuesday night, and Vazquez said Butler still was making changes to his piece the night before.' },
+                        { type: 'paragraph', text: '“He’s very dedicated on making the best piece he can,” Vazquez said.' },
+                        { type: 'paragraph', text: 'Butler flew to San Francisco for the festival and had a chance to mingle with many of the media distributors about distribution rights for the film. Unfortunately, he is unable to distribute the film until he clears up some legal matters. “I need about $10,000 to fully complete the project. I need to procure the rights to 50 to 60 photographs,” Butler said.' },
+                        { type: 'paragraph', text: '“The project also continues to grow, and it looks like I may be shooting two or three more interviews and expanding the project to a 90-minute documentary to really do justice to the scope of [Paul Rader’s] life,” he said.' }
+                    ]
+                }
             },
             {
                 id: 'faking-a-comeback',
@@ -2598,16 +2638,36 @@
                 publication: 'Northern Star — Weekender, page 10',
                 credit: 'By Chaz Wilke, Weekender Reporter',
                 format: 'Cultural round-up · the comebacks of 2003',
-                depthLabel: 'Clipping + pull quote',
+                depthLabel: 'Full feature',
                 image: '/images/before-times/archive/faking-a-comeback-v1.webp',
                 imageAlt: 'The Jan. 22, 2004 clipping of "FAKING A COMEBACK?" laid out with courtesy photos of several 2003 celebrities',
-                dek: 'A field guide to how nine acts engineered a comeback in 2003, each reduced to its operating logic — the White Stripes’, Arnold’s, OutKast’s, and one that only worked because its subject died.',
+                dek: 'A field guide to how eight acts engineered a comeback in 2003, each reduced to its operating logic — the White Stripes’, Arnold’s, OutKast’s, and one that only worked because its subject died.',
                 curator: 'A format piece, and the format is the joke: every entry is written as a set of instructions. It is mostly disposable and knows it, except for the Johnny Cash entry, which is written straight and is the best paragraph in the file — Cash died four months before this ran.',
                 body: [
                     { type: 'paragraph', text: 'The rise and fall of popularity and mass interest changes as much as Anna Nicole Smith’s waistline.' },
                     { type: 'quote', text: 'Johnny Cash’s logic: Cut a new record comprised of all covers, make an amazingly sad music video for “Hurt” and name the final song on an album “We’ll Meet Again.” Leave this world with the eerie question: “Will we?”' },
                     { type: 'paragraph', text: 'Photos, as printed: courtesy photos.' }
-                ]
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete round-up',
+                    meta: 'Complete round-up // about 3 minutes',
+                    intro: 'Transcribed from the original newsprint, page 10 of the Jan. 22, 2004 Weekender. Each entry ran with its subject’s name set in bold as a run-in head, reproduced here as printed. Three courtesy photos ran with the piece and carried no individual captions.',
+                    body: [
+                        { type: 'paragraph', text: 'The rise and fall of popularity and mass interest changes as much as Anna Nicole Smith’s waistline.' },
+                        { type: 'paragraph', text: '2003 showed old and new faces coming to the forefront of public gossip magazines such as Entertainment Weekly, US Weekly and Popular Mechanics.' },
+                        { type: 'paragraph', text: 'Arnold Schwarzenegger’s logic: Go from making 20 million bucks per mega movie flop and trade it in for $129,432 to do civil service work that rarely includes fending off aliens or futuristic robots. He does this while being thrown further into the limelight, and he’s giving all the impersonators that many more Arnold sound bites to master.' },
+                        { type: 'paragraph', text: '“I think Arnold made a pretty big comeback; [he] did it in such a different way than anyone else,” senior illustration major Jaime Torraco said.' },
+                        { type: 'paragraph', text: 'Ashton Kutcher’s logic: While gaining popularity, find a fellow star exactly one step above and jump from stone to stone. The man went from Brittney Murphy to P. Diddy to Demi Moore in less than a year. He not only pioneered the trucker hat fad but personally killed it, all within 2003.' },
+                        { type: 'paragraph', text: 'The White Stripes’ logic: Cancel all shows on current tour and recede to England. Record a bare-bones album that is exactly opposite of the popular trend of over-produced rap rock. Spend less than $64,000 and be completely surprised that people hail “Elephant” as the album of the year.' },
+                        { type: 'paragraph', text: 'Jessica Simpson and Nick Lachey’s logic: Take a standard reality TV show and act as stupid as possible. Refer to Chicken of the Sea tuna as chicken and refuse buffalo wings because one just can’t acquire a taste for those darn buffalo.' },
+                        { type: 'paragraph', text: 'Hilary Duff and Lindsay Lohan’s logic: After both got over semi-serious relationships with Aaron Carter, they get super-sexy, 15-year-old-girl makeovers and consequently are thrust into mainstream 40-year-old men’s fantasies. “Hilary Duff sung her way into my heart,” junior physics major Mike Himes said. Aside from movies from each, they both ventured into semi-digestible and fully disposable pop music. However, Lohan never really makes it past the Disney Channel.' },
+                        { type: 'paragraph', text: 'Johnny Cash’s logic: Cut a new record comprised of all covers, make an amazingly sad music video for “Hurt” and name the final song on an album “We’ll Meet Again.” Leave this world with the eerie question: “Will we?”' },
+                        { type: 'paragraph', text: 'Anna Nicole Smith’s logic: As the reality show popularity starts to wane, decide to take a few cases of TrimSpa pills to prove the world wrong. Yes, lazy people can get skinny. Charles Darwin would be turning over in his grave.' },
+                        { type: 'paragraph', text: 'OutKast’s logic: Throw the world for a loop after creating Grammy-winning “Stankonia” and release a dual album that splits the creative collaboration, which in essence is two solo albums packaged together. “The Love Below/Speakerboxxx” reached the top of the charts, but does this mean the end of OutKast?' },
+                        { type: 'paragraph', text: '“I remember [OutKast] being popular in my freshman year of high school,” freshman undeclared major Greg Bailey said. “They faded off the scene for a while, and then bam! Two songs on the top ten list.”' }
+                    ]
+                }
             },
             {
                 id: 'the-cost-of-terror',
@@ -2634,7 +2694,7 @@
                 publication: 'Northern Star — Weekender (Vol. 104, Issue 99)',
                 credit: 'Written and photographed by Chaz Wilke',
                 format: 'Feature · NIU “Get on the Bus” day trip',
-                depthLabel: 'Clipping + pull quote',
+                depthLabel: 'Full feature',
                 image: '/images/before-times/archive/gettin-artsy-at-the-institute-v1.webp',
                 imageAlt: 'The Feb. 19, 2004 clipping of "Gettin’ artsy at the Institute," with Chaz Wilke’s own photo of the Art Institute of Chicago facade',
                 dek: 'A Valentine’s Day bus trip to the Art Institute of Chicago, sixteen people aboard, most of them elderly couples and almost none of them students.',
@@ -2643,7 +2703,39 @@
                     { type: 'paragraph', text: 'Valentine’s Day for some was an opportunity to spend the day with fellow art lovers on NIU’s “Get on the Bus” day trip to the Art Institute and NIU Chicago Gallery.' },
                     { type: 'quote', text: 'Go on one if for nothing else that to get out of DeKalb for a day.' },
                     { type: 'paragraph', text: 'Photo caption, as printed: “The Art Institute of Chicago served as the location for faculty, students and community members to interact and discuss art in an informal setting at an NIU ‘Get on the Bus’ trip on Saturday.” — Chaz Wilke photo.' }
-                ]
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete feature',
+                    meta: 'Complete feature // about 3 minutes',
+                    intro: 'Transcribed from the original newsprint, the Feb. 19, 2004 Weekender (Vol. 104, Issue 99). The “Wanna go?” service box ran alongside the story and is reproduced here in place. Spelling and punctuation are preserved as printed, including the ellipsis and bracketed insertion in Jo Burke’s quote.',
+                    body: [
+                        { type: 'paragraph', text: 'Valentine’s Day for some was an opportunity to spend the day with fellow art lovers on NIU’s “Get on the Bus” day trip to the Art Institute and NIU Chicago Gallery.' },
+                        { type: 'paragraph', text: 'The “Get on the Bus” program has been taking monthly trips for about 10 years.' },
+                        { type: 'paragraph', text: '“We’ve gone to other galleries [in the past] and art or architecture or cultural places … art fairs, University of Chicago, art studios,” said Jo Burke, assistant director of the NIU Art Museum.' },
+                        { type: 'paragraph', text: 'The Art Institute is most frequented because it is so easy to get to and they offer so many good exhibits, Burke said.' },
+                        { type: 'paragraph', text: 'Saturday’s trip was a great opportunity for students to mingle with professors on a more informal level. Unfortunately, very few students attended.' },
+                        { type: 'paragraph', text: '“I think they could’ve gotten more people to go if they advertised for it,” senior illustration major Jaime Torraco said.' },
+                        { type: 'paragraph', text: 'The bus was filled with about 16 people. Some were elderly couples, which seemed fitting for Valentine’s Day.' },
+                        { type: 'paragraph', text: 'The group rolled into the Art Institute at 11 a.m. and we were offered a choice — either come with the professors or wander around on your own and take things in as you chose.' },
+                        { type: 'paragraph', text: 'That was the beauty of this trip. They provide transportation to Chicago but guests can do as they please. Everyone met again at 1:45 p.m. and went to the NIU Chicago Gallery, 215 W. Superior.' },
+                        { type: 'paragraph', text: 'The NIU Chicago Gallery consisted of selected works from professors and provided perfect ambiance for the three formal presentations.' },
+                        { type: 'paragraph', text: 'Joshua B. Kind gave a lecture on the inherent elitism of museum curators and how they disallow information to the general public.' },
+                        { type: 'paragraph', text: 'Catherine Raymond gave a presentation called “New Discoveries at Vat Sisaket, Vientiane, Laos.”' },
+                        { type: 'paragraph', text: 'Jeff Kowalski gave the final presentation on the Mayan ball game and the legend around the sport and its players.' },
+                        { type: 'paragraph', text: 'As everyone exited the bus back in DeKalb, praise was given by every member of this program.' },
+                        { type: 'paragraph', text: 'The NIU “Get on the Bus” program accepts membership but is open to all with a price break for students. Go on one if for nothing else that to get out of DeKalb for a day.' },
+                        {
+                            type: 'bullets',
+                            title: 'Wanna go? — the service box, as printed',
+                            items: [
+                                'Transportation cost — $12 for Historia Artis members (NIU art history student group) and NIU art museum members; $15/$18 others',
+                                'Entry to Art Institute — suggested donation is $10 for adults and $6 for students, children and seniors'
+                            ]
+                        },
+                        { type: 'paragraph', text: 'Photo caption, as printed: “The Art Institute of Chicago served as the location for faculty, students and community members to interact and discuss art in an informal setting at an NIU ‘Get on the Bus’ trip on Saturday.” — Chaz Wilke photo.' }
+                    ]
+                }
             },
             {
                 id: 'film-takes-trip-across-pond',
@@ -2670,7 +2762,7 @@
                 publication: 'Northern Star — Weekender (Vol. 104, Issue 109)',
                 credit: 'By Chaz Wilke, Weekender Reporter',
                 format: 'Spring Break 2004 guide',
-                depthLabel: 'Clipping + pull quote',
+                depthLabel: 'Full feature',
                 image: '/images/before-times/archive/destination-dekalb-v1.webp',
                 imageAlt: 'The Mar. 4, 2004 clipping of "Spring Break 2004: DESTINATION DeKALB," a single wide strip across the page',
                 dek: 'An argument for spending spring break in DeKalb, filed the day before the paper shut down for the week, with actual occupancy numbers from the housing office.',
@@ -2679,7 +2771,28 @@
                     { type: 'paragraph', text: '“Spring Broke” quickly is approaching. After one more day, we have an entire week of absolute freedom.' },
                     { type: 'quote', text: 'Give Cancun a rest. After all, who needs all that sand in the shoes? Save your money, stay home, build a box fort and enjoy the week.' },
                     { type: 'paragraph', text: 'No photo ran with this piece.' }
-                ]
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete guide',
+                    meta: 'Complete guide // about 2 minutes',
+                    intro: 'Transcribed from the original newsprint, the Mar. 4, 2004 Weekender (Vol. 104, Issue 109) — the last issue before the paper went dark for the break, as its own masthead banner announced. Spelling and punctuation are preserved as printed, including the bracketed insertions in Melodie Thomas’ quote. No photo ran with this piece.',
+                    body: [
+                        { type: 'paragraph', text: '“Spring Broke” quickly is approaching. After one more day, we have an entire week of absolute freedom.' },
+                        { type: 'paragraph', text: 'Freedom from school, homework and annoying 8 a.m. classes. But where to go?' },
+                        { type: 'paragraph', text: 'How about a place where you’re sweating constantly, paying $4.50 for a mai tai with a fancy parasol and constantly questioning exactly what the locals were yelling to you as you passed by on your rented moped?' },
+                        { type: 'paragraph', text: 'Why go anywhere? DeKalb can be the hottest destination on any Spring Break itinerary. The best reasons to stay put during “Spring Broke” are:' },
+                        { type: 'paragraph', text: 'The weather. It’s taken a turn for the best, and we have prime frisbee-throwing weather on our hands.' },
+                        { type: 'paragraph', text: 'The DeKalb winds. Coupled with the warm air, this is a prime kite-flying location.' },
+                        { type: 'paragraph', text: 'Smaller crowds at the bars. There finally is one week where anyone can acquire a table at Starbusters on a Wednesday, Thursday, Friday or Saturday night.' },
+                        { type: 'paragraph', text: 'Countless parks in the area. No matter where someone is in DeKalb, a great park is only blocks away and, with everyone picking up and leaving, there won’t be any wait for the swings.' },
+                        { type: 'paragraph', text: 'Did we mention no classes? There’s a subtle beauty in sleeping late in your own bed and spending the entire week bedridden, getting up only for cereal and the occasional Saturday morning cartoon.' },
+                        { type: 'paragraph', text: 'Golf. DeKalb has two great golf courses. With the weather prime for golfing, you can take advantage of a tee time that’s not ungodly early.' },
+                        { type: 'paragraph', text: 'Melodie Thomas, coordinator of contracts and assignments in NIU’s Administrative Housing Office, said, “Right now, we got 175 students signed up [to stay in the residence halls for Spring Break]; we’ll probably easily have about 50 students come in at the last minute.”' },
+                        { type: 'paragraph', text: 'With so few students in DeKalb, it’s like that episode of “Pete and Pete” when little Pete and his friends get locked in the school — this whole place can be your personal playground.' },
+                        { type: 'paragraph', text: 'Give Cancun a rest. After all, who needs all that sand in the shoes? Save your money, stay home, build a box fort and enjoy the week.' }
+                    ]
+                }
             },
             {
                 id: 'dead-return-from-the-grave',

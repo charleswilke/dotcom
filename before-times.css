@@ -6336,6 +6336,658 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     font-size: 0.75rem;
 }
 
+/* ---------------------------------------------------------------------------
+ * The clipping file
+ *
+ * Two registers, kept deliberately unlike each other. The artifact is paper:
+ * newsprint rules, serif text, orange archival trim. The archivist's 2026
+ * annotation is an indigo slip with a mint offset — the only mint-shadowed
+ * object in the archive, so a fresh perspective is recognisable on sight.
+ * ------------------------------------------------------------------------- */
+
+/* Index: three desks instead of one flat run of thirty-three */
+.bt-press-index-heading {
+    margin: 1.4rem 0 0.6rem;
+    padding-top: 0.7rem;
+    border-top: 2px solid rgba(35, 28, 34, 0.3);
+    display: grid;
+    gap: 0.15rem;
+}
+
+.bt-press-index-heading:first-child {
+    margin-top: 0.2rem;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.bt-press-index-heading strong {
+    color: var(--bt-indigo);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.92rem;
+    font-weight: 400;
+}
+
+.bt-press-index-heading span {
+    color: #7b4436;
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.bt-press-index-item {
+    grid-template-columns: 1.85rem minmax(0, 1fr);
+    gap: 0.2rem 0.45rem;
+    border-left-width: 3px;
+    border-left-color: rgba(35, 28, 34, 0.18);
+}
+
+.bt-press-index-item.is-transcribed {
+    border-left-color: var(--bt-indigo);
+}
+
+.bt-press-index-item .bt-archive-index-number {
+    grid-row: 1 / span 3;
+}
+
+.bt-press-index-tags {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.15rem;
+}
+
+.bt-press-stars {
+    color: #a24b35;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    line-height: 1;
+}
+
+.bt-press-tag {
+    padding: 0.18rem 0.34rem;
+    color: #76606b;
+    border: 1px dashed rgba(35, 28, 34, 0.38);
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.bt-press-tag.is-full {
+    color: var(--bt-indigo);
+    background: rgba(0, 247, 194, 0.2);
+    border-style: solid;
+    border-color: var(--bt-indigo);
+}
+
+/* Masthead: one source line where a three-row table used to be */
+.bt-press-header {
+    max-width: 46rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 3px double var(--bt-ink);
+}
+
+/* Focused programmatically as a landing target after a clipping is picked, so
+   it takes no focus ring — the jump to the masthead is the feedback. */
+.bt-press-header:focus,
+.bt-press-header:focus-visible {
+    outline: none;
+}
+
+.bt-press-slug,
+.bt-press-source {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1rem 0.5rem;
+    margin: 0;
+}
+
+.bt-press-slug {
+    margin-bottom: 0.45rem;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.bt-press-slug span:not(:first-child)::before {
+    content: "·";
+    margin-right: 0.5rem;
+    color: rgba(35, 28, 34, 0.4);
+}
+
+.bt-press-slug-desk {
+    color: #a24b35;
+}
+
+.bt-press-slug span:not(.bt-press-slug-desk) {
+    color: #76606b;
+}
+
+.bt-press-slug-count {
+    margin-left: auto;
+}
+
+.bt-press-headline {
+    margin: 0;
+    color: var(--bt-indigo);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.02;
+}
+
+.bt-press-source {
+    margin-top: 0.55rem;
+    color: #4f3e47;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.82rem;
+    font-style: italic;
+}
+
+.bt-press-source span:not(:first-child):not(.bt-press-stars)::before {
+    content: "·";
+    margin-right: 0.5rem;
+    color: rgba(35, 28, 34, 0.4);
+}
+
+/* The 2026 annotation: the one mint-shadowed object in the archive */
+.bt-press-note {
+    max-width: 46rem;
+    margin: 1.35rem 0;
+    padding: 1rem 1.15rem 1.1rem;
+    background:
+        linear-gradient(rgba(0, 247, 194, 0.07), rgba(0, 247, 194, 0)),
+        var(--bt-indigo);
+    border: 2px solid var(--bt-ink);
+    box-shadow: 5px 5px 0 var(--bt-mint);
+    transform: rotate(-0.35deg);
+}
+
+.bt-press-note-label {
+    margin: 0 0 0.55rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(0, 247, 194, 0.35);
+    color: var(--bt-mint);
+    font-family: "Courier New", monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.bt-press-note-lede {
+    margin: 0;
+    color: var(--bt-paper);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1rem, 1.9vw, 1.16rem);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.bt-press-note-body {
+    margin: 0.7rem 0 0;
+    color: rgba(248, 235, 210, 0.86);
+    font-size: 0.86rem;
+    line-height: 1.6;
+}
+
+/* The printed scorecard: the column's own verdict, in the paper's register */
+.bt-press-scorecard {
+    max-width: 46rem;
+    margin: 0 0 1.35rem;
+    padding: 0.85rem 1rem 0.95rem;
+    background: rgba(255, 250, 230, 0.55);
+    border: 1px solid rgba(35, 28, 34, 0.3);
+    border-left: 4px solid #a24b35;
+}
+
+.bt-press-scorecard-label {
+    margin: 0 0 0.5rem;
+    color: #a24b35;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.bt-press-scorecard-label:not(:first-child) {
+    margin-top: 1.1rem;
+}
+
+.bt-press-scorecard-list {
+    display: grid;
+    gap: 0.1rem;
+    margin: 0;
+}
+
+.bt-press-scorecard-list > div {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.28rem 0;
+    border-bottom: 1px dotted rgba(35, 28, 34, 0.28);
+}
+
+.bt-press-scorecard-list > div:last-child {
+    border-bottom: 0;
+}
+
+.bt-press-scorecard-list dt {
+    flex: 1 1 auto;
+    color: #3d3037;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.88rem;
+    line-height: 1.4;
+}
+
+.bt-press-scorecard-list dd {
+    flex: 0 0 auto;
+    margin: 0;
+    color: var(--bt-indigo);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+/* Pane switch */
+.bt-press-switch {
+    max-width: 46rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1.35rem;
+}
+
+.bt-press-switch-item {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.6rem 0.75rem;
+    color: #483b44;
+    background: rgba(255, 250, 230, 0.42);
+    border: 2px solid rgba(35, 28, 34, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.bt-press-switch-item strong {
+    color: var(--bt-indigo);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.bt-press-switch-item span {
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.bt-press-switch-item:hover,
+.bt-press-switch-item:focus-visible {
+    background: rgba(255, 250, 230, 0.85);
+    border-color: var(--bt-indigo);
+    outline: none;
+}
+
+.bt-press-switch-item.is-active {
+    color: rgba(248, 235, 210, 0.82);
+    background: var(--bt-indigo);
+    border-color: var(--bt-ink);
+    box-shadow: 3px 3px 0 var(--bt-orange);
+}
+
+.bt-press-switch-item.is-active strong {
+    color: var(--bt-paper);
+}
+
+/* Page strip for a clipping that jumps across several pages of newsprint */
+.bt-press-pagestrip {
+    max-width: 46rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+
+.bt-press-pagestrip-count {
+    margin-right: 0.3rem;
+    color: #7b4436;
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.bt-press-pagestrip-item {
+    padding: 0.35rem 0.6rem;
+    color: #483b44;
+    background: rgba(255, 250, 230, 0.5);
+    border: 1px solid rgba(35, 28, 34, 0.35);
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.78rem;
+    transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.bt-press-pagestrip-item:hover,
+.bt-press-pagestrip-item:focus-visible {
+    background: rgba(255, 250, 230, 0.9);
+    border-color: var(--bt-indigo);
+    outline: none;
+}
+
+.bt-press-pagestrip-item.is-active {
+    color: var(--bt-paper);
+    background: var(--bt-indigo);
+    border-color: var(--bt-ink);
+    box-shadow: 2px 2px 0 var(--bt-orange);
+}
+
+/* The scan, finally shown whole */
+.bt-press-scan {
+    max-width: 46rem;
+    margin: 0;
+}
+
+.bt-press-scan-frame {
+    position: relative;
+    width: 100%;
+    display: block;
+    padding: 0.6rem;
+    background: #f5ecd8;
+    border: 1px solid rgba(35, 28, 34, 0.35);
+    box-shadow: 5px 6px 0 rgba(26, 21, 80, 0.13);
+    cursor: zoom-in;
+}
+
+.bt-press-scan-frame img {
+    width: 100%;
+    max-height: min(58vh, 34rem);
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.bt-press-scan-zoom {
+    position: absolute;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    padding: 0.32rem 0.55rem;
+    color: var(--bt-ink);
+    background: var(--bt-mint);
+    border: 2px solid var(--bt-ink);
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 200ms ease;
+}
+
+.bt-press-scan-frame:hover .bt-press-scan-zoom,
+.bt-press-scan-frame:focus-visible .bt-press-scan-zoom {
+    opacity: 1;
+}
+
+.bt-press-scan-frame:focus-visible {
+    outline: 3px solid var(--bt-indigo);
+    outline-offset: 3px;
+}
+
+@media (hover: none) {
+    .bt-press-scan-zoom { opacity: 1; }
+}
+
+.bt-press-scan figcaption {
+    margin-top: 0.7rem;
+    padding-left: 0.7rem;
+    border-left: 3px solid rgba(162, 75, 53, 0.5);
+}
+
+.bt-press-scan-label {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: #a24b35;
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.bt-press-scan figcaption p {
+    margin: 0;
+    color: #4f3e47;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* Scan-only clippings: an honest excerpt, not a teaser */
+.bt-press-excerpt {
+    max-width: 43rem;
+    margin-inline: auto;
+    font-size: clamp(1.02rem, 2vw, 1.12rem);
+    line-height: 1.7;
+}
+
+.bt-press-excerpt > p:first-child {
+    color: var(--bt-indigo);
+    font-size: 1.12em;
+}
+
+.bt-press-transcription-note {
+    max-width: 43rem;
+    margin: 1.5rem auto 0;
+    padding-top: 0.7rem;
+    border-top: 1px dashed rgba(35, 28, 34, 0.38);
+    color: #6b5762;
+    font-family: "Courier New", monospace;
+    font-size: 0.72rem;
+    line-height: 1.55;
+}
+
+/* Walking the file in order */
+.bt-press-walk {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(35, 28, 34, 0.28);
+}
+
+.bt-press-walk-item {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.65rem 0.8rem;
+    background: rgba(255, 250, 230, 0.42);
+    border: 1px solid rgba(35, 28, 34, 0.28);
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.bt-press-walk-item.is-next {
+    text-align: right;
+}
+
+.bt-press-walk-item span {
+    color: #a24b35;
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.bt-press-walk-item strong {
+    color: var(--bt-indigo);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.25;
+}
+
+.bt-press-walk-item:hover,
+.bt-press-walk-item:focus-visible {
+    background: rgba(255, 250, 230, 0.85);
+    border-color: var(--bt-indigo);
+    outline: none;
+}
+
+/* Full-size scan viewer */
+.bt-scan-dialog {
+    width: min(80rem, calc(100vw - 1.5rem));
+    max-height: calc(100dvh - 1.5rem);
+}
+
+.bt-scan-card {
+    height: min(56rem, calc(100dvh - 1.5rem));
+    max-height: none;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 0.8rem;
+    padding: clamp(1rem, 2.5vw, 1.6rem);
+    overflow: hidden;
+    color: var(--bt-paper);
+    background: var(--bt-ink);
+}
+
+.bt-scan-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0 3.5rem 0.7rem 0;
+    border-bottom: 2px solid rgba(248, 235, 210, 0.28);
+}
+
+.bt-scan-header h1 {
+    max-width: none;
+    margin: 0;
+    color: var(--bt-paper);
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+}
+
+.bt-scan-header .bt-dialog-kicker {
+    margin-bottom: 0.2rem;
+    color: var(--bt-mint);
+}
+
+.bt-scan-controls {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bt-scan-pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.bt-scan-page {
+    min-height: 2.5rem;
+    padding: 0.5rem 0.7rem;
+    color: var(--bt-paper);
+    background: transparent;
+    border: 2px solid rgba(248, 235, 210, 0.42);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.8rem;
+}
+
+.bt-scan-page:hover,
+.bt-scan-page:focus-visible {
+    border-color: var(--bt-mint);
+    outline: none;
+}
+
+.bt-scan-page.is-active {
+    color: var(--bt-ink);
+    background: var(--bt-paper);
+    border-color: var(--bt-paper);
+}
+
+.bt-scan-fit {
+    flex: 0 0 auto;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.8rem;
+    color: var(--bt-ink);
+    background: var(--bt-mint);
+    border: 2px solid var(--bt-paper);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.bt-scan-fit:hover,
+.bt-scan-fit:focus-visible {
+    background: var(--bt-paper);
+    outline: 3px solid var(--bt-mint);
+    outline-offset: 2px;
+}
+
+.bt-scan-stage {
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    overflow: auto;
+    background: #f5ecd8;
+    border: 1px solid rgba(248, 235, 210, 0.24);
+}
+
+.bt-scan-stage img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    object-fit: contain;
+}
+
+.bt-scan-stage.is-actual {
+    align-items: flex-start;
+    justify-content: flex-start;
+    cursor: grab;
+}
+
+.bt-scan-stage.is-actual img {
+    max-width: none;
+    max-height: none;
+    width: auto;
+}
+
+.bt-scan-caption {
+    margin: 0;
+    color: rgba(248, 235, 210, 0.82);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.5;
+}
+
 .bt-archive-deep-content {
     max-width: 52rem;
     margin-top: 1.5rem;
@@ -7284,9 +7936,91 @@ body.bt-room-content .bt-inventory-drawer.is-open {
         margin: 0;
     }
 
+    /* The clipping file has thirty-three entries in three desks, which a
+       horizontal shelf cannot show without clipping every card. Give it a real
+       vertical list that scrolls inside its own capped height instead. */
+    .bt-archive-press .bt-archive-index {
+        display: block;
+        max-height: 40vh;
+        margin: 0 -0.9rem;
+        padding: 0.35rem 0.9rem 0.9rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .bt-archive-press .bt-press-index-item {
+        margin: 0 0 0.5rem;
+    }
+
+    .bt-archive-press .bt-press-index-heading {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        margin-top: 0.9rem;
+        padding: 0.5rem 0;
+        background: var(--bt-paper);
+        border-top: 0;
+        border-bottom: 1px solid rgba(35, 28, 34, 0.28);
+    }
+
     .bt-archive-detail {
         padding: 1.25rem 0.15rem 0.5rem;
         overflow: visible;
+    }
+
+    /* Space Mono fits roughly thirty characters to a phone column, so the
+       annotation needs a smaller size to stay a note rather than a wall. */
+    .bt-press-note-body {
+        font-size: 0.78rem;
+        line-height: 1.65;
+    }
+
+    .bt-press-switch {
+        grid-template-columns: 1fr;
+    }
+
+    .bt-press-walk {
+        grid-template-columns: 1fr;
+    }
+
+    .bt-press-walk-item.is-next {
+        text-align: left;
+    }
+
+    .bt-press-slug-count {
+        margin-left: 0;
+    }
+
+    .bt-scan-card {
+        height: calc(100dvh - 1.5rem);
+        padding: 0.9rem;
+    }
+
+    .bt-scan-header {
+        padding-right: 2.5rem;
+    }
+
+    /* The page buttons and the fit toggle share a row that has no width to
+       spare, so give the controls their own full-width line below the title. */
+    .bt-scan-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .bt-scan-page,
+    .bt-scan-fit {
+        min-height: 2.5rem;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.72rem;
+    }
+
+    /* A landscape page fitted into a portrait stage would otherwise hover in the
+       middle of a tall empty sheet. Let the stage shrink to its page and sit at
+       the top; at actual size it grows back to the full height and scrolls. */
+    .bt-scan-stage {
+        align-items: flex-start;
+        align-self: start;
+        max-height: 100%;
     }
 
     .bt-archive-depth-prompt {

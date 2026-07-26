@@ -18,9 +18,14 @@ Agreed shape for the dispenser:
    carries the NIU Review rule and belongs to this run, not the reviews — it was
    miscategorised in the first pass.
 2. **Film / music / theater reviews** — clipping scan plus a pull quote, no full
-   transcription. ✅ **complete — 15 pieces**, including the Art Institute trip, the
-   spring-break guide and the 2003 comeback round-up.
-3. **"Meet Sam"** — the one long-form feature. ✅ done.
+   transcription. ✅ **complete — 11 pieces.**
+3. **Features** — full transcriptions. ✅ **complete — 5 pieces:** "Meet Sam" (the
+   long-form, 3 pages), "A taste of radio heaven" (IMG_4631), "FAKING A COMEBACK?"
+   (IMG_4634), "Gettin' artsy at the Institute" (IMG_4640) and "DESTINATION DeKALB"
+   (IMG_4643). The last four were transcribed in July 2026 when the clipping file
+   regrouped into three desks and put the features at the top; they had shipped as
+   scan-plus-pull-quote before that. Transcription totals now **22 full text, 11 scan
+   only.**
 
 ## The recurring column
 
@@ -80,6 +85,12 @@ thing in it.
   IMG_4622 (page 2), IMG_4623 (page 3), and the superseded IMG_4621. Reading order is
   cover → p2 left column → p3 left column → p2 right column → p3 right column; each
   seam was verified by matching the broken sentence across the jump.
+  All three pages now ship: `meet-sam-v1.webp`, `meet-sam-p2-v1.webp`,
+  `meet-sam-p3-v1.webp` (1400px long edge, `sips -Z 1400` → `cwebp -q 82`). The
+  clipping file reads them from the `pages: [{label, src, alt}]` array on the piece
+  in `before-times-archive.js`; any clipping without `pages` falls back to its single
+  `image`. It is the only multi-page piece in the set — every other entry in the
+  table above is one photo.
 - **IMG_4647 clips the headline.** The reshoot frame cuts the tops of the letters in
   "Meet Sam." It reads fine and is what ships today, but a reshoot framed ~1cm higher
   would make a cleaner hero image.

@@ -819,6 +819,14 @@
     const archiveTitle = document.getElementById('bt-archive-title');
     const archiveIndex = document.getElementById('bt-archive-index');
     const archiveDetail = document.getElementById('bt-archive-detail');
+    const scanDialog = document.getElementById('bt-scan-dialog');
+    const scanKicker = document.getElementById('bt-scan-kicker');
+    const scanTitle = document.getElementById('bt-scan-title');
+    const scanStage = document.getElementById('bt-scan-stage');
+    const scanImage = document.getElementById('bt-scan-image');
+    const scanFit = document.getElementById('bt-scan-fit');
+    const scanCaption = document.getElementById('bt-scan-caption');
+    const scanPages = document.getElementById('bt-scan-pages');
     const gameBinderDialog = document.getElementById('bt-game-binder-dialog');
     const gameBinderIndex = document.getElementById('bt-game-binder-index');
     const gameBinderDetail = document.getElementById('bt-game-binder-detail');
@@ -2190,7 +2198,7 @@
             children.push(reader);
             const endMark = makeArchiveElement('aside', 'bt-archive-end-mark');
             endMark.appendChild(makeArchiveElement('strong', '', 'End of recovered artifact'));
-            endMark.appendChild(makeArchiveElement('p', '', 'You made it past the nibble. The conveyor belt approves.'));
+            endMark.appendChild(makeArchiveElement('p', '', [piece.publication, piece.credit].filter(Boolean).join(' · ')));
             children.push(endMark);
         }
 
@@ -2405,6 +2413,543 @@
         archiveDetail.scrollTop = 0;
     }
 
+    /* ------------------------------------------------------------------------
+     * The clipping file
+     *
+     * The press collection is presented in two visual registers, and the split
+     * is the whole point: everything printed in 2003–04 reads as newsprint
+     * (serif, paper, drop cap, "as printed" captions), and everything written
+     * in 2026 — the dek and the curator note — reads as an annotation slip laid
+     * on top of the paper. Nothing here should ever let the two voices blur.
+     *
+     * Two tiers of artifact exist. Eighteen clippings have a full transcription
+     * (`piece.depth`); the other fifteen have only the scan plus a recovered
+     * pull quote. Both tiers use the same shell, and the pane toggle names the
+     * difference honestly rather than hiding it behind a "keep reading" button.
+     * ---------------------------------------------------------------------- */
+
+    const PRESS_CAPTION_PREFIX = 'Photo caption, as printed:';
+
+    // The desks are derived from `format`, not hand-tagged, so a new clipping
+    // that follows the existing "<Desk> · <subject>" convention files itself.
+    const PRESS_DESKS = [
+        {
+            id: 'features',
+            label: 'Features',
+            note: 'Reported pieces, round-ups and guides',
+            match: (info) => info.kind === 'feature'
+        },
+        {
+            id: 'column',
+            label: 'The NIU Review',
+            note: 'Weekly graded column, Sept. 2003 → spring 2004',
+            match: (info) => info.kind === 'column'
+        },
+        {
+            id: 'reviews',
+            label: 'The review desk',
+            note: 'Film, theater, music, live performance',
+            match: (info) => info.kind === 'review'
+        }
+    ];
+
+    // Explicit `desk`, `date` and `stars` fields on a piece always win; the
+    // fallbacks below read the conventions already present in the data.
+    function describePressPiece(piece) {
+        const format = piece.format || '';
+        const eyebrowParts = (piece.eyebrow || '').split(' // ');
+        const eyebrowDesk = eyebrowParts[0] || '';
+        const eyebrowTail = eyebrowParts[1] || '';
+        const formatParts = format.split(' · ');
+
+        let kind = piece.desk;
+        if (!kind) {
+            if (/^NIU Review/.test(format)) kind = 'column';
+            else if (/review/i.test(formatParts[0])) kind = 'review';
+            else kind = 'feature';
+        }
+
+        // Reviews name the work they cover in `publication`, in quotes.
+        const workMatch = (piece.publication || '').match(/[“"]([^”"]+)[”"]/);
+        // "three stars" only repeats the ★ chip sitting next to it.
+        const formatTail = formatParts.slice(1).join(' · ');
+        const subject = /^(one|two|three|four|five) stars?$/i.test(formatTail) ? '' : formatTail;
+
+        return {
+            kind,
+            desk: eyebrowDesk,
+            // "Sept. 4, 2003" and "spring 2004" both end in a year; "★★★" and
+            // "Players Theater" do not, and fall through to the subject line.
+            date: piece.date || (/\d{4}$/.test(eyebrowTail) ? eyebrowTail : ''),
+            stars: piece.stars !== undefined ? piece.stars : (eyebrowTail.match(/★/g) || []).length,
+            work: piece.work || (workMatch ? workMatch[1] : ''),
+            subject,
+            hasTranscription: Boolean(piece.depth),
+            readingTime: (piece.depth && piece.depth.meta) || ''
+        };
+    }
+
+    // The last paragraph of a clipping body is the printed photo caption. It
+    // belongs under the scan, not buried at the end of the prose.
+    function splitPressBody(blocks) {
+        const body = (blocks || []).slice();
+        const last = body[body.length - 1];
+        let caption = '';
+        if (last && last.type === 'paragraph' && last.text.startsWith(PRESS_CAPTION_PREFIX)) {
+            caption = body.pop().text.slice(PRESS_CAPTION_PREFIX.length).trim();
+        }
+        return { body, caption };
+    }
+
+    function makePressStars(count) {
+        const stars = makeArchiveElement('span', 'bt-press-stars', '★'.repeat(count));
+        stars.setAttribute('aria-label', `${count} ${count === 1 ? 'star' : 'stars'}`);
+        return stars;
+    }
+
+    // The index groups the file into desks, and that grouped order is the only
+    // order the reader ever sees: the numbering and the previous/next walk both
+    // run off it, so "Next" always lands on the next card down the list.
+    function pressDisplayOrder() {
+        const collection = (window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.press) || [];
+        const entries = collection.map((piece) => ({ piece, info: describePressPiece(piece) }));
+        const ordered = [];
+        PRESS_DESKS.forEach((desk) => {
+            entries.forEach((entry) => {
+                if (desk.match(entry.info)) ordered.push({ ...entry, desk });
+            });
+        });
+        // Anything a future format string does not match still gets a place.
+        entries.forEach((entry) => {
+            if (!ordered.some((item) => item.piece.id === entry.piece.id)) ordered.push({ ...entry, desk: null });
+        });
+        return ordered.map((entry, index) => ({ ...entry, number: String(index + 1).padStart(2, '0') }));
+    }
+
+    function renderPressIndex(activeId) {
+        const entries = pressDisplayOrder();
+        if (!entries.length) return;
+
+        archiveIndex.replaceChildren();
+
+        PRESS_DESKS.forEach((desk) => {
+            const deskEntries = entries.filter((entry) => entry.desk === desk);
+            if (!deskEntries.length) return;
+
+            const heading = makeArchiveElement('p', 'bt-press-index-heading');
+            heading.appendChild(makeArchiveElement('strong', '', desk.label));
+            heading.appendChild(makeArchiveElement('span', '', `${deskEntries.length} · ${desk.note}`));
+            archiveIndex.appendChild(heading);
+
+            deskEntries.forEach(({ piece, info, number }) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'bt-archive-index-item bt-press-index-item';
+                button.classList.toggle('is-active', piece.id === activeId);
+                button.classList.toggle('is-transcribed', info.hasTranscription);
+                button.setAttribute('aria-current', piece.id === activeId ? 'true' : 'false');
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', number));
+                button.appendChild(makeArchiveElement('strong', '', piece.title));
+                button.appendChild(makeArchiveElement(
+                    'span',
+                    'bt-archive-index-meta',
+                    info.work || info.date || info.subject
+                ));
+
+                const tags = makeArchiveElement('span', 'bt-press-index-tags');
+                if (info.stars) tags.appendChild(makePressStars(info.stars));
+                tags.appendChild(makeArchiveElement(
+                    'span',
+                    info.hasTranscription ? 'bt-press-tag is-full' : 'bt-press-tag',
+                    info.hasTranscription ? 'Full text' : 'Scan only'
+                ));
+                button.appendChild(tags);
+
+                button.addEventListener('click', () => renderPressPiece(piece.id, { revealArticle: true }));
+                archiveIndex.appendChild(button);
+            });
+        });
+
+    }
+
+    // Scrolled by hand rather than with scrollIntoView: on mobile the index sits
+    // inside the scrolling card, and letting the browser walk the ancestor chain
+    // yanks the article back off screen.
+    function revealPressIndexItem() {
+        const activeItem = archiveIndex.querySelector('.bt-archive-index-item.is-active');
+        if (!activeItem) return;
+        // The card sizes itself in dvh, so just after the dialog opens or the
+        // viewport changes the list can report a collapsed box — a 20px height
+        // over 6,000px of content. Scrolling on those numbers throws the list to
+        // the far end, so bail and let the next frame's pass do the work.
+        if (archiveIndex.clientHeight < 40) return;
+        const item = activeItem.getBoundingClientRect();
+        const list = archiveIndex.getBoundingClientRect();
+        if (item.top < list.top) {
+            archiveIndex.scrollTop += item.top - list.top - 8;
+        } else if (item.bottom > list.bottom) {
+            archiveIndex.scrollTop += item.bottom - list.bottom + 8;
+        }
+    }
+
+    // A clipping can run across several pages of newsprint — "Meet Sam" jumps
+    // from the cover to pages 2 and 3. `pages` wins when present; otherwise the
+    // single `image` is treated as a one-page run so both shapes render alike.
+    function pressPages(piece) {
+        if (Array.isArray(piece.pages) && piece.pages.length) {
+            return piece.pages.map((page, index) => ({
+                label: page.label || `Page ${index + 1}`,
+                src: page.src,
+                alt: page.alt || '',
+                caption: page.caption || ''
+            }));
+        }
+        if (!piece.image) return [];
+        return [{
+            label: 'The clipping',
+            src: piece.image,
+            alt: piece.imageAlt || '',
+            caption: ''
+        }];
+    }
+
+    let scanViewerState = { pages: [], index: 0, title: '' };
+
+    function paintScanViewer() {
+        const { pages, index } = scanViewerState;
+        const page = pages[index];
+        if (!page) return;
+
+        scanImage.src = page.src;
+        scanImage.alt = page.alt || `Scan of “${scanViewerState.title}”, ${page.label}`;
+        scanCaption.textContent = page.caption || '';
+        scanCaption.hidden = !page.caption;
+
+        scanPages.replaceChildren();
+        scanPages.hidden = pages.length < 2;
+        if (pages.length > 1) {
+            pages.forEach((item, itemIndex) => {
+                const button = makeArchiveElement('button', 'bt-scan-page', item.label);
+                button.type = 'button';
+                button.setAttribute('aria-pressed', String(itemIndex === index));
+                button.classList.toggle('is-active', itemIndex === index);
+                button.addEventListener('click', () => {
+                    scanViewerState.index = itemIndex;
+                    paintScanViewer();
+                });
+                scanPages.appendChild(button);
+            });
+        }
+
+        scanStage.classList.remove('is-actual');
+        scanFit.textContent = 'Actual size';
+        scanFit.setAttribute('aria-pressed', 'false');
+        scanStage.scrollTo({ top: 0, left: 0 });
+    }
+
+    function openScanViewer(piece, pageIndex) {
+        const pages = pressPages(piece);
+        if (!pages.length) return;
+        scanViewerState = {
+            pages,
+            index: Math.min(Math.max(pageIndex || 0, 0), pages.length - 1),
+            title: piece.title
+        };
+        scanKicker.textContent = piece.publication || 'As printed';
+        scanTitle.textContent = piece.title;
+        paintScanViewer();
+        openDialog(scanDialog);
+    }
+
+    scanFit.addEventListener('click', () => {
+        const actual = scanStage.classList.toggle('is-actual');
+        scanFit.textContent = actual ? 'Fit to window' : 'Actual size';
+        scanFit.setAttribute('aria-pressed', String(actual));
+        if (actual) scanStage.focus({ preventScroll: true });
+    });
+
+    // Arrow keys walk a multi-page scan, but only while the stage itself is not
+    // being panned at actual size, where the arrows belong to the scroll box.
+    scanDialog.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+        if (scanViewerState.pages.length < 2) return;
+        if (scanStage.classList.contains('is-actual') && document.activeElement === scanStage) return;
+        const next = scanViewerState.index + (event.key === 'ArrowRight' ? 1 : -1);
+        if (next < 0 || next >= scanViewerState.pages.length) return;
+        event.preventDefault();
+        scanViewerState.index = next;
+        paintScanViewer();
+    });
+
+    function renderPressScanPane(piece, caption, pageIndex, onSelectPage) {
+        const pages = pressPages(piece);
+        const index = Math.min(Math.max(pageIndex || 0, 0), Math.max(pages.length - 1, 0));
+        const page = pages[index];
+        const pane = makeArchiveElement('div', 'bt-press-pane bt-press-pane-scan');
+        if (!page) return pane;
+
+        // The printed photo caption comes off the body, which is not page
+        // specific, so it is only trusted for a single-page clipping. Multi-page
+        // runs carry their caption per page.
+        const pageCaption = pages.length > 1 ? page.caption : (page.caption || caption);
+
+        if (pages.length > 1) {
+            const strip = makeArchiveElement('div', 'bt-press-pagestrip');
+            strip.setAttribute('role', 'group');
+            strip.setAttribute('aria-label', 'Choose a page of this clipping');
+            strip.appendChild(makeArchiveElement(
+                'span',
+                'bt-press-pagestrip-count',
+                `${pages.length} pages, as printed`
+            ));
+            pages.forEach((item, itemIndex) => {
+                const button = makeArchiveElement('button', 'bt-press-pagestrip-item', item.label);
+                button.type = 'button';
+                button.setAttribute('aria-pressed', String(itemIndex === index));
+                button.classList.toggle('is-active', itemIndex === index);
+                button.addEventListener('click', () => onSelectPage(itemIndex));
+                strip.appendChild(button);
+            });
+            pane.appendChild(strip);
+        }
+
+        const figure = makeArchiveElement('figure', 'bt-press-scan');
+        const frame = makeArchiveElement('button', 'bt-press-scan-frame');
+        frame.type = 'button';
+        frame.setAttribute('aria-label', pages.length > 1
+            ? `Open the full-size scan of “${piece.title}”, ${page.label}`
+            : `Open the full-size scan of “${piece.title}”`);
+        const image = document.createElement('img');
+        image.src = page.src;
+        image.alt = page.alt;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        frame.appendChild(image);
+        frame.appendChild(makeArchiveElement('span', 'bt-press-scan-zoom', 'Enlarge'));
+        frame.addEventListener('click', () => openScanViewer(piece, index));
+        figure.appendChild(frame);
+
+        if (pageCaption) {
+            const figcaption = document.createElement('figcaption');
+            figcaption.appendChild(makeArchiveElement('span', 'bt-press-scan-label', 'Caption, as printed'));
+            figcaption.appendChild(makeArchiveElement('p', '', pageCaption));
+            figure.appendChild(figcaption);
+        }
+
+        pane.appendChild(figure);
+        return pane;
+    }
+
+    // The graded columns print a scorecard — "Grades, as printed", "Out of five
+    // unsightly drool stains" — and it lives in `body` rather than in the
+    // transcription, so it has to be rendered on its own or it is lost. It is
+    // also the fastest read in the piece, so it sits above the article and shows
+    // in both panes.
+    function renderPressScorecard(piece) {
+        const blocks = (piece.body || []).filter((block) => block.type === 'bullets');
+        if (!blocks.length) return null;
+
+        const section = makeArchiveElement('section', 'bt-press-scorecard');
+        blocks.forEach((block) => {
+            section.appendChild(makeArchiveElement('p', 'bt-press-scorecard-label', block.title));
+            const list = makeArchiveElement('dl', 'bt-press-scorecard-list');
+            block.items.forEach((item) => {
+                const parts = item.split(' — ');
+                const grade = parts.length > 1 ? parts.pop() : '';
+                const row = document.createElement('div');
+                row.appendChild(makeArchiveElement('dt', '', parts.join(' — ')));
+                if (grade) row.appendChild(makeArchiveElement('dd', '', grade));
+                list.appendChild(row);
+            });
+            section.appendChild(list);
+        });
+        return section;
+    }
+
+    function renderPressTextPane(piece, info) {
+        const pane = makeArchiveElement('div', 'bt-press-pane bt-press-pane-text');
+
+        if (info.hasTranscription) {
+            const split = splitPressBody(piece.depth.body);
+            const reader = renderArchiveBody(split.body);
+            reader.classList.add('bt-archive-reader');
+            pane.appendChild(reader);
+            if (piece.depth.intro) {
+                pane.appendChild(makeArchiveElement('p', 'bt-press-transcription-note', piece.depth.intro));
+            }
+            const endMark = makeArchiveElement('aside', 'bt-archive-end-mark');
+            endMark.appendChild(makeArchiveElement('strong', '', 'End of recovered artifact'));
+            endMark.appendChild(makeArchiveElement(
+                'p',
+                '',
+                [piece.publication, piece.credit].filter(Boolean).join(' · ')
+            ));
+            pane.appendChild(endMark);
+            return pane;
+        }
+
+        // Scan-only: the recovered excerpt is the opening line and the pull
+        // quote. Say so plainly instead of implying there is more behind a click.
+        // Any scorecard is rendered separately, above.
+        const split = splitPressBody(piece.body);
+        const excerpt = renderArchiveBody(split.body.filter((block) => block.type !== 'bullets'));
+        excerpt.classList.add('bt-press-excerpt');
+        pane.appendChild(excerpt);
+        pane.appendChild(makeArchiveElement(
+            'p',
+            'bt-press-transcription-note',
+            'Only the opening line and the pull quote have been transcribed from this clipping. The scan is the complete record.'
+        ));
+        return pane;
+    }
+
+    function renderPressWalk(entries, index) {
+        const walk = makeArchiveElement('nav', 'bt-press-walk');
+        walk.setAttribute('aria-label', 'Move through the clipping file');
+        [
+            { entry: entries[index - 1], label: '← Previous', className: 'is-previous' },
+            { entry: entries[index + 1], label: 'Next →', className: 'is-next' }
+        ].forEach(({ entry, label, className }) => {
+            if (!entry) {
+                walk.appendChild(makeArchiveElement('span', `bt-press-walk-blank ${className}`));
+                return;
+            }
+            const button = makeArchiveElement('button', `bt-press-walk-item ${className}`);
+            button.type = 'button';
+            button.appendChild(makeArchiveElement('span', '', `${label}  ·  ${entry.desk ? entry.desk.label : 'The file'}`));
+            button.appendChild(makeArchiveElement('strong', '', entry.piece.title));
+            button.addEventListener('click', () => renderPressPiece(entry.piece.id, { revealArticle: true }));
+            walk.appendChild(button);
+        });
+        return walk;
+    }
+
+    function renderPressPiece(pieceId, options) {
+        const entries = pressDisplayOrder();
+        if (!entries.length) return;
+        const foundIndex = entries.findIndex((entry) => entry.piece.id === pieceId);
+        const index = foundIndex === -1 ? 0 : foundIndex;
+        const { piece, info, number } = entries[index];
+        const settings = options || {};
+        const mode = settings.mode || (info.hasTranscription ? 'text' : 'scan');
+        const caption = splitPressBody(info.hasTranscription ? piece.depth.body : piece.body).caption;
+        const pages = pressPages(piece);
+        const pageIndex = Math.min(Math.max(settings.page || 0, 0), Math.max(pages.length - 1, 0));
+
+        renderPressIndex(piece.id);
+
+        // --- the artifact's masthead ---------------------------------------
+        const header = makeArchiveElement('header', 'bt-press-header');
+        const slug = makeArchiveElement('p', 'bt-press-slug');
+        slug.appendChild(makeArchiveElement('span', 'bt-press-slug-desk', info.desk));
+        if (info.date) slug.appendChild(makeArchiveElement('span', '', info.date));
+        slug.appendChild(makeArchiveElement(
+            'span',
+            'bt-press-slug-count',
+            `No. ${number} of ${entries.length}`
+        ));
+        header.appendChild(slug);
+
+        const headline = makeArchiveElement('h2', 'bt-press-headline', piece.title);
+        header.appendChild(headline);
+
+        const source = makeArchiveElement('p', 'bt-press-source');
+        source.appendChild(makeArchiveElement('span', '', piece.publication));
+        if (piece.credit) source.appendChild(makeArchiveElement('span', '', piece.credit));
+        if (info.stars) source.appendChild(makePressStars(info.stars));
+        header.appendChild(source);
+
+        // --- the 2026 annotation, deliberately a different object ----------
+        const note = makeArchiveElement('aside', 'bt-press-note');
+        note.appendChild(makeArchiveElement('p', 'bt-press-note-label', 'Archivist’s note · 2026'));
+        note.appendChild(makeArchiveElement('p', 'bt-press-note-lede', piece.dek));
+        note.appendChild(makeArchiveElement('p', 'bt-press-note-body', piece.curator));
+
+        // --- pane switch ---------------------------------------------------
+        // Two toggle buttons rather than a tablist: real tab semantics would owe
+        // the reader arrow-key navigation, and these are simply pressed states.
+        const switcher = makeArchiveElement('div', 'bt-press-switch');
+        switcher.setAttribute('role', 'group');
+        switcher.setAttribute('aria-label', 'Choose how to read this clipping');
+        [
+            {
+                id: 'text',
+                label: info.hasTranscription ? 'Transcription' : 'Excerpt',
+                meta: info.hasTranscription
+                    ? (info.readingTime || 'Transcribed in full')
+                    : 'Pull quote only'
+            },
+            {
+                id: 'scan',
+                label: 'Newsprint',
+                meta: pages.length > 1 ? `The original scan · ${pages.length} pages` : 'The original scan'
+            }
+        ].forEach((tab) => {
+            const button = makeArchiveElement('button', 'bt-press-switch-item');
+            button.type = 'button';
+            button.setAttribute('aria-pressed', String(tab.id === mode));
+            button.classList.toggle('is-active', tab.id === mode);
+            button.appendChild(makeArchiveElement('strong', '', tab.label));
+            button.appendChild(makeArchiveElement('span', '', tab.meta));
+            button.addEventListener('click', () => renderPressPiece(piece.id, {
+                mode: tab.id,
+                page: pageIndex,
+                revealArticle: settings.revealArticle
+            }));
+            switcher.appendChild(button);
+        });
+
+        const pane = mode === 'scan'
+            ? renderPressScanPane(piece, caption, pageIndex, (nextPage) => renderPressPiece(piece.id, {
+                mode: 'scan',
+                page: nextPage,
+                revealArticle: settings.revealArticle
+            }))
+            : renderPressTextPane(piece, info);
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+
+        archiveDetail.replaceChildren(...[
+            header,
+            note,
+            renderPressScorecard(piece),
+            switcher,
+            pane,
+            renderPressWalk(entries, index),
+            actions
+        ].filter(Boolean));
+        archiveDetail.scrollTop = 0;
+
+        // Focus is claimed immediately, before any scrolling. Re-rendering
+        // removes the button the reader just pressed, and an orphaned focus
+        // sends the dialog hunting for a replacement — a hunt that scrolls both
+        // the index and the card out from under anything positioned first.
+        if (settings.revealArticle) {
+            header.tabIndex = -1;
+            header.focus({ preventScroll: true });
+        }
+
+        // Below 760px the index stacks above the article inside the scrolling
+        // card, so the card is scrolled as well to land on the masthead.
+        const revealScrolls = () => {
+            revealPressIndexItem();
+            if (!settings.revealArticle || !window.matchMedia('(max-width: 760px)').matches) return;
+            const card = archiveDialog.querySelector('.bt-archive-card');
+            if (!card || card.clientHeight < 40) return;
+            const offset = header.getBoundingClientRect().top - card.getBoundingClientRect().top;
+            card.scrollTop += offset - 8;
+        };
+        // Both passes: the first lands before paint, and the second corrects it
+        // if the first ran against a layout that had not settled. Each is a
+        // no-op once the target is already in view.
+        revealScrolls();
+        window.requestAnimationFrame(revealScrolls);
+    }
+
     const ARCHIVE_HEADERS = {
         alchemy: { kicker: 'The Sound Stage // project file', title: 'The mutation archive' },
         press: { kicker: 'Student press // recovered byline', title: 'The clipping file' },
@@ -2415,7 +2960,12 @@
         const header = ARCHIVE_HEADERS[collectionName] || ARCHIVE_HEADERS.content;
         archiveKicker.textContent = header.kicker;
         archiveTitle.textContent = header.title;
-        renderArchivePiece(collectionName, pieceId);
+        archiveDialog.classList.toggle('bt-archive-press', collectionName === 'press');
+        if (collectionName === 'press') {
+            renderPressPiece(pieceId);
+        } else {
+            renderArchivePiece(collectionName, pieceId);
+        }
         openDialog(archiveDialog);
     }
 

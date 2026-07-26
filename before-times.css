@@ -5128,6 +5128,63 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     display: none;
 }
 
+/* A credit roll, not a fact list: these are people, so they get the indigo
+   card and the marquee typeface rather than the statistics register. */
+.bt-dialog-credits {
+    margin: 1.25rem 0 0;
+    padding: 1rem 1.15rem 1.1rem;
+    color: var(--bt-paper);
+    background:
+        linear-gradient(rgba(0, 247, 194, 0.07), rgba(0, 247, 194, 0)),
+        var(--bt-indigo);
+    border: 2px solid var(--bt-ink);
+    box-shadow: 5px 5px 0 var(--bt-mint);
+}
+
+.bt-dialog-credits[hidden] {
+    display: none;
+}
+
+.bt-dialog-credits-label {
+    margin: 0 0 0.7rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(0, 247, 194, 0.35);
+    color: var(--bt-mint);
+    font-family: "Courier New", monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.bt-dialog-credits-names {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bt-dialog-credits-names li {
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.98rem;
+    line-height: 1.3;
+}
+
+.bt-dialog-credits-note {
+    margin: 0.85rem 0 0;
+    color: rgba(248, 235, 210, 0.82);
+    font-size: 0.78rem;
+    line-height: 1.55;
+}
+
+@media (max-width: 760px) {
+    .bt-dialog-credits-names {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Context-recovery badge — the "you did it" reward beat, seated up top right
    under the evidence title as a glowing unlock banner before any of the copy. */
 .bt-dialog-recovery {

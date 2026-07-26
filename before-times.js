@@ -24,6 +24,29 @@
             facts: ['Writer / producer', 'French Kitty, featuring Chloe Fineman', 'The NoHo Rag + Call Me Lucifer', 'The Sisters Hayes — unproduced short, 2013', 'Distributed by Troma Entertainment'],
             action: { label: 'Visit the surviving Vimeo archive', href: 'https://vimeo.com/absurdalchemy', external: true }
         },
+        alchemyHand: {
+            kicker: 'The Sound Stage // the company',
+            title: 'The hand of Absurd Alchemy',
+            copy: [
+                'Still reaching for one more impossible shot. The hand belongs to a company, though — almost nothing in this room was made alone.',
+                'Los Angeles, 2013–2017: short films, a web series built like a newspaper, a serial inside the serial, and the props that outlived the productions they were built for.'
+            ],
+            credits: {
+                label: 'The players',
+                names: [
+                    'Charles Wilke',
+                    'Jake Buras',
+                    'Matt Hudacs',
+                    'Lori Dean',
+                    'Marcelina Chavira',
+                    'Chloe Fineman',
+                    'Phil Mazo',
+                    'Tom Sibley'
+                ]
+            },
+            action: { label: 'Visit the Absurd Alchemy Vimeo ↗', href: 'https://vimeo.com/absurdalchemy', external: true },
+            secondaryLabel: 'Back to the room'
+        },
         games: {
             kicker: 'Door 02 // Burbank // 2008–2013',
             title: 'Game Development',
@@ -850,6 +873,7 @@
     const infoRecovery = document.getElementById('bt-dialog-recovery');
     const infoCopy = document.getElementById('bt-dialog-copy');
     const infoFacts = document.getElementById('bt-dialog-facts');
+    const infoCredits = document.getElementById('bt-dialog-credits');
     const infoRoutes = document.getElementById('bt-dialog-routes');
     const infoAction = document.getElementById('bt-dialog-action');
     const infoButton = document.getElementById('bt-dialog-button');
@@ -1756,6 +1780,8 @@
             }
         });
         infoRoutes.replaceChildren();
+        infoCredits.replaceChildren();
+        infoCredits.hidden = true;
         infoAction.hidden = true;
         infoButton.hidden = true;
         infoButton.onclick = null;
@@ -5073,7 +5099,8 @@
         const panel = PANELS[panelId];
         if (!panel) return;
 
-        infoSecondary.textContent = 'Back to the lobby';
+        // Panels opened from inside a room say so; the lobby is the default.
+        infoSecondary.textContent = panel.secondaryLabel || 'Back to the lobby';
         knowledgeDocumentViewer.hidden = true;
         infoRecovery.hidden = true;
         infoRecovery.replaceChildren();
@@ -5089,6 +5116,24 @@
             item.textContent = fact;
             infoFacts.appendChild(item);
         });
+
+        // A credit roll rather than a fact list: these are people, and they get
+        // their own register instead of sharing the one used for statistics.
+        infoCredits.replaceChildren();
+        infoCredits.hidden = !panel.credits;
+        if (panel.credits) {
+            if (panel.credits.label) {
+                infoCredits.appendChild(makeArchiveElement('p', 'bt-dialog-credits-label', panel.credits.label));
+            }
+            const names = makeArchiveElement('ul', 'bt-dialog-credits-names');
+            (panel.credits.names || []).forEach((name) => {
+                names.appendChild(makeArchiveElement('li', '', name));
+            });
+            infoCredits.appendChild(names);
+            if (panel.credits.note) {
+                infoCredits.appendChild(makeArchiveElement('p', 'bt-dialog-credits-note', panel.credits.note));
+            }
+        }
 
         infoRoutes.replaceChildren();
         (panel.routes || []).forEach((route) => {
@@ -5597,7 +5642,10 @@
             if (action === 'twenty-five') playTapeTwentyFive();
             if (action === 'sagan') cueAlchemyVideo('sagan');
             if (action === 'cat') cueAlchemyVideo('french-kitty');
-            if (action === 'hand') showStatus('The hand of Absurd Alchemy. Still reaching for one more impossible shot.', 3600);
+            if (action === 'hand') {
+                animateLayer(button, 'is-activating', 620);
+                openPanel('alchemyHand');
+            }
             if (action === 'collect-pen') collectAlchemyPen();
             if (action === 'scripts') {
                 animateLayer(alchemyCrateLayer, 'is-rustling', 620);

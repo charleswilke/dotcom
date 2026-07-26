@@ -5840,79 +5840,6 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     border-color: var(--bt-orange);
 }
 
-.bt-archive-index-divider {
-    margin: 1.15rem 0 0.6rem;
-    padding-top: 0.8rem;
-    border-top: 2px dashed rgba(35, 28, 34, 0.3);
-    color: #7b4436;
-    font-size: 0.58rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    line-height: 1.3;
-    text-transform: uppercase;
-}
-
-.bt-archive-catalog-tab {
-    background: rgba(255, 250, 230, 0.22);
-    border-style: dashed;
-}
-
-.bt-archive-catalog-samples,
-.bt-archive-catalog-restored {
-    margin: 1.5rem 0 0;
-}
-
-.bt-archive-catalog-samples ul {
-    margin: 0.65rem 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.bt-archive-catalog-samples li {
-    position: relative;
-    padding: 0.5rem 0.2rem 0.5rem 1.35rem;
-    border-bottom: 1px dashed rgba(35, 28, 34, 0.24);
-    color: var(--bt-indigo);
-    font-family: "Special Elite", Georgia, serif;
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-.bt-archive-catalog-samples li::before {
-    content: '»';
-    position: absolute;
-    left: 0.2rem;
-    color: #a24b35;
-}
-
-.bt-archive-restored-link {
-    display: block;
-    width: 100%;
-    margin: 0.55rem 0 0;
-    padding: 0.6rem 0.75rem;
-    color: var(--bt-indigo);
-    background: rgba(255, 90, 54, 0.08);
-    border: 1px solid rgba(123, 68, 54, 0.3);
-    border-radius: 3px;
-    font-family: "Special Elite", Georgia, serif;
-    font-size: 0.9rem;
-    line-height: 1.35;
-    text-align: left;
-    cursor: pointer;
-    transition: border-color 220ms ease, background-color 220ms ease, box-shadow 220ms ease;
-}
-
-.bt-archive-restored-link:hover,
-.bt-archive-restored-link:focus-visible {
-    background: rgba(255, 90, 54, 0.14);
-    border-color: rgba(162, 75, 53, 0.5);
-    box-shadow:
-        0 0 0.55rem rgba(255, 90, 54, 0.3),
-        0 0 1.5rem rgba(255, 90, 54, 0.16),
-        0 0 2.8rem rgba(0, 247, 194, 0.12);
-    outline: none;
-}
-
 .bt-archive-detail {
     padding: clamp(1rem, 3vw, 2rem);
 }
@@ -6337,16 +6264,21 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 }
 
 /* ---------------------------------------------------------------------------
- * The clipping file
+ * The document reader — shared by the clipping file and the output archive
  *
  * Two registers, kept deliberately unlike each other. The artifact is paper:
  * newsprint rules, serif text, orange archival trim. The archivist's 2026
  * annotation is an indigo slip with a mint offset — the only mint-shadowed
  * object in the archive, so a fresh perspective is recognisable on sight.
+ *
+ * `bt-doc-*` is the shell both collections share: the masthead, the annotation,
+ * the pane switch, the walk, the grouped index. `bt-press-*` below it is what
+ * only the newsprint needs — star ratings, the scan viewer, page strips, the
+ * printed grade scorecards. `bt-out-*` is what only the output archive needs.
  * ------------------------------------------------------------------------- */
 
-/* Index: three desks instead of one flat run of thirty-three */
-.bt-press-index-heading {
+/* Index: desks instead of one flat run */
+.bt-doc-index-heading {
     margin: 1.4rem 0 0.6rem;
     padding-top: 0.7rem;
     border-top: 2px solid rgba(35, 28, 34, 0.3);
@@ -6354,20 +6286,20 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     gap: 0.15rem;
 }
 
-.bt-press-index-heading:first-child {
+.bt-doc-index-heading:first-child {
     margin-top: 0.2rem;
     padding-top: 0;
     border-top: 0;
 }
 
-.bt-press-index-heading strong {
+.bt-doc-index-heading strong {
     color: var(--bt-indigo);
     font-family: "Special Elite", Georgia, serif;
     font-size: 0.92rem;
     font-weight: 400;
 }
 
-.bt-press-index-heading span {
+.bt-doc-index-heading span {
     color: #7b4436;
     font-size: 0.55rem;
     font-weight: 800;
@@ -6376,22 +6308,22 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     text-transform: uppercase;
 }
 
-.bt-press-index-item {
+.bt-doc-index-item {
     grid-template-columns: 1.85rem minmax(0, 1fr);
     gap: 0.2rem 0.45rem;
     border-left-width: 3px;
     border-left-color: rgba(35, 28, 34, 0.18);
 }
 
-.bt-press-index-item.is-transcribed {
+.bt-doc-index-item.is-transcribed {
     border-left-color: var(--bt-indigo);
 }
 
-.bt-press-index-item .bt-archive-index-number {
+.bt-doc-index-item .bt-archive-index-number {
     grid-row: 1 / span 3;
 }
 
-.bt-press-index-tags {
+.bt-doc-index-tags {
     grid-column: 2;
     display: flex;
     flex-wrap: wrap;
@@ -6407,7 +6339,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     line-height: 1;
 }
 
-.bt-press-tag {
+.bt-doc-tag {
     padding: 0.18rem 0.34rem;
     color: #76606b;
     border: 1px dashed rgba(35, 28, 34, 0.38);
@@ -6418,7 +6350,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     text-transform: uppercase;
 }
 
-.bt-press-tag.is-full {
+.bt-doc-tag.is-full {
     color: var(--bt-indigo);
     background: rgba(0, 247, 194, 0.2);
     border-style: solid;
@@ -6426,7 +6358,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 }
 
 /* Masthead: one source line where a three-row table used to be */
-.bt-press-header {
+.bt-doc-header {
     max-width: 46rem;
     padding-bottom: 0.85rem;
     border-bottom: 3px double var(--bt-ink);
@@ -6434,13 +6366,13 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 
 /* Focused programmatically as a landing target after a clipping is picked, so
    it takes no focus ring — the jump to the masthead is the feedback. */
-.bt-press-header:focus,
-.bt-press-header:focus-visible {
+.bt-doc-header:focus,
+.bt-doc-header:focus-visible {
     outline: none;
 }
 
-.bt-press-slug,
-.bt-press-source {
+.bt-doc-slug,
+.bt-doc-source {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -6448,7 +6380,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     margin: 0;
 }
 
-.bt-press-slug {
+.bt-doc-slug {
     margin-bottom: 0.45rem;
     font-size: 0.62rem;
     font-weight: 800;
@@ -6456,25 +6388,25 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     text-transform: uppercase;
 }
 
-.bt-press-slug span:not(:first-child)::before {
+.bt-doc-slug span:not(:first-child)::before {
     content: "·";
     margin-right: 0.5rem;
     color: rgba(35, 28, 34, 0.4);
 }
 
-.bt-press-slug-desk {
+.bt-doc-slug-desk {
     color: #a24b35;
 }
 
-.bt-press-slug span:not(.bt-press-slug-desk) {
+.bt-doc-slug span:not(.bt-doc-slug-desk) {
     color: #76606b;
 }
 
-.bt-press-slug-count {
+.bt-doc-slug-count {
     margin-left: auto;
 }
 
-.bt-press-headline {
+.bt-doc-headline {
     margin: 0;
     color: var(--bt-indigo);
     font-family: "Special Elite", Georgia, serif;
@@ -6483,7 +6415,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     line-height: 1.02;
 }
 
-.bt-press-source {
+.bt-doc-source {
     margin-top: 0.55rem;
     color: #4f3e47;
     font-family: Georgia, "Times New Roman", serif;
@@ -6491,14 +6423,14 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     font-style: italic;
 }
 
-.bt-press-source span:not(:first-child):not(.bt-press-stars)::before {
+.bt-doc-source span:not(:first-child):not(.bt-press-stars)::before {
     content: "·";
     margin-right: 0.5rem;
     color: rgba(35, 28, 34, 0.4);
 }
 
 /* The 2026 annotation: the one mint-shadowed object in the archive */
-.bt-press-note {
+.bt-doc-note {
     max-width: 46rem;
     margin: 1.35rem 0;
     padding: 1rem 1.15rem 1.1rem;
@@ -6510,7 +6442,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     transform: rotate(-0.35deg);
 }
 
-.bt-press-note-label {
+.bt-doc-note-label {
     margin: 0 0 0.55rem;
     padding-bottom: 0.45rem;
     border-bottom: 1px solid rgba(0, 247, 194, 0.35);
@@ -6522,7 +6454,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     text-transform: uppercase;
 }
 
-.bt-press-note-lede {
+.bt-doc-note-lede {
     margin: 0;
     color: var(--bt-paper);
     font-family: Georgia, "Times New Roman", serif;
@@ -6531,7 +6463,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     line-height: 1.5;
 }
 
-.bt-press-note-body {
+.bt-doc-note-body {
     margin: 0.7rem 0 0;
     color: rgba(248, 235, 210, 0.86);
     font-size: 0.86rem;
@@ -6598,7 +6530,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 }
 
 /* Pane switch */
-.bt-press-switch {
+.bt-doc-switch {
     max-width: 46rem;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -6606,7 +6538,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     margin-bottom: 1.35rem;
 }
 
-.bt-press-switch-item {
+.bt-doc-switch-item {
     display: grid;
     gap: 0.15rem;
     padding: 0.6rem 0.75rem;
@@ -6619,35 +6551,35 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     transition: background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
 
-.bt-press-switch-item strong {
+.bt-doc-switch-item strong {
     color: var(--bt-indigo);
     font-family: "Special Elite", Georgia, serif;
     font-size: 0.95rem;
     font-weight: 400;
 }
 
-.bt-press-switch-item span {
+.bt-doc-switch-item span {
     font-size: 0.56rem;
     font-weight: 800;
     letter-spacing: 0.07em;
     text-transform: uppercase;
 }
 
-.bt-press-switch-item:hover,
-.bt-press-switch-item:focus-visible {
+.bt-doc-switch-item:hover,
+.bt-doc-switch-item:focus-visible {
     background: rgba(255, 250, 230, 0.85);
     border-color: var(--bt-indigo);
     outline: none;
 }
 
-.bt-press-switch-item.is-active {
+.bt-doc-switch-item.is-active {
     color: rgba(248, 235, 210, 0.82);
     background: var(--bt-indigo);
     border-color: var(--bt-ink);
     box-shadow: 3px 3px 0 var(--bt-orange);
 }
 
-.bt-press-switch-item.is-active strong {
+.bt-doc-switch-item.is-active strong {
     color: var(--bt-paper);
 }
 
@@ -6789,7 +6721,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     font-size: 1.12em;
 }
 
-.bt-press-transcription-note {
+.bt-doc-provenance {
     max-width: 43rem;
     margin: 1.5rem auto 0;
     padding-top: 0.7rem;
@@ -6801,7 +6733,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 }
 
 /* Walking the file in order */
-.bt-press-walk {
+.bt-doc-walk {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.6rem;
@@ -6810,7 +6742,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     border-top: 2px solid rgba(35, 28, 34, 0.28);
 }
 
-.bt-press-walk-item {
+.bt-doc-walk-item {
     display: grid;
     gap: 0.2rem;
     padding: 0.65rem 0.8rem;
@@ -6822,11 +6754,11 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     transition: background-color 200ms ease, border-color 200ms ease;
 }
 
-.bt-press-walk-item.is-next {
+.bt-doc-walk-item.is-next {
     text-align: right;
 }
 
-.bt-press-walk-item span {
+.bt-doc-walk-item span {
     color: #a24b35;
     font-size: 0.56rem;
     font-weight: 800;
@@ -6834,7 +6766,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     text-transform: uppercase;
 }
 
-.bt-press-walk-item strong {
+.bt-doc-walk-item strong {
     color: var(--bt-indigo);
     font-family: "Special Elite", Georgia, serif;
     font-size: 0.88rem;
@@ -6842,11 +6774,170 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     line-height: 1.25;
 }
 
-.bt-press-walk-item:hover,
-.bt-press-walk-item:focus-visible {
+.bt-doc-walk-item:hover,
+.bt-doc-walk-item:focus-visible {
     background: rgba(255, 250, 230, 0.85);
     border-color: var(--bt-indigo);
     outline: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * The output archive — what only the Content Factory needs
+ * ------------------------------------------------------------------------- */
+
+/* The standing count at the head of the index: 13 restored of 195 logged */
+.bt-out-index-summary {
+    margin-top: 0.2rem;
+    padding: 0.6rem 0.7rem;
+    background: rgba(26, 21, 80, 0.07);
+    border: 1px dashed rgba(35, 28, 34, 0.38);
+    border-top: 0;
+}
+
+.bt-out-index-summary:first-child {
+    border-top: 1px dashed rgba(35, 28, 34, 0.38);
+}
+
+/* A client's drawer card sits at the head of that client's restored pieces */
+.bt-out-index-drawer {
+    background: rgba(255, 250, 230, 0.2);
+    border-style: dashed;
+    border-left-color: rgba(35, 28, 34, 0.3);
+}
+
+.bt-out-index-drawer .bt-archive-index-number {
+    color: #7b4436;
+}
+
+/* The captured page, shown whole rather than cropped to a band */
+.bt-out-hero {
+    max-width: 46rem;
+    margin: 0 0 1.6rem;
+}
+
+.bt-out-hero-frame {
+    position: relative;
+    width: 100%;
+    display: block;
+    padding: 0.5rem;
+    background: #f5ecd8;
+    border: 1px solid rgba(35, 28, 34, 0.35);
+    box-shadow: 5px 6px 0 rgba(26, 21, 80, 0.13);
+    cursor: zoom-in;
+}
+
+.bt-out-hero-frame img {
+    width: 100%;
+    max-height: min(52vh, 30rem);
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.bt-out-hero-frame:hover .bt-press-scan-zoom,
+.bt-out-hero-frame:focus-visible .bt-press-scan-zoom {
+    opacity: 1;
+}
+
+.bt-out-hero-frame:focus-visible {
+    outline: 3px solid var(--bt-indigo);
+    outline-offset: 3px;
+}
+
+/* The précis pane */
+.bt-out-brief {
+    max-width: 43rem;
+    margin-inline: auto;
+    font-size: clamp(1.02rem, 2vw, 1.12rem);
+    line-height: 1.7;
+}
+
+.bt-out-brief > p:first-child {
+    color: var(--bt-indigo);
+    font-size: 1.1em;
+}
+
+/* The drawer card */
+.bt-out-pane-drawer {
+    max-width: 46rem;
+    display: grid;
+    gap: 1.4rem;
+}
+
+.bt-out-drawer-section {
+    padding: 1rem 1.15rem;
+    background: rgba(255, 250, 230, 0.5);
+    border: 1px solid rgba(35, 28, 34, 0.28);
+    border-left: 4px solid #a24b35;
+}
+
+.bt-out-drawer-label {
+    margin: 0 0 0.6rem;
+    color: #a24b35;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+}
+
+.bt-out-drawer-section ul {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding-left: 1.1rem;
+    color: #3d3037;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+.bt-out-drawer-links {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.bt-out-drawer-link {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.6rem 0.75rem;
+    background: rgba(255, 250, 230, 0.7);
+    border: 1px solid rgba(35, 28, 34, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.bt-out-drawer-link strong {
+    color: var(--bt-indigo);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.bt-out-drawer-link span {
+    color: #76606b;
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.bt-out-drawer-link:hover,
+.bt-out-drawer-link:focus-visible {
+    background: var(--bt-paper);
+    border-color: var(--bt-indigo);
+    outline: none;
+}
+
+/* The before/after rewrite keeps its own comparison layout, minus the old
+   heading chrome that the masthead and the annotation now carry. */
+.bt-out-pane-compare .bt-archive-deep-content {
+    margin-top: 0;
+}
+
+.bt-out-pane-compare .bt-compare-heading {
+    display: none;
 }
 
 /* Full-size scan viewer */
@@ -7939,7 +8030,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     /* The clipping file has thirty-three entries in three desks, which a
        horizontal shelf cannot show without clipping every card. Give it a real
        vertical list that scrolls inside its own capped height instead. */
-    .bt-archive-press .bt-archive-index {
+    .bt-archive-doc .bt-archive-index {
         display: block;
         max-height: 40vh;
         margin: 0 -0.9rem;
@@ -7948,11 +8039,11 @@ body.bt-room-content .bt-inventory-drawer.is-open {
         overflow-y: auto;
     }
 
-    .bt-archive-press .bt-press-index-item {
+    .bt-archive-doc .bt-doc-index-item {
         margin: 0 0 0.5rem;
     }
 
-    .bt-archive-press .bt-press-index-heading {
+    .bt-archive-doc .bt-doc-index-heading {
         position: sticky;
         top: 0;
         z-index: 1;
@@ -7970,24 +8061,24 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 
     /* Space Mono fits roughly thirty characters to a phone column, so the
        annotation needs a smaller size to stay a note rather than a wall. */
-    .bt-press-note-body {
+    .bt-doc-note-body {
         font-size: 0.78rem;
         line-height: 1.65;
     }
 
-    .bt-press-switch {
+    .bt-doc-switch {
         grid-template-columns: 1fr;
     }
 
-    .bt-press-walk {
+    .bt-doc-walk {
         grid-template-columns: 1fr;
     }
 
-    .bt-press-walk-item.is-next {
+    .bt-doc-walk-item.is-next {
         text-align: left;
     }
 
-    .bt-press-slug-count {
+    .bt-doc-slug-count {
         margin-left: 0;
     }
 

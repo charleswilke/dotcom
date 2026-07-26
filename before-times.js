@@ -2251,94 +2251,8 @@
             archiveIndex.appendChild(button);
         });
 
-        const catalog = collectionName === 'content'
-            ? window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog
-            : null;
-        if (catalog && catalog.length) {
-            archiveIndex.appendChild(makeArchiveElement('p', 'bt-archive-index-divider', 'The card catalog // by client'));
-            catalog.forEach((group, index) => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'bt-archive-index-item bt-archive-catalog-tab';
-                button.classList.toggle('is-active', group.id === activeId);
-                button.setAttribute('aria-current', group.id === activeId ? 'true' : 'false');
-                button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', 'D' + (index + 1)));
-                button.appendChild(makeArchiveElement('strong', '', group.client));
-                button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', `${group.years} · ${group.pieces} pieces logged`));
-                button.appendChild(makeArchiveElement('span', 'bt-archive-index-depth', 'Catalog card'));
-                button.addEventListener('click', () => renderCatalogCard(group.id));
-                archiveIndex.appendChild(button);
-            });
-        }
-
         const activeItem = archiveIndex.querySelector('.bt-archive-index-item.is-active');
         if (activeItem) activeItem.scrollIntoView({ block: 'nearest' });
-    }
-
-    function renderCatalogCard(groupId) {
-        const catalog = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog;
-        if (!catalog || !catalog.length) return;
-        const group = catalog.find((item) => item.id === groupId) || catalog[0];
-        renderArchiveIndex('content', group.id);
-
-        const heading = makeArchiveElement('header', 'bt-archive-piece-header');
-        heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', `Card catalog // ${group.years}`));
-        heading.appendChild(makeArchiveElement('span', 'bt-archive-mode-chip', 'Catalog card'));
-        heading.appendChild(makeArchiveElement('h2', '', group.client));
-        heading.appendChild(makeArchiveElement('p', 'bt-archive-dek', group.summary));
-
-        const meta = makeArchiveElement('dl', 'bt-archive-meta');
-        [
-            ['Engagement', group.years],
-            ['Pieces logged', String(group.pieces)],
-            ['Formats', group.formats]
-        ].forEach(([term, description]) => {
-            meta.appendChild(makeArchiveElement('dt', '', term));
-            meta.appendChild(makeArchiveElement('dd', '', description));
-        });
-
-        const children = [heading, meta];
-
-        const samples = makeArchiveElement('section', 'bt-archive-catalog-samples');
-        samples.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'Pulled from the drawer'));
-        const sampleList = makeArchiveElement('ul', '');
-        (group.samples || []).forEach((title) => {
-            sampleList.appendChild(makeArchiveElement('li', '', title));
-        });
-        samples.appendChild(sampleList);
-        children.push(samples);
-
-        const restoredIds = group.restored || [];
-        if (restoredIds.length) {
-            const restored = makeArchiveElement('section', 'bt-archive-catalog-restored');
-            restored.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', 'Restored from this drawer'));
-            restoredIds.forEach((pieceId) => {
-                const piece = (window.BEFORE_TIMES_ARCHIVE.content || []).find((item) => item.id === pieceId);
-                if (!piece) return;
-                const link = makeArchiveElement('button', 'bt-archive-restored-link', piece.title);
-                link.type = 'button';
-                link.addEventListener('click', () => renderArchivePiece('content', piece.id));
-                restored.appendChild(link);
-            });
-            children.push(restored);
-        }
-
-        const note = makeArchiveElement('aside', 'bt-archive-curator');
-        note.appendChild(makeArchiveElement('strong', '', 'Restoration status'));
-        note.appendChild(makeArchiveElement('p', '', restoredIds.length
-            ? `${restoredIds.length} of the ${group.pieces} logged pieces ${restoredIds.length === 1 ? 'has' : 'have'} been fully restored. The rest wait, labeled and preserved, for a turn on the bench.`
-            : `None of the ${group.pieces} logged pieces has been fully restored yet. Each one waits, labeled and preserved, for a turn on the bench.`));
-        children.push(note);
-
-        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
-        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
-        close.type = 'button';
-        close.addEventListener('click', () => closeDialog(archiveDialog));
-        actions.appendChild(close);
-        children.push(actions);
-
-        archiveDetail.replaceChildren(...children);
-        archiveDetail.scrollTop = 0;
     }
 
     function renderArchivePiece(collectionName, pieceId) {
@@ -2523,7 +2437,11 @@
         entries.forEach((entry) => {
             if (!ordered.some((item) => item.piece.id === entry.piece.id)) ordered.push({ ...entry, desk: null });
         });
-        return ordered.map((entry, index) => ({ ...entry, number: String(index + 1).padStart(2, '0') }));
+        return ordered.map((entry, index) => ({
+            ...entry,
+            groupLabel: entry.desk ? entry.desk.label : 'The file',
+            number: String(index + 1).padStart(2, '0')
+        }));
     }
 
     function renderPressIndex(activeId) {
@@ -2536,7 +2454,7 @@
             const deskEntries = entries.filter((entry) => entry.desk === desk);
             if (!deskEntries.length) return;
 
-            const heading = makeArchiveElement('p', 'bt-press-index-heading');
+            const heading = makeArchiveElement('p', 'bt-doc-index-heading');
             heading.appendChild(makeArchiveElement('strong', '', desk.label));
             heading.appendChild(makeArchiveElement('span', '', `${deskEntries.length} · ${desk.note}`));
             archiveIndex.appendChild(heading);
@@ -2544,7 +2462,7 @@
             deskEntries.forEach(({ piece, info, number }) => {
                 const button = document.createElement('button');
                 button.type = 'button';
-                button.className = 'bt-archive-index-item bt-press-index-item';
+                button.className = 'bt-archive-index-item bt-doc-index-item';
                 button.classList.toggle('is-active', piece.id === activeId);
                 button.classList.toggle('is-transcribed', info.hasTranscription);
                 button.setAttribute('aria-current', piece.id === activeId ? 'true' : 'false');
@@ -2556,11 +2474,11 @@
                     info.work || info.date || info.subject
                 ));
 
-                const tags = makeArchiveElement('span', 'bt-press-index-tags');
+                const tags = makeArchiveElement('span', 'bt-doc-index-tags');
                 if (info.stars) tags.appendChild(makePressStars(info.stars));
                 tags.appendChild(makeArchiveElement(
                     'span',
-                    info.hasTranscription ? 'bt-press-tag is-full' : 'bt-press-tag',
+                    info.hasTranscription ? 'bt-doc-tag is-full' : 'bt-doc-tag',
                     info.hasTranscription ? 'Full text' : 'Scan only'
                 ));
                 button.appendChild(tags);
@@ -2590,6 +2508,110 @@
         } else if (item.bottom > list.bottom) {
             archiveIndex.scrollTop += item.bottom - list.bottom + 8;
         }
+    }
+
+    /* ------------------------------------------------------------------------
+     * The document reader
+     *
+     * The shell the clipping file and the output archive share: a masthead, the
+     * archivist's 2026 annotation as a visibly separate object, a pane switch
+     * instead of a "keep reading" gate, and a walk through the collection in the
+     * order the index displays it. Each collection supplies its own panes.
+     * ---------------------------------------------------------------------- */
+
+    // desk / date / position, headline, then one source line where a three-row
+    // definition list used to sit.
+    function makeDocMasthead(spec) {
+        const header = makeArchiveElement('header', 'bt-doc-header');
+
+        const slug = makeArchiveElement('p', 'bt-doc-slug');
+        if (spec.desk) slug.appendChild(makeArchiveElement('span', 'bt-doc-slug-desk', spec.desk));
+        if (spec.date) slug.appendChild(makeArchiveElement('span', '', spec.date));
+        if (spec.position) slug.appendChild(makeArchiveElement('span', 'bt-doc-slug-count', spec.position));
+        header.appendChild(slug);
+
+        header.appendChild(makeArchiveElement('h2', 'bt-doc-headline', spec.title));
+
+        const source = makeArchiveElement('p', 'bt-doc-source');
+        (spec.source || []).filter(Boolean).forEach((part) => {
+            source.appendChild(typeof part === 'string' ? makeArchiveElement('span', '', part) : part);
+        });
+        if (source.childElementCount) header.appendChild(source);
+        return header;
+    }
+
+    function makeDocNote(dek, curator) {
+        const note = makeArchiveElement('aside', 'bt-doc-note');
+        note.appendChild(makeArchiveElement('p', 'bt-doc-note-label', 'Archivist’s note · 2026'));
+        if (dek) note.appendChild(makeArchiveElement('p', 'bt-doc-note-lede', dek));
+        if (curator) note.appendChild(makeArchiveElement('p', 'bt-doc-note-body', curator));
+        return note;
+    }
+
+    // Toggle buttons rather than a tablist: real tab semantics would owe the
+    // reader arrow-key navigation, and these are simply pressed states.
+    function makeDocSwitch(tabs, activeId, onSelect) {
+        const switcher = makeArchiveElement('div', 'bt-doc-switch');
+        switcher.setAttribute('role', 'group');
+        switcher.setAttribute('aria-label', 'Choose how to read this piece');
+        switcher.style.setProperty('--bt-doc-switch-count', String(tabs.length));
+        tabs.forEach((tab) => {
+            const button = makeArchiveElement('button', 'bt-doc-switch-item');
+            button.type = 'button';
+            button.setAttribute('aria-pressed', String(tab.id === activeId));
+            button.classList.toggle('is-active', tab.id === activeId);
+            button.appendChild(makeArchiveElement('strong', '', tab.label));
+            button.appendChild(makeArchiveElement('span', '', tab.meta));
+            button.addEventListener('click', () => onSelect(tab.id));
+            switcher.appendChild(button);
+        });
+        return switcher;
+    }
+
+    function makeDocWalk(entries, index, onSelect) {
+        const walk = makeArchiveElement('nav', 'bt-doc-walk');
+        walk.setAttribute('aria-label', 'Move through the archive');
+        [
+            { entry: entries[index - 1], label: '← Previous', className: 'is-previous' },
+            { entry: entries[index + 1], label: 'Next →', className: 'is-next' }
+        ].forEach(({ entry, label, className }) => {
+            if (!entry) {
+                walk.appendChild(makeArchiveElement('span', `bt-doc-walk-blank ${className}`));
+                return;
+            }
+            const button = makeArchiveElement('button', `bt-doc-walk-item ${className}`);
+            button.type = 'button';
+            button.appendChild(makeArchiveElement('span', '', entry.groupLabel ? `${label}  ·  ${entry.groupLabel}` : label));
+            button.appendChild(makeArchiveElement('strong', '', entry.piece.title));
+            button.addEventListener('click', () => onSelect(entry.piece.id));
+            walk.appendChild(button);
+        });
+        return walk;
+    }
+
+    // Focus is claimed immediately, before any scrolling. Re-rendering removes
+    // the button the reader just pressed, and an orphaned focus sends the dialog
+    // hunting for a replacement — a hunt that scrolls both the index and the card
+    // out from under anything positioned first.
+    function settleDocScroll(header, reveal) {
+        archiveDetail.scrollTop = 0;
+        if (reveal) {
+            header.tabIndex = -1;
+            header.focus({ preventScroll: true });
+        }
+        const run = () => {
+            revealPressIndexItem();
+            if (!reveal || !window.matchMedia('(max-width: 760px)').matches) return;
+            const card = archiveDialog.querySelector('.bt-archive-card');
+            if (!card || card.clientHeight < 40) return;
+            const offset = header.getBoundingClientRect().top - card.getBoundingClientRect().top;
+            card.scrollTop += offset - 8;
+        };
+        // Both passes: the first lands before paint, and the second corrects it
+        // if the first ran against a layout that had not settled. Each is a
+        // no-op once the target is already in view.
+        run();
+        window.requestAnimationFrame(run);
     }
 
     // A clipping can run across several pages of newsprint — "Meet Sam" jumps
@@ -2685,7 +2707,7 @@
         const pages = pressPages(piece);
         const index = Math.min(Math.max(pageIndex || 0, 0), Math.max(pages.length - 1, 0));
         const page = pages[index];
-        const pane = makeArchiveElement('div', 'bt-press-pane bt-press-pane-scan');
+        const pane = makeArchiveElement('div', 'bt-doc-pane bt-doc-pane-scan');
         if (!page) return pane;
 
         // The printed photo caption comes off the body, which is not page
@@ -2767,7 +2789,7 @@
     }
 
     function renderPressTextPane(piece, info) {
-        const pane = makeArchiveElement('div', 'bt-press-pane bt-press-pane-text');
+        const pane = makeArchiveElement('div', 'bt-doc-pane bt-doc-pane-text');
 
         if (info.hasTranscription) {
             const split = splitPressBody(piece.depth.body);
@@ -2775,7 +2797,7 @@
             reader.classList.add('bt-archive-reader');
             pane.appendChild(reader);
             if (piece.depth.intro) {
-                pane.appendChild(makeArchiveElement('p', 'bt-press-transcription-note', piece.depth.intro));
+                pane.appendChild(makeArchiveElement('p', 'bt-doc-provenance', piece.depth.intro));
             }
             const endMark = makeArchiveElement('aside', 'bt-archive-end-mark');
             endMark.appendChild(makeArchiveElement('strong', '', 'End of recovered artifact'));
@@ -2797,31 +2819,10 @@
         pane.appendChild(excerpt);
         pane.appendChild(makeArchiveElement(
             'p',
-            'bt-press-transcription-note',
+            'bt-doc-provenance',
             'Only the opening line and the pull quote have been transcribed from this clipping. The scan is the complete record.'
         ));
         return pane;
-    }
-
-    function renderPressWalk(entries, index) {
-        const walk = makeArchiveElement('nav', 'bt-press-walk');
-        walk.setAttribute('aria-label', 'Move through the clipping file');
-        [
-            { entry: entries[index - 1], label: '← Previous', className: 'is-previous' },
-            { entry: entries[index + 1], label: 'Next →', className: 'is-next' }
-        ].forEach(({ entry, label, className }) => {
-            if (!entry) {
-                walk.appendChild(makeArchiveElement('span', `bt-press-walk-blank ${className}`));
-                return;
-            }
-            const button = makeArchiveElement('button', `bt-press-walk-item ${className}`);
-            button.type = 'button';
-            button.appendChild(makeArchiveElement('span', '', `${label}  ·  ${entry.desk ? entry.desk.label : 'The file'}`));
-            button.appendChild(makeArchiveElement('strong', '', entry.piece.title));
-            button.addEventListener('click', () => renderPressPiece(entry.piece.id, { revealArticle: true }));
-            walk.appendChild(button);
-        });
-        return walk;
     }
 
     function renderPressPiece(pieceId, options) {
@@ -2835,43 +2836,23 @@
         const caption = splitPressBody(info.hasTranscription ? piece.depth.body : piece.body).caption;
         const pages = pressPages(piece);
         const pageIndex = Math.min(Math.max(settings.page || 0, 0), Math.max(pages.length - 1, 0));
+        const reopen = (extra) => renderPressPiece(piece.id, Object.assign({
+            mode,
+            page: pageIndex,
+            revealArticle: settings.revealArticle
+        }, extra));
 
         renderPressIndex(piece.id);
 
-        // --- the artifact's masthead ---------------------------------------
-        const header = makeArchiveElement('header', 'bt-press-header');
-        const slug = makeArchiveElement('p', 'bt-press-slug');
-        slug.appendChild(makeArchiveElement('span', 'bt-press-slug-desk', info.desk));
-        if (info.date) slug.appendChild(makeArchiveElement('span', '', info.date));
-        slug.appendChild(makeArchiveElement(
-            'span',
-            'bt-press-slug-count',
-            `No. ${number} of ${entries.length}`
-        ));
-        header.appendChild(slug);
+        const header = makeDocMasthead({
+            desk: info.desk,
+            date: info.date,
+            position: `No. ${number} of ${entries.length}`,
+            title: piece.title,
+            source: [piece.publication, piece.credit, info.stars ? makePressStars(info.stars) : null]
+        });
 
-        const headline = makeArchiveElement('h2', 'bt-press-headline', piece.title);
-        header.appendChild(headline);
-
-        const source = makeArchiveElement('p', 'bt-press-source');
-        source.appendChild(makeArchiveElement('span', '', piece.publication));
-        if (piece.credit) source.appendChild(makeArchiveElement('span', '', piece.credit));
-        if (info.stars) source.appendChild(makePressStars(info.stars));
-        header.appendChild(source);
-
-        // --- the 2026 annotation, deliberately a different object ----------
-        const note = makeArchiveElement('aside', 'bt-press-note');
-        note.appendChild(makeArchiveElement('p', 'bt-press-note-label', 'Archivist’s note · 2026'));
-        note.appendChild(makeArchiveElement('p', 'bt-press-note-lede', piece.dek));
-        note.appendChild(makeArchiveElement('p', 'bt-press-note-body', piece.curator));
-
-        // --- pane switch ---------------------------------------------------
-        // Two toggle buttons rather than a tablist: real tab semantics would owe
-        // the reader arrow-key navigation, and these are simply pressed states.
-        const switcher = makeArchiveElement('div', 'bt-press-switch');
-        switcher.setAttribute('role', 'group');
-        switcher.setAttribute('aria-label', 'Choose how to read this clipping');
-        [
+        const switcher = makeDocSwitch([
             {
                 id: 'text',
                 label: info.hasTranscription ? 'Transcription' : 'Excerpt',
@@ -2884,27 +2865,10 @@
                 label: 'Newsprint',
                 meta: pages.length > 1 ? `The original scan · ${pages.length} pages` : 'The original scan'
             }
-        ].forEach((tab) => {
-            const button = makeArchiveElement('button', 'bt-press-switch-item');
-            button.type = 'button';
-            button.setAttribute('aria-pressed', String(tab.id === mode));
-            button.classList.toggle('is-active', tab.id === mode);
-            button.appendChild(makeArchiveElement('strong', '', tab.label));
-            button.appendChild(makeArchiveElement('span', '', tab.meta));
-            button.addEventListener('click', () => renderPressPiece(piece.id, {
-                mode: tab.id,
-                page: pageIndex,
-                revealArticle: settings.revealArticle
-            }));
-            switcher.appendChild(button);
-        });
+        ], mode, (id) => reopen({ mode: id }));
 
         const pane = mode === 'scan'
-            ? renderPressScanPane(piece, caption, pageIndex, (nextPage) => renderPressPiece(piece.id, {
-                mode: 'scan',
-                page: nextPage,
-                revealArticle: settings.revealArticle
-            }))
+            ? renderPressScanPane(piece, caption, pageIndex, (nextPage) => reopen({ mode: 'scan', page: nextPage }))
             : renderPressTextPane(piece, info);
 
         const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
@@ -2915,39 +2879,339 @@
 
         archiveDetail.replaceChildren(...[
             header,
-            note,
+            makeDocNote(piece.dek, piece.curator),
             renderPressScorecard(piece),
             switcher,
             pane,
-            renderPressWalk(entries, index),
+            makeDocWalk(entries, index, (id) => renderPressPiece(id, { revealArticle: true })),
             actions
         ].filter(Boolean));
-        archiveDetail.scrollTop = 0;
 
-        // Focus is claimed immediately, before any scrolling. Re-rendering
-        // removes the button the reader just pressed, and an orphaned focus
-        // sends the dialog hunting for a replacement — a hunt that scrolls both
-        // the index and the card out from under anything positioned first.
-        if (settings.revealArticle) {
-            header.tabIndex = -1;
-            header.focus({ preventScroll: true });
+        settleDocScroll(header, settings.revealArticle);
+    }
+
+    /* ------------------------------------------------------------------------
+     * The output archive
+     *
+     * Where the clipping file sorts into desks, this one sorts into clients —
+     * the axis the data already models in `contentCatalog`. That unifies the two
+     * lists the index used to keep apart: each client heading now owns its
+     * catalog card and whatever has been restored from that drawer, so the shape
+     * of the archive (13 restored, 195 logged) is legible at a glance.
+     *
+     * Unlike a clipping, a restored article's `body` is not an excerpt of the
+     * full text — it is a separately written précis with a pull quote. So the
+     * preview is not discarded when the gate goes; it becomes the "In brief"
+     * pane, which is also where the `bullets` blocks live.
+     * ---------------------------------------------------------------------- */
+
+    function contentDisplayOrder() {
+        const archive = window.BEFORE_TIMES_ARCHIVE || {};
+        const pieces = archive.content || [];
+        const catalog = archive.contentCatalog || [];
+        const entries = [];
+        let number = 0;
+
+        catalog.forEach((group) => {
+            const restored = (group.restored || [])
+                .map((id) => pieces.find((piece) => piece.id === id))
+                .filter(Boolean);
+            entries.push({ kind: 'catalog', group, groupLabel: group.client });
+            restored.forEach((piece) => {
+                number += 1;
+                entries.push({
+                    kind: 'piece',
+                    piece,
+                    group,
+                    groupLabel: group.client,
+                    number: String(number).padStart(2, '0')
+                });
+            });
+        });
+
+        // A restored piece whose client has no catalog drawer still gets a place.
+        pieces.forEach((piece) => {
+            if (entries.some((entry) => entry.kind === 'piece' && entry.piece.id === piece.id)) return;
+            number += 1;
+            entries.push({
+                kind: 'piece',
+                piece,
+                group: null,
+                groupLabel: piece.publication || 'Unfiled',
+                number: String(number).padStart(2, '0')
+            });
+        });
+
+        return entries;
+    }
+
+    // The walk steps between readable pieces; catalog cards are not stops on it.
+    function contentPieceEntries() {
+        return contentDisplayOrder().filter((entry) => entry.kind === 'piece');
+    }
+
+    function describeContentPiece(piece) {
+        const eyebrowParts = (piece.eyebrow || '').split(' // ');
+        return {
+            desk: eyebrowParts[0] || '',
+            date: eyebrowParts[1] || '',
+            readingTime: (piece.depth && piece.depth.meta) || '',
+            isCompare: Boolean(piece.depth && piece.depth.kind === 'compare')
+        };
+    }
+
+    function renderContentIndex(activeId) {
+        const entries = contentDisplayOrder();
+        if (!entries.length) return;
+        const pieces = (window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.content) || [];
+        const catalog = (window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog) || [];
+        const logged = catalog.reduce((total, group) => total + (group.pieces || 0), 0);
+
+        archiveIndex.replaceChildren();
+
+        const summary = makeArchiveElement('p', 'bt-doc-index-heading bt-out-index-summary');
+        summary.appendChild(makeArchiveElement('strong', '', 'The card catalog'));
+        summary.appendChild(makeArchiveElement(
+            'span',
+            '',
+            `${pieces.length} restored of ${logged} logged · ${catalog.length} clients`
+        ));
+        archiveIndex.appendChild(summary);
+
+        let lastGroupId = null;
+        entries.forEach((entry) => {
+            const groupId = entry.group ? entry.group.id : 'unfiled';
+            if (groupId !== lastGroupId) {
+                lastGroupId = groupId;
+                if (entry.group) {
+                    const heading = makeArchiveElement('p', 'bt-doc-index-heading');
+                    heading.appendChild(makeArchiveElement('strong', '', entry.group.client));
+                    heading.appendChild(makeArchiveElement(
+                        'span',
+                        '',
+                        `${entry.group.years} · ${(entry.group.restored || []).length} restored of ${entry.group.pieces}`
+                    ));
+                    archiveIndex.appendChild(heading);
+                }
+            }
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'bt-archive-index-item bt-doc-index-item';
+            const isActive = entry.kind === 'catalog'
+                ? entry.group.id === activeId
+                : entry.piece.id === activeId;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-current', isActive ? 'true' : 'false');
+
+            if (entry.kind === 'catalog') {
+                button.classList.add('bt-out-index-drawer');
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', '▤'));
+                button.appendChild(makeArchiveElement('strong', '', 'The drawer'));
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', entry.group.formats));
+                const tags = makeArchiveElement('span', 'bt-doc-index-tags');
+                tags.appendChild(makeArchiveElement('span', 'bt-doc-tag', 'Catalog card'));
+                button.appendChild(tags);
+                button.addEventListener('click', () => renderContentCatalogCard(entry.group.id, { revealArticle: true }));
+            } else {
+                const info = describeContentPiece(entry.piece);
+                button.classList.add('is-transcribed');
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', entry.number));
+                button.appendChild(makeArchiveElement('strong', '', entry.piece.title));
+                button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', info.date));
+                const tags = makeArchiveElement('span', 'bt-doc-index-tags');
+                tags.appendChild(makeArchiveElement(
+                    'span',
+                    'bt-doc-tag is-full',
+                    info.isCompare ? 'Before + after' : 'Full read'
+                ));
+                button.appendChild(tags);
+                button.addEventListener('click', () => renderContentPiece(entry.piece.id, { revealArticle: true }));
+            }
+
+            archiveIndex.appendChild(button);
+        });
+
+        revealPressIndexItem();
+    }
+
+    // The 2026 précis: two condensed paragraphs and a pull quote, written for the
+    // archive rather than lifted from the article, plus any summary list.
+    function renderContentBriefPane(piece) {
+        const pane = makeArchiveElement('div', 'bt-doc-pane bt-out-pane-brief');
+        const brief = renderArchiveBody(piece.body);
+        brief.classList.add('bt-out-brief');
+        pane.appendChild(brief);
+        pane.appendChild(makeArchiveElement(
+            'p',
+            'bt-doc-provenance',
+            'Written for the archive in 2026 as a short way in. The article itself is under “Full article.”'
+        ));
+        return pane;
+    }
+
+    function renderContentReadPane(piece) {
+        const pane = makeArchiveElement('div', 'bt-doc-pane bt-doc-pane-text');
+
+        if (piece.image) {
+            const figure = makeArchiveElement('figure', 'bt-out-hero');
+            const frame = makeArchiveElement('button', 'bt-out-hero-frame');
+            frame.type = 'button';
+            frame.setAttribute('aria-label', `Open the captured page for “${piece.title}”`);
+            const image = document.createElement('img');
+            image.src = piece.image;
+            image.alt = piece.imageAlt || '';
+            image.loading = 'lazy';
+            image.decoding = 'async';
+            frame.appendChild(image);
+            frame.appendChild(makeArchiveElement('span', 'bt-press-scan-zoom', 'Enlarge'));
+            frame.addEventListener('click', () => openScanViewer(piece, 0));
+            figure.appendChild(frame);
+            pane.appendChild(figure);
         }
 
-        // Below 760px the index stacks above the article inside the scrolling
-        // card, so the card is scrolled as well to land on the masthead.
-        const revealScrolls = () => {
-            revealPressIndexItem();
-            if (!settings.revealArticle || !window.matchMedia('(max-width: 760px)').matches) return;
-            const card = archiveDialog.querySelector('.bt-archive-card');
-            if (!card || card.clientHeight < 40) return;
-            const offset = header.getBoundingClientRect().top - card.getBoundingClientRect().top;
-            card.scrollTop += offset - 8;
-        };
-        // Both passes: the first lands before paint, and the second corrects it
-        // if the first ran against a layout that had not settled. Each is a
-        // no-op once the target is already in view.
-        revealScrolls();
-        window.requestAnimationFrame(revealScrolls);
+        const reader = renderArchiveBody(piece.depth.body);
+        reader.classList.add('bt-archive-reader');
+        pane.appendChild(reader);
+
+        if (piece.depth.intro) {
+            pane.appendChild(makeArchiveElement('p', 'bt-doc-provenance', piece.depth.intro));
+        }
+
+        const endMark = makeArchiveElement('aside', 'bt-archive-end-mark');
+        endMark.appendChild(makeArchiveElement('strong', '', 'End of recovered artifact'));
+        endMark.appendChild(makeArchiveElement(
+            'p',
+            '',
+            [piece.publication, piece.credit].filter(Boolean).join(' · ')
+        ));
+        pane.appendChild(endMark);
+        return pane;
+    }
+
+    function renderContentComparePane(piece) {
+        const pane = makeArchiveElement('div', 'bt-doc-pane bt-out-pane-compare');
+        pane.appendChild(renderArchiveComparison(piece));
+        return pane;
+    }
+
+    function renderContentPiece(pieceId, options) {
+        const entries = contentPieceEntries();
+        if (!entries.length) return;
+        const foundIndex = entries.findIndex((entry) => entry.piece.id === pieceId);
+        const index = foundIndex === -1 ? 0 : foundIndex;
+        const { piece, number, group } = entries[index];
+        const info = describeContentPiece(piece);
+        const settings = options || {};
+        const mode = settings.mode || 'read';
+
+        renderContentIndex(piece.id);
+
+        const header = makeDocMasthead({
+            desk: group ? group.client : piece.publication,
+            date: info.date,
+            position: `No. ${number} of ${entries.length}`,
+            title: piece.title,
+            source: [piece.credit, piece.format]
+        });
+
+        const switcher = makeDocSwitch([
+            {
+                id: 'read',
+                label: info.isCompare ? 'The rewrite' : 'Full article',
+                meta: info.readingTime || 'The recovered article'
+            },
+            { id: 'brief', label: 'In brief', meta: 'Summary and pull quote' }
+        ], mode, (id) => renderContentPiece(piece.id, {
+            mode: id,
+            revealArticle: settings.revealArticle
+        }));
+
+        let pane;
+        if (mode === 'brief') pane = renderContentBriefPane(piece);
+        else if (info.isCompare) pane = renderContentComparePane(piece);
+        else pane = renderContentReadPane(piece);
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        if (piece.action && piece.action.href) {
+            const action = makeArchiveElement('a', 'bt-dialog-action', piece.action.label);
+            action.href = piece.action.href;
+            action.target = '_blank';
+            action.rel = 'noopener';
+            actions.appendChild(action);
+        }
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+
+        archiveDetail.replaceChildren(...[
+            header,
+            makeDocNote(piece.dek, piece.curator),
+            switcher,
+            pane,
+            makeDocWalk(entries, index, (id) => renderContentPiece(id, { revealArticle: true })),
+            actions
+        ].filter(Boolean));
+
+        settleDocScroll(header, settings.revealArticle);
+    }
+
+    function renderContentCatalogCard(groupId, options) {
+        const catalog = (window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.contentCatalog) || [];
+        if (!catalog.length) return;
+        const group = catalog.find((item) => item.id === groupId) || catalog[0];
+        const pieces = (window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.content) || [];
+        const restored = (group.restored || []).map((id) => pieces.find((p) => p.id === id)).filter(Boolean);
+        const settings = options || {};
+
+        renderContentIndex(group.id);
+
+        const header = makeDocMasthead({
+            desk: 'Card catalog',
+            date: group.years,
+            position: `${restored.length} restored of ${group.pieces}`,
+            title: group.client,
+            source: [group.formats]
+        });
+
+        const note = makeDocNote(group.summary, restored.length
+            ? `${restored.length} of the ${group.pieces} logged pieces ${restored.length === 1 ? 'has' : 'have'} been fully restored. The rest wait, labeled and preserved, for a turn on the bench.`
+            : `None of the ${group.pieces} logged pieces has been fully restored yet. Each one waits, labeled and preserved, for a turn on the bench.`);
+
+        const body = makeArchiveElement('div', 'bt-doc-pane bt-out-pane-drawer');
+
+        const samples = makeArchiveElement('section', 'bt-out-drawer-section');
+        samples.appendChild(makeArchiveElement('p', 'bt-out-drawer-label', 'Pulled from the drawer'));
+        const sampleList = document.createElement('ul');
+        (group.samples || []).forEach((title) => sampleList.appendChild(makeArchiveElement('li', '', title)));
+        samples.appendChild(sampleList);
+        body.appendChild(samples);
+
+        if (restored.length) {
+            const section = makeArchiveElement('section', 'bt-out-drawer-section');
+            section.appendChild(makeArchiveElement('p', 'bt-out-drawer-label', 'Restored from this drawer'));
+            const links = makeArchiveElement('div', 'bt-out-drawer-links');
+            restored.forEach((piece) => {
+                const link = makeArchiveElement('button', 'bt-out-drawer-link');
+                link.type = 'button';
+                link.appendChild(makeArchiveElement('strong', '', piece.title));
+                link.appendChild(makeArchiveElement('span', '', describeContentPiece(piece).readingTime));
+                link.addEventListener('click', () => renderContentPiece(piece.id, { revealArticle: true }));
+                links.appendChild(link);
+            });
+            section.appendChild(links);
+            body.appendChild(section);
+        }
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+
+        archiveDetail.replaceChildren(header, note, body, actions);
+        settleDocScroll(header, settings.revealArticle);
     }
 
     const ARCHIVE_HEADERS = {
@@ -2960,9 +3224,11 @@
         const header = ARCHIVE_HEADERS[collectionName] || ARCHIVE_HEADERS.content;
         archiveKicker.textContent = header.kicker;
         archiveTitle.textContent = header.title;
-        archiveDialog.classList.toggle('bt-archive-press', collectionName === 'press');
+        archiveDialog.classList.toggle('bt-archive-doc', collectionName === 'press' || collectionName === 'content');
         if (collectionName === 'press') {
             renderPressPiece(pieceId);
+        } else if (collectionName === 'content') {
+            renderContentPiece(pieceId);
         } else {
             renderArchivePiece(collectionName, pieceId);
         }

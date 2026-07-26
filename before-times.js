@@ -2052,59 +2052,6 @@
         return body;
     }
 
-    function makeArchiveFigure(piece) {
-        if (piece.beforeImage && piece.afterImage) {
-            const comparison = makeArchiveElement('figure', 'bt-archive-comparison');
-            const comparisons = [
-                { label: 'Before // 2020', src: piece.beforeImage, alt: piece.beforeAlt },
-                { label: 'After // 2021', src: piece.afterImage, alt: piece.afterAlt }
-            ];
-            comparisons.forEach((item) => {
-                const proof = makeArchiveElement('div', 'bt-archive-proof');
-                proof.appendChild(makeArchiveElement('span', 'bt-archive-proof-label', item.label));
-                const windowElement = makeArchiveElement('div', 'bt-archive-proof-window');
-                const image = document.createElement('img');
-                image.src = item.src;
-                image.alt = item.alt;
-                image.loading = 'lazy';
-                image.decoding = 'async';
-                windowElement.appendChild(image);
-                proof.appendChild(windowElement);
-                comparison.appendChild(proof);
-            });
-            return comparison;
-        }
-        if (!piece.image) return null;
-        const figure = makeArchiveElement('figure', 'bt-archive-hero');
-        const image = document.createElement('img');
-        image.src = piece.image;
-        image.alt = piece.imageAlt || '';
-        image.loading = 'lazy';
-        image.decoding = 'async';
-        figure.appendChild(image);
-        return figure;
-    }
-
-    function renderArchiveLineage(lineage) {
-        if (!lineage) return null;
-        const list = makeArchiveElement('ol', 'bt-archive-lineage');
-        lineage.forEach((step) => {
-            const item = document.createElement('li');
-            item.appendChild(makeArchiveElement('span', 'bt-archive-lineage-year', step.year));
-            item.appendChild(makeArchiveElement('strong', '', step.label));
-            item.appendChild(makeArchiveElement('span', '', step.detail));
-            list.appendChild(item);
-        });
-        return list;
-    }
-
-    function makeArchiveBackButton(collectionName, piece) {
-        const back = makeArchiveElement('button', 'bt-archive-back', '← Back to the preview');
-        back.type = 'button';
-        back.addEventListener('click', () => renderArchivePiece(collectionName, piece.id));
-        return back;
-    }
-
     function renderArchiveComparison(piece) {
         const container = makeArchiveElement('div', 'bt-archive-deep-content');
         const mapHeading = makeArchiveElement('header', 'bt-compare-heading');
@@ -2176,155 +2123,6 @@
         selectProof('after');
         container.appendChild(source);
         return container;
-    }
-
-    function renderArchiveDepth(collectionName, piece) {
-        if (!piece.depth) return;
-        const isComparison = piece.depth.kind === 'compare';
-        const heading = makeArchiveElement('header', 'bt-archive-deep-header');
-        heading.appendChild(makeArchiveBackButton(collectionName, piece));
-        heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', piece.depth.meta));
-        heading.appendChild(makeArchiveElement('h2', '', piece.title));
-        heading.appendChild(makeArchiveElement('p', 'bt-archive-dek', piece.depth.intro));
-
-        const children = [heading];
-        if (isComparison) {
-            children.push(renderArchiveComparison(piece));
-        } else {
-            const figure = makeArchiveFigure(piece);
-            if (figure) children.push(figure);
-            const reader = renderArchiveBody(piece.depth.body);
-            reader.classList.add('bt-archive-reader');
-            children.push(reader);
-            const endMark = makeArchiveElement('aside', 'bt-archive-end-mark');
-            endMark.appendChild(makeArchiveElement('strong', '', 'End of recovered artifact'));
-            endMark.appendChild(makeArchiveElement('p', '', [piece.publication, piece.credit].filter(Boolean).join(' · ')));
-            children.push(endMark);
-        }
-
-        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
-        if (piece.action && piece.action.video) {
-            const action = makeArchiveElement('button', 'bt-dialog-action', piece.action.label);
-            action.type = 'button';
-            action.addEventListener('click', () => {
-                closeDialog(archiveDialog);
-                cueAlchemyVideo(piece.action.video);
-            });
-            actions.appendChild(action);
-        } else if (piece.action && piece.action.href) {
-            const action = makeArchiveElement('a', 'bt-dialog-action', piece.action.label);
-            action.href = piece.action.href;
-            action.target = '_blank';
-            action.rel = 'noopener';
-            actions.appendChild(action);
-        }
-        const previewBack = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the preview');
-        previewBack.type = 'button';
-        previewBack.addEventListener('click', () => renderArchivePiece(collectionName, piece.id));
-        actions.appendChild(previewBack);
-        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
-        close.type = 'button';
-        close.addEventListener('click', () => closeDialog(archiveDialog));
-        actions.appendChild(close);
-        children.push(actions);
-
-        archiveDetail.replaceChildren(...children);
-        archiveDetail.scrollTop = 0;
-    }
-
-    function renderArchiveIndex(collectionName, activeId) {
-        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
-        if (!collection || !collection.length) return;
-
-        archiveIndex.replaceChildren();
-        collection.forEach((item, index) => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'bt-archive-index-item';
-            button.classList.toggle('is-active', item.id === activeId);
-            button.setAttribute('aria-current', item.id === activeId ? 'true' : 'false');
-            button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', String(index + 1).padStart(2, '0')));
-            button.appendChild(makeArchiveElement('strong', '', item.title));
-            button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', item.eyebrow.replace(' // ', ' · ')));
-            button.appendChild(makeArchiveElement('span', 'bt-archive-index-depth', item.depthLabel || 'Curated preview'));
-            button.addEventListener('click', () => renderArchivePiece(collectionName, item.id));
-            archiveIndex.appendChild(button);
-        });
-
-        const activeItem = archiveIndex.querySelector('.bt-archive-index-item.is-active');
-        if (activeItem) activeItem.scrollIntoView({ block: 'nearest' });
-    }
-
-    function renderArchivePiece(collectionName, pieceId) {
-        const collection = window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE[collectionName];
-        if (!collection || !collection.length) return;
-        const piece = collection.find((item) => item.id === pieceId) || collection[0];
-
-        renderArchiveIndex(collectionName, piece.id);
-
-        const heading = makeArchiveElement('header', 'bt-archive-piece-header');
-        heading.appendChild(makeArchiveElement('p', 'bt-archive-piece-eyebrow', piece.eyebrow));
-        heading.appendChild(makeArchiveElement('span', 'bt-archive-mode-chip', piece.depthLabel || 'Curated preview'));
-        heading.appendChild(makeArchiveElement('h2', '', piece.title));
-        heading.appendChild(makeArchiveElement('p', 'bt-archive-dek', piece.dek));
-
-        const meta = makeArchiveElement('dl', 'bt-archive-meta');
-        [
-            ['Publication', piece.publication],
-            ['Credit', piece.credit],
-            ['Artifact', piece.format]
-        ].forEach(([term, description]) => {
-            meta.appendChild(makeArchiveElement('dt', '', term));
-            meta.appendChild(makeArchiveElement('dd', '', description));
-        });
-
-        const children = [heading, meta];
-        if (piece.depth) {
-            const depthPrompt = makeArchiveElement('aside', 'bt-archive-depth-prompt');
-            const depthCopy = makeArchiveElement('div', '');
-            depthCopy.appendChild(makeArchiveElement('span', '', piece.depth.kind === 'compare' ? 'See the transformation' : 'Keep reading'));
-            depthCopy.appendChild(makeArchiveElement('strong', '', piece.depth.meta));
-            const depthButton = makeArchiveElement('button', 'bt-dialog-action', piece.depth.label);
-            depthButton.type = 'button';
-            depthButton.addEventListener('click', () => renderArchiveDepth(collectionName, piece));
-            depthPrompt.append(depthCopy, depthButton);
-            children.push(depthPrompt);
-        }
-        const figure = makeArchiveFigure(piece);
-        if (figure) children.push(figure);
-        const lineage = renderArchiveLineage(piece.lineage);
-        if (lineage) children.push(lineage);
-        children.push(renderArchiveBody(piece.body));
-
-        const curator = makeArchiveElement('aside', 'bt-archive-curator');
-        curator.appendChild(makeArchiveElement('strong', '', 'Why it survived'));
-        curator.appendChild(makeArchiveElement('p', '', piece.curator));
-        children.push(curator);
-
-        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
-        if (piece.action && piece.action.video) {
-            const action = makeArchiveElement('button', 'bt-dialog-action', piece.action.label);
-            action.type = 'button';
-            action.addEventListener('click', () => {
-                closeDialog(archiveDialog);
-                cueAlchemyVideo(piece.action.video);
-            });
-            actions.appendChild(action);
-        } else if (piece.action && piece.action.href) {
-            const action = makeArchiveElement('a', 'bt-dialog-action', piece.action.label);
-            action.href = piece.action.href;
-            action.target = '_blank';
-            action.rel = 'noopener';
-            actions.appendChild(action);
-        }
-        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
-        close.type = 'button';
-        close.addEventListener('click', () => closeDialog(archiveDialog));
-        actions.appendChild(close);
-        children.push(actions);
-
-        archiveDetail.replaceChildren(...children);
-        archiveDetail.scrollTop = 0;
     }
 
     /* ------------------------------------------------------------------------
@@ -3214,6 +3012,227 @@
         settleDocScroll(header, settings.revealArticle);
     }
 
+    /* ------------------------------------------------------------------------
+     * The mutation archive
+     *
+     * Four project files, and the thing they have in common is not a desk or a
+     * client — it is that each one changed shape on the way to the screen. Every
+     * piece carries a three-step `lineage`, and every lineage ends in something
+     * that can be watched or read. So the chain is the hero element here, the
+     * way the printed scorecard is in the clipping file, and the payoff is
+     * attached to the end of it rather than parked in a row of buttons.
+     * ---------------------------------------------------------------------- */
+
+    function describeAlchemyPiece(piece) {
+        const eyebrowParts = (piece.eyebrow || '').split(' // ');
+        return {
+            desk: eyebrowParts[0] || 'Project file',
+            date: eyebrowParts[1] || '',
+            readingTime: (piece.depth && piece.depth.meta) || ''
+        };
+    }
+
+    // Desks are read off the eyebrow in order of first appearance, so a new
+    // project file groups itself without a hardcoded list.
+    function alchemyDisplayOrder() {
+        const collection = (window.BEFORE_TIMES_ARCHIVE && window.BEFORE_TIMES_ARCHIVE.alchemy) || [];
+        const entries = collection.map((piece) => ({ piece, info: describeAlchemyPiece(piece) }));
+        const desks = [];
+        entries.forEach((entry) => {
+            if (!desks.includes(entry.info.desk)) desks.push(entry.info.desk);
+        });
+        const ordered = [];
+        desks.forEach((desk) => {
+            entries.forEach((entry) => {
+                if (entry.info.desk === desk) ordered.push({ ...entry, groupLabel: desk });
+            });
+        });
+        return ordered.map((entry, index) => ({ ...entry, number: String(index + 1).padStart(2, '0') }));
+    }
+
+    function renderAlchemyIndex(activeId) {
+        const entries = alchemyDisplayOrder();
+        if (!entries.length) return;
+
+        archiveIndex.replaceChildren();
+        let lastDesk = null;
+        entries.forEach((entry) => {
+            if (entry.groupLabel !== lastDesk) {
+                lastDesk = entry.groupLabel;
+                const deskEntries = entries.filter((item) => item.groupLabel === lastDesk);
+                const heading = makeArchiveElement('p', 'bt-doc-index-heading');
+                heading.appendChild(makeArchiveElement('strong', '', lastDesk));
+                heading.appendChild(makeArchiveElement(
+                    'span',
+                    '',
+                    `${deskEntries.length} ${deskEntries.length === 1 ? 'file' : 'files'}`
+                ));
+                archiveIndex.appendChild(heading);
+            }
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'bt-archive-index-item bt-doc-index-item is-transcribed';
+            button.classList.toggle('is-active', entry.piece.id === activeId);
+            button.setAttribute('aria-current', entry.piece.id === activeId ? 'true' : 'false');
+            button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', entry.number));
+            button.appendChild(makeArchiveElement('strong', '', entry.piece.title));
+            button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', entry.info.date));
+            const tags = makeArchiveElement('span', 'bt-doc-index-tags');
+            tags.appendChild(makeArchiveElement('span', 'bt-doc-tag is-full', entry.piece.depthLabel || 'Project file'));
+            button.appendChild(tags);
+            button.addEventListener('click', () => renderAlchemyPiece(entry.piece.id, { revealArticle: true }));
+            archiveIndex.appendChild(button);
+        });
+
+        revealPressIndexItem();
+    }
+
+    // The chain, ending in the thing it turned into.
+    function renderAlchemyLineage(piece) {
+        const lineage = piece.lineage || [];
+        if (!lineage.length && !piece.action) return null;
+
+        const section = makeArchiveElement('section', 'bt-sound-lineage');
+        section.setAttribute('aria-label', 'What it turned into');
+        section.appendChild(makeArchiveElement('p', 'bt-sound-lineage-label', 'The mutation'));
+
+        const chain = makeArchiveElement('ol', 'bt-sound-chain');
+        lineage.forEach((step) => {
+            const item = document.createElement('li');
+            item.appendChild(makeArchiveElement('span', 'bt-sound-chain-year', step.year));
+            item.appendChild(makeArchiveElement('strong', '', step.label));
+            item.appendChild(makeArchiveElement('span', 'bt-sound-chain-detail', step.detail));
+            chain.appendChild(item);
+        });
+        section.appendChild(chain);
+
+        if (piece.action) {
+            const payoff = makeArchiveElement('div', 'bt-sound-payoff');
+            if (piece.action.video) {
+                const button = makeArchiveElement('button', 'bt-dialog-action', piece.action.label);
+                button.type = 'button';
+                button.addEventListener('click', () => {
+                    closeDialog(archiveDialog);
+                    cueAlchemyVideo(piece.action.video);
+                });
+                payoff.appendChild(button);
+            } else if (piece.action.href) {
+                const link = makeArchiveElement('a', 'bt-dialog-action', piece.action.label);
+                link.href = piece.action.href;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                payoff.appendChild(link);
+            }
+            section.appendChild(payoff);
+        }
+        return section;
+    }
+
+    function renderAlchemyDossierPane(piece) {
+        const pane = makeArchiveElement('div', 'bt-doc-pane bt-doc-pane-text');
+
+        if (piece.image) {
+            const figure = makeArchiveElement('figure', 'bt-out-hero');
+            const frame = makeArchiveElement('button', 'bt-out-hero-frame');
+            frame.type = 'button';
+            frame.setAttribute('aria-label', `Open the still from “${piece.title}”`);
+            const image = document.createElement('img');
+            image.src = piece.image;
+            image.alt = piece.imageAlt || '';
+            image.loading = 'lazy';
+            image.decoding = 'async';
+            frame.appendChild(image);
+            frame.appendChild(makeArchiveElement('span', 'bt-press-scan-zoom', 'Enlarge'));
+            frame.addEventListener('click', () => openScanViewer(piece, 0));
+            figure.appendChild(frame);
+            pane.appendChild(figure);
+        }
+
+        const reader = renderArchiveBody(piece.depth.body);
+        reader.classList.add('bt-archive-reader');
+        pane.appendChild(reader);
+
+        if (piece.depth.intro) {
+            pane.appendChild(makeArchiveElement('p', 'bt-doc-provenance', piece.depth.intro));
+        }
+
+        const endMark = makeArchiveElement('aside', 'bt-archive-end-mark');
+        endMark.appendChild(makeArchiveElement('strong', '', 'End of recovered artifact'));
+        endMark.appendChild(makeArchiveElement(
+            'p',
+            '',
+            [piece.publication, piece.credit].filter(Boolean).join(' · ')
+        ));
+        pane.appendChild(endMark);
+        return pane;
+    }
+
+    // Three lines lifted off the page, which for three of the four files appear
+    // nowhere in the dossier — so the excerpt is its own view, not a teaser.
+    function renderAlchemyScriptPane(piece) {
+        const pane = makeArchiveElement('div', 'bt-doc-pane bt-sound-pane-script');
+        const excerpt = renderArchiveBody(piece.body);
+        excerpt.classList.add('bt-sound-excerpt');
+        pane.appendChild(excerpt);
+        pane.appendChild(makeArchiveElement(
+            'p',
+            'bt-doc-provenance',
+            'Lifted from the working script. The complete file is under “The dossier.”'
+        ));
+        return pane;
+    }
+
+    function renderAlchemyPiece(pieceId, options) {
+        const entries = alchemyDisplayOrder();
+        if (!entries.length) return;
+        const foundIndex = entries.findIndex((entry) => entry.piece.id === pieceId);
+        const index = foundIndex === -1 ? 0 : foundIndex;
+        const { piece, info, number } = entries[index];
+        const settings = options || {};
+        const mode = settings.mode || 'dossier';
+
+        renderAlchemyIndex(piece.id);
+
+        const header = makeDocMasthead({
+            desk: info.desk,
+            date: info.date,
+            position: `No. ${number} of ${entries.length}`,
+            title: piece.title,
+            source: [piece.publication, piece.credit, piece.format]
+        });
+
+        const switcher = makeDocSwitch([
+            { id: 'dossier', label: 'The dossier', meta: info.readingTime || 'The recovered file' },
+            { id: 'script', label: 'Script excerpt', meta: 'Lifted from the page' }
+        ], mode, (id) => renderAlchemyPiece(piece.id, {
+            mode: id,
+            revealArticle: settings.revealArticle
+        }));
+
+        const pane = mode === 'script'
+            ? renderAlchemyScriptPane(piece)
+            : renderAlchemyDossierPane(piece);
+
+        const actions = makeArchiveElement('div', 'bt-dialog-actions bt-archive-actions');
+        const close = makeArchiveElement('button', 'bt-dialog-secondary', 'Back to the room');
+        close.type = 'button';
+        close.addEventListener('click', () => closeDialog(archiveDialog));
+        actions.appendChild(close);
+
+        archiveDetail.replaceChildren(...[
+            header,
+            makeDocNote(piece.dek, piece.curator),
+            renderAlchemyLineage(piece),
+            switcher,
+            pane,
+            makeDocWalk(entries, index, (id) => renderAlchemyPiece(id, { revealArticle: true })),
+            actions
+        ].filter(Boolean));
+
+        settleDocScroll(header, settings.revealArticle);
+    }
+
     const ARCHIVE_HEADERS = {
         alchemy: { kicker: 'The Sound Stage // project file', title: 'The mutation archive' },
         press: { kicker: 'Student press // recovered byline', title: 'The clipping file' },
@@ -3224,14 +3243,10 @@
         const header = ARCHIVE_HEADERS[collectionName] || ARCHIVE_HEADERS.content;
         archiveKicker.textContent = header.kicker;
         archiveTitle.textContent = header.title;
-        archiveDialog.classList.toggle('bt-archive-doc', collectionName === 'press' || collectionName === 'content');
-        if (collectionName === 'press') {
-            renderPressPiece(pieceId);
-        } else if (collectionName === 'content') {
-            renderContentPiece(pieceId);
-        } else {
-            renderArchivePiece(collectionName, pieceId);
-        }
+        archiveDialog.classList.add('bt-archive-doc');
+        if (collectionName === 'alchemy') renderAlchemyPiece(pieceId);
+        else if (collectionName === 'content') renderContentPiece(pieceId);
+        else renderPressPiece(pieceId);
         openDialog(archiveDialog);
     }
 

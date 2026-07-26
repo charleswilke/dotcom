@@ -5805,21 +5805,6 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     font-size: 0.77rem;
 }
 
-.bt-archive-index-depth {
-    grid-column: 2;
-    width: fit-content;
-    margin-top: 0.2rem;
-    padding: 0.18rem 0.34rem;
-    color: #7b4436;
-    background: rgba(255, 90, 54, 0.1);
-    border: 1px solid rgba(123, 68, 54, 0.28);
-    font-size: 0.52rem;
-    font-weight: 800;
-    letter-spacing: 0.07em;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
 .bt-archive-index-item:hover,
 .bt-archive-index-item:focus-visible,
 .bt-archive-index-item.is-active {
@@ -5832,20 +5817,8 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     outline: none;
 }
 
-.bt-archive-index-item:hover .bt-archive-index-depth,
-.bt-archive-index-item:focus-visible .bt-archive-index-depth,
-.bt-archive-index-item.is-active .bt-archive-index-depth {
-    color: var(--bt-ink);
-    background: var(--bt-orange);
-    border-color: var(--bt-orange);
-}
-
 .bt-archive-detail {
     padding: clamp(1rem, 3vw, 2rem);
-}
-
-.bt-archive-piece-header {
-    max-width: 54rem;
 }
 
 .bt-archive-piece-eyebrow {
@@ -5857,129 +5830,8 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     text-transform: uppercase;
 }
 
-.bt-archive-piece-header h2,
-.bt-archive-deep-header h2 {
-    margin: 0;
-    color: var(--bt-indigo);
-    font-family: "Special Elite", Georgia, serif;
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: 400;
-    line-height: 1.02;
-}
-
-.bt-archive-mode-chip {
-    display: inline-flex;
-    margin: 0 0 0.65rem;
-    padding: 0.25rem 0.48rem;
-    color: var(--bt-paper);
-    background: #a24b35;
-    border: 1px solid var(--bt-ink);
-    font-size: 0.58rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transform: rotate(-0.5deg);
-}
-
-.bt-archive-dek {
-    max-width: 48rem;
-    margin: 0.65rem 0 0;
-    color: #4f3e47;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    font-style: italic;
-    line-height: 1.48;
-}
-
-.bt-archive-meta {
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-    gap: 0.25rem 0.75rem;
-    margin: 1rem 0;
-    padding: 0.8rem 1rem;
-    background: rgba(26, 21, 80, 0.07);
-    border-left: 4px solid var(--bt-orange);
-    font-size: 0.72rem;
-    line-height: 1.35;
-}
-
-.bt-archive-meta dt {
-    color: #76606b;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.bt-archive-meta dd {
-    margin: 0;
-    color: #352a31;
-}
-
-.bt-archive-depth-prompt {
-    max-width: 48rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin: 1rem 0 1.35rem;
-    padding: 0.9rem 1rem;
-    color: var(--bt-paper);
-    background: var(--bt-indigo);
-    border: 2px solid var(--bt-ink);
-    box-shadow: 4px 4px 0 var(--bt-orange);
-}
-
-.bt-archive-depth-prompt > div {
-    min-width: 0;
-    display: grid;
-    gap: 0.2rem;
-}
-
-.bt-archive-depth-prompt span {
-    color: var(--bt-mint);
-    font-size: 0.58rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.bt-archive-depth-prompt strong {
-    font-family: "Special Elite", Georgia, serif;
-    font-size: 1rem;
-    font-weight: 400;
-}
-
-.bt-archive-depth-prompt .bt-dialog-action {
-    flex: 0 0 auto;
-    color: var(--bt-ink);
-    background: var(--bt-mint);
-    box-shadow: 3px 3px 0 var(--bt-orange);
-}
-
-.bt-archive-depth-prompt .bt-dialog-action:hover,
-.bt-archive-depth-prompt .bt-dialog-action:focus-visible {
-    background: var(--bt-paper);
-}
-
-.bt-archive-hero,
 .bt-archive-comparison {
     margin: 1.2rem 0;
-}
-
-.bt-archive-hero {
-    padding: 0.45rem;
-    background: #f5ecd8;
-    border: 1px solid rgba(35, 28, 34, 0.35);
-    box-shadow: 5px 6px 0 rgba(26, 21, 80, 0.13);
-    transform: rotate(-0.25deg);
-}
-
-.bt-archive-hero img {
-    width: 100%;
-    max-height: 29rem;
-    display: block;
-    object-fit: cover;
-    object-position: top center;
 }
 
 .bt-archive-comparison {
@@ -6100,82 +5952,6 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     text-transform: uppercase;
 }
 
-.bt-archive-curator {
-    max-width: 48rem;
-    margin-top: 1.25rem;
-    padding: 1rem 1.15rem;
-    color: #3d3037;
-    background: #efe1bf;
-    border: 1px solid rgba(35, 28, 34, 0.26);
-    box-shadow: 3px 3px 0 rgba(26, 21, 80, 0.13);
-    transform: rotate(0.2deg);
-}
-
-.bt-archive-curator strong {
-    color: #a24b35;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.bt-archive-curator p {
-    margin: 0.4rem 0 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-
-.bt-archive-lineage {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.6rem;
-    margin: 1.4rem 0;
-    padding: 0;
-    list-style: none;
-}
-
-.bt-archive-lineage li {
-    position: relative;
-    min-height: 7.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    padding: 0.85rem;
-    color: var(--bt-paper);
-    background: var(--bt-indigo);
-    border: 2px solid var(--bt-ink);
-    box-shadow: 4px 4px 0 var(--bt-orange);
-}
-
-.bt-archive-lineage li:not(:last-child)::after {
-    content: "→";
-    position: absolute;
-    top: 50%;
-    right: -1.45rem;
-    color: #a24b35;
-    font-size: 1.2rem;
-    font-weight: 900;
-    transform: translateY(-50%);
-}
-
-.bt-archive-lineage-year {
-    color: var(--bt-mint);
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-.bt-archive-lineage strong {
-    font-family: "Special Elite", Georgia, serif;
-    font-size: 1.02rem;
-    font-weight: 400;
-}
-
-.bt-archive-lineage li > span:last-child {
-    font-size: 0.72rem;
-    line-height: 1.35;
-}
-
 .bt-archive-screenplay {
     padding: 1rem clamp(1rem, 4vw, 2.5rem);
     background: rgba(255, 250, 237, 0.66);
@@ -6193,33 +5969,6 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 
 .bt-archive-actions {
     padding-bottom: 0.4rem;
-}
-
-.bt-archive-deep-header {
-    max-width: 52rem;
-    padding-bottom: 1.2rem;
-    border-bottom: 2px solid var(--bt-ink);
-}
-
-.bt-archive-back {
-    display: inline-flex;
-    margin: 0 0 1rem;
-    padding: 0.35rem 0;
-    color: var(--bt-indigo);
-    background: transparent;
-    border: 0;
-    border-bottom: 1px dotted currentColor;
-    cursor: pointer;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-}
-
-.bt-archive-back:hover,
-.bt-archive-back:focus-visible {
-    color: #a24b35;
-    outline: 2px solid var(--bt-orange);
-    outline-offset: 4px;
 }
 
 .bt-archive-reader {
@@ -6938,6 +6687,111 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 
 .bt-out-pane-compare .bt-compare-heading {
     display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * The mutation archive — what only the Sound Stage needs
+ *
+ * The chain is the point of this collection: a script changes shape twice and
+ * ends as something you can watch. So it reads left to right and terminates in
+ * the payoff button rather than filing it away in the actions row.
+ * ------------------------------------------------------------------------- */
+
+.bt-sound-lineage {
+    max-width: 46rem;
+    margin: 0 0 1.35rem;
+    padding: 0.9rem 1rem 1rem;
+    background: rgba(255, 250, 230, 0.5);
+    border: 1px solid rgba(35, 28, 34, 0.3);
+    border-left: 4px solid var(--bt-indigo);
+}
+
+.bt-sound-lineage-label {
+    margin: 0 0 0.7rem;
+    color: #a24b35;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+}
+
+.bt-sound-chain {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* Wide enough that the arrow between steps sits in clear space rather than
+       under the edge of the card beside it. */
+    gap: 1.3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bt-sound-chain li {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.15rem;
+    padding: 0.6rem 0.7rem;
+    background: rgba(255, 250, 230, 0.75);
+    border: 1px solid rgba(35, 28, 34, 0.24);
+    border-radius: 3px;
+}
+
+/* The arrow between steps: the mutation, made visible */
+.bt-sound-chain li + li::before {
+    content: "→";
+    position: absolute;
+    left: -0.95rem;
+    top: 50%;
+    z-index: 1;
+    color: #a24b35;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    transform: translateY(-50%);
+}
+
+.bt-sound-chain-year {
+    color: #7b4436;
+    font-size: 0.54rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.bt-sound-chain strong {
+    color: var(--bt-indigo);
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.bt-sound-chain-detail {
+    color: #4f3e47;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.bt-sound-payoff {
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed rgba(35, 28, 34, 0.3);
+    display: flex;
+}
+
+.bt-sound-payoff .bt-dialog-action {
+    width: 100%;
+    background: var(--bt-indigo);
+    box-shadow: 3px 3px 0 var(--bt-orange);
+}
+
+/* Script excerpts are already monospaced blocks; give them room to breathe */
+.bt-sound-excerpt {
+    max-width: 43rem;
+    margin-inline: auto;
+    gap: 1.1rem;
 }
 
 /* Full-size scan viewer */
@@ -8070,6 +7924,19 @@ body.bt-room-content .bt-inventory-drawer.is-open {
         grid-template-columns: 1fr;
     }
 
+    /* The chain stacks, so the arrows turn to point down between the steps. */
+    .bt-sound-chain {
+        grid-template-columns: 1fr;
+        gap: 1.05rem;
+    }
+
+    .bt-sound-chain li + li::before {
+        content: "↓";
+        left: 50%;
+        top: -0.78rem;
+        transform: translateX(-50%);
+    }
+
     .bt-doc-walk {
         grid-template-columns: 1fr;
     }
@@ -8114,15 +7981,6 @@ body.bt-room-content .bt-inventory-drawer.is-open {
         max-height: 100%;
     }
 
-    .bt-archive-depth-prompt {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .bt-archive-depth-prompt .bt-dialog-action {
-        width: 100%;
-    }
-
     .bt-archive-reader {
         font-size: 1.03rem;
         line-height: 1.7;
@@ -8146,20 +8004,8 @@ body.bt-room-content .bt-inventory-drawer.is-open {
         height: 30rem;
     }
 
-    .bt-archive-comparison,
-    .bt-archive-lineage {
+    .bt-archive-comparison {
         grid-template-columns: 1fr;
-    }
-
-    .bt-archive-lineage {
-        gap: 1rem;
-    }
-
-    .bt-archive-lineage li:not(:last-child)::after {
-        top: auto;
-        right: 50%;
-        bottom: -1.1rem;
-        transform: translateX(50%) rotate(90deg);
     }
 
     .bt-archive-proof-window {

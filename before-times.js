@@ -109,16 +109,6 @@
             ],
             facts: ['Personal photography', 'Production stills and location textures', 'An archive waiting to be digitized']
         },
-        radio: {
-            kicker: 'Lobby exhibit // broadcast receiver',
-            title: 'The old radio shows',
-            copy: [
-                'The receiver works. The actual episode tapes are still somewhere in the physical archive, which feels appropriately on-brand.',
-                'For now, turn the dial and listen to the machine search. When the broadcasts are recovered, they can drop into this tuner without rebuilding the room.'
-            ],
-            facts: ['Cassette-ready player', 'Nine original tuning sounds already mounted', 'Episode slots waiting for recovered audio'],
-            button: { label: 'Turn the dial', action: 'tune' }
-        },
         floorplan: {
             kicker: 'Inventory // permanent item',
             title: 'Floor plan',
@@ -1479,14 +1469,6 @@
         if (unlocked) {
             radioHotspot.dataset.label = 'The Boat radio archive · unlocked';
             radioHotspot.setAttribute('aria-label', 'Open the unlocked archive of The Boat radio show');
-            PANELS.radio.kicker = 'Lobby exhibit // signal recovered';
-            PANELS.radio.title = 'The Boat is on the air';
-            PANELS.radio.copy = [
-                'The hand-labeled cassette from the Game Development desk fits the receiver. Five broadcasts from 2004 have come back through the static.',
-                'The recovered archive includes the first episode, Walken on Water, plus Elections, Robotic Brayton, Burnt Sienna, and Viva Variety.'
-            ];
-            PANELS.radio.facts = ['Five complete recovered broadcasts', 'Chaz Wilke · John Ugolini · Brayton Cameron', 'Live CRT oscilloscope playback'];
-            PANELS.radio.button = { label: 'Open The Boat archive', action: 'broadcasts' };
         } else if (cassetteReady) {
             radioHotspot.dataset.label = 'Radio · insert The Boat cassette';
             radioHotspot.setAttribute('aria-label', 'Drop The Boat cassette from inventory onto the radio');
@@ -5159,6 +5141,12 @@
                     window.setTimeout(() => enterKnowledgeRoom(), 30);
                     return;
                 }
+                // The radio has no info panel: unlocked it opens the archive, locked it
+                // just turns the dial and drops the hint into the lobby status line.
+                if (route.id === 'radio') {
+                    window.setTimeout(() => openRadioArchive(), 30);
+                    return;
+                }
                 window.setTimeout(() => openPanel(route.id), 30);
             });
             infoRoutes.appendChild(button);
@@ -5185,8 +5173,6 @@
                 : panel.button.label;
             infoButton.hidden = false;
             infoButton.onclick = () => {
-                if (panel.button.action === 'tune') tuneRadio();
-                if (panel.button.action === 'broadcasts') openRadioArchive();
                 if (panel.button.action === 'clippings') {
                     if (infoDialog.open) closeDialog(infoDialog);
                     openArchive('press');
@@ -5418,7 +5404,7 @@
 
     function openRadioArchive() {
         if (!boatCassetteIsInRadio()) {
-            openPanel('radio');
+            tuneRadio();
             return;
         }
         if (infoDialog.open) closeDialog(infoDialog);
@@ -5432,7 +5418,9 @@
     function tuneRadio() {
         animateLayer(radioHotspot, 'is-tuning', 680);
         if (!soundEnabled) {
-            showStatus('Sound is off. The dial moves silently.');
+            showStatus(boatCassetteIsInInventory()
+                ? 'Sound is off, so the dial moves silently. The Boat cassette in inventory looks like it fits the slot.'
+                : 'Sound is off, so the dial moves silently. Maybe there’s a tape around here somewhere.', 4200);
             return;
         }
         radioMode = 'tuning';
@@ -5729,11 +5717,7 @@
                     return;
                 }
                 tuneRadio();
-                if (prefersReducedMotion.matches) {
-                    openPanel('radio');
-                } else {
-                    window.setTimeout(() => openPanel('radio'), 360);
-                }
+                return;
             }
             if (action === 'newspaper') {
                 if (quarterIsInNewsstand()) {
@@ -6036,7 +6020,7 @@
         }
         showStatus(boatCassetteIsInInventory()
             ? 'Only static. The Boat cassette in inventory looks like it fits the slot.'
-            : 'Only static for now. Something on the Game Development desk might fit the cassette slot.');
+            : 'Only static for now. Maybe there’s a tape around here somewhere.', 4200);
     });
 
     document.addEventListener('visibilitychange', () => {

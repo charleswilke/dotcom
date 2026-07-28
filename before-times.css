@@ -4754,99 +4754,6 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     max-width: min(38rem, 72%);
 }
 
-.bt-alchemy-menu-dialog {
-    width: min(43rem, calc(100vw - 2rem));
-}
-
-.bt-alchemy-menu-card {
-    background:
-        linear-gradient(90deg, transparent 0 7%, rgba(255, 90, 54, 0.1) 7% calc(7% + 2px), transparent calc(7% + 2px)),
-        repeating-linear-gradient(0deg, transparent 0 1.75rem, rgba(26, 21, 80, 0.1) 1.75rem calc(1.75rem + 1px)),
-        var(--bt-paper);
-}
-
-.bt-alchemy-menu-card h1 {
-    max-width: none;
-}
-
-.bt-alchemy-menu-intro {
-    max-width: 37rem;
-    margin: 0 0 1.2rem;
-    color: #45323b;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.05rem;
-    line-height: 1.55;
-}
-
-.bt-alchemy-video-list {
-    display: grid;
-    gap: 0.7rem;
-}
-
-.bt-alchemy-series-label {
-    margin: 0.9rem 0 -0.1rem;
-    color: #644235;
-    font-family: "Space Mono", monospace;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-}
-
-.bt-alchemy-series-label:first-child {
-    margin-top: 0;
-}
-
-.bt-alchemy-video-option {
-    position: relative;
-    width: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.4rem 1rem;
-    padding: 0.95rem 1rem;
-    color: var(--bt-paper);
-    background: rgba(26, 21, 80, 0.96);
-    border: 2px solid var(--bt-ink);
-    border-radius: 5px;
-    box-shadow: 4px 4px 0 var(--bt-orange);
-    cursor: pointer;
-    text-align: left;
-}
-
-.bt-alchemy-video-option:hover,
-.bt-alchemy-video-option:focus-visible,
-.bt-alchemy-video-option[aria-current="true"] {
-    color: var(--bt-ink);
-    background: var(--bt-mint);
-    outline: 3px solid var(--bt-ink);
-    outline-offset: 2px;
-}
-
-.bt-alchemy-video-title {
-    font-family: "Special Elite", Georgia, serif;
-    font-size: 1.15rem;
-}
-
-.bt-alchemy-video-year {
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-
-.bt-alchemy-video-description {
-    grid-column: 1 / -1;
-    margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 0.86rem;
-    line-height: 1.45;
-}
-
-.bt-alchemy-now-playing {
-    margin: 1rem 0 0;
-    color: #644235;
-    font-size: 0.72rem;
-    font-weight: 700;
-}
-
 @keyframes bt-alchemy-enter {
     from { opacity: 0; filter: brightness(0.38) blur(2px); transform: scale(1.025); }
     to { opacity: 1; filter: brightness(1) blur(0); transform: scale(1); }
@@ -5391,6 +5298,585 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 .bt-dialog-secondary:focus-visible {
     border-color: var(--bt-indigo);
     outline: 3px solid rgba(26, 21, 80, 0.22);
+    outline-offset: 2px;
+}
+
+/* Absurd Alchemy: the reel picker reads as a projection-booth log rather than a
+   paper call sheet — the room behind it is deep teal with brass fittings, and a
+   cream page at 27 rows was both a tonal break and a lot of scrolling. */
+.bt-alchemy-menu-dialog {
+    width: min(62rem, calc(100vw - 1.5rem));
+    max-height: calc(100dvh - 1.5rem);
+    color: var(--bt-paper);
+}
+
+.bt-alchemy-menu-card {
+    height: min(43rem, calc(100dvh - 1.5rem));
+    max-height: none;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: 0;
+    overflow: hidden;
+    color: var(--bt-paper);
+    background:
+        radial-gradient(circle at 22% 8%, rgba(0, 247, 194, 0.11), transparent 46%),
+        linear-gradient(155deg, #0f2a2b, #071618 58%, #040f11);
+    border-color: #040f11;
+    box-shadow:
+        0 0 0 2px #8a6a3f,
+        0 0 0 6px #040f11,
+        0 28px 80px rgba(0, 0, 0, 0.78);
+}
+
+.bt-alchemy-menu-card::before {
+    opacity: 0.3;
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 4px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.05), transparent 30%, rgba(138, 106, 63, 0.07));
+    mix-blend-mode: screen;
+}
+
+.bt-alchemy-menu-close {
+    color: #071618;
+    background: #d8b57c;
+    border-color: #5d4526;
+}
+
+.bt-alchemy-menu-header {
+    padding: clamp(1rem, 2.6vw, 1.6rem) clamp(1rem, 3vw, 2rem) 1rem;
+    border-bottom: 1px solid rgba(138, 106, 63, 0.42);
+}
+
+.bt-alchemy-menu-card .bt-dialog-kicker {
+    color: rgba(0, 247, 194, 0.72);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+}
+
+.bt-alchemy-menu-heading-row {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.bt-alchemy-menu-card h1 {
+    max-width: none;
+    margin: 0;
+    color: var(--bt-paper);
+    font-size: clamp(2.2rem, 5.6vw, 3.9rem);
+    line-height: 0.9;
+    text-shadow: 0 0 1.1rem rgba(0, 247, 194, 0.2);
+}
+
+.bt-alchemy-menu-intro {
+    max-width: 40ch;
+    /* Bottom-aligned against the title, so on narrower desktops its first line
+       rises into the close button's corner unless that corner is reserved. */
+    padding-right: 2rem;
+    margin: 0 0 0.4rem;
+    color: rgba(248, 235, 210, 0.66);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    text-align: right;
+}
+
+.bt-alchemy-menu-layout {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.42fr) minmax(0, 1fr);
+}
+
+.bt-alchemy-series-rail {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: clamp(0.75rem, 2vw, 1.1rem) 0.6rem;
+    overflow: auto;
+    border-right: 1px solid rgba(138, 106, 63, 0.3);
+}
+
+.bt-alchemy-series-tab {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.7rem 0.6rem 0.85rem;
+    color: rgba(248, 235, 210, 0.7);
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-align: left;
+    transition: color 160ms ease, background-color 160ms ease;
+}
+
+.bt-alchemy-series-tab::before {
+    content: "";
+    position: absolute;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    left: 0;
+    width: 2px;
+    background: transparent;
+    border-radius: 2px;
+}
+
+.bt-alchemy-series-tab span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bt-alchemy-series-tab i {
+    color: rgba(248, 235, 210, 0.4);
+    font-size: 0.58rem;
+    font-style: normal;
+}
+
+.bt-alchemy-series-tab:hover,
+.bt-alchemy-series-tab:focus-visible {
+    color: var(--bt-paper);
+    background: rgba(0, 247, 194, 0.07);
+}
+
+.bt-alchemy-series-tab[aria-pressed="true"] {
+    color: var(--bt-mint);
+    background: rgba(0, 247, 194, 0.1);
+}
+
+.bt-alchemy-series-tab[aria-pressed="true"]::before {
+    background: var(--bt-mint);
+    box-shadow: 0 0 0.6rem rgba(0, 247, 194, 0.65);
+}
+
+.bt-alchemy-series-tab[aria-pressed="true"] i {
+    color: rgba(0, 247, 194, 0.7);
+}
+
+.bt-alchemy-video-scroller {
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+.bt-alchemy-video-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.bt-alchemy-series-label {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    margin: 0;
+    padding: 0.75rem clamp(0.9rem, 2.4vw, 1.4rem) 0.45rem;
+    color: rgba(229, 189, 117, 0.85);
+    /* Opaque, not a fade — rows scrolling underneath were reading through it. */
+    background: #08191b;
+    border-bottom: 1px solid rgba(138, 106, 63, 0.28);
+    font-family: "Space Mono", monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.bt-alchemy-video-option {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.15rem 0.9rem;
+    padding: 0.7rem clamp(0.9rem, 2.4vw, 1.4rem);
+    color: var(--bt-paper);
+    background: transparent;
+    border: 0;
+    border-top: 1px solid rgba(138, 106, 63, 0.16);
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 160ms ease, padding-left 160ms ease;
+}
+
+.bt-alchemy-video-option::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: transparent;
+}
+
+.bt-alchemy-video-option:hover,
+.bt-alchemy-video-option:focus-visible {
+    background: rgba(0, 247, 194, 0.06);
+    outline: 0;
+    padding-left: calc(clamp(0.9rem, 2.4vw, 1.4rem) + 0.25rem);
+}
+
+.bt-alchemy-video-option:hover::before,
+.bt-alchemy-video-option:focus-visible::before {
+    background: rgba(0, 247, 194, 0.5);
+}
+
+.bt-alchemy-video-option:focus-visible {
+    outline: 2px solid rgba(0, 247, 194, 0.55);
+    outline-offset: -2px;
+}
+
+.bt-alchemy-video-option[aria-current="true"] {
+    background: rgba(0, 247, 194, 0.09);
+}
+
+.bt-alchemy-video-option[aria-current="true"]::before {
+    background: var(--bt-mint);
+    box-shadow: 0 0 0.7rem rgba(0, 247, 194, 0.7);
+}
+
+.bt-alchemy-video-slate {
+    color: rgba(248, 235, 210, 0.32);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.62rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+}
+
+.bt-alchemy-video-option[aria-current="true"] .bt-alchemy-video-slate {
+    color: rgba(0, 247, 194, 0.7);
+}
+
+.bt-alchemy-video-title {
+    font-family: "Special Elite", Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.25;
+}
+
+.bt-alchemy-video-option[aria-current="true"] .bt-alchemy-video-title {
+    color: var(--bt-mint);
+}
+
+.bt-alchemy-video-year {
+    color: rgba(248, 235, 210, 0.45);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.62rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.bt-alchemy-video-cue {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: end;
+    color: rgba(0, 247, 194, 0.85);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 160ms ease;
+}
+
+.bt-alchemy-video-option:hover .bt-alchemy-video-cue,
+.bt-alchemy-video-option:focus-visible .bt-alchemy-video-cue,
+.bt-alchemy-video-option[aria-current="true"] .bt-alchemy-video-cue {
+    opacity: 1;
+}
+
+.bt-alchemy-video-option[aria-current="true"] .bt-alchemy-video-cue {
+    color: var(--bt-mint);
+}
+
+.bt-alchemy-video-description {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+    color: rgba(248, 235, 210, 0.55);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.bt-alchemy-menu-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem clamp(0.8rem, 2.4vw, 1.5rem);
+    padding: 0.85rem clamp(1rem, 3vw, 2rem);
+    background: rgba(4, 15, 17, 0.55);
+    border-top: 1px solid rgba(138, 106, 63, 0.42);
+}
+
+.bt-alchemy-now-playing {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    margin: 0;
+    color: rgba(248, 235, 210, 0.72);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.bt-alchemy-now-playing i {
+    flex: none;
+    width: 0.45rem;
+    aspect-ratio: 1;
+    background: rgba(248, 235, 210, 0.28);
+    border-radius: 50%;
+}
+
+.bt-alchemy-now-playing.is-live {
+    color: var(--bt-mint);
+}
+
+.bt-alchemy-now-playing.is-live i {
+    background: var(--bt-mint);
+    box-shadow: 0 0 0.7rem rgba(0, 247, 194, 0.9);
+    animation: bt-radio-signal-pulse 2.4s ease-in-out infinite;
+}
+
+.bt-alchemy-menu-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.bt-alchemy-menu-link {
+    padding: 0.5rem 0.85rem;
+    color: rgba(248, 235, 210, 0.82);
+    background: transparent;
+    border: 1px solid rgba(138, 106, 63, 0.6);
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.bt-alchemy-menu-link:hover,
+.bt-alchemy-menu-link:focus-visible {
+    color: var(--bt-mint);
+    background: rgba(0, 247, 194, 0.08);
+    border-color: rgba(0, 247, 194, 0.6);
+    outline: 0;
+}
+
+.bt-alchemy-menu-link:focus-visible {
+    outline: 2px solid rgba(0, 247, 194, 0.6);
+    outline-offset: 2px;
+}
+
+@media (max-width: 46rem) {
+    .bt-alchemy-menu-header {
+        padding-bottom: 0.75rem;
+    }
+
+    .bt-alchemy-menu-card h1 {
+        font-size: clamp(1.9rem, 9vw, 2.6rem);
+    }
+
+    .bt-alchemy-menu-intro {
+        max-width: none;
+        padding-right: 0;
+        margin-bottom: 0;
+        text-align: left;
+    }
+
+    /* No hover on touch, and "ON AIR" in the meta column squeezes the blurb —
+       the mint edge and the footer readout carry the current-reel state here. */
+    .bt-alchemy-video-cue {
+        display: none;
+    }
+
+    .bt-alchemy-menu-heading-row {
+        flex-direction: column;
+        align-items: start;
+        gap: 0.6rem;
+    }
+
+    .bt-alchemy-menu-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .bt-alchemy-series-rail {
+        flex-direction: row;
+        gap: 0.4rem;
+        padding: 0.6rem 0.8rem;
+        overflow-x: auto;
+        border-right: 0;
+        border-bottom: 1px solid rgba(138, 106, 63, 0.3);
+    }
+
+    .bt-alchemy-series-tab {
+        flex: none;
+        padding: 0.45rem 0.7rem;
+        border: 1px solid rgba(138, 106, 63, 0.42);
+    }
+
+    .bt-alchemy-series-tab::before {
+        display: none;
+    }
+
+    .bt-alchemy-series-tab[aria-pressed="true"] {
+        border-color: rgba(0, 247, 194, 0.6);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bt-alchemy-now-playing.is-live i {
+        animation: none;
+    }
+}
+
+/* Projection-booth theme for the shared info dialog. Panels opened from inside
+   the Absurd Alchemy room sat on cream paper against a dark teal set; this puts
+   them on the same brass-framed surface as the reel picker. Opt in per panel
+   with `theme: 'booth'` so the lobby doors keep their paper. */
+.bt-dialog-booth {
+    color: var(--bt-paper);
+}
+
+.bt-dialog-booth .bt-dialog-card {
+    color: var(--bt-paper);
+    background:
+        radial-gradient(circle at 22% 8%, rgba(0, 247, 194, 0.11), transparent 46%),
+        linear-gradient(155deg, #0f2a2b, #071618 58%, #040f11);
+    border-color: #040f11;
+    box-shadow:
+        0 0 0 2px #8a6a3f,
+        0 0 0 6px #040f11,
+        0 28px 80px rgba(0, 0, 0, 0.78);
+}
+
+.bt-dialog-booth .bt-dialog-card::before {
+    opacity: 0.3;
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 4px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.05), transparent 30%, rgba(138, 106, 63, 0.07));
+    mix-blend-mode: screen;
+}
+
+.bt-dialog-booth .bt-dialog-close {
+    color: #071618;
+    background: #d8b57c;
+    border-color: #5d4526;
+}
+
+.bt-dialog-booth .bt-dialog-kicker {
+    color: rgba(0, 247, 194, 0.72);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+}
+
+.bt-dialog-booth h1 {
+    color: var(--bt-paper);
+    text-shadow: 0 0 1.1rem rgba(0, 247, 194, 0.2);
+}
+
+.bt-dialog-booth .bt-dialog-copy {
+    max-width: 54ch;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    line-height: 1.62;
+}
+
+.bt-dialog-booth .bt-dialog-copy p {
+    color: rgba(248, 235, 210, 0.7);
+}
+
+.bt-dialog-booth .bt-dialog-facts {
+    color: rgba(248, 235, 210, 0.72);
+    background: rgba(0, 247, 194, 0.05);
+    border-left-color: rgba(0, 247, 194, 0.45);
+}
+
+/* The credit roll drops its indigo card and hard mint shadow for a ruled crew
+   list — the same ledger the reel picker uses, one hairline per person. */
+.bt-dialog-booth .bt-dialog-credits {
+    margin-top: 1.6rem;
+    padding: 1.1rem 0 0;
+    background: none;
+    border: 0;
+    border-top: 1px solid rgba(138, 106, 63, 0.42);
+    box-shadow: none;
+}
+
+.bt-dialog-booth .bt-dialog-credits-label {
+    margin-bottom: 0.2rem;
+    padding-bottom: 0;
+    color: rgba(0, 247, 194, 0.78);
+    border-bottom: 0;
+    font-family: "Space Mono", ui-monospace, monospace;
+}
+
+.bt-dialog-booth .bt-dialog-credits-names {
+    gap: 0 clamp(1rem, 4vw, 2.5rem);
+}
+
+.bt-dialog-booth .bt-dialog-credits-names li {
+    padding: 0.5rem 0.1rem;
+    border-top: 1px solid rgba(138, 106, 63, 0.18);
+    font-size: 0.95rem;
+}
+
+.bt-dialog-booth .bt-dialog-credits-note {
+    color: rgba(248, 235, 210, 0.6);
+    font-size: 0.74rem;
+}
+
+.bt-dialog-booth .bt-dialog-actions {
+    margin-top: 1.6rem;
+}
+
+.bt-dialog-booth .bt-dialog-action,
+.bt-dialog-booth .bt-dialog-secondary {
+    min-height: 0;
+    padding: 0.55rem 0.9rem;
+    border-radius: 3px;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.bt-dialog-booth .bt-dialog-action {
+    color: var(--bt-mint);
+    background: rgba(0, 247, 194, 0.08);
+    border: 1px solid rgba(0, 247, 194, 0.5);
+    box-shadow: none;
+}
+
+.bt-dialog-booth .bt-dialog-secondary {
+    color: rgba(248, 235, 210, 0.82);
+    border: 1px solid rgba(138, 106, 63, 0.6);
+}
+
+.bt-dialog-booth .bt-dialog-action:hover,
+.bt-dialog-booth .bt-dialog-action:focus-visible,
+.bt-dialog-booth .bt-dialog-secondary:hover,
+.bt-dialog-booth .bt-dialog-secondary:focus-visible {
+    color: var(--bt-mint);
+    background: rgba(0, 247, 194, 0.14);
+    border-color: rgba(0, 247, 194, 0.6);
+    outline: 0;
+}
+
+.bt-dialog-booth .bt-dialog-action:focus-visible,
+.bt-dialog-booth .bt-dialog-secondary:focus-visible {
+    outline: 2px solid rgba(0, 247, 194, 0.6);
     outline-offset: 2px;
 }
 
@@ -7934,6 +8420,11 @@ body.bt-room-content .bt-inventory-drawer.is-open {
         border-bottom: 2px solid rgba(35, 28, 34, 0.28);
     }
 
+    /* The ink rule the paper archives use disappears on the booth surface. */
+    .bt-archive-booth .bt-archive-index {
+        border-bottom-color: rgba(138, 106, 63, 0.42);
+    }
+
     .bt-archive-index-item {
         margin: 0;
     }
@@ -8297,6 +8788,335 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     0% { opacity: 0.22; transform: translateY(2px); }
     48% { opacity: 0.72; }
     100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------------------------------------------------------------------
+ * The mutation archive in projection-booth dress
+ *
+ * The Sound Stage collection opens from inside the dark production room, so the
+ * alchemy archive gets the same brass-framed teal surface as the reel picker
+ * and the company panel. `openArchive` sets `.bt-archive-booth` for that
+ * collection only — the clipping file and the output archive keep their paper.
+ * ------------------------------------------------------------------------ */
+.bt-archive-booth .bt-archive-card {
+    color: var(--bt-paper);
+    background:
+        linear-gradient(90deg, rgba(138, 106, 63, 0.07) 1px, transparent 1px),
+        linear-gradient(rgba(138, 106, 63, 0.07) 1px, transparent 1px),
+        radial-gradient(circle at 18% 6%, rgba(0, 247, 194, 0.09), transparent 46%),
+        linear-gradient(155deg, #0f2a2b, #071618 58%, #040f11);
+    background-size: 22px 22px, 22px 22px, auto, auto;
+    border-color: #040f11;
+    box-shadow:
+        0 0 0 2px #8a6a3f,
+        0 0 0 6px #040f11,
+        0 28px 80px rgba(0, 0, 0, 0.78);
+}
+
+.bt-archive-booth .bt-archive-card::before {
+    opacity: 0.3;
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 4px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.05), transparent 30%, rgba(138, 106, 63, 0.07));
+    mix-blend-mode: screen;
+}
+
+.bt-archive-booth .bt-dialog-close {
+    color: #071618;
+    background: #d8b57c;
+    border-color: #5d4526;
+}
+
+.bt-archive-booth .bt-dialog-kicker {
+    color: rgba(0, 247, 194, 0.72);
+    letter-spacing: 0.18em;
+}
+
+.bt-archive-booth .bt-archive-header {
+    border-bottom-color: rgba(138, 106, 63, 0.5);
+}
+
+.bt-archive-booth .bt-archive-header h1 {
+    color: var(--bt-paper);
+    text-shadow: 0 0 1.1rem rgba(0, 247, 194, 0.2);
+}
+
+/* The index rail: cream cards become ledger rows on the room's own surface. */
+.bt-archive-booth .bt-archive-index {
+    border-right-color: rgba(138, 106, 63, 0.32);
+    scrollbar-color: rgba(138, 106, 63, 0.55) transparent;
+}
+
+.bt-archive-booth .bt-archive-detail {
+    scrollbar-color: rgba(138, 106, 63, 0.55) transparent;
+}
+
+.bt-archive-booth .bt-archive-index-item {
+    color: rgba(248, 235, 210, 0.7);
+    background: rgba(0, 247, 194, 0.04);
+    border-color: rgba(138, 106, 63, 0.28);
+}
+
+.bt-archive-booth .bt-archive-index-item strong {
+    color: var(--bt-paper);
+}
+
+.bt-archive-booth .bt-archive-index-number {
+    color: rgba(229, 189, 117, 0.85);
+}
+
+.bt-archive-booth .bt-archive-index-meta {
+    color: rgba(248, 235, 210, 0.5);
+}
+
+.bt-archive-booth .bt-archive-index-item:hover,
+.bt-archive-booth .bt-archive-index-item:focus-visible,
+.bt-archive-booth .bt-archive-index-item.is-active {
+    background: rgba(0, 247, 194, 0.1);
+    border-color: rgba(0, 247, 194, 0.5);
+    box-shadow: 0 0 1.4rem rgba(0, 247, 194, 0.16);
+}
+
+.bt-archive-booth .bt-archive-index-item.is-active strong {
+    color: var(--bt-mint);
+}
+
+/* The reading surface. */
+.bt-archive-booth .bt-archive-reader,
+.bt-archive-booth .bt-doc-pane-text {
+    color: rgba(248, 235, 210, 0.78);
+}
+
+.bt-archive-booth .bt-archive-reader > p:first-child::first-letter {
+    color: var(--bt-mint);
+}
+
+.bt-archive-booth .bt-archive-body-heading {
+    color: rgba(229, 189, 117, 0.92);
+}
+
+.bt-archive-booth .bt-archive-body > blockquote:not(.bt-archive-screenplay) {
+    color: var(--bt-paper);
+    background: rgba(0, 247, 194, 0.08);
+    border-left-color: var(--bt-mint);
+}
+
+.bt-archive-booth .bt-archive-screenplay {
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(138, 106, 63, 0.3);
+}
+
+.bt-archive-booth .bt-doc-header {
+    border-bottom-color: rgba(138, 106, 63, 0.55);
+}
+
+.bt-archive-booth .bt-doc-headline {
+    color: var(--bt-paper);
+}
+
+.bt-archive-booth .bt-doc-source,
+.bt-archive-booth .bt-doc-slug span:not(.bt-doc-slug-desk) {
+    color: rgba(248, 235, 210, 0.6);
+}
+
+.bt-archive-booth .bt-doc-slug-desk {
+    color: rgba(229, 189, 117, 0.9);
+}
+
+.bt-archive-booth .bt-doc-slug span:not(:first-child)::before,
+.bt-archive-booth .bt-doc-source span:not(:first-child):not(.bt-press-stars)::before {
+    color: rgba(248, 235, 210, 0.32);
+}
+
+/* The archivist's note keeps its status as the one annotated object, but the
+   indigo card and hard mint shadow would read as a bruise on a dark surface. */
+.bt-archive-booth .bt-doc-note {
+    background: rgba(0, 247, 194, 0.06);
+    border: 1px solid rgba(0, 247, 194, 0.35);
+    box-shadow: none;
+}
+
+.bt-archive-booth .bt-doc-note-body {
+    color: rgba(248, 235, 210, 0.72);
+}
+
+/* Lineage chain: the mutation, still legible in the dark. */
+.bt-archive-booth .bt-sound-lineage {
+    background: rgba(0, 247, 194, 0.04);
+    border-color: rgba(138, 106, 63, 0.3);
+    border-left-color: var(--bt-mint);
+}
+
+.bt-archive-booth .bt-sound-lineage-label,
+.bt-archive-booth .bt-sound-chain li + li::before,
+.bt-archive-booth .bt-sound-chain-year {
+    color: rgba(229, 189, 117, 0.88);
+}
+
+.bt-archive-booth .bt-sound-chain li {
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(138, 106, 63, 0.26);
+}
+
+.bt-archive-booth .bt-sound-chain strong {
+    color: var(--bt-paper);
+}
+
+.bt-archive-booth .bt-sound-chain-detail {
+    color: rgba(248, 235, 210, 0.65);
+}
+
+.bt-archive-booth .bt-sound-payoff {
+    border-top-color: rgba(138, 106, 63, 0.42);
+}
+
+/* Depth switcher, walk, and tags. */
+.bt-archive-booth .bt-doc-switch-item {
+    color: rgba(248, 235, 210, 0.7);
+    background: rgba(0, 247, 194, 0.04);
+    border-color: rgba(138, 106, 63, 0.35);
+}
+
+.bt-archive-booth .bt-doc-switch-item strong {
+    color: var(--bt-paper);
+}
+
+.bt-archive-booth .bt-doc-switch-item:hover,
+.bt-archive-booth .bt-doc-switch-item:focus-visible {
+    background: rgba(0, 247, 194, 0.1);
+    border-color: rgba(0, 247, 194, 0.5);
+}
+
+.bt-archive-booth .bt-doc-switch-item.is-active {
+    color: rgba(248, 235, 210, 0.75);
+    background: rgba(0, 247, 194, 0.14);
+    border-color: rgba(0, 247, 194, 0.6);
+    box-shadow: none;
+}
+
+.bt-archive-booth .bt-doc-switch-item.is-active strong {
+    color: var(--bt-mint);
+}
+
+.bt-archive-booth .bt-doc-walk {
+    border-top-color: rgba(138, 106, 63, 0.42);
+}
+
+.bt-archive-booth .bt-doc-walk-item {
+    background: rgba(0, 247, 194, 0.04);
+    border-color: rgba(138, 106, 63, 0.28);
+}
+
+.bt-archive-booth .bt-doc-walk-item span {
+    color: rgba(229, 189, 117, 0.85);
+}
+
+.bt-archive-booth .bt-doc-walk-item strong {
+    color: var(--bt-paper);
+}
+
+.bt-archive-booth .bt-doc-walk-item:hover,
+.bt-archive-booth .bt-doc-walk-item:focus-visible {
+    background: rgba(0, 247, 194, 0.1);
+    border-color: rgba(0, 247, 194, 0.5);
+}
+
+.bt-archive-booth .bt-doc-index-heading {
+    border-top-color: rgba(138, 106, 63, 0.42);
+}
+
+.bt-archive-booth.bt-archive-doc .bt-doc-index-heading {
+    background: #08191b;
+    border-bottom-color: rgba(138, 106, 63, 0.32);
+}
+
+.bt-archive-booth .bt-doc-index-heading strong {
+    color: var(--bt-paper);
+}
+
+.bt-archive-booth .bt-doc-index-heading span {
+    color: rgba(229, 189, 117, 0.8);
+}
+
+.bt-archive-booth .bt-doc-index-item {
+    border-left-color: rgba(138, 106, 63, 0.35);
+}
+
+.bt-archive-booth .bt-doc-index-item.is-transcribed {
+    border-left-color: var(--bt-mint);
+}
+
+.bt-archive-booth .bt-doc-tag {
+    color: rgba(248, 235, 210, 0.6);
+    border-color: rgba(138, 106, 63, 0.5);
+}
+
+.bt-archive-booth .bt-doc-tag.is-full {
+    color: var(--bt-mint);
+    background: rgba(0, 247, 194, 0.12);
+    border-color: rgba(0, 247, 194, 0.5);
+}
+
+.bt-archive-booth .bt-doc-provenance {
+    color: rgba(248, 235, 210, 0.55);
+    border-top-color: rgba(138, 106, 63, 0.45);
+}
+
+/* Scans and stills sit in a lit frame rather than on a paper mount. */
+.bt-archive-booth .bt-out-hero-frame {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(138, 106, 63, 0.4);
+    box-shadow: 0 0.6rem 1.8rem rgba(0, 0, 0, 0.5);
+}
+
+.bt-archive-booth .bt-press-scan-zoom {
+    color: #071618;
+    background: var(--bt-mint);
+    border-color: #05201c;
+}
+
+/* End mark and the action row, in the same outline dress as the reel picker. */
+.bt-archive-booth .bt-archive-end-mark {
+    color: rgba(248, 235, 210, 0.7);
+    background: rgba(0, 247, 194, 0.05);
+    border: 1px solid rgba(0, 247, 194, 0.3);
+    box-shadow: none;
+}
+
+.bt-archive-booth .bt-dialog-action,
+.bt-archive-booth .bt-dialog-secondary,
+.bt-archive-booth .bt-sound-payoff .bt-dialog-action {
+    color: var(--bt-mint);
+    background: rgba(0, 247, 194, 0.08);
+    border: 1px solid rgba(0, 247, 194, 0.5);
+    box-shadow: none;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.bt-archive-booth .bt-dialog-secondary {
+    color: rgba(248, 235, 210, 0.82);
+    background: transparent;
+    border-color: rgba(138, 106, 63, 0.6);
+}
+
+.bt-archive-booth .bt-dialog-action:hover,
+.bt-archive-booth .bt-dialog-action:focus-visible,
+.bt-archive-booth .bt-dialog-secondary:hover,
+.bt-archive-booth .bt-dialog-secondary:focus-visible {
+    color: var(--bt-mint);
+    background: rgba(0, 247, 194, 0.14);
+    border-color: rgba(0, 247, 194, 0.6);
+    outline: 0;
+}
+
+.bt-archive-booth .bt-dialog-action:focus-visible,
+.bt-archive-booth .bt-dialog-secondary:focus-visible {
+    outline: 2px solid rgba(0, 247, 194, 0.6);
+    outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

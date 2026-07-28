@@ -748,16 +748,27 @@
 
     <dialog class="bt-dialog bt-alchemy-menu-dialog" id="bt-alchemy-menu-dialog" aria-labelledby="bt-alchemy-menu-title">
         <article class="bt-dialog-card bt-alchemy-menu-card">
-            <button class="bt-dialog-close" type="button" data-dialog-close aria-label="Close">×</button>
-            <p class="bt-dialog-kicker">Absurd Alchemy // screening call sheet</p>
-            <h1 id="bt-alchemy-menu-title">Choose a reel</h1>
-            <p class="bt-alchemy-menu-intro">Pick a production and the large monitor will do its best to cooperate.</p>
-            <div class="bt-alchemy-video-list" id="bt-alchemy-video-list"></div>
-            <p class="bt-alchemy-now-playing" id="bt-alchemy-now-playing" role="status" aria-live="polite">Nothing is currently screening.</p>
-            <div class="bt-dialog-actions">
-                <a class="bt-dialog-secondary" href="https://vimeo.com/absurdalchemy" target="_blank" rel="noopener noreferrer">Surviving Vimeo archive</a>
-                <button class="bt-dialog-secondary" type="button" data-dialog-close>Back to the room</button>
+            <button class="bt-dialog-close bt-alchemy-menu-close" type="button" data-dialog-close aria-label="Close">×</button>
+            <header class="bt-alchemy-menu-header">
+                <p class="bt-dialog-kicker">Absurd Alchemy // screening call sheet</p>
+                <div class="bt-alchemy-menu-heading-row">
+                    <h1 id="bt-alchemy-menu-title">Choose a reel</h1>
+                    <p class="bt-alchemy-menu-intro">Pick a production and the large monitor will do its best to cooperate.</p>
+                </div>
+            </header>
+            <div class="bt-alchemy-menu-layout">
+                <nav class="bt-alchemy-series-rail" id="bt-alchemy-series-rail" aria-label="Productions"></nav>
+                <div class="bt-alchemy-video-scroller">
+                    <div class="bt-alchemy-video-list" id="bt-alchemy-video-list"></div>
+                </div>
             </div>
+            <footer class="bt-alchemy-menu-footer">
+                <p class="bt-alchemy-now-playing" id="bt-alchemy-now-playing" role="status" aria-live="polite"><i aria-hidden="true"></i>Nothing is currently screening.</p>
+                <div class="bt-alchemy-menu-actions">
+                    <a class="bt-alchemy-menu-link" href="https://vimeo.com/absurdalchemy" target="_blank" rel="noopener noreferrer">Surviving Vimeo archive ↗</a>
+                    <button class="bt-alchemy-menu-link" type="button" data-dialog-close>Back to the room</button>
+                </div>
+            </footer>
         </article>
     </dialog>
 

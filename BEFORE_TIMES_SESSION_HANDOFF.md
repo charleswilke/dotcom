@@ -89,6 +89,16 @@ system, door, props, and perspective remain locked to the concept render.
   Segments (4 YouTube shorts, 2015). Vimeo entries carry `id` (+ optional
   `hash`; only Sagan has one); YouTube entries carry `yt`. The presence of
   `yt` is what routes a cue to the YouTube path.
+- The call sheet is styled as a projection-booth log rather than a paper page:
+  a dark teal panel with a brass frame that matches the room behind it. A left
+  rail lists the five productions with counts and filters the list to one of
+  them (`filterAlchemyPlaylist`, `data-alchemy-group` on both rows and series
+  labels); "All reels" restores the full list with sticky series headers. Rows
+  are hairline-separated with a slate number, year, and a hover CUE label. The
+  current reel carries a mint edge and an ON AIR badge, mirrored by the lamp in
+  the footer readout, which goes dark and reads "Reel ended" when the set powers
+  itself off. Under 46rem the rail becomes a horizontal chip row and the CUE
+  column drops out.
 - The hero CRT is dual-source: two stacked iframes inside the same keystoned
   video plane, with `data-crt-source` on the hero screen controlling which is
   visible. The YouTube IFrame API loads lazily on first YouTube cue. A thin
@@ -118,6 +128,20 @@ system, door, props, and perspective remain locked to the concept render.
   by a dimensional Absurd Alchemy hand emblem: blackened metal, the original
   yellow cuff, and a gray mounting base. It keeps the compact curio-style
   silhouette glow and exposes an object label/status line on hover or focus.
+  It opens the company credits on the shared info dialog, themed to match the
+  room: a panel sets `theme: 'booth'` and `openPanel` toggles `bt-dialog-booth`,
+  which swaps the cream card for the brass-framed dark teal surface, turns the
+  credit roll into a ruled crew list, and restyles the buttons. Every other
+  panel keeps its paper, so add the flag deliberately rather than styling
+  `.bt-dialog-card` directly.
+- The crate's mutation archive gets the same treatment through a parallel hook:
+  `openArchive` sets `.bt-archive-booth` when the collection is `alchemy`, and
+  a block at the end of `before-times.css` re-skins the card, index rail,
+  reader, screenplay blocks, archivist's note, lineage chain, depth switcher,
+  walk, end mark, and buttons for the dark surface. The clipping file and the
+  output archive share every one of those classes and must stay on paper, so
+  scope any new archive styling under `.bt-archive-booth` rather than editing
+  the base rules.
 - Once a reel has started, an invisible `.bt-crt-tap-toggle` button covers the
   picture area and toggles play/pause through the Player API (a tap after the
   reel ends rewinds and replays).

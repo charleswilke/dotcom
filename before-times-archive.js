@@ -3209,13 +3209,14 @@
                 curator: 'This is the long-form impulse hiding inside the sketch machine. The story carries consequences from broadcast scandal to firing to exile—and turns the geography between NoHo and Burbank into an underworld journey.',
                 lineage: [
                     { year: 'Part One', label: 'The broadcast', detail: 'Alec tells an inconvenient truth and detonates the show' },
-                    { year: 'Parts Two–Three', label: 'The fall', detail: 'Replacement, protest, and a walk across the Burbank line' },
-                    { year: 'Part Four', label: 'The reckoning', detail: 'A civic tour, a second IKEA, and the question of what mattered' }
+                    { year: 'Part Two', label: 'The aftermath', detail: 'The producer delivers the news and the replacements are already hired' },
+                    { year: 'Part Three', label: 'The lashes', detail: 'NoHo lines up to punish the newsman it used to watch' },
+                    { year: 'Part Four', label: 'The false victory', detail: 'A musical Burbank welcome, a civic tour, and an unfinished IKEA' }
                 ],
                 body: [
                     { type: 'screenplay', character: 'BOB', text: 'You were fired. Kicked to the curb. Forced out. Sacked. We found someone else!' },
-                    { type: 'screenplay', character: 'BILL', text: 'You only lost your show. You kept your integrity.' },
-                    { type: 'screenplay', character: 'ALEC', text: 'My name is Alec Reidel. And the news runs in my family.' }
+                    { type: 'screenplay', character: 'ALEC', text: 'My name is Alec Reidel. And the news runs in my family.' },
+                    { type: 'screenplay', character: 'D.W. BURBANK', text: 'There’s no need to be down when you’re in Burbank!' }
                 ],
                 action: {
                     label: 'Watch Part One',
@@ -3224,8 +3225,8 @@
                 depth: {
                     kind: 'read',
                     label: 'Open the surviving serial dossier',
-                    meta: 'Parts Two–Four // 2015–2016',
-                    intro: 'The file labeled Part One contains a different NoHo Rag season-two promo. Parts Two through Four survive as scripts, so this dossier begins in the aftermath and follows the serial to its final recovered pages.',
+                    meta: 'The surviving pages // 2015–2016',
+                    intro: 'Assembled from the surviving script pages. The file labeled Part One holds a different NoHo Rag season-two promo, so the dossier starts in the aftermath, and Part Three came back with no pages at all. The alley scene is kept separate because it belongs to no released reel.',
                     body: [
                         { type: 'subhead', text: 'PART TWO // THE AFTERMATH' },
                         {
@@ -3240,22 +3241,15 @@
                             text: 'Bob reveals that the show has already hired Dane Argyle and Kelly Mae Greenblatt, a hotshot duo from Des Moines who poll “close-ish” to Alec’s demographic. Alec finally walks toward the door.'
                         },
                         { type: 'screenplay', character: 'BOB', text: 'You’ll find a way to make it matter. You always do.' },
-                        { type: 'subhead', text: 'PART THREE // EXILE IN BURBANK' },
+                        { type: 'subhead', text: 'PART THREE // THE LASHES' },
                         {
                             type: 'paragraph',
-                            text: 'Alec crosses the Burbank welcome line and wanders past hobby shops in slow motion. In an alley, he meets Bill Sampson warming his hands over a burning trash can on a nearly forty-degree night.'
+                            text: 'NoHo takes its turn. The neighborhood that watched Alec every night lines up to tell him exactly what it thinks of him, and he absorbs the whole civic punishment on his way out. No pages for this stretch came back with the rest of the file, so the reel is the only record of it.'
                         },
-                        { type: 'screenplay', character: 'BILL', text: 'You only lost your show. You kept your integrity.' },
-                        { type: 'screenplay', character: 'ALEC', text: 'They think I’m the devil.' },
-                        { type: 'screenplay', character: 'BILL', text: 'Good. Wear it with pride.' },
+                        { type: 'subhead', text: 'PART FOUR // THE BURBANK WELCOME' },
                         {
                             type: 'paragraph',
-                            text: 'Bill tells Alec that the desk was not a calling but a comfortable nest. The protesters kicked him out of it. Alec does not need a news program to make news.'
-                        },
-                        { type: 'subhead', text: 'PART FOUR // THE GREAT IKEA' },
-                        {
-                            type: 'paragraph',
-                            text: 'D.W. Burbank finds Alec and gives him an aggressively cheerful civic tour. The carts have all been returned. The municipal service is the best in the valley. Burbank is “pretty much a better EPCOT,” crowned by IKEA—and, D.W. whispers, another even larger IKEA on the way.'
+                            text: 'Alec crosses the Burbank welcome line and wanders past the hobby shops in slow motion. D.W. Burbank finds him there and delivers an aggressively cheerful civic tour. The carts have all been returned. The municipal service is the best in the valley. Burbank is “pretty much a better EPCOT,” crowned by IKEA, and, D.W. whispers, another even larger IKEA on the way.'
                         },
                         { type: 'screenplay', character: 'D.W. BURBANK', text: 'There’s no need to be down when you’re in Burbank!' },
                         {
@@ -3270,7 +3264,19 @@
                         { type: 'screenplay', character: 'D.W. BURBANK', text: 'But it really doesn’t matter.' },
                         {
                             type: 'paragraph',
-                            text: 'That is where the final recovered script ends: in the middle of D.W.’s answer, with Alec’s great grievance hanging beside an unfinished IKEA. The incomplete page is not a clean finale, but it may be the most NoHo ending the archive could have kept.'
+                            text: 'The page breaks off in the middle of D.W.’s answer, with Alec’s great grievance hanging beside an unfinished IKEA. It reads like an ending and was never meant to be one. Burbank hands Alec a victory he has not earned and cannot keep, and three more parts were planned to take it back from him.'
+                        },
+                        { type: 'subhead', text: 'UNRELEASED // PAGES THAT NEVER REACHED A REEL' },
+                        {
+                            type: 'paragraph',
+                            text: 'One recovered stretch belongs to no released part. In an alley on a nearly forty-degree night, Alec meets Bill Sampson warming his hands over a burning trash can.'
+                        },
+                        { type: 'screenplay', character: 'BILL', text: 'You only lost your show. You kept your integrity.' },
+                        { type: 'screenplay', character: 'ALEC', text: 'They think I’m the devil.' },
+                        { type: 'screenplay', character: 'BILL', text: 'Good. Wear it with pride.' },
+                        {
+                            type: 'paragraph',
+                            text: 'Bill tells Alec that the desk was not a calling but a comfortable nest. The protesters kicked him out of it. Alec does not need a news program to make news. The scene was either cut or held for a part five or six, which puts the serial’s clearest statement of its own theme in the half of the story that never got shot.'
                         }
                     ]
                 }

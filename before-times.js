@@ -25,6 +25,7 @@
             action: { label: 'Visit the surviving Vimeo archive', href: 'https://vimeo.com/absurdalchemy', external: true }
         },
         alchemyHand: {
+            theme: 'booth',
             kicker: 'The Sound Stage // the company',
             title: 'The hand of Absurd Alchemy',
             copy: [
@@ -214,7 +215,7 @@
             series: 'Call Me Lucifer',
             title: 'Call Me Lucifer - Part One',
             year: '2015',
-            description: 'The Devil takes a meeting. Part one of the four-part confessional.'
+            description: 'Alec Reidel tells the truth on the air and is fired for it.'
         },
         {
             key: 'lucifer-2',
@@ -222,7 +223,7 @@
             series: 'Call Me Lucifer',
             title: 'Call Me Lucifer - Part Two',
             year: '2015',
-            description: 'Part two. The horns come off; the grievances do not.'
+            description: 'Reality arrives with the producer, who delivers the news himself.'
         },
         {
             key: 'lucifer-3',
@@ -230,7 +231,7 @@
             series: 'Call Me Lucifer',
             title: 'Call Me Lucifer - Part Three',
             year: '2015',
-            description: 'Part three. Old Scratch would like the record corrected on several points.'
+            description: 'The good people of NoHo line up to give Alec his lashes.'
         },
         {
             key: 'lucifer-4',
@@ -238,7 +239,7 @@
             series: 'Call Me Lucifer',
             title: 'Call Me Lucifer - Part Four',
             year: '2016',
-            description: 'The finale, recovered nearly a year later with the prince of darkness still talking.'
+            description: 'Burbank welcomes Alec with a musical number and calls it a happy ending.'
         },
         {
             key: 'noho-1',
@@ -997,7 +998,9 @@
     const alchemyTapToggle = document.getElementById('bt-crt-tap-toggle');
     const alchemyYtIframe = document.getElementById('bt-alchemy-player-yt');
     const alchemyVideoList = document.getElementById('bt-alchemy-video-list');
+    const alchemySeriesRail = document.getElementById('bt-alchemy-series-rail');
     const alchemyNowPlaying = document.getElementById('bt-alchemy-now-playing');
+    let alchemySeriesFilter = 'all';
     const productionScreens = Array.from(document.querySelectorAll('[data-production-screen]'));
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const usesTouchscreenLayout = window.matchMedia('(hover: none) and (pointer: coarse)');
@@ -3252,27 +3255,87 @@
         archiveKicker.textContent = header.kicker;
         archiveTitle.textContent = header.title;
         archiveDialog.classList.add('bt-archive-doc');
+        // The Sound Stage collection opens from inside the dark production room.
+        archiveDialog.classList.toggle('bt-archive-booth', collectionName === 'alchemy');
         if (collectionName === 'alchemy') renderAlchemyPiece(pieceId);
         else if (collectionName === 'content') renderContentPiece(pieceId);
         else renderPressPiece(pieceId);
         openDialog(archiveDialog);
     }
 
+    const ALCHEMY_SERIES_ALL = 'all';
+
+    /* The call sheet carries 27 reels across five productions, which is more than
+       one scroll wants to hold — the rail filters the list down to a single
+       production, and "All reels" keeps the sticky series headers for browsing. */
+    function renderAlchemySeriesRail() {
+        if (!alchemySeriesRail) return;
+        const counts = new Map();
+        ALCHEMY_VIDEOS.forEach((video) => {
+            const series = video.series || 'Unfiled';
+            counts.set(series, (counts.get(series) || 0) + 1);
+        });
+
+        const tabs = [['All reels', ALCHEMY_SERIES_ALL, ALCHEMY_VIDEOS.length]];
+        counts.forEach((count, series) => tabs.push([series, series, count]));
+
+        alchemySeriesRail.replaceChildren(
+            ...tabs.map(([label, value, count]) => {
+                const tab = document.createElement('button');
+                tab.type = 'button';
+                tab.className = 'bt-alchemy-series-tab';
+                tab.dataset.alchemySeries = value;
+                tab.setAttribute('aria-pressed', String(value === alchemySeriesFilter));
+
+                const name = document.createElement('span');
+                name.textContent = label;
+
+                const tally = document.createElement('i');
+                tally.textContent = String(count).padStart(2, '0');
+
+                tab.append(name, tally);
+                tab.addEventListener('click', () => filterAlchemyPlaylist(value));
+                return tab;
+            })
+        );
+    }
+
+    function filterAlchemyPlaylist(series) {
+        alchemySeriesFilter = series;
+        alchemySeriesRail.querySelectorAll('[data-alchemy-series]').forEach((tab) => {
+            tab.setAttribute('aria-pressed', String(tab.dataset.alchemySeries === series));
+        });
+        alchemyVideoList.querySelectorAll('[data-alchemy-group]').forEach((node) => {
+            const matches = series === ALCHEMY_SERIES_ALL || node.dataset.alchemyGroup === series;
+            // Series headers are redundant once the list is down to one production.
+            node.hidden = !matches || (series !== ALCHEMY_SERIES_ALL && node.classList.contains('bt-alchemy-series-label'));
+        });
+        alchemyVideoList.parentElement.scrollTop = 0;
+    }
+
     function renderAlchemyPlaylist() {
         alchemyVideoList.replaceChildren();
         let currentSeries = null;
-        ALCHEMY_VIDEOS.forEach((video) => {
-            if (video.series && video.series !== currentSeries) {
-                currentSeries = video.series;
+        ALCHEMY_VIDEOS.forEach((video, index) => {
+            const series = video.series || 'Unfiled';
+            if (series !== currentSeries) {
+                currentSeries = series;
                 const seriesLabel = document.createElement('p');
                 seriesLabel.className = 'bt-alchemy-series-label';
-                seriesLabel.textContent = currentSeries;
+                seriesLabel.dataset.alchemyGroup = series;
+                seriesLabel.textContent = series;
                 alchemyVideoList.appendChild(seriesLabel);
             }
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'bt-alchemy-video-option';
             button.dataset.alchemyVideo = video.key;
+            button.dataset.alchemyGroup = series;
+
+            const slate = document.createElement('span');
+            slate.className = 'bt-alchemy-video-slate';
+            slate.textContent = String(index + 1).padStart(2, '0');
+            slate.setAttribute('aria-hidden', 'true');
 
             const title = document.createElement('span');
             title.className = 'bt-alchemy-video-title';
@@ -3286,17 +3349,30 @@
             description.className = 'bt-alchemy-video-description';
             description.textContent = video.description;
 
-            button.append(title, year, description);
+            const cue = document.createElement('span');
+            cue.className = 'bt-alchemy-video-cue';
+            cue.textContent = 'Cue ▸';
+            cue.setAttribute('aria-hidden', 'true');
+
+            button.append(slate, title, year, description, cue);
             button.addEventListener('click', () => cueAlchemyVideo(video.key));
             alchemyVideoList.appendChild(button);
         });
+        renderAlchemySeriesRail();
+        filterAlchemyPlaylist(alchemySeriesFilter);
     }
 
     function markCurrentAlchemyVideo(video) {
         currentAlchemyVideo = video;
-        alchemyNowPlaying.textContent = `Now screening: ${video.title}`;
+        alchemyNowPlaying.classList.add('is-live');
+        const lamp = document.createElement('i');
+        lamp.setAttribute('aria-hidden', 'true');
+        alchemyNowPlaying.replaceChildren(lamp, document.createTextNode(`On air: ${video.title}`));
         alchemyVideoList.querySelectorAll('[data-alchemy-video]').forEach((button) => {
-            if (button.dataset.alchemyVideo === video.key) {
+            const isCurrent = button.dataset.alchemyVideo === video.key;
+            const cue = button.querySelector('.bt-alchemy-video-cue');
+            if (cue) cue.textContent = isCurrent ? 'On air' : 'Cue ▸';
+            if (isCurrent) {
                 button.setAttribute('aria-current', 'true');
             } else {
                 button.removeAttribute('aria-current');
@@ -3592,6 +3668,13 @@
     }
 
     function powerDownHeroScreen() {
+        if (currentAlchemyVideo) {
+            // The lamp is a claim about the set, so it goes dark when the set does.
+            alchemyNowPlaying.classList.remove('is-live');
+            const lamp = document.createElement('i');
+            lamp.setAttribute('aria-hidden', 'true');
+            alchemyNowPlaying.replaceChildren(lamp, document.createTextNode(`Reel ended: ${currentAlchemyVideo.title}`));
+        }
         alchemyHeroScreen.classList.add('is-powering-off');
         alchemyTapToggle.setAttribute('aria-label', 'Play the reel again');
         resetGlow();
@@ -5087,6 +5170,7 @@
         infoRecovery.hidden = true;
         infoRecovery.replaceChildren();
         infoDialog.classList.remove('bt-knowledge-documents-dialog');
+        infoDialog.classList.toggle('bt-dialog-booth', panel.theme === 'booth');
 
         infoKicker.textContent = panel.kicker || '';
         setInfoTitle(panel.title);

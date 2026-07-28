@@ -449,15 +449,22 @@ images/before-times/layers/alchemy-exit-door-lobby-v2.{png,webp}
   Superseded full-scene reverse-clapboard exit sprite.
 
 images/before-times/layers/alchemy-exit-door-lobby-v3.{png,webp}
-  Current full-scene transparent exit sprite. The visible lobby and threshold
-  retain original concept pixels; the inside-facing surround uses blackened
-  steel, oxblood acoustic padding, worn brass trim, and three amber utility
-  lamps. The combined silhouette remains one hoverable layer.
+  Superseded surgical composite. It retained original lobby pixels but cut and
+  perspective-warped the new frame into separate lintel and jamb polygons,
+  making the installed result look visibly chopped.
+
+images/before-times/layers/alchemy-exit-door-lobby-v4.{png,webp}
+  Current full-scene transparent exit sprite. The complete generated render—
+  blackened-steel frame, oxblood acoustic padding, amber lights, lobby view,
+  and threshold—is fitted directly into its source crop and clipped at the
+  actual steel doorway silhouette. The matching room-plate repair removes the
+  legacy clapboard cap fragments underneath, so no generated teal wall or
+  horizontal blend seam remains above the lintel. The whole render remains one
+  hoverable layer.
 
 tools/before-times-clean-patches/alchemy-exit-door-interior-frame-source-v1.png
-  Generated source render for the V3 inside-facing cinema surround. The exit
-  builder masks out all regenerated lobby/room pixels and perspective-warps
-  only the lintel and jambs into the locked full-room composition.
+  Authoritative generated source render for the V4 inside-facing cinema
+  doorway and visible lobby.
 
 images/before-times/layers/alchemy-hand-logo-v1.{png,webp}
   Full-scene transparent hand-emblem interaction layer, aligned to the repaired
@@ -499,9 +506,9 @@ tools/build-absurd-alchemy-hand-logo.py
   generated hand master, writes the runtime PNG/WebP layer, and emits a preview.
 
 tools/build-absurd-alchemy-exit-door.py
-  Builds the combined exit sprite from original lobby pixels plus the
-  generated inside-facing frame, applies the localized no-door repair to V3,
-  and writes the V4 plate plus runtime WebP.
+  Fits the complete generated doorway render into the locked full-room origin,
+  applies the localized no-door repair to V3, and writes the clean V4 room
+  plate, its live pen-free counterpart, and the V4 doorway PNG/WebP.
 
 tools/build-guestbook-no-pen.py
   Composites a narrow generated ruled-paper donor into the locked guest-book

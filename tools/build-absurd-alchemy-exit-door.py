@@ -1,9 +1,9 @@
 """Build the Absurd Alchemy inside-facing exit doorway.
 
-The lobby view and threshold deliberately keep the original concept pixels.
-The frame is a generated inside-facing soundproof cinema surround warped into
-the installed perspective.  They share one alpha silhouette so the frame and
-lobby glimpse remain a single hoverable asset.
+The complete generated render supplies the frame, lobby view, and threshold as
+one continuous painted composition.  It is fitted directly into the source
+crop's full-scene origin and clipped only at the outside doorway silhouette, so
+the lintel and jambs are never reconstructed from separate pieces.
 """
 
 from pathlib import Path
@@ -23,47 +23,31 @@ INTERIOR_FRAME_SOURCE = (
 )
 
 OUTPUT_PLATE = ROOT / "images/before-times/absurd-alchemy-clean-v4.png"
-OUTPUT_LAYER = LAYER_DIR / "alchemy-exit-door-lobby-v3.png"
+OUTPUT_NO_PEN_PLATE = (
+    ROOT / "images/before-times/absurd-alchemy-clean-v4-no-pen.png"
+)
+OUTPUT_LAYER = LAYER_DIR / "alchemy-exit-door-lobby-v4.png"
 
 # The generated repair uses this exact source crop as its composition target.
 REPAIR_BOX = (1110, 18, 1515, 725)
 
-# The opening belongs to the sprite along with the physical frame.  These
-# points follow the hand-drawn keystone rather than imposing a rectangle.
-OPENING_POLYGON = (
-    (1200, 156),
-    (1393, 162),
-    (1396, 625),
-    (1200, 652),
-)
+# The generated render derives from this exact crop of the installed scene and
+# has the same aspect ratio. A direct fit preserves its coherent perspective.
+RENDER_BOX = (1116, 58, 1474, 719)
+RENDER_SOURCE_SIZE = (922, 1705)
+PEN_FREE_PATCH_BOX = (99, 579, 186, 613)
 
-THRESHOLD_POLYGON = (
-    (1188, 625),
-    (1422, 606),
-    (1428, 666),
-    (1186, 676),
-)
-
-# These polygons isolate only the generated blackened-steel, oxblood acoustic,
-# and brass surround.  All regenerated lobby and room pixels stay excluded.
-INTERIOR_FRAME_SOURCE_POLYGONS = (
-    ((95, 72), (812, 43), (852, 67), (851, 196), (704, 242), (218, 271), (96, 195)),
-    ((96, 181), (218, 238), (242, 1565), (98, 1492)),
-    ((701, 208), (851, 190), (852, 1454), (696, 1513)),
-)
-
-# Pillow's perspective transform maps destination pixels back into the source
-# image.  These coefficients align the generated frame's four inner corners
-# with the installed doorway while letting its outer silhouette stay distinct.
-INTERIOR_FRAME_PERSPECTIVE = (
-    1.7845989974577003,
-    0.062289127619887606,
-    -1970.422942482766,
-    -0.24851261612859515,
-    2.2206249770224646,
-    152.70403554287313,
-    -0.00019326111462076185,
-    0.00011812481932794536,
+# One continuous outside contour retains the entire rendered frame and lobby
+# opening. No internal cuts are made through the jambs, lintel, or threshold.
+RENDERED_DOORWAY_POLYGON = (
+    (95, 153),
+    (812, 43),
+    (852, 67),
+    (852, 1454),
+    (700, 1595),
+    (240, 1595),
+    (98, 1492),
+    (96, 181),
 )
 
 def save_png_and_webp(image: Image.Image, path: Path) -> None:
@@ -76,23 +60,6 @@ def build_original_door_alpha(
 ) -> Image.Image:
     """Return the old doorway footprint used to repair the clean room plate."""
     frame_alpha = frame.getchannel("A")
-    clip = Image.new("L", size, 0)
-    ImageDraw.Draw(clip).polygon(
-        (
-            (1170, 78),
-            (1399, 43),
-            (1427, 61),
-            (1445, 104),
-            (1443, 575),
-            (1419, 625),
-            (1414, 654),
-            (1200, 668),
-            (1155, 652),
-            (1156, 126),
-        ),
-        fill=255,
-    )
-    frame_alpha = ImageChops.multiply(frame_alpha, clip)
 
     opening = Image.new("L", size, 0)
     ImageDraw.Draw(opening).polygon(
@@ -100,50 +67,56 @@ def build_original_door_alpha(
         fill=255,
     )
 
-    return ImageChops.lighter(frame_alpha, opening)
-
-
-def build_interior_frame(size: tuple[int, int]) -> Image.Image:
-    source = Image.open(INTERIOR_FRAME_SOURCE).convert("RGBA")
-    mask = Image.new("L", source.size, 0)
-    draw = ImageDraw.Draw(mask)
-    for polygon in INTERIOR_FRAME_SOURCE_POLYGONS:
-        draw.polygon(polygon, fill=255)
-    source.putalpha(mask.filter(ImageFilter.GaussianBlur(0.65)))
-
-    return source.transform(
-        size,
-        Image.Transform.PERSPECTIVE,
-        data=INTERIOR_FRAME_PERSPECTIVE,
-        resample=Image.Resampling.BICUBIC,
-        fillcolor=(0, 0, 0, 0),
+    # The flattened source plate retains two tiny cap fragments outside the
+    # separately extracted legacy-frame alpha. Include those fragments in the
+    # repair footprint so they cannot peek out above the replacement lintel.
+    remnants = Image.new("L", size, 0)
+    draw = ImageDraw.Draw(remnants)
+    draw.polygon(
+        ((1158, 58), (1194, 58), (1194, 121), (1154, 127), (1154, 88)),
+        fill=255,
+    )
+    draw.polygon(
+        ((1375, 24), (1417, 24), (1421, 84), (1374, 84)),
+        fill=255,
     )
 
+    return ImageChops.lighter(ImageChops.lighter(frame_alpha, opening), remnants)
 
-def build_doorway(source: Image.Image) -> Image.Image:
-    keep = Image.new("L", source.size, 0)
-    draw = ImageDraw.Draw(keep)
-    draw.polygon(OPENING_POLYGON, fill=255)
-    draw.polygon(THRESHOLD_POLYGON, fill=255)
-    keep = keep.filter(ImageFilter.GaussianBlur(0.35))
 
-    original_pixels = source.copy()
-    original_pixels.putalpha(keep)
+def build_rendered_doorway(size: tuple[int, int]) -> Image.Image:
+    source = Image.open(INTERIOR_FRAME_SOURCE).convert("RGBA")
+    if source.size != RENDER_SOURCE_SIZE:
+        raise ValueError(
+            f"Expected generated doorway source {RENDER_SOURCE_SIZE}, got {source.size}"
+        )
 
-    doorway = Image.new("RGBA", source.size, (0, 0, 0, 0))
-    doorway.alpha_composite(original_pixels)
-    doorway.alpha_composite(build_interior_frame(source.size))
+    mask = Image.new("L", source.size, 0)
+    ImageDraw.Draw(mask).polygon(RENDERED_DOORWAY_POLYGON, fill=255)
+    source.putalpha(mask.filter(ImageFilter.GaussianBlur(0.8)))
+
+    render_size = (
+        RENDER_BOX[2] - RENDER_BOX[0],
+        RENDER_BOX[3] - RENDER_BOX[1],
+    )
+    fitted = source.resize(render_size, Image.Resampling.LANCZOS)
+
+    doorway = Image.new("RGBA", size, (0, 0, 0, 0))
+    doorway.alpha_composite(fitted, dest=RENDER_BOX[:2])
     return doorway
 
 
 def main() -> None:
     source = Image.open(SOURCE_PLATE).convert("RGBA")
+    no_pen_source = Image.open(OUTPUT_NO_PEN_PLATE).convert("RGBA")
     frame = Image.open(FRAME_LAYER).convert("RGBA")
     if frame.size != source.size:
         raise ValueError("Door frame and room plate must share a raster origin")
+    if no_pen_source.size != source.size:
+        raise ValueError("Pen-free room plate must share the source raster origin")
 
     repair_alpha = build_original_door_alpha(frame, source.size)
-    doorway = build_doorway(source)
+    doorway = build_rendered_doorway(source.size)
 
     repair_source = Image.open(REPAIR_SOURCE).convert("RGB")
     repair_size = (REPAIR_BOX[2] - REPAIR_BOX[0], REPAIR_BOX[3] - REPAIR_BOX[1])
@@ -166,7 +139,15 @@ def main() -> None:
     clean_plate = Image.composite(repair, source, repair_mask)
     clean_plate.putalpha(255)
 
+    # The live page uses the pen-free plate plus a tiny lossless pen overlay.
+    # Preserve the stable pen-free donor crop while applying this doorway repair
+    # to that runtime plate as well.
+    pen_free_patch = no_pen_source.crop(PEN_FREE_PATCH_BOX)
+    no_pen_plate = clean_plate.copy()
+    no_pen_plate.paste(pen_free_patch, PEN_FREE_PATCH_BOX[:2])
+
     save_png_and_webp(clean_plate, OUTPUT_PLATE)
+    save_png_and_webp(no_pen_plate, OUTPUT_NO_PEN_PLATE)
     save_png_and_webp(doorway, OUTPUT_LAYER)
 
     preview = clean_plate.copy()

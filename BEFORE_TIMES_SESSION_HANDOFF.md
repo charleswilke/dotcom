@@ -446,9 +446,18 @@ images/before-times/absurd-alchemy-clean-v4-no-pen.{png,webp}
   state says the pen is in inventory or on the guest book.
 
 images/before-times/layers/alchemy-exit-door-lobby-v2.{png,webp}
-  Full-scene transparent exit sprite. Original concept pixels preserve the
-  installed reverse-view perspective; frame, threshold, reverse clapboard,
-  and visible lobby interior share one alpha silhouette for hover lighting.
+  Superseded full-scene reverse-clapboard exit sprite.
+
+images/before-times/layers/alchemy-exit-door-lobby-v3.{png,webp}
+  Current full-scene transparent exit sprite. The visible lobby and threshold
+  retain original concept pixels; the inside-facing surround uses blackened
+  steel, oxblood acoustic padding, worn brass trim, and three amber utility
+  lamps. The combined silhouette remains one hoverable layer.
+
+tools/before-times-clean-patches/alchemy-exit-door-interior-frame-source-v1.png
+  Generated source render for the V3 inside-facing cinema surround. The exit
+  builder masks out all regenerated lobby/room pixels and perspective-warps
+  only the lintel and jambs into the locked full-room composition.
 
 images/before-times/layers/alchemy-hand-logo-v1.{png,webp}
   Full-scene transparent hand-emblem interaction layer, aligned to the repaired
@@ -490,8 +499,9 @@ tools/build-absurd-alchemy-hand-logo.py
   generated hand master, writes the runtime PNG/WebP layer, and emits a preview.
 
 tools/build-absurd-alchemy-exit-door.py
-  Builds the combined exit sprite from original concept pixels, applies the
-  localized no-door repair to V3, and writes the V4 plate plus runtime WebP.
+  Builds the combined exit sprite from original lobby pixels plus the
+  generated inside-facing frame, applies the localized no-door repair to V3,
+  and writes the V4 plate plus runtime WebP.
 
 tools/build-guestbook-no-pen.py
   Composites a narrow generated ruled-paper donor into the locked guest-book

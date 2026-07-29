@@ -161,7 +161,7 @@
                         ['action', 'IVAN paces behind NAYA slowly, methodically.'],
                         ['action', 'Naya silently scans the room, searching for where she could even go in the event that she works herself free.'],
                         ['action', 'Ivan places his hand on her shoulder and twists himself into her eyeline.'],
-                        ['action', 'He scans her eyes, then looks to her forehead attempting to see her chess move before she makes he.'],
+                        ['action', 'He scans her eyes, then looks to her forehead attempting to see her chess move before she makes it.'],
                         ['character', 'IVAN'],
                         ['parenthetical', '(disturbingly somber)'],
                         ['dialogue', 'I had a dog growing up. My mom got it for me when I was in primary school. She never liked that I spent so much time alone, so she got me a puppy.'],

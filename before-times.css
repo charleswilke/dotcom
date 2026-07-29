@@ -2063,8 +2063,8 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
 
 .bt-game-hotspot-cassette {
     z-index: 8;
-    left: 78.35%;
-    top: 85.2%;
+    left: 76.85%;
+    top: 86.7%;
     width: 6.35%;
     height: 7.2%;
     overflow: visible;
@@ -2080,8 +2080,8 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
     height: 126%;
     object-fit: contain;
     pointer-events: none;
-    opacity: 0.66;
-    filter: brightness(0.66) saturate(0.78) drop-shadow(0 2px 1px rgba(0, 0, 0, 0.88));
+    opacity: 1;
+    filter: brightness(0.82) saturate(0.85) drop-shadow(0 2px 1px rgba(0, 0, 0, 0.88));
     transform: perspective(18rem) rotateX(55deg) rotate(-1deg) scale(0.94);
     transition: opacity 160ms ease, filter 180ms ease, transform 200ms ease;
 }

@@ -908,6 +908,11 @@
     const inventoryCassetteDragGhost = document.getElementById('bt-inventory-cassette-drag-ghost');
     const inventoryDrawer = document.getElementById('bt-inventory-drawer');
     const inventoryHandle = document.getElementById('bt-inventory-handle');
+    // The Sound Stage shipped as #absurd-alchemy first. The old hash stays
+    // supported so links shared before the rename keep working.
+    const ALCHEMY_HASH = '#sound-stage';
+    const ALCHEMY_HASH_LEGACY = '#absurd-alchemy';
+
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
     const alchemyScene = document.getElementById('bt-alchemy-scene');
@@ -922,6 +927,7 @@
     const gameIframe = document.getElementById('bt-game-player');
     const gameMocapGif = document.getElementById('bt-game-mocap-gif');
     const gamePlayFallback = document.getElementById('bt-game-play-fallback');
+    const gameScreenToggle = document.getElementById('bt-game-screen-toggle');
     const gameRoleCase = document.getElementById('bt-game-role-case');
     const gameRoleTitle = document.getElementById('bt-game-role-title');
     const gameRoleYear = document.getElementById('bt-game-role-year');
@@ -4569,7 +4575,38 @@
         });
     }
 
+    function updateGameScreenToggle(mode) {
+        if (!gameScreenToggle) return;
+        if (mode === 'off') {
+            gameScreenToggle.hidden = true;
+            return;
+        }
+        const label = currentGameProject ? `the ${currentGameProject.title} trailer` : 'the trailer';
+        gameScreenToggle.setAttribute('aria-label', mode === 'paused' ? `Resume ${label}` : `Pause ${label}`);
+        gameScreenToggle.hidden = false;
+    }
+
+    // The monitor is small enough that YouTube's own controls are awkward, so a
+    // tap on the screen toggles playback, mirroring toggleAlchemyPlayback on the
+    // hero CRT. The player's state events do the rest of the work, exactly as if
+    // the case hotspot had driven it.
+    function toggleGameTrailerPlayback() {
+        if (!window.YT || !gamePlayer || typeof gamePlayer.getPlayerState !== 'function') return;
+        const states = window.YT.PlayerState;
+        const state = gamePlayer.getPlayerState();
+        if (state === states.PLAYING || state === states.BUFFERING) {
+            gamePlayer.pauseVideo();
+            showStatus('Paused mid-trailer. Tap the screen to resume.', 3200);
+            return;
+        }
+        if (state === states.ENDED) gamePlayer.seekTo(0, true);
+        gamePlayer.playVideo();
+        gamePlayFallback.hidden = true;
+        showStatus('Rolling again.', 2400);
+    }
+
     function powerDownGameScreen() {
+        updateGameScreenToggle('off');
         gameTrailerScreen.classList.remove('is-playing', 'is-loading');
         gameTrailerScreen.classList.add('is-powering-off');
         gameScene.classList.remove('is-trailer-playing');
@@ -4588,6 +4625,7 @@
             gameTrailerScreen.classList.remove('is-loading', 'is-powering-off');
             gameScene.classList.add('is-trailer-playing');
             gamePlayFallback.hidden = true;
+            updateGameScreenToggle('playing');
             setGameCaseState('playing');
             return;
         }
@@ -4596,6 +4634,7 @@
             gameTrailerScreen.classList.remove('is-playing', 'is-loading');
             gameScene.classList.remove('is-trailer-playing');
             gamePlayFallback.hidden = true;
+            updateGameScreenToggle('paused');
             setGameCaseState('paused');
             return;
         }
@@ -4871,8 +4910,8 @@
         loadGlowTracks();
         primeAlchemyPlayer(ALCHEMY_VIDEOS[0]).catch(() => {});
 
-        if (settings.updateHistory !== false && window.location.hash !== '#absurd-alchemy') {
-            window.history.pushState({ btRoom: 'alchemy' }, '', '#absurd-alchemy');
+        if (settings.updateHistory !== false && window.location.hash !== ALCHEMY_HASH) {
+            window.history.pushState({ btRoom: 'alchemy' }, '', ALCHEMY_HASH);
         }
         showStatus('The Sound Stage. The director’s chair controls the big screen.', 4200);
         window.setTimeout(() => alchemyChairHotspot.focus({ preventScroll: true }), 380);
@@ -4958,6 +4997,7 @@
         if (gamePlayer && typeof gamePlayer.pauseVideo === 'function') gamePlayer.pauseVideo();
         stopMocapGif();
         gamePlayFallback.hidden = true;
+        updateGameScreenToggle('off');
         gameTrailerScreen.classList.remove('is-loading', 'is-playing');
         gameScene.classList.remove('is-trailer-playing');
         if (currentGameProject) setGameCaseState('paused');
@@ -5108,11 +5148,20 @@
     }
 
     function syncRoomFromLocation() {
-        if (window.location.hash === '#absurd-alchemy') {
+        if (window.location.hash === ALCHEMY_HASH || window.location.hash === ALCHEMY_HASH_LEGACY) {
             if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
             if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
             if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
             enterAlchemyRoom({ updateHistory: false });
+            // Links shared before the room was renamed still land here; quietly
+            // canonicalize the address bar without adding a history entry.
+            if (window.location.hash === ALCHEMY_HASH_LEGACY) {
+                window.history.replaceState(
+                    { btRoom: 'alchemy' },
+                    '',
+                    `${window.location.pathname}${window.location.search}${ALCHEMY_HASH}`
+                );
+            }
             return;
         }
         if (window.location.hash === '#game-development') {
@@ -5780,6 +5829,7 @@
     alchemyPlayFallback.addEventListener('click', retryAlchemyPlayback);
     alchemyTapToggle.addEventListener('click', toggleAlchemyPlayback);
     gamePlayFallback.addEventListener('click', retryGamePlayback);
+    if (gameScreenToggle) gameScreenToggle.addEventListener('click', toggleGameTrailerPlayback);
 
     document.querySelectorAll('[data-action]').forEach((button) => {
         button.addEventListener('click', () => {

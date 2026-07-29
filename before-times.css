@@ -1847,6 +1847,9 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
     inset: 0;
     display: grid;
     place-items: center;
+    /* Decorative plate. It stays in the layout at opacity 0 once a trailer is
+       loaded, so it must not swallow taps meant for the screen beneath it. */
+    pointer-events: none;
     color: rgba(220, 198, 241, 0.72);
     background:
         radial-gradient(circle at 52% 48%, rgba(145, 91, 189, 0.12), transparent 55%),
@@ -1861,6 +1864,32 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
 
 .bt-game-trailer-screen.is-loaded .bt-game-trailer-idle {
     opacity: 0;
+}
+
+/* Tap anywhere on the monitor to pause or resume, the same affordance the
+   Sound Stage's .bt-crt-tap-toggle gives the hero CRT. It lives inside the
+   video plane, and the bottom band stays clear so YouTube's own control bar
+   and fullscreen button remain reachable on a screen this small. */
+.bt-game-screen-toggle {
+    position: absolute;
+    z-index: 2;
+    inset: 0 0 16% 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.bt-game-screen-toggle:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 3px rgba(0, 247, 194, 0.65);
+}
+
+/* The mocap gif borrows the same screen; there is no player to toggle then. */
+.bt-game-trailer-screen.is-mocap .bt-game-screen-toggle {
+    display: none;
 }
 
 .bt-game-monitor-glass {

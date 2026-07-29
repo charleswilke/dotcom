@@ -74,7 +74,9 @@ its `::after` is a restrained elliptical floor pool.
 ## Absurd Alchemy room
 
 The Absurd Alchemy doorway now enters a full-width illustrated production room
-at `#absurd-alchemy`. The runtime image is a clean 1672×941 plate with an empty
+at `#sound-stage` (it shipped as `#absurd-alchemy`; that hash still resolves and
+is rewritten to the new one on arrival, see `ALCHEMY_HASH_LEGACY` in
+before-times.js). The runtime image is a clean 1672×941 plate with an empty
 hero CRT; only that screen was replaced, so the original VHS 25, chair, solar
 system, door, props, and perspective remain locked to the concept render.
 
@@ -237,7 +239,7 @@ with immutable caching. The old thumbnail-derived
 rotation.
 
 For re-measuring the two production monitors' glass, open
-`/before-times.html?calibrate=production#absurd-alchemy`. This is the
+`/before-times.html?calibrate=production#sound-stage`. This is the
 generalized four-corner tool the game room's `?calibrate=monitors` pioneered,
 with one twist for these convex tubes: the four handles per monitor mark the
 TRUE corners (where the straight edges would meet), and the overlay generates

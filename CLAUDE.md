@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development
 
-**Local server:** `python3 -m http.server 8080` (or `npx serve` — see .claude/launch.json) — serves the site at http://localhost:8080
+**Local server:** `node .claude/static-server.js` — serves the site at http://localhost:8080 (this is what .claude/launch.json launches)
+
+Use that one, not `python3 -m http.server`, when touching **audio**: python's server ignores `Range` requests, so the browser reports every mp3 as unseekable (`audio.seekable` stays `[0,0]`) and clamps all seeks to zero. The album players' time vial then looks broken locally while working fine on Vercel, which serves `206`. `.claude/static-server.js` answers ranges, so scrubbing is testable locally. This burned us once already.
 
 **TootsJam leaderboard server** (optional): `cd games/TootsJam && npm start`
 

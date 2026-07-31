@@ -2790,14 +2790,26 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options =
             e.preventDefault();
             try { vial.setPointerCapture(e.pointerId); } catch (err) {}
             const wasPlaying = !audioEl.paused;
-            if (wasPlaying) audioEl.pause();
+            if (wasPlaying) {
+                // A scrub's pause is transient, not the listener stopping the
+                // song — flag it so cover-art choreography doesn't treat it as
+                // "at rest" and flash the album cover for the length of a drag.
+                // Cleared once playback resumes (or fails to), never left stuck.
+                audioEl.isScrubbing = true;
+                audioEl.pause();
+            }
             seekVial(e.clientY);
             const move = function (ev) { seekVial(ev.clientY); };
             const up = function () {
                 vial.removeEventListener('pointermove', move);
                 vial.removeEventListener('pointerup', up);
                 vial.removeEventListener('pointercancel', up);
-                if (wasPlaying) setTimeout(function () { audioEl.play().catch(function () {}); }, 50);
+                if (wasPlaying) setTimeout(function () {
+                    const clear = function () { audioEl.isScrubbing = false; };
+                    const resumed = audioEl.play();
+                    if (resumed && resumed.then) resumed.then(clear, clear);
+                    else clear();
+                }, 50);
             };
             vial.addEventListener('pointermove', move);
             vial.addEventListener('pointerup', up);
@@ -3894,6 +3906,85 @@ function updateNowPlayingDisplays(elements, title, metaTitle) {
     }
 }
 
+// ── Cover-art choreography ──────────────────────────────────────────────────
+// GWOR and JC share one rule: the album cover shows at rest, each track's title
+// art shows while it plays. Returns a ready-made `hooks` object for
+// createAlbumPlayer. Two pieces of state keep the album cover from strobing
+// through a track change:
+//   - isChangingTrack swallows the `pause` event a manual track switch fires
+//   - lingerTimer holds the finished track's title art on screen for a beat
+//     after a song ends, so an auto-advance crosses title card → title card.
+//     Without it the album cover flashed: on a natural end the audio is already
+//     paused when `ended` fires, so loadTrack sees wasPlaying === false and
+//     falls to the at-rest branch until the next track's `play` event lands.
+function createCoverChoreographer({ coverImg, tracks, audio, albumAlt, lingerMs = 1100 }) {
+    const albumCoverSrc = coverImg ? coverImg.src : '';
+    let isChangingTrack = false;
+    let lingerTimer = null;
+
+    function clearLinger() {
+        if (lingerTimer) {
+            clearTimeout(lingerTimer);
+            lingerTimer = null;
+        }
+    }
+
+    function showAlbumCover() {
+        clearLinger();
+        if (!coverImg) return;
+        if (coverImg.src !== albumCoverSrc) {
+            coverImg.src = albumCoverSrc;
+        }
+        coverImg.alt = albumAlt;
+    }
+
+    function showTrackCover(index) {
+        if (!coverImg) return;
+        const track = tracks[index];
+        if (!track || !track.cover) {
+            showAlbumCover();
+            return;
+        }
+        const trackCoverUrl = new URL(track.cover, window.location.href).href;
+        if (coverImg.src !== trackCoverUrl) {
+            coverImg.src = track.cover;
+        }
+        coverImg.alt = `${track.title} title art`;
+    }
+
+    return {
+        afterLoadTrack: (index, { wasPlaying, autoAdvance }) => {
+            isChangingTrack = wasPlaying || autoAdvance;
+            if (autoAdvance) {
+                // Leave the finished track's art up, then cut to the new one.
+                clearLinger();
+                lingerTimer = setTimeout(() => {
+                    lingerTimer = null;
+                    // Autoplay refused mid-album → fall back to the at-rest cover.
+                    if (audio && audio.paused) showAlbumCover();
+                    else showTrackCover(index);
+                }, lingerMs);
+            } else if (wasPlaying) {
+                showTrackCover(index);
+            } else {
+                showAlbumCover();
+            }
+        },
+        onPlay: (index) => {
+            isChangingTrack = false;
+            if (!lingerTimer) showTrackCover(index);
+        },
+        onPause: () => {
+            // A pause during the linger window is a real pause: drop the timer
+            // and go back to the album cover. Track changes (isChangingTrack)
+            // and vial scrubs (isScrubbing) pause too, but neither is the
+            // listener stopping the song, so the title art stays put.
+            if (audio && !audio.ended && !isChangingTrack && !audio.isScrubbing) showAlbumCover();
+        },
+        onEndedAtEnd: showAlbumCover
+    };
+}
+
 // Mixtape Lightbox Logic
 // ── Album player factory ────────────────────────────────────────────────────
 // The three album lightboxes (Mixtape, GWOR, Junkyard Cabaret) are one shared
@@ -3903,7 +3994,8 @@ function updateNowPlayingDisplays(elements, title, metaTitle) {
 //   - timeReadout: 'text' updates a mm:ss readout, 'vial' syncs the liquid
 //     vial's ARIA value
 //   - hooks.afterLoadTrack / onPlay / onPause / onEndedAtEnd cover the mixtape
-//     side-theme swap and JC's per-track cover-art choreography
+//     side-theme swap; GWOR and JC pass createCoverChoreographer()'s hooks for
+//     their per-track cover art
 function createAlbumPlayer(config) {
     const {
         tracks,
@@ -3980,14 +4072,16 @@ function createAlbumPlayer(config) {
     }
 
     function loadTrack(index, options = {}) {
-        const { syncHash = true } = options;
+        // autoAdvance marks the one case a hook can't infer from wasPlaying: a
+        // song that ran to its end has already flipped audio.paused to true.
+        const { syncHash = true, autoAdvance = false } = options;
         const wasPlaying = !!(audio && !audio.paused);
         currentIndex = index;
         if (audio) {
             audio.src = tracks[index].file;
             audio.load();
         }
-        if (hooks.afterLoadTrack) hooks.afterLoadTrack(index, { wasPlaying, oscilloscope });
+        if (hooks.afterLoadTrack) hooks.afterLoadTrack(index, { wasPlaying, autoAdvance, oscilloscope });
         updateNowPlayingDisplays({
             trackDisplay,
             glassTitle: oscilloscopeTitle,
@@ -4143,7 +4237,7 @@ function createAlbumPlayer(config) {
         audio.addEventListener('ended', () => {
             // Only advance to the next track if not at the end; never loop back.
             if (currentIndex < tracks.length - 1) {
-                loadTrack(currentIndex + 1);
+                loadTrack(currentIndex + 1, { autoAdvance: true });
                 playTrack();
             } else if (hooks.onEndedAtEnd) {
                 hooks.onEndedAtEnd();
@@ -4344,38 +4438,9 @@ function initGWORLightbox() {
     const audio = document.getElementById('gworAudio');
     const trackList = document.getElementById('gworTrackList');
     const coverImg = document.getElementById('gworCoverImg');
-    const albumCoverSrc = coverImg ? coverImg.src : '';
     if (!lightbox || !audio || !trackList) return;
 
     const GWOR_OSC_COLORS = { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' };
-
-    // Cover art choreography (same pattern as JC): the album cover shows at
-    // rest, each track's title art shows while it plays. isChangingTrack keeps
-    // the pause fired by a track switch from flashing the album cover
-    // mid-transition.
-    let isChangingTrack = false;
-
-    function showAlbumCover() {
-        if (!coverImg) return;
-        if (coverImg.src !== albumCoverSrc) {
-            coverImg.src = albumCoverSrc;
-        }
-        coverImg.alt = 'Grief without Ritual Cover';
-    }
-
-    function showTrackCover(index) {
-        if (!coverImg) return;
-        const track = tracks[index];
-        if (!track || !track.cover) {
-            showAlbumCover();
-            return;
-        }
-        const trackCoverUrl = new URL(track.cover, window.location.href).href;
-        if (coverImg.src !== trackCoverUrl) {
-            coverImg.src = track.cover;
-        }
-        coverImg.alt = `${track.title} title art`;
-    }
 
     return createAlbumPlayer({
         tracks,
@@ -4415,26 +4480,12 @@ function initGWORLightbox() {
                 shadowColor: `hsla(${hue}, 100%, 55%, ${0.4 + intensity * 0.4})`
             };
         },
-        hooks: {
-            afterLoadTrack: (index, { wasPlaying }) => {
-                isChangingTrack = wasPlaying;
-                if (wasPlaying) {
-                    showTrackCover(index);
-                } else {
-                    showAlbumCover();
-                }
-            },
-            onPlay: (index) => {
-                isChangingTrack = false;
-                showTrackCover(index);
-            },
-            onPause: () => {
-                if (!audio.ended && !isChangingTrack) {
-                    showAlbumCover();
-                }
-            },
-            onEndedAtEnd: showAlbumCover
-        }
+        hooks: createCoverChoreographer({
+            coverImg,
+            tracks,
+            audio,
+            albumAlt: 'Grief without Ritual Cover'
+        })
     });
 }
 
@@ -4463,37 +4514,9 @@ function initJCLightbox() {
     const audio = document.getElementById('jcAudio');
     const trackList = document.getElementById('jcTrackList');
     const coverImg = document.getElementById('jcCoverImg');
-    const albumCoverSrc = coverImg ? coverImg.src : '';
     if (!lightbox || !tile || !audio || !trackList) return;
 
     const JC_OSC_COLORS = { trace: '#c27038', glow: 'rgba(194, 112, 56, 0.9)', graticule: 'rgba(194, 112, 56, 1)' };
-
-    // Cover art choreography: the album cover shows at rest, each track's title
-    // art shows while it plays. isChangingTrack keeps the pause fired by a
-    // track switch from flashing the album cover mid-transition.
-    let isChangingTrack = false;
-
-    function showAlbumCover() {
-        if (!coverImg) return;
-        if (coverImg.src !== albumCoverSrc) {
-            coverImg.src = albumCoverSrc;
-        }
-        coverImg.alt = 'Junkyard Cabaret Cover';
-    }
-
-    function showTrackCover(index) {
-        if (!coverImg) return;
-        const track = tracks[index];
-        if (!track || !track.cover) {
-            showAlbumCover();
-            return;
-        }
-        const trackCoverUrl = new URL(track.cover, window.location.href).href;
-        if (coverImg.src !== trackCoverUrl) {
-            coverImg.src = track.cover;
-        }
-        coverImg.alt = `${track.title} title art`;
-    }
 
     return createAlbumPlayer({
         tracks,
@@ -4533,26 +4556,12 @@ function initJCLightbox() {
                 shadowColor: `hsla(${hue}, 100%, 50%, ${0.4 + intensity * 0.4})`
             };
         },
-        hooks: {
-            afterLoadTrack: (index, { wasPlaying }) => {
-                isChangingTrack = wasPlaying;
-                if (wasPlaying) {
-                    showTrackCover(index);
-                } else {
-                    showAlbumCover();
-                }
-            },
-            onPlay: (index) => {
-                isChangingTrack = false;
-                showTrackCover(index);
-            },
-            onPause: () => {
-                if (!audio.ended && !isChangingTrack) {
-                    showAlbumCover();
-                }
-            },
-            onEndedAtEnd: showAlbumCover
-        }
+        hooks: createCoverChoreographer({
+            coverImg,
+            tracks,
+            audio,
+            albumAlt: 'Junkyard Cabaret Cover'
+        })
     });
 }
 

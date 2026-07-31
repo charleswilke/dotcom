@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the small pen overlay that sits on top of the pen-less Sound Stage backdrop.
+"""Build the small pen overlay that sits on top of the pen-less Screening Room backdrop.
 
 The scene used to ship two full 1.5MB backdrops that were identical except for the
 painted fountain pen, swapping between them to make the pen appear and disappear.

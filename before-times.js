@@ -16,7 +16,7 @@
         },
         alchemy: {
             kicker: 'Door 01 // Los Angeles // 2013–2017',
-            title: 'The Sound Stage',
+            title: 'Screening Room',
             copy: [
                 'The crooked production office of the film years — scripts, short films, web series, questionable props, and twenty-five projects shepherded from idea to finished thing, most of them under the Absurd Alchemy banner.',
                 'Its project files now connect the working title of French Kitty to the finished film, open the production machinery inside The NoHo Rag, follow Call Me Lucifer from broadcast scandal into Burbank exile — and preserve The Sisters Hayes, the unproduced horror short whose whole development file survived.'
@@ -26,7 +26,7 @@
         },
         alchemyHand: {
             theme: 'booth',
-            kicker: 'The Sound Stage // the company',
+            kicker: 'Screening Room // the company',
             title: 'The hand of Absurd Alchemy',
             copy: [
                 'Still reaching for one more impossible shot. The hand belongs to a company, though — almost nothing in this room was made alone.',
@@ -115,7 +115,7 @@
             title: 'Floor plan',
             copy: ['The lobby and all four career rooms are open. The Knowledge Maze contains a second route to the present for anyone willing to give the machine enough human context.'],
             routes: [
-                { id: 'alchemy', label: '01 · The Sound Stage' },
+                { id: 'alchemy', label: '01 · Screening Room' },
                 { id: 'games', label: '02 · Game Development' },
                 { id: 'content', label: '03 · The Content Factory' },
                 { id: 'docs', label: '04 · The Knowledge Maze' },
@@ -908,10 +908,10 @@
     const inventoryCassetteDragGhost = document.getElementById('bt-inventory-cassette-drag-ghost');
     const inventoryDrawer = document.getElementById('bt-inventory-drawer');
     const inventoryHandle = document.getElementById('bt-inventory-handle');
-    // The Sound Stage shipped as #absurd-alchemy first. The old hash stays
-    // supported so links shared before the rename keep working.
-    const ALCHEMY_HASH = '#sound-stage';
-    const ALCHEMY_HASH_LEGACY = '#absurd-alchemy';
+    // The Screening Room shipped first as #absurd-alchemy and then as
+    // #sound-stage. Both old hashes stay supported so shared links keep working.
+    const ALCHEMY_HASH = '#screening-room';
+    const ALCHEMY_HASH_ALIASES = new Set(['#sound-stage', '#absurd-alchemy']);
 
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
@@ -3251,7 +3251,7 @@
     }
 
     const ARCHIVE_HEADERS = {
-        alchemy: { kicker: 'The Sound Stage // project file', title: 'The mutation archive' },
+        alchemy: { kicker: 'Screening Room // project file', title: 'The mutation archive' },
         press: { kicker: 'Student press // recovered byline', title: 'The clipping file' },
         content: { kicker: 'Content Factory // recovered work', title: 'The output archive' }
     };
@@ -3261,7 +3261,7 @@
         archiveKicker.textContent = header.kicker;
         archiveTitle.textContent = header.title;
         archiveDialog.classList.add('bt-archive-doc');
-        // The Sound Stage collection opens from inside the dark production room.
+        // The Screening Room collection opens from inside the dark production room.
         archiveDialog.classList.toggle('bt-archive-booth', collectionName === 'alchemy');
         if (collectionName === 'alchemy') renderAlchemyPiece(pieceId);
         else if (collectionName === 'content') renderContentPiece(pieceId);
@@ -4913,7 +4913,7 @@
         if (settings.updateHistory !== false && window.location.hash !== ALCHEMY_HASH) {
             window.history.pushState({ btRoom: 'alchemy' }, '', ALCHEMY_HASH);
         }
-        showStatus('The Sound Stage. The director’s chair controls the big screen.', 4200);
+        showStatus('Screening Room. The director’s chair controls the big screen.', 4200);
         window.setTimeout(() => alchemyChairHotspot.focus({ preventScroll: true }), 380);
     }
 
@@ -5148,14 +5148,14 @@
     }
 
     function syncRoomFromLocation() {
-        if (window.location.hash === ALCHEMY_HASH || window.location.hash === ALCHEMY_HASH_LEGACY) {
+        if (window.location.hash === ALCHEMY_HASH || ALCHEMY_HASH_ALIASES.has(window.location.hash)) {
             if (activeRoom === 'games') leaveGameRoom({ updateHistory: false });
             if (activeRoom === 'content') leaveContentRoom({ updateHistory: false });
             if (activeRoom === 'knowledge') leaveKnowledgeRoom({ updateHistory: false });
             enterAlchemyRoom({ updateHistory: false });
             // Links shared before the room was renamed still land here; quietly
             // canonicalize the address bar without adding a history entry.
-            if (window.location.hash === ALCHEMY_HASH_LEGACY) {
+            if (ALCHEMY_HASH_ALIASES.has(window.location.hash)) {
                 window.history.replaceState(
                     { btRoom: 'alchemy' },
                     '',

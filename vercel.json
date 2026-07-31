@@ -60,14 +60,15 @@
   ],
   "redirects": [
     { "source": "/tootsjam", "destination": "/tootsjam/", "permanent": true },
-    { "source": "/chessblaster", "destination": "/chessblaster/", "permanent": true }
+    { "source": "/chessblaster", "destination": "/chessblaster/", "permanent": true },
+    { "source": "/before-times/sound-stage(/?)", "destination": "/before-times/screening-room", "permanent": true }
   ],
   "rewrites": [
     { "source": "/read/:slug", "destination": "/api/article-preview?slug=:slug" },
     { "source": "/read/:slug/", "destination": "/api/article-preview?slug=:slug" },
     { "source": "/s2i(/?)", "destination": "/s2i.html" },
     { "source": "/s2i-present(/?)", "destination": "/OMAxAI/viewer/index.html" },
-    { "source": "/before-times/sound-stage(/?)", "destination": "/before-times-sound-stage.html" },
+    { "source": "/before-times/screening-room(/?)", "destination": "/before-times-screening-room.html" },
     { "source": "/before-times/game-development(/?)", "destination": "/before-times-game-development.html" },
     { "source": "/before-times/content-factory(/?)", "destination": "/before-times-content-factory.html" },
     { "source": "/before-times/knowledge-maze(/?)", "destination": "/before-times-knowledge-maze.html" },

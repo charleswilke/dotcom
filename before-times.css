@@ -1856,7 +1856,7 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
 }
 
 /* Tap anywhere on the monitor to pause or resume, the same affordance the
-   Sound Stage's .bt-crt-tap-toggle gives the hero CRT. It lives inside the
+   Screening Room's .bt-crt-tap-toggle gives the hero CRT. It lives inside the
    video plane, and the bottom band stays clear so YouTube's own control bar
    and fullscreen button remain reachable on a screen this small. */
 .bt-game-screen-toggle {
@@ -7251,7 +7251,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 }
 
 /* ---------------------------------------------------------------------------
- * The mutation archive — what only the Sound Stage needs
+ * The mutation archive — what only the Screening Room needs
  *
  * The chain is the point of this collection: a script changes shape twice and
  * ends as something you can watch. So it reads left to right and terminates in
@@ -8811,7 +8811,7 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 /* ---------------------------------------------------------------------------
  * The mutation archive in projection-booth dress
  *
- * The Sound Stage collection opens from inside the dark production room, so the
+ * The Screening Room collection opens from inside the dark production room, so the
  * alchemy archive gets the same brass-framed teal surface as the reel picker
  * and the company panel. `openArchive` sets `.bt-archive-booth` for that
  * collection only — the clipping file and the output archive keep their paper.

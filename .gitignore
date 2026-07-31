@@ -1,4 +1,7 @@
-.claude/
+# .claude/* rather than .claude/ so a single file can be re-included below —
+# git can't un-ignore anything whose parent directory is excluded outright.
+.claude/*
+!.claude/static-server.js
 .DS_Store
 .vercel
 .env*.local

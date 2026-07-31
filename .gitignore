@@ -2,6 +2,7 @@
 # git can't un-ignore anything whose parent directory is excluded outright.
 .claude/*
 !.claude/static-server.js
+!.claude/launch.json
 .DS_Store
 .vercel
 .env*.local

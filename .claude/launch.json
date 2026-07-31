@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "dotcom", "runtimeExecutable": "node", "runtimeArgs": [".claude/static-server.js"], "port": 8080, "autoPort": true }
+  ]
+}

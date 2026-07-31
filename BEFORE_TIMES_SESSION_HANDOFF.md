@@ -71,14 +71,17 @@ dedicated `.bt-door-light` element behind each sprite, so light spill is not
 clipped by an image bounding box. Its `::before` is a narrow opening aura and
 its `::after` is a restrained elliptical floor pool.
 
-## Absurd Alchemy room
+## Screening Room
 
-The Absurd Alchemy doorway now enters a full-width illustrated production room
-at `#sound-stage` (it shipped as `#absurd-alchemy`; that hash still resolves and
-is rewritten to the new one on arrival, see `ALCHEMY_HASH_LEGACY` in
-before-times.js). The runtime image is a clean 1672×941 plate with an empty
+The Absurd Alchemy doorway now enters the full-width illustrated Screening Room
+at `#screening-room` (it previously shipped as `#absurd-alchemy` and then
+`#sound-stage`; both hashes still resolve and are rewritten to the new one on
+arrival, see `ALCHEMY_HASH_ALIASES` in before-times.js). The runtime image is a
+clean 1672×941 plate with an empty
 hero CRT; only that screen was replaced, so the original VHS 25, chair, solar
 system, door, props, and perspective remain locked to the concept render.
+The canonical clean route is `/before-times/screening-room`; the former
+`/before-times/sound-stage` route redirects there permanently.
 
 - The director's chair opens a call-sheet playlist. Selecting a title loads the
   Vimeo source and calls `play()` inside the same click gesture. The current
@@ -239,7 +242,7 @@ with immutable caching. The old thumbnail-derived
 rotation.
 
 For re-measuring the two production monitors' glass, open
-`/before-times.html?calibrate=production#sound-stage`. This is the
+`/before-times.html?calibrate=production#screening-room`. This is the
 generalized four-corner tool the game room's `?calibrate=monitors` pioneered,
 with one twist for these convex tubes: the four handles per monitor mark the
 TRUE corners (where the straight edges would meet), and the overlay generates

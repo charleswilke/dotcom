@@ -40,6 +40,7 @@ Both directories are gitignored. Run `npm run check` before pushing; it covers m
 Static assets that ship with the web build live under `public/` and are served from the site root by Vite:
 
 - `public/assets/pieces/<color><type>.svg` — piece sprites (e.g. `wk.svg`, `bn.svg`). Color is `w` or `b`; type is `p`, `n`, `b`, `r`, `q`, or `k`.
+- `public/assets/pieces/cel-v1/<color><type>-<facing>.png` — transparent cel-shaded character sprites. Facing is `front` or `rear`; the renderer uses rear views for White and front views for Black so the armies face each other, then falls back to a front sprite or the procedural silhouette while the set is incomplete.
 - Future sound effects, capture animations, and isometric tiles should follow the same `public/assets/<category>/` convention so the renderer can load them by predictable paths.
 
 ## Game Loop and Input

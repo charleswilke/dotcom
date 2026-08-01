@@ -12,6 +12,30 @@ const TARGET = "rgba(108, 242, 255, 0.55)";
 const CAPTURE = "rgba(255, 92, 132, 0.55)";
 const CHECK_TINT = "rgba(255, 64, 96, 0.4)";
 
+type PieceFacing = "front" | "rear";
+
+const PIECE_SPRITE_PATHS: Record<string, string> = {
+  "wp-front": "./assets/pieces/cel-v1/wp-front.png",
+  "wp-rear": "./assets/pieces/cel-v1/wp-rear.png",
+  "bp-front": "./assets/pieces/cel-v1/bp-front.png",
+  "bp-rear": "./assets/pieces/cel-v1/bp-rear.png",
+  "wr-front": "./assets/pieces/cel-v1/wr-front.png",
+  "wr-rear": "./assets/pieces/cel-v1/wr-rear.png",
+  "br-front": "./assets/pieces/cel-v1/br-front.png",
+  "br-rear": "./assets/pieces/cel-v1/br-rear.png",
+  "wn-front": "./assets/pieces/cel-v1/wn-front.png",
+  "wn-rear": "./assets/pieces/cel-v1/wn-rear.png",
+  "bn-front": "./assets/pieces/cel-v1/bn-front.png",
+  "bn-rear": "./assets/pieces/cel-v1/bn-rear.png"
+};
+
+const PIECE_SPRITE_FOOT_LINES: Partial<Record<string, number>> = {
+  "wn-rear": 0.892
+};
+
+const pieceSprites = new Map<string, HTMLImageElement>();
+let spriteLoadPromise: Promise<void> | null = null;
+
 export type BoardView = "flat" | "isometric";
 
 export type RenderState = {
@@ -54,8 +78,25 @@ type IsometricProjection = {
 type BoardProjection = FlatProjection | IsometricProjection;
 
 export function loadPieceSprites(onReady: () => void): Promise<void> {
-  onReady();
-  return Promise.resolve();
+  if (spriteLoadPromise) {
+    spriteLoadPromise.then(onReady);
+    return spriteLoadPromise;
+  }
+
+  spriteLoadPromise = Promise.all(
+    Object.entries(PIECE_SPRITE_PATHS).map(([key, src]) => new Promise<void>((resolve) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.onload = () => resolve();
+      image.onerror = () => resolve();
+      image.src = src;
+      pieceSprites.set(key, image);
+    }))
+  ).then(() => {
+    onReady();
+  });
+
+  return spriteLoadPromise;
 }
 
 export function drawBoard(canvas: HTMLCanvasElement, state: RenderState): void {
@@ -399,6 +440,11 @@ function drawBlasterPiece(
   drawPieceGlow(ctx, palette, pulse);
   drawMotionSignature(ctx, piece, palette, pulse);
 
+  if (drawCharacterSprite(ctx, piece)) {
+    ctx.restore();
+    return;
+  }
+
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
   ctx.lineWidth = 4.5;
@@ -411,6 +457,26 @@ function drawBlasterPiece(
 
   drawPieceCuts(ctx, piece, palette, pulse);
   ctx.restore();
+}
+
+function drawCharacterSprite(ctx: CanvasRenderingContext2D, piece: Piece): boolean {
+  const preferredFacing: PieceFacing = piece.color === "w" ? "rear" : "front";
+  const baseKey = `${piece.color}${piece.type}`;
+  const preferredKey = `${baseKey}-${preferredFacing}`;
+  const fallbackKey = `${baseKey}-front`;
+  const spriteKey = pieceSprites.has(preferredKey) ? preferredKey : fallbackKey;
+  const sprite = pieceSprites.get(spriteKey);
+  if (!sprite?.complete || sprite.naturalWidth === 0) return false;
+
+  // All generated masters share a square canvas and a measured foot line at
+  // roughly 93.5% of the image height. Anchoring that line at y=0 lets pieces
+  // with very different silhouettes stand on the same board plane.
+  const boxSize = piece.type === "r" ? 108 : 115;
+  const footLine = PIECE_SPRITE_FOOT_LINES[spriteKey] ?? 0.935;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(sprite, -boxSize / 2, -boxSize * footLine, boxSize, boxSize);
+  return true;
 }
 
 function drawPieceSilhouette(ctx: CanvasRenderingContext2D, type: Piece["type"], pulse: number): void {

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill -f \"python3 -m http.server 8080\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(lsof -i :8080 -sTCP:LISTEN)",
+      "Bash(kill 2295)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}

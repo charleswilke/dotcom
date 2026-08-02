@@ -312,99 +312,156 @@
                         text: 'The suburbs did not fail by offering privacy. They overshot the amount of distance required to provide it.'
                     }
                 ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/fringe-of-suburbia-v1.webp',
+                        alt: 'An aerial view of curving roads and single-family homes in a car-oriented suburb'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/trimming-fringe-suburbia-1-v1.webp'
+                    },
+                    {
+                        label: 'Figure 2',
+                        src: '/images/before-times/archive/trimming-fringe-suburbia-2-v1.webp'
+                    }
+                ],
                 depth: {
                     kind: 'read',
                     label: 'Read the recovered suburbia feature',
-                    meta: 'Reported feature // about 8 minutes',
-                    intro: 'A reading edition of the 2015 feature. Its demographic forecasts are preserved as period analysis, not presented as current planning data.',
+                    meta: 'Complete edition // about 5 minutes',
+                    intro: 'The full article as it was last published, recovered from the 2022 site backup with its images restored to position. Earlier editions of this archive carried a shortened rebuild; this is the complete text.',
                     body: [
                         {
                             type: 'paragraph',
-                            text: 'Few images evoke American prosperity more efficiently than a tree-lined street filled with large single-family homes. Modern suburbia emerged in the late 1940s and came of age in the 1950s, as the United States expanded while much of the world rebuilt after World War II.'
+                            text: 'No image is more evocative of American prosperity than the sprawling tree-lined street with row after row of single-family homes. Suburbia, born in the late 1940s, came of age in the ‘50s during America’s runaway economic expansion while the rest of the world rebuilt after World War II.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'A countrywide web of interstates connected cities and states. Families could recede farther from city centers in search of larger homes and broader lawns—a bigger private piece of the American Dream.'
+                            text: 'The Great Expansion built a countrywide web of interstates connecting cities and states. This helped the suburbs recede further from city centers as families sought a larger slice of The American Dream, with the hopes of bigger houses and broader lawns.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“We created urban sprawl, which spread people further and further apart – further away from their jobs and into communities that weren’t designed to meet their needs,” says Leigh Gallagher, editor at Fortune magazine and the author of The End of the Suburbs.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Sixty years later, Americans are waking from the dream that embraced the United States for decades. Those once idyllic sprawling suburbs are dying. Many social and economic variables that once made sprawl so appealing are changing, and we should have all seen this coming.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Waking from Slumber'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In the 1950s, America rapidly laid down infrastructure and expanded townships that radiated out from cities as fast as construction could allow.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In The End of the Suburbs, Gallagher acknowledges the baby-boomer generation grew up believing the suburban single-family home was the epitome of The American Dream. But rising fuel costs, economic downturn, Millennials marrying less and later in life, smaller family sizes and increased interest in urban living have created a situation where urban sprawl has essentially halted.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Rules of the Game'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Anywhere in America, the fringe of suburbia appears exactly the same: A sprawling suburban township with large homes, broad roadways and distant, isolated strip malls. The residents’ cars are likely status symbols as much as a necessity. Large, luxury SUVs fill the unnecessarily wide suburban roads as residents race to drop the girls at ballet before picking junior up at soccer practice.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Many of these new outlying towns were built with the false presumption there would always be a constant influx of new residents. There is a need for a continual stream of new homeowner taxes, fees and economic dollars to prop up the cost of running each burgeoning town.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But, as more residents are opting to live closer to, and within, city limits, fewer are moving to these distant outlying towns. Reasons include living near work or entertainment might offset the cost of urban living. Tal F writes on his blog, The Greenway Commuter, “It was only after trying out our third suburban community in as many years that we started looking for a different kind of neighborhood.” He adds, “We tried hard to go out for entertainment while living there, but whenever we did, it was always some place far, at least a 20-minute drive away.”'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Something Must’ve Seemed Off'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Think about getting groceries without driving to the store. Does that sound impossible? How many miles do you need to drive for milk? Is it more than 10?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The decades of prosperity allowed American towns to stretch and sprawl, granting every homeowner the opportunity to grab more land and space than needed. “But somewhere between leafy neighborhoods built around lively railroad villages and the shiny new subdivisions in cornfields on the way to Iowa that bill themselves as suburbs of Chicago, we took our wish for privacy too far. The suburbs overshot their mandate,” says Gallagher in a Time op-ed.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Overshooting a sustainable suburbia is not solely the fault of greedy homeowners. Civil engineers and city planners prepared the fringe suburbs for a rapidly increasing population, even when some homeowners protested. Civil engineer Charles Marohn explained his realization in a 2010 blog post, “Confessions of a Recovering Engineer:”'
                         },
                         {
                             type: 'quote',
-                            text: 'We spread people farther apart, farther from their jobs, and into communities that were not designed to meet their needs.'
+                            text: '“When [homeowners] objected to the cost of the wider, faster, treeless road that would turn their peaceful front yard into the viewing area for a drag strip unless they built a concrete barricade along their front property line, I informed them that progress was sometimes expensive, but these standards have been shown to work across the state, the country and the world and I could not compromise with their safety.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Marohn later understood the impact of his forward-thinking. “In retrospect, I understand that this was insanity. Wider, faster, treeless roads not only ruin our public places, they kill people.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In a strange twist, those sprawling suburban streets once viewed so idyllic are now proven to be treacherous. “In fact, recent studies show that living in Manhattan is safer than living in the suburbs (!) when you account for traffic deaths,” Tal F writes.'
                         },
                         {
                             type: 'subhead',
-                            text: 'Waking from slumber'
+                            text: 'Suburban Poverty on the Rise'
                         },
                         {
                             type: 'paragraph',
-                            text: 'By 2015, many variables supporting outward sprawl were changing: fuel costs, economic shocks, smaller families, later marriages, and renewed interest in urban life. The single-family suburb had not disappeared, but the assumption of unlimited outward growth looked increasingly unstable.'
+                            text: 'Those with income flexibility will likely leave the suburbs for homes closer to city centers. Those that can’t afford to move will see these sprawling suburban towns turn into something far less desirable: slums.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Professor Peter Newman of the Perth Australia-based Curtin University says, “if we continue to roll out new land releases and suburbs that are car-dependent, they will become the slums of the future.” Newman’s reasoning is that public transit will soon be prohibitively expensive to operate routes from outlying suburbs to city centers.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Those who depend on public transit may find themselves stranded in a remote suburban outpost, cut off from the economic engine that would normally supply jobs and prosperity.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“If you don’t own a car in the suburbs, you’re screwed. And if you do, you’re extremely vulnerable to shocks in gas prices—and that’s why some analysts and urban planners speculated long years ago that suburbs are becoming the next slums,” says Vice senior editor Brian Merchant. “Newman is right: urban sprawl is finished.”'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/trimming-fringe-suburbia-1-v1.webp',
+                            align: 'center',
+                            width: 725,
+                            page: 1
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Digging into the economic data, Elizabeth Kneebone and Alan Berube of the Brookings Institute have revealed a grim diagnosis for outlying suburbs.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“Poverty rates do remain higher in cities and rural communities than elsewhere. But for three decades the poor population has grown fastest in suburbs,” says Kneebone and Berube in Confronting Suburban Poverty in America.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Poverty in the suburbs has grown by a scale of two-to-one compared to urban poverty growth in the past decade. The Brookings infographic above reveals how suburban poverty has grown and is expected to grow significantly faster in communities far from cities.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/trimming-fringe-suburbia-2-v1.webp',
+                            align: 'center',
+                            width: 725,
+                            page: 2
                         },
                         {
                             type: 'subhead',
-                            text: 'The rules of the fringe'
+                            text: 'Moving Forward'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The outer edge of suburbia repeats a recognizable pattern: large homes, broad roads, isolated retail, and cars that function as necessities as much as status symbols. Daily life becomes a sequence of drives—to work, school, ballet, soccer, dinner, and every gallon of milk.'
+                            text: '“Many older suburbs are still going strong, and real estate developers are beginning to build new suburban neighborhoods that are mixed-use and pedestrian-friendly, a movement loosely known as New Urbanism,” says Gallagher.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Many of these towns were planned around a constant influx of residents. New homeowner taxes, development fees, and consumer spending helped pay for a growing network of streets and services. When growth slowed, the cost of maintaining the network did not.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'People reconsidering the bargain cited proximity. Living closer to work and entertainment could offset a higher urban housing cost by returning time and reducing the amount of life spent in transit.'
-                        },
-                        {
-                            type: 'subhead',
-                            text: 'Something should have seemed off'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'Can you buy groceries without driving? How many miles separate the house from milk? The questions reveal how thoroughly a development pattern can convert distance into a mandatory household expense.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The decades of prosperity allowed towns to stretch, but privacy was sometimes taken beyond its useful mandate. Older rail suburbs joined homes to walkable centers. Newer subdivisions placed the house in a field and called the nearest distant strip mall a town square.'
-                        },
-                        {
-                            type: 'subhead',
-                            text: 'The road engineered for speed'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'Civil engineer Charles Marohn wrote about once defending wider, faster, treeless roads as universal safety standards. He later reversed that view. The designs destroyed public space, encouraged dangerous speeds, and required homeowners to build barriers against the very road intended to serve them.'
-                        },
-                        {
-                            type: 'quote',
-                            text: 'Wider, faster, treeless roads do not merely ruin a public place. They make the place more dangerous.'
-                        },
-                        {
-                            type: 'subhead',
-                            text: 'Suburban poverty on the rise'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The feature’s darkest forecast concerned residents without the flexibility to leave. If employment, services, and reliable transit remained far away, car-dependent communities could become traps for anyone hit by unemployment, disability, rising fuel costs, or the loss of a vehicle.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'Research from the Brookings Institution had already found poverty growing faster in suburbs than in cities or rural communities. The stereotype of poverty as an exclusively urban condition obscured a population spread across places where assistance was harder to reach.'
-                        },
-                        {
-                            type: 'subhead',
-                            text: 'Moving forward'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The essay did not predict the death of every suburb. Older suburbs with established centers remained strong, and developers were beginning to build mixed-use, pedestrian-friendly neighborhoods under the broad banner of New Urbanism.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The dividing line was adaptability. A town able to add housing types, walkable services, safer roads, and practical transit could remain resilient. A distant subdivision built only for perpetual expansion had fewer moves available once the expansion stopped.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The American Dream was not the mistake. The mistake was designing one version of it at such a scale that every resident had to keep paying for the distance.'
+                            text: 'The suburban towns that are able to adapt to this concept of New Urbanism will likely thrive for decades to come. Unfortunately, that leaves many towns across America out of luck. The gathering storm of social and economic variables will likely lead an increasing number of small, outlying towns to an unfortunate and dismal future.'
                         }
                     ]
                 }
@@ -435,95 +492,326 @@
                         text: 'Each design was unique, yet every piece remained an unmistakable reflection of its creator.'
                     }
                 ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/frank-lloyd-wright-v1.webp',
+                        alt: 'The Chapel of the Holy Cross rising from red rocks in Arizona'
+                    },
+                    {
+                        label: 'Frank Lloyd Wright in 1906',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-1-v1.webp',
+                        caption: 'Frank Lloyd Wright in 1906'
+                    },
+                    {
+                        label: 'Martha “Mamah” Borthwick in 1911',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-2-v1.webp',
+                        caption: 'Martha “Mamah” Borthwick in 1911'
+                    },
+                    {
+                        label: 'Taliesin in 1912, as seen from the tea circle',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-3-v1.webp',
+                        caption: 'Taliesin in 1912, as seen from the tea circle'
+                    },
+                    {
+                        label: 'Julian Carlton',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-4-v1.webp',
+                        caption: 'Julian Carlton'
+                    },
+                    {
+                        label: 'The actual hatchet Carlton used',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-5-v1.webp',
+                        caption: 'The actual hatchet Carlton used'
+                    },
+                    {
+                        label: 'Taliesin after the fire. “FLW (center) surveys the damage.”',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-6-v1.webp',
+                        caption: 'Taliesin after the fire. “FLW (center) surveys the damage.”'
+                    },
+                    {
+                        label: 'FLW stands next to a sketch of The Illinois',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-7-v1.webp',
+                        caption: 'FLW stands next to a sketch of The Illinois'
+                    },
+                    {
+                        label: 'Frank Lloyd Wright in 1954',
+                        src: '/images/before-times/archive/frank-lloyd-wright-spotlight-8-v1.webp',
+                        caption: 'Frank Lloyd Wright in 1954'
+                    }
+                ],
                 depth: {
                     kind: 'read',
                     label: 'Read the recovered Wright profile',
-                    meta: 'Long-form profile // about 9 minutes',
-                    intro: 'A reading edition reconstructed from the ten-page 2015 capture. Lead-generation furniture and property prices frozen to that moment have been removed; the biographical arc remains.',
+                    meta: 'Complete edition // about 7 minutes',
+                    intro: 'The full article as it was last published, recovered from the 2022 site backup with its images restored to position. Earlier editions of this archive carried a shortened rebuild; this is the complete text.',
                     body: [
                         {
                             type: 'paragraph',
-                            text: 'It was not only his command of steel, wood, and concrete that made Frank Lloyd Wright a legend of architecture. It was the confidence with which he demonstrated his comfort in the craft. The world, in turn, let that comfort wash over it.'
+                            text: 'His stylistic command of wood, steel and concrete make him an architectural legend. His restrained minimalism remains unmistakable among his peers. Each of his 1,100 designs are as unique as a fingerprint, and a clear reflection of their creator, Frank Lloyd Wright.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'His work is unmistakable beside that of his peers. Each design can feel as distinct as a snowflake, yet every one remains a reflection of its creator.'
+                            text: 'Born in 1867 to William Carey Wright and Anna Lloyd Jones in the sleepy farming community of Richland Center, Wisconsin, Frank Lloyd Wright entered a world in transition. During the throes of western expansion, and two short years after the conclusion of the Civil War, Wright was born decades before Chicago-architect Louis Sullivan would create the modern skyscraper.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Wright’s parents, both teachers, attempted to impress the importance of education on young Frank. And while Wright did attend high school in Madison, Wis. there’s no evidence that he graduated. Even still, he was granted acceptance to University of Wisconsin-Madison in 1886 as a special student but left the following year.'
                         },
                         {
                             type: 'subhead',
-                            text: 'A modern architect enters a changing world'
+                            text: 'Adler and Sullivan / Organic Architecture'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Wright was born in 1867 in Richland Center, Wisconsin, two years after the Civil War. His parents were teachers who impressed the value of education on him, though formal schooling never held him for long. He attended the University of Wisconsin as a special student and left after a year to pursue architecture directly.'
+                            text: 'In 1888, Wright apprenticed under the tutelage of Louis Sullivan, “the Father of Skyscrapers.” This was during a time when a skyscraper was defined as only seven stories tall. For context, Wright began his professional architecture career when the Washington Monument was the tallest structure in the world.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-1-v1.webp',
+                            caption: 'Frank Lloyd Wright in 1906',
+                            align: 'right',
+                            width: 241,
+                            page: 1
                         },
                         {
                             type: 'paragraph',
-                            text: 'In 1888 he apprenticed with Chicago architect Louis Sullivan, the “father of skyscrapers,” at a time when seven stories could still earn the name. Sullivan taught the young Wright to strip away borrowed European ornament and let form follow function.'
+                            text: 'Sullivan taught Wright the basics of form following function. Wright learned the importance of stripping away the ornate styling that was prevalent in most European architecture at the time.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Wright left the firm after taking private commissions in breach of his contract. He then used the Winslow House in River Forest, Illinois, as an early declaration of the approach he would call organic architecture: a building shaped by materials, place, purpose, and the life inside it rather than by inherited decoration.'
+                            text: 'In appropriately defiant Wright fashion, he left that apprenticeship after breaching his contract by taking freelance commissions to design homes.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'After leaving Sullivan, Wright established his signature style of organic architecture using the Winslow House in River Forest, Ill. as a bold declaration of his thesis.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Later in life, Wright explained this approach in his book, An Organic Architecture: The Architecture of Democracy published in 1939:'
                         },
                         {
                             type: 'quote',
-                            text: 'Organic architecture became not a style applied to a structure, but a way of asking the structure what it wanted to be.'
+                            text: '“So here I stand before you preaching organic architecture: declaring organic architecture to be the modern ideal and the teaching so much needed if we are to see the whole of life, and to now serve the whole of life, holding no traditions essential to the great TRADITION. Nor cherishing any preconceived form fixing upon us either past, present or future, but instead exalting the simple laws of common sense or of super-sense if you prefer determining form by way of the nature of materials…”'
                         },
                         {
                             type: 'subhead',
-                            text: 'Mamah Borthwick and Taliesin'
+                            text: 'Martha “Mamah” Borthwick'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-2-v1.webp',
+                            caption: 'Martha “Mamah” Borthwick in 1911',
+                            align: 'right',
+                            width: 210,
+                            page: 2
                         },
                         {
                             type: 'paragraph',
-                            text: 'In 1903 Wright designed a house for Oak Park neighbor Edwin Cheney and met Cheney’s wife, Martha “Mamah” Borthwick. She was educated, independent, and a free-love advocate. Wright was married with six children; Borthwick was married with two. They nevertheless fell in love and left for Europe together, providing irresistible material for the sensational press.'
+                            text: 'In 1903, while designing a house for his Oak Park, Ill. neighbor Edwin Cheney, Wright met Edwin’s wife, Mamah. She was considered progressive for the time, meaning she was a well-educated, free-love advocate with interests outside the house. Some consider her a proto-feminist.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Wright built Taliesin in Spring Green, Wisconsin, on land tied to his maternal family. The house was a home for Borthwick, a working studio, and a school for young architects. Its deep connection to the hillside made it one of the most personal demonstrations of Wright’s philosophy.'
+                            text: 'At that time, Wright had six children with his wife of 20 years, Catherine. This, however, didn’t stop Wright from falling deeply in love with Mamah. Both Edwin and Catherine refused to grant mutual divorces, but the bullheaded Wright didn’t care and whisked Mamah away on a trip through Europe.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'On August 15, 1914, household employee Julian Carlton set fire to Taliesin’s residential wing and attacked people attempting to escape. Seven people were killed, including Borthwick and her two children. Wright returned from Chicago to what he later described as a devastating scene of horror.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'He rebuilt. Taliesin II rose from the wreckage, an act that could not undo the loss but refused to let the work end there.'
+                            text: 'Gossip and speculation ran wild thanks to a newly formed, fledgling paper the Chicago American run by the aggressively provocative yellow-journalist William Randolph Hearst.'
                         },
                         {
                             type: 'subhead',
-                            text: 'Usonia and an American architecture'
+                            text: 'Taliesin’s Devastating Scene of Horror'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Wright kept inventing terms because existing categories felt too small. “Usonia” became his name for an architecture specific to the United States: modest, modern, responsive to its landscape, and available beyond the old mansion tradition.'
+                            text: 'Perhaps the most personal of all FLW structures is Taliesin in Spring Green, Wis. Dedicated to Mamah Borthwick, Taliesin sat atop thirty-one and a half acres of land that was owned by Wright’s maternal ancestors.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-3-v1.webp',
+                            caption: 'Taliesin in 1912, as seen from the tea circle',
+                            align: 'center',
+                            width: 600,
+                            page: 3
                         },
                         {
                             type: 'paragraph',
-                            text: 'The Millard House in Pasadena explored that thesis through modular concrete blocks. Across his career Wright designed homes, churches, schools, hotels, museums, offices, a gas station, an entire city, and one structure so large it still reads like speculative fiction.'
+                            text: 'Far more than a mere love bungalow, Taliesin functioned as Wright’s school for architecture. Welcoming budding young minds yearning to learn from the creator of many unique works known across the world by this point.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Taliesin was intended to be the North Star of Wright’s portfolio, but sadly became the scene of a horrific tragedy of unspeakable evil.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Julian Carlton was in his early thirties when he came to work at Taliesin as a chef for the summer. He was highly recommended from a caterer that Wright previously hired.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-4-v1.webp',
+                            caption: 'Julian Carlton',
+                            align: 'right',
+                            width: 150,
+                            page: 4
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The new chef never quite fit in. He got in a heated argument with Milwaukee-based drafter Emil Brodelle over Carlton’s refusal to saddle Brodelle’s horse. A request not quite fitting a chef’s responsibilities.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Carlton became increasingly paranoid and spent many sleepless nights clutching a butcher knife as he stared out across the rolling hills of Spring Green.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'After another altercation between Carlton and Brodelle came to blows, Carlton decided to quit. His last day was to be August 15, 1914, a Saturday.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'That day Mamah Borthwick issued an urgent telegram to Wright in Chicago. “Come as quickly as you can. Something terrible has happened!”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The plan was simple. Carlton served lunch to Taliesin’s guests precisely at noon, intentionally seating any formidable opponents in a single room to minimize any resistance in the events that were to follow.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'He then grabbed a small hatchet, barricaded the door to that room, and set fire to the building.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'As flames engulfed the guests, Carlton hunted down any attempting to flee. He took this hatchet (right) and killed as many people as he could.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-5-v1.webp',
+                            caption: 'The actual hatchet Carlton used',
+                            align: 'right',
+                            width: 240,
+                            page: 5
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Julian Carlton slaughtered seven unarmed men, women and children that balmy August afternoon.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Sadly, Mamah Borthwick and her two children were among the casualties. She fell from a single blow to the head from Carlton’s hatchet.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“The first person to reach Mamah Borthwich [sic] was Wright’s brother-in-law Andrew Porter. He found her body ablaze as though it has been saturated with gasoline. It was 12:45 p.m.,” recounts Wright biographer Meryle Secrest.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'As Taliesin burned, Carlton receded to the opposite side of a fireproof wall in the furnace room. He carried a small bottle of hydrochloric acid with him and drank the contents in hopes of a swift end.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While the acid did badly burn his esophagus, it didn’t kill him. Carlton was arrested and remained in jail for 47 days before passing due to starvation.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'After receiving the telegram, Wright rushed back from Chicago. Arriving on the scene the same day as the massacre, only a few hours after the horrific events concluded.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Upon arriving, he set his eyes upon the twisted nightmare that Taliesin became. Later in life, Wright described what he saw as a, “devastating scene of horror.”'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-6-v1.webp',
+                            caption: 'Taliesin after the fire. “FLW (center) surveys the damage.”',
+                            align: 'center',
+                            width: 600,
+                            page: 6
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While the man may have never fully recovered from the betrayal and heartbreak, he did rebuild, calling the new structure Taliesin II. He buried Mamah’s remains with a simple tombstone marking her resting place on the grounds of Spring Green, Wis.'
                         },
                         {
                             type: 'subhead',
-                            text: 'The Illinois // one mile high'
+                            text: 'Later in Life / Mile-High The Illinois'
                         },
                         {
                             type: 'paragraph',
-                            text: 'In 1956 Wright proposed a steel-and-glass skyscraper for Chicago that would rise one mile into the sky. The Illinois was designed with more than 500 floors, roughly 18 million square feet, and a daily population of 100,000 people moved by 76 atomic-powered elevators.'
+                            text: 'It would be difficult to find an architect anywhere in the world with as varied a portfolio of projects both realized and planned as Frank Lloyd Wright. He designed homes, churches, community centers, schools, hotels, museums, corporate offices, a gas station, an entire city, and even drew up plans for a record-breaking mile-high skyscraper.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-7-v1.webp',
+                            caption: 'FLW stands next to a sketch of The Illinois',
+                            align: 'right',
+                            width: 205,
+                            page: 7
                         },
                         {
                             type: 'paragraph',
-                            text: 'Wright disliked the bloated centralization of cities, but if centralization was inevitable, he argued, there was no reason to keep fooling around. The proposal was audacious, impractical, and completely sincere—a final demonstration of the scale at which his imagination operated.'
+                            text: 'Planned to be the crown gem of Chicago’s skyline, towering a mile straight into the heavens, The Illinois might just have been Wright’s wildest proposed project of his career.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'During the nationwide debate on centralization in Post-WWII America, many believed the government would function best if the decision makers were contained in one building. This would create the need for inconceivably massive super-structures in the 1950s.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Wright was personally not a fan of bloating the already strained cityscapes, having said in his book A Testament:'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“The primitive ideals of centralization are now largely self-defeating. Human crucifixion by vertically on the now static checkerboard of the old city is pattern already in agony; yet for lack of any organic planning it is going on and on–not living, but rather hanging by its eyebrows from its nervous system.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While he championed organic architecture, he recognized the need for massive, vertigo-inducing structures. Therefore, he concluded, “If we’re going to have centralization, why not quit fooling around and have it.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And he was serious about following through by submitting plans for his mile-high building made of steel and glass. To this day, no structure comes close to this dizzying height. It would have been twice the height of today’s current tallest building, the Burj Khalifa in Dubai, and four times the height of that time’s tallest building, the Empire State Building.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'With more than 500 floors and a projected 18 million square feet, Wright assured the skeptical public in 1956 that The Illinois could be built. It would accommodate 100,000 people every day by running 76 atomic-powered elevators that could lift 100 people per cabin.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The building would mainly be provisioned for civic and governmental operations, but the top nine floors would be earmarked for TV sound stages. Surely, the views from those windows would put any other local news broadcast to shame.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Wright confidently left Chicago after injecting optimism and wonder into the city’s administrators and receiving the honor of having October 17th proclaimed Frank Lloyd Wright day.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Sadly, two years after leaving Chicago, Wright passed away in Arizona in 1959. After his passing, interest for his mile-high monument diminished, leaving the plans unrealized.'
                         },
                         {
                             type: 'subhead',
-                            text: 'Gone, not forgotten'
+                            text: 'Gone, but not forgotten'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/frank-lloyd-wright-spotlight-8-v1.webp',
+                            caption: 'Frank Lloyd Wright in 1954',
+                            align: 'right',
+                            width: 210,
+                            page: 8
                         },
                         {
                             type: 'paragraph',
-                            text: 'Wright died in 1959, but the schools at Taliesin and Taliesin West extended his influence through generations of architects. Taliesin apprentice Rowan Maiden designed Nepenthe in Big Sur, a restaurant that became a gathering place for artists including Henry Miller and Jack Kerouac.'
+                            text: 'Wright oversaw many Taliesin students’ projects before his passing. His influence on the young architects of tomorrow gave way to an eternal spring of fantastic structures.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The buildings are the obvious legacy. The deeper one is permission: permission to treat a house, a church, a school, or even an impossible skyscraper as a new problem rather than a familiar shape waiting to be repeated.'
+                            text: 'This includes such iconic structures as Nepenthe in Big Sur, Calif. Created by Taliesin-trained architect Rowan Maiden. This warm and inviting eatery became a local haunt for the bohemian artists of the time, including Henry Miller and Jack Kerouac. Nepenthe continues operating to this day and remains a gem of refuge alone California’s picturesque Highway One.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And Taliesin II continues to accept new creative contemporary minds, inspiring the next generation of bold architecture. The school remained so successful it spawned the western counterpart Taliesin West nestled in the foothills of Scottsdale, Ariz.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Wright’s incredible portfolio of structures, and a dedicated following will ensure a continued impact on American architecture for ages to come.'
                         }
                     ]
                 }
@@ -653,79 +941,120 @@
                         text: 'The public did not merely need the product explained. It needed a reason to consent to the product’s presence.'
                     }
                 ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/google-glass-slow-death-v1.webp',
+                        alt: 'The original Google Glass wearable computer against a black background'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/google-glass-slow-death-1-v1.webp'
+                    }
+                ],
                 depth: {
                     kind: 'read',
                     label: 'Read the complete Glass postmortem',
-                    meta: 'Technology time capsule // about 6 minutes',
-                    intro: 'The 2014 essay rebuilt from its captured publication. Product status, pricing, and company strategy are intentionally presented in their period context.',
+                    meta: 'Complete edition // about 4 minutes',
+                    intro: 'The full article as it was last published, recovered from the 2022 site backup with its images restored to position. Earlier editions of this archive carried a shortened rebuild; this is the complete text.',
                     body: [
                         {
                             type: 'paragraph',
-                            text: 'Sarah Slocum wanted to go for a drink with friends after work. The San Francisco tech writer and proud Google Glass wearer quickly discovered that not everyone was receptive to a wearable computer and camera on a stranger’s face.'
+                            text: 'Sarah Slocum just wanted to go out for a drink after work with friends. Slocum, a San Francisco-based tech writer and proud Google Glass owner, soon realized not everyone is terribly receptive to a wearable computer-and-camera attached to a stranger’s face.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'What might have begun with an impolite request to remove the device became a confrontation. Google had already acknowledged the social problem in its own etiquette guide, warning owners not to become “glassholes”: creepy or rude users who ignored other people’s privacy and discomfort.'
+                            text: 'An evening that might have started with not-so-polite requests for her to remove her face computer, quickly devolved into an uncomfortable confrontation. As you can see from the video Slocum recorded from her device:'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The bar fight contained an irony. As patrons reached toward Slocum’s Glass because they believed it was recording them without consent, multiple security cameras mounted around the room captured the entire event.'
+                            text: 'Slocum is a member of a small demographic that has since been labeled glassholes. Becoming a glasshole is a Google-acknowledged problem with Glass owners. Google’s own documents define a glasshole as a creepy or rude person who does not respect the wishes of others with regards to the use of Glass. “Respect others’ privacy and if they have questions about Glass don’t get snappy,” requests Google.'
                         },
                         {
-                            type: 'quote',
-                            text: 'Surveillance and society were already synonymous. Glass made the camera impossible to politely ignore.'
+                            type: 'paragraph',
+                            text: 'Fault may rest on both parties at that San Francisco bar, but there’s an inherent irony in Slocum’s altercation. As the angry bar patrons attempted to rip the device from Slocum’s face for her supposedly recording video without their consent, multiple wall-mounted security cameras silently captured the conflict.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This irony may be the underlying reason why Google Glass is now dying a slow death.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Surveillance and society are now synonymous. Stepping into public spaces now carries the implied understanding that you will be photographed. Thinking you won’t be seen, or recorded, when you leave your house is a delightfully antiquated assumption.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/google-glass-slow-death-1-v1.webp',
+                            width: 2400,
+                            page: 1
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'For those who might doubt the stigma of being labeled a glasshole while wearing the $1,500 Google novelty, here is a real-world experiment you can try yourself: Carry around your phone and point the camera’s lens directly at people as you walk down the street.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'You’ll received pointed comments concerning your motives and actions. You might hear requests to stop filming even if you’re not, and pressure to divulge what you’ll be “using those for.” Mothers may shield their children as you make your way past them based on the assumption that you’re a creep.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This situation is reminiscent of Jeff Goldblum’s quote from Jurassic Park. His character, at a loss with technology-run-wild, said: “Yeah, yeah, but your scientists were so preoccupied with whether or not they could that they didn’t stop to think if they should.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'That’s because this isn’t a question of good and evil. This isn’t even an exercise in right from wrong. It is merely the confusing boundaries between could and should. And that confusion will ultimately kill Google Glass.'
                         },
                         {
                             type: 'subhead',
-                            text: 'A lens where a face should be'
+                            text: 'Google’s Fleeting Interest in its Own Baby'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Anyone doubting the stigma could reproduce it without buying the $1,500 device: walk through a mall with a phone camera pointed directly at every person you pass. Even if the camera is not recording, people will ask what you are doing, where the images are going, and why your lens has made them its subject.'
+                            text: 'Google has a history of abandoning its own products. Google Wave, Google+, Orkut, Google Reader, iGoogle, etc., all represent Google’s lack of interest in bringing a product to market and supporting it for the long term. Some may suggest that Google’s products are perpetually in Open Beta, meaning not officially released yet widely available. Maybe the company uses this as an excuse to release half-finished products with no real marketing strategy.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'That reaction is not a clean argument for or against the technology. It is evidence that social boundaries live somewhere between what a device can do and what everyone around it has agreed it should do.'
+                            text: 'Google first called them Glass Explorers, but what most might just as easily call beta testers. The hope seemed to be that enthusiastic and influential users would market-by-example to a salivating mass-market consumer waiting to jump at the chance of the prestige of wearing Glass. Unfortunately, those influential first users turned the public perception from wide-eyed wonder to something a few pitchforks shy of the climax in Frankenstein.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The Glass Explorers campaign most certainly was not received as cool, or even desirable. Google’s hope for organic news stories highlighting the wide range of Glass uses didn’t materialize. In the end, the news stories focused more on public reaction, which was almost universally negative. Stories included shouting matches, assaults, and movie-theater ejections; signaling that the public just didn’t understand the product and felt threatened when they saw someone wearing Glass.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Honestly, who can blame them?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Also, consider Google’s tepid insistence that always-on facial recognition software would be banned from Glass, while also teaching programmers how easy it was to circumvent that restriction. “Google itself provided the information needed for developers to ‘hack’ its Glass systems to provide such services during a session at its I/O conference in May called ‘Voiding Your Warranty: Hacking Glass’,” reports Charles Arthur at The Guardian.'
                         },
                         {
                             type: 'subhead',
-                            text: 'Google’s fleeting interest in its own baby'
+                            text: 'Fumbled Marketing Potential'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The essay placed Glass inside Google’s history of launching ambitious products without always sustaining them. The company recruited “Explorers”—influential early adopters who were expected to market the device by example to a mass audience.'
+                            text: 'Google’s failure to provide Glass to the desired Explorer demographic is crystal clear when compared to GoPro’s successful user-generated marketing campaign. GoPro makes a compact, waterproof go-anywhere camera.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Instead, the prestige became part of the backlash. Stories about Glass focused less on extraordinary uses than on arguments, assaults, theater ejections, and the unease of encountering an always-available camera. The public did not see an adventurous new point of view. It saw a stranger wearing a data company on their face.'
+                            text: 'The remarkable footage created by users and presented in GoPro’s marketing shows the vast potential for that adventurous product. Recently, GoPro released a dog harness called Fetch that allows users to attach the waterproof camera to their dog. The footage is as gripping as any free-running parkour video.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It’s clear Google targeted a demographic that isn’t living the kind of life that lends itself to gripping footage. Since primarily the Explorers chosen by Google were mostly Bay-Area tech journalists, Glass became more of a mundane personal assistant than a tool to capture the POV of an adventurous life. By Google’s own decision the term Glass Explorer became something of an oxymoron.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“Google is the wrong company to push a product like this because to most users Google is a faceless corporation that deals in information. It’s a HAL 9000,” says ZDNet contributor Adrian Kingsley-Hughes. Quite simply, Google is not cool. Apple is cool. GoPro is cool. Google is data. Google is interested in collecting and quantifying every morsel of data it can gather on every single person. So, perhaps the most poisonous characteristic of Glass is the company that makes it.'
                         },
                         {
                             type: 'subhead',
-                            text: 'The GoPro comparison'
+                            text: 'Moving Forward'
                         },
                         {
                             type: 'paragraph',
-                            text: 'GoPro sold another compact camera by showing what its owners made: surfing, free running, underwater footage, and even a dog’s-eye view. The user-generated images demonstrated the reason for the product’s existence.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'Glass Explorers rarely produced an equivalent answer. The device looked more like a mundane personal assistant than a tool for capturing an adventurous life, leaving the word “Explorer” to feel increasingly like an oxymoron.'
-                        },
-                        {
-                            type: 'quote',
-                            text: 'Glass had a feature list. What it lacked was a convincing story about why another person should welcome it into the room.'
-                        },
-                        {
-                            type: 'subhead',
-                            text: 'Moving forward, as seen then'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The 2014 conclusion was blunt: Glass in its original form was too expensive, too unwelcome in public, and too thinly supported to reach a mass market. The hardware might survive in other shapes and specialized settings, but this particular attempt to place a computer between a person and everyone they met appeared to be running out of time.'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The final joke looked toward the next wearable arriving on the horizon: Apple was making a very attractive watch. The deeper lesson was less brand-specific. A successful wearable must fit into a life, not merely onto a body.'
+                            text: 'It is unlikely that Google Glass in its current form will ever reach any mass-market consumer. Google’s hi-tech trinket is prohibitively expensive, unwelcome in public, and wrought with a lack of support. These few facts will unfortunately mark the slow, sad death for Google Glass.'
                         }
                     ]
                 }
@@ -756,119 +1085,230 @@
                         text: 'An algorithm can introduce two people. It cannot do the real work that begins after the introduction.'
                     }
                 ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/state-of-dating-2016-v1.webp',
+                        alt: 'People meeting and talking at a crowded evening social event'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/state-of-dating-2016-1-v1.webp'
+                    },
+                    {
+                        label: 'Figure 2',
+                        src: '/images/before-times/archive/state-of-dating-2016-2-v1.webp'
+                    },
+                    {
+                        label: 'Figure 3',
+                        src: '/images/before-times/archive/state-of-dating-2016-3-v1.webp'
+                    },
+                    {
+                        label: 'Figure 4',
+                        src: '/images/before-times/archive/state-of-dating-2016-4-v1.webp'
+                    }
+                ],
                 depth: {
                     kind: 'read',
                     label: 'Read the restored 2016 manuscript',
-                    meta: 'Restored manuscript // about 9 minutes',
-                    intro: 'Rebuilt from the clean editable manuscript after the surviving webpage capture was found to contain corrupted word substitutions. Dated app references and weaker period claims are preserved or qualified as 2016 context.',
+                    meta: 'Complete edition // about 8 minutes',
+                    intro: 'The full article as it was last published, recovered from the 2022 site backup with its images restored to position. Earlier editions of this archive carried a shortened rebuild; this is the complete text.',
                     body: [
                         {
                             type: 'quote',
-                            text: '“Twenty years from now, the idea that someone looking for love won’t look for it online will be silly.” — Rufus Griscom, 2002'
+                            text: '“Twenty years from now, the idea that someone looking for love won’t look for it online will be silly, akin to skipping the card catalog to instead wander the stacks because the right books are found only by accident.” — Rufus Griscom Wired Magazine, 2002'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The modern era of digital courtship allows anyone seeking love to sift through an apparently infinite stream of potential partners. But are more options always better? What happens when it is time to choose just one? That was always the point, right—to find enduring love?'
+                            text: 'The modern era of digital courtship allows everyone seeking love to sift through an infinite stream of potential suitors. But are more options always better? And what does that mean when it comes time to choose just one lifelong partner? That was always the point, right? To find enduring love - a soulmate?'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Choosing among 31 ice-cream flavors as a child can feel like a special form of torture. Chocolate or vanilla is simple. Increase the available flavors and fear of missing out joins the decision. Rum raisin and rainbow sherbet begin lobbying from the edges.'
+                            text: 'Have you ever seen a child selecting a flavor at Baskin Robbins? Deciding between 31 different ice-cream flavors as a child is a special form of torture. Choosing chocolate over vanilla is a rather simple decision. But increasing the available options also increases the fear of missing out (FOMO), which makes that final decision an excruciating endeavor.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'A study in 1995 conducted at a California grocery store attempted to quantify our inability to choose when the pool of choice is increased. The researcher handed out coupons for heavily discounted jam at an endcap kiosk but rotated the amount of presented jams each hour. One hour, a passerby could select from six jams, the next hour that number increased to 24.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The larger assortment of jams attracted more attention, a total of 60 percent of customers were drawn to the display. When the display dropped to just six jams, attention dropped to 40 percent.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But attention alone is not entirely a statement of choice.'
                         },
                         {
                             type: 'subhead',
-                            text: 'The burden of choice'
+                            text: 'The Burden of Choice'
                         },
                         {
                             type: 'paragraph',
-                            text: 'A famous grocery-store study alternated a display of six jams with a display of 24. The larger assortment attracted more attention, but customers facing the smaller assortment were far more likely to make a purchase.'
+                            text: 'A peculiar thing happened when the time came to actually purchase the selected jam. Those attracted to the display of 24 jars only bought the jam three percent of the time. Those attracted to the stand with just six jams presented, purchased the jam 30 percent of the time.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Choice looks appealing in theory. In practice, expanding the field can increase expectation, seed doubt about the decision, and make choosing anything feel like accepting the loss of everything else.'
+                            text: 'By a ten-to-one margin, less choice resulted in more sales.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The researcher responsible for this social experiment concluded that the presence of choice might seem appealing in theory, “but in reality, people might find more and more choice to actually be debilitating.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Quite simply, the doubt in oneself to make a confident decision when presented with overwhelming choice often erodes one’s ability to make any choice at all. Perhaps the increase of available choices make it seem one could select a better option, which lays the seed of doubt in whichever choice one actually ends up making.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'A possible explanation for this is that our expectation rises along with additional options. There’s a term for this, and it’s unfortunate that we can now apply it to our dating life:'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Buyer’s Remorse'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'If additional options increase expectation and the resulting regret subtracts from satisfaction, why can’t we just be happy with the person we’ve chosen to date?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The hunt for the best doesn’t stop after we make our initial choice to date someone. We wonder if other matches might also make that weird noise when they sleep; or if someone else would be such a terrible tipper… Or, maybe that match you passed up for being too short might have made a better mate in the long run? This constant nitpicking and self-doubt lead to a disquieting discontentment as we wonder what might have been.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And that loop only intensifies as we continue to inundate ourselves with additional choices. We lay awake, endlessly swiping past even more potential suitors. You have so many options! So many choices! Your mind swells with the fantastic possibilities of those new options as you hold each against the reality of your current choice.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'So, you’ll continue to stew over what could be, or what might have been.'
                         },
                         {
                             type: 'quote',
-                            text: 'Less choice resulted in more decisions.'
+                            text: '“There’s no question that some choice is better than none, but it doesn’t follow from that, that more choice is better than some choice.” — Barry Schwartz Author of The Paradox of Choice'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/state-of-dating-2016-1-v1.webp',
+                            width: 2400,
+                            page: 1
                         },
                         {
                             type: 'subhead',
-                            text: 'Buyer’s remorse enters the relationship'
+                            text: 'Technology Evolves Faster than Humans'
                         },
                         {
                             type: 'paragraph',
-                            text: 'If additional options increase expectation and regret reduces satisfaction, why stop evaluating after choosing someone to date? Perhaps another match would not make that strange noise while sleeping. Maybe the person dismissed for being too short would have been a better partner in the long run.'
+                            text: 'We haven’t yet fully grasped the effects that rapidly advancing technology will have on humanity. We’ve fully integrated these marvelous trinkets into our lives without much thought; but will the iPhone one day carry a Surgeon General’s warning like cigarettes do now?'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The loop intensifies while swiping through more people. The mind polishes the fantastic possibilities of strangers and holds those possibilities against the ordinary reality of the person already present. The unreal option has no annoying habits because it has not yet become real.'
+                            text: 'We’ve already proven how we willingly erode our fragile decision-making process. But, thanks to the rise of smartphones, humankind’s attention span is now rated at eight seconds, a full second shorter than a goldfish.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We’re now also discovering the toll smartphone use has on our bodies as well. The simple act of using your phone can lead to a dangerous nerve condition called occipital neuralgia, which is caused by constantly tilting our heads down to look at our phones. The symptoms can include a permanent headache and severe tenderness of the scalp.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Technology is becoming such a large part of our lives that it is literally changing how we look as a species. Humans created technology, but technology is crafting the future of human evolution.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/state-of-dating-2016-2-v1.webp',
+                            width: 2400,
+                            page: 2
                         },
                         {
                             type: 'subhead',
-                            text: 'Technology evolves faster than humans'
+                            text: 'The Rise of the TechnoSexual Era'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The 2016 manuscript gathered the era’s fears about smartphones: shortened attention, physical strain from looking down, and the possibility that omnipresent devices were changing memory and behavior. Some supporting claims—especially the popular comparison between humans and goldfish—were shakier than the larger observation.'
+                            text: 'As device advancements leapfrog previous iterations every few years, and we hurtle towards an always-on, ever-connected future, we ourselves are beginning to change as well. Enter the technosexual era. We are developing entirely new psychoses and phobias that only a mere decade ago would’ve sounded like a plot from a sci-fi film.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'That larger observation survives: marvelous devices entered daily life faster than people developed norms for living with them. Humans created the tools, then began adapting courtship, attention, memory, and expectation around the tools’ design.'
+                            text: 'Nomophobia is the fear of being out of mobile contact. This is deeper than the fear of just being bored in the doctor’s waiting room. This is a debilitating fear of being out of the loop. It’s the fear that someone might be trying to contact you when you can’t connect. And worse still, nomophobia might just be a small side effect of technology’s bigger effect on our transactive memory.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We are now less likely to retain the information that we know we can easily access through our phones.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Having Google in your pocket can deteriorate your ability to remember those facts that made you whip out your phone and prove your knowledge at the bar. Recent studies show that having a nearly omniscient, omnipresent device by our side will train our brains to treat our tech trinkets like a relationship partner. This means your brain knows little difference between the lovesick signals triggered when your lover is away and the nomophobia of forgetting your phone at home.'
                         },
                         {
                             type: 'subhead',
-                            text: 'The technosexual era'
+                            text: 'So, We’re in Love with Our Phones?'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Nomophobia—the fear of being without mobile contact—gave the article a name for something newly familiar. This was not boredom in a waiting room. It was the fear of falling out of the loop, missing an attempted connection, or losing access to the external memory stored in the device.'
+                            text: 'Not sexually, but yes. And that relationship with technology is changing how we communicate with other humans. The immediacy and availability of options and the speed in which we can connect leads to us spending more time vetting each romantic candidate.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'When a phone becomes a constant cognitive partner, forgetting it can trigger a small version of separation. The tool is no longer simply used. It occupies a role in the user’s sense of availability, memory, and social presence.'
+                            text: 'In fact, Eve Peters, the co-founder of the new dating app Whim ran a study on just that. “We found that less than 10 percent of matches result in real-life dates and that it takes an average of two weeks of texting back and forth to eventually get out on a date. What that means is, on average, you’ve got to be texting back and forth with 10 people for two weeks to just get one date,” she said.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Compound this research with a new phenomenon called The Tinder Effect and we begin to see the true state of dating in 2016.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/state-of-dating-2016-3-v1.webp',
+                            width: 2400,
+                            page: 3
                         },
                         {
                             type: 'subhead',
-                            text: 'So we’re in love with our phones?'
+                            text: 'The Tinder Effect'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Not sexually, the manuscript answers, but yes. That relationship with technology changes communication with other humans. Immediate access to more candidates can produce more time spent vetting each one and less confidence about moving a conversation into the physical world.'
+                            text: 'If you’re not familiar with the term gamification, you’re not unfamiliar with the effects. Gamification takes the rewarding elements of a video game and adds it to non-gaming applications. Elements like a high score, pleasingly crisp sound effects for simple actions, awarding digital badges, and any progression mechanics like leveling up are all components that can be applied to a non-game environment to improve user attachment.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'A study shared by Whim co-founder Eve Peters claimed that fewer than ten percent of matches became real dates and that arranging one could require two weeks of messages across multiple conversations. Whatever the exact platform numbers, the friction was recognizable: matching and meeting were different user journeys.'
+                            text: 'Fitbit awards profile badges for the distance you’ve walked. LinkedIn rates the quality of your page with a score. And loyalty programs that incentivize return visits like those found at grocery stores are also a form of gamification.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Tinder’s groundbreaking hot-or-not right-left swiping mechanic effectively gamifies finding a match. The satisfaction of swiping right and discovering that this same user also swiped right on you can feel deeply pleasing.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Of course, the gamification of romantic courtship comes at a cost. Adrenaline, endorphins, dopamine, serotonin and oxytocin are all activated during the natural romantic courtship process. But it’s been found that this Tinder Effect makes the brain release a dangerously similar mixture of chemicals when users become delighted by these gamified elements within the app.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This means one could derive a similar amount of pleasure from the mere act of swiping through matches as someone going through the work of actually dating. This might explain why it takes many users two weeks while chatting with 10 matches to line up one date. For many, a date might not even be desired.'
                         },
                         {
                             type: 'subhead',
-                            text: 'The Tinder effect'
+                            text: 'The Rise of the Anti-Tinder'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Gamification borrows satisfying elements from games—scores, crisp feedback, rewards, badges, and visible progression—and places them inside other kinds of products. Fitbit awards distance badges. LinkedIn scores profile completeness. Loyalty programs turn returning to a store into progress.'
+                            text: 'Tinder’s market share and influence on modern dating is undeniable. But like all pendulum swings, it won’t be long before others rise in popularity on the premise of being the antithesis.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Tinder applied the loop to courtship. Swiping right followed by the revelation of a mutual match created a compact reward: evaluate, act, receive validation, repeat. The action was simple enough to continue indefinitely.'
+                            text: 'Bumble, a dating app created by an ex-Tinder employee aims to shift the power of communication to the hands of the ladies. Women bear the brunt of curt and brutish pickup attempts on most dating platforms. Bumble turns the tables and requires women to initiate the conversation, which may smooth out the headache of receiving a deluge of inane and often explicit chats on other dating platforms.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'That raised the essay’s most durable question. What if the act of swiping and receiving a match supplied enough satisfaction that the date stopped being the end goal? A dating product could succeed at engagement while its users failed to leave it.'
-                        },
-                        {
-                            type: 'quote',
-                            text: 'The match notification can become a substitute for the messier reward of actually knowing someone.'
-                        },
-                        {
-                            type: 'subhead',
-                            text: 'The rise of the anti-Tinder'
+                            text: 'Neqtr approaches dating through the activist causes you hold dear to your heart. The hope is that this app will connect people on a deeper level than a few good profile pictures.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'The pendulum was already swinging. Bumble required women to begin the conversation, attempting to change who controlled the opening interaction. Neqtr proposed matching people through shared causes rather than photographs alone. Each new service promised that its extra constraint would produce a more meaningful pool.'
+                            text: 'As we shake off our Tinder-conditioned drive to swipe, only time will tell if these new apps will provide more tailored matches for those engaged in our modern digital-dating culture.'
                         },
                         {
-                            type: 'paragraph',
-                            text: 'The names and market positions would keep changing. The underlying design problem would remain: reducing people to selectable information makes introductions efficient, but efficiency cannot guarantee intimacy.'
+                            type: 'image',
+                            src: '/images/before-times/archive/state-of-dating-2016-4-v1.webp',
+                            width: 2400,
+                            page: 4
                         },
                         {
                             type: 'subhead',
@@ -876,15 +1316,27 @@
                         },
                         {
                             type: 'paragraph',
-                            text: 'There was—and is—plenty of hope. Technology can introduce people who would never otherwise meet. The instinct that needs interrogation is not using the tool; it is the endless pursuit of capital-B Best.'
+                            text: 'So, where does this leave us? Is there any hope to find love and be happy in this technology-obsessed world? Well, absolutely!'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Best is an impossible category because people and lives change. An algorithm matches selected data about online selves. Then the real work begins: choosing, paying attention, tolerating imperfection, and understanding the difference between digital possibility and daily love.'
+                            text: 'In fact, now more than ever you are capable of finding someone truly special. The one thing that needs to change is our instinctual pursuit of finding the Best.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'If the grass in another profile always appears greener, it may be time to stop refreshing the horizon and do a little yard work where you are.'
+                            text: 'Finding the Best is an impossible goal, because life is fluid and people change. Perfection need not apply; best is merely ephemeral, momentary. But technology shrouds our ability to see that futility. So, it’s up to us to change, grow and evolve.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“So, you mean settle?” Or you can just understand that an algorithm designed to match cherry-picked data about our online selves might not be the most surefire way to find capital-T True Love. It’s a great tool to help us meet people, but then our real work begins.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The best place to start is to understand a simple distinction between digital life and daily life. As much as technology wishes to blur the lines between reality and fantasy, you cannot hold the impossible expectations of digital fantasy against the day-to-day realities of loving a single person.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'If you find yourself envying the green grass of another’s lawn, it may just mean that it’s time to do a little yard work of your own.'
                         }
                     ]
                 }
@@ -1112,64 +1564,108 @@
                 depth: {
                     kind: 'read',
                     label: 'Read the recovered labor-history essay',
-                    meta: 'Historical reading edition // about 7 minutes',
-                    intro: 'The 2015 essay reconstructed from its surviving manuscript. Contemporary campaign references have been condensed; the Haymarket-to-weekend argument remains in its original period voice.',
+                    meta: 'Complete edition // about 5 minutes',
+                    intro: 'The full article as it was last published, recovered from the 2022 site backup with its images restored to position. Earlier editions of this archive carried a shortened rebuild; this is the complete text.',
                     body: [
                         {
-                            type: 'quote',
-                            text: '“Eight hours for work, eight hours for rest, eight hours for what we will!”'
+                            type: 'paragraph',
+                            text: '“Eight hours for work, eight hours for rest, eight hours for what we will!” chanted throngs of labor protesters flooding the streets of Chicago in 1886. The chants fell silent shortly thereafter when a large explosion ripped through the crowd, killing seven police officers and at least five civilians. The Haymarket Massacre marked a bloody escalation in the fight for fair treatment of workers near the turn of the last century.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Throngs of labor protesters carried that chant through Chicago in 1886. The words fell silent after an explosion ripped through a gathering at Haymarket Square, killing police officers and civilians and marking a bloody escalation in the fight for humane working conditions.'
+                            text: 'And unfortunately, America’s fight for the 40-hour workweek still remains unfinished.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'America’s fight for the 40-hour week did not end in that square. The familiar weekend is the result of a long struggle, and the protections that sustain it remain decisions rather than laws of nature.'
+                            text: 'From the Presidential campaign trail to Wisconsin’s latest labor-law changes, it’s disheartening to see a renewed effort to dismantle that hard-fought worker victory. Imagine an America where a large portion of the working class are forced to slog to work every single day of the week, every week.'
                         },
                         {
                             type: 'subhead',
-                            text: 'Two days never feels like enough'
+                            text: 'Two days never feels like enough time!'
                         },
                         {
                             type: 'paragraph',
-                            text: 'How often does Sunday evening arrive before the errands are done or any meaningful rest has begun? The complaint sounds ordinary because a two-day weekend has become ordinary. Imagine instead a life in which having a job means having almost no time to live beyond it.'
+                            text: 'How many times have you muttered displeasure that another weekend flew by without much rest or relaxation? How often do you lament that you’ve once again pushed all your errands into those precious few moments of free time? Can you imagine a life where having a job means having no time to live beyond work?'
                         },
                         {
                             type: 'paragraph',
-                            text: 'That reality was common less than a century before the article was written. In May 1926, Ford Motor Company became one of the early major American manufacturers to adopt a five-day, 40-hour schedule in its factories. The change arrived after labor organizers had spent decades demanding eight-hour days and days of rest.'
+                            text: 'That reality was commonplace not that long ago. It was less than 100 years ago, on May 1, 1926, when the Ford Motor Company became “one of the first companies in America to adopt a five-day, 40-hour week for workers in its automotive factories.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This came after years of the labor union movement fiercely fought through deadly protests to secure two days of rest each week. Workers across the nation stood together to demand more humane workplace treatment. And this fight gets routinely glossed over in the history books.'
                         },
                         {
                             type: 'subhead',
-                            text: 'What workers were fighting'
+                            text: 'What conditions led to the protests?'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Industrial employers could demand extraordinarily long weeks, provide few breaks, employ children, and treat injury or illness as the cost of production. Low pay was only one part of a larger disregard for the health and safety of the workforce.'
+                            text: '“Corporations use to work employees 80+ hours a week, offer no breaks, hire children, offer horrid, unsanitary work conditions, paid literally next to nothing, and even murder. Not murder with a pen like they do today, but actual murder,” says the AFL-CIO.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Upton Sinclair’s The Jungle gave readers a fictional Chicago meatpacking worker moving through conditions drawn from reporting: steam-filled rooms, open vats, brutal repetition, and people treated as consumable parts of the machinery. The horror worked because the public recognized that the exaggeration, if any, was uncomfortably small.'
+                            text: 'Aside from working horrendous hours for low pay alongside children operating dangerous machines, there was a general disregard for the safety and health of the whole workforce. Describing these conditions as chilling might be too kind for the reality of American work at the turn of the century.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Many workers who never joined a union still inherited the gains of that organizing. A standard week, a safer workplace, restrictions on child labor, and the expectation of rest became broad cultural norms because people once demanded them together.'
-                        },
-                        {
-                            type: 'subhead',
-                            text: 'The uncertain future, as seen in 2015'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The manuscript was prompted by a Wisconsin budget change allowing some employees to state in writing that they voluntarily chose to work without one day of rest in seven. Supporters described the policy as flexibility. Labor advocates heard an old question: how voluntary is a worker’s waiver when the employer controls the schedule and the paycheck?'
-                        },
-                        {
-                            type: 'paragraph',
-                            text: 'The period also carried proposals to lower working ages or replace paid school-maintenance staff with student labor. To the essay, those ideas were not isolated provocations. They were reminders that rights can be reframed as inefficiencies once the conditions that produced them fade from living memory.'
+                            text: 'Upton Sinclair detailed the harsh working conditions in the United States in the early 20th century in his novel The Jungle. The novel follows a fictional character, Jurgis Rudkus, a poor immigrant working in Chicago’s meatpacking industry. While the characters were a work of fiction, the working conditions were informed by fact:'
                         },
                         {
                             type: 'quote',
-                            text: 'The weekend is not merely empty space between workweeks. It is evidence of what workers once insisted a human life should contain.'
+                            text: "“As for the other men, who worked in tank rooms full of steam, and in some of which there were open vats near the level of the floor, their peculiar trouble was that they fell into the vats; and when they were fished out, there was never enough of them left to be worth exhibiting,--sometimes they would be overlooked for days, till all but the bones of them had gone out to the world as Durham's Pure Leaf Lard!”"
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Many American workers still enjoy the fruits of the labor-union’s fight even if those workers aren’t in a union themselves. But this doesn’t mean that this fight is finished. There is a renewed focus on stripping away many of the benefits afforded the average American worker. This includes the everlasting fight on minimum wage and a new effort to remove the standard of a 40-hour workweek.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'The 40-Hour Workweek’s Uncertain Future'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Recently, Wisconsin Governor Scott Walker signed a budget into law that removes the stipulation in the state’s labor law that protects industrial and retail employees’ right to one day of rest each week.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The revised law would “permit an employee to state in writing that he or she voluntarily chooses to work without one day of rest in seven.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This labor-law exemption is one of the conditions that directly led to Chicago’s 1886 Haymarket Massacre. Protestors then and now assert how an employer may force that employee’s decision to forgo any days of rest.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'After the budget became law, Wisconsin’s AFL-CIO chapter issued an immediate statement:'
+                        },
+                        {
+                            type: 'quote',
+                            text: '“In a blatant and shocking blow to the democratic process, Republicans took away the weekend in a late-night budget maneuver. All workers should have the right to a day of rest. It is a basic American ideal ... The Wisconsin AFL-CIO calls for this budget item to be immediately removed.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Supporters of Wisconsin’s new change remind critics that there is no right-to-rest stipulation or standardized 40-hour workweek on the federal level. In fact, President Obama vetoed a measure in 2015 to re-establish that federal standard.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'On the 2016 campaign trail, Republican presidential candidate Jeb Bush suggested that “people need to work longer hours” in order to meet his proposed 4% economic growth under a hypothetical Jeb-Bush presidency.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In 2013, Maine Governor Paul LePage expressed his interest in lowering the legal working age to 12. He’s made numerous legislative attempts to pass this revised age limit.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'LePage argues that having 12-year-olds in the workforce will help instill a respect for the work ethic that he finds lacking in American youths. Maine’s Governor understands the danger in letting children work full-time jobs. “But a 12-year-old working eight to 10 hours a week or a 14-year-old working 12 to 15 hours a week is not bad,” he said in an interview with DownEast magazine.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In 2011, former Speaker of the House Newt Gingrich suggested cutting school janitorial staff positions and having the children clean and maintain their institutions themselves.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Gingrich suggested that children as young as nine should begin regular afterschool maintenance on the facilities. He felt children should handle hazardous chemicals, “do electrical repairs, maintain the school grounds, take care of the HVAC equipment, and handle basic plumbing fixes, among other assorted jobs,” as explained by Jordan Weissmann of The Atlantic.'
                         },
                         {
                             type: 'subhead',
@@ -1177,11 +1673,11 @@
                         },
                         {
                             type: 'paragraph',
-                            text: 'A 40-hour week can still feel like a slog to anyone dreaming of a permanent three-day weekend. The alternative history is worse: work without a meaningful boundary, rest treated as an indulgence, and family or civic life squeezed into whatever hours remain.'
+                            text: 'The 40-hour workweek may still feel like a slog to those wishing for an everlasting three-day weekend. But the alternative could be far worse. The worker-rights movement fought tirelessly for our weekend. Those two days are a gift compared to the horrid working conditions at the turn of the 20th century.'
                         },
                         {
                             type: 'paragraph',
-                            text: 'Those two days are not perfect balance. They are a hard-won floor. Enjoy them, defend them, and remember the people who fought to make them feel ordinary.'
+                            text: 'While the fight continues, and may still intensify, we should remain thankful for the long-fought battle to secure workers’ rights and any form of life balance we’re afforded when holding down a job. Let’s enjoy our two days off, we’ve earned them.'
                         }
                     ]
                 }
@@ -1395,6 +1891,1824 @@
                     ]
                 }
             }
+        ,
+            {
+                id: 'occipital-neuralgia-smartphones',
+                eyebrow: 'Health Desk // 2015–2016',
+                title: 'Heads Up! Smartphone Use Linked to Occipital Neuralgia',
+                publication: 'Review Weekly',
+                credit: 'Written by Charles Wilke',
+                format: 'Health explainer',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/occipital-neuralgia-smartphones-v1.webp',
+                imageAlt: 'A pedestrian walking with their head tilted down over a glowing phone',
+                dek: 'A health explainer built to the shape of an SEO brief — what is it, how does it happen, what can you do — that then refuses to end on the reassuring note the format expects.',
+                curator: 'The bones here are pure search scaffolding: four questions as subheads, a takeaway to close. What the brief did not ask for was the bowling ball balanced on a plastic cup, or the closing admission that evolution is not going to arrive in time to fix our posture. The format holds. Something else moves around inside it.',
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'The occipital nerves run up through the cervical spine and branch across the scalp. Tilt your head down far enough, long enough, and the weight of the skull stops being distributed and starts being concentrated — and those nerves, no longer shielded, begin to complain.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'Think of your head like a bowling ball and your neck as a plastic cup.'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'The piece walks through symptoms, causes and the thin menu of treatments, then closes somewhere a service article usually does not go: human evolution takes hundreds of thousands of years, the phone is not going anywhere, and the adaptation is going to have to be behavioral.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/occipital-neuralgia-smartphones-v1.webp',
+                        alt: 'A pedestrian walking with their head tilted down over a glowing phone'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/occipital-neuralgia-smartphones-1-v1.webp'
+                    },
+                    {
+                        label: 'Figure 2',
+                        src: '/images/before-times/archive/occipital-neuralgia-smartphones-2-v1.webp'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 4 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'Next time you find yourself walking along a bustling city street, take a moment to look around at the other pedestrians, and sneak a peek at the motorists waiting for the light to change. You will see, perhaps unsurprisingly, a large number of heads tilted down with faces glowing from the light of their smartphones.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'An ambling public mindlessly isolated in a personal digital companion might have made a fine sci-fi plot just a decade ago. Unfortunately, this is now our reality. We have become so willfully and constantly distracted. And the dangers of this distraction are well-studied, with warnings issued. Unfortunately, what is less publicized is the damage we are unwittingly administering on our own necks.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The neurological condition occipital neuralgia is on the rise. If this condition’s name sounds frightening to you, just wait, it gets worse.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Smartphones are now ubiquitous in modern life, filling all those awkward moments we’d normally be waiting in public. Before the advent of these devices, you might find yourself scanning your surroundings while you wait, looking for stimulation or letting your brain wander. Now, you dig into your pocket and nervously check your emails, texts, Twitter, Tik Tok, or any other trending digital pacifier.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The act of waiting in public no longer requires engaging with the world around you. Those quiet moments waiting for a table at a restaurant, for the doctor, or mechanic to call your name when reflection or interaction were commonplace are now replaced with the comforting glow of our dopamine-dripping data-driven paradise. But understanding the damage caused by simply tilting your head down should hopefully make you rethink reaching for your phone.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'What is occipital neuralgia?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The greater- and lesser-occipital nerves weave through the cervical spine, also known as your neck. The nerves continue across the top of the skull and branch across the scalp, top of the head and over the ears. Occipital neuralgia occurs when the occipital nerves become exposed from the protection of the cervical spine.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The exposed occipital nerves can then easily become irritated. This results in symptoms like a constant debilitating headache, upper neck pain, even a pain that spans from the back of the head, over the scalp, across the brow and behind the eyes.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'There are many causes for this condition: Osteoporosis, cancer, and other degenerative diseases. But over the past decade, smartphones have become linked to triggering this condition as well.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/occipital-neuralgia-smartphones-1-v1.webp',
+                            align: 'center',
+                            width: 764,
+                            page: 1
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'How does smartphone use link to occipital neuralgia?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Think of your head like a bowling ball and your neck as a plastic cup. When the bowling ball sits atop the plastic cup, the entire force of the ball is evenly distributed around the circumference of the cup. The cup might not be the strongest pedestal for that heavy bowling ball, but since the weight is distributed, the cup is able to hold the weight without much strain.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Now, imagine if you began tilting the ball to one edge of the plastic cup. Putting so much force on only one side would begin to stress the cup considerably.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Your neck may seem stronger than a plastic cup, but the neck intends to distribute the head’s weight evenly, upright on your spine. If you tilt your head down, you might not even realize the strain you’re placing on your neck, and those sensitive nerves within.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Looking down to tie your shoes or pick up a lucky penny may not seem too dangerous, and given the quick interval, you’ll be safe picking up a couple pennies each day. But if you find yourself looking down at your phone for long stretches of time, you may be in for a world of hurt.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Americans, on average, check their phones over 150 times every day. And DailyMail reports that the average European uses their phones for a total of three hours and 16 minutes each day! Worse still, Gallup notes that this increase in use skews young, meaning the latest generation is most at risk for developing occipital neuralgia. A demographic previously spared from suffering at the hands of this disorder.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/occipital-neuralgia-smartphones-2-v1.webp',
+                            align: 'center',
+                            width: 720,
+                            page: 2
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'What can be done to relieve occipital neuralgia?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While there is no direct cure for occipital neuralgia, there are a number of options for sufferers, some more invasive than others. Depending on your case, you may find relief with over-the-counter aspirin. But some people might need something a little stronger.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Your doctor might decide that injections of steroids and numbing agents can offer swift and lasting relief. The fact remains, that the more you tilt your head down to stare at your smartphone, the more you will create excessive pressure on your occipital nerves.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Takeaway'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Smartphones aren’t going away. The genie isn’t going back into its bottle. We humans must now learn to adapt to using this magical and often addicting technology. One that we rarely keep more than a few feet away all day, every day.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Human evolution takes hundreds of thousands of years. Our bodies are not immediately suited for this new trend of continuously tilting our heads down during every lull in daily life. Consider being more litigious when using your smartphone in public. It’ll not only benefit you socially by keeping you aware and available for interaction, it may also save you from a quite literal pain in the neck!'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'irish-pubs-chicago',
+                eyebrow: 'City Guides // 2015–2016',
+                title: '7 Best Irish Pubs in Chicago to Visit on St. Patrick’s Day',
+                publication: 'Review Weekly',
+                credit: 'Written by Charles Wilke',
+                format: 'City guide listicle',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/irish-pubs-chicago-v1.webp',
+                imageAlt: "St. Patrick's Day header art for a Chicago pub guide",
+                dek: 'Seven Chicago Irish pubs, loosely ranked and annotated with the kind of trivia that only turns up when a writer is enjoying the assignment.',
+                curator: 'A listicle is the most disposable thing the factory made, and this is unmistakably one — addresses, phone numbers, the whole apparatus. But every entry closes on a Fun Fact, and the fun facts are where the writer is hiding: gangster tunnels running toward the Field Museum, a four-way stop sign the city installed because of falling drunks, the birth of the Harvey Wallbanger. The listicle is the container. The marginalia is the piece.',
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: "Seven pubs, spread deliberately across the city rather than clustered downtown — the Kerryman for people who want corned beef without the hollering, Cork & Kerry for the South Side, Johnny O'Hagan's for Wrigleyville, Butch McGuire's for the animatronic leprechauns."
+                    },
+                    {
+                        type: 'quote',
+                        text: 'The City of Chicago had to add a four‐way stop sign at the intersection outside this pub due to so many stumbling drunks tripping into the streets.'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'The service information is accurate and the structure is exactly what the brief called for. The reason to read it now is the footnotes.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/irish-pubs-chicago-v1.webp',
+                        alt: "St. Patrick's Day header art for a Chicago pub guide"
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 5 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'St. Patrick’s Day is a big deal in Chicago. We mock those who forget to wear green, we pound Shamrock Shakes and we hunt high and low for green-tinted beer. Hell, we even dye the Chicago River bright green for March 17th! The city turns to a singular mission mid-March: Get drunk, be loud and stumble through the city hitting as many Irish pubs as we can.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And Chicago is stuffed with Irish pubs. Not even the most diehard St. Paddy’s Day reveler can hope to hit every shamrock-themed drinking hole in this city. Especially if you’ve got a corned-beef-&-cabbage dinner on the books, and frankly you should, it’s tradition!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Luckily, we’ve got a list of great (dare we say best?) Irish pubs located all around Chicago.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '1. The Kerryman'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '661 N Clark Street'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Website: The Kerryman'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Phone: (312) 335‐8121'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This pub is named after an early Irish monastic saint, St. Brendan, also known as Brendan the Navigator. The Kerryman is already preparing for a packed house the night of the 17th! If you’re looking to enjoy the live music scheduled for this fun night, be sure to reserve a table as soon as possible.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The Kerryman offers a more upscale environment for those looking to grab some corned beef but not get swept up in the hooting and hollering of the drunken masses. And be sure to try their curry fries, they’re to die for!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Fun Fact: Kerryman is a term that applies to those from County Kerry in southwest Ireland.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '2. Emmit’s Irish Pub'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '495 N Milwaukee Avenue'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Website: Emmit’s Irish Pub'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Phone: (312) 563‐9631'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Emmit’s may have only opened in 1996, but the building Emmit’s calls home has quite a storied past! The same space housed a bank in the 1920s. Tunnels are rumored to connect this building to locations as far away as The Field Museum. These tunnels, stretching several miles, were said to have been used by gangsters for smuggling, hiding and escaping during the prohibition era.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Now, Emmit’s is a lively Irish pub and regales in the building’s bloody history by lifting libations for the fallen! For this St. Patrick’s Day, Emmit’s is scheduling live music and releasing t‐shirts and coozies to commemorate 2016’s greenest holiday!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Fun Fact: This bar is steps away from the Blue Line, which should make getting to and from this bar a little easier and a whole lot safer.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '3. Fado Irish Pub & Restaurant'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '100 W Grand Avenue'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Website: Fado Irish Pub & Restaurant'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Phone: (312) 836‐0066'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The Irish theme is on full display at Fado Irish Pub & Restaurant on the corner of Clark and Grand, but that Irish theme doesn’t make this place stuffy. Come as you are and be prepared for great festivities planned for St. Patrick’s Day.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Live music is scheduled, and you better believe you’ll be able to get your corned beef and cabbage fix here, but Fado’s fish and chips might just give that traditional favorite a run for its money.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Fun Fact: The restaurant’s name is Irish Gaelic for “long ago” and is often spoken to begin a story, like how we say “once upon a time.”'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '4. Cork & Kerry'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '3258 S Princeton Avenue and 10614 S Western Avenue'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Website: Cork & Kerry'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Phone: (312) 842‐0769'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Established in 1988 and after nearly succumbing to a 1999 fire, Cork & Kerry re‐opened in 2003. Serving south‐ side Irish neighborhoods, the Princeton Avenue location is mere steps away from U.S. Cellular Field. The original Western Avenue location boasts a massive beer garden and a 50‐person private lounge.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Now, I know what you’re thinking, an outdoor beer garden in Chicago in March isn’t exactly where I want to be spending my St. Paddy’s Day! Well, a good portion of that beer garden is enclosed, which will give those at the bar a little extra space to stretch their legs when this location is sure to get packed on the 17th!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Fun Fact: Cork & Kerry was recognized by Thrillist as one of the country’s best Irish pubs in 2014.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '5. Johnny O’Hagan’s'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '3374 N Clark Street'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Website: Johnny O’Hagans'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Phone: (773) 857‐0944'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Jumping from one Irish pub near the home of the White Sox, let’s take a look at a great St. Patrick’s Day spot in Wrigleyville! Johnny O’Hagan’s is classically styled with beautiful Irish charm and a relaxed atmosphere. This genuine Irish pub located near The Friendly Confines recently changed hands in 2013. It’s now being operated by two honest‐to‐God Irish owners!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'If you’re new to the area, the thin, wedge‐shaped building is easy to miss if you’re coming from the south. If you’re scratching your head, just look for the intersection of Clark & Roscoe. Thursday nights are normally trivia night at Johnny O’Hagan’s, and there’s no word yet on that being cancelled for St. Patrick’s Day. So, come on down if you’re looking for cold beer, tasty food, and some great trivia. And give the brand-new menu a taste, there are some winners on there!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Fun Fact: The City of Chicago had to add a four‐way stop sign at the intersection outside this pub due to so many stumbling drunks tripping into the streets.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '6. Butch McGuire’s'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '20 W Division Street'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Website: Butch McGuire’s'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Phone: (312) 787‐4318'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'As the story goes, Butch borrowed $560 from his mother to open a singles bar in 1961. Still open and operating to this day, and now being run by his son, Butch McGuire’s is the stuff of legend.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Upon entering, you’ll be greeted by a beautifully preserved wood bar and a design-aesthetic most would describe as alarmingly busy.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'For St. Patrick’s Day, be sure to spot Butch’s signature animatronic displays that include leprechauns dancing around toadstools and the year‐round model trains that scoot around overhead! The pub’s ceiling will also be decked out with green twinkly Christmas lights. And be sure to grab your awesome Butch McGuire’s official St. Pat’s Day t‐shirt, which is only available if you head to the bar in person.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Fun Fact: Butch McGuire’s is credited with creating the Harvey Wallbanger and this is rumored to be the first pub to serve celery as a garnish on a Bloody Mary!'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '7. Celtic Crossings Irish Pub'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '751 N Clark Street'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Website: Celtic Crossings Irish Pub'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Phone: (312) 337‐1005'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We close with a bar that’s just down the street from our first entry on this list. If the buttoned-up atmosphere of The Kerryman isn’t the vibe you want for your St. Patrick’s Day, then Celtic Crossings Irish Pub might be the place for you!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It’s bold red facade beckons those looking for a cold drink and a little revelry to enter from the cold Chicago winter. Celtic Crossings is known for live music and while the band for the 17th hasn’t been announced, expect the pub to be rocking the night of St. Patrick’s Day!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Fun Fact: USA Today rated Celtic Crossings to be the most traditional Irish pub in Chicago!'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'hooking-up-at-coachella',
+                eyebrow: 'Digital Culture // 2015–2016',
+                title: 'Hooking Up at Coachella',
+                publication: 'Review Weekly',
+                credit: 'Written by Charles Wilke',
+                format: 'Festival dispatch',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/hooking-up-at-coachella-v1.webp',
+                imageAlt: 'Header art for a Coachella dispatch about dating apps and festival marketing',
+                dek: 'A festival dispatch about dating apps, geo-fencing and the marketing machinery of Coachella, written by someone who has never been and has no intention of going.',
+                curator: "The factory at its most cheerfully cynical, and the editor's note at the bottom gives the whole game away: the writer has never attended and describes the event as a personalized hell. The reporting still lands — Glance, the geo-fencing, the H&M aura booth are all real. It simply does the job from a great and entirely unashamed distance.",
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'Coachella as a marketing surface: twelve corporate partners, a Dutch dating app using the same geo-fencing that serves you targeted ads, and an H&M aura-photo booth engineered to be posted. The ostensible subject is hooking up. The actual subject is how thoroughly the moment has been instrumented.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'And while nothing screams cool indie rock like American Express, you’ll quickly focus on the nearly naked throngs of millennials chewing handfuls of designer drugs and having sex in the mosh pit.'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: "It ends with a practical tip about dropping GPS pins when the cell network collapses under the weight of everyone uploading at once, and then an editor's note admitting the writer has never set foot in the place."
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/hooking-up-at-coachella-v1.webp',
+                        alt: 'Header art for a Coachella dispatch about dating apps and festival marketing'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/hooking-up-at-coachella-1-v1.webp'
+                    },
+                    {
+                        label: 'Figure 2',
+                        src: '/images/before-times/archive/hooking-up-at-coachella-2-v1.webp'
+                    },
+                    {
+                        label: 'Figure 3',
+                        src: '/images/before-times/archive/hooking-up-at-coachella-3-v1.webp'
+                    },
+                    {
+                        label: 'Figure 4',
+                        src: '/images/before-times/archive/hooking-up-at-coachella-4-v1.webp'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 3 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'Ah Coachella. Where The Flaming Lips can describe both the band on stage and the blistered labia scattered throughout the crowd. Over the next two weekends, the 2016 Coachella Valley Music and Arts Festival descends on a sleepy community in the middle of nowhere.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This dusty expanse of nothingness becomes the throbbing epicenter of hipster idol worship for two weekends each year. With all these like-minded, fashionable youths swarming like locusts with bare midriffs and culturally insensitive Native American headdresses, it’s hard not to think about hooking up. Well, hooking up and where to find water that’s not $5 a bottle.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Yes, steamy sex and heat exhaustion are often not far from the hipster’s mind as they slog through the world’s longest line of bumper-to-bumper traffic approaching the tragically underdeveloped, yet charmingly beautiful, Coachella Valley.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/hooking-up-at-coachella-1-v1.webp',
+                            width: 1024,
+                            page: 1
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Inside The Beast'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Once inside, you’ll be assaulted with advertising from Coachella’s twelve major corporate partners. And while nothing screams cool indie rock like American Express, you’ll quickly focus on the nearly naked throngs of millennials chewing handfuls of designer drugs and having sex in the mosh pit.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'So, you’ll stuff the event’s overwhelming corporatism into that back part of your brain where you keep memories of touchy Uncle Larry and focus your attention on the true bounty of Coachella: The ladies!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The droves of beautiful women in their early-not-quite twenties showing off their spring-break bodies will turn your attention to getting laid. And why shouldn’t it? You’re young. You’ve yet to discover the futility of all existence, the reality that your life’s significance is highly suspect in the grand sense. So, you might as well get some action before that concept hits home.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/hooking-up-at-coachella-2-v1.webp',
+                            width: 1024,
+                            page: 2
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Ladies! Ladies Everywhere!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Because you’re here! You’re now! You’re excited to meet somebody new! And talking to someone you’ve never met will continue to be scary! If only an app could be designed for the specific goal of meeting ladies at a music festival…'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Well, the Dutch dating app Glance looks to focus on the millennial market that loves hooking up at big music festivals. You’re probably familiar with the geo-fencing technology that many apps like Snapchat use to overlay highly targeted advertisements on top of your dick-pics. Well, Glance uses similar trickery for you to find that cute girl you just bumped into at the Purity Ring set.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/hooking-up-at-coachella-3-v1.webp',
+                            width: 1024,
+                            page: 3
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Buy Now! Be Happy!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And that dating app isn’t alone. The nowism of today’s world is forcing app developers to live in the moment, much like hipsters and millennials continue to flaunt with ease. And great rewards lay waiting for those marketers able and willing to create an ephemeral, narcissistic social ad campaign.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Like H&M last year.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It offered an aura-shot photo booth which created filter-heavy photos of participants with three aura descriptors (i.e. spiritual, enlightened, etc.), a larger-than-necessary branded message along the bottom and a totally-not-fickle plea to share on social media. Perhaps the major benefit for those on the prowl was the vacuous excuse to strike up a conversation with a hottie of the same aura-type, and totally not discuss the slave labor that constructs H&M’s throw-away fashion.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/hooking-up-at-coachella-4-v1.webp',
+                            width: 1024,
+                            page: 4
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Closing the Deal'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But even if you’re tired of ads with your hookups, you can help your chances of getting laid by using a feature found in most phones: GPS pins!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'If you’re struggling to describe the “art” exhibit you’ve popped your tent near, you can help your newfound honey find you by sending her a pin. The benefit of GPS pins is that they can be used without a cell signal to find a specific location deep in the sea of hipsters.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This works great when the available cell network is choked by thousands of self-aggrandizing, over-filtered Instagram posts scrambling to upload. Plus, it creates a rush of exhilaration for your newly met companion. It becomes almost like a scavenger hunt where the prize is sharing a sleeping bag (sleeping optional [wink face]).'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Editor’s Note: This writer has never been to Coachella. In fact, if you were to create a personalized hell, one couldn’t conjure a more perfect example. Surrounded by a grotesque mixture of advertising and what-some-consider art. Overhearing debates on the musical significance of the banjo. Nowhere to sit comfortably and questionable bathroom situations, expensive cash-only refreshments, and the people, my God… the people.'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'grammatical-errors-dating-profile',
+                eyebrow: 'Service Desk // 2015–2016',
+                title: '5 Common Grammatical Errors That Sink Your Dating Profile',
+                publication: 'Review Weekly',
+                credit: 'Written by Charles Wilke',
+                format: 'Service piece',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/grammatical-errors-dating-profile-v1.webp',
+                imageAlt: 'Header art for a grammar guide aimed at dating profiles',
+                dek: 'Five grammar mistakes, each pinned to an animated reaction GIF, aimed at men whose dating profiles are working against them faster than their photos are.',
+                curator: 'A grammar explainer dressed as dating advice, which is a shrewder brief than it looks: nobody clicks a grammar explainer, and everybody clicks an explanation of why they are not getting dates. The GIFs did the traffic work. The apostrophe rule underneath them is the cleanest version of that rule I ever managed to write.',
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: "Apostrophes, your/you're, there/their/they're, its/it's, and sentences ending in prepositions — the five most common ways a dating profile signals carelessness before anyone reaches the photos."
+                    },
+                    {
+                        type: 'quote',
+                        text: 'Every time you remove letters of one word to stick together with another word, you use an apostrophe'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'The framing is unapologetically commercial, opening on a Zoosk statistic that 48% of singles call bad grammar a deal breaker. The teaching under it is genuinely good, and the five GIFs are preserved here as they ran.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/grammatical-errors-dating-profile-v1.webp',
+                        alt: 'Header art for a grammar guide aimed at dating profiles'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/grammatical-errors-dating-profile-1-v1.webp'
+                    },
+                    {
+                        label: 'Figure 2',
+                        src: '/images/before-times/archive/grammatical-errors-dating-profile-2-v1.webp'
+                    },
+                    {
+                        label: 'Figure 3',
+                        src: '/images/before-times/archive/grammatical-errors-dating-profile-3-v1.webp'
+                    },
+                    {
+                        label: 'Figure 4',
+                        src: '/images/before-times/archive/grammatical-errors-dating-profile-4-v1.webp'
+                    },
+                    {
+                        label: 'Figure 5',
+                        src: '/images/before-times/archive/grammatical-errors-dating-profile-5-v1.webp'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 4 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'Nothing destroys your chances at getting that girl faster than poor grammar on your dating profile.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In a study published by Zoosk, 48% of singles polled find bad grammar a deal breaker!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Making simple grammar mistakes might make you look less intelligent, or worse: a scammer, and you wouldn’t want that! But the biggest turn off for me when I meet a new match is when it seems like we won’t be able to hold a simple conversation.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'I know. I know. Grammar is boring. “I comes before E except after C” reads like some ancient bible translation. But trust me, conjugations are not contagious. And apostrophes are really not that mysterious.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'So if you’ve slept through English class, you may find your options of sleeping with anyone now a little limiting. Thankfully, you’ve got me!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "Let's discuss a few of my biggest pet peeves when reading your dating profile:"
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/grammatical-errors-dating-profile-1-v1.webp',
+                            page: 1
+                        },
+                        {
+                            type: 'subhead',
+                            text: '1. Apostrophes'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Here’s my trick for 95% of all apostrophe use: Every time you remove letters of one word to stick together with another word, you use an apostrophe: “it is,” “you are,” “they are” and “you will” are all prime examples. So, you’ll need an apostrophe to represent the missing letters.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/grammatical-errors-dating-profile-2-v1.webp',
+                            page: 2
+                        },
+                        {
+                            type: 'subhead',
+                            text: '2. Your / You’re'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'You might already see where I’m going with this one after my last point. “Your” implies ownership: your coat, your spaghetti, your insatiable urge to date assholes. You can use it when listing your favorite personal qualities that you’re looking to find in an ideal match.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“You’re” is another one of those apostrophe words, so we know a letter has been removed, so “you’re” is really “you are.” This means you’re in a state of being. You’re moody; you’re not saying much on this date; you’re really funny!'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/grammatical-errors-dating-profile-3-v1.webp',
+                            page: 3
+                        },
+                        {
+                            type: 'subhead',
+                            text: '3. There / Their / They’re'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This old language landmine might feel a little harder to remember than the other points on this list but it’s super easy.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“They’re” uses that tricky apostrophe, so we already know that this is really “they are,” which relates to a state of being for a third party. They’re late! They’re thirsty tonight! They’re really going to like this article!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“Their” shows possession like just my, his, her, our, and your but it’s focused on a non‐specific or grouped third party. “Who owns that cream‐colored stretch Hummer outside?” “Oh, it’s theirs.” Or “They better clean up their mess before I bring another date here.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“There” is a location that isn’t here or used to confirm something’s existence, both physical and abstract. It’s easy to see why confusion sprouts up with this one. “I’ll meet you there at 9.” “What’s with that tone there, buddy?” “There’s a price to pay for being late on a date with me.”'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/grammatical-errors-dating-profile-4-v1.webp',
+                            page: 4
+                        },
+                        {
+                            type: 'subhead',
+                            text: '4. Its / It’s'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Again, we can use our apostrophe knowledge and an understanding of non‐specific or grouped ownership. “It’s” is really just “it is” so when you answer a question like “how do you like this bar?” you can reply “it’s great!”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But if you want to apply ownership, that’s when you use “its.” So when you’re describing the best restaurant in town and hoping you can convince your match to meet for dinner, you can say “its egg rolls are out of this world!”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The possessive pronoun its also fell victim to years of incorrect autocorrecting with T9 predictive text and again with the rise of smartphones. It appears we are just now starting to get autocorrect smart enough to understand context, so hopefully we as a species will remember this form exists and has a proper use once again.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/grammatical-errors-dating-profile-5-v1.webp',
+                            page: 5
+                        },
+                        {
+                            type: 'subhead',
+                            text: '5. Ending a Sentence with a Preposition'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Now that we’ve gotten the more common pitfalls out of the way, let’s look at some sentence structure errors that really get my goat when I see them on a potential match’s profile.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Ending a sentence in a preposition creates something of a mental cliff for the reader. It damages the flow of your idea and ultimately makes your bio harder to read.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Prepositions are meant to precede nouns; which is what makes ending a sentence with one feel so weird. On, with, for, by and to are all examples of prepositional phrases.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'You’ll usually want to structure your sentences so you end in a noun or verb. “Let’s meet at the bar around the corner.” “Do you like to go running?” As a sentence, these read like complete thoughts, but if you say something like “I want to meet at the bar that you want to go to.” might include similar information but creates a little maze for the person reading your words.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'You put so much effort into dating. You want to look good, and I want you to sound good too. With these tips you’ll be ahead of the pack by a mile. Who thought simple sentence structure could get you that much closer to getting laid?'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'shell-arctic-drilling',
+                eyebrow: 'Energy Desk // 2015',
+                title: 'Shell Abandons Arctic Drilling Plans at a $7 Billion Loss',
+                publication: 'Solar Me Home',
+                credit: 'Written by Charles Wilke',
+                format: 'Energy news feature',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/shell-arctic-drilling-v1.webp',
+                imageAlt: 'An Arctic offshore drilling rig under a pale sky',
+                dek: 'Shell walks away from Arctic exploration after $7 billion, and the piece follows the loss past the headline to the Alaskan port town that had been counting on the work.',
+                curator: "News copy with a turn in it. The obvious version of this story ends at 'oil company retreats, environment wins.' This one keeps going to Unalaska, where the mayor is quietly working out what the departure costs a town that had been promised a boom. The factory rarely paid for that second move. This one made it anyway.",
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'After years of exploration and $7 billion spent, Shell abandons offshore Alaska entirely, citing the Burger J well result, the costs, and a federal regulatory environment it calls unpredictable — with a presidential election approaching in which every remaining Democratic candidate opposed Arctic drilling.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'Our business community will notice it because [Shell] utilized a lot of local businesses and hired a lot of folks. So, that’s too bad. I mean it was a real boon,'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'The closing argument is that the retreat says less about one bad well than about a company reading the direction of the whole industry.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/shell-arctic-drilling-v1.webp',
+                        alt: 'An Arctic offshore drilling rig under a pale sky'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/shell-arctic-drilling-1-v1.webp'
+                    },
+                    {
+                        label: 'Figure 2',
+                        src: '/images/before-times/archive/shell-arctic-drilling-2-v1.webp'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 2 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'For years now, oil companies have circled the Arctic like vultures hanging in the sky over a dying carcass. From up there, the target is clear, and the execution appears easy.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Political cycles come and go with the idea of drilling in the Arctic rising and falling in popularity. Some believe we can unlock unimaginable energy potential by cracking into the trove of crude buried beneath the frozen tundra. Remember Sarah Palin’s reductive catch phrase, “Drill, baby, drill”? Others think the process of deep-sea arctic drilling is as impossible as tying your shoe on a rollercoaster.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Across the span of quite a few years now, Shell spent a total of $7 billion in research and exploratory drilling of the Arctic. After previously stating its confidence in the “90 billion barrels of crude available” in the Arctic, Shell is now announcing that it is abandoning its arctic operation entirely.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“Shell will now cease further exploration activity in offshore Alaska for the foreseeable future,” the oil company stated. “The decision reflects both the Burger J well [the planned location] result, the high costs associated with the project, and the challenging and unpredictable federal regulatory environment in offshore Alaska.”'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/shell-arctic-drilling-1-v1.webp',
+                            width: 2400,
+                            page: 1
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Uncertain Political, Environment and Petroleum-Based Future'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The unpredictability Shell refers to is likely in reference to the looming general election. U.S. regulatory conditions may shift a great deal after the 2016 election. Harsh sanctions and regulatory changes may push clean energy much more aggressively if a liberal candidate wins the presidency.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Hillary Clinton recently joined the ranks of Martin O’Malley and Bernie Sanders as she voiced her dissent on arctic drilling. This means all potential democratic candidates for the 2016 presidential election are against oil companies drilling up north.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'NASA’s latest findings also show carbon emissions, like burning fossil fuels, require immediate attention and is already destined to augment the habitable areas of coastal cities in the coming century. The public perception of deep-sea drilling likely will continue to sway towards avoiding such risks in the future.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/shell-arctic-drilling-2-v1.webp',
+                            width: 2400,
+                            page: 2
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Ramifications of the Decision'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'You might think that Shell’s decision to pull out of arctic drilling is an overwhelmingly positive outcome. But the residents of Unalaska, Alaska will now feel the pinch of this decision. The coastal city benefitted from an optimistic jobs prospect with Shell looking to hire for the now-abandoned operation.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Unalaska Mayor Shirley Marquardt lamented that her town’s citizens and businesses will be disproportionately impacted by Shell’s departure. “Our business community will notice it because [Shell] utilized a lot of local businesses and hired a lot of folks. So, that’s too bad. I mean it was a real boon,” she said in a recent radio interview.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This is not to say that the town will implode. Marquardt is quick to add, “It’s not going to be too huge, I mean, we’re an extremely busy port, we’ve been expanding for years, and that’s not going to end.”'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Takeaway'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Given the continued runaway success of renewable, clean energy it appears likely that Shell might have just seen the difficulty in drilling inhospitable locales for oil as a sign that crude is not the future of energy on this planet. Losing $7 billion on a bad bet must sting, regardless of Shell’s comfortable profit margins.'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'ladwp-overcharging',
+                eyebrow: 'Utility Watch // 2015',
+                title: 'Some Customers Report LADWP Overcharging on Monthly Bill',
+                publication: 'Solar Me Home',
+                credit: 'Written by Charles Wilke',
+                format: 'Consumer utility report',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/ladwp-overcharging-v1.webp',
+                imageAlt: 'A Los Angeles Department of Water and Power utility bill and meter',
+                dek: "A municipal utility's botched billing system, told through the customers holding four-figure bills they cannot account for.",
+                curator: "Consumer-utility reporting on a solar blog, which is to say: written to be found by somebody searching at midnight for why their power bill tripled. The Consumer Affairs quotes carry it — 'Can they do this? Is this legal?' — real people at the wrong end of a database migration, before anyone called it a scandal.",
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'LADWP sends out nearly 1.5 million estimated bills in a single year following a botched billing-system transition. Customers report charges they cannot reconcile, refunds that arrive in the wrong amounts, and a utility that considers the matter closed.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'Can they do this? Is this legal?'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'Two class-action suits were pending when this ran. The piece does not resolve, because at the time it had not.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/ladwp-overcharging-v1.webp',
+                        alt: 'A Los Angeles Department of Water and Power utility bill and meter'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/ladwp-overcharging-1-v1.webp'
+                    },
+                    {
+                        label: 'Figure 2',
+                        src: '/images/before-times/archive/ladwp-overcharging-2-v1.webp'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 4 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'There’s a common assumption that everything will cost more when living in Los Angeles. Gas is routinely over $4 a gallon, eggs can creep into the double digits for a dozen, and monthly utility bills can skyrocket for some.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While most of these expenses are unavoidable, if you’re an LADWP customer and you’ve seen your rates jump, there may be an unexpected reason. Customers receiving an estimated amount on their monthly bills may be scratching their heads over why there’s been a sudden jump in their amount due.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'What is an estimated amount on a utility bill?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Previous to this current rash of customers receiving estimated bills, estimated amounts only got issued to customers with inaccessible meters. A meter behind a locked gate or somewhere unreachable by a meter reader, or when a dog is present on the homeowner’s property, usually triggers an estimated bill to get delivered to the customer.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'These estimated amounts would be derived from historic usage data and might get adjusted for seasonal variance. This means an estimated bill should reflect an accurate guess based on the customer’s actual usage.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The LADWP is now fielding complaints related to the recent billing system overhaul that has left many customers with higher than normal bills due to estimated amounts getting autogenerated. These new estimated bills aren’t based on individual customer usage, leaving some customers to deal with bills many multiple times their actual utility usage.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While the LADWP is prepared to correct these errors, the municipal utility is dragging its feet while placing the blame on a third-party.'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/ladwp-overcharging-1-v1.webp',
+                            width: 2400,
+                            page: 1
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'PricewaterhouseCoopers was hired to consult on LADWP’s new billing system. It is expected that the migration to this system is to blame for the sudden increase in bills with estimated amounts delivered to customers across Los Angeles.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“The billing problem has plagued DWP since the system was first implemented. The agency has sent out incorrect bills to customers, sometimes inflated more than 300 percent,” reports NBC Los Angeles. But this doesn’t explain why an auditor’s report[PDF] released recently claims that DWP officials knew there were issues with the new system before switching to it. An error that some claim may cost LADWP north of $200 million once this is all said and done.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This, however, is in discord with an LADWP-commissioned investigation by TMG. “Per TMG’s report, the vendor selected to design and implement the system, PwC, lacked the necessary experience to manage a task of such complexity. This gap, combined with the lack of effective project management from the department, resulted in critical missed deadlines and frequent warning signs that were ignored,” LADWP’s internal report reads.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'LADWP does admit to an unusual jump in customers receiving estimated bills in January 2014. Over 20 percent by LADWP’s estimate, received these spuriously priced bills. The amount has since dramatically decreased to below the agency’s self-declared goal of five percent. This means that even though everyone may not be receiving accurate bills, steps have been taken to curtail the issue.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Consumer Affairs has justifiably gotten slammed with questions, complaints and pleas for help in the wake of this recent deluge of billing errors. Jimmy from Granada Hills expressed fear and outrage on a Consumer Affairs message board at the prospect of being on the hook for a $4,500 billing error:'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“They are charging me $4,500 for a billing error that they caused. They said they had been undercharging me for months. How is this my fault? I live on a budget, now they want to blame me for the mistakes they did. I asked if they had a billing plan, they said no. I have to come up with the money or I will lose my electricity. CAN THEY DO THIS???”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Plenty of other residents posting on the Consumer Affairs website share this sentiment: “Can they do this? Is this legal?” “What can we do?” “I’m going to get disconnected and have no idea what to do.”'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/ladwp-overcharging-2-v1.webp',
+                            width: 2400,
+                            page: 2
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Class Action Lawsuit'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Early in 2015, LADWP customers filed two separate class-action lawsuits. Both pending lawsuits address the billing errors that are affecting thousands of Angelinos. “The refunds, in the correct amounts, should simply be paid back and the billing system should be fixed so these types of problems no longer occur,” said Time Blood, an attorney representing one of the pending cases.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In one year’s time, nearly 1.5 million estimated bills were sent out from LADWP, a figure which even the utility company agrees is far too high. However, one of the lawsuits alleges that some of the astronomical costs on these bills weren’t even marked as estimated, even though, as the suit purports estimate should have been stamped on those bills as well.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'LADWP says that the bills they deemed incorrect have already been re-billed. The utility company feels this issue is resolved. But these two pending class-action lawsuits suggest that customers feel they’re still not getting the relief they expected after the utility company admitted to the mess up.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The future remains to be seen if the affected Angelinos will receive any court-ordered help in clearing up this unfortunate mess.'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'future-of-the-battery',
+                eyebrow: 'Energy Desk // 2015',
+                title: 'The Future of the Battery',
+                publication: 'Solar Me Home',
+                credit: 'Written by Charles Wilke',
+                format: 'Technology explainer',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/future-of-the-battery-v1.webp',
+                imageAlt: 'A cutaway view of battery cells',
+                dek: "Solar's real bottleneck was never the panel, and this piece goes looking for the storage chemistry that might finally clear it.",
+                curator: "The energy desk's standing problem was that solar news is mostly panel news, and panels had stopped being interesting some time around the third conversion-rate story. So the beat widened into storage, which is where the actual constraint always lived. The phone-in-your-pocket framing is a content-farm move. The argument underneath it is sound.",
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'Crack open any phone and the battery is the largest component in it, dictating the size and weight of everything around it. That ratio is the ceiling on renewable energy too: panels keep improving, and storage does not.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'What if the battery became the smallest component in your phone?'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'From there it runs through the candidate chemistries, including one whose key material turns out to be sitting inside a tree.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/future-of-the-battery-v1.webp',
+                        alt: 'A cutaway view of battery cells'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 5 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'Renewable energy continues its technological march. New developments in solar panels grab headlines almost daily, and energy conversion rates increase regularly - but there is a limit to what we can do with solar panels until battery technology improves as well.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "Sadly, batteries have remained relatively unchanged for decades, but that's all about to change."
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'The Battery Bottleneck'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "Consider the size of your phone. It doesn't matter if you have the latest and greatest smartphone, an old flip phone or something in between. The battery remains the largest component within, thus dictating the overall size, weight and thickness of any mobile device."
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "An iPhone might just be the most advanced mobile technology - all crammed into a millimeters-thick brick. But if you were to crack it open, you'd see a minuscule circuit board next to a comparatively massive battery."
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And it’s gotta be that big because we need all that juice to run those trillions upon trillions of calculations every day. Who knew swiping through Tinder or flicking down your for-you page on TikTok required so much energy?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "But, what if a battery's energy capacity wasn't so directly tied to the battery's size?"
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'What if the battery became the smallest component in your phone? And what if there was an energy-dense battery capable of running your entire house at night?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We may be seeing that mystical-sounding battery sooner than you might think...'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Emerging Battery Breakthroughs'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Is it possible that tree-huggers were on to something? And could it be that the answer was in our walls (and fireplaces) for hundreds of years?'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Wood Batteries'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'How on earth could wood become a battery? It can’t even conduct electricity!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "You're right to question the logic of wood batteries. We've historically used caustic chemicals and precious metals to store and conduct energy. Alkaline, lithium ion, and nickel cadmium are all relatively toxic materials. So why are researchers looking at wood as a potential lightweight battery solution?"
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "It's simple, really... Trees."
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Have you noticed the similarity between photovoltaic solar-panel cells and leaves on a tree?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We have yet to crack artificial photosynthesis, but the photovoltaic process is a good first step. And the logical next step is identifying how trees store that energy.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Surprise, surprise, it’s in the tree’s wood.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“The researchers noted that wood fibers are naturally designed to hold mineral-rich water, water that is very similar to the electrolyte in batteries,” explains CleanTechnica.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Wood batteries can be significantly lighter and more pliable than the rigid, heavy contemporary batteries. And the experimental wood batteries are already showing great promise in charge cycles.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The prototype is already “successfully lasting through a full 400 charge-discharge cycles.” For comparison, a lithium ion battery, like the one in your phone, lasts through 300-500 charge-discharge cycles.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: '3D-Printed Batteries'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While this technology is still in its infancy, 3D printing is already showing promise in rapidly prototyping new ideas.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Current 3D printers operate by extruding two-dimensional layers upon layers of a substance that stacks up to create a three-dimensional object.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'What started with at-home hobbyists printing simple trinkets is now evolving to print more complex items - like batteries!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Researchers from Lawrence Livermore National Laboratory are using a novel approach to 3D-print nearly microscopic layers of aerogel.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Carbon nanotube aerogels, known as “hard smoke,” are used to print a tight graphene geometric design. This results in a structure that may one day function as a battery.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The old guard in the battery game, lithium ion, has a tendency to degrade quickly. As evidenced by the 300-500 charge-discharge cycle lifetime limit on most conventional batteries.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Graphene may help the stability and extend the longevity of these batteries. So while a 3D-printed graphene-aerogel battery may be years off, graphene-integrated lithium batteries are already in development at Tesla.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Tesla’s Game-Changing Powerwall Home Battery'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "In April of 2015, Elon Musk announced Tesla's plans to release a much-needed missing piece to the solar-energy puzzle."
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“We have this handy fusion reactor in the sky called the Sun,” Musk said to a rowdy crowd during his keynote presentation. “We don’t have to do anything, it just works. [It] shows up every day, and produces ridiculous amounts of power.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This is information many of us may already know. However, we are aware of the current limitations of solar panels. Chief among them is that they don’t work so great (read: at all) at night.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'So maybe we could use rechargeable batteries to harness the excess power generated during the day for use when it’s cloudy or at night. But so far there hasn’t been much of a ready-made product that would tackle that problem.'
+                        },
+                        {
+                            type: 'quote',
+                            text: '“The issue with existing batteries is that they suck... They’re expensive, they’re unreliable, they’re sort of stinky, ugly, bad in every way. They’re very expensive... There’s not one integrated place you can go and buy a battery that just works, which is what people really want to buy,” Musk told the packed auditorium. “That’s the missing piece, that’s the thing that’s needed to have a proper transition to a sustainable energy world.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And Musk believes he’s found a solution to that problem. That missing piece.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'You may recall news of Tesla teaming up with Panasonic to create the massive Nevada Gigafactory. The zero-energy footprint factory is deep in construction and looking to start operations in 2016. Once operational, Musk predicts the factory’s output will be 50 GWh in annual battery production by 2020.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Tesla acknowledges that there’s a problem with current feed-in tariff plans across the nation. The grid is old, like over-a-century old in many cities. The wiring cannot handle a rush of additional energy sent back to the utilities.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This means that as more consumers adopt rooftop solar panels for personal energy production, the more selling back excess energy will cause strain to this ancient electrical grid.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Tesla plans to release home-grade, business-grade and utility-grade battery solutions to contain all that excess energy and prevent grid overload.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The home-grade Tesla Energy Powerwall battery comes with a capacity of 10KWh starting at $3,500. That sum is the cost to the installer not including the subsidies that may very well decrease the cost to the end user.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Bloomberg Business summarizes the April 30, 2015 Elon Musk announcement below:'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'The Battery Our Future Deserves'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Battery technology lagged behind computational processor advancements for decades. Now it appears that is set to change.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The next two decades will bring battery advancements closer to the future promised by our exponentially growing computer processing power.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It’s not clear which new battery technology will become the industry standard - but it should be comforting to know there are multiple highly advanced technologies already in the research phase, and in the case of Tesla’s Powerwall, available for order.'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'life-near-an-airport',
+                eyebrow: 'Urban Systems // 2015',
+                title: 'Now Boarding – Life Near an Airport is for the Birds',
+                publication: 'Home Living 101',
+                credit: 'Written by Charles Wilke',
+                format: 'Real-estate feature',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/life-near-an-airport-v1.webp',
+                imageAlt: 'Commercial airliners queued on approach over a residential neighborhood',
+                dek: 'The discounted house under the landing pattern, and the noise, air-quality and eviction research that explains the discount.',
+                curator: 'A real-estate piece that turns into a warning. It opens on the conga line of jets hanging over Los Angeles and ends in Heathrow cardiac studies and Medicare data across eighty-nine American airports — sourcing the brief did not require and probably did not pay for. Useful copy that decided to be true first.',
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'The price break on a house near an airport is real, and so is what you are buying with it: constant low-frequency noise, elevated particulate exposure, and, if the airport ever expands, the possibility of an eviction you cannot contest.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'The closer you live to the airport, the more aircraft noise you experience in your home, the higher the risk you run for developing heart problems.'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'Two observational studies anchor it — 3.6 million people around Heathrow, six million Medicare recipients near American airports — both finding the same dose-response curve.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/life-near-an-airport-v1.webp',
+                        alt: 'Commercial airliners queued on approach over a residential neighborhood'
+                    },
+                    {
+                        label: 'Figure 1',
+                        src: '/images/before-times/archive/life-near-an-airport-1-v1.webp'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 4 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'On a clear day in parts of Los Angeles, you can see a string of commercial airliners queuing up to land at LAX. From a distance, this conga line of four or five planes silently hangs as if stationary on the horizon slowly curving towards the ground.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But if you’re in El Segundo, much closer to LAX, a plane approaching to land every two minutes becomes an unnervingly persistent disruption.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Living near an airport, under the landing pattern of jumbo jets, requires a certain amount of Zen to ignore. But noise isn’t the only detriment to finding peace in your home near an airport. Planes release toxins in the air; and with hundreds taking off and landing each day from major airports, living near a busy travel hub can take its toll on your health.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'The Constant, Bone-Rattling Noise'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'When buying a home, there’s usually an implied wish for peace and quiet. Without much investigation, the discounted price tag on a home near an airport may seem a little too good to be true for that wish to get granted.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Consider the distance your potential new home sits from an airport. Less than a mile? More than nine? That distance may make a huge impact on your quality of life and your overall health. Two recent observational studies looked at the relationship between noise pollution and the increased risk for cardiovascular disease.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Both studies found an increased risk of possible health effects directly related to aircraft noise. The first paper studied 3.6 million people living near Heathrow Airport in London. Those living closest, in the noisiest residential area, saw “an elevated risk for stroke, coronary heart disease, and cardiovascular disease.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The paper concluded that there is a “dose-response relationship,” which means that the closer you live to the airport, the more aircraft noise you experience in your home, the higher the risk you run for developing heart problems.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The second paper analyzed six million Medicare recipients in the U.S. who lived near 89 different airports around the country. Larry Husten, a contributor for Forbes reports:'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“They found that people who lived in zip codes with the top 10% of noise exposure had a significant increase in the risk of hospital admission for cardiovascular disease (after adjusting for age, sex, race, zip code level socioeconomic status and demographics, zip code level air pollution and roadway density.)”'
+                        },
+                        {
+                            type: 'image',
+                            src: '/images/before-times/archive/life-near-an-airport-1-v1.webp',
+                            width: 2400,
+                            page: 1
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Dangerous Levels of Air Pollution'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It’s been nearly two decades since lead was included in automobile gasoline. It had taken many years since passing the Clean Air Act of 1970 to change what can legally get included in what we pay for at the pump.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Lead creates nasty neurological effects that can damage the central nervous system, impair hearing, cause anemia and can manifest violent behavior later in life. “Even at infinitesimal levels in the blood, lead has been linked to ADHD,” says Michael Behar of On-Earth.org. It’s dangerous and potentially fatal for all age groups, and it is still allowed in airline fuel.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“When the Oregon Department of Environmental Quality surveyed the airport in 2005, it found a lead cloud hovering above Hillsboro [home to Portland-Hillsboro Airport], a circular plume spanning 25 square miles,” says Behar.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Twenty-five square miles covers a staggering number of homes surrounding the airport. And lead is really just one of the many pollutants spewed by airplanes. Recent studies indicate an increased cancer risk for those living near an airport. Volatile organic compounds (VOCs) are included in the slurry of toxins spewed into the air by planes across their flight path. These VOCs are directly linked to an increase in cancer rates of residents in surrounding areas.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Researchers looked at the residences surrounding the Seattle-Tacoma Airport (SeaTac). “Health workers also found high numbers of cases of the brain cancer called glioblastoma.” This condition is normally fatal when contracted. It remains rare in the general public, affecting one in 25,000 people, but the area around SeaTac, “which has a population of 23,000, had experienced at least five deaths from the disease,” says Andrea Perry, a reporter for DailyMail. This means residents near SeaTac have a five-fold increased risk in developing this deadly disease.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'If you’re asking yourself how something like this isn’t widely reported, you’re not alone. “The question is why hasn’t any research been done. No one seems to be taking this threat seriously and we really should be asking more questions about the effects on health caused by the aviation industry,” says a spokesman for Transport 2000, the organization leading this latest round of research.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Unfortunately, the exponential increase in aviation is likely to increase these figures as well. It is reported that air travel in 2015 has more than doubled since 1995, and if current trends continue by 2050 “passenger-kilometers flown could grow between five and nine times the figure for 1995,” predicts Transport 2000.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'The Looming Threat of Evictions'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This information should give pause to anyone considering buying a home near an airport. But beyond health risks and daily noise disruptions, there’s one more little problem with living near an airport. As Realtor.com reminds us, “a home very close to the physical border of the airport might decrease in value should the airport decide to expand or add additional runways that create new flight paths.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'So even if you’re okay with the potential damaging health effects of living close to an airport, you may find that you’ll be forced out of your home if the airport decides to expand or restructure its flight paths. In case you were wondering, evictions due to airport expansions happen relatively often.'
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'unlicensed-sober-living-homes',
+                eyebrow: 'Investigative // 2015',
+                title: 'The Dark Side of Unlicensed Sober Living Homes',
+                publication: 'Home Living 101',
+                credit: 'Written by Charles Wilke',
+                format: 'Investigative feature',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/unlicensed-sober-living-homes-v1.webp',
+                imageAlt: 'A residential street of single-family homes',
+                dek: 'A neighborhood-watch meeting in Hollywood opens into three decades of federal housing law, and the loophole that lets unlicensed halfway houses operate with no oversight at all.',
+                curator: 'The longest thing in this drawer and the least like anything around it. It begins in a room the writer walked into two doors from his own apartment and works outward through the Fair Housing Act, the ADA, the Oxford House ruling, and a 2012 Pasadena fire that killed two men. It is careful about the people it could easily have vilified, and it does not resolve, because the law never did. Nobody briefed this one.',
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'Sober-living homes sit in a gap in the law: not medical facilities, so not licensed; occupied by residents legally defined as disabled, so protected by the FHA and the ADA. The result is a category of business with almost no operational floor and almost no way for a neighbor to challenge it.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'A completely self-governed facility with zero oversight is somehow meant to expel those that relapse.'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'The reporting is deliberate about what it is not arguing. Recovering addicts deserve housing and protection; the objection is to proprietors packing ten to twelve people into single-family homes and calling it recovery. Los Angeles drafted an ordinance in 2011 and sent it back to committee in 2013, where it stayed.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/unlicensed-sober-living-homes-v1.webp',
+                        alt: 'A residential street of single-family homes'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 9 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'A group is forming at my neighbor’s beautiful three-bedroom apartment in Hollywood, California.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'I enter cautiously… because even though I’ve lived two-doors down for the past two years, we’ve never met.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'As the place fills in with others, it dawns on me: This neighborhood-watch meeting is not your normal get together.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'That’s because a few blocks away an unlicensed sober-living facility just opened.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The owner now living next door to this new facility is here tonight. He’s not the first to talk. First, we listen to a member of our city council explain the current housing laws.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The Americans with Disabilities Act (ADA) protects many from prejudice when buying a home. It’s a good law, and it was crafted with the best of intentions.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Unfortunately, some unlicensed sober living facilities use those best intentions as a loophole to create unsupervised, self-governed and overfilled halfway homes.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'You might imagine the value of that neighbor’s home taking an immediate nosedive. And he had just put in a pool… “sweat equity,” he said.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'First, a Caveat'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It should be said: not all sober living homes are bad. Not all facilities engage in objectionable practices. Not every single location is appalling.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But there are many across the entire country fitting that bill.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It should also be said that the portion of our society struggling with addiction deserves our attention, respect and compassion. These are human beings just like the rest of us and deserve protection under the same laws as everyone else.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'I do not mean to vilify those looking for help. My concern is unlicensed sober-living proprietors abusing legal loopholes to spread substandard living conditions to bucolic neighborhoods across the nation.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It’s an unfortunate roll of the dice that lands one of these businesses next to your home. And there is very little legal recourse for a homeowner to recover that sudden dip in property value if that nearby facility turns foul.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Companies Profit on Sober Living?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Yes. The goal: find a quiet, tucked away single-family home that is near but removed from the environment the recovering addict is escaping. So, by definition, proprietors of these facilities target desirable residential neighborhoods.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Essentially, these businesses open up shop in the same areas that most homeowners consider a great place to raise a family.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This has created a decades-long fight between homeowners and municipalities in an attempt to define operational parameters and create stronger oversight governing how these sites are run.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Laws as They Stand'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Currently, there are few laws regulating the location, quality and acceptable staffing of these group homes.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'A statement released in August of 2006, by the County of Los Angeles’ Chief Administrative Office states, “Sober living homes do not require licensing and consequently are unregulated as such… These facilities sometimes come to the attention of code enforcement personnel due to associated code violations relating to unsanitary and substandard housing conditions.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This means there will be no intervention until the property falls far enough into disrepair as to be deemed unsanitary and substandard.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This should make any neighbor’s skin crawl.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Especially those who aren’t too keen on seeing the neighboring property repurposed for this use, knowing full well that nothing can be done until it falls into squalid disrepair.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The reason the legal avenues are restricted to combat the proliferation of these sober-living group homes is due to their protection under the Fair Housing Act (FHA) and the Americans with Disabilities Act (ADA).'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Moreover, the regulations enforced on residential-care facilities do not apply since the legal definition of a sober-living home specifically omits any on-site medical assistance.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The Department of Alcohol and Drug Program’s (DADP) fact sheet explains, “[Sober-living homes] are not required (or eligible) to be licensed, and are not subject to Department of Alcohol and Drug Program [DADP] oversight and regulatory requirements.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This shifts enforcement of these homes from DADP to the Department of Social Services (DSS), which means reasoning to evict falls along similar guidelines as ousting your average homeowner.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But, since the occupants of sober-living homes are legally defined as disabled there are many additional protections provided to them under the law.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And rightfully so.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Those with disabilities may not have the means to protect their own rights. However, I’ve found that it’s not the afflicted that are truly at fault when sober-living group homes veer towards squalid.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'It’s the proprietors.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Single-family homes are not meant to house 10-12 unrelated individuals. In many cases, occupants share one bathroom. Garages become used as additional bedrooms, and bunk beds litter the living room.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This all makes these homes seem like high-priced dorms with grown men packed in like sardines. This is a far cry from what is truly needed for recovery: The comforting respite from addiction.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And it’s true that the improperly run facilities are in the minority, but this is a noisy minority.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In 2007, Los Angeles City Council passed an ordinance limiting sober-living facilities to six occupants, by updating zoning definition of family related to the residential use of the property. The ordinance also forces the operator to apply for a reasonable-accommodation permit, regardless of tenant count.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This ordinance had gone mostly unenforced until late 2012. On the night of November 1, a sober living group home on El Sereno Avenue in Pasadena erupted in flames claiming the lives of two men and severely injuring another while also doing $1.35 million in damage to both neighboring residences.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This event renewed interest in addressing the legal recourse for group houses stricken with substandard living conditions. However, interest alone will not change the federal laws protecting these unlicensed facilities from operating in their current form.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Currently, the FHA states that homeowners cannot disclose the existence of nearby facilities.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Soberlivingcertification.com uses this analogy: “It would be just as wrong to tell a prospective home buyer that there is a sober living home nearby as it would to say there is a person with AIDS in the neighborhood or an African American family living next door.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The justification is sound, but it puts the responsibility on any prospective homeowner to do exhaustive research on their new neighborhood before entering escrow.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'So, what’s really going on?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Again, it should be said that not all sober living facilities operate this way.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Some homes are a welcome relief from the alleys where these addicts are sure to return if not given a chance to right the wrongs in their life. However, this topic has become such a hot button issue due to the cases of things going sour.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This means that it is often hard to start a dialogue about sober-living facilities at all.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'But one specific nationwide sober-living facility business, Oxford House, is laying the legal groundwork through court cases that only muddies the discussion.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'In the 1992 court case Oxford House, Inc. v. Township of Cherry Hill (CIV. No. 92-1150) the plaintiff presents itself as such:'
+                        },
+                        {
+                            type: 'quote',
+                            text: '“Oxford Houses are not health care facilities, rehabilitation centers, or supervised halfway houses. They are simply residential dwellings rented by a group of individuals who are recovering from alcoholism and drug addiction.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Part of the company structure includes the stipulation that the facility must be “democratically self-governed by its residents.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Another major component in their self-description includes an important distinction:'
+                        },
+                        {
+                            type: 'quote',
+                            text: '“No professional treatment, therapy, or paid staff is provided. Unlike a boarding house, where a proprietor is responsible to run and operate the premises, at Oxford House, the residents are responsible for their own food and care as well as for running the home.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Oxford House claims that in the event that someone relapses into use of drugs or alcohol, they are to self-evict.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Wait right there.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'A completely self-governed facility with zero oversight is somehow meant to expel those that relapse. Essentially Oxford House, which has a nationwide footprint of 1,607 homes in 45 states, is requesting relapsing drug addicts to use the honor system and just decide to leave if they break their sobriety.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And go where?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Since the occupants are protected under the FHA’s definition of the disabled, Oxford House won its suit against the Township of Cherry Hill and remained open and unregulated.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This same logic is used all across the country. No medical assistance, no onsite staff, no government oversight.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Mind you, Paul Molloy, Oxford House CEO, admits that their success rate is right around 75 percent.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This leaves a 25 percent chance that the largest network of these unlicensed homes could become a nuisance in your neighborhood should they open one near you.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: '“You can’t take the newly recovering person and put them in the crack neighborhood where they were using crack. You gotta open houses and rent houses in good neighborhoods,” Malloy adds in his interview with 60 Minutes.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'I do not mean to suggest that those in need don’t deserve all the help they can get. But, any rational person would concede that a sober-living home protected by both the FHA and ADA should also include some stipulation concerning oversight and accountability.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Because there currently is none.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Oxford House’s victory in court was three decades ago, yet the systemic abuse of this legal loophole remains to this day and continues across the nation.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'What’s being done now?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This topic has once again resurfaced in Los Angeles. In 2011, Councilman Paul Koretz painted a picture of the true concern of homeowners and parents.'
+                        },
+                        {
+                            type: 'quote',
+                            text: '"We had a young family who lived next to a group home and, one day, someone climbed a fence and went into their backyard where their daughter was," Koretz explained. "When I went door-to-door, people told me they were moving out because of that. The process we have in place doesn\'t work."'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Drafted in 2011, the Los Angeles City Council presented the Community Care Facilities Ordinance (CCFO) to help curtail what Los Angeles resident Sharon Pierce considers “…a vastly profitable illegal business that has been untouchable."'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'While that ordinance aimed to solve some of the headaches currently plaguing homeowners, it was deemed too invasive.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Councilman Richard Alarcón put it this way, “This ordinance is throwing the baby out with the bathwater and will have an extremely negative impact on the people we want to help.”'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Ultimately, the ordinance was sent back to committee in January of 2013, and has yet to re-emerge.'
+                        },
+                        {
+                            type: 'subhead',
+                            text: 'Where do we go from here?'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'This contentious subject is sure to elicit emotional support on both sides of the argument.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We should all be able to agree that recovering addicts and alcoholics deserve the respect of their fellow citizens. They deserve a place to emerge from the throes of their addiction and return to being functional members of society.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Without safe havens and a place to call home it would be very easy for most to return to their old habits.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Hopefully, we all would agree that something needs to be done. However, the predominant not-in-my-backyard mindset prevents many from seeing the forest for the trees. And that is understandable. Homelessness in Los Angeles is officially a state of emergency, with 28,852 unsheltered residents at last count.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We must understand the need to protect both neighboring homeowners and those recovering from addiction.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'There needs to be an understanding that money is being made on the backs of those looking for a way out, so protection and oversight is a must.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We need to ask our representatives to approach this problem head on. While these unlicensed facilities may take advantage of legal loopholes, they speak to a larger need that should remain protected.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: "Now it's time to actually approach the problem with care and compassion. Because this is already in our backyard."
+                        }
+                    ]
+                }
+            },
+            {
+                id: 'give-a-damn-about-space',
+                eyebrow: 'Personal Essay',
+                title: 'Give a Damn About Space: An Argument',
+                publication: 'Improbology',
+                credit: 'Written by Charles Wilke',
+                format: 'Personal essay',
+                depthLabel: 'Full read',
+                image: '/images/before-times/archive/give-a-damn-about-space-v1.webp',
+                imageAlt: 'An illustration of distant planets orbiting a nearby star',
+                dek: 'A short argument for caring about space exploration, written in the weeks after seven Earth-like planets turned up around a single nearby star.',
+                curator: 'Four hundred words and not one subhead, which in this archive marks it immediately as something other than client work. No keyword to hit, no takeaway to land, no drawer it fits into. Just a writer who has been looking up since childhood, briefly getting to say so.',
+                body: [
+                    {
+                        type: 'paragraph',
+                        text: 'The TRAPPIST-1 discovery lands, and the essay uses it to make a case that has nothing to do with habitability studies: that space is one of the few remaining subjects capable of holding public attention across every other division.'
+                    },
+                    {
+                        type: 'quote',
+                        text: 'And this makes me ecstatic!'
+                    },
+                    {
+                        type: 'paragraph',
+                        text: 'It is the shortest piece in the archive and the only one written for no client at all.'
+                    }
+                ],
+                pages: [
+                    {
+                        label: 'The header',
+                        src: '/images/before-times/archive/give-a-damn-about-space-v1.webp',
+                        alt: 'An illustration of distant planets orbiting a nearby star'
+                    }
+                ],
+                depth: {
+                    kind: 'read',
+                    label: 'Read the complete recovered article',
+                    meta: 'Complete edition // about 2 minutes',
+                    intro: 'Recovered in full from the 2022 site backup and presented as it was last published, images included. Nothing has been condensed for the archive.',
+                    body: [
+                        {
+                            type: 'paragraph',
+                            text: 'We may have just found a new home! The recent discovery of seven Earth-like planets orbiting a nearby star is the latest in a series of space-based revelations that’s grabbed the social consciousness.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And this makes me ecstatic!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'From an early age, I’ve looked to the heavens and wondered what might be out there. In the fourth grade, I attended Space Camp. I was a member of the Junior Astronauts in grade school. I built and launched model rockets and calculated the cosmic math to determine my true astrological sign!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'And while pop culture now accepts my passion into the good graces of the masses, my young interest in space was routinely mocked. Luckily, as we march towards the future, I recognize I’m not alone in my love of that song softly calling to us from above.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Elon Musk is perhaps the most important contemporary catalyst in this growing interest in space. His flat out acceptance of SpaceX’s potential failure may have actually saved the fledgling private spaceflight company. Launch after launch, failure after failure, Elon wiped away the bad press and focused on iteration.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'He understood that the first stage of the rocket, the booster that propels the second stage high enough and fast enough to escape the pull of Earth’s gravity, is the most expensive single-use element in spaceflight. The proposed reusability of that part of the rocket would drop the cost of launches by 30 percent.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We are quite lucky that SpaceX has since shown some success landing rockets. But I feel it’s equally important that we’ve been allowed to share in its failures.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'SpaceX’s commitment to hosting streams for each attempted launch and landing imbues viewers with hope, anticipation and uncertainty. Each success feels shared, each failure endears SpaceX to the public. This gives the company the social capital to try again. We want to see this company succeed because we are allowed to see the scope of its failure.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'We’ve become invested, perhaps not monetarily, but emotionally.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Each stream guarantees excitement for better or worse. Root for success, cheer on failure, but appreciate a man and a company willing to welcome anyone and everyone to a potential future of space exploration.'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'The next launch is only a few weeks away. SpaceX will, as always, be streaming the event. No one is quite certain how this will go and that uncertainty feels damned exciting!'
+                        },
+                        {
+                            type: 'paragraph',
+                            text: 'Be sure to follow Elon Musk on Twitter for the latest launch updates. And head over to SpaceX’s YouTube page for live hosted webcasts of each upcoming launch!'
+                        }
+                    ]
+                }
+            }
         ],
         contentCatalog: [
             {
@@ -1472,7 +3786,7 @@
                     '21st Century Johnny Appleseed: A Carbon-Negative Trek Across America',
                     'The Birth of Solar Panels'
                 ],
-                restored: ['solars-retro-future']
+                restored: ['solars-retro-future', 'shell-arctic-drilling', 'ladwp-overcharging', 'future-of-the-battery']
             },
             {
                 id: 'catalog-home-living-101',
@@ -1488,7 +3802,7 @@
                     'Coyote Encounters: What to do When Walking Your Dog',
                     'Xeriscapes: Drought-Friendly Landscapes'
                 ],
-                restored: ['trimming-fringe-suburbia', 'the-watcher', 'forty-hour-workweek']
+                restored: ['trimming-fringe-suburbia', 'the-watcher', 'forty-hour-workweek', 'life-near-an-airport', 'unlicensed-sober-living-homes']
             },
             {
                 id: 'catalog-review-weekly',
@@ -1504,7 +3818,7 @@
                     'What is IFTTT and How Can It Set You Free?',
                     "LG G5's Modular Smartphone Review"
                 ],
-                restored: ['state-of-dating-2016']
+                restored: ['state-of-dating-2016', 'occipital-neuralgia-smartphones', 'irish-pubs-chicago', 'hooking-up-at-coachella', 'grammatical-errors-dating-profile']
             },
             {
                 id: 'catalog-fieldedge',

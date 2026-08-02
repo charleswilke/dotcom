@@ -2017,7 +2017,10 @@
         });
     }
 
-    function renderArchiveBody(blocks) {
+    // `piece` is optional and only used by image blocks, which hand their
+    // `page` index to the scan viewer so an inline figure opens the same
+    // lightbox the hero does, already turned to the right page.
+    function renderArchiveBody(blocks, piece) {
         const body = makeArchiveElement('div', 'bt-archive-body');
         (blocks || []).forEach((block) => {
             if (block.type === 'paragraph') {
@@ -2039,6 +2042,39 @@
                 block.items.forEach((item) => list.appendChild(makeArchiveElement('li', '', item)));
                 section.appendChild(list);
                 body.appendChild(section);
+                return;
+            }
+            if (block.type === 'image') {
+                // `align` and `width` come from the original WordPress markup, so
+                // insets sit where they were published. Width is the editor's
+                // display size and only ever caps the figure, never stretches it.
+                const align = block.align === 'left' || block.align === 'right'
+                    ? ` is-${block.align}`
+                    : (block.align === 'center' ? ' is-center' : '');
+                const figure = makeArchiveElement('figure', `bt-archive-figure${align}`);
+                if (block.width) figure.style.setProperty('--bt-figure-width', `${block.width}px`);
+                const frame = makeArchiveElement('button', 'bt-out-hero-frame bt-archive-figure-frame');
+                frame.type = 'button';
+                frame.setAttribute('aria-label', block.alt
+                    ? `Enlarge “${block.alt}”`
+                    : 'Enlarge this image');
+                const image = document.createElement('img');
+                image.src = block.src;
+                image.alt = block.alt || '';
+                image.loading = 'lazy';
+                image.decoding = 'async';
+                frame.appendChild(image);
+                frame.appendChild(makeArchiveElement('span', 'bt-press-scan-zoom', 'Enlarge'));
+                if (piece) {
+                    frame.addEventListener('click', () => openScanViewer(piece, block.page || 0));
+                } else {
+                    frame.disabled = true;
+                }
+                figure.appendChild(frame);
+                if (block.caption) {
+                    figure.appendChild(makeArchiveElement('figcaption', 'bt-archive-figure-caption', block.caption));
+                }
+                body.appendChild(figure);
                 return;
             }
             if (block.type === 'links') {
@@ -2833,7 +2869,11 @@
                 button.classList.add('is-transcribed');
                 button.appendChild(makeArchiveElement('span', 'bt-archive-index-number', entry.number));
                 button.appendChild(makeArchiveElement('strong', '', entry.piece.title));
-                button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', info.date));
+                // Not every piece has a date we can stand behind; skip the slot
+                // entirely rather than leaving an empty line in the index.
+                if (info.date) {
+                    button.appendChild(makeArchiveElement('span', 'bt-archive-index-meta', info.date));
+                }
                 const tags = makeArchiveElement('span', 'bt-doc-index-tags');
                 tags.appendChild(makeArchiveElement(
                     'span',
@@ -2885,7 +2925,7 @@
             pane.appendChild(figure);
         }
 
-        const reader = renderArchiveBody(piece.depth.body);
+        const reader = renderArchiveBody(piece.depth.body, piece);
         reader.classList.add('bt-archive-reader');
         pane.appendChild(reader);
 
@@ -3253,7 +3293,7 @@
     const ARCHIVE_HEADERS = {
         alchemy: { kicker: 'Screening Room // project file', title: 'The mutation archive' },
         press: { kicker: 'Student press // recovered byline', title: 'The clipping file' },
-        content: { kicker: 'Content Factory // recovered work', title: 'The output archive' }
+        content: { kicker: 'Content Factory // recovered work, 2014–2022', title: 'The output archive' }
     };
 
     function openArchive(collectionName, pieceId) {

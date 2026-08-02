@@ -2364,6 +2364,31 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
     transform: rotate(0.8deg);
 }
 
+/* Three clipboards further back on the line, claimed by the 2022 recovery. */
+.bt-content-hotspot-article-sober {
+    left: 46.2%;
+    top: 37.3%;
+    width: 3.8%;
+    height: 10.85%;
+    transform: rotate(-1.1deg);
+}
+
+.bt-content-hotspot-article-coachella {
+    left: 56.25%;
+    top: 29.6%;
+    width: 2.8%;
+    height: 8.25%;
+    transform: rotate(1.2deg);
+}
+
+.bt-content-hotspot-article-pubs {
+    left: 36%;
+    top: 27.5%;
+    width: 2.65%;
+    height: 8%;
+    transform: rotate(-0.9deg);
+}
+
 .bt-content-hotspot-article-far::after {
     top: auto;
     right: auto;
@@ -6430,23 +6455,45 @@ body.bt-room-content .bt-inventory-drawer.is-open {
     display: block;
 }
 
+/* flow-root rather than grid: recovered articles carry floated insets, and a
+   floated grid item just sits in its own cell instead of letting text wrap.
+   The margins below reproduce the 0.9rem grid gap exactly, including the
+   0.9 + 1.15 that used to separate a paragraph from the next heading. */
 .bt-archive-body {
     max-width: 48rem;
-    display: grid;
-    gap: 0.9rem;
+    display: flow-root;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1rem;
     line-height: 1.62;
 }
 
-.bt-archive-body > p,
-.bt-archive-body blockquote,
+.bt-archive-body > * {
+    margin: 0 0 0.9rem;
+}
+
+/* The full-article reader runs looser than the précis panes; this replaces the
+   `gap: 1.2rem` it used to set on the grid. */
+.bt-archive-reader > * {
+    margin-bottom: 1.2rem;
+}
+
+.bt-archive-body > *:last-child {
+    margin-bottom: 0;
+}
+
 .bt-archive-screenplay p {
     margin: 0;
 }
 
+/* Adjacent margins collapse to the larger of the two, so a heading's top margin
+   is the whole gap it wants: the row gap plus its own 1.15rem. */
+.bt-archive-reader > .bt-archive-body-heading {
+    margin-top: 2.35rem;
+    margin-bottom: 1.2rem;
+}
+
 .bt-archive-body-heading {
-    margin: 1.15rem 0 0;
+    margin: 2.05rem 0 0.9rem;
     color: var(--bt-indigo);
     font-family: "Special Elite", Georgia, serif;
     font-size: clamp(1.35rem, 3vw, 1.8rem);
@@ -7152,6 +7199,60 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 .bt-out-hero-frame:focus-visible {
     outline: 3px solid var(--bt-indigo);
     outline-offset: 3px;
+}
+
+/* Images set inside an article body, where the original published them.
+   They reuse the hero's clipped-page frame at a smaller scale. */
+.bt-archive-figure {
+    max-width: var(--bt-figure-width, none);
+    margin: 1.8rem 0;
+}
+
+/* Insets keep the alignment and display width the original article gave them,
+   and the surrounding paragraphs wrap around as they did on the live page. */
+.bt-archive-figure.is-right {
+    float: right;
+    margin: 0.35rem 0 1rem 1.5rem;
+}
+
+.bt-archive-figure.is-left {
+    float: left;
+    margin: 0.35rem 1.5rem 1rem 0;
+}
+
+.bt-archive-figure.is-center {
+    margin-inline: auto;
+}
+
+/* A narrow column cannot host a wrapped inset; drop them back into the flow. */
+@media (max-width: 720px) {
+    .bt-archive-figure.is-right,
+    .bt-archive-figure.is-left {
+        float: none;
+        max-width: min(var(--bt-figure-width, 100%), 100%);
+        margin-inline: auto;
+    }
+}
+
+.bt-archive-figure-frame {
+    padding: 0.4rem;
+    box-shadow: 4px 5px 0 rgba(26, 21, 80, 0.11);
+}
+
+.bt-archive-figure-frame img {
+    max-height: min(44vh, 24rem);
+}
+
+.bt-archive-figure-frame[disabled] {
+    cursor: default;
+}
+
+.bt-archive-figure-caption {
+    margin: 0.55rem 0 0;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: rgba(35, 28, 34, 0.72);
+    font-style: italic;
 }
 
 /* The précis pane */

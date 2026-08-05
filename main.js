@@ -56,9 +56,17 @@ onReady(() => {
     }
 
     function layout() {
+        // Always measure from the real grid, never from the masonry snapshot.
+        // .is-masonry sets display:block, and on a non-grid box getComputedStyle
+        // hands back the *specified* grid-template-columns ("repeat(4, minmax(0px,
+        // 1fr))") rather than resolved pixel tracks — that string splits into 3
+        // tokens no matter how many columns are declared, which silently matched
+        // the old 3-column layout and broke at 4. The items also carry baked
+        // inline widths by then. Resetting first keeps both readings honest; it
+        // runs inside a rAF, so the intermediate state never paints.
+        reset();
         const cols = getColumnCount();
-        if (cols < 2) { reset(); return; }
-        // Measure before flipping to masonry so column width is from the real grid layout.
+        if (cols < 2) return;
         // Use offsetWidth (not getBoundingClientRect) so the float animation's rotation
         // doesn't inflate the reading — otherwise the baked-in width feeds the
         // ResizeObserver and the cards grow a little on every layout pass.
@@ -69,8 +77,12 @@ onReady(() => {
         const colHeights = new Array(cols).fill(0);
         const placements = items.map(item => {
             item.style.width = `${colWidth}px`;
+            // Wrap rather than clamp: when the grid drops to fewer tracks than
+            // there are declared columns (4-across → 2×2 on tablets), clamping
+            // would stack every overflow card in the last column. Modulo keeps
+            // them distributed and preserves source reading order.
             const col = explicitCols && item.dataset.col != null
-                ? Math.min(cols - 1, Number(item.dataset.col))
+                ? Number(item.dataset.col) % cols
                 : colHeights.indexOf(Math.min(...colHeights));
             const top = colHeights[col];
             colHeights[col] = top + item.offsetHeight + gap;

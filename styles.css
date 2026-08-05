@@ -1602,16 +1602,29 @@ section.production-header.alice .production-details p strong {
     margin: 0;
 }
 
-/* Two-column layout (data-layout="columns") — the JS packer (main.js) places
+/* Multi-column layout (data-layout="columns") — the JS packer (main.js) places
    each card in its declared column (data-col) at the natural aspect ratio of
-   its image: Toast/Spectator left, Junkyard/Space Toots right. */
+   its image. Four cards run four-across on wide screens and fold to a 2×2 below
+   1100px, where four tracks would squeeze each caption under ~150px. The packer
+   wraps data-col by the live track count, so the 2×2 keeps reading order:
+   Toast/Junkyard on top, Spectator/Before Times beneath. */
 @media (min-width: 768px) {
     .showcase-grid[data-layout="columns"] {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         max-width: 960px;
         /* Match the breathing room above the cards (section padding-top: 2rem)
            between them too — the packer reads this gap for column + row spacing. */
         gap: 2rem;
+    }
+
+    /* Four-across. 1160px is the widest the 1200px .container (1rem padding)
+       allows, giving ~266px tracks — close enough to the old 3-across 298px
+       that the caption type needs no retuning. */
+    @media (min-width: 1100px) {
+        .showcase-grid[data-layout="columns"] {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            max-width: 1160px;
+        }
     }
     /* Neutralize the masonry-era 0.88 shrink so JC's square cover fills its
        column at full size like the other cards. */
@@ -1718,6 +1731,7 @@ section.production-header.alice .production-details p strong {
 .showcase-item-jc    { animation: showcase-float-b 8.4s ease-in-out -2.6s infinite; }
 .showcase-item-game  { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
 .showcase-item-s2i   { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
+.showcase-item-bt    { animation: showcase-float-c 7.4s ease-in-out -1.9s infinite; }
 
 /* The tilt is safe only because the scanline layers counter-rotate against
    --tile-rot (see .showcase-item::after and .showcase-media::before): hard
@@ -1743,7 +1757,8 @@ section.production-header.alice .production-details p strong {
     .showcase-item-toast,
     .showcase-item-jc,
     .showcase-item-game,
-    .showcase-item-s2i { animation: none; }
+    .showcase-item-s2i,
+    .showcase-item-bt { animation: none; }
 }
 
 .showcase-item::before {
@@ -1860,7 +1875,8 @@ section.production-header.alice .production-details p strong {
    delays survive hover either way. */
 .showcase-item.showcase-item-jc .showcase-signal-blip { animation-delay: -0.65s, 0s; }
 .showcase-item.showcase-item-s2i .showcase-signal-blip { animation-delay: -1.3s, 0s; }
-.image-compare .about-photo-signal .showcase-signal-blip { animation-delay: -1.95s, 0s; }
+.showcase-item.showcase-item-bt .showcase-signal-blip { animation-delay: -1.95s, 0s; }
+.image-compare .about-photo-signal .showcase-signal-blip { animation-delay: -2.6s, 0s; }
 
 @media (prefers-reduced-motion: reduce) {
     .showcase-signal,
@@ -2127,6 +2143,16 @@ section.production-header.alice .production-details p strong {
     .showcase-item-jc .showcase-caption p {
         white-space: nowrap;
     }
+}
+
+/* Before Times: mint-teal drawn from the archive lobby's doorway glow. */
+.showcase-item-bt {
+    --showcase-accent: #5fd6bd;
+    --showcase-edge: #8ff0dc;
+    --showcase-accent-soft: rgba(95, 214, 189, 0.18);
+    --showcase-media-tint: rgba(95, 214, 189, 0.12);
+    --crt-cool: 30% 78%;
+    --crt-warm: 74% 18%;
 }
 
 .showcase-item-gwor {

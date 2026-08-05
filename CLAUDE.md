@@ -64,6 +64,23 @@ Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a3
 
 `styles.css` is loaded **only by index.html**. The subpages (faq, alice-in-wonderland, jersey-boys, before-times) load `subpages.css`, a generated ~15% subset of styles.css. If you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages, before-times), mirror the change in subpages.css.
 
+### Foil (Balatro-style holofoil)
+Two places carry it: the About card portrait (`.foil`) and the four "Recently" cards (`.showcase-foil`). Both use the same stack — a pointer-driven hue field, a hairline etch, a specular glare — clipped by an alpha mask generated from the artwork itself, never hand-drawn:
+
+```
+node tools/make-foil-mask.js            # about-card portrait
+node tools/make-card-foil-masks.js      # all four Recently cards
+node tools/make-card-foil-masks.js jc   # just one
+```
+
+Recipes (key color, thresholds, blur) live at the top of the card tool, one per card, with the reasoning for each. Re-run it if any of those four source images is replaced — the masks are keyed off specific pixel values and will silently drift otherwise.
+
+Two things bite when editing this area:
+- **The Recently cards float.** Their transform composes `--tile-rot`/`--tile-y`/`--tile-scale` (keyframes) with `--tile-tilt-x`/`--tile-tilt-y` (pointer). JC overrides that whole declaration twice, so the shared parts are held in `--tile-persp`/`--tile-tilt` — write transform functions literally and they stop applying to JC only.
+- **Hairline textures need counter-rotation.** The etch, like the scanline layers, rotates against `--tile-rot` or it moirés against the pixel grid under the float.
+
+`.showcase-item:hover img` scales 1.03, and `.showcase-foil` must scale with it or the sheen slides off its own shapes on hover.
+
 ### Content organization
 - `songs/{album}/{song-name}/` — metadata per song
 - `audio/` — MP3s organized by project

@@ -1629,7 +1629,7 @@ section.production-header.alice .production-details p strong {
     /* Neutralize the masonry-era 0.88 shrink so JC's square cover fills its
        column at full size like the other cards. */
     .showcase-grid[data-layout="columns"] .showcase-item-jc {
-        transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(var(--tile-scale));
+        transform: var(--tile-persp) rotate(var(--tile-rot)) translateY(var(--tile-y)) var(--tile-tilt) scale(var(--tile-scale));
         transform-origin: center center;
     }
     .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-kicker,
@@ -1667,7 +1667,26 @@ section.production-header.alice .production-details p strong {
     --tile-rot: 0deg;
     --tile-y: 0px;
     --tile-scale: 1;
-    transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(var(--tile-scale));
+    --tile-tilt-x: 0deg;
+    --tile-tilt-y: 0deg;
+    /* The float owns rotate/translateY/scale; the pointer owns the two 3D
+       angles (main.js, initShowcaseFoil). Composing them in one transform
+       list means the card can bob and tilt at once instead of one clobbering
+       the other. perspective() as a function rather than a wrapper element
+       keeps the markup flat.
+
+       Held in vars because JC overrides this whole declaration twice below
+       (once for the masonry 0.88 shrink, once to undo it in the four-column
+       layout). Anything written literally here silently stops applying to
+       that one card. */
+    --tile-persp: perspective(900px);
+    --tile-tilt: rotateX(var(--tile-tilt-x)) rotateY(var(--tile-tilt-y));
+    transform:
+        var(--tile-persp)
+        rotate(var(--tile-rot))
+        translateY(var(--tile-y))
+        var(--tile-tilt)
+        scale(var(--tile-scale));
     /* Scanlines live on ::after (counter-rotated against the float's tilt),
        not here — a background would tilt with the card, and hard 1px lines
        rasterized off-axis moiré against the pixel grid. */
@@ -1680,7 +1699,15 @@ section.production-header.alice .production-details p strong {
         0 0 2px color-mix(in srgb, var(--showcase-edge) 72%, transparent),
         0 0 7px -2px color-mix(in srgb, var(--showcase-edge) 42%, transparent),
         inset 0 0 7px -3px color-mix(in srgb, var(--showcase-edge) 28%, transparent);
-    transition: --tile-scale 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    /* Springy overshoot on the way back to rest, like setting a card down.
+       While the pointer is actually tracking, .is-tilting swaps this for a
+       short ease that acts as a low-pass filter. */
+    transition:
+        --tile-scale 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        --tile-tilt-x 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+        --tile-tilt-y 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
     border: 1px solid color-mix(in srgb, var(--showcase-edge) 52%, #151036);
     cursor: pointer;
     isolation: isolate;
@@ -1700,6 +1727,18 @@ section.production-header.alice .production-details p strong {
         0 0 11px -2px color-mix(in srgb, var(--showcase-edge) 58%, transparent),
         inset 0 0 10px -3px color-mix(in srgb, var(--showcase-edge) 40%, transparent);
     outline: none;
+}
+
+/* Tracking the pointer: no spring, just enough easing that the card feels
+   weighted rather than glued to the cursor, and no jump on entry the way
+   `transition: none` would give. */
+.showcase-item.is-tilting {
+    transition:
+        --tile-scale 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        --tile-tilt-x 0.12s ease-out,
+        --tile-tilt-y 0.12s ease-out;
 }
 
 /* Weightless float for the "Recently" cards, mirroring the game cartridges below.
@@ -1725,6 +1764,22 @@ section.production-header.alice .production-details p strong {
     syntax: "<number>";
     inherits: false;
     initial-value: 1;
+}
+
+/* Pointer tilt. Registered so the *angles* can be transitioned rather than
+   `transform` itself — the float rewrites --tile-rot every frame, and a
+   transition on transform would re-trigger each time and damp the bob into
+   mush. Smoothing the inputs instead leaves the float untouched. */
+@property --tile-tilt-x {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@property --tile-tilt-y {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
 }
 
 .showcase-item-toast { animation: showcase-float-a 7s ease-in-out infinite; }
@@ -1964,6 +2019,161 @@ section.production-header.alice .production-details p strong {
     filter: saturate(1.04) contrast(1.1) brightness(0.98);
 }
 
+/* ===== Recently-card foil ==============================================
+   The same layer stack as the about-card portrait (see .foil), with two
+   differences forced by these tiles.
+
+   1. No 3D tilt. These cards already float on --tile-rot/--tile-y, so the
+      sheen is driven by pointer position alone; a second transform would
+      fight the bob. main.js writes --foil-px/--foil-py.
+   2. Per-card everything. The four masks cover 8% to 30% of their art and
+      sit on different grounds, so mask, palette, blend and level are all
+      card-scoped vars set below rather than one shared look.
+
+   Masks are generated from the art itself (tools/make-card-foil-masks.js).
+   Every source image renders at width:100%/height:auto with no crop, so
+   `mask-size: 100% 100%` registers 1:1 with the pixels underneath. */
+.showcase-foil {
+    position: absolute;
+    inset: 0;
+    /* Above the artwork, below .showcase-media's scanlines (2) and CRT tint
+       (3): the foil is on the printed card, those are the screen in front. */
+    z-index: 1;
+    pointer-events: none;
+    background: var(--foil-hue);
+    background-size: 200% 200%;
+    background-position: calc(var(--foil-px, 0.5) * 100%) calc(var(--foil-py, 0.5) * 100%);
+    mix-blend-mode: var(--foil-blend, hard-light);
+    opacity: var(--foil-level, 0.38);
+    -webkit-mask-image: var(--foil-mask);
+    mask-image: var(--foil-mask);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    /* Matches .showcase-item:hover img exactly. Without it the artwork zooms
+       on hover and the mask doesn't, so the sheen slides off its own shapes
+       at the moment you're looking straight at it. */
+    transition: transform 0.35s ease;
+    /* Inert unless a card opts in below, so a tile with no mask can't end up
+       with an unmasked full-bleed wash. */
+    display: none;
+}
+
+.showcase-item:hover .showcase-foil {
+    transform: scale(1.03);
+}
+
+/* The etch is a hairline pattern, so it carries the same moiré risk the
+   scanline layers do and takes the same fix: counter-rotate against the
+   float's tilt (--tile-rot inherits) to stay locked to screen pixel rows.
+   The inset bleed covers the corners the rotation would otherwise expose;
+   .showcase-media's overflow clips it. */
+.showcase-foil::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    transform: rotate(calc(var(--tile-rot) * -1));
+    will-change: transform;
+    background: repeating-linear-gradient(
+        112deg,
+        rgba(255, 255, 255, 0) 0px,
+        rgba(255, 255, 255, 0.16) 1.5px,
+        rgba(255, 255, 255, 0) 3px,
+        rgba(0, 0, 0, 0.14) 4.5px,
+        rgba(255, 255, 255, 0) 6px
+    );
+    mix-blend-mode: overlay;
+}
+
+/* Specular glare, pinned to the pointer — the cue that says laminated
+   rather than printed. */
+.showcase-foil::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at calc(var(--foil-px, 0.5) * 100%) calc(var(--foil-py, 0.5) * 100%),
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(255, 255, 255, 0.14) 26%,
+        rgba(255, 255, 255, 0) 58%
+    );
+    mix-blend-mode: screen;
+}
+
+/* Palettes. Warm gold suits the three cards whose cream is genuinely warm;
+   the about card's blue/cyan field pushed them green. */
+.showcase-item-jc,
+.showcase-item-s2i,
+.showcase-item-bt {
+    --foil-hue: repeating-linear-gradient(
+        112deg,
+        rgba(58, 22, 10, 0.9) 0%,
+        rgba(255, 168, 64, 0.85) 5%,
+        rgba(255, 232, 180, 0.8) 9%,
+        rgba(196, 74, 32, 0.9) 14%,
+        rgba(255, 124, 48, 0.85) 17.5%,
+        rgba(58, 22, 10, 0.9) 22%
+    );
+}
+
+.showcase-item-toast .showcase-foil,
+.showcase-item-jc .showcase-foil,
+.showcase-item-s2i .showcase-foil,
+.showcase-item-bt .showcase-foil {
+    display: block;
+}
+
+/* Toast foils its arcs, not its ground: at 77% coverage the cream left
+   nothing matte to read against, and it recolored a client's brand white.
+   The arcs are saturated ink, so this one is tuned differently throughout —
+   a hue-free field and soft-light, which lets Toast's own gradient show
+   through at full density and only travels the shine across it. soft-light
+   cannot clip, so it needs roughly double the level to register at all. */
+.showcase-item-toast {
+    --foil-mask: url('images/foil/toast-arcs-foil-mask.webp');
+    --foil-blend: soft-light;
+    --foil-level: 0.8;
+    --foil-hue: repeating-linear-gradient(
+        112deg,
+        rgba(20, 20, 30, 0.92) 0%,
+        rgba(255, 255, 255, 0.9) 5%,
+        rgba(230, 238, 255, 0.85) 9%,
+        rgba(40, 44, 60, 0.9) 14%,
+        rgba(255, 255, 255, 0.8) 17.5%,
+        rgba(20, 20, 30, 0.92) 22%
+    );
+}
+
+.showcase-item-jc  { --foil-mask: url('images/foil/jc-foil-mask.webp'); }
+.showcase-item-s2i { --foil-mask: url('images/foil/s2i-foil-mask.webp'); }
+.showcase-item-bt  { --foil-mask: url('images/foil/bt-foil-mask.webp'); }
+
+/* Without a pointer there's nothing driving the sheen, and a motionless
+   foil just reads as a discolored patch. `alternate` makes the loop seamless
+   without matching the keyframe range to the gradient's repeat period. */
+@keyframes showcaseFoilDrift {
+    from { background-position: 16% 30%; }
+    to   { background-position: 84% 70%; }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .showcase-foil {
+        animation: showcaseFoilDrift 8s ease-in-out infinite alternate;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .showcase-foil {
+        animation: none;
+    }
+    .showcase-foil::before {
+        /* The float is already disabled, so --tile-rot rests at 0 and the
+           counter-rotation has nothing to cancel. */
+        will-change: auto;
+    }
+}
+
 #mixtapeTile img {
     object-position: top;
 }
@@ -2105,7 +2315,7 @@ section.production-header.alice .production-details p strong {
        the top of the row and the scale(0.88) (anchored center-top) lifts it further.
        Nudge it down a touch so it sits level with the cards on either side. */
     .showcase-item-jc {
-        transform: rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) scale(calc(0.88 * var(--tile-scale)));
+        transform: var(--tile-persp) rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) var(--tile-tilt) scale(calc(0.88 * var(--tile-scale)));
         transform-origin: center top;
     }
 

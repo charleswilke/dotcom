@@ -3232,6 +3232,16 @@ html {
 .image-compare {
     position: relative;
     --showcase-edge: #ffb93a;
+    /* Pointer-driven tilt. JS writes the two angles and the normalized pointer
+       position; everything else here is static so the card still rests at its
+       jaunty angle with JS off. --foil-px/--foil-py are consumed by the foil
+       sheen layer. */
+    --foil-tilt-x: 0deg;
+    --foil-tilt-y: 0deg;
+    --foil-lift: 0px;
+    --foil-scale: 1;
+    --foil-px: 0.5;
+    --foil-py: 0.5;
     width: 100%;
     max-width: 420px;
     margin: 0 auto;
@@ -3239,8 +3249,17 @@ html {
     border-radius: 8px 8px 16px 16px;
     overflow: visible;
     box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 0 2px #ffb93a;
-    transform: rotate(-0.5deg);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* perspective() as a transform function rather than a wrapper element, so
+       the ring and border tilt with the card and the markup stays flat. */
+    transform:
+        perspective(1000px)
+        translateY(var(--foil-lift))
+        rotateX(var(--foil-tilt-x))
+        rotateY(var(--foil-tilt-y))
+        rotate(-0.5deg)
+        scale(var(--foil-scale));
+    /* Springy overshoot on the way back to rest, like setting a card down. */
+    transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.3s ease;
     animation: pulseGlow 4s infinite alternate;
     cursor: pointer;
     border: 3px solid #000;
@@ -3250,8 +3269,17 @@ html {
 }
 
 .image-compare:hover {
-    transform: translateY(-10px) rotate(1deg);
+    --foil-lift: -10px;
+    --foil-scale: 1.02;
     box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 0 15px rgba(255, 185, 58, 0.55);
+}
+
+/* While tracking the pointer, swap the springy return for a short ease that
+   acts as a low-pass filter: the card feels weighted instead of glued to the
+   cursor, and there's no jump on entry the way `transition: none` would give. */
+.image-compare.is-tilting {
+    transition: transform 0.12s ease-out, box-shadow 0.3s ease;
+    will-change: transform;
 }
 
 /* Ride the mustard outline instead of the padding edge: the ring is a 2px
@@ -3277,6 +3305,9 @@ html {
     overflow: hidden;
     cursor: pointer;
     border-radius: 8px 8px 0 0;
+    /* Scope the foil's blend modes to the two portraits. Without this the
+       blending would reach past the card and pick up the page background. */
+    isolation: isolate;
 }
 
 .image-before,
@@ -3302,10 +3333,143 @@ html {
     filter: blur(0.5px) drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
 }
 
-/* Hover effect styles */
-.image-wrapper:hover .image-after {
+/* ===== Foil =============================================================
+   Confined to the orange hexagon plate by an alpha mask generated from the
+   illustration itself (tools/make-foil-mask.js). Both the source art and the
+   mask are square and the wrapper is 1:1, so `cover` is an exact 1:1 fit and
+   the two register without any offset correction.
+
+   `mask` makes this an isolated group, so ::before and ::after blend against
+   the hue field below rather than against the artwork. That's deliberate: the
+   foil is composed internally, then laid onto the orange as a single unit by
+   the mix-blend-mode here. */
+.foil {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    /* Hue field. Bands are anisotropic and travel with the pointer, which is
+       what separates foil from a flat rainbow wash. */
+    /* Foil, not Polychrome: the palette stays inside the blue/cyan family. An
+       earlier violet stop read as hot magenta against the orange, which is the
+       Polychrome look rather than the restrained sheen we want. */
+    background: repeating-linear-gradient(
+        112deg,
+        rgba(12, 38, 82, 0.9) 0%,
+        rgba(0, 214, 200, 0.9) 5%,
+        rgba(158, 232, 255, 0.85) 9%,
+        rgba(28, 92, 172, 0.9) 14%,
+        rgba(72, 192, 236, 0.85) 17.5%,
+        rgba(12, 38, 82, 0.9) 22%
+    );
+    background-size: 200% 200%;
+    background-position: calc(var(--foil-px) * 100%) calc(var(--foil-py) * 100%);
+    /* hard-light, after trying the two obvious alternatives:
+       - color-dodge divides by the inverse of the source, so bright bands blew
+         the orange out to a pale salmon.
+       - overlay lets the *base* pick multiply vs screen, so the orange's
+         dominant red channel survived and the cyan bands came through yellow.
+       hard-light lets the *source* decide, which is what actually cools the
+       plate where a band crosses it while the dark stops keep it banded. */
+    mix-blend-mode: hard-light;
+    opacity: 0.38;
+    -webkit-mask-image: url('images/cw4-card-foil-mask.webp');
+    mask-image: url('images/cw4-card-foil-mask.webp');
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    transition: opacity 0.4s ease;
+}
+
+/* The etch. Real foil is a micro-grooved layer under the ink, and without a
+   fine directional pattern the hue field reads as a soap bubble instead. */
+.foil::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        112deg,
+        rgba(255, 255, 255, 0) 0px,
+        rgba(255, 255, 255, 0.16) 1.5px,
+        rgba(255, 255, 255, 0) 3px,
+        rgba(0, 0, 0, 0.14) 4.5px,
+        rgba(255, 255, 255, 0) 6px
+    );
+    mix-blend-mode: overlay;
+}
+
+/* Specular glare, pinned to the pointer. This is the gloss cue: it says the
+   surface is laminated rather than printed. */
+.foil::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at calc(var(--foil-px) * 100%) calc(var(--foil-py) * 100%),
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.15) 26%,
+        rgba(255, 255, 255, 0) 58%
+    );
+    mix-blend-mode: screen;
+}
+
+/* The mask only describes the illustration, and the reveal swaps in a
+   completely different photograph. Rather than fight that, the foil retires
+   while the photo is up: the card is the persona, the photo is the person. */
+.image-compare.is-revealed .foil {
+    opacity: 0;
+}
+
+/* Without a pointer there's nothing to drive the sheen, and a motionless foil
+   just reads as a discolored plate. A slow drift keeps it legible as foil.
+   `alternate` makes the loop seamless without having to match the keyframe
+   range to the gradient's repeat period. */
+@keyframes foilDrift {
+    from { background-position: 14% 28%; }
+    to   { background-position: 86% 72%; }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .foil {
+        animation: foilDrift 7s ease-in-out infinite alternate;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .foil {
+        animation: none;
+    }
+}
+
+/* Reveal is click/tap-toggled rather than hover, so the pointer is free to
+   drive the tilt and so touch devices get a real gesture instead of the
+   sticky-hover behavior they had before. */
+.image-compare.is-revealed .image-after {
     clip-path: circle(85% at 50% 50%);
     filter: blur(0px) drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+}
+
+/* The card's own `outline` is the mustard ring, so the keyboard focus ring has
+   to be a separate layer rather than an outline override. Sits just outside the
+   signal blip's -6px inset. */
+.image-compare::before {
+    content: '';
+    position: absolute;
+    inset: -11px;
+    border: 3px solid var(--neon);
+    border-radius: 18px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.image-compare:focus-visible {
+    outline-color: var(--neon);
+}
+
+.image-compare:focus-visible::before {
+    opacity: 1;
 }
 
 .about-content {
@@ -3394,7 +3558,7 @@ html {
     }
 
     .image-after,
-    .image-wrapper:hover .image-after {
+    .image-compare.is-revealed .image-after {
         clip-path: none;
         filter: none;
     }
@@ -3404,7 +3568,7 @@ html {
         transition: opacity 0.35s ease;
     }
 
-    .image-wrapper:hover .image-after {
+    .image-compare.is-revealed .image-after {
         opacity: 1;
     }
 

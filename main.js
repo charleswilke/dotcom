@@ -4942,12 +4942,105 @@ function initCoverZoom() {
     });
 }
 
+function initFoilCard() {
+    const card = document.querySelector('.image-compare');
+    if (!card) return;
+
+    // --- Reveal, moved off :hover -------------------------------------------
+    // Hover had to give up the pointer to the tilt, and on touch it was never
+    // right anyway: tapping left the card stuck in a phantom hover state.
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-pressed', 'false');
+    card.setAttribute('aria-label', 'Illustrated portrait of Charles Wilke. Activate to show the photograph.');
+
+    const toggleReveal = () => {
+        const revealed = card.classList.toggle('is-revealed');
+        card.setAttribute('aria-pressed', revealed ? 'true' : 'false');
+    };
+
+    card.addEventListener('click', toggleReveal);
+    card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleReveal();
+        }
+    });
+
+    // --- Pointer tilt --------------------------------------------------------
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const MAX_TILT = 9; // degrees at the very edge of the card
+
+    let pointerX = 0;
+    let pointerY = 0;
+    let frame = 0;
+
+    const applyTilt = () => {
+        frame = 0;
+        const rect = card.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        // -0.5 .. 0.5 from the card's center
+        const dx = (pointerX - rect.left) / rect.width - 0.5;
+        const dy = (pointerY - rect.top) / rect.height - 0.5;
+        // rotateX is negated so the card tips *away* under the pointer, as if
+        // the cursor were pressing into the surface. Dropping the minus gives
+        // the opposite "card leans toward you" read.
+        card.style.setProperty('--foil-tilt-x', (-dy * MAX_TILT * 2).toFixed(2) + 'deg');
+        card.style.setProperty('--foil-tilt-y', (dx * MAX_TILT * 2).toFixed(2) + 'deg');
+        card.style.setProperty('--foil-px', (dx + 0.5).toFixed(4));
+        card.style.setProperty('--foil-py', (dy + 0.5).toFixed(4));
+    };
+
+    const onPointerMove = (e) => {
+        pointerX = e.clientX;
+        pointerY = e.clientY;
+        if (!frame) frame = requestAnimationFrame(applyTilt);
+    };
+
+    const onPointerEnter = () => card.classList.add('is-tilting');
+
+    const onPointerLeave = () => {
+        if (frame) {
+            cancelAnimationFrame(frame);
+            frame = 0;
+        }
+        card.classList.remove('is-tilting');
+        card.style.setProperty('--foil-tilt-x', '0deg');
+        card.style.setProperty('--foil-tilt-y', '0deg');
+        card.style.setProperty('--foil-px', '0.5');
+        card.style.setProperty('--foil-py', '0.5');
+    };
+
+    let tiltBound = false;
+    const syncTilt = () => {
+        const wanted = finePointer.matches && !reduceMotion.matches;
+        if (wanted === tiltBound) return;
+        if (wanted) {
+            card.addEventListener('pointermove', onPointerMove);
+            card.addEventListener('pointerenter', onPointerEnter);
+            card.addEventListener('pointerleave', onPointerLeave);
+        } else {
+            card.removeEventListener('pointermove', onPointerMove);
+            card.removeEventListener('pointerenter', onPointerEnter);
+            card.removeEventListener('pointerleave', onPointerLeave);
+            onPointerLeave();
+        }
+        tiltBound = wanted;
+    };
+
+    syncTilt();
+    finePointer.addEventListener('change', syncTilt);
+    reduceMotion.addEventListener('change', syncTilt);
+}
+
 onReady(() => {
     initRSSFallbackFetch();
     initTimeDial();
     initEmailGlitchEffects();
     initCustomAudioPlayers();
     initPetLightboxLinks();
+    initFoilCard();
     initDeferredHomepageMedia();
     initDeferredHomepageEffects();
     initCoverZoom();

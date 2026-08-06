@@ -81,6 +81,14 @@ Two things bite when editing this area:
 
 `.showcase-item:hover img` scales 1.03, and `.showcase-foil` must scale with it or the sheen slides off its own shapes on hover.
 
+**On touch, the gyroscope drives it instead** (`initFoilMotion` in main.js). Same vars as the pointer path, so the CSS is shared; the only CSS addition is `.foil-motion .foil { animation: none }`, which retires the canned drift once real readings arrive. Worth knowing:
+
+- The two paths are mutually exclusive, gated on `(hover: hover) and (pointer: fine)`. Never let both bind.
+- iOS needs `DeviceOrientationEvent.requestPermission()` from a user gesture, so activation rides the about card's existing tap. Grants are remembered in `localStorage` and retried gesture-free on the next visit.
+- The model is a plate held level by gravity: the cards rotate *against* the phone, and the glare slides toward whichever edge you tip down (the near one). Both axes follow that rule — if you change one sign, change both or they'll disagree.
+- `beta`/`gamma` are fixed to the hardware and swap in landscape, so the delta gets rotated by `screen.orientation.angle` before it means anything.
+- Add `?foildebug` to the URL for a `window.__foilMotion` handle (live state, `arm`/`start`/`stop`/`rebase`) — no desktop browser can produce a real reading, so tuning has to happen on a phone.
+
 ### Content organization
 - `songs/{album}/{song-name}/` — metadata per song
 - `audio/` — MP3s organized by project

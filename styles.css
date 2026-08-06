@@ -3672,6 +3672,15 @@ html {
     }
 }
 
+/* Once the gyroscope is actually feeding the sheen (main.js, initFoilMotion
+   sets this on <html>), the canned drift has to go: it animates the same
+   background-position the base rule derives from --foil-px/--foil-py, and an
+   animation outranks a declaration, so the device's readings would be written
+   every frame and painted by nothing. */
+.foil-motion .foil {
+    animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .foil {
         animation: none;

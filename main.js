@@ -5142,6 +5142,281 @@ function initShowcaseFoil() {
     reduceMotion.addEventListener('change', sync);
 }
 
+/* Gyroscope tilt for the foil, on touch devices.
+
+   Desktop drives the sheen from the pointer. A phone has no pointer to give,
+   so the foil sat there as a discolored plate with only a slow canned drift on
+   the about card. The device's own orientation is the honest stand-in: tip the
+   phone and the light moves, the way it does holding a real foil card.
+
+   It writes exactly the vars the pointer path writes (--foil-px/--foil-py and
+   the two 3D angles), so all five cards — the about portrait and the four
+   Recently tiles — share one reading of the device and catch the same light at
+   the same moment, like a sheet of cards on a table.
+
+   Model: the cards behave as plates held level by gravity, floating just above
+   the screen. Tip the phone right and they stay level, which from the screen's
+   frame means their right edge rises toward you. Everything below follows from
+   that one idea, including which way the glare travels.
+
+   Three things to know before editing:
+
+   - iOS gates the sensor. DeviceOrientationEvent.requestPermission() exists
+     only on Safari and only resolves when called from a real user gesture, so
+     activation is bolted to the about card's existing tap. Everywhere else the
+     listener just binds. A grant is remembered per origin, so returning
+     visitors get a gesture-free retry first and only fall back to the tap.
+   - Baseline, not absolute. Nobody holds a phone flat, so the first reading
+     becomes neutral and everything after is a delta from it. Re-baselined when
+     the screen rotates or the tab comes back, since both invalidate the pose.
+   - Screen space, not device space. beta/gamma are fixed to the hardware; in
+     landscape they swap. The delta is rotated by screen.orientation.angle
+     before it means anything about left and right.
+
+   Smoothing is the same trick the pointer path uses — .is-tilting swaps in a
+   0.12s ease on the registered angle properties — plus an EMA here, because a
+   real gyro is noisier than a mouse and the raw signal jitters visibly. */
+function initFoilMotion() {
+    const about = document.querySelector('.image-compare');
+    const grid = document.querySelector('.showcase-grid');
+    if (!about && !grid) return;
+    if (typeof DeviceOrientationEvent === 'undefined') return;
+
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Degrees of tilt away from the resting pose that reach the edge of the
+    // effect. A comfortable wrist roll is about this much; smaller and the
+    // sheen pins to the edges the moment you breathe.
+    const SWING = 22;
+    // Deltas past this are someone putting the phone in a pocket, not aiming
+    // it. Clamped rather than ignored so the cards settle instead of freezing.
+    const MAX_DELTA = 45;
+    // Gentler than the pointer's 9deg/6deg: the tilt is now on top of a moving
+    // hand rather than a still screen, and the same amplitude reads as wobble.
+    const ABOUT_TILT = 6;
+    const TILE_TILT = 4;
+    // Exponential moving average on the screen-space delta. 0.16 lands about
+    // where a gyro stops looking twitchy without feeling like syrup.
+    const SMOOTH = 0.16;
+
+    /* Which way the glare travels. Not a taste call in the end: solving the
+       specular condition for a tilting flat plane puts the highlight at
+       v ≈ d(θ - 2φ) — it slides toward whichever edge is *nearer* the viewer.
+       Since a level plate lifts the edge the phone drops, the glare chases the
+       edge you tip down. Both axes follow that one rule, so they can't disagree
+       with each other; flip a sign only to reverse the whole read. */
+    const TIP_X = 1;
+    const TIP_Y = -1;
+
+    const targets = [];
+    if (about) targets.push({ el: about, tiltX: '--foil-tilt-x', tiltY: '--foil-tilt-y', max: ABOUT_TILT });
+    if (grid) {
+        // Only tiles that actually carry a mask, same as the pointer path —
+        // the rest have no foil layer to light.
+        grid.querySelectorAll(':scope > .showcase-item').forEach(item => {
+            if (!item.querySelector(':scope > .showcase-media > .showcase-foil')) return;
+            targets.push({ el: item, tiltX: '--tile-tilt-x', tiltY: '--tile-tilt-y', max: TILE_TILT });
+        });
+    }
+    if (!targets.length) return;
+
+    let baseBeta = null;
+    let baseGamma = null;
+    let sx = 0; // screen-space left/right delta, degrees
+    let sy = 0; // screen-space front/back delta, degrees
+    let frame = 0;
+    let listening = false;
+    const visible = new Set();
+
+    const screenAngle = () => {
+        const angle = (screen.orientation && screen.orientation.angle);
+        return typeof angle === 'number' ? angle : (window.orientation || 0);
+    };
+
+    const clampDelta = (v) => Math.max(-MAX_DELTA, Math.min(MAX_DELTA, v));
+
+    const write = () => {
+        frame = 0;
+        // -1 .. 1 on each axis
+        const nx = Math.max(-1, Math.min(1, sx / SWING));
+        const ny = Math.max(-1, Math.min(1, sy / SWING));
+        const px = (0.5 + TIP_X * nx * 0.5).toFixed(4);
+        const py = (0.5 + TIP_Y * ny * 0.5).toFixed(4);
+        visible.forEach(target => {
+            const el = target.el;
+            el.style.setProperty('--foil-px', px);
+            el.style.setProperty('--foil-py', py);
+            // Both angles negated, for the same reason: a plate that stays
+            // level while the phone turns under it rotates *against* the
+            // phone, and CSS's positive directions push the far edge away
+            // (measured, not assumed — positive rotateX sends the top back,
+            // positive rotateY sends the right edge back). ny/nx are "this
+            // edge went down", so the plate answers with the opposite sign.
+            el.style.setProperty(target.tiltX, (-ny * target.max).toFixed(2) + 'deg');
+            el.style.setProperty(target.tiltY, (-nx * target.max).toFixed(2) + 'deg');
+        });
+    };
+
+    const onOrientation = (e) => {
+        if (e.beta == null || e.gamma == null) return;
+        if (baseBeta === null) {
+            baseBeta = e.beta;
+            baseGamma = e.gamma;
+            return; // the pose that started it is neutral, not a tilt
+        }
+        const dBeta = clampDelta(e.beta - baseBeta);
+        const dGamma = clampDelta(e.gamma - baseGamma);
+        // Device axes: +X out the right edge, +Y out the top. Positive gamma
+        // drops the right edge, positive beta lifts the top. Express both as
+        // "which way is down", then rotate into screen space.
+        const downX = dGamma;
+        const downY = -dBeta;
+        const rad = screenAngle() * Math.PI / 180;
+        const cos = Math.cos(rad);
+        const sin = Math.sin(rad);
+        const targetX = downX * cos - downY * sin;
+        const targetY = downY * cos + downX * sin;
+        sx += (targetX - sx) * SMOOTH;
+        sy += (targetY - sy) * SMOOTH;
+        if (!frame) frame = requestAnimationFrame(write);
+    };
+
+    const release = (target) => {
+        target.el.classList.remove('is-tilting');
+        target.el.style.removeProperty('--foil-px');
+        target.el.style.removeProperty('--foil-py');
+        target.el.style.removeProperty(target.tiltX);
+        target.el.style.removeProperty(target.tiltY);
+    };
+
+    // Offscreen cards would still take a style write every frame, and on the
+    // about card that write is a transform on a large image. Nothing below the
+    // fold pays for the effect until it's actually on screen.
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const target = targets.find(t => t.el === entry.target);
+            if (!target) return;
+            if (entry.isIntersecting) {
+                visible.add(target);
+                if (listening) target.el.classList.add('is-tilting');
+            } else {
+                visible.delete(target);
+                release(target);
+            }
+        });
+    }, { rootMargin: '10% 0px' });
+
+    const rebase = () => {
+        baseBeta = null;
+        baseGamma = null;
+        sx = 0;
+        sy = 0;
+    };
+
+    const start = () => {
+        if (listening) return;
+        listening = true;
+        rebase();
+        document.documentElement.classList.add('foil-motion');
+        visible.forEach(target => target.el.classList.add('is-tilting'));
+        window.addEventListener('deviceorientation', onOrientation);
+        window.addEventListener('orientationchange', rebase);
+        document.addEventListener('visibilitychange', onVisibility);
+    };
+
+    const stop = () => {
+        if (!listening) return;
+        listening = false;
+        if (frame) {
+            cancelAnimationFrame(frame);
+            frame = 0;
+        }
+        document.documentElement.classList.remove('foil-motion');
+        window.removeEventListener('deviceorientation', onOrientation);
+        window.removeEventListener('orientationchange', rebase);
+        document.removeEventListener('visibilitychange', onVisibility);
+        targets.forEach(release);
+    };
+
+    function onVisibility() {
+        // Coming back from the app switcher, the phone is rarely in the pose it
+        // left in. Re-baselining beats snapping to a stale neutral.
+        if (!document.hidden) rebase();
+    }
+
+    const GRANT_KEY = 'foil-motion-granted';
+    const needsPermission = typeof DeviceOrientationEvent.requestPermission === 'function';
+
+    const requestAndStart = () => {
+        // Rejects outside a user gesture, on insecure origins, and when the
+        // user declines. All three mean "no gyro" and none deserve a console
+        // error on a portfolio page.
+        return DeviceOrientationEvent.requestPermission().then(state => {
+            if (state !== 'granted') return false;
+            try { localStorage.setItem(GRANT_KEY, '1'); } catch (err) { /* private mode */ }
+            start();
+            return true;
+        }).catch(() => false);
+    };
+
+    let armed = false;
+    const arm = () => {
+        if (armed) return;
+        armed = true;
+        targets.forEach(target => observer.observe(target.el));
+        if (!needsPermission) {
+            start();
+            return;
+        }
+        let remembered = false;
+        try { remembered = localStorage.getItem(GRANT_KEY) === '1'; } catch (err) { /* private mode */ }
+        // A previous grant is remembered per origin, so this usually resolves
+        // without a prompt and the foil is live before the first tap. If the
+        // browser insists on a gesture anyway, the tap below still covers it.
+        if (remembered) requestAndStart();
+        if (about) {
+            about.addEventListener('click', () => {
+                if (!listening) requestAndStart();
+            });
+        }
+    };
+
+    const disarm = () => {
+        if (!armed) return;
+        armed = false;
+        observer.disconnect();
+        visible.clear();
+        stop();
+    };
+
+    // Touch devices only. A laptop with both a trackpad and an accelerometer
+    // already has the pointer version, and running both would fight.
+    const sync = () => {
+        if (!finePointer.matches && !reduceMotion.matches) arm();
+        else disarm();
+    };
+
+    sync();
+    finePointer.addEventListener('change', sync);
+    reduceMotion.addEventListener('change', sync);
+
+    // Debug readout for tuning TIP_X/TIP_Y and SWING on a real device, since
+    // no desktop browser can produce a genuine reading. ?foildebug only.
+    if (/[?&]foildebug\b/.test(location.search)) {
+        window.__foilMotion = {
+            get state() {
+                return { listening, needsPermission, sx, sy, baseBeta, baseGamma, angle: screenAngle(), visible: visible.size };
+            },
+            rebase,
+            arm,
+            disarm,
+            start,
+            stop,
+        };
+    }
+}
+
 onReady(() => {
     initRSSFallbackFetch();
     initTimeDial();
@@ -5150,6 +5425,7 @@ onReady(() => {
     initPetLightboxLinks();
     initFoilCard();
     initShowcaseFoil();
+    initFoilMotion();
     initDeferredHomepageMedia();
     initDeferredHomepageEffects();
     initCoverZoom();

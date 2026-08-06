@@ -81,13 +81,14 @@ Two things bite when editing this area:
 
 `.showcase-item:hover img` scales 1.03, and `.showcase-foil` must scale with it or the sheen slides off its own shapes on hover.
 
-**On touch, the gyroscope drives it instead** (`initFoilMotion` in main.js). Same vars as the pointer path, so the CSS is shared; the only CSS addition is `.foil-motion .foil { animation: none }`, which retires the canned drift once real readings arrive. Worth knowing:
+**On touch, the gyroscope drives it instead** (`initFoilMotion` in main.js) — **the about portrait only**. The four Recently cards drop their foil entirely on coarse pointers (see the `@media (hover: none)` block after the `display: block` opt-in). Driving all five was the first cut and it was too much: four holofoils answering every wrist movement, and the about card lost its status as the one object that does this. Same vars as the pointer path, so the CSS is shared; the only additions are that hide rule and `.foil-motion .foil { animation: none }`, which retires the canned drift once real readings arrive. Worth knowing:
 
 - The two paths are mutually exclusive, gated on `(hover: hover) and (pointer: fine)`. Never let both bind.
 - iOS needs `DeviceOrientationEvent.requestPermission()` from a user gesture, so activation rides the about card's existing tap. Grants are remembered in `localStorage` and retried gesture-free on the next visit.
-- The model is a plate held level by gravity: the cards rotate *against* the phone, and the glare slides toward whichever edge you tip down (the near one). Both axes follow that rule — if you change one sign, change both or they'll disagree.
+- The model is a plate held level by gravity: the card rotates *against* the phone, and the glare slides toward whichever edge you tip down (the near one). Both axes follow that rule — if you change one sign, change both or they'll disagree.
+- **Swing is per axis** (`SWING_X` 22deg, `SWING_Y` 12deg) and should stay that way. Rolling a wrist 22deg is free; pitching a phone that far angles the screen out of view, so a shared range makes pitch read as dead. The 112deg hue gradient compounds it — its direction vector is (0.93, 0.37), so `--foil-py` sweeps the bands only ~40% as far as `--foil-px`.
 - `beta`/`gamma` are fixed to the hardware and swap in landscape, so the delta gets rotated by `screen.orientation.angle` before it means anything.
-- Add `?foildebug` to the URL for a `window.__foilMotion` handle (live state, `arm`/`start`/`stop`/`rebase`) — no desktop browser can produce a real reading, so tuning has to happen on a phone.
+- Add `?foildebug` to the URL for a `window.__foilMotion` handle: live state plus `peakPitch`/`peakRoll` against their swings, which is how you tell a dead axis from one you aren't moving far enough. No desktop browser can produce a real reading, so tuning has to happen on a phone.
 
 ### Content organization
 - `songs/{album}/{song-name}/` — metadata per song

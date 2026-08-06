@@ -2124,6 +2124,25 @@ section.production-header.alice .production-details p strong {
     display: block;
 }
 
+/* Touch has no pointer to drive these, and the gyroscope deliberately doesn't
+   either — four holofoils answering every wrist movement turned the top of the
+   page into a light show, and cost the about card its status as the one object
+   that does this (main.js, initFoilMotion). What's left without an input is a
+   motionless rainbow wash on the artwork, which reads as a printing fault
+   rather than as foil, so the layer comes off entirely. The cards keep their
+   float and their CRT treatment.
+
+   Has to come after the opt-in above: a media query adds no specificity, so
+   placing it any earlier just loses to `display: block`. */
+@media (hover: none), (pointer: coarse) {
+    .showcase-item-toast .showcase-foil,
+    .showcase-item-jc .showcase-foil,
+    .showcase-item-s2i .showcase-foil,
+    .showcase-item-bt .showcase-foil {
+        display: none;
+    }
+}
+
 /* Toast foils its arcs, not its ground: at 77% coverage the cream left
    nothing matte to read against, and it recolored a client's brand white.
    The arcs are saturated ink, so this one is tuned differently throughout —

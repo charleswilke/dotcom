@@ -3821,6 +3821,33 @@ html {
         transform: none;
     }
 
+    /* ...except while the gyroscope is driving, which is the only time this
+       card has a reason to move on a phone.
+
+       The rule above is why the pitch axis read as broken: with no transform,
+       --foil-tilt-x/y went nowhere, so the sheen was the whole effect. That
+       hides an asymmetry — the hue field runs at 112deg, direction vector
+       (0.93, 0.37), so rolling sweeps the bands hard while pitching barely
+       shifts them. Roll looked alive on the weak cue alone; pitch had nothing
+       left. Restoring the tilt gives both axes an equal, obvious one.
+
+       Only the tilt, not the desktop declaration: no -0.5deg jaunt, no lift,
+       no scale. At rest the angles are 0deg, so this is visually identical to
+       `none` and the card can't jump when motion starts.
+
+       Watch this one in Safari. The wrapper paints the portrait as a parent
+       background precisely because Safari drops composited <img> layers when a
+       tap mixes clipping, filtering and transforms; the clip and filter are
+       already neutralized above, and .is-tilting's will-change promotes this to
+       its own layer, but if the portrait ever blanks on tap, start here. */
+    html.foil-motion .image-compare,
+    html.foil-motion .image-compare:hover {
+        transform:
+            perspective(1000px)
+            rotateX(var(--foil-tilt-x))
+            rotateY(var(--foil-tilt-y));
+    }
+
     .image-after,
     .image-compare.is-revealed .image-after {
         clip-path: none;

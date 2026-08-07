@@ -5149,6 +5149,12 @@ function initShowcaseFoil() {
    the about card. The device's own orientation is the honest stand-in: tip the
    phone and the light moves, the way it does holding a real foil card.
 
+   Until it's live the portrait is flat — styles.css hides .foil on coarse
+   pointers and un-hides it on html.foil-motion, which is set here on the first
+   real reading. So a visitor who never grants the sensor sees the plain
+   illustration, never an inert tinted plate, and the permission tap has a
+   visible payoff.
+
    It writes exactly the vars the pointer path writes (--foil-px/--foil-py and
    the two tilt angles), so the CSS is shared and this only supplies a different
    input.
@@ -5263,8 +5269,21 @@ function initFoilMotion() {
         card.style.setProperty('--foil-tilt-y', (-nx * MAX_TILT).toFixed(2) + 'deg');
     };
 
+    // The class is what un-hides the foil on touch (styles.css), so it's set on
+    // the first real reading rather than in start(). A phone that grants the
+    // sensor but never reports one — no gyro, or a silent implementation —
+    // would otherwise trade the flat portrait for a motionless plate, which is
+    // the exact thing this path exists to avoid.
+    let live = false;
+    const goLive = () => {
+        if (live) return;
+        live = true;
+        document.documentElement.classList.add('foil-motion');
+    };
+
     const onOrientation = (e) => {
         if (e.beta == null || e.gamma == null) return;
+        goLive();
         if (baseBeta === null) {
             baseBeta = e.beta;
             baseGamma = e.gamma;
@@ -5325,7 +5344,6 @@ function initFoilMotion() {
         if (listening) return;
         listening = true;
         rebase();
-        document.documentElement.classList.add('foil-motion');
         if (onScreen) card.classList.add('is-tilting');
         window.addEventListener('deviceorientation', onOrientation);
         window.addEventListener('orientationchange', rebase);
@@ -5339,6 +5357,7 @@ function initFoilMotion() {
             cancelAnimationFrame(frame);
             frame = 0;
         }
+        live = false;
         document.documentElement.classList.remove('foil-motion');
         window.removeEventListener('deviceorientation', onOrientation);
         window.removeEventListener('orientationchange', rebase);
@@ -5415,7 +5434,7 @@ function initFoilMotion() {
         window.__foilMotion = {
             get state() {
                 return {
-                    listening, needsPermission, onScreen,
+                    listening, live, needsPermission, onScreen,
                     angle: screenAngle(),
                     beta: rawBeta, gamma: rawGamma,
                     baseBeta, baseGamma,

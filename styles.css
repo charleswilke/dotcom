@@ -3676,33 +3676,28 @@ html {
     opacity: 0;
 }
 
-/* Without a pointer there's nothing to drive the sheen, and a motionless foil
-   just reads as a discolored plate. A slow drift keeps it legible as foil.
-   `alternate` makes the loop seamless without having to match the keyframe
-   range to the gradient's repeat period. */
-@keyframes foilDrift {
-    from { background-position: 14% 28%; }
-    to   { background-position: 86% 72%; }
-}
+/* Without a pointer there's nothing to drive the sheen, and an undriven foil
+   reads as a discolored plate rather than as foil. So on touch the portrait
+   starts flat, as the plain illustration, and the foil fades in only once the
+   gyroscope is actually feeding it (main.js, initFoilMotion sets the class on
+   <html> when the first real reading lands). The base rule's opacity
+   transition does the fade.
 
+   This replaced a slow canned drift, which was the wrong answer to the same
+   problem: it kept the layer legible as *something moving*, but before the
+   sensor was granted it was a tinted plate wandering on its own, and on iOS
+   that is the state most visitors saw. Flat until earned reads better, and it
+   gives the permission tap a visible payoff.
+
+   Specificity note: .image-compare.is-revealed .foil still wins over the
+   un-hide below, so the photo side stays foil-free. */
 @media (hover: none), (pointer: coarse) {
     .foil {
-        animation: foilDrift 7s ease-in-out infinite alternate;
+        opacity: 0;
     }
-}
 
-/* Once the gyroscope is actually feeding the sheen (main.js, initFoilMotion
-   sets this on <html>), the canned drift has to go: it animates the same
-   background-position the base rule derives from --foil-px/--foil-py, and an
-   animation outranks a declaration, so the device's readings would be written
-   every frame and painted by nothing. */
-.foil-motion .foil {
-    animation: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .foil {
-        animation: none;
+    html.foil-motion .foil {
+        opacity: 0.38;
     }
 }
 

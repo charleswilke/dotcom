@@ -914,6 +914,7 @@
     const ALCHEMY_HASH_ALIASES = new Set(['#sound-stage', '#absurd-alchemy']);
 
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
+    const thresholdTransition = document.getElementById('bt-threshold-transition');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
     const alchemyScene = document.getElementById('bt-alchemy-scene');
     const alchemyArt = document.querySelector('.bt-alchemy-art');
@@ -1026,6 +1027,7 @@
     let radioScopeAnimation = 0;
     let radioScopeData = null;
     let activeRoom = 'lobby';
+    let thresholdTransitionBusy = false;
     let alchemyPlayer = null;
     let loadedAlchemyVideoKey = null;
     let currentAlchemyVideo = null;
@@ -5638,6 +5640,61 @@
         button.btAnimationTimer = window.setTimeout(() => button.classList.remove(className), duration);
     }
 
+    function waitForThreshold(milliseconds) {
+        return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+    }
+
+    function resetThresholdTransition() {
+        if (!thresholdTransition) return;
+        thresholdTransition.classList.remove('is-active', 'is-revealing');
+        thresholdTransition.removeAttribute('data-theme');
+        thresholdTransition.style.removeProperty('--bt-threshold-x');
+        thresholdTransition.style.removeProperty('--bt-threshold-y');
+        thresholdTransition.style.removeProperty('--bt-threshold-width');
+        thresholdTransition.style.removeProperty('--bt-threshold-height');
+        document.body.classList.remove('bt-threshold-active');
+    }
+
+    async function runThresholdTransition(button, theme, destination, options) {
+        const settings = options || {};
+        if (thresholdTransitionBusy || typeof destination !== 'function') return;
+        if (prefersReducedMotion.matches || !thresholdTransition) {
+            await destination();
+            return;
+        }
+
+        thresholdTransitionBusy = true;
+        const rect = button.getBoundingClientRect();
+        thresholdTransition.dataset.theme = theme;
+        thresholdTransition.style.setProperty('--bt-threshold-x', `${rect.left + rect.width / 2}px`);
+        thresholdTransition.style.setProperty('--bt-threshold-y', `${rect.top + rect.height / 2}px`);
+        thresholdTransition.style.setProperty('--bt-threshold-width', `${Math.max(rect.width * 0.72, 72)}px`);
+        thresholdTransition.style.setProperty('--bt-threshold-height', `${Math.max(rect.height * 0.84, 120)}px`);
+        thresholdTransition.classList.remove('is-active', 'is-revealing');
+        void thresholdTransition.offsetWidth;
+        thresholdTransition.classList.add('is-active');
+        document.body.classList.add('bt-threshold-active');
+        animateLayer(button, 'is-activating', 860);
+
+        try {
+            await waitForThreshold(500);
+            if (settings.revealBeforeDestination) {
+                thresholdTransition.classList.add('is-revealing');
+                await waitForThreshold(290);
+                resetThresholdTransition();
+                await destination();
+                return;
+            }
+
+            await destination();
+            thresholdTransition.classList.add('is-revealing');
+            await waitForThreshold(290);
+        } finally {
+            resetThresholdTransition();
+            thresholdTransitionBusy = false;
+        }
+    }
+
     function bindAlchemyObjectLayer(hotspot, layer) {
         if (!hotspot || !layer) return;
         const setHovered = (hovered) => layer.classList.toggle('is-hovered', hovered);
@@ -5741,54 +5798,26 @@
     document.querySelectorAll('[data-panel]').forEach((button) => {
         button.addEventListener('click', () => {
             const panelId = button.dataset.panel;
-            if (panelId === 'alchemy') {
-                animateLayer(button, 'is-activating', 680);
-                if (prefersReducedMotion.matches) {
-                    enterAlchemyRoom();
-                } else {
-                    window.setTimeout(() => enterAlchemyRoom(), 360);
-                }
+            const roomEntrances = {
+                alchemy: enterAlchemyRoom,
+                games: enterGameRoom,
+                content: enterContentRoom,
+                docs: enterKnowledgeRoom
+            };
+            if (roomEntrances[panelId]) {
+                void runThresholdTransition(button, panelId, roomEntrances[panelId]);
                 return;
             }
-            if (panelId === 'games') {
-                animateLayer(button, 'is-activating', 680);
-                if (prefersReducedMotion.matches) {
-                    enterGameRoom();
-                } else {
-                    window.setTimeout(() => enterGameRoom(), 360);
-                }
+            if (panelId === 'portal') {
+                void runThresholdTransition(
+                    button,
+                    'portal',
+                    () => openPanel(panelId),
+                    { revealBeforeDestination: true }
+                );
                 return;
             }
-            if (panelId === 'content') {
-                animateLayer(button, 'is-activating', 680);
-                if (prefersReducedMotion.matches) {
-                    enterContentRoom();
-                } else {
-                    window.setTimeout(() => enterContentRoom(), 360);
-                }
-                return;
-            }
-            if (panelId === 'docs') {
-                animateLayer(button, 'is-activating', 680);
-                if (prefersReducedMotion.matches) {
-                    enterKnowledgeRoom();
-                } else {
-                    window.setTimeout(() => enterKnowledgeRoom(), 360);
-                }
-                return;
-            }
-            const hasDoorwayAnimation = panelId === 'portal' || button.classList.contains('bt-layered-doorway');
-            if (!hasDoorwayAnimation) {
-                openPanel(panelId);
-                return;
-            }
-
-            animateLayer(button, 'is-activating', 680);
-            if (prefersReducedMotion.matches) {
-                openPanel(panelId);
-                return;
-            }
-            window.setTimeout(() => openPanel(panelId), 360);
+            openPanel(panelId);
         });
     });
 

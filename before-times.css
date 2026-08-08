@@ -92,6 +92,137 @@ a {
     isolation: isolate;
 }
 
+.bt-threshold-transition {
+    --bt-threshold-rgb: 0, 247, 194;
+    --bt-threshold-x: 50vw;
+    --bt-threshold-y: 50vh;
+    --bt-threshold-width: 10rem;
+    --bt-threshold-height: 20rem;
+    position: fixed;
+    z-index: 80;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    background: transparent;
+    transition: opacity 260ms cubic-bezier(0.2, 0.72, 0.24, 1);
+}
+
+.bt-threshold-transition.is-active {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+    transition: none;
+}
+
+.bt-threshold-transition.is-revealing {
+    opacity: 0;
+    transition: opacity 280ms cubic-bezier(0.2, 0.72, 0.24, 1);
+}
+
+.bt-threshold-aperture,
+.bt-threshold-signature,
+.bt-threshold-wash {
+    position: absolute;
+    pointer-events: none;
+}
+
+.bt-threshold-aperture {
+    z-index: 1;
+    top: var(--bt-threshold-y);
+    left: var(--bt-threshold-x);
+    width: var(--bt-threshold-width);
+    height: var(--bt-threshold-height);
+    border-radius: 42% 42% 34% 34% / 24% 24% 16% 16%;
+    background:
+        radial-gradient(ellipse at 50% 48%, rgba(248, 255, 253, 0.96) 0 7%, rgba(var(--bt-threshold-rgb), 0.84) 34%, rgba(var(--bt-threshold-rgb), 0.28) 64%, transparent 78%);
+    box-shadow:
+        inset 0 0 1.4rem rgba(248, 255, 253, 0.72),
+        0 0 2rem rgba(var(--bt-threshold-rgb), 0.8),
+        0 0 5rem rgba(var(--bt-threshold-rgb), 0.48);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.58);
+    transform-origin: 50% 50%;
+}
+
+.bt-threshold-wash {
+    z-index: 2;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at var(--bt-threshold-x) var(--bt-threshold-y),
+            rgba(248, 255, 253, 0.98) 0,
+            rgba(var(--bt-threshold-rgb), 0.94) 22%,
+            rgba(var(--bt-threshold-rgb), 0.76) 46%,
+            rgba(9, 10, 35, 0.98) 88%
+        );
+    opacity: 0;
+}
+
+.bt-threshold-signature {
+    z-index: 3;
+    inset: 0;
+    opacity: 0;
+    mix-blend-mode: screen;
+}
+
+.bt-threshold-transition.is-active .bt-threshold-aperture {
+    animation: bt-threshold-aperture 680ms cubic-bezier(0.18, 0.74, 0.2, 1) both;
+}
+
+.bt-threshold-transition.is-active .bt-threshold-wash {
+    animation: bt-threshold-wash 680ms cubic-bezier(0.2, 0.72, 0.24, 1) both;
+}
+
+.bt-threshold-transition.is-active .bt-threshold-signature {
+    animation: bt-threshold-signature 680ms ease-out both;
+}
+
+.bt-threshold-transition[data-theme="alchemy"] {
+    --bt-threshold-rgb: 28, 226, 202;
+}
+
+.bt-threshold-transition[data-theme="alchemy"] .bt-threshold-signature {
+    background: repeating-linear-gradient(90deg, transparent 0 12%, rgba(235, 255, 250, 0.2) 12.3%, transparent 12.8% 25%);
+    animation-timing-function: steps(5, end);
+}
+
+.bt-threshold-transition[data-theme="games"] {
+    --bt-threshold-rgb: 235, 157, 72;
+}
+
+.bt-threshold-transition[data-theme="games"] .bt-threshold-signature {
+    background: repeating-linear-gradient(0deg, rgba(255, 224, 180, 0.18) 0 1px, transparent 1px 6px);
+    background-size: 100% 12px;
+    animation-name: bt-threshold-scan-lock;
+}
+
+.bt-threshold-transition[data-theme="content"] {
+    --bt-threshold-rgb: 34, 208, 190;
+}
+
+.bt-threshold-transition[data-theme="content"] .bt-threshold-signature {
+    width: 52%;
+    left: -58%;
+    background: linear-gradient(90deg, transparent, rgba(235, 255, 250, 0.38) 48%, transparent);
+    transform: skewX(-12deg);
+    animation-name: bt-threshold-conveyor-sweep;
+}
+
+.bt-threshold-transition[data-theme="docs"] {
+    --bt-threshold-rgb: 154, 105, 221;
+}
+
+.bt-threshold-transition[data-theme="docs"] .bt-threshold-signature {
+    background: repeating-radial-gradient(circle at var(--bt-threshold-x) var(--bt-threshold-y), transparent 0 7%, rgba(226, 205, 255, 0.16) 7.4%, transparent 8.2% 14%);
+    animation-name: bt-threshold-maze-converge;
+}
+
+.bt-threshold-transition[data-theme="portal"] {
+    --bt-threshold-rgb: 76, 242, 204;
+}
+
 .bt-lobby-scroll {
     width: 100%;
     height: 100%;
@@ -234,15 +365,16 @@ a {
 }
 
 .bt-object-layer-radio {
-    top: -39.9%;
-    left: -13.5%;
-    width: 123.2%;
-    height: 148.3%;
+    top: -20.2%;
+    left: -17%;
+    width: 130.8%;
+    height: 125.7%;
+    transform-origin: 50% 82%;
 }
 
 .bt-radio-aura {
     position: absolute;
-    z-index: 2;
+    z-index: 0;
     inset: -20% -9% -14%;
     pointer-events: none;
     opacity: 0;
@@ -264,9 +396,9 @@ a {
     border-radius: 48%;
     background: radial-gradient(
         ellipse at 50% 55%,
-        rgba(255, 216, 135, 0.28) 0 17%,
-        rgba(0, 247, 194, 0.4) 38%,
-        rgba(0, 247, 194, 0.16) 58%,
+        rgba(255, 226, 166, 0.28) 0 17%,
+        rgba(255, 181, 71, 0.34) 38%,
+        rgba(255, 117, 54, 0.13) 58%,
         transparent 76%
     );
     filter: blur(10px);
@@ -278,10 +410,10 @@ a {
     width: 46%;
     height: 30%;
     border-radius: 50%;
-    background: rgba(0, 247, 194, 0.24);
+    background: rgba(255, 181, 71, 0.18);
     box-shadow:
-        0 0 22px rgba(255, 216, 135, 0.34),
-        0 0 42px rgba(0, 247, 194, 0.38);
+        0 0 22px rgba(255, 226, 166, 0.42),
+        0 0 42px rgba(255, 135, 62, 0.34);
     filter: blur(13px);
 }
 
@@ -357,9 +489,36 @@ a {
     --bt-door-light-hover: 0.46;
 }
 
+.bt-layered-doorway::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+        ellipse at 50% 52%,
+        rgba(235, 255, 250, 0.4) 0 8%,
+        rgba(var(--bt-door-light-rgb), 0.28) 34%,
+        rgba(var(--bt-door-light-rgb), 0.1) 64%,
+        transparent 82%
+    );
+    box-shadow:
+        inset 0 0 10px rgba(235, 255, 250, 0.34),
+        inset 0 0 30px rgba(var(--bt-door-light-rgb), 0.34);
+    mix-blend-mode: screen;
+}
+
 .bt-hotspot-alchemy {
     --bt-door-light-rgb: 28, 226, 202;
     --bt-door-light-rest: 0.2;
+}
+
+.bt-hotspot-alchemy::before {
+    top: -4.3%;
+    left: -5.28%;
+    width: 107.93%;
+    height: 113.78%;
+    clip-path: polygon(22.5% 23%, 83.5% 27%, 87% 87%, 36% 94%);
 }
 
 .bt-hotspot-games {
@@ -368,10 +527,26 @@ a {
     --bt-door-light-hover: 0.38;
 }
 
+.bt-hotspot-games::before {
+    top: -0.45%;
+    left: -11.64%;
+    width: 125.67%;
+    height: 103.67%;
+    clip-path: polygon(17.6% 24.2%, 82.3% 24.6%, 82.5% 89.2%, 18.2% 90.8%);
+}
+
 .bt-hotspot-content {
     --bt-door-light-rgb: 34, 208, 190;
     --bt-door-light-rest: 0.18;
     --bt-door-light-hover: 0.44;
+}
+
+.bt-hotspot-content::before {
+    top: -3.4%;
+    left: -4.26%;
+    width: 114.73%;
+    height: 113%;
+    clip-path: polygon(22% 27.5%, 70.2% 29.1%, 67% 78.8%, 21.8% 78.5%);
 }
 
 .bt-hotspot-content .bt-door-light {
@@ -382,6 +557,14 @@ a {
     --bt-door-light-rgb: 154, 105, 221;
     --bt-door-light-rest: 0.14;
     --bt-door-light-hover: 0.38;
+}
+
+.bt-hotspot-docs::before {
+    top: -3.65%;
+    left: -9.14%;
+    width: 104.25%;
+    height: 110.75%;
+    clip-path: polygon(21.9% 27.7%, 83.9% 26.8%, 82.3% 86.3%, 20.3% 84.5%);
 }
 
 /* Once the maze is breached the room beyond is lit by the present, not by the
@@ -473,6 +656,40 @@ a {
     --bt-door-light-hover: 0.54;
 }
 
+.bt-hotspot-portal::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 9.39%;
+    left: -13.27%;
+    width: 121.95%;
+    height: 103.27%;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+        ellipse at 52% 48%,
+        rgba(218, 255, 246, 0.52) 0 8%,
+        rgba(61, 255, 214, 0.26) 34%,
+        rgba(0, 247, 194, 0.1) 62%,
+        transparent 80%
+    );
+    box-shadow:
+        inset 0 0 10px rgba(218, 255, 246, 0.42),
+        inset 0 0 28px rgba(0, 247, 194, 0.38);
+    clip-path: polygon(
+        38% 12%,
+        69% 10%,
+        78% 19%,
+        70% 81%,
+        68% 90%,
+        57% 93%,
+        39% 87%,
+        24% 81%,
+        29% 19%
+    );
+    mix-blend-mode: screen;
+}
+
 .bt-door-light {
     position: absolute;
     z-index: 0;
@@ -522,16 +739,6 @@ a {
     transform-origin: 50% 50%;
 }
 
-.bt-layered-doorway:hover .bt-door-light,
-.bt-layered-doorway:focus-visible .bt-door-light,
-.bt-layered-doorway.is-activating .bt-door-light,
-.bt-hotspot-portal:hover .bt-door-light,
-.bt-hotspot-portal:focus-visible .bt-door-light,
-.bt-hotspot-portal.is-activating .bt-door-light {
-    opacity: var(--bt-door-light-hover, 0.44);
-    transform: scale(1.015);
-}
-
 .bt-hotspot-portal .bt-door-light {
     inset: 7% -4% -7%;
 }
@@ -571,30 +778,56 @@ a {
 }
 
 .bt-hotspot-portal:hover .bt-object-layer,
-.bt-hotspot-portal:focus-visible .bt-object-layer,
+.bt-hotspot-portal:focus-visible .bt-object-layer {
+    filter: none;
+    animation: none;
+    transform: translateZ(0) scale(1);
+}
+
+.bt-hotspot-portal:hover::before,
+.bt-hotspot-portal:focus-visible::before {
+    animation: bt-doorway-inner-glow-pulse 1.15s ease-in-out infinite alternate;
+}
+
 .bt-hotspot-portal.is-activating .bt-object-layer {
-    filter: brightness(1.12) saturate(1.22);
-    animation: bt-portal-breathe 1.25s ease-in-out infinite alternate;
+    filter: none;
+    animation: none;
+    transform: translateZ(0) scale(1);
 }
 
 .bt-layered-doorway:hover .bt-object-layer,
 .bt-layered-doorway:focus-visible .bt-object-layer {
-    filter: brightness(1.1) saturate(1.16);
-    animation: bt-doorway-hover 1.05s ease-in-out infinite alternate;
+    filter: none;
+    animation: none;
+    transform: translateZ(0) scale(1);
+}
+
+.bt-layered-doorway:hover::before,
+.bt-layered-doorway:focus-visible::before {
+    animation: bt-doorway-inner-glow-pulse 1.15s ease-in-out infinite alternate;
 }
 
 .bt-layered-doorway.is-activating .bt-object-layer {
-    filter: brightness(1.14) saturate(1.2);
-    animation: bt-doorway-awaken 620ms cubic-bezier(0.2, 0.84, 0.32, 1) both;
+    filter: none;
+    animation: none;
+    transform: translateZ(0) scale(1);
 }
 
+.bt-hotspot-portal.is-activating::before,
+.bt-layered-doorway.is-activating::before {
+    animation: bt-doorway-threshold-charge 680ms cubic-bezier(0.18, 0.74, 0.2, 1) both;
+}
+
+.bt-hotspot-newspaper:hover .bt-object-layer,
+.bt-hotspot-newspaper:focus-visible .bt-object-layer,
 .bt-hotspot-bell:hover .bt-object-layer,
-.bt-hotspot-bell:focus-visible .bt-object-layer {
-    filter:
-        brightness(1.16)
-        saturate(1.16)
-        drop-shadow(0 0 5px rgba(255, 216, 135, 0.96))
-        drop-shadow(0 0 13px rgba(255, 90, 54, 0.72));
+.bt-hotspot-bell:focus-visible .bt-object-layer,
+.bt-hotspot-radio:hover .bt-object-layer,
+.bt-hotspot-radio:focus-visible .bt-object-layer,
+.bt-hotspot-guestbook:hover .bt-guestbook-prop,
+.bt-hotspot-guestbook:focus-visible .bt-guestbook-prop {
+    animation: bt-newsstand-nudge 900ms ease-in-out infinite alternate;
+    transform: translateZ(0) scale(1);
 }
 
 .bt-hotspot-radio.is-tuning .bt-object-layer {
@@ -619,14 +852,6 @@ a {
     transform: translateZ(0) scale(1);
 }
 
-.bt-hotspot-radio:hover .bt-object-layer,
-.bt-hotspot-radio:focus-visible .bt-object-layer {
-    filter: brightness(1.09) saturate(1.1);
-    transform: translateZ(0) scale(1);
-}
-
-.bt-hotspot-radio:hover .bt-radio-aura,
-.bt-hotspot-radio:focus-visible .bt-radio-aura,
 .bt-hotspot-radio.is-tuning .bt-radio-aura {
     opacity: 0.78;
     transform: scale(1);
@@ -634,11 +859,6 @@ a {
 
 .bt-hotspot-radio.is-tuning .bt-radio-aura {
     opacity: 0.92;
-}
-
-.bt-hotspot-newspaper:hover .bt-object-layer,
-.bt-hotspot-newspaper:focus-visible .bt-object-layer {
-    animation: bt-newsstand-nudge 900ms ease-in-out infinite alternate;
 }
 
 .bt-hotspot-newspaper.is-unlocked .bt-object-layer {
@@ -717,17 +937,6 @@ a {
 .bt-hotspot-radio { left: 31%; top: 56.4%; width: 17%; height: 21.5%; }
 .bt-hotspot-guestbook { left: 49.04%; top: 55.79%; width: 34.99%; height: 23.38%; }
 .bt-hotspot-floorplan { left: 3.35%; top: 82.5%; width: 13.9%; height: 16%; }
-
-/* The book is now independent from a repaired tabletop, so it can lift as a
-   single prop without revealing the old flattened guestbook underneath. */
-.bt-hotspot-guestbook:hover .bt-guestbook-prop,
-.bt-hotspot-guestbook:focus-visible .bt-guestbook-prop {
-    filter:
-        brightness(1.045)
-        saturate(1.04)
-        drop-shadow(0 7px 5px rgba(5, 6, 24, 0.52));
-    transform: translateY(-4.4%) rotate(-0.22deg) scale(1.018);
-}
 
 .bt-lobby-inventory-item {
     position: absolute;
@@ -864,22 +1073,68 @@ a {
     transform: translate(-50%, -50%) rotate(-4deg) scale(1.06);
 }
 
-@keyframes bt-portal-breathe {
-    from { transform: translateY(0) scale(1.01); }
-    to { transform: translateY(-0.65%) scale(1.035); }
+@keyframes bt-doorway-inner-glow-pulse {
+    from {
+        opacity: 0.2;
+        box-shadow:
+            inset 0 0 9px rgba(235, 255, 250, 0.3),
+            inset 0 0 24px rgba(var(--bt-door-light-rgb), 0.28);
+    }
+    to {
+        opacity: 0.7;
+        box-shadow:
+            inset 0 0 15px rgba(235, 255, 250, 0.62),
+            inset 0 0 38px rgba(var(--bt-door-light-rgb), 0.54);
+    }
 }
 
-@keyframes bt-doorway-hover {
-    from { transform: translateY(0) scale(1.005); }
-    to { transform: translateY(-0.75%) scale(1.025); }
+@keyframes bt-doorway-threshold-charge {
+    0% { opacity: 0.42; filter: brightness(1); transform: scale(1); }
+    42% { opacity: 1; filter: brightness(1.34) saturate(1.16); transform: scale(0.97); }
+    72% { opacity: 0.92; filter: brightness(1.72) saturate(1.26); transform: scale(1.035); }
+    100% { opacity: 0; filter: brightness(2) saturate(1.34); transform: scale(1.1); }
 }
 
-@keyframes bt-doorway-awaken {
-    0% { transform: translateY(0) scale(1); }
-    28% { transform: translateY(1.1%) scale(0.985, 1.015); }
-    58% { transform: translateY(-1.6%) scale(1.025, 0.99); }
-    78% { transform: translateY(-0.45%) scale(1.012); }
-    100% { transform: translateY(0) scale(1); }
+@keyframes bt-threshold-aperture {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.58); }
+    18% { opacity: 1; transform: translate(-50%, -50%) scale(0.76); }
+    48% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    100% { opacity: 0.96; transform: translate(-50%, -50%) scale(13); }
+}
+
+@keyframes bt-threshold-wash {
+    0%, 34% { opacity: 0; }
+    58% { opacity: 0.28; }
+    72%, 100% { opacity: 1; }
+}
+
+@keyframes bt-threshold-signature {
+    0%, 20% { opacity: 0; }
+    34% { opacity: 0.58; }
+    52% { opacity: 0.18; }
+    72% { opacity: 0.46; }
+    100% { opacity: 0; }
+}
+
+@keyframes bt-threshold-scan-lock {
+    0%, 18% { opacity: 0; background-position: 0 -20px; }
+    36% { opacity: 0.62; }
+    76% { opacity: 0.28; background-position: 0 34px; }
+    100% { opacity: 0; background-position: 0 60px; }
+}
+
+@keyframes bt-threshold-conveyor-sweep {
+    0%, 20% { opacity: 0; translate: 0 0; }
+    38% { opacity: 0.72; }
+    82% { opacity: 0.38; translate: 310% 0; }
+    100% { opacity: 0; translate: 330% 0; }
+}
+
+@keyframes bt-threshold-maze-converge {
+    0%, 20% { opacity: 0; transform: scale(1.5); }
+    42% { opacity: 0.6; }
+    82% { opacity: 0.34; transform: scale(0.72); }
+    100% { opacity: 0; transform: scale(0.56); }
 }
 
 @keyframes bt-radio-shimmy {
@@ -3182,17 +3437,16 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
 .bt-layered-doorway:focus-visible .bt-door-break,
 .bt-layered-doorway:hover .bt-door-spill,
 .bt-layered-doorway:focus-visible .bt-door-spill {
-    /* Same lift and grade the door layer gets, so the halves stay part of it. */
-    filter: brightness(1.1) saturate(1.16);
-    transform-origin: 50% 72%;
-    animation: bt-doorway-hover 1.05s ease-in-out infinite alternate;
+    filter: none;
+    transform: none;
+    animation: none;
 }
 
 .bt-layered-doorway.is-activating .bt-door-break,
 .bt-layered-doorway.is-activating .bt-door-spill {
-    filter: brightness(1.14) saturate(1.2);
-    transform-origin: 50% 72%;
-    animation: bt-doorway-awaken 620ms cubic-bezier(0.2, 0.84, 0.32, 1) both;
+    filter: none;
+    transform: none;
+    animation: none;
 }
 
 .bt-layered-doorway:hover .bt-door-break-slab > img,
@@ -6261,11 +6515,9 @@ body.bt-room-content .bt-inventory-drawer.is-open {
 
 .bt-hotspot-radio.is-unlocked .bt-radio-aura {
     opacity: 0.48;
-    filter: hue-rotate(-34deg) saturate(1.2);
+    filter: saturate(1.12);
 }
 
-.bt-hotspot-radio.is-unlocked:hover .bt-radio-aura,
-.bt-hotspot-radio.is-unlocked:focus-visible .bt-radio-aura,
 .bt-hotspot-radio.is-unlocked.is-tuning .bt-radio-aura {
     opacity: 0.9;
     transform: scale(1);

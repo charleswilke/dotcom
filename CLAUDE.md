@@ -65,23 +65,19 @@ Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a3
 `styles.css` is loaded **only by index.html**. The subpages (faq, alice-in-wonderland, jersey-boys, before-times) load `subpages.css`, a generated ~15% subset of styles.css. If you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages, before-times), mirror the change in subpages.css.
 
 ### Foil (Balatro-style holofoil)
-Two places carry it: the About card portrait (`.foil`) and the four "Recently" cards (`.showcase-foil`). Both use the same stack — a pointer-driven hue field, a hairline etch, a specular glare — clipped by an alpha mask generated from the artwork itself, never hand-drawn:
+**One place carries it: the About card portrait (`.foil`).** A pointer-driven hue field, a hairline etch, a specular glare, clipped by an alpha mask generated from the artwork itself, never hand-drawn:
 
 ```
 node tools/make-foil-mask.js            # about-card portrait
-node tools/make-card-foil-masks.js      # all four Recently cards
-node tools/make-card-foil-masks.js jc   # just one
 ```
 
-Recipes (key color, thresholds, blur) live at the top of the card tool, one per card, with the reasoning for each. Re-run it if any of those four source images is replaced — the masks are keyed off specific pixel values and will silently drift otherwise.
+The four "Recently" cards used to carry the same stack plus a pointer tilt (`.showcase-foil`, `initShowcaseFoil`, `--tile-tilt-*`). **All of it was removed.** Five holofoils answering the cursor turned the top of the page into a light show and cost the portrait its status as the one object that does this. The cards keep their float, their hover scale, and their CRT treatment; the transform is now just `rotate`/`translateY`/`scale`.
 
-Two things bite when editing this area:
-- **The Recently cards float.** Their transform composes `--tile-rot`/`--tile-y`/`--tile-scale` (keyframes) with `--tile-tilt-x`/`--tile-tilt-y` (pointer). JC overrides that whole declaration twice, so the shared parts are held in `--tile-persp`/`--tile-tilt` — write transform functions literally and they stop applying to JC only.
-- **Hairline textures need counter-rotation.** The etch, like the scanline layers, rotates against `--tile-rot` or it moirés against the pixel grid under the float.
+The way back is intact: `tools/make-card-foil-masks.js` and `images/foil/*.webp` are deliberately still in the tree (unreferenced, kept on purpose — don't prune them as dead assets), and commit `88314c4` has the CSS, the markup and the JS as they were. Re-run the tool if any of those four source images is replaced in the meantime; the masks are keyed off specific pixel values and will silently drift.
 
-`.showcase-item:hover img` scales 1.03, and `.showcase-foil` must scale with it or the sheen slides off its own shapes on hover.
+If any of this comes back: JC overrides the tile transform declaration twice (masonry 0.88 shrink, then undoing it in the four-column layout), so anything added to the base transform has to be mirrored there or it silently stops applying to that one card. And hairline textures need counter-rotation against `--tile-rot` or they moiré against the pixel grid under the float — that's why the scanline layers rotate backwards.
 
-**On touch, the gyroscope drives it instead** (`initFoilMotion` in main.js) — **the about portrait only**. The four Recently cards drop their foil entirely on coarse pointers (see the `@media (hover: none)` block after the `display: block` opt-in). Driving all five was the first cut and it was too much: four holofoils answering every wrist movement, and the about card lost its status as the one object that does this. Same vars as the pointer path, so the CSS is shared; the only additions are that hide rule and the pair in the `@media (hover: none), (pointer: coarse)` block that hides `.foil` and un-hides it under `html.foil-motion`. Worth knowing:
+**On touch, the gyroscope drives it instead** (`initFoilMotion` in main.js). Same vars as the pointer path, so the CSS is shared; the only addition is the pair in the `@media (hover: none), (pointer: coarse)` block that hides `.foil` and un-hides it under `html.foil-motion`. Worth knowing:
 
 - **On touch the portrait is flat until the sensor is live.** `html.foil-motion` is set on the *first real reading*, not in `start()`, so a phone that grants the sensor but never reports (no gyro, silent implementation) keeps the plain illustration instead of an inert tinted plate. A returning visitor whose grant is remembered gets it without tapping, which is the point of remembering. This replaced a slow canned drift (`@keyframes foilDrift`, now gone): before the grant that drift was a tinted plate wandering on its own, which is the state most iOS visitors actually saw.
 

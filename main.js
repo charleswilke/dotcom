@@ -5047,102 +5047,6 @@ function initFoilCard() {
     reduceMotion.addEventListener('change', syncTilt);
 }
 
-/* Drives the tilt and the foil sheen on the four "Recently" cards.
-
-   The tilt angles compose with the float rather than replacing it: the
-   keyframes own --tile-rot/--tile-y/--tile-scale, this owns the two 3D
-   angles, and .showcase-item's transform lists all five (see styles.css).
-   Smoothing happens on the registered angle properties, not here, so the
-   loop can write raw values every frame.
-
-   One listener on the grid rather than one per card. The pointer can only be
-   over a single tile, so per-tile handlers would just be four ways to learn the
-   same thing, and the grid re-renders its children on relayout. */
-function initShowcaseFoil() {
-    const grid = document.querySelector('.showcase-grid');
-    if (!grid) return;
-
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    // Gentler than the about card's 9deg: these tiles are smaller, there are
-    // four of them, and they're already bobbing.
-    const MAX_TILT = 6;
-    let current = null;
-    let pointerX = 0;
-    let pointerY = 0;
-    let frame = 0;
-
-    const apply = () => {
-        frame = 0;
-        if (!current) return;
-        const rect = current.getBoundingClientRect();
-        if (!rect.width || !rect.height) return;
-        const px = (pointerX - rect.left) / rect.width;
-        const py = (pointerY - rect.top) / rect.height;
-        current.style.setProperty('--foil-px', px.toFixed(4));
-        current.style.setProperty('--foil-py', py.toFixed(4));
-        // rotateX negated so the card tips *away* under the pointer, as if the
-        // cursor were pressing into the surface — same read as the about card.
-        current.style.setProperty('--tile-tilt-x', ((0.5 - py) * MAX_TILT * 2).toFixed(2) + 'deg');
-        current.style.setProperty('--tile-tilt-y', ((px - 0.5) * MAX_TILT * 2).toFixed(2) + 'deg');
-    };
-
-    const release = (item) => {
-        if (!item) return;
-        item.classList.remove('is-tilting');
-        item.style.removeProperty('--foil-px');
-        item.style.removeProperty('--foil-py');
-        item.style.removeProperty('--tile-tilt-x');
-        item.style.removeProperty('--tile-tilt-y');
-    };
-
-    const onPointerMove = (e) => {
-        const item = e.target.closest('.showcase-item');
-        // Only tiles that actually carry a mask; the rest have no foil layer.
-        const foiled = item && item.querySelector(':scope > .showcase-media > .showcase-foil');
-        if (!foiled) {
-            if (current) { release(current); current = null; }
-            return;
-        }
-        if (item !== current) {
-            release(current);
-            current = item;
-            item.classList.add('is-tilting');
-        }
-        pointerX = e.clientX;
-        pointerY = e.clientY;
-        if (!frame) frame = requestAnimationFrame(apply);
-    };
-
-    const onPointerLeave = () => {
-        if (frame) {
-            cancelAnimationFrame(frame);
-            frame = 0;
-        }
-        release(current);
-        current = null;
-    };
-
-    let bound = false;
-    const sync = () => {
-        const wanted = finePointer.matches && !reduceMotion.matches;
-        if (wanted === bound) return;
-        if (wanted) {
-            grid.addEventListener('pointermove', onPointerMove);
-            grid.addEventListener('pointerleave', onPointerLeave);
-        } else {
-            grid.removeEventListener('pointermove', onPointerMove);
-            grid.removeEventListener('pointerleave', onPointerLeave);
-            onPointerLeave();
-        }
-        bound = wanted;
-    };
-
-    sync();
-    finePointer.addEventListener('change', sync);
-    reduceMotion.addEventListener('change', sync);
-}
-
 /* Gyroscope tilt for the foil, on touch devices.
 
    Desktop drives the sheen from the pointer. A phone has no pointer to give,
@@ -5160,11 +5064,11 @@ function initShowcaseFoil() {
    the two tilt angles), so the CSS is shared and this only supplies a different
    input.
 
-   The about portrait only. Driving the four Recently tiles too was the first
-   cut and it was too much: four holofoils answering every wrist movement turned
-   the top of the page into a light show, and the effect stops reading as one
-   special object. They keep their float on touch and drop the foil entirely
-   (see .showcase-foil in styles.css) rather than sit there as tinted plates.
+   The about portrait only, and it's now the only foil on the page at all. The
+   four Recently tiles carried a pointer tilt and a sheen of their own for a
+   while; five holofoils turned the top of the page into a light show and cost
+   this one its status as the object that does this. They keep their float and
+   their CRT treatment; the foil is the portrait's alone.
 
    Model: the card behaves as a plate held level by gravity, floating just above
    the screen. Tip the phone right and it stays level, which from the screen's
@@ -5460,7 +5364,6 @@ onReady(() => {
     initCustomAudioPlayers();
     initPetLightboxLinks();
     initFoilCard();
-    initShowcaseFoil();
     initFoilMotion();
     initDeferredHomepageMedia();
     initDeferredHomepageEffects();

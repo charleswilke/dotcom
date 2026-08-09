@@ -914,6 +914,7 @@
     const ALCHEMY_HASH_ALIASES = new Set(['#sound-stage', '#absurd-alchemy']);
 
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
+    const lobbyScene = document.querySelector('.bt-lobby-scene');
     const thresholdTransition = document.getElementById('bt-threshold-transition');
     const alchemyScroll = document.getElementById('bt-alchemy-scroll');
     const alchemyScene = document.getElementById('bt-alchemy-scene');
@@ -4920,20 +4921,22 @@
         scheduleProductionGhost();
     }
 
+    function prepareRoomArt(art) {
+        if (!art || (art.complete && art.naturalWidth)) return Promise.resolve();
+        if (art.loading === 'lazy') art.loading = 'eager';
+        art.fetchPriority = 'high';
+        return art.decode().catch(() => {
+            // The image element will still show its normal fallback behavior.
+        });
+    }
+
     async function enterAlchemyRoom(options) {
         const settings = options || {};
         if (activeRoom === 'alchemy' || alchemyRoomOpening) return;
         alchemyRoomOpening = true;
         if (!alchemyArt.complete || !alchemyArt.naturalWidth) {
             showStatus('Unlocking the production room…', 3200);
-            try {
-                // Room art is lazy, so this <img> has not begun loading while its
-                // room is hidden and decode() would never settle. Promote it first.
-                if (alchemyArt.loading === 'lazy') alchemyArt.loading = 'eager';
-                await alchemyArt.decode();
-            } catch (error) {
-                // The image element will still show its normal fallback behavior.
-            }
+            await prepareRoomArt(alchemyArt);
         }
         alchemyRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
@@ -4997,14 +5000,7 @@
         gameRoomOpening = true;
         if (!gameArt.complete || !gameArt.naturalWidth) {
             showStatus('Booting the development room…', 3200);
-            try {
-                // Room art is lazy, so this <img> has not begun loading while its
-                // room is hidden and decode() would never settle. Promote it first.
-                if (gameArt.loading === 'lazy') gameArt.loading = 'eager';
-                await gameArt.decode();
-            } catch (error) {
-                // The image element will still show its normal fallback behavior.
-            }
+            await prepareRoomArt(gameArt);
         }
         gameRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
@@ -5066,14 +5062,7 @@
         contentRoomOpening = true;
         if (!contentArt.complete || !contentArt.naturalWidth) {
             showStatus('Starting the conveyor line…', 3200);
-            try {
-                // Room art is lazy, so this <img> has not begun loading while its
-                // room is hidden and decode() would never settle. Promote it first.
-                if (contentArt.loading === 'lazy') contentArt.loading = 'eager';
-                await contentArt.decode();
-            } catch (error) {
-                // The image element will still show its normal fallback behavior.
-            }
+            await prepareRoomArt(contentArt);
         }
         contentRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
@@ -5125,14 +5114,7 @@
         knowledgeRoomOpening = true;
         if (!knowledgeArt.complete || !knowledgeArt.naturalWidth) {
             showStatus('Mapping the documentation labyrinth…', 3200);
-            try {
-                // Room art is lazy, so this <img> has not begun loading while its
-                // room is hidden and decode() would never settle. Promote it first.
-                if (knowledgeArt.loading === 'lazy') knowledgeArt.loading = 'eager';
-                await knowledgeArt.decode();
-            } catch (error) {
-                // The image element will still show its normal fallback behavior.
-            }
+            await prepareRoomArt(knowledgeArt);
         }
         knowledgeRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
@@ -5644,6 +5626,12 @@
         return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
     }
 
+    function waitForThresholdPrime() {
+        return new Promise((resolve) => {
+            window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
+        });
+    }
+
     function resetThresholdTransition() {
         if (!thresholdTransition) return;
         thresholdTransition.classList.remove('is-active', 'is-revealing');
@@ -5652,7 +5640,12 @@
         thresholdTransition.style.removeProperty('--bt-threshold-y');
         thresholdTransition.style.removeProperty('--bt-threshold-width');
         thresholdTransition.style.removeProperty('--bt-threshold-height');
-        document.body.classList.remove('bt-threshold-active');
+        thresholdTransition.style.removeProperty('--bt-threshold-signature-size');
+        if (lobbyScene) {
+            lobbyScene.style.removeProperty('--bt-threshold-scene-x');
+            lobbyScene.style.removeProperty('--bt-threshold-scene-y');
+        }
+        document.body.classList.remove('bt-threshold-primed', 'bt-threshold-active');
     }
 
     async function runThresholdTransition(button, theme, destination, options) {
@@ -5664,23 +5657,39 @@
         }
 
         thresholdTransitionBusy = true;
+        const preparation = typeof settings.prepare === 'function'
+            ? Promise.resolve().then(settings.prepare).catch(() => {})
+            : Promise.resolve();
         const rect = button.getBoundingClientRect();
+        const thresholdX = rect.left + rect.width / 2;
+        const thresholdY = rect.top + rect.height / 2;
         thresholdTransition.dataset.theme = theme;
-        thresholdTransition.style.setProperty('--bt-threshold-x', `${rect.left + rect.width / 2}px`);
-        thresholdTransition.style.setProperty('--bt-threshold-y', `${rect.top + rect.height / 2}px`);
+        thresholdTransition.style.setProperty('--bt-threshold-x', `${thresholdX}px`);
+        thresholdTransition.style.setProperty('--bt-threshold-y', `${thresholdY}px`);
         thresholdTransition.style.setProperty('--bt-threshold-width', `${Math.max(rect.width * 0.72, 72)}px`);
         thresholdTransition.style.setProperty('--bt-threshold-height', `${Math.max(rect.height * 0.84, 120)}px`);
+        thresholdTransition.style.setProperty(
+            '--bt-threshold-signature-size',
+            `${Math.max(rect.width * 1.22, rect.height * 0.72)}px`
+        );
+        if (lobbyScene) {
+            const sceneRect = lobbyScene.getBoundingClientRect();
+            lobbyScene.style.setProperty('--bt-threshold-scene-x', `${thresholdX - sceneRect.left}px`);
+            lobbyScene.style.setProperty('--bt-threshold-scene-y', `${thresholdY - sceneRect.top}px`);
+        }
         thresholdTransition.classList.remove('is-active', 'is-revealing');
-        void thresholdTransition.offsetWidth;
-        thresholdTransition.classList.add('is-active');
-        document.body.classList.add('bt-threshold-active');
-        animateLayer(button, 'is-activating', 860);
+        document.body.classList.add('bt-threshold-primed');
+        animateLayer(button, 'is-activating', 600);
 
         try {
-            await waitForThreshold(500);
+            await waitForThresholdPrime();
+            void thresholdTransition.offsetWidth;
+            thresholdTransition.classList.add('is-active');
+            document.body.classList.add('bt-threshold-active');
+            await Promise.all([waitForThreshold(400), preparation]);
             if (settings.revealBeforeDestination) {
                 thresholdTransition.classList.add('is-revealing');
-                await waitForThreshold(290);
+                await waitForThreshold(240);
                 resetThresholdTransition();
                 await destination();
                 return;
@@ -5688,7 +5697,7 @@
 
             await destination();
             thresholdTransition.classList.add('is-revealing');
-            await waitForThreshold(290);
+            await waitForThreshold(240);
         } finally {
             resetThresholdTransition();
             thresholdTransitionBusy = false;
@@ -5795,17 +5804,28 @@
         }
     }
 
+    const roomEntrances = {
+        alchemy: { enter: enterAlchemyRoom, art: alchemyArt },
+        games: { enter: enterGameRoom, art: gameArt },
+        content: { enter: enterContentRoom, art: contentArt },
+        docs: { enter: enterKnowledgeRoom, art: knowledgeArt }
+    };
+
     document.querySelectorAll('[data-panel]').forEach((button) => {
+        const roomEntrance = roomEntrances[button.dataset.panel];
+        if (roomEntrance) {
+            const prepare = () => prepareRoomArt(roomEntrance.art);
+            button.addEventListener('pointerenter', prepare, { once: true });
+            button.addEventListener('focus', prepare, { once: true });
+        }
+
         button.addEventListener('click', () => {
             const panelId = button.dataset.panel;
-            const roomEntrances = {
-                alchemy: enterAlchemyRoom,
-                games: enterGameRoom,
-                content: enterContentRoom,
-                docs: enterKnowledgeRoom
-            };
-            if (roomEntrances[panelId]) {
-                void runThresholdTransition(button, panelId, roomEntrances[panelId]);
+            const entrance = roomEntrances[panelId];
+            if (entrance) {
+                void runThresholdTransition(button, panelId, entrance.enter, {
+                    prepare: () => prepareRoomArt(entrance.art)
+                });
                 return;
             }
             if (panelId === 'portal') {

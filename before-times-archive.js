@@ -1070,7 +1070,7 @@
                 image: '/images/before-times/archive/state-of-dating-2016-v1.webp',
                 imageAlt: 'People meeting and talking at a crowded evening social event',
                 dek: 'Dating apps solved the problem of finding options so effectively that they created a new problem: mistaking the infinite menu for the relationship itself.',
-                curator: 'The clean manuscript makes the real argument visible beneath the damaged webpage capture. Years before “engagement” became a universal product goal, the piece noticed that a dating app could optimize the pleasure of swiping without optimizing for an actual date.',
+                curator: 'Ten years later, the names of the apps matter less than the tension the article identified: technology can multiply our chances to meet while training us to keep looking. Its most durable idea is that an algorithm can make an introduction, but it cannot replace the imperfect, sustained work of choosing and loving a real person.',
                 body: [
                     {
                         type: 'paragraph',

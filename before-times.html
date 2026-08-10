@@ -51,7 +51,7 @@
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.webp?v=20260718e" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=202607241328" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/guestbook-fresh-v1.webp?v=20260718d" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260808e">
+    <link rel="stylesheet" href="/before-times.css?v=20260810h">
     <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
@@ -758,6 +758,33 @@
         </article>
     </dialog>
 
+    <dialog class="bt-dialog bt-photo-dialog" id="bt-photo-dialog" aria-labelledby="bt-photo-title">
+        <article class="bt-dialog-card bt-photo-card">
+            <button class="bt-dialog-close bt-photo-close" type="button" data-dialog-close aria-label="Close photography archive">×</button>
+            <header class="bt-photo-header">
+                <div>
+                    <h1 id="bt-photo-title">Photography</h1>
+                    <p class="bt-photo-subtitle">Favorites · 2008–2014</p>
+                </div>
+            </header>
+
+            <div class="bt-photo-layout">
+                <figure class="bt-photo-viewer">
+                    <div class="bt-photo-stage">
+                        <button class="bt-photo-nav bt-photo-prev" id="bt-photo-prev" type="button" aria-label="Previous photograph">‹</button>
+                        <img id="bt-photo-image" width="1800" height="1200" alt="" decoding="async" hidden>
+                        <button class="bt-photo-nav bt-photo-next" id="bt-photo-next" type="button" aria-label="Next photograph">›</button>
+                        <p class="bt-photo-load-state" id="bt-photo-load-state">Loading recovered photographs…</p>
+                    </div>
+                </figure>
+
+                <aside class="bt-photo-sheet" aria-label="Choose a photograph">
+                    <div class="bt-photo-thumbs" id="bt-photo-thumbs" aria-busy="true"></div>
+                </aside>
+            </div>
+        </article>
+    </dialog>
+
     <dialog class="bt-dialog bt-alchemy-menu-dialog" id="bt-alchemy-menu-dialog" aria-labelledby="bt-alchemy-menu-title">
         <article class="bt-dialog-card bt-alchemy-menu-card">
             <button class="bt-dialog-close bt-alchemy-menu-close" type="button" data-dialog-close aria-label="Close">×</button>
@@ -932,6 +959,6 @@
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260809a" defer></script>
     <script src="/before-times-game-binder.js?v=20260729a" defer></script>
-    <script src="/before-times.js?v=20260808c" defer></script>
+    <script src="/before-times.js?v=20260810e" defer></script>
 </body>
 </html>

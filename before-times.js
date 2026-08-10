@@ -106,9 +106,9 @@
             title: 'Photography',
             copy: [
                 'The work that never fit into the job chronology: frames, contact sheets, visual experiments, and evidence that the instinct to compose a scene was present long before it had a professional label.',
-                'This lightbox will become a browsable contact sheet as the photo archive is recovered.'
+                'The first recovered roll restores the twenty-four photographs selected for the old site’s Favorites portfolio, in their original sequence.'
             ],
-            facts: ['Personal photography', 'Production stills and location textures', 'An archive waiting to be digitized']
+            facts: ['Favorites (2008–2014)', '24 recovered photographs', 'Original files and best surviving archived copies']
         },
         floorplan: {
             kicker: 'Inventory // permanent item',
@@ -826,6 +826,13 @@
     const contentSceneStatus = document.getElementById('bt-content-scene-status');
     const knowledgeSceneStatus = document.getElementById('bt-knowledge-scene-status');
     const infoDialog = document.getElementById('bt-info-dialog');
+    const photoDialog = document.getElementById('bt-photo-dialog');
+    const photoThumbs = document.getElementById('bt-photo-thumbs');
+    const photoStage = document.querySelector('.bt-photo-stage');
+    const photoImage = document.getElementById('bt-photo-image');
+    const photoLoadState = document.getElementById('bt-photo-load-state');
+    const photoPrev = document.getElementById('bt-photo-prev');
+    const photoNext = document.getElementById('bt-photo-next');
     const guestbookDialog = document.getElementById('bt-guestbook-dialog');
     const alchemyMenuDialog = document.getElementById('bt-alchemy-menu-dialog');
     const archiveDialog = document.getElementById('bt-archive-dialog');
@@ -5233,7 +5240,109 @@
         showStatus('Tape 25 offers its production notes.', 2800);
     }
 
+    let photographyManifestPromise = null;
+    let photographyItems = [];
+    let activePhotographyIndex = 0;
+
+    function loadPhotographyManifest() {
+        if (!photographyManifestPromise) {
+            photographyManifestPromise = fetch('/images/before-times/photography/manifest.json?v=20260810a', {
+                cache: 'force-cache'
+            }).then((response) => {
+                if (!response.ok) throw new Error(`Photography manifest returned ${response.status}`);
+                return response.json();
+            }).catch((error) => {
+                photographyManifestPromise = null;
+                throw error;
+            });
+        }
+        return photographyManifestPromise;
+    }
+
+    function renderPhotographyContactSheet() {
+        const fragment = document.createDocumentFragment();
+        photographyItems.forEach((item, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'bt-photo-thumb';
+            button.dataset.photoIndex = String(index);
+            button.setAttribute('aria-label', `View frame ${item.sequence}: ${item.title}`);
+
+            const image = document.createElement('img');
+            image.src = item.thumb;
+            image.width = item.thumbWidth;
+            image.height = item.thumbHeight;
+            image.alt = '';
+            image.loading = 'lazy';
+            image.decoding = 'async';
+
+            button.append(image);
+            fragment.appendChild(button);
+        });
+        photoThumbs.replaceChildren(fragment);
+        photoThumbs.setAttribute('aria-busy', 'false');
+    }
+
+    function selectPhotographyItem(index, options = {}) {
+        if (!photographyItems.length) return;
+        activePhotographyIndex = (index + photographyItems.length) % photographyItems.length;
+        const item = photographyItems[activePhotographyIndex];
+
+        photoImage.hidden = false;
+        photoImage.classList.remove('is-loaded');
+        photoLoadState.hidden = false;
+        photoLoadState.textContent = 'Loading recovered frame…';
+        photoImage.onload = () => {
+            photoImage.classList.add('is-loaded');
+            photoLoadState.hidden = true;
+        };
+        photoImage.onerror = () => {
+            photoLoadState.hidden = false;
+            photoLoadState.textContent = 'This recovered frame could not be loaded.';
+        };
+        photoImage.src = item.src;
+        photoImage.width = item.displayWidth;
+        photoImage.height = item.displayHeight;
+        photoImage.alt = item.title;
+        photoStage.style.setProperty('--bt-photo-aspect', `${item.displayWidth} / ${item.displayHeight}`);
+        photoStage.style.setProperty('--bt-photo-ratio', String(item.displayWidth / item.displayHeight));
+
+        photoPrev.setAttribute('aria-label', `Previous photograph before ${item.title}`);
+        photoNext.setAttribute('aria-label', `Next photograph after ${item.title}`);
+
+        photoThumbs.querySelectorAll('.bt-photo-thumb').forEach((thumb, thumbIndex) => {
+            const selected = thumbIndex === activePhotographyIndex;
+            thumb.classList.toggle('is-active', selected);
+            thumb.setAttribute('aria-current', selected ? 'true' : 'false');
+            if (selected && options.scroll !== false) {
+                thumb.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+            }
+        });
+    }
+
+    async function openPhotographyArchive() {
+        photoLoadState.hidden = false;
+        photoLoadState.textContent = 'Loading recovered photographs…';
+        openDialog(photoDialog);
+
+        try {
+            const manifest = await loadPhotographyManifest();
+            photographyItems = Array.isArray(manifest.items) ? manifest.items : [];
+            if (!photographyItems.length) throw new Error('Photography manifest is empty');
+            if (!photoThumbs.childElementCount) renderPhotographyContactSheet();
+            selectPhotographyItem(activePhotographyIndex, { scroll: false });
+        } catch (error) {
+            console.error('Photography archive failed to open', error);
+            photoLoadState.hidden = false;
+            photoLoadState.textContent = 'The archive canister is temporarily jammed.';
+        }
+    }
+
     function openPanel(panelId) {
+        if (panelId === 'photography') {
+            void openPhotographyArchive();
+            return;
+        }
         const panel = PANELS[panelId];
         if (!panel) return;
 
@@ -5985,10 +6094,37 @@
         button.addEventListener('click', () => closeDialog(button.closest('dialog')));
     });
 
-    [infoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog, gameBinderDialog, radioDialog].forEach((dialog) => {
+    [infoDialog, photoDialog, guestbookDialog, alchemyMenuDialog, archiveDialog, gameBinderDialog, radioDialog].forEach((dialog) => {
         dialog.addEventListener('click', (event) => {
             if (event.target === dialog) closeDialog(dialog);
         });
+    });
+
+    photoThumbs.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-photo-index]');
+        if (!button) return;
+        selectPhotographyItem(Number(button.dataset.photoIndex));
+    });
+    photoPrev.addEventListener('click', () => selectPhotographyItem(activePhotographyIndex - 1));
+    photoNext.addEventListener('click', () => selectPhotographyItem(activePhotographyIndex + 1));
+    photoDialog.addEventListener('keydown', (event) => {
+        if (!photographyItems.length || event.altKey || event.ctrlKey || event.metaKey) return;
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            selectPhotographyItem(activePhotographyIndex - 1);
+        }
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            selectPhotographyItem(activePhotographyIndex + 1);
+        }
+        if (event.key === 'Home') {
+            event.preventDefault();
+            selectPhotographyItem(0);
+        }
+        if (event.key === 'End') {
+            event.preventDefault();
+            selectPhotographyItem(photographyItems.length - 1);
+        }
     });
 
     // When a freshly recovered evidence dialog closes, punch its terminal row so the

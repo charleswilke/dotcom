@@ -1160,8 +1160,82 @@ rupture shake/bloom/smoke/debris, and lobby scar remain code-native layers.
 Tune placement, copy, and timing in HTML/CSS/JS; rebuild the masked plates only
 when changing the physical maze damage.
 
+## Photography contact-sheet recovery (August 9, 2026)
+
+The lobby photography lightbox and hanging camera now open a dedicated darkroom
+contact-sheet dialog instead of the former placeholder info panel. The first
+restored roll is the old site's curated `Favorites (2008–2014)` page: all 24
+photographs appear in their original gallery sequence with a horizontal
+thumbnail strip beneath an image-first viewer and prior/next controls.
+The compact header identifies the roll as `Favorites · 2008–2014`.
+Provenance, camera, date, pixel dimensions, frame numbers, image titles,
+archive-summary copy, and the redundant lobby button were removed from the
+visible exhibit so the selected photograph receives nearly all of the available
+space. The viewer follows each image's actual aspect ratio with only a slim dark
+mat; slim chevron controls sit just outside the image edges. Each new selection
+centers itself in the bottom thumbnail strip so the roll advances along with
+arrow-key or button navigation. Arrow Left/Right, Home, and End move through the
+roll. The floor plan's `Lobby · Photography` route opens the same dialog.
+
+The source page is the February 6, 2015 Wayback snapshot of
+`http://chazwilke.com/photography/favorites/`. Five exact original image files
+survived; for the other 19, the recovery uses the largest explicitly referenced
+WordPress copy that Wayback retained. The viewer labels that distinction as
+`Original file recovered` or `Best surviving copy` rather than presenting every
+archive result as an original.
+
+Recovery and runtime files:
+
+```text
+tools/recover-before-times-photography.py
+  Re-fetches the portfolio page and CDX upload index, preserves archived bytes,
+  verifies image content, computes SHA-256 provenance, and rebuilds WebPs.
+
+bt-assets/photography/favorites/
+  Preserved archived JPEG bytes plus the source HTML snapshot (~9.8 MiB).
+
+images/before-times/photography/manifest.json
+  Runtime collection order, titles, camera/exposure metadata, dimensions,
+  source/capture URLs, checksums, and recovery-quality labels.
+
+images/before-times/photography/*-thumb.webp
+images/before-times/photography/*.webp
+  560px contact-sheet copies and 1800px-capped viewer copies (~3.3 MiB total).
+```
+
+Rebuild with the bundled workspace Python because it includes Pillow:
+
+```bash
+/Users/cwilke/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 \
+  tools/recover-before-times-photography.py
+```
+
+The script resumes from preserved JPEGs, so a rerun does not redownload a file
+that is already present. Keep the raw archive and manifest together: the WebPs
+are deployable derivatives, while the raw bytes and their checksums are the
+recoverable historical record.
+
+An expanded local-only recovery is available through
+`tools/recover-additional-photography.py`. By default it writes to
+`/Users/cwilke/Documents/Pictures/chazwilke.com-recovery`, preserving Travel and
+Animals gallery placements plus the largest surviving copy from every remaining
+archived upload family under `Archive Extras/YYYY/MM/`. The current run produced
+265 image files (20 collection placements and 245 archive extras, about 109 MiB),
+with source-page HTML, checksums, dimensions, capture URLs, and 38 named gallery
+entries for which Wayback retained metadata but no image bytes documented in
+`manifest.json`. The raw local recovery deliberately preserves EXIF; 24 files
+retain GPS fields and should be metadata-scrubbed before any public reuse. The
+WebP presentation derivatives above do not carry that EXIF payload.
+
 ## Verification completed this session
 
+- The recovered photography dialog was checked at 1280×720 and 390×844. Both
+  lobby objects and the mobile floor-plan route opened it; all 24 thumbnails
+  rendered in a horizontal bottom strip, click and keyboard selection updated
+  the large image, the strip followed the active thumbnail, and the final image
+  was reachable with End. No broken dialog images, page-level horizontal
+  overflow, console errors, runtime errors, or framework error overlays were
+  detected.
 - The page was repeatedly tested at `http://localhost:8080/before-times.html`.
 - The Knowledge Maze was tested from a fresh direct `#knowledge-maze` load:
   all three evidence dialogs opened, context advanced from 0/3 to 3/3, the

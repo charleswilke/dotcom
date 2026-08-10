@@ -14126,7 +14126,14 @@ body.reader-open {
 .article-reader-footer::before {
     content: "";
     position: absolute;
+    /* The site-wide footer::before downlight (see ~line 2722) also matches this
+       element and hands it width:130%/height:78%/translateX(-50%). Left alone,
+       the grid+scanline layer renders shoved off-canvas and short, cutting the
+       texture off around 65% across and 78% down. Reclaim the full box. */
     inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
     pointer-events: none;
     background-image:
         linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),

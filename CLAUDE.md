@@ -52,14 +52,14 @@ Cues to run this: "I updated the cover for X", "just replaced the album art", "s
 Clean URLs are rewritten to `.html` files on the server side (both `.htaccess` and `vercel.json`). Some pages (e.g. `/mixtape`) have their own `.html` entry for OG meta tags, but then redirect the browser to `/#mixtape` to open a lightbox on the main portfolio page.
 
 ### Main site (`index.html` + `main.js`)
-Hash-based navigation (`#portfolio`, `#writing`, `#projections`, `#about`). `main.js` (~4,600 lines) orchestrates:
+Hash-based navigation (`#portfolio`, `#writing`, `#projections`, `#about`). `main.js` (~5,400 lines) orchestrates:
 - Fetching the Substack RSS feed via `/api/substack-feed.js` (Vercel)
 - Rendering the article grid (spotlight card + 18 regular cards)
 - The "Time Dial" — a vintage radio UI for browsing recap audio
 - Lazy initialization via `createLazyInitializer()` and `requestIdleCallback`
 - Audio player mutual exclusion (only one player active at a time)
 
-### CSS design system (`styles.css`, ~14,400 lines)
+### CSS design system (`styles.css`, ~15,200 lines)
 Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a36`. Responsive grid: 4 → 3 → 2 → 1 columns across breakpoints.
 
 `styles.css` is loaded **only by index.html**. Three subpages — faq, alice-in-wonderland, jersey-boys — load `subpages.css`, a **hand-maintained** ~22% subset of it (3,852 of 15,182 lines). Nothing generates that subset, so if you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages), mirror the change in subpages.css by hand and then check for drift:

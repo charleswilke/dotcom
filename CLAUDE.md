@@ -62,7 +62,15 @@ Hash-based navigation (`#portfolio`, `#writing`, `#projections`, `#about`). `mai
 ### CSS design system (`styles.css`, ~14,400 lines)
 Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a36`. Responsive grid: 4 → 3 → 2 → 1 columns across breakpoints.
 
-`styles.css` is loaded **only by index.html**. The subpages (faq, alice-in-wonderland, jersey-boys, before-times) load `subpages.css`, a generated ~15% subset of styles.css. If you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages, before-times), mirror the change in subpages.css.
+`styles.css` is loaded **only by index.html**. Three subpages — faq, alice-in-wonderland, jersey-boys — load `subpages.css`, a **hand-maintained** ~22% subset of it (3,852 of 15,182 lines). Nothing generates that subset, so if you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages), mirror the change in subpages.css by hand and then check for drift:
+
+```
+python3 tools/check-subpages-css.py
+```
+
+It compares every selector the two sheets share, context-aware about `@media` blocks, and exits non-zero on a mismatch.
+
+**before-times is not one of them.** It loads its own standalone `before-times.css` and nothing else, so styles.css edits never reach it — and, in the other direction, its footers don't inherit the site-wide `footer` rules the other pages get.
 
 ### Foil (Balatro-style holofoil)
 **One place carries it: the About card portrait (`.foil`).** A pointer-driven hue field, a hairline etch, a specular glare, clipped by an alpha mask generated from the artwork itself, never hand-drawn:

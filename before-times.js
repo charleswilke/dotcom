@@ -106,7 +106,7 @@
             title: 'Photography',
             copy: [
                 'The work that never fit into the job chronology: frames, contact sheets, visual experiments, and evidence that the instinct to compose a scene was present long before it had a professional label.',
-                'The first recovered roll restores the twenty-four photographs selected for the old site’s Favorites portfolio, in their original sequence.'
+                'The first recovered roll restores the twenty-four photographs selected for the old site’s Favorites portfolio, reshuffled into a fresh sequence each time the gallery opens.'
             ],
             facts: ['Favorites (2008–2014)', '24 recovered photographs', 'Original files and best surviving archived copies']
         },
@@ -904,6 +904,10 @@
     const inventoryPenSlot = document.getElementById('bt-inventory-slot-pen');
     const lobbyInventoryCassette = document.getElementById('bt-lobby-inventory-cassette');
     const inventoryCassetteSlot = document.getElementById('bt-inventory-slot-cassette');
+    const lobbyInventoryFilm = document.getElementById('bt-lobby-inventory-film');
+    const inventoryFilmSlot = document.getElementById('bt-inventory-slot-film');
+    const photographyHotspots = Array.from(document.querySelectorAll('[data-panel="photography"]'));
+    const photographyLightboxHotspot = document.querySelector('.bt-hotspot-photo-display');
     const contentDoorHotspot = document.querySelector('.bt-hotspot-content');
     const contentExitHotspot = document.querySelector('.bt-content-hotspot-door');
     const contentConsoleHotspot = document.querySelector('.bt-content-hotspot-console');
@@ -965,6 +969,7 @@
     const knowledgeAsk = document.getElementById('bt-knowledge-ask');
     const knowledgePresentPortal = document.getElementById('bt-knowledge-present-portal');
     const knowledgePresentVideo = document.getElementById('bt-knowledge-present-video');
+    const knowledgeFilmHotspot = document.getElementById('bt-knowledge-film');
     const knowledgeDocumentSurfaces = {
         before: document.querySelector('[data-knowledge-document-surface="before"]'),
         after: document.querySelector('[data-knowledge-document-surface="after"]'),
@@ -1101,6 +1106,8 @@
     let cassettePointerStartY = 0;
     let cassettePointerLastX = 0;
     let cassettePointerLastY = 0;
+    let hasPhotographyFilm = false;
+    let photographyFilmLocation = 'drawer';
     let portraitPromptDismissed = false;
 
     function fullscreenElement() {
@@ -1215,8 +1222,19 @@
         return hasBoatCassette && boatCassetteLocation === 'radio';
     }
 
+    function photographyFilmIsInInventory() {
+        return hasPhotographyFilm && photographyFilmLocation === 'inventory';
+    }
+
+    function photographyFilmIsLoaded() {
+        return hasPhotographyFilm && photographyFilmLocation === 'camera';
+    }
+
     function inventoryHasItems() {
-        return penIsInInventory() || quarterIsInInventory() || boatCassetteIsInInventory();
+        return penIsInInventory()
+            || quarterIsInInventory()
+            || boatCassetteIsInInventory()
+            || photographyFilmIsInInventory();
     }
 
     function savePenState() {
@@ -1237,6 +1255,13 @@
         const inventory = readInventory();
         inventory.boatCassette = hasBoatCassette;
         inventory.boatCassetteLocation = boatCassetteLocation;
+        writeInventory(inventory);
+    }
+
+    function savePhotographyFilmState() {
+        const inventory = readInventory();
+        inventory.photographyFilm = hasPhotographyFilm;
+        inventory.photographyFilmLocation = photographyFilmLocation;
         writeInventory(inventory);
     }
 
@@ -1572,6 +1597,101 @@
         }
         cassetteDragStarted = false;
         if (shouldInsert) insertBoatCassetteIntoRadio();
+    }
+
+    function syncPhotographyAccess() {
+        const filmReady = photographyFilmIsInInventory();
+        const filmLoaded = photographyFilmIsLoaded();
+
+        photographyHotspots.forEach((hotspot) => {
+            // The contact sheet stays physically dark until the roll is actually
+            // loaded. `is-film-ready` changes the instruction, not the lamp.
+            hotspot.classList.toggle('is-film-locked', !filmLoaded);
+            hotspot.classList.toggle('is-film-ready', filmReady);
+            hotspot.classList.toggle('is-film-loaded', filmLoaded);
+
+            const isCamera = hotspot.classList.contains('bt-hotspot-camera');
+            if (filmLoaded) {
+                hotspot.dataset.label = isCamera ? 'Camera · film loaded' : 'Photography contact sheets';
+                hotspot.setAttribute('aria-label', isCamera
+                    ? 'Open the photography contact sheets from the loaded vintage camera'
+                    : 'Open the illuminated photography contact sheets');
+            } else if (filmReady) {
+                hotspot.dataset.label = isCamera ? 'Camera · load recovered roll' : 'Photography · load recovered roll';
+                hotspot.setAttribute('aria-label', isCamera
+                    ? 'Load the recovered 35mm film roll into the hanging vintage camera'
+                    : 'Load the recovered 35mm film roll and open the photography contact sheets');
+            } else {
+                hotspot.dataset.label = isCamera ? 'Camera · no film loaded' : 'Photography · no film loaded';
+                hotspot.setAttribute('aria-label', isCamera
+                    ? 'Inspect the empty hanging vintage camera; a recovered film roll is required'
+                    : 'Inspect the dark photography contact sheets; a recovered film roll is required');
+            }
+        });
+
+        const photographyRoute = PANELS.floorplan.routes.find((route) => route.id === 'photography');
+        if (photographyRoute) {
+            photographyRoute.label = filmLoaded
+                ? 'Lobby · Photography · roll loaded'
+                : (filmReady ? 'Lobby · Photography · roll recovered' : 'Lobby · Photography · film required');
+        }
+    }
+
+    function syncPhotographyFilmInventory(options) {
+        const settings = options || {};
+        const filmReady = photographyFilmIsInInventory();
+        knowledgeFilmHotspot.hidden = hasPhotographyFilm;
+        inventoryFilmSlot.classList.toggle('bt-inventory-slot-filled', filmReady);
+        lobbyInventoryFilm.hidden = !filmReady;
+        syncPhotographyAccess();
+        syncInventoryDrawer();
+        if (settings.openDrawer && filmReady) setInventoryDrawerOpen(true, true);
+    }
+
+    function collectPhotographyFilm() {
+        if (hasPhotographyFilm) {
+            if (photographyFilmIsInInventory()) setInventoryDrawerOpen(true, true);
+            return;
+        }
+
+        hasPhotographyFilm = true;
+        photographyFilmLocation = 'inventory';
+        savePhotographyFilmState();
+        inventoryFilmSlot.classList.add('bt-inventory-slot-filled');
+        lobbyInventoryFilm.hidden = false;
+        syncPhotographyAccess();
+        syncInventoryDrawer();
+        animateLayer(knowledgeFilmHotspot, 'is-collecting', 740);
+        window.setTimeout(() => {
+            knowledgeFilmHotspot.hidden = true;
+            syncPhotographyFilmInventory({ openDrawer: true });
+        }, prefersReducedMotion.matches ? 0 : 420);
+        showStatus('Recovered roll: FAVORITES, 2008–14. The lobby camera can develop it.', 4800);
+    }
+
+    function loadPhotographyFilm(sourceHotspot) {
+        if (!photographyFilmIsInInventory()) return;
+        photographyFilmLocation = 'camera';
+        savePhotographyFilmState();
+        syncPhotographyFilmInventory();
+        animateLayer(photographyLightboxHotspot, 'is-film-starting', 1380);
+        if (sourceHotspot && sourceHotspot !== photographyLightboxHotspot) {
+            animateLayer(sourceHotspot, 'is-film-loading', 760);
+        }
+        showStatus('The recovered roll clicks into the lobby camera. The contact sheet wakes.', 3800);
+        window.setTimeout(() => void openPhotographyArchive(), prefersReducedMotion.matches ? 0 : 1280);
+    }
+
+    function requestPhotographyArchive(sourceHotspot) {
+        if (photographyFilmIsLoaded()) {
+            void openPhotographyArchive();
+            return;
+        }
+        if (photographyFilmIsInInventory()) {
+            loadPhotographyFilm(sourceHotspot);
+            return;
+        }
+        showStatus('NO FILM LOADED. A recovered roll is required. Check the files in the Knowledge Maze.', 5600);
     }
 
     function readKnowledgeState() {
@@ -5259,7 +5379,26 @@
         return photographyManifestPromise;
     }
 
+    function shufflePhotographyItems(items) {
+        const shuffled = items.slice();
+        for (let index = shuffled.length - 1; index > 0; index -= 1) {
+            const swapIndex = Math.floor(Math.random() * (index + 1));
+            [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+        }
+
+        // A true shuffle can theoretically reproduce the previous arrangement.
+        // Keep the user-facing promise literal by forcing one final swap if that
+        // vanishingly unlikely result occurs on a repeated opening.
+        if (shuffled.length > 1
+            && photographyItems.length === shuffled.length
+            && shuffled.every((item, index) => item === photographyItems[index])) {
+            [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+        }
+        return shuffled;
+    }
+
     function renderPhotographyContactSheet() {
+        photoThumbs.setAttribute('aria-busy', 'true');
         const fragment = document.createDocumentFragment();
         photographyItems.forEach((item, index) => {
             const button = document.createElement('button');
@@ -5327,10 +5466,12 @@
 
         try {
             const manifest = await loadPhotographyManifest();
-            photographyItems = Array.isArray(manifest.items) ? manifest.items : [];
-            if (!photographyItems.length) throw new Error('Photography manifest is empty');
-            if (!photoThumbs.childElementCount) renderPhotographyContactSheet();
-            selectPhotographyItem(activePhotographyIndex, { scroll: false });
+            const manifestItems = Array.isArray(manifest.items) ? manifest.items : [];
+            if (!manifestItems.length) throw new Error('Photography manifest is empty');
+            photographyItems = shufflePhotographyItems(manifestItems);
+            activePhotographyIndex = 0;
+            renderPhotographyContactSheet();
+            selectPhotographyItem(0, { scroll: false });
         } catch (error) {
             console.error('Photography archive failed to open', error);
             photoLoadState.hidden = false;
@@ -5338,9 +5479,9 @@
         }
     }
 
-    function openPanel(panelId) {
+    function openPanel(panelId, sourceHotspot) {
         if (panelId === 'photography') {
-            void openPhotographyArchive();
+            requestPhotographyArchive(sourceHotspot);
             return;
         }
         const panel = PANELS[panelId];
@@ -5946,7 +6087,7 @@
                 );
                 return;
             }
-            openPanel(panelId);
+            openPanel(panelId, button);
         });
     });
 
@@ -6012,6 +6153,7 @@
     document.querySelectorAll('[data-knowledge-action]').forEach((button) => {
         button.addEventListener('click', () => {
             if (button.dataset.knowledgeAction === 'lobby') leaveKnowledgeRoom();
+            if (button.dataset.knowledgeAction === 'collect-film') collectPhotographyFilm();
         });
     });
 
@@ -6338,6 +6480,10 @@
         }
         setInventoryCassetteSelected(!inventoryCassetteSelected);
     });
+    lobbyInventoryFilm.addEventListener('click', () => {
+        if (!photographyFilmIsInInventory()) return;
+        showStatus('The recovered Favorites roll is ready. Activate the camera or lightbox to load it.', 4400);
+    });
 
     radioPlay.addEventListener('click', toggleRadioEpisode);
     radioPrev.addEventListener('click', () => loadRadioEpisode(currentRadioEpisode - 1, { autoplay: true }));
@@ -6457,12 +6603,17 @@
     boatCassetteLocation = hasBoatCassette && savedInventory.boatCassetteLocation === 'radio'
         ? 'radio'
         : (hasBoatCassette ? 'inventory' : 'room');
+    hasPhotographyFilm = savedInventory.photographyFilm === true;
+    photographyFilmLocation = hasPhotographyFilm && savedInventory.photographyFilmLocation === 'camera'
+        ? 'camera'
+        : (hasPhotographyFilm ? 'inventory' : 'drawer');
     const savedKnowledge = readKnowledgeState();
     knowledgeContext = new Set(savedKnowledge.context);
     knowledgeBreached = savedKnowledge.breached;
     syncPenInventory();
     syncQuarterInventory();
     syncBoatCassetteInventory();
+    syncPhotographyFilmInventory();
     syncKnowledgeState();
     renderAlchemyPlaylist();
     initializeGameMonitorKeystones();

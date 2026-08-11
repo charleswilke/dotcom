@@ -413,7 +413,7 @@ images/before-times/layers/lobby-clean-v4.webp
 images/before-times/layers/lobby-clean-v4-newsstand-v1.png
 images/before-times/layers/lobby-clean-v4-newsstand-v1.webp
   Base plate for the current runtime lobby. It applies only the localized, feathered
-  upper-silhouette repair over V4 so the independent `newsstand-v2` sprite has
+  upper-silhouette repair over V4 so the independent newsstand sprite has
   no doubled diagonal rod or original top plane peeking behind it. The baked
   cabinet body, base, and grounding shadow remain; removing them made the
   dispenser look pulled from the wall and reintroduced generated floor shadows.
@@ -732,9 +732,10 @@ only a tiny CSS contact shadow. The older `bell.*` remains the extraction/build
 source but should not be restored to the page unless its oversized shadow matte
 is fixed.
 
-The live newsstand similarly uses `images/before-times/layers/newsstand-v2.*`.
-It preserves the full cabinet, top rod, side cable, and newspaper face without
-the wall slivers and large floor wedge carried by the older extracted matte.
+The live newsstand similarly uses `images/before-times/layers/newsstand-v3.*`.
+It preserves the full cabinet, side cable, and newspaper face without the top
+rod that read as a stray antenna, or the wall slivers and large floor wedge
+carried by the older extracted matte.
 Its matching base background is `lobby-clean-v4-newsstand-v1.*`; the live plate
 is the guestbook V3 derivative. Do not restore the plain V4 plate unless the
 doubled handle and top plane are intentionally wanted.
@@ -1165,8 +1166,9 @@ when changing the physical maze damage.
 The lobby photography lightbox and hanging camera now open a dedicated darkroom
 contact-sheet dialog instead of the former placeholder info panel. The first
 restored roll is the old site's curated `Favorites (2008–2014)` page: all 24
-photographs appear in their original gallery sequence with a horizontal
-thumbnail strip beneath an image-first viewer and prior/next controls.
+photographs are preserved in their original gallery sequence in the manifest,
+but the dialog shuffles a fresh working copy every time it opens. A horizontal
+thumbnail strip sits beneath the image-first viewer with prior/next controls.
 The compact header identifies the roll as `Favorites · 2008–2014`.
 Provenance, camera, date, pixel dimensions, frame numbers, image titles,
 archive-summary copy, and the redundant lobby button were removed from the
@@ -1227,8 +1229,81 @@ entries for which Wayback retained metadata but no image bytes documented in
 retain GPS fields and should be metadata-scrubbed before any public reuse. The
 WebP presentation derivatives above do not carry that EXIF payload.
 
+## Photography film-roll access gate (August 10, 2026)
+
+The recovered photography collection now has a session-scoped physical access
+gate. On a fresh visit, both lobby photography objects and the floor plan's
+`Lobby · Photography` route report that no film is loaded and point toward the
+Knowledge Maze. They do not open or fetch the contact-sheet dialog while the
+roll is missing.
+
+The roll is an optional fourth collectible in the Knowledge Maze, separate from
+the room's three required context-evidence stations. It rests at full opacity on
+the left side of the open notepad beneath the right task lamp; its click target
+covers the notepad so the small prop remains usable on touch screens. The prop
+is a code-native scene layer rather than a rebuild of any contained or cracked
+room plate. Runtime and generated masters are:
+
+```text
+images/before-times/inventory/photography-film-roll-v1.webp
+images/before-times/inventory/photography-film-roll-v1.png
+images/before-times/inventory/photography-film-roll-source-v1.png
+```
+
+Collecting it stores `photographyFilm: true` plus
+`photographyFilmLocation: "inventory"` in the existing `bt-inventory-v1`
+session record and opens the shared four-slot inventory drawer. Returning to
+the lobby also shows the roll in the physical inventory row. The next activation
+of either the hanging camera or the lightbox loads the film automatically,
+changes its location to `"camera"`, removes it from inventory, and opens the
+24-frame contact sheet. That loaded state survives navigation and reloads for
+the remainder of the session. Each dialog opening runs an unbiased Fisher–Yates
+shuffle over a fresh copy of the manifest items, rebuilds the thumbnail rail,
+and resets selection to the first shuffled photograph. The manifest's recovered
+source order is never mutated. A repeat-order guard forces a swap in the
+vanishingly unlikely event that a shuffle recreates the immediately prior order.
+
+The lightbox remains dark until the roll's location becomes `"camera"`—having
+the roll in inventory changes the prompt but does not turn on the display.
+Locked hover/focus explicitly disables the old `bt-photo-breathe` animation and
+holds the same dim filter, so pointer discovery cannot preview the lit state.
+Loading the roll runs a one-shot 1.35-second warm lightbox-start flicker, from
+failed flashes through a stable illuminated plate, while the camera gives a
+shorter loading pulse. The photography dialog waits 1.28 seconds so the room
+beat remains visible before the modal opens. Reduced-motion visitors skip both
+the animation and wait.
+
+The inventory drawer is now available inside the Knowledge Maze as well as the
+other collectible rooms. Its fixed container keeps `pointer-events: none`; only
+the visible handle and drawer body accept input. This prevents the tucked-away
+drawer from intercepting the fixed mobile Lobby control after a collection.
+
+Accessibility copy tracks all three states (`film required`, `roll recovered`,
+and `roll loaded`) on both lobby photography hotspots. The floor-plan route
+label changes with the same state, and the Knowledge Maze instructions identify
+the optional roll's location for non-visual navigation.
+
 ## Verification completed this session
 
+- The photography gate was checked from an empty `bt-inventory-v1` session at
+  1280×720 and 390×844. Both lobby objects and the floor-plan route stayed
+  closed, announced `NO FILM LOADED`, and named the Knowledge Maze as the clue.
+  The notepad roll collected into the four-slot drawer, survived the return to
+  the lobby, loaded automatically through the camera, disappeared from
+  inventory, and opened all 24 frames. The loaded `"camera"` state persisted in
+  session storage. The mobile stage remained horizontally swipeable with no
+  page-level overflow, and the fixed Lobby control stayed operable after the
+  inventory drawer closed. No runtime or console errors were detected.
+- The loaded photography dialog was closed and reopened repeatedly against one
+  cached manifest. Every opening retained all 24 unique frames, produced a new
+  order, rebuilt the thumbnail rail, and selected the first item in that new
+  order. Arrow-key navigation continued to advance through the shuffled array.
+- The empty and inventory-ready contact sheet was hovered and focused in the
+  browser: both states held the same dim filter with `animation-name: none`.
+  Loading through the camera applied `bt-photography-light-flicker` to the
+  lightbox, kept the dialog closed during the startup beat, then opened the
+  shuffled 24-frame gallery with the selected image loaded. No console errors
+  were detected.
 - The recovered photography dialog was checked at 1280×720 and 390×844. Both
   lobby objects and the mobile floor-plan route opened it; all 24 thumbnails
   rendered in a horizontal bottom strip, click and keyboard selection updated

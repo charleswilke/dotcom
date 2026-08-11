@@ -51,7 +51,7 @@
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.webp?v=20260718e" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=202607241328" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/guestbook-fresh-v1.webp?v=20260718d" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260810h">
+    <link rel="stylesheet" href="/before-times.css?v=20260810p">
     <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
@@ -181,12 +181,12 @@
                 </button>
 
                 <button class="bt-hotspot bt-hotspot-newspaper bt-layered-hotspot bt-prop-hotspot" type="button" data-action="newspaper" data-label="Coin-operated newspaper archive" aria-label="Inspect the coin-operated collegiate newspaper dispenser">
-                    <img class="bt-object-layer bt-object-layer-prop" src="/images/before-times/layers/newsstand-v2.webp?v=20260716a" width="240" height="350" alt="" aria-hidden="true" decoding="async">
+                    <img class="bt-object-layer bt-object-layer-prop" src="/images/before-times/layers/newsstand-v3.webp?v=20260810a" width="240" height="350" alt="" aria-hidden="true" decoding="async">
                 </button>
-                <button class="bt-hotspot bt-hotspot-photo-display bt-layered-hotspot bt-prop-hotspot" type="button" data-panel="photography" data-label="Photography contact sheets" aria-label="Inspect the illuminated photography contact sheets">
+                <button class="bt-hotspot bt-hotspot-photo-display bt-layered-hotspot bt-prop-hotspot" type="button" data-panel="photography" data-label="Photography · no film loaded" aria-label="Inspect the dark photography contact sheets; a recovered film roll is required">
                     <img class="bt-object-layer bt-object-layer-prop" src="/images/before-times/layers/photo-display.webp?v=20260716l" width="152" height="242" alt="" aria-hidden="true" decoding="async">
                 </button>
-                <button class="bt-hotspot bt-hotspot-camera bt-layered-hotspot bt-prop-hotspot" type="button" data-panel="photography" data-label="Old camera" aria-label="Inspect the hanging vintage camera">
+                <button class="bt-hotspot bt-hotspot-camera bt-layered-hotspot bt-prop-hotspot" type="button" data-panel="photography" data-label="Camera · no film loaded" aria-label="Inspect the empty hanging vintage camera; a recovered film roll is required">
                     <img class="bt-object-layer bt-object-layer-prop" src="/images/before-times/layers/camera.webp?v=20260716l" width="140" height="160" alt="" aria-hidden="true" decoding="async">
                 </button>
 
@@ -216,6 +216,10 @@
                 <button class="bt-lobby-inventory-item bt-lobby-inventory-cassette" id="bt-lobby-inventory-cassette" type="button" aria-label="Select The Boat cassette to use with the lobby radio" aria-pressed="false" draggable="true" hidden>
                     <img src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="">
                     <span aria-hidden="true">The Boat cassette</span>
+                </button>
+                <button class="bt-lobby-inventory-item bt-lobby-inventory-film" id="bt-lobby-inventory-film" type="button" aria-label="Recovered 35mm film roll ready to load into the lobby camera" hidden>
+                    <img src="/images/before-times/inventory/photography-film-roll-v1.webp?v=20260810a" width="720" height="421" alt="">
+                    <span aria-hidden="true">Favorites film roll</span>
                 </button>
 
                 <div class="bt-scene-status" id="bt-scene-status" role="status" aria-live="polite"></div>
@@ -541,7 +545,7 @@
         <div class="bt-lobby-scroll bt-knowledge-scroll" id="bt-knowledge-scroll" hidden>
             <section class="bt-lobby-scene bt-knowledge-scene" id="bt-knowledge-scene" aria-label="The Knowledge Maze room" aria-describedby="bt-knowledge-instructions">
                 <p class="bt-sr-only" id="bt-knowledge-instructions">
-                    Inspect the paired documentation panels, voice-and-tone controls, and impact gauge to give the early assistance terminal the human context it is missing. The right doorway returns to the lobby. Completing the terminal opens a path to the present-day site.
+                    Inspect the paired documentation panels, voice-and-tone controls, and impact gauge to give the early assistance terminal the human context it is missing. An optional photography film roll rests on the notepad beneath the right task lamp. The right doorway returns to the lobby. Completing the terminal opens a path to the present-day site.
                 </p>
                 <img
                     class="bt-lobby-art bt-knowledge-art bt-knowledge-art-contained"
@@ -645,6 +649,9 @@
                 <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-docs" type="button" data-knowledge-key="goal" data-label="Before and after documentation" aria-label="Inspect the before and after documentation panels"></button>
                 <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-voice" type="button" data-knowledge-key="human" data-label="Voice and tone controls" aria-label="Inspect the voice and tone controls"></button>
                 <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-impact" type="button" data-knowledge-key="friction" data-label="Impact gauge · 93 percent" aria-label="Inspect the customer-care escalation impact gauge"></button>
+                <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-film" id="bt-knowledge-film" type="button" data-knowledge-action="collect-film" data-label="Recovered 35mm film roll" aria-label="Recover the 35mm film roll resting on the notepad beneath the task lamp">
+                    <img class="bt-knowledge-film-sprite" src="/images/before-times/inventory/photography-film-roll-v1.webp?v=20260810a" width="720" height="421" alt="" aria-hidden="true" loading="lazy">
+                </button>
                 <button class="bt-hotspot bt-knowledge-hotspot bt-knowledge-hotspot-door" type="button" data-knowledge-action="lobby" data-label="Back to the lobby" aria-label="Return to the Before Times lobby">
                     <span class="bt-door-light" aria-hidden="true"></span>
                 </button>
@@ -704,6 +711,10 @@
                 <div class="bt-inventory-slot bt-inventory-slot-cassette" id="bt-inventory-slot-cassette">
                     <img src="/images/before-times/inventory/the-boat-cassette-v1.webp?v=20260722a" width="1672" height="940" alt="Scuffed black cassette hand-labeled The Boat">
                     <span>The Boat cassette</span>
+                </div>
+                <div class="bt-inventory-slot bt-inventory-slot-film" id="bt-inventory-slot-film">
+                    <img src="/images/before-times/inventory/photography-film-roll-v1.webp?v=20260810a" width="720" height="421" alt="Scuffed 35mm photography film cartridge with a short exposed leader">
+                    <span>Favorites film roll</span>
                 </div>
             </div>
         </aside>
@@ -959,6 +970,6 @@
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260809a" defer></script>
     <script src="/before-times-game-binder.js?v=20260729a" defer></script>
-    <script src="/before-times.js?v=20260810e" defer></script>
+    <script src="/before-times.js?v=20260810h" defer></script>
 </body>
 </html>

@@ -1835,7 +1835,11 @@ section.production-header.alice .production-details p strong {
     /* Two equal blips, separated by half of the normalized perimeter. */
     stroke-dasharray: 3 47 3 47;
     stroke-dashoffset: 0;
-    vector-effect: non-scaling-stroke;
+    /* No vector-effect: non-scaling-stroke here. Blink normalizes pathLength in
+       user space but lays the dash pattern down in device space, so with it on,
+       a 2x display halves the whole pattern: four small blips on Retina, the
+       intended two big ones on a 1x monitor. The only scale in play is the
+       card's 1.025 hover, so the stroke it was protecting goes 2px -> 2.05px. */
     mix-blend-mode: screen;
     opacity: 0;
     /* Lap runs even while invisible so un-hover glides out mid-orbit instead of snapping. */

@@ -314,6 +314,150 @@ a {
     -webkit-user-drag: none;
 }
 
+/* The title rails are a recovered-signal meter. The original mint rules remain
+   in the room plate as registration guides; each rail lays a narrow ink strip
+   over the rule, then rebuilds it as five deliberately imperfect receiver bars. */
+.bt-archive-signal {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+}
+
+.bt-archive-signal-rail {
+    position: absolute;
+    top: 2.65%;
+    width: 12.5%;
+    height: 3.15%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4%;
+    isolation: isolate;
+}
+
+.bt-archive-signal-rail::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: -1.2%;
+    bottom: -1px;
+    left: -1.2%;
+    height: 22%;
+    background:
+        linear-gradient(90deg, transparent, rgba(9, 10, 35, 0.98) 2% 98%, transparent),
+        var(--bt-ink);
+    filter: blur(0.15px);
+}
+
+.bt-archive-signal-rail-left {
+    left: 20%;
+}
+
+.bt-archive-signal-rail-right {
+    left: 66.85%;
+    flex-direction: row-reverse;
+}
+
+.bt-archive-signal-bar {
+    --bt-signal-tilt: 0deg;
+    position: relative;
+    width: 11.2%;
+    min-height: 22%;
+    overflow: hidden;
+    opacity: 0.34;
+    background:
+        repeating-linear-gradient(0deg, rgba(243, 216, 173, 0.07) 0 1px, transparent 1px 4px),
+        linear-gradient(92deg, #12152f, #202341 55%, #0d102a);
+    border: 1px solid rgba(243, 216, 173, 0.3);
+    border-radius: 48% 38% 34% 44% / 12% 17% 10% 14%;
+    box-shadow:
+        inset 1px 0 rgba(243, 216, 173, 0.08),
+        0 1px 0 rgba(0, 0, 0, 0.72);
+    transform: rotate(var(--bt-signal-tilt)) scaleY(0.94);
+    transform-origin: 50% 100%;
+    transition: opacity 260ms ease, background-color 260ms ease, border-color 260ms ease, box-shadow 260ms ease, filter 260ms ease;
+}
+
+.bt-archive-signal-bar:nth-child(1) { --bt-signal-tilt: -0.9deg; height: 27%; }
+.bt-archive-signal-bar:nth-child(2) { --bt-signal-tilt: 0.65deg; height: 42%; }
+.bt-archive-signal-bar:nth-child(3) { --bt-signal-tilt: -0.35deg; height: 58%; }
+.bt-archive-signal-bar:nth-child(4) { --bt-signal-tilt: 0.8deg; height: 75%; }
+.bt-archive-signal-bar:nth-child(5) { --bt-signal-tilt: -0.45deg; height: 94%; }
+
+.bt-archive-signal-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.42;
+    background:
+        linear-gradient(112deg, transparent 0 24%, rgba(255, 255, 255, 0.22) 28% 33%, transparent 38% 100%),
+        repeating-linear-gradient(176deg, transparent 0 5px, rgba(9, 10, 35, 0.28) 5px 6px);
+    mix-blend-mode: screen;
+}
+
+.bt-archive-signal-bar.is-lit {
+    opacity: 0.96;
+    background:
+        repeating-linear-gradient(0deg, rgba(9, 10, 35, 0.2) 0 1px, transparent 1px 5px),
+        linear-gradient(96deg, #00a98e, #66f1c7 55%, #09caa8);
+    border-color: rgba(174, 255, 227, 0.82);
+    box-shadow:
+        inset 1px 0 rgba(239, 255, 249, 0.32),
+        0 0 4px rgba(0, 247, 194, 0.5),
+        0 0 10px rgba(0, 247, 194, 0.18);
+    filter: saturate(0.9);
+}
+
+.bt-archive-signal.is-receiving .bt-archive-signal-bar.is-new {
+    animation: bt-archive-signal-receive 880ms cubic-bezier(0.2, 0.72, 0.24, 1) both;
+}
+
+.bt-archive-signal.is-locking .bt-archive-signal-bar.is-lit {
+    animation: bt-archive-signal-lock 980ms ease-out both;
+}
+
+@keyframes bt-archive-signal-receive {
+    0% {
+        opacity: 0.18;
+        filter: brightness(0.65) saturate(0.55);
+        transform: rotate(var(--bt-signal-tilt)) scaleY(0.18);
+    }
+    24% {
+        opacity: 1;
+        filter: brightness(1.85) saturate(0.5);
+        transform: rotate(var(--bt-signal-tilt)) scaleY(1.08);
+    }
+    42% {
+        opacity: 0.52;
+        filter: brightness(0.9) saturate(0.75);
+    }
+    61% {
+        opacity: 1;
+        filter: brightness(1.5) saturate(0.7);
+    }
+    100% {
+        opacity: 0.96;
+        filter: saturate(0.9);
+        transform: rotate(var(--bt-signal-tilt)) scaleY(1);
+    }
+}
+
+@keyframes bt-archive-signal-lock {
+    0%, 100% {
+        filter: saturate(0.9);
+    }
+    38% {
+        background-color: var(--bt-cream);
+        border-color: rgba(255, 221, 154, 0.96);
+        box-shadow:
+            inset 1px 0 rgba(255, 255, 255, 0.52),
+            0 0 7px rgba(255, 204, 112, 0.74),
+            0 0 18px rgba(255, 90, 54, 0.36);
+        filter: brightness(1.55) saturate(0.14) sepia(0.58);
+    }
+}
+
 .bt-hotspot {
     position: absolute;
     z-index: 3;

@@ -11,7 +11,11 @@
                 'Click or tap a door, exhibit, or desk object. Keyboard visitors can use Tab and Enter. On a narrow screen, swipe sideways through the lobby or use the floating floor-plan button.',
                 'Sound is always opt-in. Nothing plays until you ring the bell or tune the radio.'
             ],
-            facts: ['Use Tab to move between every interactive object.', 'The glowing mint door and the X in the upper-right return to the present-day site.'],
+            facts: [
+                'Use Tab to move between every interactive object.',
+                'The signal bars beside the title strengthen as the archive’s main rooms and recovered objects are investigated.',
+                'The glowing mint door and the X in the upper-right return to the present-day site.'
+            ],
             button: { label: 'Turn sound off', action: 'sound' }
         },
         alchemy: {
@@ -820,6 +824,8 @@
     const mobileOrientationFullscreen = document.getElementById('bt-mobile-orientation-fullscreen');
     const mobileOrientationContinue = document.getElementById('bt-mobile-orientation-continue');
     const mobileImmersiveButton = document.getElementById('bt-mobile-immersive');
+    const archiveSignal = document.getElementById('bt-archive-signal');
+    const archiveSignalBars = Array.from(archiveSignal.querySelectorAll('[data-signal-level]'));
     const lobbySceneStatus = document.getElementById('bt-scene-status');
     const alchemySceneStatus = document.getElementById('bt-alchemy-scene-status');
     const gameSceneStatus = document.getElementById('bt-game-scene-status');
@@ -923,6 +929,30 @@
     // #sound-stage. Both old hashes stay supported so shared links keep working.
     const ALCHEMY_HASH = '#screening-room';
     const ALCHEMY_HASH_ALIASES = new Set(['#sound-stage', '#absurd-alchemy']);
+    const INVESTIGATION_STORAGE_KEY = 'bt-investigation-v1';
+    const INVESTIGATION_MILESTONES = Object.freeze([
+        'visit-alchemy',
+        'visit-games',
+        'visit-content',
+        'visit-knowledge',
+        'investigate-alchemy',
+        'investigate-games',
+        'investigate-content',
+        'investigate-knowledge',
+        'recover-pen',
+        'recover-quarter',
+        'recover-cassette',
+        'recover-film'
+    ]);
+    const INVESTIGATION_SIGNAL_THRESHOLDS = Object.freeze([1, 3, 6, 9, 12]);
+    const INVESTIGATION_SIGNAL_LABELS = Object.freeze([
+        'dormant',
+        'faint',
+        'strengthening',
+        'steady',
+        'strong',
+        'complete'
+    ]);
 
     const lobbyScroll = document.getElementById('bt-lobby-scroll');
     const lobbyScene = document.querySelector('.bt-lobby-scene');
@@ -1040,6 +1070,9 @@
     let radioScopeAnimation = 0;
     let radioScopeData = null;
     let activeRoom = 'lobby';
+    let investigationMilestones = readInvestigationMilestones();
+    let lastPresentedSignalLevel = investigationSignalLevel();
+    let archiveSignalAnimationTimer = 0;
     let thresholdTransitionBusy = false;
     let alchemyPlayer = null;
     let loadedAlchemyVideoKey = null;
@@ -1116,6 +1149,109 @@
 
     function fullscreenRequest() {
         return document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || null;
+    }
+
+    function readInvestigationMilestones() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(INVESTIGATION_STORAGE_KEY) || '{}');
+            const milestones = Array.isArray(saved.milestones) ? saved.milestones : [];
+            return new Set(milestones.filter((milestone) => INVESTIGATION_MILESTONES.includes(milestone)));
+        } catch (error) {
+            return new Set();
+        }
+    }
+
+    function writeInvestigationMilestones() {
+        try {
+            localStorage.setItem(INVESTIGATION_STORAGE_KEY, JSON.stringify({
+                milestones: INVESTIGATION_MILESTONES.filter((milestone) => investigationMilestones.has(milestone))
+            }));
+        } catch (error) {
+            // Progress remains available for this page view when storage is unavailable.
+        }
+    }
+
+    function investigationSignalLevel() {
+        const count = investigationMilestones.size;
+        return INVESTIGATION_SIGNAL_THRESHOLDS.reduce(
+            (level, threshold) => level + (count >= threshold ? 1 : 0),
+            0
+        );
+    }
+
+    function syncArchiveSignal() {
+        const count = investigationMilestones.size;
+        const level = investigationSignalLevel();
+        archiveSignal.dataset.level = String(level);
+        archiveSignal.setAttribute('aria-valuenow', String(count));
+        archiveSignal.setAttribute(
+            'aria-valuetext',
+            `Archive signal ${INVESTIGATION_SIGNAL_LABELS[level]}; ${count} of ${INVESTIGATION_MILESTONES.length} investigations recovered`
+        );
+        archiveSignalBars.forEach((bar) => {
+            bar.classList.toggle('is-lit', Number(bar.dataset.signalLevel) <= level);
+        });
+        archiveSignal.classList.toggle('is-complete', level === INVESTIGATION_SIGNAL_THRESHOLDS.length);
+        return level;
+    }
+
+    function animateArchiveSignal(fromLevel, toLevel) {
+        window.clearTimeout(archiveSignalAnimationTimer);
+        archiveSignal.classList.remove('is-receiving', 'is-locking');
+        archiveSignalBars.forEach((bar) => {
+            const barLevel = Number(bar.dataset.signalLevel);
+            bar.classList.toggle('is-new', barLevel > fromLevel && barLevel <= toLevel);
+        });
+
+        if (prefersReducedMotion.matches) {
+            archiveSignalBars.forEach((bar) => bar.classList.remove('is-new'));
+            return;
+        }
+
+        // Force a new receiver cycle even when two signal levels arrive close together.
+        void archiveSignal.offsetWidth;
+        archiveSignal.classList.add('is-receiving');
+        if (toLevel === INVESTIGATION_SIGNAL_THRESHOLDS.length) {
+            archiveSignal.classList.add('is-locking');
+        }
+        archiveSignalAnimationTimer = window.setTimeout(() => {
+            archiveSignal.classList.remove('is-receiving', 'is-locking');
+            archiveSignalBars.forEach((bar) => bar.classList.remove('is-new'));
+        }, 1050);
+    }
+
+    function presentArchiveSignal() {
+        if (activeRoom !== 'lobby') return;
+        const level = investigationSignalLevel();
+        if (level <= lastPresentedSignalLevel) return;
+        animateArchiveSignal(lastPresentedSignalLevel, level);
+        lastPresentedSignalLevel = level;
+    }
+
+    function markInvestigationMilestone(milestone) {
+        if (!INVESTIGATION_MILESTONES.includes(milestone) || investigationMilestones.has(milestone)) return;
+        investigationMilestones.add(milestone);
+        writeInvestigationMilestones();
+        syncArchiveSignal();
+        presentArchiveSignal();
+    }
+
+    function hydrateInvestigationFromSessionState() {
+        const recoveredMilestones = [];
+        if (penIsOnGuestbook()) recoveredMilestones.push('recover-pen');
+        if (quarterIsInNewsstand()) recoveredMilestones.push('recover-quarter');
+        if (boatCassetteIsInRadio()) recoveredMilestones.push('recover-cassette');
+        if (photographyFilmIsLoaded()) recoveredMilestones.push('recover-film');
+        if (knowledgeBreached) recoveredMilestones.push('investigate-knowledge');
+
+        let changed = false;
+        recoveredMilestones.forEach((milestone) => {
+            if (investigationMilestones.has(milestone)) return;
+            investigationMilestones.add(milestone);
+            changed = true;
+        });
+        if (changed) writeInvestigationMilestones();
+        lastPresentedSignalLevel = syncArchiveSignal();
     }
 
     function listenForMediaQueryChange(mediaQuery, handler) {
@@ -1357,6 +1493,7 @@
         savePenState();
         setInventoryPenSelected(false);
         syncPenInventory();
+        markInvestigationMilestone('recover-pen');
         showStatus('The pen settles onto the guest book. Time to sign.', 3000);
         openDialog(guestbookDialog);
         loadGuestbook(false);
@@ -1461,6 +1598,7 @@
         saveQuarterState();
         setInventoryQuarterSelected(false);
         syncQuarterInventory();
+        markInvestigationMilestone('recover-quarter');
         animateLayer(newspaperHotspot, 'is-opening', 780);
         showStatus('Clink. The newspaper dispenser unlocks with a mechanical sigh.', 3200);
         window.setTimeout(() => openPanel('press'), prefersReducedMotion.matches ? 0 : 420);
@@ -1563,6 +1701,7 @@
         saveBoatCassetteState();
         setInventoryCassetteSelected(false);
         syncBoatCassetteInventory();
+        markInvestigationMilestone('recover-cassette');
         animateLayer(radioHotspot, 'is-tuning', 780);
         showStatus('The cassette clicks into place. The Boat is back on the air.', 3600);
         window.setTimeout(openRadioArchive, prefersReducedMotion.matches ? 0 : 420);
@@ -1674,6 +1813,7 @@
         photographyFilmLocation = 'camera';
         savePhotographyFilmState();
         syncPhotographyFilmInventory();
+        markInvestigationMilestone('recover-film');
         animateLayer(photographyLightboxHotspot, 'is-film-starting', 1380);
         if (sourceHotspot && sourceHotspot !== photographyLightboxHotspot) {
             animateLayer(sourceHotspot, 'is-film-loading', 760);
@@ -1931,6 +2071,7 @@
                 knowledgeBreached = true;
                 saveKnowledgeState();
                 syncKnowledgeState();
+                markInvestigationMilestone('investigate-knowledge');
                 knowledgeTerminal.classList.remove('is-answering');
                 knowledgeScene.classList.remove('is-rupturing');
                 showStatus('There you are. The present has been looking for you.', 5200);
@@ -3436,6 +3577,7 @@
         if (collectionName === 'alchemy') renderAlchemyPiece(pieceId);
         else if (collectionName === 'content') renderContentPiece(pieceId);
         else renderPressPiece(pieceId);
+        if (collectionName === 'content') markInvestigationMilestone('investigate-content');
         openDialog(archiveDialog);
     }
 
@@ -3819,6 +3961,7 @@
     async function cueAlchemyVideo(videoKey) {
         const video = ALCHEMY_VIDEOS.find((item) => item.key === videoKey);
         if (!video) return;
+        markInvestigationMilestone('investigate-alchemy');
         const restartCurrentVideo = currentAlchemyVideo && currentAlchemyVideo.key === video.key;
 
         if (alchemyMenuDialog.open) closeDialog(alchemyMenuDialog);
@@ -4852,6 +4995,7 @@
     async function cueGameTrailer(gameKey) {
         const project = GAME_PROJECTS.find((item) => item.key === gameKey);
         if (!project) return;
+        markInvestigationMilestone('investigate-games');
         const restartCurrent = currentGameProject && currentGameProject.key === project.key;
 
         stopMocapGif();
@@ -5069,6 +5213,7 @@
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
         activeRoom = 'alchemy';
+        markInvestigationMilestone('visit-alchemy');
         lobbyScroll.hidden = true;
         alchemyScroll.hidden = false;
         mobileFloorplan.hidden = true;
@@ -5106,6 +5251,7 @@
         alchemyHeroScreen.classList.remove('is-playing');
         alchemyScroll.hidden = true;
         lobbyScroll.hidden = false;
+        presentArchiveSignal();
         mobileFloorplan.hidden = false;
         mobileRoomExit.hidden = true;
         document.body.classList.remove('bt-room-alchemy');
@@ -5133,6 +5279,7 @@
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
         activeRoom = 'games';
+        markInvestigationMilestone('visit-games');
         lobbyScroll.hidden = true;
         gameScroll.hidden = false;
         applyGameMonitorKeystones();
@@ -5168,6 +5315,7 @@
         if (currentGameProject) setGameCaseState('paused');
         gameScroll.hidden = true;
         lobbyScroll.hidden = false;
+        presentArchiveSignal();
         mobileFloorplan.hidden = false;
         mobileRoomExit.hidden = true;
         document.body.classList.remove('bt-room-games');
@@ -5195,6 +5343,7 @@
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
         activeRoom = 'content';
+        markInvestigationMilestone('visit-content');
         lobbyScroll.hidden = true;
         contentScroll.hidden = false;
         mobileFloorplan.hidden = true;
@@ -5220,6 +5369,7 @@
         activeRoom = 'lobby';
         contentScroll.hidden = true;
         lobbyScroll.hidden = false;
+        presentArchiveSignal();
         mobileFloorplan.hidden = false;
         mobileRoomExit.hidden = true;
         document.body.classList.remove('bt-room-content');
@@ -5247,6 +5397,7 @@
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
         activeRoom = 'knowledge';
+        markInvestigationMilestone('visit-knowledge');
         lobbyScroll.hidden = true;
         knowledgeScroll.hidden = false;
         mobileFloorplan.hidden = true;
@@ -5283,6 +5434,7 @@
         activeRoom = 'lobby';
         knowledgeScroll.hidden = true;
         lobbyScroll.hidden = false;
+        presentArchiveSignal();
         mobileFloorplan.hidden = false;
         mobileRoomExit.hidden = true;
         document.body.classList.remove('bt-room-knowledge');
@@ -6610,6 +6762,7 @@
     const savedKnowledge = readKnowledgeState();
     knowledgeContext = new Set(savedKnowledge.context);
     knowledgeBreached = savedKnowledge.breached;
+    hydrateInvestigationFromSessionState();
     syncPenInventory();
     syncQuarterInventory();
     syncBoatCassetteInventory();

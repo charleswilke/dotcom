@@ -51,7 +51,7 @@
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.webp?v=20260718e" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=202607241328" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/guestbook-fresh-v1.webp?v=20260718d" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=20260810p">
+    <link rel="stylesheet" href="/before-times.css?v=20260811b">
     <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
@@ -103,6 +103,31 @@
                     aria-hidden="true"
                     decoding="async"
                     fetchpriority="high">
+
+                <div
+                    class="bt-archive-signal"
+                    id="bt-archive-signal"
+                    role="progressbar"
+                    aria-label="Before Times investigation progress"
+                    aria-valuemin="0"
+                    aria-valuemax="12"
+                    aria-valuenow="0"
+                    aria-valuetext="Archive signal dormant">
+                    <span class="bt-archive-signal-rail bt-archive-signal-rail-left" aria-hidden="true">
+                        <span class="bt-archive-signal-bar" data-signal-level="1"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="2"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="3"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="4"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="5"></span>
+                    </span>
+                    <span class="bt-archive-signal-rail bt-archive-signal-rail-right" aria-hidden="true">
+                        <span class="bt-archive-signal-bar" data-signal-level="1"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="2"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="3"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="4"></span>
+                        <span class="bt-archive-signal-bar" data-signal-level="5"></span>
+                    </span>
+                </div>
 
                 <button class="bt-hotspot bt-hotspot-help" type="button" data-panel="about" data-label="About this place" aria-label="About the Before Times archive"></button>
                 <span class="bt-header-control-mask" aria-hidden="true"></span>
@@ -970,6 +995,6 @@
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=20260809a" defer></script>
     <script src="/before-times-game-binder.js?v=20260729a" defer></script>
-    <script src="/before-times.js?v=20260810h" defer></script>
+    <script src="/before-times.js?v=20260811a" defer></script>
 </body>
 </html>

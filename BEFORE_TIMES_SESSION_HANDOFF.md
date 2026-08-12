@@ -1283,6 +1283,35 @@ and `roll loaded`) on both lobby photography hotspots. The floor-plan route
 label changes with the same state, and the Knowledge Maze instructions identify
 the optional roll's location for non-visual navigation.
 
+## Header archive signal (August 11, 2026)
+
+The two mint rules flanking the lobby title now carry a five-level, mirrored
+archive signal. CSS overlays cover the baked horizontal rules between their
+endpoint dots and rebuild them as compact clusters of deliberately uneven
+receiver bars; dormant bars retain a dim etched-brass outline, recovered levels
+illuminate in mint,
+and a newly earned level gets one brief analog warm-up cycle. Reaching the final
+level produces one restrained cream/amber carrier-lock pulse. The signal is
+otherwise still, and the global reduced-motion rule collapses both animations.
+
+The display is intentionally coarser than the underlying state. Twelve durable
+milestones map to the five signal levels at 1, 3, 6, 9, and 12 recoveries:
+
+- Enter each of the four career rooms.
+- Complete one defining investigation in each room: cue a Screening Room reel,
+  select a Game Development case, open the Content Factory archive, and breach
+  the Knowledge Maze.
+- Complete the four cross-room object paths: pen to guest book, quarter to
+  newspaper dispenser, cassette to radio, and film to camera.
+
+Bell rings, full media playback, external links, and guest-book submission are
+not completion requirements. Progress persists across visits in `localStorage`
+under `bt-investigation-v1`; existing session-scoped completed object paths and
+a breached Knowledge Maze are absorbed silently on load. Levels earned inside
+a room wait to animate until the lobby header is visible again. The progressbar
+semantics expose the exact recovered count and an atmospheric signal label to
+assistive technology without putting a numeric percentage in the visual UI.
+
 ## Verification completed this session
 
 - The photography gate was checked from an empty `bt-inventory-v1` session at

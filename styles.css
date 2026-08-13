@@ -1628,9 +1628,13 @@ section.production-header.alice .production-details p strong {
     }
     /* "Junkyard Cabaret" at the base 1.15rem overruns a ~266px four-across track
        even with the badge gutter dropped. 1.05rem is the largest size that holds
-       it on one line there; below 768px the full-bleed card is wide enough to
-       take the base size, hence the breakpoint. */
-    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-caption h3 { font-size: 1.05rem; }
+       it on one line there, and all four titles now take it so the row reads as
+       one size — otherwise JC alone sits smaller than its neighbors. Below 768px
+       the full-bleed card is wide enough for the base size, hence the breakpoint.
+       The second selector outranks the 768–1024px block's 1.25rem, which would
+       otherwise still win for the featured card on tablets. */
+    .showcase-grid[data-layout="columns"] .showcase-caption h3,
+    .showcase-grid[data-layout="columns"] .showcase-item-featured .showcase-caption h3 { font-size: 1.05rem; }
 }
 
 .showcase-grid::before {

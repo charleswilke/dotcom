@@ -12247,9 +12247,15 @@ section.production-header.alice p {
     z-index: 10001;
     display: flex;
     align-items: stretch;
-    gap: 0.65rem;
+    /* No padding, no gap: the art tile and the scope run to the bezel on all four
+       sides and meet each other edge to edge, so the whole 80px face is screen.
+       The cover's own hairline border is the only thing dividing them. The CRT
+       glass + scanline overlays are inset 0 on this element, so full-bleed content
+       picks them up automatically — the art now sits under the same glass as the
+       waveform, and the trace runs the full width of what's left. */
+    gap: 0;
     height: 80px;
-    padding: 0.55rem 0.7rem 0.55rem 0.55rem;
+    padding: 0;
     border-radius: 0;
     background: radial-gradient(ellipse at 50% 50%,
         rgba(0, 6, 4, 0.95) 0%,
@@ -12396,12 +12402,16 @@ section.production-header.alice p {
     display: none;
 }
 
+/* Square, sized off the bezel rather than a hardcoded 76px: stretch takes the
+   full inner height (80px face - 2x2px border) and aspect-ratio transfers that
+   back to the width, so the tile stays square if the player's height ever moves. */
 .mini-player-cover {
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: auto;
+    height: auto;
+    aspect-ratio: 1;
     flex: 0 0 auto;
-    align-self: center;
+    align-self: stretch;
     padding: 0;
     border-radius: 0;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -12454,13 +12464,15 @@ section.production-header.alice p {
     outline: none;
 }
 
+/* 240px, not the old 230: the scope takes over the 0.65rem that used to sit
+   between it and the art, so the player's overall footprint doesn't move. */
 .mini-player-oscilloscope-frame {
     position: relative;
-    width: 230px;
-    height: 60px;
+    width: 240px;
+    height: auto;
     min-height: 0;
     max-height: none;
-    align-self: center;
+    align-self: stretch;
     flex: 1 1 auto;
     margin-top: 0;
     padding: 0;
@@ -12512,14 +12524,16 @@ section.production-header.alice p {
         0 0 2px rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), 0.3);
 }
 
+/* 4px off each edge: the scope is flush to the bezel now, so top/bottom 0 would
+   print these against the border instead of on the glass. */
 .mini-player-album {
-    top: 0;
+    top: 4px;
     font-size: 0.55rem;
     letter-spacing: 3px;
 }
 
 .mini-player-title {
-    bottom: 0;
+    bottom: 4px;
     font-size: 0.6rem;
     letter-spacing: 2px;
 }
@@ -12567,10 +12581,12 @@ section.production-header.alice p {
     min-width: 0;
 }
 
+/* Was top:-2px/right:0 against a padded, vertically-centered screen. With the
+   screen flush to the bezel that put the glyph on the border, so it moves inside. */
 .mini-player-close {
     position: absolute;
-    top: -2px;
-    right: 0;
+    top: 2px;
+    right: 4px;
     z-index: 7;
     flex: 0 0 auto;
     width: 16px;
@@ -12613,19 +12629,15 @@ section.production-header.alice p {
         bottom: 0.6rem;
         left: 0.6rem;
         max-width: none;
-        padding: 0.45rem 0.55rem 0.45rem 0.45rem;
-        gap: 0.55rem;
     }
+    /* width: auto so the scope takes whatever the full-bleed row leaves; height
+       and the cover's square both come from the base rules' stretch. The old
+       52px pair predates the bleed and would reintroduce the margin here. */
     .mini-player-oscilloscope-frame {
         width: auto;
-        height: 52px;
     }
-    .mini-player-cover {
-        width: 52px;
-        height: 52px;
-    }
-    .mini-player-album { font-size: 0.5rem; letter-spacing: 2px; top: 4px; }
-    .mini-player-title { font-size: 0.55rem; letter-spacing: 1.5px; bottom: 4px; }
+    .mini-player-album { font-size: 0.5rem; letter-spacing: 2px; }
+    .mini-player-title { font-size: 0.55rem; letter-spacing: 1.5px; }
 }
 
 /* Music player close button — inside .mixtape-content */

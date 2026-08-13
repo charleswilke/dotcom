@@ -83,7 +83,7 @@ The four "Recently" cards used to carry the same stack plus a pointer tilt (`.sh
 
 The way back is intact: `tools/make-card-foil-masks.js` and `images/foil/*.webp` are deliberately still in the tree (unreferenced, kept on purpose — don't prune them as dead assets), and commit `88314c4` has the CSS, the markup and the JS as they were. Re-run the tool if any of those four source images is replaced in the meantime; the masks are keyed off specific pixel values and will silently drift.
 
-If any of this comes back: JC overrides the tile transform declaration twice (masonry 0.88 shrink, then undoing it in the four-column layout), so anything added to the base transform has to be mirrored there or it silently stops applying to that one card. And hairline textures need counter-rotation against `--tile-rot` or they moiré against the pixel grid under the float — that's why the scanline layers rotate backwards.
+If any of this comes back: every card now runs the base tile transform unmodified, so anything added there applies everywhere. (JC used to override the whole declaration twice — a masonry-era 0.88 shrink, then an undo of it in the four-column layout — which silently dropped anything added to the base. Both were removed once JC's card art went 16:9 like the rest of the row.) And hairline textures need counter-rotation against `--tile-rot` or they moiré against the pixel grid under the float — that's why the scanline layers rotate backwards.
 
 **On touch, the gyroscope drives it instead** (`initFoilMotion` in main.js). Same vars as the pointer path, so the CSS is shared; the only addition is the pair in the `@media (hover: none), (pointer: coarse)` block that hides `.foil` and un-hides it under `html.foil-motion`. Worth knowing:
 

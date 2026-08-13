@@ -1626,17 +1626,11 @@ section.production-header.alice .production-details p strong {
             max-width: 1160px;
         }
     }
-    /* Neutralize the masonry-era 0.88 shrink so JC's square cover fills its
-       column at full size like the other cards. */
-    .showcase-grid[data-layout="columns"] .showcase-item-jc {
-        transform: rotate(var(--tile-rot)) translateY(var(--tile-y)) scale(var(--tile-scale));
-        transform-origin: center center;
-    }
-    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-kicker,
-    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-meta,
-    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-cta { font-size: 0.68rem; }
+    /* "Junkyard Cabaret" at the base 1.15rem overruns a ~266px four-across track
+       even with the badge gutter dropped. 1.05rem is the largest size that holds
+       it on one line there; below 768px the full-bleed card is wide enough to
+       take the base size, hence the breakpoint. */
     .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-caption h3 { font-size: 1.05rem; }
-    .showcase-grid[data-layout="columns"] .showcase-item-jc .showcase-caption p { font-size: 0.8rem; }
 }
 
 .showcase-grid::before {
@@ -1667,10 +1661,10 @@ section.production-header.alice .production-details p strong {
     --tile-rot: 0deg;
     --tile-y: 0px;
     --tile-scale: 1;
-    /* The float owns rotate/translateY, hover owns scale. JC overrides this
-       whole declaration twice below (once for the masonry 0.88 shrink, once to
-       undo it in the four-column layout), so any change here needs mirroring
-       there.
+    /* The float owns rotate/translateY, hover owns scale. Every card runs this
+       declaration unmodified — JC used to override it twice (a masonry-era 0.88
+       shrink, then an undo of that shrink in the four-column layout), both gone
+       now that its art is 16:9 like everything else in the row.
 
        These cards had a pointer-driven 3D tilt and a holofoil sheen on top of
        the float; both were removed on purpose. The foil is the about-card
@@ -2112,53 +2106,18 @@ section.production-header.alice .production-details p strong {
     --crt-warm: 88% 35%;
 }
 
-.showcase-item-jc img {
-    object-position: top;
+/* "Junkyard Cabaret" is the longest card title, and the base h3 carries a 2rem
+   badge gutter (3.5rem under 480px) that wraps it in every column width. Drop
+   the gutter at all sizes; the card has no badge to clear. Outranks both base
+   rules on specificity, so it needs no media query of its own. */
+.showcase-item-jc .showcase-caption h3 {
+    padding-right: 0;
 }
 
-/* The 88% card shrink only applies in the multi-column desktop layout. On
-   mobile the cards reset to transform: none, so JC must behave like the rest
-   (no resting scale, no shrunk hover, no compensating font bump). */
-@media (min-width: 768px) {
-    /* The square JC art is taller than the 16:9 neighbours, so masonry pins it to
-       the top of the row and the scale(0.88) (anchored center-top) lifts it further.
-       Nudge it down a touch so it sits level with the cards on either side. */
-    .showcase-item-jc {
-        transform: rotate(var(--tile-rot)) translateY(calc(var(--tile-y) + 22px)) scale(calc(0.88 * var(--tile-scale)));
-        transform-origin: center top;
-    }
-
-    /* Card is scaled to 0.88; bump caption text by 1/0.88 so it renders at the
-       same visual size as the neighboring full-size cards. */
-    .showcase-item-jc .showcase-kicker,
-    .showcase-item-jc .showcase-meta,
-    .showcase-item-jc .showcase-cta {
-        font-size: calc(0.68rem / 0.88);
-    }
-
-    /* "Junkyard Cabaret" is the longest title. Drop the badge gutter so it sits
-       on one line where the column is wide enough, but let it wrap rather than
-       force nowrap — at narrow desktop widths the bumped (1/0.88) title is wider
-       than the scaled-down column, and nowrap stretched the whole caption past
-       the card's clip box, cropping the title and meta on the right edge. */
-    .showcase-item-jc .showcase-caption h3 {
-        font-size: calc(1.05rem / 0.88);
-        padding-right: 0;
-    }
-
-    .showcase-item-jc .showcase-caption p {
-        font-size: calc(0.8rem / 0.88);
-    }
-}
-
-/* Keep the Junkyard title and description on a single line each on mobile.
-   The featured-card badge gutter (h3 padding-right) is the main wrap culprit. */
+/* Below 768px the card is full-bleed and wide enough that the title and
+   description each hold one line. Pin them there. */
 @media (max-width: 767px) {
-    .showcase-item-jc .showcase-caption h3 {
-        padding-right: 0;
-        white-space: nowrap;
-    }
-
+    .showcase-item-jc .showcase-caption h3,
     .showcase-item-jc .showcase-caption p {
         white-space: nowrap;
     }

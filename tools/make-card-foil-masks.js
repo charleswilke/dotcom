@@ -53,13 +53,18 @@ const RECIPES = {
   },
   /* Spotlight wedge + the JUNKYARD lettering. tIn is wide because the poster
      carries a printed grain over the flat sand. The blob floor is low so
-     individual letters survive; the wedge alone is ~11% of the image and each
-     letter only a fraction of a percent. */
+     individual letters survive; the wedge carries most of the ~18% coverage and
+     each letter only a fraction of a percent.
+
+     The key tracks the artwork, not a constant: the 2026-08 cover replaced a
+     sandy [215,175,120] cream with a near-white [248,226,192] one, and the old
+     key silently returned 0% rather than erroring. If the cover is replaced
+     again, re-sample the wedge before trusting the output. */
   jc: {
     src: 'audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp',
     out: 'jc-foil-mask.webp',
     mode: 'key',
-    key: [215, 175, 120], tIn: 30, tOut: 80, minBlob: 0.0002, dilate: 1,
+    key: [248, 226, 192], tIn: 40, tOut: 100, minBlob: 0.0002, dilate: 1,
     resize: [430, 430],
   },
   /* The paper ground. Luminance-led with a wide saturation gate: the paper

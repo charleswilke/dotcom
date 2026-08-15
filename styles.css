@@ -1604,10 +1604,15 @@ section.production-header.alice .production-details p strong {
 
 /* Multi-column layout (data-layout="columns") — the JS packer (main.js) places
    each card in its declared column (data-col) at the natural aspect ratio of
-   its image. Four cards run four-across on wide screens and fold to a 2×2 below
-   1100px, where four tracks would squeeze each caption under ~150px. The packer
+   its image. The four cards run 2×2 at every width from 768px up. The packer
    wraps data-col by the live track count, so the 2×2 keeps reading order:
-   Toast/Junkyard on top, Spectator/Before Times beneath. */
+   Toast/Junkyard on top, Spectator/Before Times beneath.
+
+   There used to be a four-across layout above 1100px. It's gone: the grid caps
+   at 1160px (the widest the 1200px .container allows), so four tracks were
+   266px at *every* viewport — 1280 or 2560, the cards never grew, and at that
+   size they read as thumbnails. The 2×2 gives 464px tracks and keeps growing
+   nowhere, which is the point: one size, always legible. */
 @media (min-width: 768px) {
     .showcase-grid[data-layout="columns"] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1617,24 +1622,30 @@ section.production-header.alice .production-details p strong {
         gap: 2rem;
     }
 
-    /* Four-across. 1160px is the widest the 1200px .container (1rem padding)
-       allows, giving ~266px tracks — close enough to the old 3-across 298px
-       that the caption type needs no retuning. */
-    @media (min-width: 1100px) {
-        .showcase-grid[data-layout="columns"] {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            max-width: 1160px;
-        }
-    }
-    /* "Junkyard Cabaret" at the base 1.15rem overruns a ~266px four-across track
-       even with the badge gutter dropped. 1.05rem is the largest size that holds
-       it on one line there, and all four titles now take it so the row reads as
-       one size — otherwise JC alone sits smaller than its neighbors. Below 768px
-       the full-bleed card is wide enough for the base size, hence the breakpoint.
-       The second selector outranks the 768–1024px block's 1.25rem, which would
-       otherwise still win for the featured card on tablets. */
+    /* All four titles take one size so the row reads as a set — otherwise JC
+       alone sits smaller than its neighbors. The second selector outranks the
+       768–1024px block's 1.25rem, which would otherwise win for the featured
+       card. 1.05rem is what holds "Junkyard Cabaret" on one line in the
+       narrowest 2×2 track (~378px on a tablet). */
     .showcase-grid[data-layout="columns"] .showcase-caption h3,
     .showcase-grid[data-layout="columns"] .showcase-item-featured .showcase-caption h3 { font-size: 1.05rem; }
+
+    /* Caption type scaled up to the full-size 464px track. The grid hits its
+       960px max-width at a ~992px viewport (960 + the container's 2rem of
+       padding); below that the tracks shrink with the container and the type
+       has to come back down, or "Spectator to Initiator" wraps to two lines
+       while its neighbors hold one. */
+    @media (min-width: 1000px) {
+        .showcase-grid[data-layout="columns"] .showcase-caption h3,
+        .showcase-grid[data-layout="columns"] .showcase-item-featured .showcase-caption h3 { font-size: 1.3rem; }
+
+        .showcase-grid[data-layout="columns"] .showcase-caption { padding: 1.1rem 1rem 1rem; }
+        .showcase-grid[data-layout="columns"] .showcase-caption p { font-size: 0.92rem; }
+
+        .showcase-grid[data-layout="columns"] :is(.showcase-kicker, .showcase-meta, .showcase-cta) {
+            font-size: 0.76rem;
+        }
+    }
 }
 
 .showcase-grid::before {

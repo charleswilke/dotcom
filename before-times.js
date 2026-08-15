@@ -1,6 +1,10 @@
 (function () {
     'use strict';
 
+    // Where Door 05 lets you out. The knowledge-maze shortcut has its own href
+    // in the markup (#bt-knowledge-present-portal) and points at the portfolio.
+    const PORTAL_DESTINATION = '/#about';
+
     const PANELS = {
         about: {
             kicker: 'Lobby directory // orientation',
@@ -86,6 +90,10 @@
             ],
             facts: ['Websites + Marketing knowledge systems', 'Unified voice-and-tone guidance', '93% reduction in customer-care escalations']
         },
+        // Door 05 no longer opens a panel: the door itself is the exit, so the
+        // click walks straight through to PORTAL_DESTINATION. This copy is kept
+        // for the way back — restore the `openPanel` call in the portal branch
+        // of the [data-panel] handler and in the floorplan routes to use it.
         portal: {
             kicker: 'Door 05 // 2024–now',
             title: 'The machines started talking back',
@@ -5706,6 +5714,12 @@
                     window.setTimeout(() => openRadioArchive(), 30);
                     return;
                 }
+                // Door 05 has no panel to open; the floor plan exits the same
+                // way the door does.
+                if (route.id === 'portal') {
+                    window.location.href = PORTAL_DESTINATION;
+                    return;
+                }
                 window.setTimeout(() => openPanel(route.id), 30);
             });
             infoRoutes.appendChild(button);
@@ -6231,10 +6245,13 @@
                 return;
             }
             if (panelId === 'portal') {
+                // The door is the exit. Reveal first so the threshold state is
+                // reset before the navigation starts — otherwise a bfcache
+                // return would restore the lobby under a stuck curtain.
                 void runThresholdTransition(
                     button,
                     'portal',
-                    () => openPanel(panelId),
+                    () => { window.location.href = PORTAL_DESTINATION; },
                     { revealBeforeDestination: true }
                 );
                 return;

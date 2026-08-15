@@ -13879,6 +13879,37 @@ body.reader-open {
     font-size: 12px;
     color: var(--fiche-ink-soft);
 }
+/* Chapter headings between turns (Baby Steps). A top-level h2, so it already
+   picks up the 600px centered column from the `.article-reader-body > h2` rule. */
+.article-reader-body .transcript-chapter {
+    margin-top: 3.2em;
+    padding-top: 1.4em;
+    border-top: 1px solid var(--fiche-rule);
+    font-size: 22px;
+    letter-spacing: 0.01em;
+}
+.article-reader-body > .transcript-chapter:first-of-type { margin-top: 0; }
+/* Image prompts handed over mid-conversation. Same treatment as an attachment
+   body, but never collapsed — the prompts are part of what the session made. */
+.article-reader-body .transcript-prompt {
+    max-width: 600px;
+    margin: 1.4em auto;
+    padding: 12px 14px;
+    border: 1px solid var(--fiche-rule);
+    border-left: 3px solid var(--fiche-accent);
+    background: rgba(46, 33, 19, 0.05);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--fiche-ink);
+}
+.article-reader-body .transcript-note--end {
+    margin-top: 3em;
+    text-align: center;
+    font-style: italic;
+}
 
 /* Substack image containers — neutralize their layout, keep our framing.
    In-article media matches the 600px text column; the first-child hero

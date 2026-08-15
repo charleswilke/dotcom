@@ -19,6 +19,13 @@ const LOCAL_ARTICLES = {
         thumbnail: '/images/transcripts/surviving-salem/the-accusation-creates-the-witch.webp',
         image: { width: 1536, height: 1024 },
         pubDate: '2026-07-18T16:00:00.000Z'
+    },
+    'baby-steps-transcript': {
+        title: 'Baby Steps: The Conversation',
+        description: 'The full working session behind "Baby Steps" — a Saturday-morning brain dump about local AI worked into an essay with Codex, then the hunt for the right enormous shadow.',
+        thumbnail: '/images/transcripts/baby-steps/06-pulp-cast-shadow.webp',
+        image: { width: 1774, height: 887 },
+        pubDate: '2026-08-15T16:00:00.000Z'
     }
 };
 

@@ -482,6 +482,14 @@ const LOCAL_ARTICLES = [
         pubDate: '2026-07-18T16:00:00.000Z',
         contentUrl: '/transcripts/surviving-salem-transcript.html',
         link: ''
+    },
+    {
+        slug: 'baby-steps-transcript',
+        title: 'Baby Steps: The Conversation',
+        cleanDescription: 'The full working session behind "Baby Steps" — a Saturday-morning brain dump about local AI worked into an essay with Codex, then the hunt for the right enormous shadow.',
+        pubDate: '2026-08-15T16:00:00.000Z',
+        contentUrl: '/transcripts/baby-steps-transcript.html',
+        link: ''
     }
 ];
 

@@ -1917,6 +1917,11 @@ section.production-header.alice .production-details p strong {
     position: relative;
     z-index: 1;
     margin: 0.65rem 0.65rem 0;
+    /* A touch rounder than .showcase-item's 0.35rem case, so the screen's
+       corners read as a curve of their own rather than an exact tracing of the
+       bezel. overflow: hidden already clips the art, the scanline bleed and the
+       glare sweep to this shape. */
+    border-radius: 0.42rem;
     overflow: hidden;
     background: linear-gradient(180deg, rgba(26, 21, 80, 0.94), rgba(44, 79, 124, 0.86));
     border: 1px solid rgba(255, 185, 58, 0.18);

@@ -62,7 +62,7 @@ Hash-based navigation (`#portfolio`, `#writing`, `#projections`, `#about`). `mai
 ### CSS design system (`styles.css`, ~15,200 lines)
 Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a36`. Responsive grid: 4 → 3 → 2 → 1 columns across breakpoints.
 
-`styles.css` is loaded **only by index.html**. Three subpages — faq, alice-in-wonderland, jersey-boys — load `subpages.css`, a **hand-maintained** ~22% subset of it (3,852 of 15,182 lines). Nothing generates that subset, so if you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages), mirror the change in subpages.css by hand and then check for drift:
+`styles.css` is loaded **only by index.html**. Three subpages — faq, alice-in-wonderland, jersey-boys — load `subpages.css`, a **hand-maintained** ~21% subset of it (3,092 of 14,444 lines). Nothing generates that subset, so if you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages), mirror the change in subpages.css by hand and then check for drift:
 
 ```
 python3 tools/check-subpages-css.py
@@ -71,6 +71,8 @@ python3 tools/check-subpages-css.py
 It compares every selector the two sheets share, context-aware about `@media` blocks, and exits non-zero on a mismatch.
 
 **before-times is not one of them.** It loads its own standalone `before-times.css` and nothing else, so styles.css edits never reach it — and, in the other direction, its footers don't inherit the site-wide `footer` rules the other pages get.
+
+Both styles.css and subpages.css carried a dead `/* ===== BEFORE TIMES WORKSPACE ===== */` block long after that split — ~780 lines each of a System-7-style window UI (`.bt-window`, `.bt-titlebar`, `.bt-file-window`, `.bt-shelf`, 44 classes plus `--bt-*` variables). None of those classes existed in `before-times.css` or in any markup or JS; it was the generation of the page that preceded the standalone sheet. Removed 2026-08-15 — recoverable from git history if that workspace look is ever wanted again.
 
 ### Foil (Balatro-style holofoil)
 **One place carries it: the About card portrait (`.foil`).** A pointer-driven hue field, a hairline etch, a specular glare, clipped by an alpha mask generated from the artwork itself, never hand-drawn:

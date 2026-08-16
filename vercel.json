@@ -1,4 +1,6 @@
 {
+  "buildCommand": "node tools/minify-css.js styles.css subpages.css before-times.css",
+  "outputDirectory": ".",
   "functions": {
     "api/*.js": {
       "maxDuration": 15

@@ -8,6 +8,10 @@
 .env*.local
 node_modules/
 
+# Minified stylesheets written by tools/css-fidelity-check.sh for the fidelity
+# harness. Throwaway: the real minification happens in Vercel's build container.
+_fid-*.css
+
 # OMAxAI talk working files stay local; only viewer/ (served at /s2i-present)
 # and the small .md notes are tracked.
 OMAxAI/WIP/

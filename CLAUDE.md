@@ -19,7 +19,7 @@ python3 transcribe.py <audio-file>
 python3 verify-lyrics.py
 ```
 
-No build step — all files are served directly.
+No build step locally — all files are served directly, authored-as-is. **CSS is minified in Vercel's build container only** (see "CSS minification" under Deployment); nothing in git is ever minified, and the local server serves the same unminified files you edit.
 
 **npm security:** Global `~/.npmrc` has `ignore-scripts=true` and `min-release-age=7` (supply chain protection). If `npm install` fails because a package needs lifecycle scripts, use `npm install --ignore-scripts=false` for that one install.
 
@@ -28,6 +28,42 @@ No build step — all files are served directly.
 **Vercel:** All three properties (main site, TootsJam, SpaceToots) auto-deploy from `main`. Serverless functions live in `/api/`. Max duration: 15s. Routing is defined in `vercel.json` — clean URLs like `/mixtape` and `/gwor` are rewritten there.
 
 `.htaccess` exists but is no longer active (legacy DreamHost config).
+
+### CSS minification (build-container only)
+
+`vercel.json` sets:
+
+```
+"buildCommand": "node tools/minify-css.js styles.css subpages.css before-times.css"
+"outputDirectory": "."
+```
+
+[tools/minify-css.js](tools/minify-css.js) rewrites those three files **in place inside Vercel's build container**, which is a throwaway checkout. Git keeps the authored files, and `node .claude/static-server.js` keeps serving them unminified, so the repo's no-build-step character is intact where you actually work. It is zero-dependency, deterministic, idempotent, and refuses to write if minifying changed the brace balance.
+
+Worth it because Vercel compresses on the fly at a low brotli level and cannot squeeze whitespace: `styles.css` goes from **86K to roughly 45K on the wire**. Since `.css` is now `immutable`, this only affects first visits.
+
+**Fail-safe, not fail-broken:** if the build step ever stops running, the site serves the unminified sources exactly as it did before. And because minification is deterministic, hashing the *source* in `stamp-code.sh` still identifies the deployed bytes uniquely.
+
+**The one rule the minifier exists to encode:** it never touches whitespace around `:`. `styles.css:1660` has a descendant `:is()` —
+
+```
+.showcase-grid[data-layout="columns"] :is(.showcase-kicker, .showcase-meta, .showcase-cta)
+```
+
+— and tightening that space makes it match the grid itself, silently dropping `font-size: 0.76rem` from the kicker, meta and CTA. That bug only manifests once `main.js` has added `.is-masonry` and only above 1000px wide, so **static-HTML testing cannot see it.** Don't "improve" the minifier by handling `:`; it needs real selector-vs-declaration parsing, and it buys about a byte per declaration.
+
+**Verifying a minifier change:** [tools/css-fidelity-check.sh](tools/css-fidelity-check.sh) plus [tools/css-fidelity-check.js](tools/css-fidelity-check.js) diff every computed property of every element on a live page (main.js run, lightboxes open) between the original and minified sheets. Always confirm the negative control (`_fid-styles-broken.css`) reports FAIL at ≥1000px wide first — if it passes, your test is blind to the bug above. Current coverage, all PASS at 0 differences and 0 control drift:
+
+| page | state | comparisons |
+|---|---|---|
+| index | 1280, main.js live | 44,240 |
+| index | 1280, album + game lightboxes open | 72,380 |
+| index | 375 / 768 | 44,240 each |
+| faq | 1280, accordions open | 28,560 |
+| alice-in-wonderland / jersey-boys | 1280 | 18,270 / 15,680 |
+| before-times | 1280 | 57,260 |
+
+**JS is deliberately not minified.** `main.js` is ~5,400 lines and terser would be a new dependency against the `ignore-scripts` posture, with silent-breakage risk; CSS is the larger win anyway.
 
 ## Cache busting for in-place asset replacements
 

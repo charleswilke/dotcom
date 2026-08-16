@@ -955,6 +955,11 @@ header:has(.header-title.glitch-scanlines)::before {
     display: none;
 }
 
+/* Roles read writer-first on one line here; the narrow order is hidden. */
+.header-subtitle .roles-narrow {
+    display: none;
+}
+
 .header-subtitle .subtitle-line-2 {
     color: var(--light);
     text-shadow:
@@ -1012,6 +1017,16 @@ footer .electric {
 @media (max-width: 767px) {
     .header-subtitle .mobile-break {
         display: block;
+    }
+
+    /* Two lines fit evenly as "product designer //" / "writer // builder";
+       the writer-first order only wraps to an orphaned word here. */
+    .header-subtitle .roles-wide {
+        display: none;
+    }
+
+    .header-subtitle .roles-narrow {
+        display: inline;
     }
 
     .header-subtitle .subtitle-line-2 {

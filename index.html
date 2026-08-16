@@ -27,7 +27,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="styles.css?v=20260815a">
+    <link rel="stylesheet" href="styles.css?v=6bdc8bcd">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -35,11 +35,13 @@
     <!-- Fonts: prefer link+preconnect over CSS @import for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Cinzel:wght@600&family=Caveat:wght@500;700&family=Rock+Salt&family=Exo:wght@400;700&family=IBM+Plex+Sans+Condensed:wght@700&family=Marcellus&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montaga&family=Neonderthaw&family=Simonetta:ital,wght@0,400;0,900;1,400;1,900&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Cinzel:wght@600&family=Caveat:wght@500;700&family=Rock+Salt&family=Exo:wght@400;700&family=IBM+Plex+Sans+Condensed:wght@700&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montaga&family=Neonderthaw&family=Simonetta:ital,wght@0,400;0,900;1,400;1,900&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="images/ToastIQ-card.webp" fetchpriority="high">
     
     <!-- RSS Feed Performance Optimization -->
-    <link rel="preconnect" href="https://api.rss2json.com">
+    <!-- No preconnect for api.rss2json.com: it is only the fallback path in
+         main.js when /api/substack-feed fails, so on a normal load the
+         connection is opened and never used. -->
     <link rel="dns-prefetch" href="https://charleswilke.substack.com">
 </head>
 <body>
@@ -59,7 +61,7 @@
       ]
     }
     </script>
-    <script src="/nav.js?v=20260612a"></script>
+    <script src="/nav.js?v=56f3b526"></script>
 
     <header>
         <div class="header-bg"></div>
@@ -73,6 +75,10 @@
     <main id="main" tabindex="-1">
     <section id="portfolio" class="dimensional-showcase" data-tuner-theme="dark">
         <div class="container">
+            <!-- Titled by the cards' own "Recently 01..04" kickers rather than a
+                 visible heading, so this keeps the four h3 cards from following
+                 the page h1 with no h2 between them. No visual change. -->
+            <h2 class="sr-only">Recently</h2>
             <div class="showcase-grid" data-layout="columns">
                 <a href="https://pos.toasttab.com/blog/data/q1-2026-restaurant-ai-pos-trends" target="_blank" rel="noopener noreferrer" class="showcase-item showcase-item-featured showcase-item-toast" data-col="0">
                     <svg class="showcase-signal" aria-hidden="true" focusable="false"><rect class="showcase-signal-blip" pathLength="100"></rect></svg>
@@ -147,6 +153,10 @@
     </section>
 
     <section class="about" id="about" data-tuner-theme="dark">
+        <!-- The About section is titled by the portrait, not by a visible heading,
+             so its h3 blurb cards would otherwise follow the page h1 with no h2
+             between them. This restores the level without changing the design. -->
+        <h2 class="sr-only">About</h2>
         <div class="container about-container">
             <div class="image-compare">
                 <svg class="showcase-signal about-photo-signal" aria-hidden="true" focusable="false"><rect class="showcase-signal-blip" pathLength="100"></rect></svg>
@@ -288,7 +298,7 @@
                 <section class="production-header spotlight-production" style="position: relative; overflow: hidden; padding: 0;">
                     <img src="" alt="Latest Article" class="featured-image spotlight-featured-image">
                     <div class="content production-content spotlight-content">
-                        <h1 class="spotlight-title">Latest Article</h1>
+                        <h3 class="spotlight-title">Latest Article</h3>
                         <p class="spotlight-description">Loading latest article...</p>
                         <div class="production-details">
                             <div class="spotlight-metadata">
@@ -811,7 +821,7 @@
         <img class="cover-zoom-img" id="coverZoomImg" alt="">
     </div>
 
-    <script src="common.js?v=20260612a" defer></script>
-<script src="main.js?v=202608052135" defer></script>
+    <script src="common.js?v=417cf1ad" defer></script>
+<script src="main.js?v=3176f00c" defer></script>
 </body>
 </html>

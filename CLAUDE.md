@@ -44,6 +44,21 @@ Worth it because Vercel compresses on the fly at a low brotli level and cannot s
 
 **Fail-safe, not fail-broken:** if the build step ever stops running, the site serves the unminified sources exactly as it did before. And because minification is deterministic, hashing the *source* in `stamp-code.sh` still identifies the deployed bytes uniquely.
 
+**`tools/` is `.vercelignore`d, so the build script has to be re-included by hand.** The first deploy of this failed with `Cannot find module '/vercel/path0/tools/minify-css.js'`: committed to git, filtered out of the deploy. And it could not be fixed with a bare `!tools/minify-css.js`, because a path under a flatly-excluded directory cannot come back — the same trap the `OMAxAI/*` and `bt-assets/*` rules are already shaped around. The directory is excluded by its contents instead:
+
+```
+tools/*
+!tools/minify-css.js
+```
+
+**So a build step may only depend on files that actually reach the container.** `package.json` is `.vercelignore`d too, which means no install step runs and a build tool cannot have dependencies — another reason `minify-css.js` is zero-dependency. If you add a second build script, re-include it explicitly and verify before pushing. Note `git check-ignore` reads `.gitignore`, so it is the wrong tool here; point `--exclude-from` at the right file instead:
+
+```
+git ls-files -c --ignored --exclude-from=.vercelignore | grep '^tools/your-script.js$'
+```
+
+No output means it reaches the deploy. A match means the build will fail with `Cannot find module`.
+
 **The one rule the minifier exists to encode:** it never touches whitespace around `:`. `styles.css:1660` has a descendant `:is()` —
 
 ```

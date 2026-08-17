@@ -23,13 +23,20 @@
  *
  *       .showcase-grid[data-layout="columns"] :is(.showcase-kicker, ...)
  *
- *   is a descendant :is() (styles.css:1660). Tighten that space and it becomes
+ *   is a descendant :is(). Tighten that space and it becomes
  *   `[data-layout="columns"]:is(...)`, which matches the grid itself instead of
  *   its children — the kicker/meta/CTA silently lose `font-size: 0.76rem`. That
  *   bug is invisible unless main.js has added `.is-masonry`, so it is exactly
  *   the kind of thing a test run against static HTML will not catch. Telling
  *   selector context from declaration context needs a real parser; skipping ':'
  *   costs about one byte per declaration and removes the entire failure class.
+ *
+ *   That selector was real (it lived at styles.css:1660) but no longer exists —
+ *   the caption type it sized folded back into the base values when the Recently
+ *   cards shrank 20%. It is kept here as the worked example because the hazard
+ *   is a property of CSS, not of that one rule: the next descendant `:is()`,
+ *   `:where()` or `:not()` anyone writes reintroduces it silently. Do not
+ *   "simplify" this rule away just because grep finds no current victim.
  *
  *   It also leaves '>' '+' '~' alone (cheap, and '+'/'-' inside calc() must keep
  *   their spaces), and copies strings and url() contents through verbatim so

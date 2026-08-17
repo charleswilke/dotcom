@@ -59,15 +59,29 @@ git ls-files -c --ignored --exclude-from=.vercelignore | grep '^tools/your-scrip
 
 No output means it reaches the deploy. A match means the build will fail with `Cannot find module`.
 
-**The one rule the minifier exists to encode:** it never touches whitespace around `:`. `styles.css:1660` has a descendant `:is()` —
+**Never run `minify-css.js` against your working copy.** It rewrites **in place** — that is the point, since Vercel's container is a throwaway checkout — so pointing it at `styles.css` to "just check the build step works" replaces your edits with minified output. Undoing that with `git checkout styles.css` then destroys every uncommitted change in the file, not only the minification. If you want to exercise the build script, copy the sheet somewhere first:
+
+```
+cp styles.css "$SCRATCH/styles.css" && (cd "$SCRATCH" && node /path/to/tools/minify-css.js styles.css)
+```
+
+Or use the non-destructive flags the tool already has: `--check` reports without writing, `--out FILE` writes elsewhere. This cost a session's uncommitted CSS once.
+
+**The one rule the minifier exists to encode:** it never touches whitespace around `:`. A descendant `:is()` —
 
 ```
 .showcase-grid[data-layout="columns"] :is(.showcase-kicker, .showcase-meta, .showcase-cta)
 ```
 
-— and tightening that space makes it match the grid itself, silently dropping `font-size: 0.76rem` from the kicker, meta and CTA. That bug only manifests once `main.js` has added `.is-masonry` and only above 1000px wide, so **static-HTML testing cannot see it.** Don't "improve" the minifier by handling `:`; it needs real selector-vs-declaration parsing, and it buys about a byte per declaration.
+— tightens into `[data-layout="columns"]:is(...)`, which matches the grid itself, silently dropping `font-size: 0.76rem` from the kicker, meta and CTA. That bug only manifests once `main.js` has added `.is-masonry`, so **static-HTML testing cannot see it.** Don't "improve" the minifier by handling `:`; it needs real selector-vs-declaration parsing, and it buys about a byte per declaration.
 
-**Verifying a minifier change:** [tools/css-fidelity-check.sh](tools/css-fidelity-check.sh) plus [tools/css-fidelity-check.js](tools/css-fidelity-check.js) diff every computed property of every element on a live page (main.js run, lightboxes open) between the original and minified sheets. Always confirm the negative control (`_fid-styles-broken.css`) reports FAIL at ≥1000px wide first — if it passes, your test is blind to the bug above. Current coverage, all PASS at 0 differences and 0 control drift:
+That selector was real — it lived at `styles.css:1660` — and is now gone, folded back into the base caption values when the Recently cards shrank 20% on 2026-08-17. **The rule stays anyway:** the hazard belongs to CSS, not to that one rule, and the next descendant `:is()`/`:where()`/`:not()` anyone writes brings it back silently. Don't prune the rule because grep finds no current victim.
+
+**Verifying a minifier change:** [tools/css-fidelity-check.sh](tools/css-fidelity-check.sh) plus [tools/css-fidelity-check.js](tools/css-fidelity-check.js) diff every computed property of every element on a live page (main.js run, lightboxes open) between the original and minified sheets. Always confirm the negative control (`_fid-styles-broken.css`) reports FAIL at **≥768px** wide first — if it passes, your test is blind to the bug above.
+
+**The control is anchored to a specific live selector, and that anchor can rot.** It used to seed the descendant `:is()` above; when that selector was deleted the seeder refused to write and said so, which is the behavior to preserve. It now tightens the descendant combinator in the Recently `h3` sizing rule instead (both selectors in that rule carry the needle, so the titles fall 1.05rem → 1.15rem and the run reports 12 differences). If you ever see `! could not seed the negative control`, **the fix is to re-anchor it on another live descendant selector whose tightening changes computed style on index.html — never to delete the guard.** A control that cannot seed is a test that proves nothing.
+
+Current coverage, all PASS at 0 differences and 0 control drift:
 
 | page | state | comparisons |
 |---|---|---|
@@ -126,10 +140,20 @@ Hash-based navigation (`#portfolio`, `#writing`, `#projections`, `#about`). `mai
 - Lazy initialization via `createLazyInitializer()` and `requestIdleCallback`
 - Audio player mutual exclusion (only one player active at a time)
 
-### CSS design system (`styles.css`, ~15,200 lines)
+### CSS design system (`styles.css`, ~14,500 lines)
 Key CSS variables: `--primary: #1a1550`, `--neon: #00f7c2`, `--secondary: #ff5a36`. Responsive grid: 4 → 3 → 2 → 1 columns across breakpoints.
 
-`styles.css` is loaded **only by index.html**. Three subpages — faq, alice-in-wonderland, jersey-boys — load `subpages.css`, a **hand-maintained** ~21% subset of it (3,092 of 14,444 lines). Nothing generates that subset, so if you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages), mirror the change in subpages.css by hand and then check for drift:
+**A malformed stylesheet is silent — the browser console will not tell you.** CSS has no parse *errors* in the way JS does; a bad token makes the parser discard until it recovers, so the rules it swallowed simply never apply, and `read_console_messages` comes back clean. These sheets are comment-heavy, which makes the common way in a stray `*/`: paste a paragraph after a comment that already closed and everything up to the next `*/` is raw CSS, taking real rules down with it. Both `stamp-code.sh` and the minifier will happily process the broken file.
+
+So after editing any sheet, check it structurally rather than trusting a quiet console:
+
+```
+python3 -c "import re,sys; s=open(sys.argv[1]).read(); t=re.sub(r'/\*.*?\*/','',s,flags=re.S); print('stray */:',t.count('*/'),'| unterminated /*:',t.count('/*'),'| braces:',s.count('{')-s.count('}'))" styles.css
+```
+
+All three must be `0`. Then confirm the rules you touched actually *compute* — read them back with `getComputedStyle` in the preview, don't just look at the page. A rule that was dropped often looks fine, because the element falls back to a plausible earlier value; the 20% Recently shrink shipped a broken comment for two full rounds of visual checking before a `getComputedStyle` read caught it.
+
+`styles.css` is loaded **only by index.html**. Three subpages — faq, alice-in-wonderland, jersey-boys — load `subpages.css`, a **hand-maintained** ~21% subset of it (3,092 of 14,475 lines). Nothing generates that subset, so if you change a rule in styles.css that those pages also use (nav, header, footer, FAQ, production pages), mirror the change in subpages.css by hand and then check for drift:
 
 ```
 python3 tools/check-subpages-css.py

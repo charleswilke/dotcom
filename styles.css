@@ -1619,46 +1619,60 @@ section.production-header.alice .production-details p strong {
 
 /* Multi-column layout (data-layout="columns") — the JS packer (main.js) places
    each card in its declared column (data-col) at the natural aspect ratio of
-   its image. The four cards run 2×2 at every width from 768px up. The packer
-   wraps data-col by the live track count, so the 2×2 keeps reading order:
-   Toast/Junkyard on top, Spectator/Before Times beneath.
+   its image. The six cards run 3-across from 1200px up and 2-across from 768px.
+   The packer wraps data-col by the live track count, so both keep reading
+   order: 01–03 on top and 04–06 beneath at three tracks, 01/02, 03/04, 05/06 at
+   two.
 
-   There used to be a four-across layout above 1100px. It's gone: the grid caps
-   at 1160px (the widest the 1200px .container allows), so four tracks were
-   266px at *every* viewport — 1280 or 2560, the cards never grew, and at that
-   size they read as thumbnails. The 2×2 gives 464px tracks and keeps growing
-   nowhere, which is the point: one size, always legible. */
+   There used to be a four-across layout above 1100px. It's gone: the grid could
+   never exceed 1168px (all the 1200px .container allows), so four tracks were
+   268px at *every* viewport — 1280 or 2560, the cards never grew, and at that
+   size they read as thumbnails. Both layouts here give 368px tracks and keep
+   growing nowhere, which is the point: one size, always legible.
+
+   The cap was 960px (464px tracks) until it came down 20% to 768px. Nothing
+   else needed a number: the images are sized by the track, and the caption type
+   the 464px track had earned (an @media (min-width: 1000px) block that bumped
+   h3 to 1.3rem, body to 0.92rem, labels to 0.76rem and padding to 1.1rem) was
+   simply dropped, which lands every one of those back on the base values —
+   already tuned for a track this size. Keep the gap at 2rem regardless; it is
+   matched to the section's padding-top, not to the card width.
+
+   Both caps exist to hold the track at exactly 368px, which is the whole point:
+   one card size at every width, never a viewport-scaled thumbnail. 2 × 368 + one
+   32px gap = 768; 3 × 368 + two gaps = 1168, which is also exactly what the
+   .container's 1200px max-width minus its 1rem side padding leaves. That
+   coincidence is why three-across was free. It is also why the third track
+   waits for 1200px rather than arriving with the sixth card: below that the
+   container is narrower than 1168 and three tracks would shrink every card. If
+   the container's max-width or padding ever changes, this cap has to move with
+   it or the row quietly goes off-size. */
 @media (min-width: 768px) {
     .showcase-grid[data-layout="columns"] {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: 960px;
+        max-width: 768px;
         /* Match the breathing room above the cards (section padding-top: 2rem)
            between them too — the packer reads this gap for column + row spacing. */
         gap: 2rem;
     }
 
-    /* All four titles take one size so the row reads as a set — otherwise JC
+    /* All six titles take one size so the row reads as a set — otherwise JC
        alone sits smaller than its neighbors. The second selector outranks the
        768–1024px block's 1.25rem, which would otherwise win for the featured
-       card. 1.05rem is what holds "Junkyard Cabaret" on one line in the
-       narrowest 2×2 track (~378px on a tablet). */
+       card; it wins on specificity, not order, so it holds at every width from
+       768px up now that the old min-width: 1000px bump is gone. 1.05rem is what
+       holds "Junkyard Cabaret" — and, at the 768px cap, "Spectator to
+       Initiator" — on one line in the narrowest 2×2 track (~378px on a
+       tablet). */
     .showcase-grid[data-layout="columns"] .showcase-caption h3,
     .showcase-grid[data-layout="columns"] .showcase-item-featured .showcase-caption h3 { font-size: 1.05rem; }
 
-    /* Caption type scaled up to the full-size 464px track. The grid hits its
-       960px max-width at a ~992px viewport (960 + the container's 2rem of
-       padding); below that the tracks shrink with the container and the type
-       has to come back down, or "Spectator to Initiator" wraps to two lines
-       while its neighbors hold one. */
-    @media (min-width: 1000px) {
-        .showcase-grid[data-layout="columns"] .showcase-caption h3,
-        .showcase-grid[data-layout="columns"] .showcase-item-featured .showcase-caption h3 { font-size: 1.3rem; }
-
-        .showcase-grid[data-layout="columns"] .showcase-caption { padding: 1.1rem 1rem 1rem; }
-        .showcase-grid[data-layout="columns"] .showcase-caption p { font-size: 0.92rem; }
-
-        .showcase-grid[data-layout="columns"] :is(.showcase-kicker, .showcase-meta, .showcase-cta) {
-            font-size: 0.76rem;
+    /* Third track once the container can hold three full-size cards. See the
+       368px arithmetic above — this cap is not a round number by accident. */
+    @media (min-width: 1200px) {
+        .showcase-grid[data-layout="columns"] {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            max-width: 1168px;
         }
     }
 }
@@ -1766,11 +1780,14 @@ section.production-header.alice .production-details p strong {
     initial-value: 1;
 }
 
-.showcase-item-toast { animation: showcase-float-a 7s ease-in-out infinite; }
-.showcase-item-jc    { animation: showcase-float-b 8.4s ease-in-out -2.6s infinite; }
-.showcase-item-game  { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
-.showcase-item-s2i   { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
-.showcase-item-bt    { animation: showcase-float-c 7.4s ease-in-out -1.9s infinite; }
+.showcase-item-toast   { animation: showcase-float-a 7s ease-in-out infinite; }
+.showcase-item-jc      { animation: showcase-float-b 8.4s ease-in-out -2.6s infinite; }
+.showcase-item-game    { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
+.showcase-item-s2i     { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
+.showcase-item-bt      { animation: showcase-float-c 7.4s ease-in-out -1.9s infinite; }
+/* Durations are mutually prime-ish on purpose: no two cards should breathe in
+   step for long. The mixtape takes -b, the only cycle with a single occupant. */
+.showcase-item-mixtape { animation: showcase-float-b 8s ease-in-out -5.2s infinite; }
 
 /* The tilt is safe only because the scanline layers counter-rotate against
    --tile-rot (see .showcase-item::after and .showcase-media::before): hard
@@ -1797,7 +1814,8 @@ section.production-header.alice .production-details p strong {
     .showcase-item-jc,
     .showcase-item-game,
     .showcase-item-s2i,
-    .showcase-item-bt { animation: none; }
+    .showcase-item-bt,
+    .showcase-item-mixtape { animation: none; }
 }
 
 .showcase-item::before {
@@ -1915,10 +1933,23 @@ section.production-header.alice .production-details p strong {
    identical spot on every border. Selectors are doubled up to tie the hover
    rule's specificity: an animation shorthand there (as in the flicker variant)
    resets delay to 0s, and these land later in the file, so the negative lap
-   delays survive hover either way. */
-.showcase-item.showcase-item-jc .showcase-signal-blip { animation-delay: -0.65s, 0s; }
-.showcase-item.showcase-item-s2i .showcase-signal-blip { animation-delay: -1.3s, 0s; }
-.showcase-item.showcase-item-bt .showcase-signal-blip { animation-delay: -1.95s, 0s; }
+   delays survive hover either way.
+
+   Phases are the 2.6s lap divided by the number of cards, so they respace when
+   the row grows: four cards sat at 0.65s apart, six sit at 0.43s. Toast holds
+   phase 0 by having no rule at all. The about portrait's -2.6s is a full lap and
+   therefore phase 0 too — in step with Toast, which has never mattered because
+   they are sections apart and never on screen together.
+
+   Listed in card order, so the ladder reads as a sweep down the row. Only the
+   desync matters mechanically — any six distinct phases would work — but the
+   order is worth keeping in sync with index.html when cards get rearranged, or
+   the next reader has to diff two files to see the pattern. */
+.showcase-item.showcase-item-bt .showcase-signal-blip { animation-delay: -0.43s, 0s; }
+.showcase-item.showcase-item-jc .showcase-signal-blip { animation-delay: -0.87s, 0s; }
+.showcase-item.showcase-item-mixtape .showcase-signal-blip { animation-delay: -1.3s, 0s; }
+.showcase-item.showcase-item-s2i .showcase-signal-blip { animation-delay: -1.73s, 0s; }
+.showcase-item.showcase-item-game .showcase-signal-blip { animation-delay: -2.17s, 0s; }
 .image-compare .about-photo-signal .showcase-signal-blip { animation-delay: -2.6s, 0s; }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1739,13 +1739,39 @@ footer p {
 }
 
 @media (max-width: 767px) {
+    /* The header is height:26vh/min-height:260px with .header-content
+       flex-centered inside it. On phones that left the content floating in a
+       box taller than it needed: ~18px of dead centering space at each end,
+       plus the h1's own 2rem margin-top and the subtitle's 2rem margin-bottom,
+       for 49px above the name and 50px below the subtitle. Size the header to
+       its content here and own both gaps as one padding, so the number in the
+       CSS is the number on screen. Zeroing the two inner margins is what makes
+       that true — leave them in and the padding just stacks on top of them. */
+    header {
+        height: auto;
+        min-height: 0;
+        padding-block: 36px;
+    }
+
     .header-content {
         margin-bottom: 0;
     }
 
     .header-title {
-        font-size: 2.5rem;
-        letter-spacing: 4px;
+        /* Fluid so "CHARLES WILKE" stays on one line at every phone width.
+           At 0.09em tracking the string measures ~10.6x its font-size, so
+           8.4vw leaves ~11% of the viewport as side slack from 320px up —
+           and the 2.5rem ceiling stops it growing past the old size as the
+           breakpoint approaches 767px. Tracking is in em, not px, or it
+           would stop scaling with the type and re-break the line. */
+        font-size: min(2.5rem, 8.4vw);
+        letter-spacing: 0.09em;
+        /* The h1 had no bottom margin and the subtitle no top margin, so the
+           two boxes touched and the only air between them was line-height
+           half-leading. In em, so this gap tracks the fluid font-size above
+           instead of going tight on small phones and loose at the ceiling. */
+        margin-bottom: 0.4em;
+        margin-top: 0;
     }
     
     .header-subtitle {
@@ -1753,6 +1779,7 @@ footer p {
         letter-spacing: 1px;
         margin-left: 0.6rem;
         margin-right: 0.6rem;
+        margin-bottom: 0;
     }
     
     .section-title {
@@ -1794,8 +1821,9 @@ footer p {
 
 @media (max-width: 480px) {
     .header-title {
-        
-        font-size: 2.6rem;
+        /* No font-size here on purpose: the fluid min() in the 767px block
+           already covers this range. An override would re-introduce the
+           two-line wrap this size was originally chosen to force. */
         line-height: 1.1;
     }
     

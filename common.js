@@ -182,21 +182,29 @@ function commonTriggerGlitch(header) {
     const classes = ['glitch'];
     let duration;
 
+    // Hold times are floors, not tastes: crt-glitch-main runs 420ms and spends
+    // its last third easing back to rest, so clearing the class early amputates
+    // the settle -- which is the part that reads as phosphor letting go rather
+    // than a class being removed. Every branch below sits at or above 420ms.
+    // (crt-vertical-hold is 600ms and already matched.) The deliberately
+    // clipped ones are the bad-signal stutters further down; those are
+    // re-triggers and are supposed to be cut off.
+
     if (roll > 0.88) {
         classes.length = 0;
         classes.push('glitch-vhold');
         duration = 600;
     } else if (roll > 0.72) {
         classes.push('glitch-tear', 'glitch-interlace');
-        duration = 400 + Math.random() * 150;
+        duration = 430 + Math.random() * 140;
     } else if (roll > 0.55) {
         classes.push('glitch-scanlines');
-        duration = 350 + Math.random() * 150;
+        duration = 430 + Math.random() * 150;
     } else if (roll > 0.40) {
         classes.push('glitch-interlace');
-        duration = 300 + Math.random() * 100;
+        duration = 430 + Math.random() * 120;
     } else {
-        duration = 250 + Math.random() * 100;
+        duration = 430 + Math.random() * 110;
     }
 
     classes.forEach(cls => header.classList.add(cls));

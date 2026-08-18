@@ -419,7 +419,7 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    color: #ff0040;
+    color: var(--crt-warm);
     z-index: -1;
     opacity: 0;
     pointer-events: none;
@@ -433,7 +433,7 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    color: #00f7c2;
+    color: var(--crt-cool);
     z-index: -1;
     opacity: 0;
     pointer-events: none;
@@ -441,11 +441,18 @@ header {
 }
 
 .header-title {
-    text-shadow:
+    --crt-warm: #ff5a36;
+    --crt-cool: #00f7c2;
+    /* The layered bloom, named so every glitch keyframe can ride it. */
+    --crt-bloom:
         0 0 7px rgba(255, 185, 58, 0.45),
         0 0 15px rgba(255, 185, 58, 0.22),
         0 0 30px rgba(255, 185, 58, 0.12),
         0 0 50px rgba(255, 185, 58, 0.06);
+    text-shadow:
+        0.5px 0 rgba(255, 90, 54, 0.4),
+        -0.5px 0 rgba(0, 247, 194, 0.35),
+        var(--crt-bloom);
 }
 
 header::before {
@@ -482,243 +489,307 @@ header::after {
     pointer-events: none;
 }
 
+/* subpages.css carries the subset of the CRT glitch system that faq,
+   alice-in-wonderland and jersey-boys actually reach through common.js's
+   commonTriggerGlitch(). The interlace and vertical-hold variants are rolled
+   there but have never had CSS on these pages, so those rolls fall through to
+   the plain chromatic glitch -- a pre-existing gap, not a new one. If they are
+   ever wanted here, lift them wholesale from styles.css. */
+/* ===== ACTIVE GLITCH STATE =====
+
+   Everything below is bounded by what a shadow-mask tube can physically do
+   when its signal degrades. Past that boundary the eye stops reading
+   "picture" and starts reading "CSS filter," which is what the previous
+   pass had drifted into: the whole word sliding 12px sideways, skewed 4deg,
+   at brightness(1.6) with a 10px mirrored red/cyan split.
+
+   Four rules the keyframes obey:
+
+   1. Horizontal error is small and coupled to raster width. A sync fault
+      moves the start of a line a pixel or two and pulls the picture wider
+      as the HV rail sags, so every sideways shift here rides with a scaleX
+      and an inverse brightness change. Wider is always dimmer. Nothing
+      skews: no analog fault shears glyphs.
+
+   2. The chroma fringe never changes sides. Colour lags luma by a fixed
+      delay and the beam always scans left to right, so the warm edge sits
+      to the right and the cool edge to the left, on every frame, all the
+      way down to rest. Only the magnitude moves. Fringes that flip sides
+      each frame are what makes an effect read as anaglyph 3D rather than
+      as a tube.
+
+   3. The pseudo-element copies are phosphor persistence, not a second
+      colour split. Each one is a faint ghost at the position the word
+      just left -- their transforms are the frame-to-frame delta of the
+      main element, so the smear always trails the motion. Warm persists
+      longer than cool, as the phosphors do.
+
+   4. The glow never switches off. --crt-bloom rides underneath every
+      frame of every variant; only its modulation changes.
+*/
 .header-title.glitch {
-    animation: crt-glitch-main 0.5s steps(2, end);
+    animation: crt-glitch-main 0.42s steps(2, end);
 }
 
+/* The two copies carry BAND TEARING, which is the channel that actually
+   reads as a broken picture. First pass made them faint colour ghosts and
+   pushed all the visible energy into filter: brightness() -- which, on a
+   headline with a 50px bloom, is a large area of light pulsing on and off.
+   The result was a glow flash with some texture hiding underneath it: with
+   filter forced to none, the hardest frame of the burst was very nearly
+   indistinguishable from rest.
+
+   So the amplitude the first pass removed comes back, but only where a tube
+   can produce it. Twelve pixels of displacement on the whole word is a
+   compositor transform. Twelve pixels on one band of scanlines, with the
+   rest of the picture holding still, is just what a line that lost its start
+   position looks like. Each copy shows one band at a time, in front of the
+   intact word, jumping between three or four bands per burst with dark gaps
+   between -- breakup is intermittent, not a constant shimmer.
+
+   The phosphor trail the ghosts used to provide moved into the main
+   element's text-shadow, where it costs nothing and cannot compete with the
+   bands for attention. */
 .header-title.glitch::before {
-    opacity: 0.8;
-    animation: crt-glitch-red 0.5s steps(3, end);
+    opacity: 1;
+    z-index: 2;
+    color: var(--light);
+    text-shadow:
+        1.4px 0 var(--crt-warm),
+        -1px 0 var(--crt-cool);
+    animation: crt-band-a 0.42s steps(1, end);
 }
 
 .header-title.glitch::after {
-    opacity: 0.8;
-    animation: crt-glitch-cyan 0.5s steps(3, end);
+    opacity: 1;
+    z-index: 2;
+    color: var(--light);
+    text-shadow:
+        1px 0 var(--crt-warm),
+        -1.4px 0 var(--crt-cool);
+    animation: crt-band-b 0.42s steps(1, end);
 }
 
+/* Scanline intensification during glitch -- uses header::before for full-width
+   coverage. Same 4px period as the resting texture, just a thicker, darker
+   line: the beam current dropping, not a different pattern appearing. */
 header:has(.header-title.glitch-scanlines)::before {
     background: repeating-linear-gradient(
         0deg,
         transparent 0px,
         transparent 2px,
-        rgba(0, 0, 0, 0.2) 2px,
-        rgba(0, 0, 0, 0.2) 4px
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
     );
-    animation: scanline-scroll 0.08s linear infinite;
+    animation: scanline-scroll 0.12s linear infinite;
 }
 
+/* Main text glitch -- horizontal sync noise on a tube that is still trying.
+
+   Note how little of the burst lives in filter: brightness() now. The range
+   is 0.955-1.02, about a 6% swing against the 24% of the first pass. HV sag
+   on a disturbance this small IS only a couple of percent -- and more to the
+   point, luminance is the wrong channel to carry a glitch. A large glowing
+   headline pulsing brighter and darker reads as a flashing sign, not as a
+   picture breaking up. The breakup lives in crt-band-a / crt-band-b.
+
+   Whole-word displacement stays small (3.5px peak) and is deliberately NOT
+   scaled down at mobile: a timing error displaces the raster by a fixed
+   number of screen pixels regardless of how large the type is set.
+
+   The third text-shadow on each frame is the phosphor trail -- a wide, soft
+   warm smear thrown opposite the direction of travel, so the glyphs always
+   drag a little light behind them. It replaces the ghost pseudo-elements the
+   first pass used, which now have a louder job. */
 @keyframes crt-glitch-main {
     0% {
-        text-shadow:
-            0 0 7px rgba(0, 247, 194, 0.4),
-            0 0 15px rgba(0, 247, 194, 0.2);
         transform: none;
         filter: none;
-    }
-    5% {
         text-shadow:
-            3px 0 var(--secondary),
-            -3px 0 var(--neon),
-            0 0 12px rgba(255, 255, 255, 0.6),
-            0 0 30px rgba(0, 247, 194, 0.5);
-        transform: translateX(3px) translateY(-1px);
-        filter: brightness(1.3) contrast(1.2);
+            0.5px 0 rgba(255, 90, 54, 0.4),
+            -0.5px 0 rgba(0, 247, 194, 0.35),
+            var(--crt-bloom);
     }
-    10% {
+    4% {
+        transform: translate3d(1.5px, 0, 0) scaleX(1.004);
+        filter: brightness(0.99);
         text-shadow:
-            -5px 0 var(--neon),
-            5px 0 #ff0040,
-            0 0 20px rgba(255, 0, 64, 0.4);
-        transform: translateX(-6px) translateY(2px) skewX(2deg);
-        filter: brightness(0.8) contrast(1.5);
+            0.9px 0 rgba(255, 90, 54, 0.6),
+            -0.7px 0 rgba(0, 247, 194, 0.5),
+            -4px 0 5px rgba(255, 140, 80, 0.16),
+            var(--crt-bloom);
     }
-    15% {
-        
+    9% {
+        transform: translate3d(-2.5px, 0, 0) scaleX(1.008);
+        filter: brightness(0.97);
         text-shadow:
-            8px 0 #ff0040,
-            -4px 0 var(--neon),
-            0 0 25px rgba(255, 90, 54, 0.6);
-        transform: translateX(10px) translateY(-1px);
-        filter: brightness(1.4) saturate(1.5);
+            1.5px 0 var(--crt-warm),
+            -1.1px 0 var(--crt-cool),
+            6px 0 6px rgba(255, 140, 80, 0.2),
+            var(--crt-bloom);
     }
-    20% {
-        
+    14% {
+        /* Raster narrows: the rail recovers and the picture brightens with it. */
+        transform: translate3d(1px, 0, 0) scaleX(0.997);
+        filter: brightness(1.015);
         text-shadow:
-            -3px 0 var(--neon),
-            3px 0 var(--secondary);
-        transform: translateX(-4px) translateY(3px);
-        filter: brightness(1.1);
+            0.7px 0 rgba(255, 90, 54, 0.55),
+            -0.6px 0 rgba(0, 247, 194, 0.45),
+            -3px 0 5px rgba(255, 140, 80, 0.14),
+            var(--crt-bloom);
     }
-    28% {
-        
+    21% {
+        /* Hardest hit of the burst: widest, dimmest, and slightly defocused,
+           because a beam driven that far off its working point does not stay
+           sharp. One vertical line of slip, not four. */
+        transform: translate3d(-3.5px, 1px, 0) scaleX(1.011);
+        filter: brightness(0.955) blur(0.4px);
         text-shadow:
-            5px 0 #ff00ff,
-            -5px 0 #00f7c2,
-            0 0 35px rgba(255, 0, 255, 0.5),
-            0 0 60px rgba(255, 0, 255, 0.2);
-        transform: translateX(6px) translateY(-2px) skewX(-3deg);
-        filter: brightness(1.5) saturate(1.8);
+            2.1px 0 var(--crt-warm),
+            -1.6px 0 var(--crt-cool),
+            8px 0 7px rgba(255, 140, 80, 0.24),
+            var(--crt-bloom);
     }
-    35% {
-        
+    27% {
+        transform: translate3d(2px, 0, 0) scaleX(0.995);
+        filter: brightness(1.02);
         text-shadow:
-            -6px 0 var(--secondary),
-            6px 0 #ff0040;
-        transform: translateY(4px) translateX(-2px);
-        filter: brightness(0.85) contrast(1.4);
+            1.2px 0 var(--crt-warm),
+            -0.9px 0 var(--crt-cool),
+            -5px 0 6px rgba(255, 140, 80, 0.18),
+            var(--crt-bloom);
     }
-    42% {
+    34% {
+        transform: translate3d(-1.5px, 0, 0) scaleX(1.005);
+        filter: brightness(0.985);
         text-shadow:
-            4px 0 #ff6ec7,
-            -4px 0 var(--neon),
-            0 0 20px rgba(255, 110, 199, 0.5);
-        transform: translateX(8px) translateY(-3px) skewX(4deg);
-        filter: brightness(1.3);
+            0.9px 0 rgba(255, 90, 54, 0.6),
+            -0.7px 0 rgba(0, 247, 194, 0.5),
+            4px 0 5px rgba(255, 140, 80, 0.15),
+            var(--crt-bloom);
     }
-    50% {
-        
+    44% {
+        transform: translate3d(2.5px, -1px, 0) scaleX(1.007);
+        filter: brightness(0.965);
         text-shadow:
-            -10px 0 #ff0040,
-            10px 0 #00f7c2,
-            0 0 40px rgba(255, 255, 255, 0.8);
-        transform: translateX(-12px) translateY(1px);
-        filter: brightness(1.6) contrast(1.8);
+            1.5px 0 var(--crt-warm),
+            -1.1px 0 var(--crt-cool),
+            -6px 0 6px rgba(255, 140, 80, 0.18),
+            var(--crt-bloom);
     }
     55% {
-        
+        transform: translate3d(-1px, 0, 0) scaleX(0.998);
+        filter: brightness(1.01);
         text-shadow:
-            6px 0 #ff00ff,
-            -6px 0 var(--neon);
-        transform: translateX(5px) translateY(-4px) skewX(-2deg);
-        filter: brightness(1.2);
+            0.7px 0 rgba(255, 90, 54, 0.55),
+            -0.6px 0 rgba(0, 247, 194, 0.45),
+            3px 0 5px rgba(255, 140, 80, 0.12),
+            var(--crt-bloom);
     }
-    62% {
+    68% {
+        /* The disturbance is over; the rest is the circuit settling, so the
+           steps give way to a smooth ramp back to rest. */
+        animation-timing-function: ease-out;
+        transform: translate3d(1px, 0, 0) scaleX(1.002);
+        filter: brightness(0.995);
         text-shadow:
-            -3px 0 var(--neon),
-            3px 0 var(--secondary),
-            0 0 15px rgba(0, 247, 194, 0.6);
-        transform: translateX(-3px) translateY(2px);
-        filter: brightness(0.9);
+            0.6px 0 rgba(255, 90, 54, 0.5),
+            -0.5px 0 rgba(0, 247, 194, 0.42),
+            -2px 0 4px rgba(255, 140, 80, 0.08),
+            var(--crt-bloom);
     }
-    70% {
+    82% {
+        animation-timing-function: ease-out;
+        transform: translate3d(-0.5px, 0, 0);
+        filter: none;
         text-shadow:
-            2px 0 #ff6ec7,
-            -2px 0 var(--neon),
-            0 0 20px rgba(0, 247, 194, 0.4);
-        transform: translateX(2px) translateY(-1px) skewX(1deg);
-        filter: brightness(1.1);
-    }
-    80% {
-        text-shadow:
-            -1px 0 var(--neon),
-            1px 0 var(--secondary),
-            0 0 12px rgba(0, 247, 194, 0.3);
-        transform: translateY(1px);
-        filter: brightness(1.05);
-    }
-    90% {
-        text-shadow:
-            0 0 10px rgba(0, 247, 194, 0.5),
-            0 0 20px rgba(0, 247, 194, 0.3);
-        transform: none;
-        filter: brightness(1.02);
+            0.5px 0 rgba(255, 90, 54, 0.45),
+            -0.5px 0 rgba(0, 247, 194, 0.38),
+            var(--crt-bloom);
     }
     100% {
-        text-shadow:
-            0 0 7px rgba(0, 247, 194, 0.4),
-            0 0 15px rgba(0, 247, 194, 0.2),
-            0 0 30px rgba(0, 247, 194, 0.1);
         transform: none;
         filter: none;
+        text-shadow:
+            0.5px 0 rgba(255, 90, 54, 0.4),
+            -0.5px 0 rgba(0, 247, 194, 0.35),
+            var(--crt-bloom);
     }
 }
 
-@keyframes crt-glitch-red {
-    0%, 100% {
+@keyframes crt-band-a {
+    0% {
+        clip-path: inset(100% 0 0 0);
         transform: none;
-        opacity: 0;
     }
-    8% {
-        transform: translateX(-4px) translateY(1px);
-        opacity: 0.7;
+    7% {
+        clip-path: inset(26% 0 64% 0);
+        transform: translateX(-11px);
     }
-    15% {
-        transform: translateX(8px) translateY(-1px);
-        opacity: 0.9;
-    }
-    25% {
-        transform: translateX(-10px) translateY(2px) skewX(2deg);
-        opacity: 0.6;
-    }
-    35% {
-        transform: translateX(5px) translateY(-3px);
-        opacity: 0.85;
-    }
-    45% {
-        transform: translateX(-7px) translateY(1px);
-        opacity: 0.7;
-    }
-    55% {
-        transform: translateX(12px) skewX(-2deg);
-        opacity: 0.9;
-    }
-    65% {
-        transform: translateX(-4px) translateY(-1px);
-        opacity: 0.6;
-    }
-    75% {
-        transform: translateX(3px) translateY(2px);
-        opacity: 0.4;
-    }
-    85% {
-        transform: translateX(-1px);
-        opacity: 0.2;
-    }
-}
-
-@keyframes crt-glitch-cyan {
-    0%, 100% {
+    13% {
+        clip-path: inset(100% 0 0 0);
         transform: none;
-        opacity: 0;
     }
-    8% {
-        transform: translateX(4px) translateY(-1px);
-        opacity: 0.7;
+    21% {
+        clip-path: inset(52% 0 39% 0);
+        transform: translateX(8px);
     }
-    15% {
-        transform: translateX(-8px) translateY(1px);
-        opacity: 0.9;
+    28% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
     }
-    25% {
-        transform: translateX(10px) translateY(-2px) skewX(-2deg);
-        opacity: 0.6;
+    44% {
+        clip-path: inset(12% 0 80% 0);
+        transform: translateX(-6px);
     }
-    35% {
-        transform: translateX(-5px) translateY(3px);
-        opacity: 0.85;
+    50% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
     }
-    45% {
-        transform: translateX(7px) translateY(-1px);
-        opacity: 0.7;
+    68% {
+        clip-path: inset(70% 0 22% 0);
+        transform: translateX(3px);
     }
-    55% {
-        transform: translateX(-12px) skewX(2deg);
-        opacity: 0.9;
-    }
-    65% {
-        transform: translateX(4px) translateY(1px);
-        opacity: 0.6;
-    }
-    75% {
-        transform: translateX(-3px) translateY(-2px);
-        opacity: 0.4;
-    }
-    85% {
-        transform: translateX(1px);
-        opacity: 0.2;
+    74%, 100% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
     }
 }
 
+/* Second band, offset in time from the first so the two rarely coincide --
+   two lines losing sync at the same instant looks authored. */
+@keyframes crt-band-b {
+    0% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
+    }
+    10% {
+        clip-path: inset(62% 0 30% 0);
+        transform: translateX(6px);
+    }
+    16% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
+    }
+    34% {
+        clip-path: inset(34% 0 58% 0);
+        transform: translateX(-9px);
+    }
+    40% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
+    }
+    56% {
+        clip-path: inset(78% 0 14% 0);
+        transform: translateX(5px);
+    }
+    62%, 100% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
+    }
+}
+
+/* Scanline scroll animation */
 @keyframes scanline-scroll {
     0% {
         background-position: 0 0;
@@ -728,37 +799,83 @@ header:has(.header-title.glitch-scanlines)::before {
     }
 }
 
-.header-title.glitch-tear {
-    animation: crt-horizontal-tear 0.35s steps(1, end);
+/* Horizontal tear: one band of lines loses its start position while the rest
+   of the picture holds. The band rides on ::before so the word itself stays
+   put -- the old version clipped the entire heading down to a single slice
+   and slid that, which hides the name rather than tearing it, and (see the
+   interlace note above) took crt-glitch-main down with it.
+
+   Sitting in front of the intact word means the displaced band reads as a
+   doubled slice, which is what a torn line actually looks like: the lines
+   that moved are drawn twice because the ones they left behind never went
+   dark. Bands are 7-10% of the heading, about two of the 4px scanlines. */
+.header-title.glitch-tear::before {
+    opacity: 1;
+    z-index: 2;
+    color: var(--light);
+    text-shadow:
+        1.4px 0 var(--crt-warm),
+        -1.1px 0 var(--crt-cool),
+        var(--crt-bloom);
+    animation: crt-tear-band 0.34s steps(1, end);
 }
 
-@keyframes crt-horizontal-tear {
-    0% { clip-path: inset(0 0 0 0); transform: none; }
-    8% {
-        clip-path: inset(5% -5% 88% 0);
-        transform: translateX(15px);
-        text-shadow: 5px 0 #ff00ff, -5px 0 var(--neon);
-    }
-    16% {
-        clip-path: inset(25% 0 65% -5%);
-        transform: translateX(-20px);
-        text-shadow: -8px 0 #ff0040, 8px 0 #00f7c2;
-    }
-    24% {
-        clip-path: inset(50% -5% 40% 0);
-        transform: translateX(12px);
-        text-shadow: 6px 0 #ff6ec7, -3px 0 var(--neon);
-    }
-    32% {
-        clip-path: inset(75% 0 15% -5%);
-        transform: translateX(-8px);
-    }
-    40% {
-        clip-path: inset(0 0 0 0);
+.header-title.glitch-tear::after {
+    opacity: 1;
+    z-index: 2;
+    color: var(--light);
+    text-shadow:
+        1px 0 var(--crt-warm),
+        -1.4px 0 var(--crt-cool);
+    animation: crt-tear-band-b 0.34s steps(1, end);
+}
+
+@keyframes crt-tear-band-b {
+    0% {
+        clip-path: inset(100% 0 0 0);
         transform: none;
     }
-    100% {
-        clip-path: inset(0 0 0 0);
+    14% {
+        clip-path: inset(72% 0 20% 0);
+        transform: translateX(12px);
+    }
+    26% {
+        clip-path: inset(38% 0 55% 0);
+        transform: translateX(-16px);
+    }
+    38% {
+        clip-path: inset(4% 0 88% 0);
+        transform: translateX(9px);
+    }
+    50%, 100% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
+    }
+}
+
+@keyframes crt-tear-band {
+    0% {
+        clip-path: inset(100% 0 0 0);
+        transform: none;
+    }
+    8% {
+        clip-path: inset(30% 0 60% 0);
+        transform: translateX(-19px);
+    }
+    20% {
+        clip-path: inset(54% 0 38% 0);
+        transform: translateX(14px);
+    }
+    32% {
+        clip-path: inset(14% 0 79% 0);
+        transform: translateX(-11px);
+    }
+    44% {
+        clip-path: inset(66% 0 27% 0);
+        transform: translateX(7px);
+    }
+    56%, 100% {
+        clip-path: inset(100% 0 0 0);
         transform: none;
     }
 }

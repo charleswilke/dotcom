@@ -5974,19 +5974,12 @@ html {
     }
 }
 
-/* CRT screen flicker on the whole tuner (subtle) */
-.tuner-glass {
-    animation: crt-screen-flicker 8s ease-in-out infinite;
-}
-
-@keyframes crt-screen-flicker {
-    0%, 100% { filter: brightness(1); }
-    92% { filter: brightness(1); }
-    93% { filter: brightness(1.1); }
-    94% { filter: brightness(0.95); }
-    95% { filter: brightness(1.05); }
-    96% { filter: brightness(1); }
-}
+/* The tuner glass used to run an 8s `crt-screen-flicker` brightness blip
+   (1 -> 1.1 -> 0.95 -> 1.05 over four frames near the end of each cycle).
+   Removed 2026-08-18: an idle screen twitching every eight seconds reads as a
+   rendering glitch rather than a warm tube, and it re-rastered the whole
+   oscilloscope canvas each time. The tuning static (`.tuner-glass.tuning::after`)
+   and the marker phosphor decay still carry the CRT character on interaction. */
 
 /* Set marker index for staggered animations */
 .tuner-scale .scale-marker:nth-child(1) { --marker-index: 0; }

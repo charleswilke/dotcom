@@ -2117,6 +2117,10 @@ section.production-header.alice .production-details p strong {
     margin: 0;
 }
 
+.showcase-mobile-break {
+    display: none;
+}
+
 .showcase-footer {
     padding-top: 0.3rem;
     border-top: 1px solid rgba(248, 233, 210, 0.08);
@@ -3101,24 +3105,226 @@ footer p {
     
     .showcase-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 0.85rem;
         margin-top: 0;
         padding-top: 0.4rem;
     }
     
     .showcase-item {
-        margin: 0 1rem;
+        --showcase-mobile-image-width: 52%;
+        /* Mobile cards take their height from the complete image in the right
+           bay. Different source ratios therefore produce subtly different row
+           heights instead of letterboxing every image inside one fixed case. */
+        grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+        width: calc(100% - 1rem);
+        max-width: 30rem;
+        min-height: 0;
+        aspect-ratio: auto;
+        margin: 0;
+        justify-self: center;
         transform: none;
+        transition: transform 0.22s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         border-left: 3px solid var(--showcase-accent);
     }
 
+    /* Keep the complete title art visible on mobile. The image occupies a
+       contained bay on the right rather than being enlarged and cropped as a
+       background; the left edge dissolves gently into the copy panel. */
+    .showcase-media {
+        grid-area: 1 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        z-index: 2;
+        min-width: 0;
+        min-height: 0;
+        height: auto;
+        margin: 0;
+        background: transparent;
+        border: 0;
+        border-radius: inherit;
+        box-shadow: none;
+    }
+
+    .showcase-item img {
+        width: var(--showcase-mobile-image-width);
+        height: auto;
+        margin-left: auto;
+        object-fit: contain;
+        object-position: center;
+        filter: saturate(1.02) contrast(1.05) brightness(0.96);
+    }
+
+    /* Rebuild the CRT surface inside the contained artwork bay. Keeping these
+       layers on the right preserves every pixel of the source composition
+       while making the image feel tuned into the card rather than pasted on. */
+    .showcase-media::before {
+        inset: 0 0 0 calc(100% - var(--showcase-mobile-image-width));
+        transform: none;
+        background:
+            linear-gradient(180deg, rgba(248, 233, 210, 0.1), transparent 18%, transparent 76%, rgba(7, 5, 22, 0.12)),
+            repeating-linear-gradient(
+                180deg,
+                rgba(248, 233, 210, 0.055) 0,
+                rgba(248, 233, 210, 0.055) 1px,
+                rgba(0, 0, 0, 0.045) 1px,
+                rgba(0, 0, 0, 0.045) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+        box-shadow:
+            inset 1px 0 color-mix(in srgb, var(--showcase-accent) 46%, transparent),
+            inset 0 0 18px rgba(7, 5, 22, 0.28);
+    }
+
+    .showcase-media::after {
+        inset: 0 0 0 calc(100% - var(--showcase-mobile-image-width));
+        transform: none;
+        background:
+            linear-gradient(126deg, rgba(248, 233, 210, 0.1) 0%, transparent 25%, transparent 62%, color-mix(in srgb, var(--showcase-accent) 8%, transparent) 100%),
+            radial-gradient(ellipse at 58% 48%, transparent 48%, rgba(7, 5, 22, 0.2) 100%);
+        opacity: 0.68;
+    }
+
     .showcase-caption {
-        padding: 0.95rem 0.9rem 0.9rem;
+        position: absolute;
+        inset: 0;
+        grid-area: 1 / 1;
+        /* Do not create a stacking context here: the bloom remains below the
+           z2 image bay while the positioned text children can rise above it. */
+        z-index: auto;
+        align-self: stretch;
+        align-content: center;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 0.78rem 48% 0.75rem 0.9rem;
+        gap: 0.32rem;
+        border-top: 0;
+        border-radius: inherit;
+        background:
+            linear-gradient(90deg,
+                rgb(7, 5, 22) 0%,
+                rgba(13, 10, 48, 0.99) 38%,
+                rgba(13, 10, 48, 0.92) 44%,
+                rgba(13, 10, 48, 0.62) 49%,
+                rgba(13, 10, 48, 0.22) 54%,
+                transparent 60%,
+                transparent 100%),
+            radial-gradient(
+                ellipse at calc(100% - var(--showcase-mobile-image-width)) 50%,
+                color-mix(in srgb, var(--showcase-accent) 14%, transparent) 0%,
+                transparent 32%
+            ),
+            linear-gradient(0deg, rgba(7, 5, 22, 0.12), transparent 58%);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.72);
+    }
+
+    .showcase-caption::before {
+        display: block;
+        top: 10%;
+        bottom: 10%;
+        left: calc(100% - var(--showcase-mobile-image-width));
+        width: 1px;
+        height: auto;
+        background: linear-gradient(transparent, var(--showcase-accent) 28% 72%, transparent);
+        box-shadow:
+            0 0 4px color-mix(in srgb, var(--showcase-accent) 82%, transparent),
+            0 0 11px color-mix(in srgb, var(--showcase-accent) 42%, transparent);
+        opacity: 0.58;
+        z-index: 4;
+    }
+
+    /* Carry the desktop card body's cool/warm CRT bloom into the mobile copy
+       bay. The mask lets the swell dissolve into the contained artwork rather
+       than ending at a flat vertical panel boundary. */
+    .showcase-caption::after {
+        content: '';
+        position: absolute;
+        inset: 0 36% 0 0;
+        border-radius: inherit;
+        background:
+            radial-gradient(ellipse at var(--crt-cool), rgba(58, 42, 140, 0.95) 0%, transparent 55%),
+            radial-gradient(ellipse at var(--crt-warm), rgba(255, 90, 54, 0.55) 0%, transparent 60%),
+            linear-gradient(135deg, #1a1550, #0d0a35);
+        -webkit-mask-image: linear-gradient(90deg, #000 0 70%, rgba(0, 0, 0, 0.72) 82%, transparent 100%);
+        mask-image: linear-gradient(90deg, #000 0 70%, rgba(0, 0, 0, 0.72) 82%, transparent 100%);
+        opacity: 0.92;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .showcase-caption > * {
+        position: relative;
+        z-index: 4;
+    }
+
+    .showcase-caption-topline {
+        justify-content: flex-start;
+        gap: 0.1rem 0.45rem;
+    }
+
+    .showcase-kicker,
+    .showcase-meta {
+        font-size: 0.55rem;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+    }
+
+    .showcase-kicker {
+        display: none;
+    }
+
+    .showcase-meta {
+        color: var(--showcase-accent);
+    }
+
+    .showcase-mobile-hide {
+        display: none;
     }
 
     .showcase-caption h3,
     .showcase-item-featured .showcase-caption h3 {
-        font-size: 1.25rem;
+        padding-right: 0;
+        font-size: clamp(0.96rem, 4vw, 1.12rem);
+        line-height: 1.08;
+        text-wrap: balance;
+    }
+
+    .showcase-caption p {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        color: var(--showcase-label);
+        opacity: 0.9;
+        text-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.95),
+            0 0 5px rgba(7, 5, 22, 0.82);
+        font-size: 0.72rem;
+        line-height: 1.32;
+    }
+
+    .showcase-item-bt .showcase-caption h3 {
+        white-space: nowrap;
+    }
+
+    .showcase-item-bt .showcase-caption p,
+    .showcase-item-mixtape .showcase-caption p,
+    .showcase-item-game .showcase-caption p {
+        -webkit-line-clamp: 3;
+    }
+
+    .showcase-mobile-break {
+        display: initial;
+    }
+
+    .showcase-footer {
+        display: none;
+    }
+
+    .showcase-item-jc .showcase-caption h3,
+    .showcase-item-jc .showcase-caption p {
+        white-space: normal;
     }
 
     .faq-grid {
@@ -3128,6 +3334,29 @@ footer p {
     
     .container {
         padding: 0 1rem;
+    }
+}
+
+@media (max-width: 767px) and (hover: hover) {
+    .showcase-item:is(:hover, :focus-visible) {
+        --tile-scale: 1;
+        z-index: 3;
+        transform: translateY(-4px);
+        box-shadow:
+            0 22px 30px -16px rgba(0, 0, 0, 0.94),
+            0 0 3px color-mix(in srgb, var(--showcase-edge) 88%, transparent),
+            0 0 13px -2px color-mix(in srgb, var(--showcase-edge) 62%, transparent),
+            inset 0 0 10px -3px color-mix(in srgb, var(--showcase-edge) 40%, transparent);
+    }
+
+    .showcase-item:is(:hover, :focus-visible) img {
+        transform: none;
+        filter: saturate(1.04) contrast(1.07) brightness(1);
+    }
+
+    .showcase-item:is(:hover, :focus-visible) .showcase-media::after {
+        transform: none;
+        opacity: 0.74;
     }
 }
 
@@ -3152,30 +3381,61 @@ footer p {
     }
     
     .showcase-item {
-        margin: 0 0.5rem;
+        width: calc(100% - 0.5rem);
+        max-width: calc(100vw - 2.5rem);
+        min-height: 0;
+        margin: 0;
     }
 
     .showcase-media {
-        margin: 0.55rem 0.55rem 0;
+        margin: 0;
     }
 
     .showcase-caption {
-        padding: 0.85rem 0.75rem 0.8rem;
+        padding: 0.38rem 47% 0.38rem 0.75rem;
+        gap: 0.22rem;
+    }
+
+    .showcase-caption-topline {
+        line-height: 1.1;
+    }
+
+    .showcase-kicker,
+    .showcase-meta {
+        font-size: 0.5rem;
     }
 
     .showcase-caption h3,
     .showcase-item-featured .showcase-caption h3 {
-        font-size: 1.1rem;
-        padding-right: 3.5rem;
+        font-size: clamp(0.94rem, 4.1vw, 1.05rem);
+        padding-right: 0;
     }
 
     .showcase-caption p {
-        font-size: 0.76rem;
+        font-size: 0.66rem;
+        line-height: 1.2;
+        -webkit-line-clamp: 2;
     }
     
     footer p {
         font-size: 0.9rem;
         padding: 0 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .showcase-item {
+        --showcase-mobile-image-width: 58%;
+    }
+
+    .showcase-caption {
+        padding-right: 45%;
+    }
+
+    .showcase-caption h3,
+    .showcase-item-featured .showcase-caption h3 {
+        font-size: 0.88rem;
+        line-height: 1.02;
     }
 }
 

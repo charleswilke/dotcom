@@ -1260,7 +1260,7 @@ section.production-header.spotlight-production .featured-image {
 }
 
 /* Latest badge styling */
-section.production-header.spotlight-production h1 {
+section.production-header.spotlight-production .spotlight-title {
     color: var(--light) !important;
     text-shadow:
         0 2px 8px rgba(0,0,0,0.4),
@@ -8275,7 +8275,7 @@ html {
         margin: 0 !important;
     }
     
-    section.production-header.spotlight-production h1 {
+    section.production-header.spotlight-production .spotlight-title {
         font-size: 1.5rem !important;
         margin-bottom: 0.5rem !important;
     }

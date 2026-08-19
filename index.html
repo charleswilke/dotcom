@@ -3,6 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (() => {
+            try {
+                const key = 'before-times:present-arrival';
+                const storedArrival = window.sessionStorage.getItem(key);
+                if (storedArrival !== null) {
+                    window.sessionStorage.removeItem(key);
+                    const arrival = JSON.parse(storedArrival);
+                    const root = document.documentElement;
+                    root.classList.add('bt-present-arrival');
+                    if (Number.isFinite(arrival.x) && arrival.x >= 0 && arrival.x <= 100) {
+                        root.style.setProperty('--bt-present-arrival-x', `${arrival.x}vw`);
+                    }
+                    if (Number.isFinite(arrival.y) && arrival.y >= 0 && arrival.y <= 100) {
+                        root.style.setProperty('--bt-present-arrival-y', `${arrival.y}vh`);
+                    }
+                }
+            } catch (error) {
+                // The main site remains fully visible if storage is unavailable.
+            }
+        })();
+    </script>
     <title>Charles Wilke | Writer, Product Designer & Builder</title>
     <!-- SEO: concise page description for SERP snippet -->
     <meta name="description" content="Writer, Conversational UX Product Designer and AI co-creation explorer." />
@@ -27,7 +49,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="styles.css?v=b02db503">
+    <link rel="stylesheet" href="styles.css?v=20260818a">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />

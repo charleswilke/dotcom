@@ -4,6 +4,7 @@
     // Where Door 05 lets you out. The knowledge-maze shortcut has its own href
     // in the markup (#bt-knowledge-present-portal) and points at the portfolio.
     const PORTAL_DESTINATION = '/#about';
+    const PORTAL_ARRIVAL_KEY = 'before-times:present-arrival';
 
     const PANELS = {
         about: {
@@ -5717,7 +5718,7 @@
                 // Door 05 has no panel to open; the floor plan exits the same
                 // way the door does.
                 if (route.id === 'portal') {
-                    window.location.href = PORTAL_DESTINATION;
+                    exitToPresent();
                     return;
                 }
                 window.setTimeout(() => openPanel(route.id), 30);
@@ -6048,6 +6049,25 @@
         });
     }
 
+    function exitToPresent(source) {
+        try {
+            const rect = source && typeof source.getBoundingClientRect === 'function'
+                ? source.getBoundingClientRect()
+                : null;
+            const arrival = rect
+                ? {
+                    x: ((rect.left + rect.width / 2) / window.innerWidth) * 100,
+                    y: ((rect.top + rect.height / 2) / window.innerHeight) * 100
+                }
+                : {};
+            window.sessionStorage.setItem(PORTAL_ARRIVAL_KEY, JSON.stringify(arrival));
+        } catch (error) {
+            // Storage can be unavailable in private browsing. Navigation should
+            // still work; only the present-day page's matching fade-in is lost.
+        }
+        window.location.assign(PORTAL_DESTINATION);
+    }
+
     function resetThresholdTransition() {
         if (!thresholdTransition) return;
         thresholdTransition.classList.remove('is-active', 'is-revealing');
@@ -6073,6 +6093,7 @@
         }
 
         thresholdTransitionBusy = true;
+        let holdForNavigation = false;
         const preparation = typeof settings.prepare === 'function'
             ? Promise.resolve().then(settings.prepare).catch(() => {})
             : Promise.resolve();
@@ -6112,11 +6133,19 @@
             }
 
             await destination();
+            if (settings.holdForNavigation) {
+                // Door 05 leaves the document, so keep its final opaque frame in
+                // place until the present-day page paints underneath the visitor.
+                holdForNavigation = true;
+                return;
+            }
             thresholdTransition.classList.add('is-revealing');
             await waitForThreshold(240);
         } finally {
-            resetThresholdTransition();
-            thresholdTransitionBusy = false;
+            if (!holdForNavigation) {
+                resetThresholdTransition();
+                thresholdTransitionBusy = false;
+            }
         }
     }
 
@@ -6245,14 +6274,14 @@
                 return;
             }
             if (panelId === 'portal') {
-                // The door is the exit. Reveal first so the threshold state is
-                // reset before the navigation starts — otherwise a bfcache
-                // return would restore the lobby under a stuck curtain.
+                // The door is the exit. Its last threshold frame stays pinned
+                // until the present-day page takes over; pageshow clears it if
+                // a Back navigation later restores this page from bfcache.
                 void runThresholdTransition(
                     button,
                     'portal',
-                    () => { window.location.href = PORTAL_DESTINATION; },
-                    { revealBeforeDestination: true }
+                    () => exitToPresent(button),
+                    { holdForNavigation: true }
                 );
                 return;
             }
@@ -6761,6 +6790,11 @@
     }
 
     window.addEventListener('popstate', syncRoomFromLocation);
+    window.addEventListener('pageshow', () => {
+        if (!thresholdTransitionBusy) return;
+        resetThresholdTransition();
+        thresholdTransitionBusy = false;
+    });
     const savedInventory = readInventory();
     hasAlchemyPen = savedInventory.alchemyPen === true;
     alchemyPenLocation = hasAlchemyPen && savedInventory.alchemyPenLocation === 'guestbook' ? 'guestbook' : (hasAlchemyPen ? 'inventory' : 'room');

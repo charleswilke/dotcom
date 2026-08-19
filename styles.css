@@ -137,6 +137,44 @@ html {
         linear-gradient(90deg, rgba(255, 185, 58, 0.3) 1px, transparent 1px);
     background-size: 40px 40px;
 }
+
+/* Door 05 in Before Times ends on this same dark portal wash. The wash then
+   fades away over the present-day page, turning navigation into one continuous
+   handoff instead of briefly exposing the archive lobby again. */
+html.bt-present-arrival {
+    --bt-present-arrival-x: 50vw;
+    --bt-present-arrival-y: 50vh;
+}
+
+html.bt-present-arrival::before {
+    content: '';
+    position: fixed;
+    z-index: 2147483647;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            ellipse 30vmax 25vmax at var(--bt-present-arrival-x) var(--bt-present-arrival-y),
+            rgb(13, 47, 45) 0,
+            rgb(11, 32, 38) 30%,
+            rgb(6, 7, 26) 72%,
+            rgb(3, 4, 17) 100%
+        );
+    animation: bt-present-arrival-reveal 520ms cubic-bezier(0.2, 0.72, 0.24, 1) both;
+}
+
+@keyframes bt-present-arrival-reveal {
+    from { opacity: 1; visibility: visible; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.bt-present-arrival::before {
+        content: none;
+        animation: none;
+    }
+}
+
 html::-webkit-scrollbar {
     width: 0;
     height: 0;

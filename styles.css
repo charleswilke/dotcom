@@ -3472,15 +3472,24 @@ footer p {
         z-index: 4;
     }
 
-    /* Carry the desktop card body's cool/warm CRT bloom into the mobile copy
-       bay. The mask lets the swell dissolve into the contained artwork rather
-       than ending at a flat vertical panel boundary. */
+    /* Carry the desktop card body's cool/warm CRT bloom and raster texture into
+       the mobile copy bay. The mask lets both dissolve into the contained
+       artwork rather than ending at a flat vertical panel boundary. */
     .showcase-caption::after {
         content: '';
         position: absolute;
         inset: 0 36% 0 0;
         border-radius: inherit;
         background:
+            repeating-linear-gradient(
+                180deg,
+                rgba(248, 233, 210, 0.035) 0,
+                rgba(248, 233, 210, 0.035) 1px,
+                rgba(0, 0, 0, 0.11) 1px,
+                rgba(0, 0, 0, 0.11) 2px,
+                transparent 2px,
+                transparent 4px
+            ),
             radial-gradient(ellipse at var(--crt-cool), rgba(58, 42, 140, 0.95) 0%, transparent 55%),
             radial-gradient(ellipse at var(--crt-warm), rgba(255, 90, 54, 0.55) 0%, transparent 60%),
             linear-gradient(135deg, #1a1550, #0d0a35);

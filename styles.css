@@ -4401,8 +4401,14 @@ html {
 .feed-item-body p {
     color: rgba(248, 233, 210, 0.82);
     line-height: 1.4;
-    /* Leave room in the bottom-right corner for the angled freshness stamp */
-    padding-right: 4.5rem;
+    /* Leave room in the bottom-right corner for the angled freshness stamp.
+       Sized off the stamp's real footprint rather than by eye: the rotated
+       box measures 103px wide and sits 0.9rem in from the panel's padding
+       edge, so it reaches 117px inward while the panel's own 1.4rem padding
+       covers only 22px of that. 6.6rem leaves the remaining 95px plus a ~10px
+       breathing gap. At 4.5rem the reserve fell ~21px short and the subtitle's
+       first line ran into the stamp's raised top-left corner. */
+    padding-right: 6.6rem;
 }
 
 /* Freshness-date stamp — like a "best by" date inked onto packaging.

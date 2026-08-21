@@ -1758,38 +1758,12 @@ footer p {
         letter-spacing: 1.5px;
     }
 
-    .showcase-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.75rem;
-    }
-
-    .showcase-item {
-        min-width: 0;
-    }
-
-    .showcase-caption {
-        padding: 0.9rem 0.8rem 0.8rem;
-    }
-
-    .showcase-caption p {
-        font-size: 0.75rem;
-    }
-
-    .showcase-caption h3 {
-        font-size: 1rem;
-    }
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
     .header-title {
         font-size: 3.5rem;
         letter-spacing: 5px;
-    }
-    
-    .dimensional-showcase > .container {
-        margin-top: 0.6rem;
-        padding-top: 1.2rem;
-        padding-bottom: 2.8rem;
     }
     
     
@@ -1904,28 +1878,6 @@ footer p {
         margin-bottom: 0.25rem;
     }
     
-    .showcase-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        margin-top: 0;
-        padding-top: 0.4rem;
-    }
-    
-    .showcase-item {
-        margin: 0 1rem;
-        transform: none;
-        border-left: 3px solid var(--showcase-accent);
-    }
-
-    .showcase-caption {
-        padding: 0.95rem 0.9rem 0.9rem;
-    }
-
-    .showcase-caption h3,
-    .showcase-item-featured .showcase-caption h3 {
-        font-size: 1.25rem;
-    }
-
     .faq-grid {
         columns: 1;
         column-gap: 1.5rem;
@@ -1953,28 +1905,6 @@ footer p {
     .section-title {
         font-size: 1.8rem;
         margin-bottom: 0.25rem;
-    }
-    
-    .showcase-item {
-        margin: 0 0.5rem;
-    }
-
-    .showcase-media {
-        margin: 0.55rem 0.55rem 0;
-    }
-
-    .showcase-caption {
-        padding: 0.85rem 0.75rem 0.8rem;
-    }
-
-    .showcase-caption h3,
-    .showcase-item-featured .showcase-caption h3 {
-        font-size: 1.1rem;
-        padding-right: 3.5rem;
-    }
-
-    .showcase-caption p {
-        font-size: 0.76rem;
     }
     
     footer p {

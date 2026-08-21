@@ -132,6 +132,18 @@ Division of labor: `stamp-code.sh` owns code (`.css`/`.js` referenced from HTML)
 ### Routing pattern
 Clean URLs are rewritten to `.html` files on the server side (both `.htaccess` and `vercel.json`). Some pages (e.g. `/mixtape`) have their own `.html` entry for OG meta tags, but then redirect the browser to `/#mixtape` to open a lightbox on the main portfolio page.
 
+**None of those 22 rewrites exist locally, and the local server hides that by serving `index.html` instead.** `.claude/static-server.js` has an explicit SPA-ish fallback: any path with no file extension that isn't a real file on disk returns **200 with `index.html`**, not a 404. So `/faq`, `/mixtape`, `/gwor` and `/totally-made-up-path` all render the portfolio page locally while working correctly on Vercel.
+
+That failure is quiet in the worst way, because you get a real page rather than an error. Testing `/faq` locally silently measures `index.html`: `styles.css` instead of `subpages.css`, no `.faq-grid`, and the four Recently cards present when the subpage has none. This cost a session's verification once, and the wrong conclusion (that a subpage carried markup it doesn't) survived several tool calls before a stylesheet check caught it.
+
+**Locally, always request subpages with the extension:** `/faq.html`, `/alice-in-wonderland.html`, `/jersey-boys.html`. Confirm you are on the page you think you are before trusting any measurement:
+
+```
+curl -s http://localhost:8080/faq.html | grep -o 'subpages\.css\|styles\.css' | head -1
+```
+
+`subpages.css` means the real subpage; `styles.css` means you got the index fallback. In the browser, `document.styleSheets` and `document.title` answer the same question. Note that paths *with* an extension do 404 properly, so this only bites clean URLs.
+
 ### Main site (`index.html` + `main.js`)
 Hash-based navigation (`#portfolio`, `#writing`, `#projections`, `#about`). `main.js` (~5,400 lines) orchestrates:
 - Fetching the Substack RSS feed via `/api/substack-feed.js` (Vercel)

@@ -6,8 +6,8 @@ On touch devices main.js no longer routes the <audio> element through Web Audio
 (createMediaElementSource), because iOS suspends the AudioContext when the screen
 locks and takes the music down with it. The scope still needs a signal, so this
 tool bakes one: for every track it writes `<track>.scope.bin` next to the mp3,
-holding a time-domain snapshot and a handful of frequency bands at 20 frames per
-second, in the same 0..255 units an AnalyserNode hands back. main.js reads it by
+holding a time-domain snapshot and a handful of frequency bands at 60 frames per
+second (one per display frame, like the live analyser), in the same 0..255 units an AnalyserNode hands back. main.js reads it by
 audio.currentTime through an AnalyserNode-shaped adapter, so the drawing code is
 untouched.
 
@@ -30,9 +30,9 @@ scaled by 1/N, smoothed across frames, 20*log10 mapped from -100..-30 dB onto
 reads); bands 1..7 are bins 9, 19, 28, 38, 48, 57, 67 — the ones the bars
 visualizer samples.
 
-Pure Python + ffmpeg on purpose: tools/ has no numpy, and only ~20 windows per
-second need transforming, so a radix-2 FFT is fast enough (a few seconds per
-track; tracks run in parallel).
+Pure Python + ffmpeg on purpose: tools/ has no numpy, and only 60 windows per
+second need transforming, so a radix-2 FFT is fast enough (~5s per track;
+tracks run in parallel).
 
 Usage:
     python3 tools/make-scope-data.py            # every track listed in main.js
@@ -58,15 +58,16 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAIN_JS = os.path.join(ROOT, 'main.js')
 
 VERSION = 1
-FPS = 20
+FPS = 60
 RATE = 44100
 FFT_SIZE = 256          # matches analyser.fftSize in createVisualizerController
 WAVE_POINTS = 48
 BAND_BINS = [None, 9, 19, 28, 38, 48, 57, 67]   # None = bass (mean of bins 1..3)
 MIN_DB, MAX_DB = -100.0, -30.0
-# The analyser smooths at the display rate (~60 Hz) with tau 0.7; three display
-# frames pass per stored frame, so the equivalent per-frame factor is 0.7^3.
-SMOOTH = 0.7 ** 3
+# The analyser smooths at the display rate (~60 Hz) with tau 0.7. Derive the
+# per-stored-frame factor from FPS so a lower rate stays equivalent (at 20 fps
+# three display frames pass per stored frame, so 0.7^3).
+SMOOTH = 0.7 ** (60 / FPS)
 
 BLACKMAN = [0.42 - 0.5 * math.cos(2 * math.pi * n / FFT_SIZE)
             + 0.08 * math.cos(4 * math.pi * n / FFT_SIZE) for n in range(FFT_SIZE)]

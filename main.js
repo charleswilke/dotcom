@@ -2656,7 +2656,7 @@ function initPetLightboxLinks() {
 // survives the lock screen and gets Media Session controls — and the scope
 // reads a baked file instead: tools/make-scope-data.py writes
 // `<track>.scope.bin` next to every mp3, holding a 48-point waveform snapshot
-// and 8 frequency bands per frame at 20 fps, in AnalyserNode's 0..255 units.
+// and 8 frequency bands per frame at 60 fps, in AnalyserNode's 0..255 units.
 // This adapter exposes the same surface the drawing code already consumes
 // (fftSize, frequencyBinCount, getByteTimeDomainData, getByteFrequencyData),
 // indexed by audio.currentTime, so createModalOscilloscope and the bars
@@ -2667,7 +2667,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '1';
+const SCOPE_DATA_VERSION = '2';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];

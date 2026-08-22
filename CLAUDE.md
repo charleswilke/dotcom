@@ -213,14 +213,14 @@ python3 tools/make-scope-data.py            # every album track listed in main.j
 python3 tools/make-scope-data.py --force    # rebuild even if up to date
 ```
 
-It writes `<track>.scope.bin` next to each mp3 (20 fps, a 48-point waveform snapshot plus 8 frequency bands per frame, in `AnalyserNode`'s 0..255 units, ~190–320K per track, ~11MB across the three albums). `createScopeDataAnalyser` in main.js exposes that file through the same surface the drawing code already consumes (`fftSize`, `getByteTimeDomainData`, `getByteFrequencyData`) indexed by `audio.currentTime`, so `createModalOscilloscope` and the bars visualizer are unchanged and the mini player inherits it for free. Until the fetch lands, `getAnalyser()` returns null and the scope idles on its static line.
+It writes `<track>.scope.bin` next to each mp3 (60 fps, one frame per display frame like the live analyser; a 48-point waveform snapshot plus 8 frequency bands per frame, in `AnalyserNode`'s 0..255 units, ~570–960K per track, ~33MB across the three albums; it started at 20 fps and 11MB and was tripled on request because the trace read as stepped). `createScopeDataAnalyser` in main.js exposes that file through the same surface the drawing code already consumes (`fftSize`, `getByteTimeDomainData`, `getByteFrequencyData`) indexed by `audio.currentTime`, so `createModalOscilloscope` and the bars visualizer are unchanged and the mini player inherits it for free. Until the fetch lands, `getAnalyser()` returns null and the scope idles on its static line.
 
 Things that will bite:
 
 - **A new or replaced mp3 needs the tool re-run** or the phone's scope idles for that track (the fetch 404s quietly). The tool skips anything already up to date, so running it is free.
 - **The files live under `/audio/`, which is served immutable.** main.js appends `?v=SCOPE_DATA_VERSION` to every request; bump that constant when the format or the output changes. `bump-cover.sh` does not know about these files.
 - The tool only reads `file: 'audio/<album>/x.mp3'` entries, one directory deep. Top-level `audio/*.mp3` are the Time Dial recaps, which keep their own Web Audio chain and are untouched by all of this (so they still die on lock; separate job).
-- Pure Python + ffmpeg by design: `tools/` has no numpy, and the script's radix-2 FFT only has to transform ~20 windows per second. Numbers were calibrated against Chrome's real analyser on the same track (bass band mean 237, max 255 on both).
+- Pure Python + ffmpeg by design: `tools/` has no numpy, and the script's radix-2 FFT only has to transform 60 windows per second. Numbers were calibrated against Chrome's real analyser on the same track (bass band mean 237, max 255 on both).
 - No desktop browser can exercise the lock screen. The Chrome pane's mobile preset does match `(pointer: coarse)`, so it *does* take the native path, which is enough to verify the scope draws and no `AudioContext` is created; the actual lock-screen behavior has to be checked on a phone.
 
 ### Content organization

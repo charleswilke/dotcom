@@ -166,10 +166,9 @@ def output_path(mp3):
 def tracks_from_main_js():
     with open(MAIN_JS, encoding='utf-8') as fh:
         src = fh.read()
-    # Album tracks only — they live one directory down (audio/<album>/x.mp3).
-    # The top-level audio/*.mp3 recaps belong to the Time Dial, which keeps its
-    # own Web Audio chain and has no use for these files.
-    files = re.findall(r"file:\s*'(audio/[^'/?]+/[^'?]+\.mp3)", src)
+    # Every `file: 'audio/....mp3'` entry: the album tracks (one directory down)
+    # and the top-level Time Dial recaps, which take the same native-audio path.
+    files = re.findall(r"file:\s*'(audio/[^'?]+\.mp3)", src)
     seen = []
     for rel in files:
         if rel not in seen:

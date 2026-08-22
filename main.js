@@ -1919,6 +1919,15 @@ function initTimeDial() {
 
         function initAudio() {
             if (initialized) return;
+            // Touch devices: same deal as the album players — never hand the
+            // element to Web Audio (iOS suspends the context on lock and takes
+            // the audio with it); read the baked .scope.bin instead.
+            if (PREFER_NATIVE_AUDIO) {
+                analyserNode = createScopeDataAnalyser(recapAudio);
+                timeData = new Uint8Array(analyserNode.fftSize);
+                initialized = true;
+                return;
+            }
             try {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 analyserNode = audioCtx.createAnalyser();
@@ -2021,7 +2030,9 @@ function initTimeDial() {
             ctx.shadowColor = 'rgba(255, 190, 60, 0.9)';
             ctx.shadowBlur = 10;
 
-            if (isPlaying && analyserNode && timeData) {
+            // The baked adapter reports ready=false until its file lands; the
+            // live AnalyserNode has no such flag, so the check passes it through.
+            if (isPlaying && analyserNode && timeData && analyserNode.ready !== false) {
                 if (audioCtx && audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
@@ -2058,12 +2069,65 @@ function initTimeDial() {
         recapAudio.addEventListener('play', function() {
             if (!initialized) initAudio();
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            // Station switches swap recapAudio.src before play fires again;
+            // load() is a no-op when the URL is unchanged.
+            if (analyserNode && typeof analyserNode.load === 'function') {
+                analyserNode.load(recapAudio.currentSrc || recapAudio.src);
+            }
         });
 
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
         drawFrame();
     })();
+
+    // Media Session: lock screen / Control Center card and controls for the
+    // recap that is tuned in. prev/next step the dial, bounded at its ends.
+    if (recapAudio && 'mediaSession' in navigator) {
+        const ms = navigator.mediaSession;
+        const publish = () => {
+            const station = recapStations[currentStation];
+            if (!station) return;
+            try {
+                ms.metadata = new MediaMetadata({
+                    title: 'Substack Recap: ' + station.date,
+                    artist: 'Charles Wilke',
+                    album: 'The Time Dial',
+                    artwork: [{ src: new URL('images/og-image.jpg', window.location.href).href }]
+                });
+            } catch (e) { /* no MediaMetadata → controls still bind */ }
+        };
+        const position = () => {
+            if (typeof ms.setPositionState !== 'function') return;
+            if (!isFinite(recapAudio.duration) || recapAudio.duration <= 0) return;
+            try {
+                ms.setPositionState({
+                    duration: recapAudio.duration,
+                    playbackRate: recapAudio.playbackRate || 1,
+                    position: Math.min(recapAudio.duration, Math.max(0, recapAudio.currentTime))
+                });
+            } catch (e) { /* mid-seek range error; next event fixes it */ }
+        };
+        const handlers = {
+            play: () => { recapAudio.play().catch(() => {}); },
+            pause: () => recapAudio.pause(),
+            previoustrack: () => { if (currentStation > 0) updateStation(currentStation - 1); },
+            nexttrack: () => { if (currentStation < recapStations.length - 1) updateStation(currentStation + 1); },
+            seekbackward: (d) => { recapAudio.currentTime = Math.max(0, recapAudio.currentTime - ((d && d.seekOffset) || 15)); },
+            seekforward: (d) => { recapAudio.currentTime = Math.min(recapAudio.duration || 0, recapAudio.currentTime + ((d && d.seekOffset) || 15)); },
+            seekto: (d) => { if (d && typeof d.seekTime === 'number') recapAudio.currentTime = d.seekTime; }
+        };
+        recapAudio.addEventListener('play', () => {
+            publish();
+            Object.keys(handlers).forEach((action) => {
+                try { ms.setActionHandler(action, handlers[action]); } catch (e) { /* unsupported */ }
+            });
+            ms.playbackState = 'playing';
+        });
+        recapAudio.addEventListener('pause', () => { ms.playbackState = 'paused'; });
+        recapAudio.addEventListener('durationchange', position);
+        recapAudio.addEventListener('seeked', position);
+    }
 
     // Initialize date display transition and current station
     dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';

@@ -7,7 +7,8 @@ On touch devices main.js no longer routes the <audio> element through Web Audio
 locks and takes the music down with it. The scope still needs a signal, so this
 tool bakes one: for every track it writes `<track>.scope.bin` next to the mp3,
 holding a time-domain snapshot and a handful of frequency bands at 60 frames per
-second (one per display frame, like the live analyser), in the same 0..255 units an AnalyserNode hands back. main.js reads it by
+second for album tracks (one per display frame, like the live analyser) and 30
+for the long-form Time Dial recaps, in the same 0..255 units an AnalyserNode hands back. main.js reads it by
 audio.currentTime through an AnalyserNode-shaped adapter, so the drawing code is
 untouched.
 
@@ -58,16 +59,26 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAIN_JS = os.path.join(ROOT, 'main.js')
 
 VERSION = 1
-FPS = 60
+FPS = 60            # album tracks: one frame per display frame, like the live analyser
+RECAP_FPS = 30      # top-level audio/*.mp3 (the Time Dial recaps): ~20-minute episodes,
+                    # so the 60 fps files ran 3.9-4.6MB each; half rate halves that
 RATE = 44100
 FFT_SIZE = 256          # matches analyser.fftSize in createVisualizerController
 WAVE_POINTS = 48
 BAND_BINS = [None, 9, 19, 28, 38, 48, 57, 67]   # None = bass (mean of bins 1..3)
 MIN_DB, MAX_DB = -100.0, -30.0
 # The analyser smooths at the display rate (~60 Hz) with tau 0.7. Derive the
-# per-stored-frame factor from FPS so a lower rate stays equivalent (at 20 fps
-# three display frames pass per stored frame, so 0.7^3).
-SMOOTH = 0.7 ** (60 / FPS)
+# per-stored-frame factor from the file's fps so a lower rate stays equivalent
+# (at 30 fps two display frames pass per stored frame, so 0.7^2).
+def smoothing_for(fps):
+    return 0.7 ** (60 / fps)
+
+
+def fps_for(path):
+    # Album tracks live one directory down (audio/<album>/x.mp3); anything
+    # directly in audio/ is a Time Dial recap.
+    rel = os.path.relpath(path, os.path.join(ROOT, 'audio'))
+    return FPS if os.sep in rel else RECAP_FPS
 
 BLACKMAN = [0.42 - 0.5 * math.cos(2 * math.pi * n / FFT_SIZE)
             + 0.08 * math.cos(4 * math.pi * n / FFT_SIZE) for n in range(FFT_SIZE)]
@@ -113,9 +124,11 @@ def decode(path):
 
 
 def build(path):
+    fps = fps_for(path)
+    smooth = smoothing_for(fps)
     pcm = decode(path)
     total = len(pcm)
-    frames = int(total * FPS // RATE)
+    frames = int(total * fps // RATE)
     body = bytearray()
     smoothed = [0.0] * (FFT_SIZE // 2)
     scale = 1.0 / 32768.0
@@ -123,7 +136,7 @@ def build(path):
     db_span = MAX_DB - MIN_DB
 
     for f in range(frames):
-        start = f * RATE // FPS
+        start = f * RATE // fps
         window = pcm[start:start + FFT_SIZE]
         if len(window) < FFT_SIZE:
             window = window + array.array('h', [0] * (FFT_SIZE - len(window)))
@@ -139,7 +152,7 @@ def build(path):
         spec = fft([complex(window[n] * scale * BLACKMAN[n], 0) for n in range(FFT_SIZE)])
         for k in range(FFT_SIZE // 2):
             mag = abs(spec[k]) / FFT_SIZE
-            smoothed[k] = SMOOTH * smoothed[k] + (1 - SMOOTH) * mag
+            smoothed[k] = smooth * smoothed[k] + (1 - smooth) * mag
 
         def band_byte(mag):
             if mag <= 0:
@@ -154,9 +167,9 @@ def build(path):
                 mag = smoothed[bin_index]
             body.append(band_byte(mag))
 
-    header = struct.pack('<4sBBBBII', b'SCOP', VERSION, FPS, WAVE_POINTS,
+    header = struct.pack('<4sBBBBII', b'SCOP', VERSION, fps, WAVE_POINTS,
                          len(BAND_BINS), frames, RATE)
-    return bytes(header) + bytes(body), frames
+    return bytes(header) + bytes(body), frames, fps
 
 
 def output_path(mp3):
@@ -181,10 +194,10 @@ def process(args):
     out = output_path(mp3)
     if not force and os.path.exists(out) and os.path.getmtime(out) >= os.path.getmtime(mp3):
         return mp3, None, 'up to date'
-    data, frames = build(mp3)
+    data, frames, fps = build(mp3)
     with open(out, 'wb') as fh:
         fh.write(data)
-    return mp3, len(data), f'{frames} frames'
+    return mp3, len(data), f'{frames} frames @ {fps} fps'
 
 
 def main(argv):

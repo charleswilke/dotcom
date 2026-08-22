@@ -2642,10 +2642,131 @@ function initPetLightboxLinks() {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Precomputed scope data (the touch-device path).
+//
+// On desktop the album players pipe the <audio> element through Web Audio
+// (createMediaElementSource → AnalyserNode) so the oscilloscope reads the live
+// signal. On iOS that wiring is fatal to background playback: the moment the
+// screen locks the AudioContext is suspended, and because the element's only
+// output path runs through it, the music stops with it. Chrome on iOS is WebKit
+// too, so it behaves the same way.
+//
+// So on coarse-pointer devices the element is left alone — it plays natively,
+// survives the lock screen and gets Media Session controls — and the scope
+// reads a baked file instead: tools/make-scope-data.py writes
+// `<track>.scope.bin` next to every mp3, holding a 48-point waveform snapshot
+// and 8 frequency bands per frame at 20 fps, in AnalyserNode's 0..255 units.
+// This adapter exposes the same surface the drawing code already consumes
+// (fftSize, frequencyBinCount, getByteTimeDomainData, getByteFrequencyData),
+// indexed by audio.currentTime, so createModalOscilloscope and the bars
+// visualizer do not know the difference.
+//
+// Bump SCOPE_DATA_VERSION whenever the tool's format or output changes: the
+// files live under /audio/, which is served immutable for a year.
+// ---------------------------------------------------------------------------
+const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
+    window.matchMedia('(hover: none), (pointer: coarse)').matches);
+const SCOPE_DATA_VERSION = '1';
+
+function scopeDataUrl(trackFile) {
+    const bare = String(trackFile || '').split('?')[0];
+    if (!/\.mp3$/i.test(bare)) return '';
+    return bare.replace(/\.mp3$/i, '.scope.bin') + '?v=' + SCOPE_DATA_VERSION;
+}
+
+function createScopeDataAnalyser(audioEl) {
+    const FFT_SIZE = 256;
+    const BAND_BINS = [0, 9, 19, 28, 38, 48, 57, 67]; // band 0 = bass (bins 1..3)
+    let data = null;      // { fps, wavePoints, bandCount, frames, stride, bytes }
+    let loadedUrl = '';
+    let pending = 0;
+
+    function parse(buffer) {
+        const view = new DataView(buffer);
+        if (buffer.byteLength < 16) return null;
+        const magic = String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3));
+        if (magic !== 'SCOP' || view.getUint8(4) !== 1) return null;
+        const fps = view.getUint8(5);
+        const wavePoints = view.getUint8(6);
+        const bandCount = view.getUint8(7);
+        const frames = view.getUint32(8, true);
+        const stride = wavePoints + bandCount;
+        const bytes = new Uint8Array(buffer, 16);
+        if (bytes.length < frames * stride) return null;
+        return { fps, wavePoints, bandCount, frames, stride, bytes };
+    }
+
+    function load(trackFile) {
+        const url = scopeDataUrl(trackFile);
+        if (!url || url === loadedUrl) return;
+        loadedUrl = url;
+        data = null;
+        const token = ++pending;
+        fetch(url).then(r => r.ok ? r.arrayBuffer() : null).then(buffer => {
+            if (token !== pending || !buffer) return;
+            data = parse(buffer);
+        }).catch(() => { /* no data → the scope idles on its static line */ });
+    }
+
+    function frameOffset() {
+        if (!data || !audioEl) return -1;
+        const index = Math.min(data.frames - 1, Math.max(0, Math.floor(audioEl.currentTime * data.fps)));
+        return index * data.stride; // `bytes` already starts past the 16-byte header
+    }
+
+    // Catmull-Rom through the stored points so 48 samples read as one smooth
+    // trace across 256 output samples rather than a 48-segment polyline.
+    function getByteTimeDomainData(out) {
+        const off = frameOffset();
+        if (off < 0) { out.fill(128); return; }
+        const n = data.wavePoints;
+        const bytes = data.bytes;
+        const last = n - 1;
+        for (let i = 0; i < out.length; i++) {
+            const pos = (i / (out.length - 1)) * last;
+            const i1 = Math.floor(pos);
+            const t = pos - i1;
+            const i0 = Math.max(0, i1 - 1);
+            const i2 = Math.min(last, i1 + 1);
+            const i3 = Math.min(last, i1 + 2);
+            const p0 = bytes[off + i0], p1 = bytes[off + i1], p2 = bytes[off + i2], p3 = bytes[off + i3];
+            const v = 0.5 * ((2 * p1) + (-p0 + p2) * t +
+                (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+                (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+            out[i] = v < 0 ? 0 : v > 255 ? 255 : v;
+        }
+    }
+
+    // Spread the 8 stored bands back across 128 bins: bins 0..3 carry the bass
+    // band, and every other bin takes the nearest stored band at or below it.
+    function getByteFrequencyData(out) {
+        const off = frameOffset();
+        if (off < 0) { out.fill(0); return; }
+        const bands = data.bytes;
+        const base = off + data.wavePoints;
+        let band = 0;
+        for (let k = 0; k < out.length; k++) {
+            while (band + 1 < BAND_BINS.length && k >= BAND_BINS[band + 1]) band++;
+            out[k] = bands[base + band];
+        }
+    }
+
+    return {
+        fftSize: FFT_SIZE,
+        frequencyBinCount: FFT_SIZE / 2,
+        load,
+        get ready() { return !!data; },
+        getByteTimeDomainData,
+        getByteFrequencyData
+    };
+}
+
 function createVisualizerController(options) {
     const audio = registerManagedAudio(options.audio);
     const visualizerCanvas = options.visualizerCanvas;
     const getPalette = options.getPalette;
+    const scopeData = options.scopeData || null; // precomputed adapter (touch path)
     const isLocalFile = window.location.protocol === 'file:';
     let animationId = null;
     let isPlaying = false;
@@ -2657,6 +2778,15 @@ function createVisualizerController(options) {
 
     function initAudioContext() {
         if (!audio || audioContext || isLocalFile) return;
+        if (scopeData) {
+            // Never touch Web Audio here: createMediaElementSource would capture
+            // the element's output and hand it to a context iOS suspends on lock.
+            if (analyser === scopeData) return;
+            analyser = scopeData;
+            dataArray = new Uint8Array(scopeData.frequencyBinCount);
+            useRealAnalyser = true;
+            return;
+        }
         try {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioContext.createAnalyser();
@@ -2767,7 +2897,10 @@ function createVisualizerController(options) {
         }
     }
 
-    return { start, stop, resize, getAnalyser: () => analyser, getAudioContext: () => audioContext };
+    // The precomputed adapter reads as "no analyser" until its file has landed,
+    // so the scope idles on its static line rather than drawing a flat 128.
+    const getAnalyser = () => (analyser && analyser === scopeData && !scopeData.ready) ? null : analyser;
+    return { start, stop, resize, getAnalyser, getAudioContext: () => audioContext };
 }
 
 function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options = {}) {
@@ -4080,7 +4213,10 @@ function createAlbumPlayer(config) {
         updateHistoryHash(buildMusicHash(getRouteKey(currentIndex), tracks[currentIndex]), method);
     }
 
-    const visualizer = createVisualizerController({ audio: audioEl, visualizerCanvas, getPalette });
+    // Touch devices: leave the element's audio native (it has to outlive the lock
+    // screen) and feed the scope from the baked per-track file instead.
+    const scopeData = PREFER_NATIVE_AUDIO ? createScopeDataAnalyser(audioEl) : null;
+    const visualizer = createVisualizerController({ audio: audioEl, visualizerCanvas, getPalette, scopeData });
 
     const oscilloscope = createModalOscilloscope(
         oscCanvas,
@@ -4109,6 +4245,8 @@ function createAlbumPlayer(config) {
             audio.src = tracks[index].file;
             audio.load();
         }
+        if (scopeData) scopeData.load(tracks[index].file);
+        updateMediaSession();
         if (hooks.afterLoadTrack) hooks.afterLoadTrack(index, { wasPlaying, autoAdvance, oscilloscope });
         updateNowPlayingDisplays({
             trackDisplay,
@@ -4140,6 +4278,54 @@ function createAlbumPlayer(config) {
 
     function resizeCanvas() {
         visualizer.resize();
+    }
+
+    // Media Session: lock screen / Control Center / headphone controls. Metadata
+    // is (re)published on every track change and on play, so whichever album
+    // played most recently owns the system card; the handlers call the same
+    // functions the on-screen buttons do.
+    const mediaSession = ('mediaSession' in navigator) ? navigator.mediaSession : null;
+    function updateMediaSession() {
+        if (!mediaSession || !audio) return;
+        const track = tracks[currentIndex];
+        if (!track) return;
+        const artSrc = track.cover || (coverImg ? coverImg.src : '');
+        const artwork = artSrc ? [{ src: new URL(artSrc, window.location.href).href }] : [];
+        try {
+            mediaSession.metadata = new MediaMetadata({
+                title: track.title || '',
+                artist: 'Charles Wilke',
+                album: albumTitle || '',
+                artwork
+            });
+        } catch (e) { /* MediaMetadata unsupported → controls still work without a card */ }
+    }
+    function updateMediaPosition() {
+        if (!mediaSession || !audio || typeof mediaSession.setPositionState !== 'function') return;
+        if (!isFinite(audio.duration) || audio.duration <= 0) return;
+        try {
+            mediaSession.setPositionState({
+                duration: audio.duration,
+                playbackRate: audio.playbackRate || 1,
+                position: Math.min(audio.duration, Math.max(0, audio.currentTime))
+            });
+        } catch (e) { /* position out of range mid-seek; next timeupdate fixes it */ }
+    }
+    function claimMediaSession() {
+        if (!mediaSession || !audio) return;
+        updateMediaSession();
+        const handlers = {
+            play: () => playTrack(),
+            pause: () => audio.pause(),
+            previoustrack: () => { loadTrack((currentIndex - 1 + tracks.length) % tracks.length); playTrack(); },
+            nexttrack: () => { loadTrack((currentIndex + 1) % tracks.length); playTrack(); },
+            seekbackward: (d) => { audio.currentTime = Math.max(0, audio.currentTime - ((d && d.seekOffset) || 10)); },
+            seekforward: (d) => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + ((d && d.seekOffset) || 10)); },
+            seekto: (d) => { if (d && typeof d.seekTime === 'number') audio.currentTime = d.seekTime; }
+        };
+        Object.keys(handlers).forEach((action) => {
+            try { mediaSession.setActionHandler(action, handlers[action]); } catch (e) { /* unsupported action */ }
+        });
     }
 
     function openPlayer(requestedTrackSlug = '', historyMethod = 'pushState', extra = {}) {
@@ -4253,14 +4439,21 @@ function createAlbumPlayer(config) {
         audio.addEventListener('play', () => {
             refreshPlayGlyph();
             visualizer.start();
+            claimMediaSession();
+            if (mediaSession) mediaSession.playbackState = 'playing';
             if (hooks.onPlay) hooks.onPlay(currentIndex);
         });
 
         audio.addEventListener('pause', () => {
             refreshPlayGlyph();
             visualizer.stop();
+            if (mediaSession) mediaSession.playbackState = 'paused';
             if (hooks.onPause) hooks.onPause();
         });
+
+        audio.addEventListener('durationchange', updateMediaPosition);
+        audio.addEventListener('seeked', updateMediaPosition);
+        audio.addEventListener('ratechange', updateMediaPosition);
 
         audio.addEventListener('ended', () => {
             // Only advance to the next track if not at the end; never loop back.

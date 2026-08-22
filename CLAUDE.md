@@ -202,6 +202,27 @@ If any of this comes back: every card now runs the base tile transform unmodifie
 - `beta`/`gamma` are fixed to the hardware and swap in landscape, so the delta gets rotated by `screen.orientation.angle` before it means anything.
 - Add `?foildebug` to the URL for a `window.__foilMotion` handle: live state plus `peakPitch`/`peakRoll` against their swings, which is how you tell a dead axis from one you aren't moving far enough. No desktop browser can produce a real reading, so tuning has to happen on a phone.
 
+### Album players on touch: native audio + baked scope data
+
+On desktop each album player routes its `<audio>` through Web Audio (`createMediaElementSource` → `AnalyserNode`) so the oscilloscope reads the live signal. **On coarse-pointer devices (`PREFER_NATIVE_AUDIO` in main.js) Web Audio is never touched.** iOS suspends the `AudioContext` when the screen locks, and because the element's only output path runs through it, the music stops with it. Chrome on iOS is WebKit, so it behaves identically. Leaving the element native is what lets playback survive the lock screen, and the same change is what makes the Media Session card (title, artist, album, cover, prev/next/seek handlers in `createAlbumPlayer`) worth having.
+
+The scope still needs a signal, so it reads a precomputed file instead:
+
+```
+python3 tools/make-scope-data.py            # every album track listed in main.js
+python3 tools/make-scope-data.py --force    # rebuild even if up to date
+```
+
+It writes `<track>.scope.bin` next to each mp3 (20 fps, a 48-point waveform snapshot plus 8 frequency bands per frame, in `AnalyserNode`'s 0..255 units, ~190–320K per track, ~11MB across the three albums). `createScopeDataAnalyser` in main.js exposes that file through the same surface the drawing code already consumes (`fftSize`, `getByteTimeDomainData`, `getByteFrequencyData`) indexed by `audio.currentTime`, so `createModalOscilloscope` and the bars visualizer are unchanged and the mini player inherits it for free. Until the fetch lands, `getAnalyser()` returns null and the scope idles on its static line.
+
+Things that will bite:
+
+- **A new or replaced mp3 needs the tool re-run** or the phone's scope idles for that track (the fetch 404s quietly). The tool skips anything already up to date, so running it is free.
+- **The files live under `/audio/`, which is served immutable.** main.js appends `?v=SCOPE_DATA_VERSION` to every request; bump that constant when the format or the output changes. `bump-cover.sh` does not know about these files.
+- The tool only reads `file: 'audio/<album>/x.mp3'` entries, one directory deep. Top-level `audio/*.mp3` are the Time Dial recaps, which keep their own Web Audio chain and are untouched by all of this (so they still die on lock; separate job).
+- Pure Python + ffmpeg by design: `tools/` has no numpy, and the script's radix-2 FFT only has to transform ~20 windows per second. Numbers were calibrated against Chrome's real analyser on the same track (bass band mean 237, max 255 on both).
+- No desktop browser can exercise the lock screen. The Chrome pane's mobile preset does match `(pointer: coarse)`, so it *does* take the native path, which is enough to verify the scope draws and no `AudioContext` is created; the actual lock-screen behavior has to be checked on a phone.
+
 ### Content organization
 - `songs/{album}/{song-name}/` — metadata per song
 - `audio/` — MP3s organized by project

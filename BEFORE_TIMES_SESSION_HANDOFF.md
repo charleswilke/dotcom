@@ -1118,13 +1118,26 @@ Every recovered piece now advances a matched image-generated background plate:
 `knowledge-maze-crack-stage-{1,2,3}-v1.webp`. The sequence moves from a physical
 hairline fissure to branching ring damage to a heavily separated pre-breach
 state. The SVG fractures are gone entirely: the rupture is sold physically
-instead, with a short decaying room shake, a mint light bloom that flares out
-of the fissure, and twelve soft CSS smoke puffs (plus the original debris
-chips) that escape along the crack line. All rupture animations are wrapped in
-`prefers-reduced-motion: no-preference`, and every smoke delay + duration
-resolves inside the 1350ms `is-rupturing` window so nothing is cut off. After
-all three pieces are present, `Ask a better question` starts the rupture. The
-final plate crossfades to
+instead, with a short decaying room shake, a mint light bloom, and six
+image-generated alpha frames that progress from the first impact burst through
+two expansion/opening intermediates to falling dust curtains, crumbles, and a
+final residual drift. Their PNG masters are
+`knowledge-maze-rupture-frame-{1,1b,2,2b,3,3b}-v1.png`; the page serves the
+corresponding alpha WebPs (about 36–175 KB each). The complete frames share the
+room's `1672 × 941` coordinate space, so the generated fragments align with the
+fracture while CSS adds slight independent scale and downward drift between
+beats. The effect layer sits at wall depth. A clipped, pixel-identical duplicate
+of the solved plate restores the center console above it as a foreground
+occluder, so dust can escape around the housing without washing across the
+monitor, controls, or desk. During `is-rupturing`, the pre-breach plate yields
+under the first dense frame and the final architectural plate resolves beneath it. All rupture
+animations are wrapped in `prefers-reduced-motion: no-preference`, and the
+six frame animations finish inside the existing 1350ms window. The present-day
+portal is unhidden when the rupture begins and starts revealing 140ms into that
+window, beneath the early dust, while the permanent solved state still commits
+at 1350ms. After all three pieces are present, `Ask a better question` starts
+the rupture. The final
+plate is
 `images/before-times/knowledge-maze/knowledge-maze-breached-v3.webp`; its dark
 aperture is filled by a muted, looping six-second screen recording of the real
 present-day homepage at a `390 × 844` phone viewport. The viewport remains
@@ -1155,11 +1168,11 @@ scar for the session. This is intentionally not a security or progress gate:
 the normal lobby doorway and the permanent Return portal remain available.
 
 The exact built-in image-generation prompts, including the three crack stages,
-broken doorway, and both K-27 documents, are recorded in
-`tools/knowledge-maze-imagegen-prompts.md`. The terminal, present-day portal,
-rupture shake/bloom/smoke/debris, and lobby scar remain code-native layers.
-Tune placement, copy, and timing in HTML/CSS/JS; rebuild the masked plates only
-when changing the physical maze damage.
+broken doorway, six rupture effect frames, and both K-27 documents, are
+recorded in `tools/knowledge-maze-imagegen-prompts.md`. The terminal,
+present-day portal, rupture shake/bloom/timing, and lobby scar remain
+code-native layers. Tune placement, copy, and timing in HTML/CSS/JS; rebuild
+the masked plates only when changing the physical maze damage.
 
 ## Photography contact-sheet recovery (August 9, 2026)
 

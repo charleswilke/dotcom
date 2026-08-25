@@ -2074,6 +2074,14 @@
         showStatus('The terminal is searching the walls instead of the maze.', 4200);
 
         const beginRupture = () => {
+            // Let the live present appear beneath the first dust hit instead of
+            // waiting for the full rupture to finish. The solved state still
+            // commits at the end of the 1350ms effects window.
+            knowledgePresentPortal.hidden = false;
+            void knowledgePresentPortal.offsetWidth;
+            if (!document.hidden && !prefersReducedMotion.matches) {
+                knowledgePresentVideo.play().catch(() => {});
+            }
             knowledgeScene.classList.add('is-rupturing');
             knowledgeTerminalResponse.textContent = 'I found a shorter path.';
             knowledgeRuptureTimer = window.setTimeout(() => {

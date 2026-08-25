@@ -133,6 +133,110 @@ Invariants: preserve exact camera, crop, dimensions, perspective, terminal and b
 Constraints: no people, no readable text, no logos, no watermark, no whole-scene redesign, no changed furniture, no changed terminal, no destination content inside the aperture. Output only the finished full-room plate.
 ```
 
+## Alpha rupture animation frames
+
+Built-in image generation using the Stage 3 and breached room plates as
+placement, material, and style references. The six outputs share the room's
+`1672 × 941` coordinate space. Runtime assets:
+`knowledge-maze-rupture-frame-{1,1b,2,2b,3,3b}-v1.webp`; RGBA PNG masters sit
+beside them. Frames 1, 2, and 3 are the original key poses. Frames 1b and 2b
+were generated between their neighboring anchors; Frame 3b advances the final
+anchor into a trailing residual-dust pose.
+
+The built-in tool previewed a checkerboard but saved RGB rather than an alpha
+channel on this run. The selected art was therefore matte-extracted from the
+neutral checker with ffmpeg (`colorkey=0xFFFFFF:0.11:0.08`) and verified with
+`sips -g hasAlpha` before WebP conversion. Do not treat the preview checker as
+proof of transparency; validate the file on disk.
+
+### Frame 1 // impact burst
+
+```text
+Use case: stylized-concept
+Asset type: FRAME 1 OF 3, full-canvas RGBA rupture-effects overlay for a 1672×941 interactive illustrated website room.
+Input image: Image 1 is a style, material, lighting, scale, and exact placement reference only. Do not reproduce any part of the room itself.
+Primary request: Create the first instant of the Knowledge Maze wall finally breaking open: a compact, forceful burst of pulverized masonry dust and small crumbling fragments exploding from the exact center vertical fracture of the circular maze.
+Scene/backdrop: a genuinely transparent 16:9 canvas. Every pixel not occupied by dust or debris must have zero alpha.
+Subject: one localized vertical eruption centered near x=50%, y=28% of the full canvas. Dense sharp inner burst around the fracture from roughly y=8% to 49%; smoky lobes push asymmetrically outward but remain mostly within x=39% to 61%. Include many tiny chips plus about 8 distinct small irregular fragments, with dark charcoal-violet stone faces and a few restrained electric-mint rim-lit edges. Dust is translucent warm gray-violet with mint light catching only the inner vapor. Highest visual density at center, feathering naturally to true transparency.
+Style/medium: richly hand-inked graphic-novel production art matching Image 1, painterly cel shading, tactile worn stone and metal, irregular line weight, no photorealism, no vector look.
+Composition/framing: full 1672×941-equivalent coordinate canvas; preserve empty transparent space around the localized effect so it aligns over Image 1. Do not crop the eruption into a standalone object.
+Lighting/mood: violent but exhilarating; restrained mint backlight from the fracture, dark archive dust, not toxic neon.
+Constraints: output only the transient dust-and-debris overlay with genuine alpha transparency; no room, no wall, no maze rings, no terminal, no floor, no papers, no furniture, no rectangular haze, no opaque or colored background, no text, no logo, no watermark. Keep debris small enough to plausibly come from the existing broken maze.
+```
+
+### Frame 1b // burst expansion in-between
+
+```text
+Use case: precise-object-edit
+Asset type: NEW IN-BETWEEN FRAME 1B for a full-canvas 1672×941 RGBA wall-rupture animation overlay.
+Input images: Image 1 is the accepted earlier impact-burst frame. Image 2 is the accepted later opening-shock-cloud frame. Both are immutable endpoints and exact canvas/placement references.
+Primary request: Create the physically plausible animation frame exactly between Image 1 and Image 2, approximately 120 milliseconds after Image 1. Interpolate the existing effect—do not invent a different explosion.
+Motion state: the dense central masonry burst has just begun splitting into left and right lobes. A narrow dark transparent seam is starting to open vertically through the middle, but it is much narrower and less clear than Image 2. The same recognizable large fragments from Image 1 have traveled roughly halfway toward their Image 2 positions, rotating slightly along consistent outward-and-downward trajectories. Fine chips begin forming curved trails. Dust volume is slightly broader and softer than Image 1 but still denser and more energetic than Image 2.
+Scene/backdrop: genuinely transparent full canvas aligned pixel-for-pixel with both inputs; zero alpha wherever there is no transient dust, chip, or free-flying fragment.
+Style/medium: preserve the hand-inked graphic-novel production art, painterly cel shading, charcoal-violet masonry, irregular fragment outlines, and restrained mint rim light of both endpoints.
+Composition: preserve the exact 1672×941 frame, center of force near x=50%, y=29%. Keep all effect material mainly within x=37%–63%, y=3%–62%.
+Invariants: same fragment identities, approximate sizes, palette, line weight, light direction, and effect scale as the endpoints. No debris teleporting, regrowing, or reversing direction.
+Constraints: output only the intermediate dust-and-debris overlay with genuine alpha transparency; no room, wall, maze, console, screen, desk, floor, furniture, portal picture, rectangular haze, checkerboard, opaque background, text, logo, or watermark.
+```
+
+### Frame 2 // opening shock cloud
+
+```text
+Use case: precise-object-edit
+Asset type: FRAME 2 OF 3, full-canvas RGBA rupture-effects overlay for the same 1672×941 interactive website sequence.
+Input images: Image 1 is the accepted transparent Frame 1 effect and exact canvas/placement reference. Image 2 is the solved room endpoint and style/scale reference only; never reproduce its room or wall.
+Primary request: Advance the transient dust and debris from Image 1 about 240 milliseconds. The wall has now opened, so remove the dense central wall-like mosaic and make the middle increasingly transparent. Expand the dusty shock cloud asymmetrically outward and downward; larger fragments have traveled farther from center, tilted, and begun falling, while smaller chips form curved ballistic trails. Preserve the same debris materials and hand-inked production-art style.
+Scene/backdrop: genuinely transparent canvas, aligned identically to Image 1. Every pixel not occupied by transient dust or free-flying fragments must have zero alpha.
+Subject/state: broad broken cloud centered near x=50%, y=31%, extending mostly x=35% to 65% and y=4% to 66%. Leave a noticeably clearer irregular vertical channel through the middle so the new doorway in Image 2 can begin to appear. About 8 consistent irregular chunks are farther outward and slightly lower than Frame 1; many small crumbs trail below. Translucent violet-gray masonry dust has softer, larger lobes and lower opacity than Frame 1. Restrained mint light grazes only fragment edges and the innermost dust.
+Style/medium: match Image 1 and Image 2: hand-inked graphic-novel production art, painterly cel shading, tactile charcoal-violet stone and metal, irregular outlines.
+Constraints/invariants: evolve only the effects from Image 1; no room, wall, maze rings, terminal, floor, furniture, papers, doorway picture, rectangular haze, opaque or colored background, text, logo, or watermark. Output only one full-canvas transparent overlay.
+```
+
+### Frame 2b // falling edge columns in-between
+
+```text
+Use case: precise-object-edit
+Asset type: NEW IN-BETWEEN FRAME 2B for a full-canvas 1672×941 RGBA wall-rupture animation overlay.
+Input images: Image 1 is the accepted earlier opening-shock-cloud frame. Image 2 is the accepted later falling-settle frame. Both are immutable endpoints and exact canvas/placement references.
+Primary request: Create the physically plausible animation frame exactly between Image 1 and Image 2, approximately 180 milliseconds after Image 1. Interpolate the existing dust and debris; do not invent a new rupture.
+Motion state: the center doorway is now substantially clear. The broad shock cloud from Image 1 has separated into two uneven vertical dust columns hugging the left and right broken wall edges, but the columns remain broader and more turbulent than Image 2. The same recognizable fragments have fallen and rotated roughly halfway toward their Image 2 positions; the largest outward pieces are exiting or reducing in prominence while smaller crumbs arc downward under gravity. Fine powder begins streaming down instead of expanding outward.
+Scene/backdrop: genuinely transparent full canvas aligned pixel-for-pixel with both inputs; zero alpha wherever there is no transient dust, chip, or free-falling fragment.
+Style/medium: preserve the hand-inked graphic-novel production art, painterly cel shading, translucent violet-gray masonry dust, charcoal-violet fragments, irregular outlines, and restrained mint edge glints of both endpoints.
+Composition: preserve the exact 1672×941 frame. Keep the open center from approximately x=46%–55% mostly transparent; effect material remains mainly within x=36%–64%, y=5%–74%.
+Invariants: same physical event, fragment identities, palette, line weight, lighting direction, and effect scale. Motion must continue outward and downward with no debris teleporting, regrowing, or reversing.
+Constraints: output only the intermediate dust-and-debris overlay with genuine alpha transparency; no room, wall, maze, console, screen, desk, floor, furniture, portal picture, rectangular haze, checkerboard, opaque background, text, logo, or watermark.
+```
+
+### Frame 3 // falling settle
+
+```text
+Use case: precise-object-edit
+Asset type: FRAME 3 OF 3, final full-canvas RGBA dust-settle overlay for the same 1672×941 interactive rupture sequence.
+Input images: Image 1 is accepted transparent Frame 2 and the exact canvas/continuity reference. Image 2 is the solved room endpoint and style/scale reference only; never reproduce its room or architecture.
+Primary request: Advance the transient effects from Image 1 another 360 milliseconds into the falling and settling beat. The doorway is fully open and must remain visually readable through a mostly clear center. Most explosive dust has thinned and drifted downward. Stone fragments are smaller in apparent visual weight, lower in the frame, tumbling and falling under gravity; fine crumbs and two uneven translucent dust curtains descend along the left and right broken edges.
+Scene/backdrop: genuinely transparent canvas aligned identically to the prior frames; zero alpha everywhere without dust or free-falling debris.
+Subject/state: a faint, broad violet-gray dust veil concentrated from x=37% to 63%, y=25% to 73%, with the densest remaining wisps beside—not inside—the irregular center doorway. Keep the center channel from roughly x=46% to 55% mostly transparent. Retain about 6 recognizable charcoal-violet fragments now lower and closer to the centerline, plus many tiny falling crumbs; a few restrained mint glints on edges nearest the opening. Overall opacity and energy clearly lower than Frame 2, with soft natural alpha falloff.
+Style/medium: consistent hand-inked graphic-novel production art, painterly cel shading, tactile worn stone and metal, matching both inputs.
+Lighting/mood: aftermath settling into a magical open path; soft residual mint backlight, dark archive dust.
+Constraints/invariants: evolve only Image 1 effects; no room, wall, maze rings, terminal, floor, furniture, papers, portal image, rectangular haze, opaque or colored background, text, logo, or watermark. Output only the full-canvas transparent overlay.
+```
+
+### Frame 3b // trailing residual dust
+
+```text
+Use case: precise-object-edit
+Asset type: NEW TRAILING FRAME 3B, the sixth and final full-canvas 1672×941 RGBA overlay in the Knowledge Maze wall-rupture animation.
+Input image: Image 1 is the accepted falling-settle frame and exact canvas, style, fragment, and placement reference.
+Primary request: Advance only the transient effects from Image 1 approximately 220 milliseconds into the last fading aftermath frame.
+Motion state: the broken doorway is completely clear. Both dust curtains have descended, stretched, and thinned substantially; their upper halves are now faint wisps hugging the broken wall edges, while the remaining powder concentrates lower in the frame. Existing larger fragments from Image 1 have continued downward and mostly exited; retain at most four smaller recognizable tumbling pieces near the lower half plus sparse fine crumbs. Do not add any new chunks. Residual mint glints are very faint.
+Scene/backdrop: genuinely transparent full canvas aligned pixel-for-pixel with Image 1; zero alpha wherever there is no transient dust, chip, or free-falling fragment.
+Style/medium: preserve Image 1's hand-inked graphic-novel production art, painterly cel shading, soft violet-gray powder, charcoal-violet fragments, irregular outlines, and subtle mint edge light.
+Composition: preserve the exact 1672×941 frame. Keep x=45%–56% fully transparent from top to bottom. Remaining effect material stays mainly beside the opening and below y=36%, with natural soft falloff.
+Lighting/mood: quiet final aftermath; significantly lower opacity and energy than Image 1.
+Invariants: advance only the existing dust and debris under gravity. Same palette, line weight, scale, and light direction; no regrowth, reverse motion, or new blast.
+Constraints: output only the trailing dust-and-debris overlay with genuine alpha transparency; no room, wall, maze, console, screen, desk, floor, furniture, portal picture, rectangular haze, checkerboard, opaque background, text, logo, or watermark.
+```
+
 ## Before document // The Answer Exists
 
 Built-in image generation using the contained room plate as a style/world

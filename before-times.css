@@ -3180,8 +3180,9 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
 }
 
 /* The rupture reads as physical failure: the room shakes, light blooms out of
-   the fissure, and pulverized wall escapes as smoke. The crack-stage plates
-   already tell the damage story, so no drawn-on crack lines here. */
+   the fissure, and six image-generated alpha frames carry the actual dust,
+   chips, and tumbling wall fragments. The crack-stage plates already tell the
+   damage story, so no drawn-on crack lines here. */
 .bt-knowledge-bloom {
     position: absolute;
     z-index: 2;
@@ -3196,46 +3197,55 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
     filter: blur(2px);
 }
 
-.bt-knowledge-smoke {
+.bt-knowledge-rupture-frames {
     position: absolute;
     z-index: 3;
-    top: 6%;
-    left: 45.5%;
-    width: 9%;
-    height: 46%;
+    inset: 0;
     pointer-events: none;
 }
 
-.bt-knowledge-smoke i {
+.bt-knowledge-rupture-frame {
     position: absolute;
-    left: 50%;
-    top: var(--bt-smoke-top, 50%);
-    width: 3.4cqw;
-    aspect-ratio: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     display: block;
+    object-fit: fill;
     opacity: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle at 46% 42%, rgba(201, 194, 206, 0.62), rgba(148, 141, 156, 0.34) 52%, transparent 74%);
-    filter: blur(0.4cqw);
+    transform-origin: 50% 30%;
+    /* The generated dust was authored against a neutral extraction matte.
+       Darkening it here seats the violet-gray powder in this near-black room
+       while leaving the mint-lit stone edges legible. */
+    filter: brightness(0.58) saturate(0.82) contrast(1.08);
+    will-change: opacity, transform;
 }
 
-/* Every third puff catches the mint light spilling from the breach. */
-.bt-knowledge-smoke i:nth-child(3n) {
-    background: radial-gradient(circle at 50% 46%, rgba(158, 240, 218, 0.44), rgba(0, 247, 194, 0.18) 48%, transparent 72%);
+/* The terminal is painted into the room plate, so a normal effects layer would
+   sit in front of both wall and console. Repeating the pixel-identical solved
+   plate through this tight silhouette puts the physical console back in the
+   foreground. Dust can escape from the wall and around the housing, but never
+   wash across the screen, controls, or desk. */
+.bt-knowledge-console-occluder {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: fill;
+    pointer-events: none;
+    opacity: 0;
+    clip-path: polygon(
+        35.5% 51%, 37.5% 48.6%, 62.8% 48.6%, 65.2% 51%,
+        67.7% 66%, 74.7% 74%, 75.8% 100%, 24.2% 100%,
+        25.3% 74%, 32.4% 66%
+    );
 }
 
-.bt-knowledge-smoke i:nth-child(1)  { --bt-smoke-top: 8%;  --bt-smoke-x: -2.6cqw; --bt-smoke-y: -5.4cqw; --bt-smoke-delay: 40ms;  --bt-smoke-scale: 1.5; }
-.bt-knowledge-smoke i:nth-child(2)  { --bt-smoke-top: 16%; --bt-smoke-x: 3.1cqw;  --bt-smoke-y: -4.6cqw; --bt-smoke-delay: 210ms; --bt-smoke-scale: 1.9; }
-.bt-knowledge-smoke i:nth-child(3)  { --bt-smoke-top: 26%; --bt-smoke-x: -3.8cqw; --bt-smoke-y: -3.2cqw; --bt-smoke-delay: 0ms;   --bt-smoke-scale: 2.2; }
-.bt-knowledge-smoke i:nth-child(4)  { --bt-smoke-top: 34%; --bt-smoke-x: 4.2cqw;  --bt-smoke-y: -2.4cqw; --bt-smoke-delay: 300ms; --bt-smoke-scale: 1.6; }
-.bt-knowledge-smoke i:nth-child(5)  { --bt-smoke-top: 43%; --bt-smoke-x: -4.6cqw; --bt-smoke-y: -1.4cqw; --bt-smoke-delay: 120ms; --bt-smoke-scale: 2.4; --bt-smoke-peak: 0.82; }
-.bt-knowledge-smoke i:nth-child(6)  { --bt-smoke-top: 50%; --bt-smoke-x: 5cqw;    --bt-smoke-y: -0.8cqw; --bt-smoke-delay: 260ms; --bt-smoke-scale: 1.8; }
-.bt-knowledge-smoke i:nth-child(7)  { --bt-smoke-top: 58%; --bt-smoke-x: -4.2cqw; --bt-smoke-y: 0.6cqw;  --bt-smoke-delay: 180ms; --bt-smoke-scale: 2.1; }
-.bt-knowledge-smoke i:nth-child(8)  { --bt-smoke-top: 66%; --bt-smoke-x: 3.6cqw;  --bt-smoke-y: 1.2cqw;  --bt-smoke-delay: 360ms; --bt-smoke-scale: 1.5; }
-.bt-knowledge-smoke i:nth-child(9)  { --bt-smoke-top: 75%; --bt-smoke-x: -2.9cqw; --bt-smoke-y: 1.8cqw;  --bt-smoke-delay: 90ms;  --bt-smoke-scale: 1.9; --bt-smoke-peak: 0.8; }
-.bt-knowledge-smoke i:nth-child(10) { --bt-smoke-top: 84%; --bt-smoke-x: 3.3cqw;  --bt-smoke-y: 2.2cqw;  --bt-smoke-delay: 420ms; --bt-smoke-scale: 1.4; }
-.bt-knowledge-smoke i:nth-child(11) { --bt-smoke-top: 30%; --bt-smoke-x: 1.2cqw;  --bt-smoke-y: -6.2cqw; --bt-smoke-delay: 330ms; --bt-smoke-scale: 2.6; --bt-smoke-peak: 0.5; }
-.bt-knowledge-smoke i:nth-child(12) { --bt-smoke-top: 62%; --bt-smoke-x: -1.4cqw; --bt-smoke-y: 3cqw;    --bt-smoke-delay: 450ms; --bt-smoke-scale: 2.3; --bt-smoke-peak: 0.52; }
+.bt-knowledge-scene.is-rupturing .bt-knowledge-console-occluder,
+.bt-knowledge-scene.is-breached .bt-knowledge-console-occluder {
+    opacity: 1;
+}
 
 @media (prefers-reduced-motion: no-preference) {
     /* bt-knowledge-enter is re-listed so toggling is-rupturing never restarts
@@ -3250,50 +3260,45 @@ body.bt-calibrating-production.bt-production-calibration-hide-screens .bt-produc
         animation: bt-knowledge-bloom 980ms cubic-bezier(0.22, 0.68, 0.31, 1) both;
     }
 
-    /* Longest delay (450ms) + duration stays inside the 1350ms rupture window
-       in before-times.js, so no puff is cut off when is-rupturing is removed. */
-    .bt-knowledge-scene.is-rupturing .bt-knowledge-smoke i {
-        animation: bt-knowledge-smoke 880ms cubic-bezier(0.3, 0.62, 0.4, 0.98) both;
-        animation-delay: var(--bt-smoke-delay, 0ms);
+    /* Open the architectural plate beneath the first opaque dust hit. Holding
+       the final values keeps it registered until JS commits is-breached at the
+       end of the same 1350ms window. */
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-art-crack-three {
+        animation: bt-knowledge-crack-release 520ms cubic-bezier(0.22, 0.68, 0.31, 1) both;
+    }
+
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-art-breached {
+        animation: bt-knowledge-breach-reveal 680ms cubic-bezier(0.2, 0.72, 0.24, 1) both;
+    }
+
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-rupture-frame-one {
+        animation: bt-knowledge-rupture-frame-one 1.35s cubic-bezier(0.2, 0.66, 0.32, 1) both;
+    }
+
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-rupture-frame-one-b {
+        animation: bt-knowledge-rupture-frame-one-b 1.35s cubic-bezier(0.2, 0.66, 0.32, 1) both;
+    }
+
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-rupture-frame-two {
+        animation: bt-knowledge-rupture-frame-two 1.35s cubic-bezier(0.2, 0.66, 0.32, 1) both;
+    }
+
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-rupture-frame-two-b {
+        animation: bt-knowledge-rupture-frame-two-b 1.35s cubic-bezier(0.2, 0.66, 0.32, 1) both;
+    }
+
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-rupture-frame-three {
+        animation: bt-knowledge-rupture-frame-three 1.35s cubic-bezier(0.2, 0.66, 0.32, 1) both;
+    }
+
+    .bt-knowledge-scene.is-rupturing .bt-knowledge-rupture-frame-three-b {
+        animation: bt-knowledge-rupture-frame-three-b 1.35s cubic-bezier(0.2, 0.66, 0.32, 1) both;
     }
 }
 
-.bt-knowledge-dust {
-    position: absolute;
-    z-index: 5;
-    top: 17%;
-    left: 47.4%;
-    width: 7%;
-    height: 35%;
-    pointer-events: none;
-}
-
-.bt-knowledge-dust i {
-    position: absolute;
-    top: 42%;
-    left: 50%;
-    width: 0.52cqw;
-    aspect-ratio: 1;
-    display: block;
-    opacity: 0;
-    background: #8b858f;
-    border-radius: 42% 58% 35% 65%;
-    box-shadow: 0 0 0.4cqw rgba(0, 0, 0, 0.68);
-}
-
-.bt-knowledge-scene.is-rupturing .bt-knowledge-dust i {
-    animation: bt-knowledge-debris 1.28s cubic-bezier(0.18, 0.68, 0.32, 1) both;
-}
-
-.bt-knowledge-dust i:nth-child(2) { --bt-dust-x: -5.4cqw; --bt-dust-y: 14cqw; animation-delay: 80ms !important; transform: scale(0.6); }
-.bt-knowledge-dust i:nth-child(3) { --bt-dust-x: 4.1cqw; --bt-dust-y: 18cqw; animation-delay: 150ms !important; transform: scale(0.82); }
-.bt-knowledge-dust i:nth-child(4) { --bt-dust-x: -2.8cqw; --bt-dust-y: 22cqw; animation-delay: 230ms !important; transform: scale(0.48); }
-.bt-knowledge-dust i:nth-child(5) { --bt-dust-x: 6.6cqw; --bt-dust-y: 12cqw; animation-delay: 310ms !important; transform: scale(0.7); }
-.bt-knowledge-dust i:nth-child(6) { --bt-dust-x: 1.4cqw; --bt-dust-y: 25cqw; animation-delay: 390ms !important; transform: scale(0.42); }
-
 .bt-knowledge-terminal-surface {
     position: absolute;
-    z-index: 4;
+    z-index: 5;
     top: 51.4%;
     left: 37.55%;
     width: 26.4%;
@@ -3674,7 +3679,7 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     filter: brightness(0.72);
     transform: scaleY(0.15);
     transform-origin: 50% 58%;
-    transition: opacity 620ms ease 360ms, filter 620ms ease 360ms, transform 760ms cubic-bezier(0.2, 0.82, 0.28, 1) 280ms;
+    transition: opacity 520ms ease 140ms, filter 520ms ease 140ms, transform 680ms cubic-bezier(0.2, 0.82, 0.28, 1) 80ms;
 }
 
 .bt-knowledge-present-portal::after {
@@ -3692,6 +3697,7 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     display: none;
 }
 
+.bt-knowledge-scene.is-rupturing .bt-knowledge-present-portal,
 .bt-knowledge-scene.is-breached .bt-knowledge-present-portal {
     opacity: 1;
     filter: brightness(1);
@@ -4363,21 +4369,57 @@ body.bt-calibrating-documents .bt-knowledge-terminal {
     100% { opacity: 0; scale: 1.45; }
 }
 
-@keyframes bt-knowledge-smoke {
-    0% { opacity: 0; translate: -50% -50%; scale: 0.35; }
-    16% { opacity: var(--bt-smoke-peak, 0.72); }
-    55% { opacity: calc(var(--bt-smoke-peak, 0.72) * 0.62); }
-    100% {
-        opacity: 0;
-        translate: calc(-50% + var(--bt-smoke-x, 0cqw)) calc(-50% + var(--bt-smoke-y, -6cqw));
-        scale: var(--bt-smoke-scale, 1.7);
-    }
+@keyframes bt-knowledge-crack-release {
+    0%, 12% { opacity: 1; filter: brightness(1) saturate(1); }
+    48% { opacity: 0.24; filter: brightness(1.38) saturate(0.8); }
+    100% { opacity: 0; filter: brightness(1.18) saturate(0.86); }
 }
 
-@keyframes bt-knowledge-debris {
-    0% { opacity: 0; translate: 0 0; rotate: 0deg; }
-    12% { opacity: 1; }
-    100% { opacity: 0; translate: var(--bt-dust-x, -4cqw) var(--bt-dust-y, 18cqw); rotate: 210deg; }
+@keyframes bt-knowledge-breach-reveal {
+    0%, 12% { opacity: 0; filter: brightness(1.34) saturate(0.72); }
+    44%, 100% { opacity: 1; filter: brightness(1) saturate(1); }
+}
+
+@keyframes bt-knowledge-rupture-frame-one {
+    0% { opacity: 0; transform: scale(0.96) translateY(0); }
+    5% { opacity: 0.68; }
+    18% { opacity: 0.52; transform: scale(0.995) translateY(-0.2%); }
+    30%, 100% { opacity: 0; transform: scale(1.025) translateY(-0.45%); }
+}
+
+@keyframes bt-knowledge-rupture-frame-one-b {
+    0%, 12% { opacity: 0; transform: scale(0.98) translateY(-0.2%); }
+    20% { opacity: 0.48; }
+    32% { opacity: 0.38; transform: scale(1.015) translateY(0.15%); }
+    43%, 100% { opacity: 0; transform: scale(1.04) translateY(0.5%); }
+}
+
+@keyframes bt-knowledge-rupture-frame-two {
+    0%, 26% { opacity: 0; transform: scale(0.99) translateY(-0.2%); }
+    34% { opacity: 0.46; }
+    48% { opacity: 0.36; transform: scale(1.02) translateY(0.65%); }
+    59%, 100% { opacity: 0; transform: scale(1.045) translateY(1.25%); }
+}
+
+@keyframes bt-knowledge-rupture-frame-two-b {
+    0%, 42% { opacity: 0; transform: scale(0.995) translateY(0.1%); }
+    50% { opacity: 0.4; }
+    62% { opacity: 0.32; transform: scale(1.02) translateY(1.1%); }
+    73%, 100% { opacity: 0; transform: scale(1.04) translateY(1.9%); }
+}
+
+@keyframes bt-knowledge-rupture-frame-three {
+    0%, 57% { opacity: 0; transform: scale(0.998) translateY(0.3%); }
+    65% { opacity: 0.38; }
+    78% { opacity: 0.28; transform: scale(1.018) translateY(1.7%); }
+    88%, 100% { opacity: 0; transform: scale(1.035) translateY(2.7%); }
+}
+
+@keyframes bt-knowledge-rupture-frame-three-b {
+    0%, 75% { opacity: 0; transform: scale(1) translateY(0.6%); }
+    83% { opacity: 0.34; }
+    92% { opacity: 0.22; transform: scale(1.012) translateY(2.2%); }
+    100% { opacity: 0; transform: scale(1.025) translateY(3.4%); }
 }
 
 @keyframes bt-knowledge-terminal-search {

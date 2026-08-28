@@ -2064,9 +2064,12 @@ section.production-header.alice .production-details p strong {
 
 .showcase-signal {
     position: absolute;
-    inset: -2px;
-    width: calc(100% + 4px);
-    height: calc(100% + 4px);
+    /* Sized against the card's padding box (1px inside its border), and the
+       rect pulls back in 2px, so -4px lands the blip's centerline 1px outside
+       the border: the 2px stroke hugs the card without covering its edge. */
+    inset: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
     overflow: visible;
     pointer-events: none;
     z-index: 4;
@@ -2079,8 +2082,10 @@ section.production-header.alice .production-details p strong {
     y: 2px;
     width: calc(100% - 4px);
     height: calc(100% - 4px);
-    rx: 6px;
-    ry: 6px;
+    /* Card radius (0.35rem ≈ 5.6px) plus the centerline's 1px outward offset,
+       kept concentric. */
+    rx: 7px;
+    ry: 7px;
     fill: none;
     stroke: var(--showcase-edge);
     stroke-width: 2px;
@@ -3860,7 +3865,7 @@ html {
 
 /* Ride the mustard outline instead of the padding edge: the ring is a 2px
    outline just past the 3px black border, so the stroke's centerline needs to
-   sit 4px farther out than the showcase default (-2px inset). */
+   sit 3px outside the card's border (the showcase default's -4px inset sits at 1px). */
 .about-photo-signal {
     inset: -6px;
     width: calc(100% + 12px);

@@ -55,7 +55,10 @@ for FILE in $REFS; do
     continue
   fi
 
-  HASH=$(shasum -a 256 "$FILE" | cut -c1-8)
+  # Hash LF-normalized bytes: with core.autocrlf, a Windows checkout has CRLF
+  # on disk while git (and therefore Vercel's build container) stores LF. The
+  # stamp must identify the *deployed* bytes, and be the same from any machine.
+  HASH=$(sed 's/\r$//' "$FILE" | shasum -a 256 | cut -c1-8)
 
   # Which HTML files point at this asset, and what stamp do they carry now?
   # The (?<![A-Za-z0-9._-]) guard keeps "before-times.js" from also matching

@@ -123,6 +123,8 @@ It hashes each file's contents and rewrites the `?v=` on every reference in `*.h
 
 **Why a hash and not a timestamp:** the stamps were bumped by hand and drifted. `main.js` sat at `?v=202608052135` while its contents had moved on ten days, which under `immutable` would have pinned returning visitors to a stale script for a year. A content hash makes the URL change exactly when the file does, with no discipline required.
 
+**The hash is over LF-normalized bytes, on purpose.** With `core.autocrlf=true` a Windows checkout has CRLF on disk while git — and therefore Vercel's build container — stores LF, so hashing raw disk bytes stamps a hash of files that never get deployed. This bit once: a Windows run re-stamped all nine css/js files on a clean tree, which would have pointlessly invalidated every returning visitor's cache and flip-flopped on the next non-Windows stamp. If a stamp run ever reports changes to files whose content you didn't touch, suspect the environment before trusting the stamps.
+
 Division of labor: `stamp-code.sh` owns code (`.css`/`.js` referenced from HTML), `bump-cover.sh` owns media (images, audio, video — which are also referenced from JS playlist data and OG tags that `stamp-code.sh` deliberately does not touch).
 
 ## Architecture

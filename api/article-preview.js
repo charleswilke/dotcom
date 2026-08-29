@@ -1,7 +1,6 @@
 const {
     decodeHtmlEntities,
-    fetchSubstackItems,
-    slugifyArticle,
+    fetchSubstackItemBySlug,
     stripHtml
 } = require('../lib/substack-utils');
 
@@ -142,8 +141,7 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-        const items = await fetchSubstackItems(200);
-        const item = items.find(candidate => slugifyArticle(candidate) === slug);
+        const item = await fetchSubstackItemBySlug(slug);
 
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.setHeader('Cache-Control', 'public, max-age=900, stale-while-revalidate=1800, stale-if-error=3600');

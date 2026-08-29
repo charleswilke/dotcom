@@ -5,22 +5,22 @@
 OMAxAI/*
 !OMAxAI/viewer
 
-# Dependencies & dev tooling. One build step now runs on Vercel — the CSS
-# minifier in vercel.json's buildCommand — so tools/ is excluded by its
+# Dependencies & dev tooling. Minification now runs on Vercel, so tools/ is excluded by its
 # *contents* rather than outright: a path under a flatly-excluded directory
 # cannot be re-included, the same trap the OMAxAI/* and bt-assets/* rules below
-# are shaped around. Everything in tools/ still stays out except the one file
+# are shaped around. Everything in tools/ still stays out except the two files
 # the build actually executes.
 node_modules
 **/node_modules
-package.json
-package-lock.json
 tools/*
 !tools/minify-css.js
+!tools/minify-js.js
 # transcripts/*.md sources stay private via the *.md rule below; the
 # pre-rendered .html fragments in transcripts/ ARE served (article reader
 # fetches them), and an unanchored "transcripts/" here would also swallow
 # images/transcripts/ (gitignore patterns match at any depth).
+transcripts/**/*.zip
+transcripts/**/*-assets
 .lighthouse/
 *.sh
 *.code-workspace

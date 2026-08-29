@@ -274,6 +274,70 @@ function createLazyInitializer(initializer) {
     };
 }
 
+const DEFERRED_FONT_STYLESHEET = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=IBM+Plex+Sans+Condensed:wght@700&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montaga&family=Neonderthaw&family=Simonetta:ital,wght@0,400;0,900;1,400;1,900&display=swap';
+let deferredFontsPromise = null;
+
+function loadDeferredFonts() {
+    if (deferredFontsPromise) return deferredFontsPromise;
+    deferredFontsPromise = new Promise(resolve => {
+        const existing = document.getElementById('deferred-font-stylesheet');
+        if (existing) {
+            resolve();
+            return;
+        }
+
+        const link = document.createElement('link');
+        link.id = 'deferred-font-stylesheet';
+        link.rel = 'stylesheet';
+        link.href = DEFERRED_FONT_STYLESHEET;
+        link.onload = resolve;
+        link.onerror = resolve;
+        document.head.appendChild(link);
+    });
+    return deferredFontsPromise;
+}
+
+function initDeferredFonts() {
+    if (getArticleRouteFromLocation()) {
+        loadDeferredFonts();
+        return;
+    }
+
+    const targets = ['#projections', '#game-cartridges', '#albums']
+        .map(selector => document.querySelector(selector))
+        .filter(Boolean);
+    if (!targets.length || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        observer.disconnect();
+        loadDeferredFonts();
+    }, { rootMargin: '800px 0px' });
+    targets.forEach(target => observer.observe(target));
+}
+
+function initSubstackSubscribeEmbed() {
+    const button = document.getElementById('substackSubscribeButton');
+    const slot = document.getElementById('substackSubscribeFrame');
+    if (!button || !slot) return;
+
+    button.addEventListener('click', () => {
+        if (slot.querySelector('iframe')) return;
+
+        const frame = document.createElement('iframe');
+        frame.src = 'https://charleswilke.substack.com/embed?transparent=1&light=1';
+        frame.width = '480';
+        frame.height = '150';
+        frame.title = 'Subscribe to Exploring L.ai.bor';
+        frame.setAttribute('scrolling', 'no');
+        frame.setAttribute('loading', 'lazy');
+        slot.hidden = false;
+        slot.appendChild(frame);
+        button.setAttribute('aria-expanded', 'true');
+        button.hidden = true;
+    }, { once: true });
+}
+
 const managedAudioPlayers = new Set();
 
 function registerManagedAudio(audio) {
@@ -434,13 +498,75 @@ function scheduleEffectTimeout(callback, delay) {
     return timerId;
 }
 
+function resizeSubstackImage(url, width, format = 'webp') {
+    const source = decodeHtmlEntities(url || '');
+    const size = Math.max(1, Math.round(Number(width) || 0));
+    if (!size || !/^https:\/\/substackcdn\.com\/image\/fetch\//i.test(source)) return source;
+
+    return source.replace(
+        /^(https:\/\/substackcdn\.com\/image\/fetch\/)([^/]+)(\/https?%3A.*)$/i,
+        (match, prefix, rawTransforms, encodedSource) => {
+            const preserved = rawTransforms
+                .split(',')
+                .filter(Boolean)
+                .filter(token => !/^(?:w_\d+|c_limit|f_(?:auto|webp|avif)|q_[^,]+|fl_progressive(?::[^,]+)?)$/i.test(token));
+            return `${prefix}${[
+                ...preserved,
+                `w_${size}`,
+                'c_limit',
+                `f_${format}`,
+                'q_auto:good'
+            ].join(',')}${encodedSource}`;
+        }
+    );
+}
+
+function getResponsiveFeedImage(item) {
+    if (!item) return { src: FALLBACK_SVG, srcset: '', width: 800, height: 400 };
+    const original = (item.image && item.image.url) || item.thumbnail || '';
+    if (!original) return { src: FALLBACK_SVG, srcset: '', width: 800, height: 400 };
+
+    const isSubstackImage = /^https:\/\/substackcdn\.com\/image\/fetch\//i.test(original);
+    return {
+        src: isSubstackImage ? resizeSubstackImage(original, 848) : original,
+        srcset: isSubstackImage
+            ? [424, 848, 1272].map(width => `${resizeSubstackImage(original, width)} ${width}w`).join(', ')
+            : ((item.image && item.image.srcset) || ''),
+        width: (item.image && item.image.width) || 1200,
+        height: (item.image && item.image.height) || 675
+    };
+}
+
+function applyResponsiveFeedImage(img, item, sizes) {
+    if (!img) return;
+    const image = getResponsiveFeedImage(item);
+    img.src = image.src;
+    if (image.srcset) {
+        img.srcset = image.srcset;
+        img.sizes = sizes;
+    } else {
+        img.removeAttribute('srcset');
+        img.removeAttribute('sizes');
+    }
+    img.width = image.width;
+    img.height = image.height;
+}
+
+function escapeHtmlAttribute(value = '') {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
 function extractFeedImage(item) {
     if (!item) return FALLBACK_SVG;
-    if (item.thumbnail) return item.thumbnail;
+    if (item.thumbnail || (item.image && item.image.url)) return getResponsiveFeedImage(item).src;
 
     const markup = item.content || item.description || '';
     const imgMatch = markup.match(/<img[^>]+src="([^">]+)"/i);
-    return imgMatch ? imgMatch[1] : FALLBACK_SVG;
+    return imgMatch ? resizeSubstackImage(imgMatch[1], 848) : FALLBACK_SVG;
 }
 
 function createFeedExcerpt(item) {
@@ -699,6 +825,14 @@ function sanitizeArticleHtml(html) {
 
     // Make sure images lazy-load and degrade gracefully.
     doc.body.querySelectorAll('img').forEach(img => {
+        const source = img.getAttribute('src') || '';
+        if (/^https:\/\/substackcdn\.com\/image\/fetch\//i.test(source)) {
+            img.setAttribute('src', resizeSubstackImage(source, 848));
+            img.setAttribute('srcset', [424, 848, 1272]
+                .map(width => `${resizeSubstackImage(source, width)} ${width}w`)
+                .join(', '));
+            img.setAttribute('sizes', '(max-width: 767px) calc(100vw - 48px), 760px');
+        }
         img.setAttribute('loading', 'lazy');
         img.setAttribute('decoding', 'async');
     });
@@ -965,6 +1099,8 @@ let _readerPrevUrl = '';
 function openArticleReader(item, options = {}) {
     if (!item || !(item.content || item.description)) return false;
 
+    loadDeferredFonts();
+
     const overlay = ensureReaderOverlay();
     const wasOpen = overlay.classList.contains('is-open');
     const shell = overlay.querySelector('.article-reader-shell');
@@ -1077,13 +1213,67 @@ function findItemBySlug(slug) {
     return allItems.find(it => slugifyArticle(it) === slug) || null;
 }
 
+const articleContentRequests = new Map();
+
+async function loadArticleContent(item) {
+    if (!item) throw new Error('Missing article');
+    if (item.content) return item;
+
+    const slug = slugifyArticle(item);
+    if (articleContentRequests.has(slug)) return articleContentRequests.get(slug);
+
+    const request = (async () => {
+        try {
+            const response = await fetch(`/api/substack-feed?slug=${encodeURIComponent(slug)}`, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.status === 'ok' && data.item) {
+                    Object.assign(item, data.item);
+                    return item;
+                }
+            }
+        } catch (error) {
+            // Local static servers have no API route; fall through to the disk cache.
+        }
+
+        const cacheResponse = await fetch('/cache_substack_feed.json', { cache: 'no-store' });
+        if (!cacheResponse.ok) throw new Error(`Article request failed: HTTP ${cacheResponse.status}`);
+        const cached = await cacheResponse.json();
+        const cachedItem = cached && Array.isArray(cached.items)
+            ? cached.items.find(candidate => slugifyArticle(candidate) === slug)
+            : null;
+        if (!cachedItem) throw new Error('Article not found');
+        Object.assign(item, cachedItem);
+        return item;
+    })().finally(() => articleContentRequests.delete(slug));
+
+    articleContentRequests.set(slug, request);
+    return request;
+}
+
+function openFeedArticle(item, options = {}) {
+    if (!item) return false;
+    if (item.content) return openArticleReader(item, options);
+
+    loadDeferredFonts();
+    loadArticleContent(item)
+        .then(fullItem => openArticleReader(fullItem, options))
+        .catch(error => {
+            console.warn('[reader] article failed to load:', error);
+            if (item.link) window.open(item.link, '_blank', 'noopener,noreferrer');
+        });
+    return true;
+}
+
 function maybeOpenReaderFromLocation() {
     const route = getArticleRouteFromLocation();
     if (!route) return;
 
     const item = findItemBySlug(route.slug);
     if (item) {
-        openArticleReader(item, { replaceUrl: route.source === 'hash' });
+        openFeedArticle(item, { replaceUrl: route.source === 'hash' });
         return;
     }
 
@@ -1155,7 +1345,7 @@ let allItems = [];
 let isLoading = false;
 const ITEMS_PER_PAGE = 12;
 let isArchiveMode = false;
-const RSS_CACHE_KEY = 'charleswilke:rss-feed:v3';
+const RSS_CACHE_KEY = 'charleswilke:rss-feed:v4';
 const RSS_CACHE_TTL_MS = 30 * 60 * 1000;
 let rssIntersectionObserver = null;
 
@@ -1178,7 +1368,7 @@ function readCachedFeedItems() {
             return null;
         }
 
-        if (parsed.version !== 3) {
+        if (parsed.version !== 4) {
             sessionStorage.removeItem(RSS_CACHE_KEY);
             return null;
         }
@@ -1206,12 +1396,28 @@ function readCachedFeedItems() {
 
 function writeCachedFeedItems(items, source = 'unknown') {
     try {
+        const summaries = items.map(item => {
+            const { content, ...summary } = item || {};
+            const responsiveImage = getResponsiveFeedImage(item);
+            return {
+                ...summary,
+                slug: slugifyArticle(item),
+                image: item && item.image ? {
+                    ...item.image,
+                    url: responsiveImage.src,
+                    srcset: responsiveImage.srcset,
+                    width: responsiveImage.width,
+                    height: responsiveImage.height
+                } : null,
+                thumbnail: responsiveImage.src
+            };
+        });
         sessionStorage.setItem(RSS_CACHE_KEY, JSON.stringify({
-            version: 3,
+            version: 4,
             timestamp: Date.now(),
             limit: TOTAL_RSS_ITEMS,
             source,
-            items
+            items: summaries
         }));
     } catch (error) {
         // Ignore storage failures (private mode, quota, etc.)
@@ -1264,8 +1470,8 @@ async function fetchRSSFeed() {
         // Primary endpoint: Vercel serverless function
         if (location.protocol === 'http:' || location.protocol === 'https:') {
             try {
-                logFeedAttempt('primary-fetch-start', { url: `/api/substack-feed?limit=${TOTAL_RSS_ITEMS}` });
-                const response = await fetch(`/api/substack-feed?limit=${TOTAL_RSS_ITEMS}`, {
+                logFeedAttempt('primary-fetch-start', { url: `/api/substack-feed?summary=1&limit=${TOTAL_RSS_ITEMS}` });
+                const response = await fetch(`/api/substack-feed?summary=1&limit=${TOTAL_RSS_ITEMS}`, {
                     cache: 'no-store',
                     headers: {
                         'Accept': 'application/json'
@@ -1402,7 +1608,7 @@ function populateLatestArticleSpotlight() {
     // Make the entire section clickable — open inline reader when we have content.
     spotlight.style.cursor = 'pointer';
     spotlight.addEventListener('click', (e) => {
-        if (latestItem.content && openArticleReader(latestItem)) {
+        if (openFeedArticle(latestItem)) {
             e.preventDefault();
             return;
         }
@@ -1410,8 +1616,14 @@ function populateLatestArticleSpotlight() {
     });
     
     // Set the image and handle sizing
-    spotlightImg.src = latestItem.displayImage || FALLBACK_SVG;
+    applyResponsiveFeedImage(
+        spotlightImg,
+        latestItem,
+        '(max-width: 767px) calc(100vw - 62px), 606px'
+    );
     spotlightImg.alt = latestItem.title;
+    spotlightImg.loading = 'lazy';
+    spotlightImg.decoding = 'async';
     
     // Adjust card height based on image aspect ratio
     spotlightImg.onload = function() {
@@ -1456,7 +1668,8 @@ function displayItems(count) {
     for (let i = startIndex; i < endIndex; i++) {
         const item = allItems[i];
         const title = item.title;
-        const link = item.content ? getArticleSharePath(item) : item.link;
+        const link = getArticleSharePath(item);
+        const feedImage = getResponsiveFeedImage(item);
         const pubDate = new Date(item.pubDate);
         // Freshness-stamp date for the printed panel, e.g. "06-06-26" (MM-DD-YY).
         const pad = (n) => String(n).padStart(2, '0');
@@ -1468,7 +1681,10 @@ function displayItems(count) {
         feedItem.target = '_blank';
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
-            <img src="${item.displayImage || FALLBACK_SVG}" alt="${title}" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml;base64,${FALLBACK_SVG_B64}'">
+            <img src="${escapeHtmlAttribute(feedImage.src)}"
+                 ${feedImage.srcset ? `srcset="${escapeHtmlAttribute(feedImage.srcset)}" sizes="(max-width: 767px) calc(100vw - 98px), (max-width: 1024px) 45vw, 548px"` : ''}
+                 alt="${escapeHtmlAttribute(title)}" width="${feedImage.width}" height="${feedImage.height}"
+                 loading="lazy" decoding="async">
             <div class="feed-item-body">
                 <h3>${title}</h3>
                 <p>${item.shortDescription || ''}</p>
@@ -1477,8 +1693,14 @@ function displayItems(count) {
                 </div>
             </div>
         `;
+        const imageEl = feedItem.querySelector('img');
+        imageEl.addEventListener('error', () => {
+            imageEl.removeAttribute('srcset');
+            imageEl.removeAttribute('sizes');
+            imageEl.src = FALLBACK_SVG;
+        }, { once: true });
         feedItem.addEventListener('click', (e) => {
-            if (item.content && openArticleReader(item)) {
+            if (openFeedArticle(item)) {
                 e.preventDefault();
             }
         });
@@ -1916,6 +2138,9 @@ function initTimeDial() {
         let timeData = null;
         let oscAnimId = null;
         let initialized = false;
+        let canvasWidth = 0;
+        let canvasHeight = 0;
+        let canvasVisible = typeof IntersectionObserver === 'undefined';
 
         function initAudio() {
             if (initialized) return;
@@ -1946,9 +2171,27 @@ function initTimeDial() {
         function resizeCanvas() {
             const dpr = window.devicePixelRatio || 1;
             const rect = oscilloscopeCanvas.getBoundingClientRect();
-            oscilloscopeCanvas.width = rect.width * dpr;
-            oscilloscopeCanvas.height = rect.height * dpr;
+            canvasWidth = Math.max(0, rect.width);
+            canvasHeight = Math.max(0, rect.height);
+            const pixelWidth = Math.round(canvasWidth * dpr);
+            const pixelHeight = Math.round(canvasHeight * dpr);
+            if (oscilloscopeCanvas.width !== pixelWidth) oscilloscopeCanvas.width = pixelWidth;
+            if (oscilloscopeCanvas.height !== pixelHeight) oscilloscopeCanvas.height = pixelHeight;
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function stopDrawing() {
+            if (oscAnimId !== null) cancelAnimationFrame(oscAnimId);
+            oscAnimId = null;
+        }
+
+        function shouldAnimate() {
+            return canvasVisible && !document.hidden && !recapAudio.paused;
+        }
+
+        function startDrawing() {
+            if (!canvasWidth || !canvasHeight) resizeCanvas();
+            if (oscAnimId === null) oscAnimId = requestAnimationFrame(drawFrame);
         }
 
         function drawGraticule(w, h) {
@@ -2014,8 +2257,10 @@ function initTimeDial() {
         }
 
         function drawFrame() {
-            var w = oscilloscopeCanvas.getBoundingClientRect().width;
-            var h = oscilloscopeCanvas.getBoundingClientRect().height;
+            oscAnimId = null;
+            var w = canvasWidth;
+            var h = canvasHeight;
+            if (!w || !h) return;
             var isPlaying = !recapAudio.paused;
 
             ctx.clearRect(0, 0, w, h);
@@ -2063,7 +2308,7 @@ function initTimeDial() {
             ctx.stroke();
             ctx.shadowBlur = 0;
 
-            oscAnimId = requestAnimationFrame(drawFrame);
+            if (shouldAnimate()) oscAnimId = requestAnimationFrame(drawFrame);
         }
 
         recapAudio.addEventListener('play', function() {
@@ -2074,11 +2319,40 @@ function initTimeDial() {
             if (analyserNode && typeof analyserNode.load === 'function') {
                 analyserNode.load(recapAudio.currentSrc || recapAudio.src);
             }
+            if (canvasVisible) startDrawing();
+        });
+
+        const drawIdleFrame = () => {
+            stopDrawing();
+            if (canvasVisible && !document.hidden) startDrawing();
+        };
+        recapAudio.addEventListener('pause', drawIdleFrame);
+        recapAudio.addEventListener('ended', drawIdleFrame);
+
+        if (typeof IntersectionObserver !== 'undefined') {
+            const visibilityObserver = new IntersectionObserver(entries => {
+                canvasVisible = entries.some(entry => entry.isIntersecting);
+                if (canvasVisible) {
+                    resizeCanvas();
+                    startDrawing();
+                } else {
+                    stopDrawing();
+                }
+            }, { rootMargin: '200px 0px' });
+            visibilityObserver.observe(oscilloscopeCanvas);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopDrawing();
+            else if (canvasVisible) startDrawing();
         });
 
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        drawFrame();
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            if (canvasVisible) startDrawing();
+        }, { passive: true });
+        if (canvasVisible) startDrawing();
     })();
 
     // Media Session: lock screen / Control Center card and controls for the
@@ -2175,6 +2449,28 @@ function initTimeDial() {
             this.style.transform = 'scale(1)';
         }, { passive: true });
     });
+}
+
+function initDeferredTimeDial() {
+    const root = document.querySelector('.audio-summary-container');
+    if (!root) return;
+
+    const ensureTimeDial = createLazyInitializer(initTimeDial);
+    root.addEventListener('pointerenter', ensureTimeDial, { once: true });
+    root.addEventListener('focusin', ensureTimeDial, { once: true });
+    root.addEventListener('touchstart', ensureTimeDial, { once: true, passive: true });
+
+    if (typeof IntersectionObserver === 'undefined') {
+        scheduleIdleWork(ensureTimeDial, 3000);
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        observer.disconnect();
+        ensureTimeDial();
+    }, { rootMargin: '350px 0px' });
+    observer.observe(root);
 }
 
 
@@ -5631,8 +5927,10 @@ function initFoilMotion() {
 }
 
 onReady(() => {
+    initDeferredFonts();
+    initSubstackSubscribeEmbed();
     initRSSFallbackFetch();
-    initTimeDial();
+    initDeferredTimeDial();
     initEmailGlitchEffects();
     initCustomAudioPlayers();
     initPetLightboxLinks();

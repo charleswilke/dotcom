@@ -49,7 +49,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="styles.css?v=b948dc04">
+    <link rel="stylesheet" href="styles.css?v=4a2a75ba">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -57,7 +57,9 @@
     <!-- Fonts: prefer link+preconnect over CSS @import for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Cinzel:wght@600&family=Caveat:wght@500;700&family=Rock+Salt&family=Exo:wght@400;700&family=IBM+Plex+Sans+Condensed:wght@700&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montaga&family=Neonderthaw&family=Simonetta:ital,wght@0,400;0,900;1,400;1,900&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Exo:wght@400;700&family=Orbitron:wght@400;700&family=Rock+Salt&family=Space+Mono:wght@400;700&display=swap"
+          rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Exo:wght@400;700&family=Orbitron:wght@400;700&family=Rock+Salt&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
     <link rel="preload" as="image" href="images/ToastIQ-card.webp" fetchpriority="high">
     
     <!-- RSS Feed Performance Optimization -->
@@ -136,7 +138,7 @@
                         </div>
                     </div>
                 </a>
-                <div class="showcase-item showcase-item-jc" id="jcTile" data-col="2">
+                <a href="/junkyard-cabaret" class="showcase-item showcase-item-jc" id="jcTile" data-col="2">
                     <svg class="showcase-signal" aria-hidden="true" focusable="false"><rect class="showcase-signal-blip" pathLength="100"></rect></svg>
                     <div class="showcase-media">
                         <img src="audio/junkyard-cabaret/junkyard-cabaret-title-card.webp?v=202608132052" alt="Junkyard Cabaret title art: a ragged band, a dancer and a top-hatted barker in silhouette on a spotlit stage" width="700" height="467" loading="lazy" decoding="async">
@@ -152,7 +154,7 @@
                             <span class="showcase-cta">Open the Album</span>
                         </div>
                     </div>
-                </div>
+                </a>
                 <a href="/mixtape" class="showcase-item showcase-item-mixtape" data-col="3">
                     <svg class="showcase-signal" aria-hidden="true" focusable="false"><rect class="showcase-signal-blip" pathLength="100"></rect></svg>
                     <div class="showcase-media">
@@ -217,8 +219,8 @@
             <div class="image-compare">
                 <svg class="showcase-signal about-photo-signal" aria-hidden="true" focusable="false"><rect class="showcase-signal-blip" pathLength="100"></rect></svg>
                 <div class="image-wrapper">
-                    <img class="image-before" src="images/cw4-card.webp" alt="Charles Wilke" width="860" height="860" loading="lazy" decoding="async">
-                    <img class="image-after" src="images/cw2.webp" alt="Charles Wilke" loading="lazy" decoding="async" width="800" height="800">
+                    <img class="image-before" src="images/cw4-card.webp" alt="" width="860" height="860" loading="lazy" decoding="async">
+                    <img class="image-after" src="images/cw2.webp" alt="" loading="lazy" decoding="async" width="800" height="800">
                     <div class="foil" aria-hidden="true"></div>
                 </div>
                 <div class="about-name">
@@ -352,7 +354,7 @@
             <!-- Latest Article Spotlight -->
             <div id="latest-article-spotlight" class="latest-article-spotlight" style="display: none;">
                 <section class="production-header spotlight-production" style="position: relative; overflow: hidden; padding: 0;">
-                    <img src="" alt="Latest Article" class="featured-image spotlight-featured-image">
+                    <img src="" alt="Latest Article" class="featured-image spotlight-featured-image" width="1200" height="675" loading="lazy" decoding="async">
                     <div class="content production-content spotlight-content">
                         <h3 class="spotlight-title">Latest Article</h3>
                         <p class="spotlight-description">Loading latest article...</p>
@@ -386,13 +388,14 @@
                         <span class="subscribe-cta-kicker">Tune In</span>
                         <p class="subscribe-cta-blurb">New essays, delivered to you the moment they ship. No spam, no upsells. Just the next signal.</p>
                     </div>
-                    <div class="subscribe-cta-embed">
-                        <iframe src="https://charleswilke.substack.com/embed?transparent=1&light=1"
-                                width="480" height="150"
-                                title="Subscribe to Exploring L.ai.bor"
-                                style="border:0; background:transparent;"
-                                frameborder="0" scrolling="no"
-                                loading="lazy"></iframe>
+                    <div class="subscribe-cta-embed" id="substackSubscribeEmbed">
+                        <button type="button" class="subscribe-load-btn" id="substackSubscribeButton"
+                                aria-controls="substackSubscribeFrame" aria-expanded="false">
+                            Open the subscription form
+                        </button>
+                        <a class="subscribe-direct-link" href="https://charleswilke.substack.com/subscribe"
+                           target="_blank" rel="noopener noreferrer">Or subscribe on Substack&nbsp;&rarr;</a>
+                        <div class="subscribe-frame-slot" id="substackSubscribeFrame" aria-live="polite" hidden></div>
                     </div>
                 </div>
             </aside>
@@ -458,8 +461,8 @@
                 <span class="work-section-name">Playable Browser Games</span>
             </h2>
 
-            <div class="cartridge-deck" role="list" aria-label="Playable browser games">
-                <a href="/tootsjam/" class="game-cartridge game-cartridge-tootsjam" role="listitem" aria-label="Play Toots Jam">
+            <div class="cartridge-deck" role="group" aria-label="Playable browser games">
+                <a href="/tootsjam/" class="game-cartridge game-cartridge-tootsjam" aria-label="Play Toots Jam">
                     <article class="cartridge-shell">
                         <div class="cartridge-ridge" aria-hidden="true"></div>
                         <div class="cartridge-label">
@@ -481,7 +484,7 @@
                     </article>
                 </a>
 
-                <a href="/spacetoots/" class="game-cartridge game-cartridge-spacetoots" role="listitem" aria-label="Play Space Toots">
+                <a href="/spacetoots/" class="game-cartridge game-cartridge-spacetoots" aria-label="Play Space Toots">
                     <article class="cartridge-shell">
                         <div class="cartridge-ridge" aria-hidden="true"></div>
                         <div class="cartridge-label">
@@ -512,8 +515,8 @@
                 <span class="work-section-name">Original Albums</span>
             </h2>
 
-            <div class="cd-rack" role="list" aria-label="Original music albums">
-                <a href="/mixtape" class="album-case album-case-mixtape" role="listitem" aria-label="Open the Exploring L.ai.bor mixtape">
+            <div class="cd-rack" role="group" aria-label="Original music albums">
+                <a href="/mixtape" class="album-case album-case-mixtape" aria-label="Open the Exploring L.ai.bor mixtape">
                     <article class="jewel-case">
                         <div class="jewel-disc" aria-hidden="true"></div>
                         <div class="jewel-shell">
@@ -535,7 +538,7 @@
                     </div>
                 </a>
 
-                <a href="/junkyard-cabaret" class="album-case album-case-jc" role="listitem" aria-label="Open the Junkyard Cabaret album">
+                <a href="/junkyard-cabaret" class="album-case album-case-jc" aria-label="Open the Junkyard Cabaret album">
                     <article class="jewel-case">
                         <div class="jewel-disc" aria-hidden="true"></div>
                         <div class="jewel-shell">
@@ -557,7 +560,7 @@
                     </div>
                 </a>
 
-                <a href="/grief-without-ritual" class="album-case album-case-gwor" role="listitem" aria-label="Open the Grief Without Ritual album">
+                <a href="/grief-without-ritual" class="album-case album-case-gwor" aria-label="Open the Grief Without Ritual album">
                     <article class="jewel-case">
                         <div class="jewel-disc" aria-hidden="true"></div>
                         <div class="jewel-shell">
@@ -589,10 +592,10 @@
                     <div class="microfiche-lamp" aria-hidden="true"></div>
                     <nav class="carousel-nav microfiche-nav" aria-label="Industry perspectives archive">
                         <div class="carousel-tabs">
-                            <button class="dot carousel-tab active" aria-label="Show industry perspectives" aria-pressed="true"><span class="carousel-tab-label">Carbon I</span></button>
-                            <button class="dot carousel-tab" aria-label="Show more perspectives" aria-pressed="false"><span class="carousel-tab-label">Carbon II</span></button>
-                            <button class="dot carousel-tab" aria-label="Show AI summary (April 2025)" aria-pressed="false"><span class="carousel-tab-label">Silicon I</span></button>
-                            <button class="dot carousel-tab" aria-label="Show AI summary (April 2026)" aria-pressed="false"><span class="carousel-tab-label">Silicon II</span></button>
+                            <button class="dot carousel-tab active" aria-label="Carbon I: industry perspectives" aria-pressed="true"><span class="carousel-tab-label">Carbon I</span></button>
+                            <button class="dot carousel-tab" aria-label="Carbon II: more perspectives" aria-pressed="false"><span class="carousel-tab-label">Carbon II</span></button>
+                            <button class="dot carousel-tab" aria-label="Silicon I: AI summary from April 2025" aria-pressed="false"><span class="carousel-tab-label">Silicon I</span></button>
+                            <button class="dot carousel-tab" aria-label="Silicon II: AI summary from April 2026" aria-pressed="false"><span class="carousel-tab-label">Silicon II</span></button>
                         </div>
                     </nav>
                     <div class="testimonial-carousel">
@@ -878,6 +881,6 @@
     </div>
 
     <script src="common.js?v=65022cad" defer></script>
-<script src="main.js?v=a9e09631" defer></script>
+<script src="main.js?v=3733502c" defer></script>
 </body>
 </html>

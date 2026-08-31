@@ -14276,8 +14276,15 @@ body.reader-open {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 720%;
+    /* Rotated -13deg, corner coverage needs width ≈ 0.97·W + 0.23·H, so a
+       width in % of W alone always runs out on a long enough article (this
+       rule has been re-widened three times: 140% → 260% → 720%). Deriving
+       width from height (aspect-ratio, with the old 720% as the floor for
+       short bodies) covers any article length. */
     height: 180%;
+    width: auto;
+    aspect-ratio: 3 / 2;
+    min-width: 720%;
     background-image: radial-gradient(circle, rgba(0,0,0,0.0232) 2.5px, transparent 2.5px);
     background-size: 8px 8px;
     transform: translate(-50%, -50%) rotate(-13deg);

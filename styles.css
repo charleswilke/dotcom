@@ -1462,6 +1462,11 @@ section.production-header.spotlight-production .featured-image {
     width: 66.667%;
     height: 100%;
     object-fit: cover;
+    /* Bias the cover crop toward the top of the artwork: square/portrait
+       headers overflow vertically far more than the old 16:9 ones, and a
+       centered crop beheads the subject (Incantations was the first). For
+       landscape images the overflow is a few px, so the shift is invisible. */
+    object-position: left 35%;
     z-index: 1;
     mix-blend-mode: normal;
     opacity: 1;

@@ -1628,8 +1628,9 @@ function populateLatestArticleSpotlight() {
     // Adjust card height based on image aspect ratio
     spotlightImg.onload = function() {
         const aspectRatio = this.naturalWidth / this.naturalHeight;
-        // More generous height calculation to prevent cropping - increased range for taller card
-        const baseHeight = Math.max(365, Math.min(520, 480 / aspectRatio));
+        // Softened cap: a square/portrait image reads slightly taller than the
+        // 365px landscape baseline without ballooning the card (square → 430px).
+        const baseHeight = Math.max(365, Math.min(430, 480 / aspectRatio));
         spotlightSection.style.height = baseHeight + 'px';
     };
     

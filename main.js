@@ -23,6 +23,34 @@ document.addEventListener('DOMContentLoaded', () => {
     readyCallbacks.forEach(callback => callback());
 });
 
+// Pause every CSS animation inside a header/section/footer that is scrolled out
+// of view. A CSS animation ticks a main-thread style update on every frame
+// whether or not its element is visible, and by now the page runs about 65 of
+// them (the Recently float and its scanline counters, the signal blips, 28 VU
+// bars, the cartridges, the grid drifts, the flickers). With the Time Dial on
+// screen the Recently cards were still costing style, pre-paint and layerize
+// work sixty times a second for nothing. animation-play-state: paused stops the
+// ticking; the animation keeps its phase and resumes where it left off.
+//
+// Zones are the direct children of body/main only, on purpose: the lightboxes,
+// the game frame and the mini player are siblings after the footer, never
+// inside a zone, so a modal opened over a scrolled-away section keeps its own
+// animations (the CRT power-on, the LEDs) running. Keep it that way — a fixed
+// overlay placed inside a section would freeze the moment the section left the
+// viewport. The 30% root margin lets a zone start moving before its edge is on
+// screen, so nothing is caught still on entry.
+onReady(() => {
+    if (typeof IntersectionObserver === 'undefined') return;
+    const zones = document.querySelectorAll('body > header, main > section, body > footer');
+    if (!zones.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            entry.target.classList.toggle('is-offscreen', !entry.isIntersecting);
+        });
+    }, { rootMargin: '30% 0px' });
+    zones.forEach(zone => observer.observe(zone));
+});
+
 // Masonry layout for the showcase grid (preserves source order, packs into shortest column)
 onReady(() => {
     const grid = document.querySelector('.showcase-grid');

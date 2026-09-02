@@ -15143,3 +15143,20 @@ body.reader-open {
     }
 }
 /* ===== END GAME LIGHTBOX ===== */
+
+/* ===== OFFSCREEN ANIMATION PAUSE ===== */
+/* main.js puts .is-offscreen on any header/section/footer that has left the
+   viewport (30% margin) and takes it off on the way back. Every animation
+   under it pauses in place. This is why the page can carry sixty-odd
+   composited animations and still be idle: a running animation ticks style
+   on the main thread every frame, visible or not; a paused one costs nothing.
+   !important so no animation shorthand written later can restart itself
+   offscreen. Transitions are unaffected by design — they finish. */
+.is-offscreen,
+.is-offscreen *,
+.is-offscreen::before,
+.is-offscreen::after,
+.is-offscreen *::before,
+.is-offscreen *::after {
+    animation-play-state: paused !important;
+}

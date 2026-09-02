@@ -939,7 +939,10 @@ footer .electric {
         0 0 10px #ffdd33,
         0 0 20px rgba(255, 200, 0, 0.75),
         0 0 32px rgba(255, 170, 0, 0.5);
-    animation: electric-flicker 2.6s infinite;
+    /* steps(1, end), mirrored from styles.css: hold each keyframe's shadow,
+       then cut, so the line is re-laid-out and repainted five times a cycle
+       instead of every frame. */
+    animation: electric-flicker 2.6s steps(1, end) infinite;
 }
 
 @keyframes electric-flicker {

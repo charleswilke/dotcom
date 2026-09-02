@@ -1204,7 +1204,14 @@ footer .electric {
         0 0 10px #ffdd33,
         0 0 20px rgba(255, 200, 0, 0.75),
         0 0 32px rgba(255, 170, 0, 0.5);
-    animation: electric-flicker 2.6s infinite;
+    /* steps(1, end): hold each keyframe's shadow, then cut. A flicker is
+       discrete anyway, and interpolating text-shadow is the expensive way to
+       draw one — every frame re-lays-out the line (ink overflow lives in
+       layout) and repaints four blurred shadows. Stepped, that happens five
+       times per 2.6s cycle instead of 156. The one thing lost is the slow
+       swell between 46% and 80%, which is now a cut at 80%; if the swell is
+       wanted back, add stepped keyframes between them, not a timing curve. */
+    animation: electric-flicker 2.6s steps(1, end) infinite;
 }
 
 @keyframes electric-flicker {
@@ -2097,8 +2104,21 @@ section.production-header.alice .production-details p strong {
     overflow: visible;
     pointer-events: none;
     z-index: 4;
+    /* Hidden at rest, not just transparent. The blip below sits at opacity 0
+       until hover but its lap never stops (see there for why), and a
+       transparent stroke still repaints every frame — seven of them, on every
+       phone, forever. visibility: hidden skips the paint while the animations
+       keep ticking. The 0.45s delay on the way out matches the blip's fade,
+       so the orbit still glides out; hover flips it visible immediately. */
+    visibility: hidden;
+    transition: visibility 0s linear 0.45s;
     /* Pulse lives here, not on the blip, so it never fights the blip's opacity fade. */
     animation: showcase-signal-pulse 1.3s ease-in-out infinite;
+}
+
+:is(.showcase-item, .image-compare):is(:hover, :focus-visible) .showcase-signal {
+    visibility: visible;
+    transition: visibility 0s;
 }
 
 .showcase-signal-blip {

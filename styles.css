@@ -5649,7 +5649,12 @@ html {
 .scale-marker::before {
     content: '';
     width: 1px;
-    height: 12px;
+    /* Rest heights are the breathing animations' 0% frames (18px minor, 28px
+       major, 36px active), so a bar looks the same whether the breathe is
+       running, paused by prefers-reduced-motion, or displaced by the
+       signal-lock flicker. They used to be 12/20px and never seen, because the
+       keyframes overrode height on every frame. */
+    height: 18px;
     background: rgba(255, 190, 60, 0.4);
     transition: all 0.3s ease;
     position: absolute;
@@ -5658,7 +5663,7 @@ html {
 }
 
 .scale-marker.scale-major::before {
-    height: 20px;
+    height: 28px;
     width: 2px;
     background: rgba(255, 190, 60, 0.6);
 }
@@ -6204,7 +6209,17 @@ html {
     100% { opacity: 1; }
 }
 
-/* 5. VU Meter Breathing Animation */
+/* 5. VU Meter Breathing Animation
+
+   The bars breathe with scaleY and opacity, never height. Every bar is
+   centered on the scale (top: 50% + translateY(-50%)), so a symmetric scale
+   about the default center origin is pixel-for-pixel what the old height
+   keyframes drew: 28 -> 34px major, 18 -> 22px minor, 36 -> 42px active.
+   Animating height was a layout per frame per bar, 28 bars, whenever the
+   Time Dial was on screen — traced at about 18% of a throttled phone core
+   with nothing playing. scaleY + opacity run on the compositor. The ratios
+   below are those pixel pairs divided; the rest heights are declared on the
+   base ::before rules above. */
 .scale-marker.scale-major::before {
     animation: vu-breathe 3s ease-in-out infinite;
     animation-delay: calc(var(--marker-index, 0) * 0.3s);
@@ -6212,30 +6227,28 @@ html {
 
 @keyframes vu-breathe {
     0%, 100% {
-        height: 28px;
+        transform: translateY(-50%) scaleY(1);
         opacity: 0.4;
     }
     50% {
-        height: 34px;
+        transform: translateY(-50%) scaleY(1.2143);
         opacity: 0.52;
     }
 }
 
-/* Active marker has more pronounced breathing */
+/* Active marker has more pronounced breathing. Its halo used to pulse too
+   (box-shadow 12/20px -> 18/30px), which is a repaint per frame even for one
+   bar; it now sits at the midpoint of that pulse and the signal-lock glow on
+   ::after (transform + opacity, already composited) carries the breathing. */
 .scale-marker.scale-major.active::before {
     animation: vu-breathe-active 1.5s ease-in-out infinite;
-    height: 38px;
+    height: 36px;
+    box-shadow: 0 0 15px rgba(255, 190, 60, 0.9), 0 0 25px rgba(255, 190, 60, 0.5);
 }
 
 @keyframes vu-breathe-active {
-    0%, 100% { 
-        height: 36px;
-        box-shadow: 0 0 12px rgba(255, 190, 60, 0.8), 0 0 20px rgba(255, 190, 60, 0.4);
-    }
-    50% { 
-        height: 42px;
-        box-shadow: 0 0 18px rgba(255, 190, 60, 1), 0 0 30px rgba(255, 190, 60, 0.6);
-    }
+    0%, 100% { transform: translateY(-50%) scaleY(1); }
+    50%      { transform: translateY(-50%) scaleY(1.1667); }
 }
 
 /* Minor markers subtle pulse */
@@ -6244,8 +6257,14 @@ html {
 }
 
 @keyframes vu-minor-pulse {
-    0%, 100% { height: 18px; opacity: 0.3; }
-    50% { height: 22px; opacity: 0.45; }
+    0%, 100% {
+        transform: translateY(-50%) scaleY(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-50%) scaleY(1.2222);
+        opacity: 0.45;
+    }
 }
 
 /* 6. Vacuum Tube Warmup Glow */
@@ -6511,14 +6530,10 @@ html {
         right: 18px;
     }
 
-    .scale-marker::before {
-        height: 16px;
-    }
-
-    .scale-marker.scale-major::before {
-        height: 24px;
-    }
-    
+    /* No bar heights here any more: the breathe used to force 18/28px on
+       every breakpoint anyway, and now that height is the rest state the
+       scale animation multiplies, a narrower override would shrink the
+       breathing bars on phones instead of their (never seen) rest state. */
     .marker-label {
         font-size: 0.5rem;
         bottom: 12px;
@@ -7384,27 +7399,41 @@ html {
         radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.25) 100%);
     mix-blend-mode: multiply;
     border-radius: inherit;
+    /* Clips the travelling band below, which is now a tall pseudo moved by
+       transform instead of a background-position animation (a repaint per
+       frame, for a layer nobody is looking at most of the time). */
+    overflow: hidden;
 }
 
+/* The scan band. It used to be a 200%-tall repeating gradient whose
+   background-position ran from -100% to 200% over 7s: with a 2H tile that is
+   band centres at y = o + H + 2Hk drifting from o = +H to o = -2H, one pass
+   through the box every 4.67s. Same picture, built to be composited: the
+   pseudo is 6H tall, starts 2H above the box, carries the same 2H tile, and
+   translates by the same +H -> -2H (16.667% and 33.333% of its own 6H). Phase
+   is preserved because -2H is a whole tile. */
 .playbill-scan::after {
     content: '';
     position: absolute;
-    inset: 0;
+    left: 0;
+    right: 0;
+    top: -200%;
+    height: 600%;
     background: linear-gradient(
         180deg,
         transparent 0%,
         rgba(0, 247, 194, 0.07) 50%,
         transparent 100%
     );
-    background-size: 100% 200%;
+    background-size: 100% 33.3333%;
     animation: playbill-scanline 7s linear infinite;
     mix-blend-mode: screen;
     opacity: 0.6;
 }
 
 @keyframes playbill-scanline {
-    0% { background-position: 0 -100%; }
-    100% { background-position: 0 200%; }
+    0%   { transform: translateY(16.6667%); }
+    100% { transform: translateY(-33.3333%); }
 }
 
 /* Chyron — OWH critic quote as a lower-third */

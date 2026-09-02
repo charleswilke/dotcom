@@ -26,13 +26,18 @@
     <meta name="twitter:description" content="170 AI-assisted projections for Omaha Community Playhouse's production of Jersey Boys.">
     <meta name="twitter:image" content="https://charleswilke.com/images/jb/jb1.webp">
     <meta name="twitter:image:alt" content="Jersey Boys Projection Design">
-    <link rel="stylesheet" href="subpages.css?v=d69e91f5">
+    <link rel="stylesheet" href="subpages.css?v=ccb8b5c0">
     <!-- Favicons / Fonts -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Exo:wght@400;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonts are self-hosted (see the top of subpages.css). Preload the two faces
+         first paint needs, the title and the body, so text paints once in its
+         final face instead of swapping. Not the nav's Orbitron: on slow 4G every
+         preloaded font is bandwidth taken from the stylesheet before first paint,
+         and the nav is a few small words. crossorigin is required on font
+         preloads even same-origin, or the browser fetches twice. -->
+    <link rel="preload" href="/fonts/audiowide-v22.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/space-mono-v17-400.woff2" as="font" type="font/woff2" crossorigin>
 </head>
 <body>
     <script src="/nav.js?v=56f3b526"></script>

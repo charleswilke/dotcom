@@ -1936,22 +1936,24 @@ section.production-header.alice .production-details p strong {
     color: inherit;
     --crt-cool: 28% 18%;
     --crt-warm: 82% 92%;
-    --tile-rot: 0deg;
-    --tile-y: 0px;
-    --tile-scale: 1;
-    /* The float owns rotate/translateY, hover owns scale. Every card runs this
-       declaration unmodified — JC used to override it twice (a masonry-era 0.88
-       shrink, then an undo of that shrink in the four-column layout), both gone
-       now that its art is 16:9 like everything else in the row.
+    /* The float owns `rotate` and `translate`, hover owns `scale`: the three
+       individual transform properties rather than one `transform`, so the
+       keyframes and the hover transition never contend for a single
+       declaration and all three stay on the compositor. No card overrides
+       any of them (JC used to override the old transform twice; both gone).
+
+       They used to be --tile-rot/--tile-y/--tile-scale custom properties
+       feeding one `transform`. Animating a registered custom property is
+       never composited, and --tile-rot inherited so the scanline pseudos
+       could read it, which re-resolved style for every card's whole subtree
+       sixty times a second: about 65% of a throttled phone core, at idle,
+       for as long as the tab was open. The var-driven version is in 025775a.
 
        These cards had a pointer-driven 3D tilt and a holofoil sheen on top of
        the float; both were removed on purpose. The foil is the about-card
        portrait's alone (.foil) — that's the one object on the page that does
        it, and five of them diluted it. */
-    transform:
-        rotate(var(--tile-rot))
-        translateY(var(--tile-y))
-        scale(var(--tile-scale));
+    scale: 1;
     /* Scanlines live on ::after (counter-rotated against the float's tilt),
        not here — a background would tilt with the card, and hard 1px lines
        rasterized off-axis moiré against the pixel grid. */
@@ -1965,7 +1967,7 @@ section.production-header.alice .production-details p strong {
         0 0 7px -2px color-mix(in srgb, var(--showcase-edge) 42%, transparent),
         inset 0 0 7px -3px color-mix(in srgb, var(--showcase-edge) 28%, transparent);
     transition:
-        --tile-scale 0.25s ease,
+        scale 0.25s ease,
         box-shadow 0.25s ease,
         border-color 0.25s ease;
     border: 1px solid color-mix(in srgb, var(--showcase-edge) 52%, #151036);
@@ -1980,7 +1982,7 @@ section.production-header.alice .production-details p strong {
 }
 
 .showcase-item:is(:hover, :focus-visible) {
-    --tile-scale: 1.025;
+    scale: 1.025;
     box-shadow:
         0 20px 30px -18px rgba(0, 0, 0, 0.92),
         0 0 3px color-mix(in srgb, var(--showcase-edge) 88%, transparent),
@@ -1990,66 +1992,65 @@ section.production-header.alice .production-details p strong {
 }
 
 /* Weightless float for the "Recently" cards, mirroring the game cartridges below.
-   Registering the tile vars lets keyframes interpolate them, so the float drives
-   the same --tile-rot/--tile-y the base + hover transforms already read — the
-   hover-scale composes on top instead of snapping the bob off. Each card runs a
-   different period + negative delay so they drift out of phase. */
-/* inherits: true so the scanline pseudos can read the animated tilt and
-   counter-rotate against it (see .showcase-item::after / .showcase-media::before). */
-@property --tile-rot {
-    syntax: "<angle>";
-    inherits: true;
-    initial-value: 0deg;
+   Each card names its keyframes and clock once, in vars its pseudo-elements
+   inherit: the card runs --float, and its two scanline layers run the matching
+   --float-counter (the same rotation negated, same period, same delay), so the
+   hard 1px lines stay locked to screen pixel rows while the card tilts under
+   them. The vars themselves are static names and times, never animated; what
+   animates is `rotate` and `translate` on the card and `rotate` on the pseudos,
+   all compositor-only. Each card runs a different period + negative delay so
+   they drift out of phase. A card without these vars simply doesn't float,
+   and on touch none of them do: see the (hover: none) block further down. */
+.showcase-item {
+    animation: var(--float) var(--float-time) infinite;
 }
 
-@property --tile-y {
-    syntax: "<length>";
-    inherits: false;
-    initial-value: 0px;
-}
-
-@property --tile-scale {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 1;
-}
-
-.showcase-item-toast   { animation: showcase-float-a 7s ease-in-out infinite; }
-.showcase-item-jc      { animation: showcase-float-b 8.4s ease-in-out -2.6s infinite; }
-.showcase-item-game    { animation: showcase-float-c 6.6s ease-in-out -4.1s infinite; }
-.showcase-item-s2i     { animation: showcase-float-a 7.8s ease-in-out -3.4s infinite; }
-.showcase-item-bt      { animation: showcase-float-c 7.4s ease-in-out -1.9s infinite; }
+.showcase-item-toast   { --float: showcase-float-a; --float-counter: showcase-float-a-counter; --float-time: 7s   ease-in-out 0s; }
+.showcase-item-jc      { --float: showcase-float-b; --float-counter: showcase-float-b-counter; --float-time: 8.4s ease-in-out -2.6s; }
+.showcase-item-game    { --float: showcase-float-c; --float-counter: showcase-float-c-counter; --float-time: 6.6s ease-in-out -4.1s; }
+.showcase-item-s2i     { --float: showcase-float-a; --float-counter: showcase-float-a-counter; --float-time: 7.8s ease-in-out -3.4s; }
+.showcase-item-bt      { --float: showcase-float-c; --float-counter: showcase-float-c-counter; --float-time: 7.4s ease-in-out -1.9s; }
 /* Durations are mutually prime-ish on purpose: no two cards should breathe in
    step for long. The mixtape takes -b, the only cycle with a single occupant. */
-.showcase-item-mixtape { animation: showcase-float-b 8s ease-in-out -5.2s infinite; }
+.showcase-item-mixtape { --float: showcase-float-b; --float-counter: showcase-float-b-counter; --float-time: 8s   ease-in-out -5.2s; }
 
 /* The tilt is safe only because the scanline layers counter-rotate against
-   --tile-rot (see .showcase-item::after and .showcase-media::before): hard
-   1px lines rasterized at a fraction of a degree would otherwise beat
-   against the pixel grid and moiré. Any new hairline texture added to these
-   cards needs the same counter-rotation. */
+   it (see .showcase-item::after and .showcase-media::before): hard 1px lines
+   rasterized at a fraction of a degree would otherwise beat against the pixel
+   grid and moiré. Any new hairline texture added to these cards needs the
+   same counter-rotation. Each -counter set is its float's `rotate` negated,
+   keyframe for keyframe; if you retune one, retune both or the lines tilt. */
 @keyframes showcase-float-a {
-    0%, 100% { --tile-y: 0px;   --tile-rot: -0.4deg; }
-    50%      { --tile-y: -9px;  --tile-rot: 0.4deg; }
+    0%, 100% { translate: 0 0;    rotate: -0.4deg; }
+    50%      { translate: 0 -9px; rotate: 0.4deg; }
+}
+@keyframes showcase-float-a-counter {
+    0%, 100% { rotate: 0.4deg; }
+    50%      { rotate: -0.4deg; }
 }
 
 @keyframes showcase-float-b {
-    0%, 100% { --tile-y: -7px;  --tile-rot: 0.5deg; }
-    50%      { --tile-y: 4px;   --tile-rot: -0.3deg; }
+    0%, 100% { translate: 0 -7px; rotate: 0.5deg; }
+    50%      { translate: 0 4px;  rotate: -0.3deg; }
+}
+@keyframes showcase-float-b-counter {
+    0%, 100% { rotate: -0.5deg; }
+    50%      { rotate: 0.3deg; }
 }
 
 @keyframes showcase-float-c {
-    0%, 100% { --tile-y: 3px;   --tile-rot: -0.3deg; }
-    50%      { --tile-y: -8px;  --tile-rot: 0.45deg; }
+    0%, 100% { translate: 0 3px;  rotate: -0.3deg; }
+    50%      { translate: 0 -8px; rotate: 0.45deg; }
+}
+@keyframes showcase-float-c-counter {
+    0%, 100% { rotate: 0.3deg; }
+    50%      { rotate: -0.45deg; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .showcase-item-toast,
-    .showcase-item-jc,
-    .showcase-item-game,
-    .showcase-item-s2i,
-    .showcase-item-bt,
-    .showcase-item-mixtape { animation: none; }
+    .showcase-item,
+    .showcase-item::after,
+    .showcase-media::before { animation: none; }
 }
 
 .showcase-item::before {
@@ -2079,7 +2080,7 @@ section.production-header.alice .production-details p strong {
         transparent 0 2px,
         rgba(0, 0, 0, 0.22) 2px 3px
     );
-    transform: rotate(calc(var(--tile-rot) * -1));
+    animation: var(--float-counter) var(--float-time) infinite;
     will-change: transform;
     pointer-events: none;
     z-index: -1;
@@ -2228,11 +2229,12 @@ section.production-header.alice .production-details p strong {
     content: '';
     position: absolute;
     /* inset bleed + counter-rotation: the float tilts the card, this layer
-       rotates back by the same (inherited) angle, so the 1px scanlines stay
-       locked to the screen's pixel rows — crisp at any tilt, no moiré. The
-       bleed covers the corner wedges; .showcase-media's overflow clips it. */
+       runs the card's --float-counter keyframes (the same tilt negated, on the
+       same clock), so the 1px scanlines stay locked to the screen's pixel rows
+       — crisp at any tilt, no moiré. The bleed covers the corner wedges;
+       .showcase-media's overflow clips it. */
     inset: -8px;
-    transform: rotate(calc(var(--tile-rot) * -1));
+    animation: var(--float-counter) var(--float-time) infinite;
     will-change: transform;
     background:
         linear-gradient(180deg, rgba(248, 233, 210, 0.09), transparent 22%),
@@ -3614,7 +3616,7 @@ footer p {
 
 @media (max-width: 767px) and (hover: hover) {
     .showcase-item:is(:hover, :focus-visible) {
-        --tile-scale: 1;
+        scale: 1;
         z-index: 3;
         transform: translateY(-4px);
         box-shadow:
@@ -3730,6 +3732,18 @@ html {
     .showcase-item {
         transform: none !important;
         transition: none !important;
+    }
+
+    /* No float on touch, by decision. The transform: none above used to
+       do this by accident while the keyframes kept ticking underneath it;
+       now that the float is `rotate`/`translate`, which transform: none
+       cannot cancel, it is switched off here, pseudos included, so the
+       scanline counter-rotation stops with it (a counter with nothing to
+       counter is a tilt). */
+    .showcase-item,
+    .showcase-item::after,
+    .showcase-media::before {
+        animation: none;
     }
 
     .showcase-item.active {

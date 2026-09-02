@@ -3156,16 +3156,33 @@ footer p {
     }
 }
 
-@keyframes pulseGlow {
-    0% {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 0 2px #ffb93a;
-    }
-    50% {
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3), 0 0 15px #ffb93a;
-    }
-    100% {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 5px var(--secondary);
-    }
+/* The portrait's breathing glow: a fixed 15px mustard halo on a pseudo-element
+   whose opacity breathes, so the whole thing is one composited fade. This
+   replaced pulseGlow, a box-shadow keyframe animation (2px ring -> 15px mustard
+   glow -> 5px orange fringe, 4s alternate) that repainted the card's shadow
+   every frame the About section was on screen. The ring is already drawn by
+   the card's own static shadow and outline; the orange fringe at the end of
+   the cycle is the one thing not reproduced — an opacity fade cannot change
+   hue — and it is dropped rather than approximated. The old keyframes are in
+   8063bed if the fringe is missed. */
+.image-compare::after {
+    content: '';
+    position: absolute;
+    /* Match the border box, not the padding box, so the halo starts outside
+       the 3px black border exactly where the element's own shadow would. */
+    inset: -3px;
+    border-radius: inherit;
+    box-shadow: 0 0 15px #ffb93a;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
+    animation: about-glow-breathe 4s infinite alternate;
+}
+
+@keyframes about-glow-breathe {
+    0%   { opacity: 0.15; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.4; }
 }
 
 @keyframes glitch {
@@ -3898,7 +3915,12 @@ html {
         scale(var(--foil-scale));
     /* Springy overshoot on the way back to rest, like setting a card down. */
     transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.3s ease;
-    animation: pulseGlow 4s infinite alternate;
+    /* The breathing glow lives on ::after (below), not here: it used to be a
+       box-shadow keyframe animation on this element, which repaints the whole
+       portrait's shadow every frame it is on screen. Keeps the pseudo's
+       z-index: -1 inside this card even where the mobile block drops the
+       transform. */
+    isolation: isolate;
     cursor: pointer;
     border: 3px solid #000;
     outline: 2px solid #ffb93a;

@@ -449,5 +449,66 @@ Recommended build sequence:
 
 ---
 
-*Last updated: March 2026*
+*Last updated: September 2026*
 *Haus of Toots × Fellow Vector*
+
+
+## Opening animation — September 2026
+
+The page now opens with a 15-second procedural Canvas cartoon: a small ship
+approaches a cut-paper planet, attempts a correction, and triggers escalating
+gravity. Stars, the perspective grid, and loose title letters join the vortex
+before the debris collapses toward the O’s in TOOTS. A final fragment drops out.
+The palette retains navy, cyan, and magenta with warm cream typography.
+
+`OPENING` precedes `TITLE` on page load only. Click, tap, Enter, Space, or Escape
+skips to the title; a separate confirmation starts gameplay. Desktop R replays
+the opening from the title. Reduced-motion preference bypasses it. Timing uses
+animation timestamps and pauses while the document is hidden. Retries retain
+the existing flow. The opening is silent; existing music starts with gameplay.
+No external assets, dependencies, or gameplay entities are involved.
+
+The typography is hand-cut paper, not a font: `PAPER_GLYPHS` holds each letter of
+SPACE TOOTS as a polygon on a 10×10 grid (inner rings are holes, filled evenodd),
+and `PAPER_LETTERS` bakes ten scissor-cut variants per glyph: jittered corners
+plus one or two wobble points pushed off every edge, so sides bow and nick rather
+than staying ruled. S, T, O and C each carry two base designs and a variant picks
+one by parity, so the two S’s, T’s and O’s in the title are different letters,
+not the same letter re-jittered; `PAPER_POSE` gives each variant its own tilt and
+size. Title letters use variant `i + row*5` in both the opening and the title
+screen. I, L, K and R exist only so CLICK TO START / TAP TO START can be cut from
+the same paper. `drawPaperLetter` lays a magenta underlayer offset like a misregistered
+screen print, with no glow.
+The same letters orbit the well loose, then blast out of the nova into the title.
+On the nova beat the frame hard-cuts to flat colour cards (cream, then magenta)
+for a few frames, and the letters emerge from the card rather than the ember.
+
+The opening ship uses the gameplay ship’s swept wings, twin nacelles/exhausts,
+angular fuselage, and wedge canopy in a simplified paper palette. Its acting is a
+chain of local-time beats in story order (`openingShipPose`): a glance over the
+shoulder before the turn, a head-cocking hover at the wobble it caused, a hop when
+it realises, a nod (“I can fix this”), windup and kick for the corrective puff, a
+lean-in to admire the fix, the alarmed double take as it makes things worse, and a
+bolt with stuttering engines that gravity overrules. Braking squash, puff recoil,
+trailing wing flex and tangent-facing orbital stretch ride on top. Exhaust puffs
+use the ship’s release position and rotation. Planet/ring deformation and staggered
+letter landing springs carry the same elastic motion through the scene.
+
+The title screen (`drawTitleScreen`) lives in the same paper world rather than the
+old neon HUD. The letters hold exactly where the nova left them so the cut is
+invisible, then bob and sway from zero; the floor is at rest, the thirty stars are
+back on their threads, and the dropped fragment lies where it fell. The ship is
+gone, mostly: every eight seconds it barrels through on one of three lanes
+(between the rows, through TOOTS, over SPACE), alternating direction, with a
+paper wake, and each letter it passes fires a spring the moment the ship crosses
+its x, scaled by how close the lane is. The start prompt is cut from the same
+paper in cream and breathes; controls and the replay hint are quiet printed text
+in the paper palette. The scenery fades up over the first beat; reduced motion
+gets the settled frame with no fly-bys. It runs on its own `performance.now()`
+clock (`title.start`, reset on entry) because `frame` does not tick on the title.
+
+The wireframe floor answers the same beats rather than ramping smoothly: each puff
+sends a travelling ripple through it, the planet’s spin swings the far ends of the
+floor lines around the sink (and the reverse pass swings them back the other way),
+the well peels it upward, the collapse pinches every line into the sink, and the
+nova throws the floor outward and down before it fades under the title.

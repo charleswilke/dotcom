@@ -644,6 +644,14 @@ const LOCAL_ARTICLES = [
         pubDate: '2026-08-15T16:00:00.000Z',
         contentUrl: '/transcripts/baby-steps-transcript.html',
         link: ''
+    },
+    {
+        slug: 'strap-in-transcript',
+        title: 'Strap In: The Conversation',
+        cleanDescription: 'The full working session behind "Strap In" — a coin flip between two brand-new models, a draft about the everything era worked over with Codex, and more clay on the wheel.',
+        pubDate: '2026-09-05T16:00:00.000Z',
+        contentUrl: '/transcripts/strap-in-transcript.html',
+        link: ''
     }
 ];
 

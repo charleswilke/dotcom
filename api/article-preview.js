@@ -25,6 +25,13 @@ const LOCAL_ARTICLES = {
         thumbnail: '/images/transcripts/baby-steps/06-pulp-cast-shadow.webp',
         image: { width: 1774, height: 887 },
         pubDate: '2026-08-15T16:00:00.000Z'
+    },
+    'strap-in-transcript': {
+        title: 'Strap In: The Conversation',
+        description: 'The full working session behind "Strap In" — a coin flip between two brand-new models, a draft about the everything era worked over with Codex, and more clay on the wheel.',
+        thumbnail: '/images/transcripts/strap-in/01-pottery-header.webp',
+        image: { width: 1774, height: 887 },
+        pubDate: '2026-09-05T16:00:00.000Z'
     }
 };
 

@@ -7253,6 +7253,9 @@ function openingShipPose(t) {
 // Each entry is a list of designs; a letter that appears twice in the title gets a different
 // design each time, on top of its own jitter, so the two S's, T's and O's are not twins.
 const PAPER_GLYPHS = {
+  W: [[[[0,0],[2.5,0],[3,6],[4,3.5],[6,3.5],[7,6],[7.5,0],[10,0],[9,10],[6.5,10],[5,7],[3.5,10],[1,10]]]],
+  G: [[[[0,0],[10,0],[10,2.6],[2.8,2.6],[2.8,7.4],[7.2,7.4],[7.2,6],[5,6],[5,4],[10,4],[10,10],[0,10]]]],
+  M: [[[[0,10],[0,0],[2.7,0],[5,4],[7.3,0],[10,0],[10,10],[7.3,10],[7.3,4.8],[5,8],[2.7,4.8],[2.7,10]]]],
   S: [[[[0,0],[10,0],[10,2.6],[2.6,2.6],[2.6,3.7],[10,3.7],[10,10],[0,10],[0,7.4],[7.4,7.4],[7.4,6.3],[0,6.3]]],
       [[[0,0],[10,0],[10,2.8],[3,2.8],[3,3.5],[10,4.9],[10,10],[0,10],[0,7.2],[7,7.2],[7,6.5],[0,5.1]]]],
   P: [[[[0,0],[10,0],[10,6.3],[2.8,6.3],[2.8,10],[0,10]], [[2.8,2.6],[7.2,2.6],[7.2,3.7],[2.8,3.7]]]],
@@ -7276,25 +7279,27 @@ const PAPER_LETTERS = {};
 for (const ch in PAPER_GLYPHS) {
   const designs = PAPER_GLYPHS[ch];
   PAPER_LETTERS[ch] = Array.from({length: PAPER_VARIANTS}, (_, variant) => designs[variant % designs.length].map((ring,r) => {
-    const hash = k => { const v = Math.sin(k*12.9898+variant*78.233+r*17.1)*43758.5453; return v-Math.floor(v)-.5; };
-    const out = [];
-    ring.forEach(([x,y],i) => {
-      const [nx,ny] = ring[(i+1)%ring.length];
-      out.push([x+hash(x*7.3+y*3.1+i*1.7)*.7, y+hash(y*9.7+x*2.3+i*4.1)*.7]);
-      // Scissors don't cut straight: every edge gets a wobble point or two, pushed
-      // sideways off the line, so the sides bow and nick instead of staying ruled.
-      const len = Math.hypot(nx-x,ny-y), cuts = len > 4 ? 2 : 1;
-      for (let c=1;c<=cuts;c++) {
-        const f = c/(cuts+1)+hash(i*3.3+c*5.7+x)*.22;
-        const d = hash(i*8.1+c*2.9+y)*(len > 2 ? .6 : .3);
-        out.push([x+(nx-x)*f-(ny-y)/len*d, y+(ny-y)*f+(nx-x)/len*d]);
+    // Sparse, repeatable scissor slips: preserve the silhouette and clean counters,
+    // but give selected long outer edges one deliberate change of direction.
+    const lean=Math.sin(variant*2.1)*.018;
+    const hash=k=>{const v=Math.sin(k*12.9898+variant*78.233)*43758.5453;return v-Math.floor(v);};
+    const out=[];
+    ring.forEach(([x,y],i)=>{
+      const [nx,ny]=ring[(i+1)%ring.length];
+      const jitter=r===0?.18:.05;
+      out.push([x+(y-5)*lean+(hash(i*3+1)-.5)*jitter,y+(hash(i*3+2)-.5)*jitter]);
+      const len=Math.hypot(nx-x,ny-y);
+      if(r===0 && len>3 && (i+variant)%3===0) {
+        const f=.35+hash(i+19)*.3,cut=(hash(i+41)>.5?1:-1)*.22;
+        const py=y+(ny-y)*f;
+        out.push([x+(nx-x)*f-(ny-y)/len*cut+(py-5)*lean,py+(nx-x)/len*cut]);
       }
     });
     return out;
   }));
 }
 // Each variant also sits a little differently on the page: its own tilt and size.
-const PAPER_POSE = Array.from({length: PAPER_VARIANTS}, (_, v) => ({ tilt:Math.sin(v*4.7+1.3)*.09, scale:1+Math.sin(v*2.3+1)*.08 }));
+const PAPER_POSE = Array.from({length: PAPER_VARIANTS}, (_, v) => ({ tilt:Math.sin(v*4.7+1.3)*.035, scale:1+Math.sin(v*2.3+1)*.025 }));
 // Draws one letter centred on the current origin, `size` tall. The magenta underlayer is
 // offset like a misregistered screen print, which is where the paper depth comes from;
 // there is no glow on these on purpose.
@@ -7310,7 +7315,7 @@ function drawPaperLetter(ch, size, color, variant = 0, under = '#c92a8c') {
     }
   };
   if (under) {
-    ctx.save(); ctx.translate(u*.55,u*.6); trace(); ctx.fillStyle = under; ctx.fill('evenodd'); ctx.restore();
+    ctx.save(); ctx.translate(u*.28,u*.34); trace(); ctx.fillStyle = under; ctx.fill('evenodd'); ctx.restore();
   }
   trace(); ctx.fillStyle = color; ctx.fill('evenodd');
   ctx.restore();
@@ -7347,6 +7352,33 @@ function drawOpeningShip(pose,t,glow) {
   ctx.restore();
 }
 
+// Shared landing geometry: the nova floor and title floor are the same paths.
+function drawPaperFloor(age = null) {
+  const w=CONFIG.width,h=CONFIG.height,cx=w*.54,cy=h*.43;
+  const landed=age===null || age>=1.65;
+  const progress=landed?1:openingClamp(age/1.65);
+  const travel=landed?1:1-Math.pow(1-openingClamp(age/.72),3);
+  const bounce=landed?0:Math.sin(Math.max(0,age-.4)*9)*Math.exp(-Math.max(0,age-.4)*3)*.23*openingEase((age-.4)/.2)*(1-openingEase((age-1.25)/.4));
+  const project=(x,y)=>[cx+(x-cx)*(travel+bounce),cy+(y-cy)*(travel+bounce)];
+  ctx.save();ctx.globalAlpha=.22+(1-progress)*.5;
+  ctx.strokeStyle='#fc44b8';ctx.lineWidth=1.3;
+  for(let i=0;i<15;i++) {
+    const x=i*w/14,end=w*.5+(x-w*.5)*.13;
+    ctx.beginPath();
+    for(let j=0;j<=48;j++) {
+      const q=j/48,inv=1-q;
+      const point=project(inv*inv*x+2*inv*q*x+q*q*end,inv*inv*h+2*inv*q*h*.69+q*q*h*.71);
+      if(j===0)ctx.moveTo(...point);else ctx.lineTo(...point);
+    }
+    ctx.stroke();
+  }
+  for(let i=0;i<7;i++) {
+    const y=h*.73+i*i*3.7;
+    ctx.beginPath();ctx.moveTo(...project(0,y));ctx.lineTo(...project(w,y));ctx.stroke();
+  }
+  ctx.restore();
+}
+
 function drawOpening(t) {
   const w = CONFIG.width, h = CONFIG.height;
   const cx = w * .54, cy = h * .43;
@@ -7358,42 +7390,53 @@ function drawOpening(t) {
   ctx.fillRect(0, 0, w, h);
   // Deliberately imperfect polygons retain their silhouette as the glow builds.
   const cutout = (x, y, size, color, rotation, kind = 'rock') => paperCutout(x, y, size, color, rotation, kind, trouble * 13);
-  // The floor answers every beat: the first puff sends a ripple through it, the spin drags
-  // it sideways, the reverse pass jolts it the other way, the well peels it up, the collapse
-  // pinches it into the sink, and the nova throws it back out.
+  // One projected surface: both families of lines share exactly the same deformation.
+  // Local radial pulses spread through the mesh instead of bowing whole lines like ribbons.
   const orbitTime = Math.max(0,t-5);
-  const gridWave = x => {
-    let v = 0;
-    for (const [beat,amp] of [[1.75,16],[4.65,34]]) {
-      const age = t-beat;
-      if (age>0) v += Math.exp(-age*2.2)*Math.sin(age*13-Math.abs(x-cx)/70)*amp;
+  const gridFade = t>=13.12?1:0;
+  const gravity = openingEase((t-4.8)/5.8);
+  const release=openingEase((t-13.12)/.65);
+  const meshCollapse=collapse*(1-release);
+  const vertex = (u,v) => {
+    const perspective=1/(1+v*.55);
+    const baseX=cx+u*w*.24*perspective;
+    const baseY=h*.66+h*.42*perspective;
+    const dx=(baseX-cx)/(w*.55), dy=(baseY-cy)/(h*.65);
+    const radius=Math.hypot(dx,dy);
+    const influence=Math.exp(-radius*radius*1.7);
+    let ripple=0;
+    for(const [beat,amp] of [[1.75,.045],[4.65,.095]]) {
+      const age=t-beat;
+      if(age>0)ripple+=amp*Math.sin(radius*19-age*11)*Math.exp(-Math.pow(radius-age*.6,2)*12)*Math.exp(-age*.55);
     }
-    return v;
+    // The horizon climbs into a vast funnel; the foreground stays broad enough
+    // to show the scale of the well. Every intersection follows this same map.
+    const well=gravity*(1-release);
+    const pull=1-well*influence*.9;
+    const angle=well*influence*(.3+orbitTime*.12)+ripple;
+    const x=dx*Math.cos(angle)-dy*Math.sin(angle);
+    const y=dx*Math.sin(angle)+dy*Math.cos(angle);
+    const breath=1+openingBump(t,10.7,.65)*.22;
+    const shockAge=Math.max(0,t-13.12);
+    const shock=release*.65+Math.exp(-Math.pow(radius-shockAge*3,2)*18)*release*.5;
+    const scale=(1-meshCollapse)*(pull+ripple+shock)*breath;
+    return [cx+x*w*.55*scale,cy+y*h*.65*scale-well*influence*h*.18*(1-meshCollapse)];
   };
-  const swirl = openingEase((t-1.7)/2)*.14 - openingEase((t-4.85)/1.8)*.42 - orbitTime*orbitTime*.025*trouble;
-  const shock = openingClamp((t-13.15)/1.1);
-  const gridFade = openingEase((t-13.7)/.7);
-  ctx.save(); ctx.globalAlpha = (1-gridFade)*(.22+trouble*.5+Math.min(.3,Math.abs(gridWave(cx))/40));
-  ctx.strokeStyle = '#fc44b8'; ctx.lineWidth = 1.3;
-  for (let i = 0; i < 15; i++) {
-    const x = i * w / 14;
-    // Far end of each floor line: lifted by the well, swung around the sink by the spin,
-    // pinched to the sink at the collapse, then flung outward and down by the nova.
-    let ex = w*.5+(x-w*.5)*.13-cx, ey = h*.71-trouble*h*.28-cy;
-    const c = Math.cos(swirl), sn = Math.sin(swirl);
-    [ex,ey] = [ex*c-ey*sn, ex*sn+ey*c];
-    ex *= 1-collapse*.9; ey *= 1-collapse*.9;
-    ex += (x-cx)*shock*.6; ey += shock*h*.34;
-    ctx.beginPath(); ctx.moveTo(x, h);
-    ctx.quadraticCurveTo(x+(cx-x)*trouble+swirl*140, h*.69-trouble*100+gridWave(x)+shock*60, cx+ex, cy+ey);
+  ctx.save();ctx.globalAlpha=(1-gridFade)*(.35+gravity*.5);
+  const meshLine = (fixed, cross, major) => {
+    ctx.lineWidth=major?1.5:.65;
+    ctx.strokeStyle=major?'#55cbd4':'#97518f';
+    ctx.beginPath();
+    for(let j=0;j<=80;j++) {
+      const p=cross?vertex(-12+j*24/80,fixed):vertex(fixed,j*20/80);
+      if(j===0)ctx.moveTo(...p);else ctx.lineTo(...p);
+    }
     ctx.stroke();
-  }
-  for (let i = 0; i < 7; i++) {
-    const y = h*.73 + i*i*3.7;
-    ctx.beginPath(); ctx.moveTo(0,y);
-    ctx.quadraticCurveTo(cx+swirl*220, y-trouble*220*(1-collapse*.5)+gridWave(cx)*.7+Math.sin(shock*Math.PI)*90, w, y); ctx.stroke();
-  }
+  };
+  for(let i=-24;i<=24;i++)meshLine(i*.5,false,i%4===0);
+  for(let i=0;i<=40;i++)meshLine(i*.5,true,i%4===0);
   ctx.restore();
+  if(t>=13.12)drawPaperFloor(t-13.12);
   ctx.save(); ctx.globalAlpha = 1-settle;
   // First a single star tips over; then the rest of the scenery joins it.
   for (let i=0;i<30;i++) {
@@ -7417,13 +7460,107 @@ function drawOpening(t) {
   ctx.save();ctx.translate(planetX,cy);ctx.scale(1+planetJiggle,1/(1+planetJiggle));ctx.translate(-planetX,-cy);
   // First wake spins clockwise; the corrective pass stalls and reverses it.
   const spin = Math.max(0,t-1.7)*2.5-Math.max(0,t-4.95)*7;
-  cutout(planetX,cy,62*(1-collapse),'#f53ba8',-.2+spin,'rock');
-  ctx.save(); ctx.translate(planetX,cy); ctx.rotate(-.25+spin);
-  ctx.strokeStyle='#090b20'; ctx.lineWidth=6*(1-collapse);
-  if (collapse<1) {
-    ctx.beginPath();ctx.ellipse(0,0,76*(1-collapse),19*(1-collapse),0,0,Math.PI*2);ctx.stroke();
-  }
+  const morph=openingEase((t-1.85)/1.5);
+  const ringPull=openingEase((t-6.2)/5.8);
+  // All band and ink vertices share one tilted plane and perspective projection.
+  const gamesRing = front => {
+    if(collapse>=1)return;
+    const dissolve=openingEase((t-5.4)/2.8);
+    const radius=112*(1-collapse)*(1-ringPull*.7);
+    const tilt=-.24+Math.sin(t*1.1)*.035+ringPull*Math.sin(spin*.2)*.3;
+    const circulation=ringPull*orbitTime*1.1;
+    const project=(angle,r,drop=0)=>{
+      const z=Math.sin(angle)*r;
+      const perspective=1/(1-z/480);
+      const x=Math.cos(angle)*r*perspective;
+      const y=(z*(.42+ringPull*.15)+drop)*perspective;
+      return [x*Math.cos(tilt)-y*Math.sin(tilt),x*Math.sin(tilt)+y*Math.cos(tilt)];
+    };
+    ctx.save();ctx.translate(planetX,cy);
+    const start=front?0:Math.PI,end=start+Math.PI;
+    const band=(drop,color)=>{
+      ctx.beginPath();
+      // Fixed sector thresholds erode the paper into a stable dither, not frame noise.
+      for(let j=0;j<96;j++) {
+        const seed=(j*37+(front?17:0))%97/97;
+        if(dissolve>seed)continue;
+        const a=start+(end-start)*j/96,b=start+(end-start)*(j+1)/96;
+        ctx.moveTo(...project(a,radius*1.18,drop));
+        ctx.lineTo(...project(b,radius*1.18,drop));
+        ctx.lineTo(...project(b,radius*.87,drop));
+        ctx.lineTo(...project(a,radius*.87,drop));ctx.closePath();
+      }
+      ctx.fillStyle=color;ctx.fill();
+    };
+    ctx.save();ctx.globalAlpha*=1-dissolve*.65;
+    band(3*(1-collapse),front?'#95537c':'#413453');
+    ctx.shadowColor='#67fff0';ctx.shadowBlur=front?17:9;
+    band(0,front?'#d5ffe1':'#7aadae');
+    ctx.restore();
+    // Freed flecks join the larger vortex early, then share its final collapse.
+    if(dissolve>0) {
+      ctx.save();ctx.shadowColor='#67fff0';ctx.shadowBlur=6;
+      for(let j=0;j<48;j++) {
+        const seed=((j*29)%47)/47;
+        if(dissolve<seed)continue;
+        const age=openingClamp((dissolve-seed)/.45);
+        const angle=start+j*Math.PI/48+age*(1+orbitTime*.35);
+        if((Math.sin(angle)>=0)!==front)continue;
+        const r=(112+age*(35+j%7*9))*(1-collapse)*(1-ringPull*.45);
+        const [x,y]=project(angle,r);
+        ctx.globalAlpha=(1-collapse)*(1-age*.65)*.8;
+        ctx.fillStyle=j%3?'#80ffe4':'#ffe5b0';
+        const size=(1.5+j%3)*(1-collapse);
+        ctx.fillRect(x,y,size,size);
+      }
+      ctx.restore();
+    }
+    for(let i=0;i<5;i++) {
+      const center=Math.PI/2+(2-i)*.255+circulation;
+      const depth=Math.sin(center);
+      if((depth>=0)!==front)continue;
+      ctx.save();ctx.globalAlpha*=(front?1:.3)*(1-openingEase((t-5.4)/1.9));
+      ctx.beginPath();
+      for(const ring of PAPER_LETTERS['GAMES'[i]][i]) {
+        ring.forEach(([x,y],j)=>{
+          const angle=center-(x-5)*.019;
+          const r=radius*(1.025+(y-5)*.025);
+          const p=project(angle,r);
+          j?ctx.lineTo(...p):ctx.moveTo(...p);
+        });ctx.closePath();
+      }
+      ctx.fillStyle='#352344';ctx.fill('evenodd');ctx.restore();
+    }
+    ctx.restore();
+  };
+  gamesRing(false);
+  ctx.save();ctx.translate(planetX,cy);ctx.rotate(-.12+spin*morph);
+  ctx.scale(1-collapse,1-collapse);
+  // Two interlocking cuts make the globe itself; there is no disk behind the CW.
+  const pieces=[
+    [[-4,-69],[-31,-65],[-52,-47],[-67,-22],[-70,6],[-59,36],[-37,58],[-8,68],[-5,43],[-27,35],[-39,14],[-40,-9],[-29,-31],[-7,-40]],
+    [[0,-68],[20,-65],[24,10],[33,-15],[45,-12],[50,9],[54,-44],[66,-24],[71,0],[63,35],[47,54],[35,43],[27,62],[10,68],[4,37]]
+  ];
+  const trace=(points,offset)=>{
+    ctx.beginPath();points.forEach(([x,y],i)=>{
+      // Close the letter gaps as the pieces inflate into the spinning world.
+      const angle=Math.atan2(y,x),r=Math.hypot(x,y);
+      const inflate=morph*.92;
+      const rr=r+(69-r)*inflate;
+      const px=Math.cos(angle)*rr,py=Math.sin(angle)*rr;
+      i?ctx.lineTo(px+offset,py+offset):ctx.moveTo(px+offset,py+offset);
+    });ctx.closePath();
+  };
+  ctx.globalAlpha*=1-openingEase((morph-.7)/.3);
+  pieces.forEach((points,i)=>{
+    trace(points,3);ctx.fillStyle='#942469';ctx.fill();
+    trace(points,0);ctx.fillStyle=i?'#ef43a4':'#ff75bb';ctx.fill();
+  });
   ctx.restore();
+  ctx.save();ctx.globalAlpha*=openingEase((morph-.7)/.3);
+  cutout(planetX,cy,69*(1-collapse),'#f53ba8',-.12+spin*morph,'rock');
+  ctx.restore();
+  gamesRing(true);
   ctx.restore(); // planet and ring squash together
   const shipPose = openingShipPose(t);
   drawOpeningShip(shipPose,t,trouble);
@@ -7442,17 +7579,6 @@ function drawOpening(t) {
         }
       }
       ctx.restore();
-    }
-  }
-  // Typography is loose scenery until the well snaps it into a title.
-  if(t>7) {
-    const letters='SPACETOOTS';
-    for(let i=0;i<letters.length;i++) {
-      const a=i*.9+orbitTime*orbitTime*.15;
-      const r=(170+i*12)*(1-collapse);
-      ctx.save();ctx.translate(cx+Math.cos(a)*r,cy+Math.sin(a)*r*.66);ctx.rotate(a+.4);
-      ctx.globalAlpha=openingEase(t-7)*(1-collapse);
-      drawPaperLetter(letters[i],46,i%2?'#42ebed':'#ffe5a0',i);ctx.restore();
     }
   }
   ctx.restore();
@@ -7533,17 +7659,8 @@ function drawTitleScreen() {
   ctx.save();
   ctx.fillStyle = '#090b20'; ctx.fillRect(0, 0, w, h);
 
-  // Floor at rest: the same lines the opening draws before anything has gone wrong.
-  ctx.save(); ctx.globalAlpha = .22*arrive; ctx.strokeStyle = '#fc44b8'; ctx.lineWidth = 1.3;
-  for (let i = 0; i < 15; i++) {
-    const x = i*w/14;
-    ctx.beginPath(); ctx.moveTo(x, h); ctx.quadraticCurveTo(x, h*.69, w*.5+(x-w*.5)*.13, h*.71); ctx.stroke();
-  }
-  for (let i = 0; i < 7; i++) {
-    const y = h*.73+i*i*3.7;
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.quadraticCurveTo(cx, y, w, y); ctx.stroke();
-  }
-  ctx.restore();
+  // The nova already landed this floor; keep its geometry and opacity on entry.
+  drawPaperFloor();
 
   ctx.globalAlpha = arrive;
   // The same thirty stars, back in their places, turning very slowly on their threads.

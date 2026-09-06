@@ -457,8 +457,8 @@ Recommended build sequence:
 
 The page now opens with a 15-second procedural Canvas cartoon: a small ship
 approaches a cut-paper planet, attempts a correction, and triggers escalating
-gravity. Stars, the perspective grid, and loose title letters join the vortex
-before the debris collapses toward the O’s in TOOTS. A final fragment drops out.
+gravity. Stars, the floor mesh, and the GAMES ring join the vortex
+before the debris collapses into a single point. A final fragment drops out.
 The palette retains navy, cyan, and magenta with warm cream typography.
 
 `OPENING` precedes `TITLE` on page load only. Click, tap, Enter, Space, or Escape
@@ -468,20 +468,67 @@ animation timestamps and pauses while the document is hidden. Retries retain
 the existing flow. The opening is silent; existing music starts with gameplay.
 No external assets, dependencies, or gameplay entities are involved.
 
-The typography is hand-cut paper, not a font: `PAPER_GLYPHS` holds each letter of
-SPACE TOOTS as a polygon on a 10×10 grid (inner rings are holes, filled evenodd),
-and `PAPER_LETTERS` bakes ten scissor-cut variants per glyph: jittered corners
-plus one or two wobble points pushed off every edge, so sides bow and nick rather
-than staying ruled. S, T, O and C each carry two base designs and a variant picks
-one by parity, so the two S’s, T’s and O’s in the title are different letters,
-not the same letter re-jittered; `PAPER_POSE` gives each variant its own tilt and
-size. Title letters use variant `i + row*5` in both the opening and the title
-screen. I, L, K and R exist only so CLICK TO START / TAP TO START can be cut from
-the same paper. `drawPaperLetter` lays a magenta underlayer offset like a misregistered
-screen print, with no glow.
-The same letters orbit the well loose, then blast out of the nova into the title.
-On the nova beat the frame hard-cuts to flat colour cards (cream, then magenta)
-for a few frames, and the letters emerge from the card rather than the ember.
+The typography is hand-cut paper, not a font: `PAPER_GLYPHS` holds each letter as
+a polygon on a 10×10 grid (inner rings are holes, filled evenodd), and
+`PAPER_LETTERS` bakes ten variants per glyph. The straight scissor cuts are kept
+deliberately: each variant gets a tiny whole-letter shear, a small seeded corner
+unevenness (outer ring only; counters stay nearly clean), and one angled scissor
+slip on selected long outer edges. Cuts are fixed per variant, so they never
+change between frames or replays. S, T, O and C each carry two base designs and a
+variant picks one by parity, so the two S’s, T’s and O’s in the title are
+different letters, not the same letter re-jittered; `PAPER_POSE` adds a restrained
+tilt and scale per variant. Title letters use variant `i + row*5` in both the
+opening and the title screen. I, L, K and R exist only so CLICK TO START / TAP TO
+START can be cut from the same paper; W, G and M exist for the CW planet and the
+GAMES ring. `drawPaperLetter` lays a magenta underlayer offset like a
+misregistered screen print (a narrow offset, so the depth reads as one sheet on
+another rather than a drop shadow), with no glow.
+
+The SPACE TOOTS letters stay hidden through the whole buildup. On the nova beat
+the frame hard-cuts to flat colour cards (cream, then magenta) for a few frames,
+and the letters blast out of the card rather than the ember.
+
+**The planet is the CW monogram.** Two bespoke faceted paper pieces, a broad C on
+the left and a W fitted into the right hemisphere, form a roughly circular
+silhouette with no disk behind them; a darker magenta underlayer offset a few
+pixels gives them thickness. The first ship puff (t≈1.85) starts a 1.5s morph:
+the pieces rotate with the planet’s spin while their inward cuts inflate toward
+the outer contour, so the gaps close and the facets sweep around the edge, and
+over the last third the closed shape cross-fades into the solid pink `paperCutout`
+planet that the rest of the sequence deforms. It should read as the same object
+changing, not a logo fading into a replacement.
+
+**GAMES is printed once on a Saturn ring.** The ring is an annular paper band
+projected in perspective on a tilted plane, drawn in two passes (rear half
+before the planet, front half after) so the planet occludes it correctly. A
+darker band offset downward gives the paper an edge; the cream face carries a
+soft mint glow. The five glyphs’ vertices go through the same projection as the
+band, so the word foreshortens with the surface instead of being rotated letter
+by letter; it rests on the readable front arc, and the ring rocks gently on its
+own. From t≈6.2 the gravity pull tightens the radius, tips the plane and sets
+the word circulating; far-side letters are drawn subdued and fade out. Starting
+at 5.4s the band dithers away over 2.8s in fixed angular sectors (stable
+thresholds, not per-frame noise) and releases glowing flecks that join the
+vortex early and share the final collapse. The printed word fades slightly
+faster; no solid band remains by 8.2s. All shadow blur stays inside canvas saves.
+
+**The floor is one projected mesh.** `drawOpening` samples a perspective grid
+(49 depth lines, 41 cross lines; every fourth line a brighter cyan major to
+establish scale, the rest a dim violet) through a single vertex function, so
+both line families share exactly the same deformation and intersections stay
+connected instead of each curve bowing on its own like a ribbon. It answers the
+beats in order: each puff (1.75s, 4.65s) sends a localized ripple travelling
+radially out from the sink; the gravity buildup (4.8s to 10.6s) pulls the mesh
+toward the sink, twists it with the orbit, and lifts the horizon into a towering
+well; the mesh takes an anticipatory outward breath around 10.7s; then the
+collapse crunches the whole surface to the nova point. At the nova (13.12s) the
+mesh releases with an expanding shock ring and `drawPaperFloor` takes over,
+throwing the settled floor outward from its centre with a quick travel and a
+damped landing bounce, fully settled before the opening ends.
+
+`drawPaperFloor` with no age argument is the title screen’s floor: the same paths
+at the same opacity the nova left them at, so nothing fades out or back in
+across the cut.
 
 The opening ship uses the gameplay ship’s swept wings, twin nacelles/exhausts,
 angular fuselage, and wedge canopy in a simplified paper palette. Its acting is a
@@ -496,19 +543,18 @@ letter landing springs carry the same elastic motion through the scene.
 
 The title screen (`drawTitleScreen`) lives in the same paper world rather than the
 old neon HUD. The letters hold exactly where the nova left them so the cut is
-invisible, then bob and sway from zero; the floor is at rest, the thirty stars are
-back on their threads, and the dropped fragment lies where it fell. The ship is
-gone, mostly: every eight seconds it barrels through on one of three lanes
-(between the rows, through TOOTS, over SPACE), alternating direction, with a
-paper wake, and each letter it passes fires a spring the moment the ship crosses
-its x, scaled by how close the lane is. The start prompt is cut from the same
-paper in cream and breathes; controls and the replay hint are quiet printed text
-in the paper palette. The scenery fades up over the first beat; reduced motion
-gets the settled frame with no fly-bys. It runs on its own `performance.now()`
-clock (`title.start`, reset on entry) because `frame` does not tick on the title.
+invisible, then bob and sway from zero; the floor is the one the nova landed, the
+thirty stars are back on their threads, and the dropped fragment lies where it
+fell. The ship is gone, mostly: every eight seconds it barrels through on one of
+three lanes (between the rows, through TOOTS, over SPACE), alternating direction,
+with a paper wake, and each letter it passes fires a spring the moment the ship
+crosses its x, scaled by how close the lane is. The start prompt is cut from the
+same paper in cream and breathes; controls and the replay hint are quiet printed
+text in the paper palette. The scenery fades up over the first beat; reduced
+motion gets the settled frame with no fly-bys. It runs on its own
+`performance.now()` clock (`title.start`, reset on entry) because `frame` does
+not tick on the title.
 
-The wireframe floor answers the same beats rather than ramping smoothly: each puff
-sends a travelling ripple through it, the planet’s spin swings the far ends of the
-floor lines around the sink (and the reverse pass swings them back the other way),
-the well peels it upward, the collapse pinches every line into the sink, and the
-nova throws the floor outward and down before it fades under the title.
+Proposed next step for the paper look, not yet started: carrying it into
+gameplay. See `PAPER_STYLE_DIRECTION.md` for the brief (ship, one enemy and one
+explosion as a first playable sample).

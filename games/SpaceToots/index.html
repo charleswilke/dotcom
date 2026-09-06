@@ -2875,11 +2875,13 @@ function drawAsteroidEnemy(e) {
   ctx.rotate(e.rotation);
 
   if (PAPER_SAMPLE && e.type === 'drone') drawPaperDrone(e, sucked);
+  else if (PAPER_SAMPLE && e.type === 'charger') drawPaperCharger(e, sucked, triggered);
   else drawAsteroidShape(e.verts, e.cracks, glowColor, shadowBlur);
 }
 
 function drawCraftEnemy(e) {
   if (PAPER_SAMPLE && e.type === 'weaver') { drawPaperWeaver(e); return; }
+  if (PAPER_SAMPLE && e.type === 'bomber') { drawPaperBomber(e); return; }
   ctx.shadowColor = CONFIG.colors.enemy;
   ctx.shadowBlur = 8;
   ctx.fillStyle = CONFIG.colors.enemy;
@@ -7202,10 +7204,12 @@ const PAPER_SAMPLE = !/[?&]classic\b/.test(location.search);
 const PAPER_PAGE = '#0b0d2a';
 // Per-enemy inks for the death burst, and how big a death each one gets.
 const PAPER_INKS = {
-  drone:  ['#c96bd6', '#9d3fae', '#fff0bf', '#c92a8c'],
-  weaver: ['#ff4fb0', '#c92a8c', '#fff0bf', '#ffb060'],
+  drone:   ['#c96bd6', '#9d3fae', '#fff0bf', '#c92a8c'],
+  weaver:  ['#ff4fb0', '#c92a8c', '#fff0bf', '#ffb060'],
+  charger: ['#ff7a3d', '#e0572b', '#fff0bf', '#ffb060'],
+  bomber:  ['#c92a8c', '#8a1c5e', '#fff0bf', '#ffb060'],
 };
-const PAPER_BURST_SIZE = { drone: 15, weaver: 19 };
+const PAPER_BURST_SIZE = { drone: 15, weaver: 19, charger: 22, bomber: 22 };
 
 // Draws a stack of paper panels: each panel first casts a page-dark copy of itself a
 // couple of pixels down and right onto whatever is already there, then lays its colour.
@@ -7407,6 +7411,93 @@ function drawPaperWeaver(e) {
   if (bay > 0) {
     ctx.fillStyle = '#fff0bf';
     ctx.beginPath(); ctx.arc(4, bay * 3, 1.5 + bay * 1.5, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// Karen as a paper rock with a temper. Same construction as the drone (base sheet, cuts,
+// glued facet) in rust inks, but it acts on its beats: it shivers harder as it nears the
+// trigger line, and once triggered it leans into the rush, stretches along its motion, and
+// leaves a stepped paper smear behind it, as if the frames couldn't keep up. Called inside
+// drawAsteroidEnemy's translate/rotate, so the stretch is undone and redone around the spin.
+function drawPaperCharger(e, sucked, triggered) {
+  ctx.shadowBlur = 0;
+  const outline = e.verts.map(v => [v.x, v.y]);
+  const facet = e.verts.map((v, i) => [v.x * .5 + (i % 2 ? 2 : -1.5), v.y * .5 + 2]);
+  const base = sucked ? '#c9472f' : triggered ? '#ff7a3d' : '#e0572b';
+  const top = sucked ? '#ff8a5c' : triggered ? '#fff0bf' : '#ffb060';
+  const rock = (dx, dy) => {
+    paperPanels([[outline, base]], dx, dy);
+    ctx.strokeStyle = PAPER_PAGE; ctx.lineWidth = 1.3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (const c of e.cracks) {
+      ctx.beginPath(); ctx.moveTo(c.x1, c.y1); ctx.lineTo(c.xm, c.ym); ctx.lineTo(c.x2, c.y2); ctx.stroke();
+    }
+    paperPanels([[facet, top]], dx * .7, dy * .7);
+  };
+  ctx.save();
+  ctx.rotate(-e.rotation);   // work in screen axes for the shake, lean and stretch
+  if (triggered && !e.isShepherdInbound) {
+    // Lean toward the row it is diving for, stretch along the rush, smear behind.
+    const dy = (e.targetY ?? e.y) - e.y;
+    const lean = Math.max(-.45, Math.min(.45, -dy / 60));
+    ctx.rotate(lean);
+    ctx.scale(1.28, .82);
+    for (const [gap, alpha] of [[22, .16], [11, .32]]) {
+      ctx.save(); ctx.globalAlpha *= alpha; ctx.translate(gap, 0); ctx.rotate(e.rotation);
+      paperPanels([[outline, base]], 0, 0); ctx.restore();
+    }
+  } else if (!sucked && !e.isShepherdInbound) {
+    // Winding up: the shiver grows over the last sixty pixels before the trigger line.
+    const wind = Math.max(0, Math.min(1, (CONFIG.width - 20 - e.x) / 60));
+    const step = Math.floor(e.frame / 2) % 4;
+    ctx.translate([-1, 1, 1, -1][step] * wind * 2.2, [1, 1, -1, -1][step] * wind * 1.6);
+    ctx.scale(1 + wind * .06, 1 - wind * .06);
+  }
+  ctx.rotate(e.rotation);
+  rock(2.4, 3);
+  ctx.restore();
+}
+
+// Oops as a fat paper bomber, nose to the left: a rounded heavy fuselage, thick swept wings
+// with a nacelle and stepped flame on each, twin fins, a cream canopy, and a belly bay that
+// opens around the bomb over the last twenty frames before the drop so you see it coming.
+// On release the whole plane hops up a couple of pixels and settles: the "oops".
+function drawPaperBomber(e) {
+  const flick = [0, .7, 1, .35, .85, .15, .55][Math.floor((frame + e.frame) / 3) % 7];
+  const bay = e.fireTimer < 20 ? 1 - e.fireTimer / 20 : 0;
+  const hopAge = 90 - e.fireTimer;                      // 0 on the frame the bomb leaves
+  const hop = hopAge >= 0 && hopAge < 14 ? Math.sin(hopAge * .45) * Math.exp(-hopAge * .12) : 0;
+  ctx.save();
+  ctx.translate(e.x, e.y - hop * 4 + Math.sin(e.frame * .05) * 1.5);
+  ctx.scale(1 - hop * .05, 1 + hop * .08);
+  ctx.shadowBlur = 0;
+  for (const side of [-1, 1]) {
+    const flame = 5 + flick * 5;
+    paperPanels([
+      [[[12, side * 4], [17, side * 11], [22, side * 10], [20, side * 4]], '#5a1040'],          // fin
+      [[[-6, side * 5], [3, side * 18], [21, side * 12], [17, side * 5]], '#d63a9a'],           // wing: broad and swept
+      [[[2, side * 9], [12, side * 9], [14, side * 12.5], [2, side * 12.5]], '#5a1040'],        // nacelle on the wing
+      [[[14, side * 9.5], [14 + flame, side * 10.5], [14, side * 12.5]], '#ffb060'],            // flame
+      [[[14, side * 10], [14 + flame * .5, side * 10.6], [14, side * 12]], '#fff0bf'],
+      [[[3, side * 16], [6, side * 18.5], [12, side * 14.5], [9, side * 12.5]], '#ff8fcf'],     // wing tip
+    ]);
+  }
+  paperPanels([
+    [[[-20, 0], [-16, -5], [-6, -7], [8, -7], [17, -5], [21, 0], [17, 5], [8, 7], [-6, 7], [-16, 5]], '#a8237a'],  // fuselage
+    [[[-14, 2], [12, 2], [15, 5], [-10, 5.5]], '#6b1450'],                                                       // belly
+    [[[-15, 0], [-11, -3], [-5, -3.5], [-2, 0], [-5, 3], [-11, 3]], '#fff0bf'],                                  // canopy
+    [[[-13, -.4], [-10, -2.2], [-6, -2.2], [-9, -.6]], '#ffffff'],
+  ]);
+  // Bomb bay: doors part around the bomb as it lowers into view.
+  ctx.fillStyle = PAPER_PAGE;
+  ctx.fillRect(-7, 3.5, 14, 2 + bay * 3);
+  if (bay > 0) {
+    const y = 5 + bay * 6;
+    paperPanels([
+      [[[-6, y - 2.6], [3, y - 2.6], [6, y], [3, y + 2.6], [-6, y + 2.6]], '#fff0bf'],   // cream bomb
+      [[[-7, y - 4], [-4, y - 2.6], [-4, y + 2.6], [-7, y + 4]], '#5a1040'],             // tail fins
+      [[[3, y - 2.6], [6, y], [3, y + 2.6]], '#ff4444'],                                 // red nose
+    ], .8, 1);
   }
   ctx.restore();
 }

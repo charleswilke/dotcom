@@ -2879,6 +2879,7 @@ function drawAsteroidEnemy(e) {
 }
 
 function drawCraftEnemy(e) {
+  if (PAPER_SAMPLE && e.type === 'weaver') { drawPaperWeaver(e); return; }
   ctx.shadowColor = CONFIG.colors.enemy;
   ctx.shadowBlur = 8;
   ctx.fillStyle = CONFIG.colors.enemy;
@@ -3722,7 +3723,7 @@ function destroyEnemy(e, index) {
   score += Math.round(e.points * multiplier);
   checkLevelUp();
   enemiesDestroyed++;
-  if (PAPER_SAMPLE && e.type === 'drone') spawnPaperBurst(e.x, e.y, 15, PAPER_DRONE_INK);
+  if (PAPER_SAMPLE && PAPER_INKS[e.type]) spawnPaperBurst(e.x, e.y, PAPER_BURST_SIZE[e.type], PAPER_INKS[e.type]);
   else spawnExplosion(e.x, e.y, 12, explosionColors);
   if (e.type === 'weaver') playSFX('bomber-death', SFX_VOLUMES['bomber-death']);
 
@@ -7199,7 +7200,12 @@ const PAPER_SAMPLE = !/[?&]classic\b/.test(location.search);
 // Flat printed inks. The page is dark, so depth comes from panels casting onto the panel
 // beneath them, not from a shadow on the background.
 const PAPER_PAGE = '#0b0d2a';
-const PAPER_DRONE_INK = ['#c96bd6', '#9d3fae', '#fff0bf', '#c92a8c'];
+// Per-enemy inks for the death burst, and how big a death each one gets.
+const PAPER_INKS = {
+  drone:  ['#c96bd6', '#9d3fae', '#fff0bf', '#c92a8c'],
+  weaver: ['#ff4fb0', '#c92a8c', '#fff0bf', '#ffb060'],
+};
+const PAPER_BURST_SIZE = { drone: 15, weaver: 19 };
 
 // Draws a stack of paper panels: each panel first casts a page-dark copy of itself a
 // couple of pixels down and right onto whatever is already there, then lays its colour.
@@ -7269,6 +7275,52 @@ function drawPaperDrone(e, sucked) {
     ctx.beginPath(); ctx.moveTo(c.x1, c.y1); ctx.lineTo(c.xm, c.ym); ctx.lineTo(c.x2, c.y2); ctx.stroke();
   }
   paperPanels([[facet, sucked ? '#ff8a5c' : '#c96bd6']], 1.4, 1.8);
+}
+
+// The Wobbler as a paper interceptor: canards, a double-delta main wing, twin tail fins
+// and a belly stripe, all layered the same way as the player's hull, nose to the left.
+// It banks into its strafing arc (from the y it actually moved this frame, so the bank
+// is honest at any speed), rocks a little because it is a Wobbler, steps its exhaust
+// on the same three-frame cycle as the player, and cracks its bomb bay open for the
+// last twelve frames before a mine drops so the drop is telegraphed.
+function drawPaperWeaver(e) {
+  const dy = e.paperLastY === undefined ? 0 : e.y - e.paperLastY;
+  e.paperLastY = e.y;
+  const speed = Math.max(.5, e.speed || 1);
+  const bank = Math.atan2(dy, -speed) - Math.PI;     // 0 when flying straight left
+  const rock = Math.sin(e.frame * .21) * .05;
+  const flick = [0, .7, 1, .35, .85, .15, .55][Math.floor((frame + e.frame) / 3) % 7];
+  const bay = e.fireTimer < 12 ? 1 - e.fireTimer / 12 : 0;
+  ctx.save();
+  ctx.translate(e.x, e.y);
+  ctx.rotate(bank + rock);
+  ctx.scale(1, 1 - Math.min(1, Math.abs(dy) / speed) * .25);
+  ctx.shadowBlur = 0;
+  for (const side of [-1, 1]) {
+    const flame = 6 + flick * 5;
+    paperPanels([
+      [[[13, side * 4], [16, side * 12], [20, side * 11], [19, side * 4]], '#8a1c5e'],   // tail fin
+      [[[17, side * 6], [17 + flame, side * 5], [17, side * 3]], '#ffb060'],           // exhaust
+      [[[17, side * 5.5], [17 + flame * .5, side * 5], [17, side * 3.5]], '#fff0bf'],
+      [[[-1, side * 4], [7, side * 17], [15, side * 7], [11, side * 4]], '#c92a8c'],   // main delta
+      [[[6, side * 15], [9, side * 17], [13, side * 12], [11, side * 11]], '#ffb3dd'], // wing tip
+      [[[-11, side * 3], [-7, side * 10], [-1, side * 4]], '#ff4fb0'],                 // canard
+    ]);
+  }
+  paperPanels([
+    [[[-20, 0], [-11, -4], [4, -5], [14, -3], [18, 0], [14, 3], [4, 5], [-11, 4]], '#ff4fb0'],  // fuselage
+    [[[-14, 1], [10, 1.5], [13, 3], [-8, 4]], '#c92a8c'],                                   // belly stripe
+    [[[-14, 0], [-9, -2.5], [-4, -2.5], [-2, 0], [-4, 2.5], [-9, 2.5]], '#fff0bf'],          // canopy
+    [[[-12, -.5], [-9, -1.8], [-6, -1.5], [-9, -.2]], '#ffffff'],                           // glare
+  ]);
+  // Bomb bay: a dark slit that opens into a cream mine peeking out before the drop.
+  ctx.fillStyle = PAPER_PAGE;
+  ctx.fillRect(0, -1 - bay * 2, 8, 2 + bay * 4);
+  if (bay > 0) {
+    ctx.fillStyle = '#fff0bf';
+    ctx.beginPath(); ctx.arc(4, bay * 3, 1.5 + bay * 1.5, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
 }
 
 // A paper death: a short white flash, one expanding ring printed twice (magenta under,

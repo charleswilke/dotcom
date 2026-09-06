@@ -555,8 +555,8 @@ motion gets the settled frame with no fly-bys. It runs on its own
 `performance.now()` clock (`title.start`, reset on entry) because `frame` does
 not tick on the title.
 
-**Paper in gameplay: first sample.** The player hull, the drone and the drone's
-death now use the same cut-paper treatment (`PAPER GAMEPLAY SAMPLE` section in
+**Paper in gameplay: first sample.** The player hull, the drone, the weaver and
+their deaths now use the same cut-paper treatment (`PAPER GAMEPLAY SAMPLE` section in
 `index.html`, gated by `PAPER_SAMPLE`; `?classic` restores the neon versions for
 comparison). Drawing only: no hitbox, speed or spawn changed. The brief, what
 the sample does and what is still to be judged are in `PAPER_STYLE_DIRECTION.md`.

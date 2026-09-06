@@ -7249,6 +7249,7 @@ function drawPaperShipBody(px, py) {
     ]);
     ctx.restore();
   }
+  drawPaperShipGear('under');
   paperPanels([
     [[[23, 0], [10, -6], [-4, -8], [-11, -5], [-10, 5], [-4, 7], [10, 6]], '#38d4df'],
     [[[-9, 1], [19, 0], [9, 6], [-4, 7]], '#1094ad'],
@@ -7256,6 +7257,93 @@ function drawPaperShipBody(px, py) {
     [[[14, -.5], [9, -2], [6, -1], [12, .6]], '#ffffff'],
     [[[23, 0], [18, -1.5], [18, 1.5]], '#adfff5'],
   ]);
+  drawPaperShipGear('over');
+  ctx.restore();
+}
+
+// What the ship is carrying, glued on as more paper. Two passes: 'under' draws what hangs
+// beneath the wings before the fuselage covers it, 'over' draws nose and spine gear on top.
+// A new pickup pops on with a settling spring (from the HUD's secondaryFlash clock), and
+// every piece kicks back on the frames right after it fires (secondaryFireTimer).
+const PAPER_GEAR_TIMER = { homing: 12, wave: 20, spread: 18, shield: 30, laser: 10 };
+function drawPaperShipGear(pass) {
+  const lvl = player.weaponLevel;
+  if (pass === 'over' && lvl >= 2) {
+    // Primary cannon stubs either side of the nose; a third down the middle from level 3.
+    const rows = lvl >= 3 ? [-3.6, 0, 3.6] : [-3.6, 3.6];
+    paperPanels(rows.map(y => [[[12, y - 1.1], [21, y - 1.1], [21, y + 1.1], [12, y + 1.1]], '#0a5d70']), 1, 1.3);
+  }
+  const type = player.secondary;
+  if (!type) return;
+  const kick = secondaryFireTimer / (PAPER_GEAR_TIMER[type] || 12);
+  const age = 90 - player.secondaryFlash;
+  const arrive = age < 40 ? 1 - Math.cos(age * .42) * Math.exp(-age * .11) : 1;
+  if (arrive <= 0) return;
+  ctx.save();
+  ctx.scale(arrive, arrive);
+  const hot = type === 'laser' && secondaryProjectiles.some(q => q.type === 'laser');
+  if (pass === 'under') {
+    if (type === 'homing') {
+      // Missile pods slung under each wing: two per side while more than half the ammo is left.
+      const pods = player.secondaryAmmo > 10 ? [11, 15.5] : [13];
+      ctx.translate(-kick * 3, 0);
+      for (const side of [-1, 1]) for (const y of pods) {
+        paperPanels([
+          [[[-15, side * (y - 1.4)], [-5, side * (y - 1.4)], [-2, side * y], [-5, side * (y + 1.4)], [-15, side * (y + 1.4)]], '#b13be0'],
+          [[[-5, side * (y - 1.4)], [-2, side * y], [-5, side * (y + 1.4)]], '#fff0bf'],
+          [[[-15, side * (y - 1.4)], [-12, side * (y - 3)], [-10, side * (y - 1.4)]], '#dd44ff'],
+        ], 1, 1.3);
+      }
+    }
+  } else {
+    switch (type) {
+      case 'wave': {
+        // A green emitter fan on the nose; it opens wider on the pulse.
+        const spread = .32 + kick * .5;
+        ctx.translate(-kick * 2, 0);
+        const wedges = [-1, 0, 1].map(k => {
+          const a = k * spread, c = Math.cos(a), sn = Math.sin(a);
+          const pt = (r, o) => [19 + c * r - sn * o, sn * r + c * o];
+          return [[pt(0, 0), pt(9, -2), pt(10, 0), pt(9, 2)], k ? '#2fcf72' : '#44ff88'];
+        });
+        paperPanels(wedges, 1, 1.3);
+        paperPanels([[[[17, -2], [21, -2], [21, 2], [17, 2]], '#fff0bf']], 1, 1.3);
+        break;
+      }
+      case 'spread': {
+        // An orange rake of three barrels; they shorten on recoil.
+        const len = 10 - kick * 3.5;
+        const barrels = [-.36, 0, .36].map(a => {
+          const c = Math.cos(a), sn = Math.sin(a);
+          const pt = (r, o) => [15 + c * r - sn * o, sn * r + c * o];
+          return [[pt(0, -1.3), pt(len, -1.1), pt(len, 1.1), pt(0, 1.3)], '#ff8844'];
+        });
+        paperPanels(barrels, 1, 1.3);
+        paperPanels([[[[12, -3.5], [17, -3.5], [17, 3.5], [12, 3.5]], '#c95a1f']], 1, 1.3);
+        break;
+      }
+      case 'shield': {
+        // Doc's bubble generator: a cyan dome on the spine with a cream bead that breathes.
+        const dome = [];
+        for (let i = 0; i <= 8; i++) { const a = Math.PI + i * Math.PI / 8; dome.push([-1 + Math.cos(a) * 5.5, -7 + Math.sin(a) * 5.5]); }
+        paperPanels([[dome, '#44ddff']], 1, 1.3);
+        const breath = 1 + Math.sin(frame * .12) * .25;
+        ctx.fillStyle = '#fff0bf';
+        ctx.beginPath(); ctx.arc(-1, -9, 1.6 * breath, 0, Math.PI * 2); ctx.fill();
+        break;
+      }
+      case 'laser': {
+        // The Full Send: a long red spar past the nose, cream-tipped; it runs hot while the beam is out.
+        ctx.translate(-kick * 4, 0);
+        paperPanels([
+          [[[14, -2.2], [38, -1.3], [38, 1.3], [14, 2.2]], hot ? '#ffb0a0' : '#ff4444'],
+          [[[36, -1.3], [42, 0], [36, 1.3]], '#fff0bf'],
+          [[[14, -3.2], [19, -3.2], [19, 3.2], [14, 3.2]], '#b32a2a'],
+        ], 1, 1.3);
+        break;
+      }
+    }
+  }
   ctx.restore();
 }
 

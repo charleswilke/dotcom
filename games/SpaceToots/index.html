@@ -1170,8 +1170,9 @@ function drawBackground() {
   ctx.fillStyle = CONFIG.colors.bg;
   ctx.fillRect(0, 0, CONFIG.width, CONFIG.height);
 
-  // Layer 1: Stars
-  for (const star of stars) {
+  // Layer 1: Stars (paper: the far planes of the multiplane sky)
+  if (PAPER_SAMPLE) drawPaperSky('far');
+  else for (const star of stars) {
     star.x -= 0.2;
     if (star.x < 0) { star.x = CONFIG.width; star.y = Math.random() * CONFIG.height; }
     ctx.fillStyle = `rgba(255,255,255,${star.brightness})`;
@@ -1215,7 +1216,8 @@ function drawBackground() {
   ctx.restore();
 
   // Layer 1.5: Celestial bodies (planets, moons, galaxies)
-  for (const c of celestials) {
+  if (PAPER_SAMPLE) drawPaperSky('near');
+  else for (const c of celestials) {
     c.x -= c.speed;
     if (c.x < -c.radius * 3) {
       Object.assign(c, makeCelestial(CONFIG.width + c.radius * 3 + Math.random() * 200));
@@ -1225,7 +1227,7 @@ function drawBackground() {
   }
 
   // Layer 3: Nebula clouds — gradient is built once per nebula and reused via translate
-  for (const neb of nebulae) {
+  if (!PAPER_SAMPLE) for (const neb of nebulae) {
     neb.x -= neb.speed;
     if (neb.x < -neb.radius * 2) { neb.x = CONFIG.width + neb.radius * 2; neb.y = Math.random() * CONFIG.height; }
     if (!neb.grad) {
@@ -1252,7 +1254,7 @@ function drawBackground() {
   for (const d of debris) {
     d.x -= d.speed * 1.2;
     if (d.x < -d.length) { d.x = CONFIG.width + d.length; d.y = Math.random() * CONFIG.height; }
-    ctx.strokeStyle = `rgba(255,255,255,${d.brightness})`;
+    ctx.strokeStyle = PAPER_SAMPLE ? `rgba(255,240,191,${d.brightness})` : `rgba(255,255,255,${d.brightness})`;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(d.x, d.y);
@@ -7502,6 +7504,158 @@ function drawPaperBomber(e) {
   ctx.restore();
 }
 
+const CW_PIECES = [
+  [[-4,-69],[-31,-65],[-52,-47],[-67,-22],[-70,6],[-59,36],[-37,58],[-8,68],[-5,43],[-27,35],[-39,14],[-40,-9],[-29,-31],[-7,-40]],
+  [[0,-68],[20,-65],[24,10],[33,-15],[45,-12],[50,9],[54,-44],[66,-24],[71,0],[63,35],[47,54],[35,43],[27,62],[10,68],[4,37]]
+];
+
+// === PAPER SKY ===
+// A multiplane camera, which is the cut-paper animator's own trick: flat sheets stacked at
+// different distances, each sliding at its own speed. Far to near: cream specks, torn nebula
+// sheets, cut planets and moons, the opening's paper stars turning on their threads, and a
+// rare big star crossing in front. No gradients anywhere: a soft airbrushed glow is the one
+// mark paper never makes. Everything is cut once at spawn; twinkle is a stepped flip between
+// poses, not a fade. The classic sky (gradient nebulae, glowing planets) is still drawn
+// under ?classic.
+function makePaperStar(near, x) {
+  const w = CONFIG.width, h = CONFIG.height;
+  const inks = ['#fff0bf', '#fff0bf', '#fff0bf', '#42ebed', '#f53ba8'];
+  return {
+    x: x ?? Math.random() * w, y: 10 + Math.random() * h * .56,
+    size: near ? 9 + Math.random() * 5 : 3.5 + Math.random() * 3.5,
+    color: near ? '#c9b892' : inks[Math.floor(Math.random() * inks.length)],
+    alpha: near ? .2 : .32 + Math.random() * .22,
+    rot: Math.random() * Math.PI * 2, spin: (Math.random() - .5) * .004,
+    period: 40 + Math.floor(Math.random() * 90), phase: Math.floor(Math.random() * 300),
+    speed: near ? .9 : .3,
+  };
+}
+function makePaperSheet(x) {
+  const w = CONFIG.width, h = CONFIG.height;
+  const rx = 140 + Math.random() * 130, ry = 55 + Math.random() * 65, n = 12 + Math.floor(Math.random() * 5);
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2, r = .75 + Math.random() * .5;   // ragged, torn edge
+    pts.push([Math.cos(a) * rx * r, Math.sin(a) * ry * r]);
+  }
+  const inks = [['#3c1f63', .13], ['#1e2a63', .12], ['#5a1a4a', .11], ['#1d3a52', .12]];
+  const [color, alpha] = inks[Math.floor(Math.random() * inks.length)];
+  return { x: x ?? Math.random() * w * 1.5, y: Math.random() * h * .7, rx, pts, color, alpha, speed: .16 + Math.random() * .06 };
+}
+function makePaperBody(x) {
+  const h = CONFIG.height, kind = Math.random();
+  const disc = (r, n = 14) => Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2, rr = r * (.96 + Math.random() * .08);
+    return [Math.cos(a) * rr, Math.sin(a) * rr];
+  });
+  if (kind < .12) {
+    // The CW planet from the opening, far back, as a wink.
+    return { type: 'cw', x, y: 40 + Math.random() * h * .4, radius: 22, alpha: .3, speed: .12, rot: Math.random() * Math.PI * 2 };
+  } else if (kind < .38) {
+    const r = 18 + Math.random() * 22;
+    return { type: 'galaxy', x, y: Math.random() * h * .55, radius: r, alpha: .16 + Math.random() * .1, speed: .08 + Math.random() * .05,
+      angle: Math.random() * Math.PI, elong: .35 + Math.random() * .3, ring: disc(r, 16), core: disc(r * .42, 10), color: Math.random() > .5 ? '#6a5aa8' : '#8a4a78' };
+  } else if (kind < .72) {
+    const r = 14 + Math.random() * 24;
+    const inks = ['#3a2a63', '#22405e', '#4a2a3a', '#2b4a48'];
+    return { type: 'planet', x, y: Math.random() * h * .5, radius: r, alpha: .34 + Math.random() * .12, speed: .1 + Math.random() * .08,
+      body: disc(r), color: inks[Math.floor(Math.random() * inks.length)], rings: Math.random() > .6, tilt: .15 + Math.random() * .25 };
+  }
+  const r = 5 + Math.random() * 7;
+  return { type: 'moon', x, y: Math.random() * h * .55, radius: r, alpha: .3 + Math.random() * .12, speed: .15 + Math.random() * .1, body: disc(r, 10), color: '#5a5a6e' };
+}
+const paperSky = {
+  far: Array.from({ length: 90 }, () => ({ x: Math.random() * CONFIG.width, y: Math.random() * CONFIG.height, size: Math.random() * 1.4 + .6, alpha: Math.random() * .35 + .18 })),
+  sheets: Array.from({ length: 5 }, () => makePaperSheet()),
+  bodies: Array.from({ length: 6 }, () => makePaperBody(Math.random() * CONFIG.width * 2)),
+  mid: Array.from({ length: 22 }, () => makePaperStar(false)),
+  near: Array.from({ length: 3 }, () => makePaperStar(true)),
+};
+function drawPaperStarLayer(list, near) {
+  const w = CONFIG.width;
+  for (let i = 0; i < list.length; i++) {
+    const st = list[i];
+    st.x -= st.speed; st.rot += st.spin;
+    if (st.x < -20) list[i] = makePaperStar(near, w + 20 + Math.random() * (near ? 900 : 60));
+    // Stepped twinkle: three cut poses swapped on the star's own clock.
+    const step = Math.floor((frame + st.phase) / st.period) % 3;
+    ctx.globalAlpha = st.alpha;
+    paperCutout(st.x, st.y, st.size * [1, .82, 1.1][step], st.color, st.rot + [0, .18, -.12][step], 'star');
+  }
+}
+function drawPaperSky(pass) {
+  const w = CONFIG.width;
+  ctx.save();
+  ctx.shadowBlur = 0;
+  if (pass === 'far') {
+    ctx.fillStyle = '#fff0bf';
+    for (const sp of paperSky.far) {
+      sp.x -= .12;
+      if (sp.x < 0) { sp.x = w; sp.y = Math.random() * CONFIG.height; }
+      ctx.globalAlpha = sp.alpha;
+      ctx.fillRect(sp.x, sp.y, sp.size, sp.size);
+    }
+    // Torn sheets of nebula, each with a second sheet a few pixels under it for thickness.
+    for (let i = 0; i < paperSky.sheets.length; i++) {
+      const sh = paperSky.sheets[i];
+      sh.x -= sh.speed;
+      if (sh.x < -sh.rx * 1.4) paperSky.sheets[i] = makePaperSheet(w + sh.rx * 1.4);
+      ctx.save(); ctx.translate(sh.x, sh.y);
+      ctx.globalAlpha = sh.alpha;
+      for (const [dx, dy, color] of [[6, 8, PAPER_PAGE], [0, 0, sh.color]]) {
+        ctx.beginPath();
+        sh.pts.forEach(([x, y], j) => j ? ctx.lineTo(x + dx, y + dy) : ctx.moveTo(x + dx, y + dy));
+        ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+      }
+      ctx.restore();
+    }
+    for (let i = 0; i < paperSky.bodies.length; i++) {
+      const b = paperSky.bodies[i];
+      b.x -= b.speed;
+      if (b.x < -b.radius * 3) paperSky.bodies[i] = makePaperBody(w + b.radius * 3 + Math.random() * 300);
+      drawPaperBody(b);
+    }
+    drawPaperStarLayer(paperSky.mid, false);
+  } else {
+    drawPaperStarLayer(paperSky.near, true);
+  }
+  ctx.restore();
+}
+function drawPaperBody(b) {
+  ctx.save();
+  ctx.translate(b.x, b.y);
+  ctx.globalAlpha = b.alpha;
+  const trace = pts => { ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); };
+  if (b.type === 'cw') {
+    ctx.rotate(b.rot); ctx.scale(b.radius / 69, b.radius / 69);
+    for (const [dx, color] of [[4, '#5a1040'], [0, '#a8237a']]) {
+      for (const piece of CW_PIECES) { ctx.beginPath(); piece.forEach(([x, y], i) => i ? ctx.lineTo(x + dx, y + dx) : ctx.moveTo(x + dx, y + dx)); ctx.closePath(); ctx.fillStyle = color; ctx.fill(); }
+    }
+  } else if (b.type === 'galaxy') {
+    // A cut annulus with a smaller cut core, on a tilted ellipse.
+    ctx.rotate(b.angle); ctx.scale(1, b.elong);
+    trace(b.ring); ctx.fillStyle = b.color; ctx.fill();
+    ctx.globalAlpha = b.alpha * 1.6;
+    trace(b.core); ctx.fillStyle = '#fff0bf'; ctx.fill();
+  } else {
+    // Planet or moon: a cut disc with a page-dark crescent glued over its shadow side, and
+    // for ringed planets a flat paper band behind and in front.
+    if (b.rings) {
+      ctx.save(); ctx.scale(1, b.tilt); ctx.strokeStyle = '#8a7aa8'; ctx.lineWidth = b.radius * .28;
+      ctx.beginPath(); ctx.arc(0, 0, b.radius * 1.7, Math.PI, Math.PI * 2); ctx.stroke(); ctx.restore();
+    }
+    trace(b.body); ctx.fillStyle = b.color; ctx.fill();
+    ctx.save(); trace(b.body); ctx.clip();
+    ctx.translate(b.radius * .38, b.radius * .3); trace(b.body); ctx.fillStyle = PAPER_PAGE; ctx.globalAlpha = b.alpha * .9; ctx.fill();
+    ctx.restore();
+    if (b.rings) {
+      ctx.save(); ctx.scale(1, b.tilt); ctx.strokeStyle = '#a898c4'; ctx.lineWidth = b.radius * .28;
+      ctx.beginPath(); ctx.arc(0, 0, b.radius * 1.7, 0, Math.PI); ctx.stroke(); ctx.restore();
+    }
+  }
+  ctx.restore();
+}
+
 // A paper death: a short white flash, one expanding ring printed twice (magenta under,
 // cream over, misregistered like the letters), and a handful of torn shards that spin
 // out and drop off the page. Shard shapes are cut once at spawn and never re-rolled.
@@ -7908,10 +8062,7 @@ function drawOpening(t) {
   ctx.save();ctx.translate(planetX,cy);ctx.rotate(-.12+spin*morph);
   ctx.scale(1-collapse,1-collapse);
   // Two interlocking cuts make the globe itself; there is no disk behind the CW.
-  const pieces=[
-    [[-4,-69],[-31,-65],[-52,-47],[-67,-22],[-70,6],[-59,36],[-37,58],[-8,68],[-5,43],[-27,35],[-39,14],[-40,-9],[-29,-31],[-7,-40]],
-    [[0,-68],[20,-65],[24,10],[33,-15],[45,-12],[50,9],[54,-44],[66,-24],[71,0],[63,35],[47,54],[35,43],[27,62],[10,68],[4,37]]
-  ];
+  const pieces=CW_PIECES;
   const trace=(points,offset)=>{
     ctx.beginPath();points.forEach(([x,y],i)=>{
       // Close the letter gaps as the pieces inflate into the spinning world.

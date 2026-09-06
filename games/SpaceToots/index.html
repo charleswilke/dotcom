@@ -1332,6 +1332,36 @@ function drawPlayer() {
   }
   ctx.translate(-px, -py);
 
+  if (PAPER_SAMPLE) drawPaperShipBody(px, py); else drawNeonShipBody(px, py);
+
+  // === GRAV PULL WARNING ===
+  if (playerGravPull.active) {
+    const s = Math.min(1, playerGravPull.strength / 2);
+    const pullAngle = Math.atan2(playerGravPull.fromY - py, playerGravPull.fromX - px);
+    // Partial arcs facing the pull source — quarter of the circle
+    const arcSpan = Math.PI * 0.5; // 90 degrees
+    const ringCount = 2 + Math.floor(s * 2);
+    const flicker = 0.5 + Math.sin(frame * 0.4) * 0.3;
+    ctx.shadowColor = '#cc44ff';
+    ctx.lineCap = 'round';
+    for (let k = 0; k < ringCount; k++) {
+      const phase = ((frame * 0.04 + k * 0.33) % 1);
+      const radius = 18 + phase * 28;
+      const ringAlpha = s * flicker * (1 - phase) * 0.8;
+      ctx.strokeStyle = `rgba(200, 60, 255, ${ringAlpha.toFixed(2)})`;
+      ctx.shadowBlur = 6 + s * 10;
+      ctx.lineWidth = 1.5 + s * (1 - phase);
+      ctx.beginPath();
+      ctx.arc(px, py, radius, pullAngle - arcSpan / 2, pullAngle + arcSpan / 2);
+      ctx.stroke();
+    }
+  }
+
+  ctx.restore();
+}
+
+// The original neon hull, kept whole so the two treatments can be compared in play (?classic).
+function drawNeonShipBody(px, py) {
   // Glow — boosted and flickering during dodge, normal idle pulse otherwise
   const glowIntensity = player.dodgeTimer > 0
     ? 25 + Math.sin(frame * 0.3) * 8
@@ -1489,31 +1519,6 @@ function drawPlayer() {
   ctx.lineTo(px + 18, py + 1.5);
   ctx.closePath();
   ctx.fill();
-
-  // === GRAV PULL WARNING ===
-  if (playerGravPull.active) {
-    const s = Math.min(1, playerGravPull.strength / 2);
-    const pullAngle = Math.atan2(playerGravPull.fromY - py, playerGravPull.fromX - px);
-    // Partial arcs facing the pull source — quarter of the circle
-    const arcSpan = Math.PI * 0.5; // 90 degrees
-    const ringCount = 2 + Math.floor(s * 2);
-    const flicker = 0.5 + Math.sin(frame * 0.4) * 0.3;
-    ctx.shadowColor = '#cc44ff';
-    ctx.lineCap = 'round';
-    for (let k = 0; k < ringCount; k++) {
-      const phase = ((frame * 0.04 + k * 0.33) % 1);
-      const radius = 18 + phase * 28;
-      const ringAlpha = s * flicker * (1 - phase) * 0.8;
-      ctx.strokeStyle = `rgba(200, 60, 255, ${ringAlpha.toFixed(2)})`;
-      ctx.shadowBlur = 6 + s * 10;
-      ctx.lineWidth = 1.5 + s * (1 - phase);
-      ctx.beginPath();
-      ctx.arc(px, py, radius, pullAngle - arcSpan / 2, pullAngle + arcSpan / 2);
-      ctx.stroke();
-    }
-  }
-
-  ctx.restore();
 }
 
 function drawShield() {
@@ -2869,7 +2874,8 @@ function drawAsteroidEnemy(e) {
   ctx.translate(e.x + wiggleX, e.y + wiggleY);
   ctx.rotate(e.rotation);
 
-  drawAsteroidShape(e.verts, e.cracks, glowColor, shadowBlur);
+  if (PAPER_SAMPLE && e.type === 'drone') drawPaperDrone(e, sucked);
+  else drawAsteroidShape(e.verts, e.cracks, glowColor, shadowBlur);
 }
 
 function drawCraftEnemy(e) {
@@ -3212,6 +3218,7 @@ function updateParticles() {
     p.y += p.vy;
     p.vx *= 0.98;
     p.vy *= 0.98;
+    if (p.kind) updatePaperParticle(p);
     p.life -= p.decay;
     if (p.life <= 0) swapRemove(particles, i);
   }
@@ -3223,6 +3230,7 @@ function drawParticles() {
   ctx.shadowBlur = 0;
   let lastColor = '';
   for (const p of particles) {
+    if (p.kind) { drawPaperParticle(p); lastColor = ''; continue; }
     const colors = p.colors;
     const idx = Math.min(Math.floor((1 - p.life) * colors.length), colors.length - 1);
     const color = colors[idx];
@@ -3714,7 +3722,8 @@ function destroyEnemy(e, index) {
   score += Math.round(e.points * multiplier);
   checkLevelUp();
   enemiesDestroyed++;
-  spawnExplosion(e.x, e.y, 12, explosionColors);
+  if (PAPER_SAMPLE && e.type === 'drone') spawnPaperBurst(e.x, e.y, 15, PAPER_DRONE_INK);
+  else spawnExplosion(e.x, e.y, 12, explosionColors);
   if (e.type === 'weaver') playSFX('bomber-death', SFX_VOLUMES['bomber-death']);
 
   // XP orb — every enemy drops one; size/value proportional to enemy points
@@ -7179,6 +7188,137 @@ function paperCutout(x, y, size, color, rotation, kind = 'rock', glow = 0) {
     : [[-.9,-.4],[-.4,-.94],[.5,-.85],[1,-.1],[.7,.7],[-.15,1],[-.9,.4]];
   points.forEach(([px,py], i) => i ? ctx.lineTo(px*size,py*size) : ctx.moveTo(px*size,py*size));
   ctx.closePath(); ctx.fill(); ctx.restore();
+}
+
+// === PAPER GAMEPLAY SAMPLE ===
+// First pass at carrying the opening's cut-paper look into combat (PAPER_STYLE_DIRECTION.md):
+// the player hull, the drone, and the drone's death. Nothing here touches a hitbox, a
+// speed or a spawn; it is drawing only. `?classic` in the URL restores the neon versions
+// so the two can be compared in the same waves.
+const PAPER_SAMPLE = !/[?&]classic\b/.test(location.search);
+// Flat printed inks. The page is dark, so depth comes from panels casting onto the panel
+// beneath them, not from a shadow on the background.
+const PAPER_PAGE = '#0b0d2a';
+const PAPER_DRONE_INK = ['#c96bd6', '#9d3fae', '#fff0bf', '#c92a8c'];
+
+// Draws a stack of paper panels: each panel first casts a page-dark copy of itself a
+// couple of pixels down and right onto whatever is already there, then lays its colour.
+function paperPanels(panels, dx = 1.6, dy = 2.2) {
+  for (const [points, color] of panels) {
+    ctx.beginPath();
+    points.forEach(([x, y], i) => i ? ctx.lineTo(x + dx, y + dy) : ctx.moveTo(x + dx, y + dy));
+    ctx.closePath(); ctx.fillStyle = PAPER_PAGE; ctx.fill();
+    ctx.beginPath();
+    points.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+    ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+  }
+}
+
+// The gameplay ship as the opening drew it: same swept wings, twin nacelles, wedge canopy,
+// in the opening's palette, no glow. Called inside drawPlayer's pitch/bank/roll transform.
+function drawPaperShipBody(px, py) {
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.shadowBlur = 0;
+  const maxVel = player.maxVel || 1;
+  // Wings trail the vertical motion; a fresh shot kicks the whole hull back a touch.
+  const lag = (player.vy / maxVel) * .16;
+  const recoil = player.fireTimer / (player.fireRateOverride || CONFIG.playerFireRate);
+  ctx.translate(-recoil * 2.5, 0);
+  ctx.scale(1 - recoil * .06, 1 + recoil * .05);
+  const thrust = Math.max(0, player.vx / maxVel);
+  // Stop-motion exhaust: the flame length steps through a fixed cycle every three frames
+  // instead of re-rolling per frame, so it flickers like cut paper swapped under a camera.
+  const flick = [0, .7, 1, .35, .85, .15, .55][Math.floor(frame / 3) % 7];
+  for (const side of [-1, 1]) {
+    ctx.save();
+    ctx.translate(-5, side * 6); ctx.rotate(lag); ctx.translate(5, -side * 6);
+    const flame = 7 + thrust * 12 + flick * 5;
+    paperPanels([
+      [[[-6, side * 10], [-14, side * 14], [-19, side * 13], [-18, side * 7], [-6, side * 6]], '#08788d'],
+      [[[-18, side * 8], [-18 - flame, side * 10], [-18, side * 13]], '#42ebed'],
+      [[[-18, side * 9], [-18 - flame * .5, side * 10], [-18, side * 11]], '#fff0bf'],
+      [[[2, side * 5], [-10, side * 19], [-17, side * 17], [-8, side * 5]], '#18a9b5'],
+      [[[-16, side * 17], [-10, side * 18], [-10, side * 20], [-15, side * 19]], '#80fff1'],
+    ]);
+    ctx.restore();
+  }
+  paperPanels([
+    [[[23, 0], [10, -6], [-4, -8], [-11, -5], [-10, 5], [-4, 7], [10, 6]], '#38d4df'],
+    [[[-9, 1], [19, 0], [9, 6], [-4, 7]], '#1094ad'],
+    [[[17, 0], [9, -3.5], [4, -2.5], [4, 2.5], [9, 3]], '#fff0bf'],
+    [[[14, -.5], [9, -2], [6, -1], [12, .6]], '#ffffff'],
+    [[[23, 0], [18, -1.5], [18, 1.5]], '#adfff5'],
+  ]);
+  ctx.restore();
+}
+
+// The drone as a two-layer paper rock: the asteroid's own crooked outline in violet ink
+// with a smaller facet glued on top, and its cracks cut in as scissor lines rather than
+// glowing fissures. Uses the verts the enemy already carries, so the shape never changes
+// between frames. Caught in the Shepherd's suction it prints in the alarm colours.
+function drawPaperDrone(e, sucked) {
+  ctx.shadowBlur = 0;
+  const outline = e.verts.map(v => [v.x, v.y]);
+  const facet = e.verts.map((v, i) => [v.x * .55 + (i % 2 ? 2 : -1), v.y * .55 + 1.5]);
+  paperPanels([[outline, sucked ? '#c9472f' : '#9d3fae']], 2, 2.5);
+  // Cuts go into the base sheet; the facet is glued over them, so they read as scissor
+  // work under a patch rather than a scribble on top.
+  ctx.strokeStyle = PAPER_PAGE; ctx.lineWidth = 1.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const c of e.cracks) {
+    ctx.beginPath(); ctx.moveTo(c.x1, c.y1); ctx.lineTo(c.xm, c.ym); ctx.lineTo(c.x2, c.y2); ctx.stroke();
+  }
+  paperPanels([[facet, sucked ? '#ff8a5c' : '#c96bd6']], 1.4, 1.8);
+}
+
+// A paper death: a short white flash, one expanding ring printed twice (magenta under,
+// cream over, misregistered like the letters), and a handful of torn shards that spin
+// out and drop off the page. Shard shapes are cut once at spawn and never re-rolled.
+function spawnPaperBurst(x, y, size, inks) {
+  localFlashes.push({ x, y, radius: size * 1.5, life: 1, fast: true });
+  if (particles.length < CONFIG.maxParticles) {
+    particles.push({ kind: 'ring', x, y, vx: 0, vy: 0, r: size * .35, vr: size * .12, life: 1, decay: .05, width: 2.6 });
+  }
+  const count = 9;
+  for (let i = 0; i < count && particles.length < CONFIG.maxParticles; i++) {
+    const angle = (i / count) * Math.PI * 2 + (Math.random() - .5) * .6;
+    const speed = 1.4 + Math.random() * 3.2;
+    const n = 3 + Math.floor(Math.random() * 3), shape = [];
+    const rad = size * (.14 + Math.random() * .16);
+    for (let k = 0; k < n; k++) {
+      const a = (k / n) * Math.PI * 2 + (Math.random() - .5) * .5, r = rad * (.55 + Math.random() * .6);
+      shape.push([Math.cos(a) * r, Math.sin(a) * r]);
+    }
+    particles.push({
+      kind: 'shard', x, y,
+      vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+      rot: Math.random() * Math.PI * 2, vrot: (Math.random() - .5) * .5,
+      life: 1, decay: .018 + Math.random() * .022,
+      shape, color: inks[i % inks.length]
+    });
+  }
+}
+
+function updatePaperParticle(p) {
+  if (p.kind === 'ring') p.r += p.vr;
+  else { p.rot += p.vrot; p.vrot *= .97; }
+}
+
+function drawPaperParticle(p) {
+  // Paper doesn't fade: it holds, then drops off the page in the last fifth of its life.
+  ctx.globalAlpha = Math.min(1, p.life * 5);
+  if (p.kind === 'ring') {
+    ctx.lineWidth = p.width * p.life + .6;
+    ctx.beginPath(); ctx.arc(p.x + 1.5, p.y + 1.8, p.r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#c92a8c'; ctx.stroke();
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#fff0bf'; ctx.stroke();
+    return;
+  }
+  ctx.save();
+  ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+  paperPanels([[p.shape, p.color]], 1.2, 1.6);
+  ctx.restore();
 }
 
 // A tiny correction becomes a cosmic catastrophe. Presentation only: no game entities.

@@ -13,9 +13,15 @@ Carry the intro's cut-paper shapes, printed colors, and elastic motion into the 
 - **Bullets:** strong silhouettes and selective glow, with clear separation between friendly fire, enemy fire, and scenery.
 - **Motion:** intentional squash, recoil, and settling springs. Shape irregularities should be fixed per object, not randomly regenerated each frame.
 
-### Suggested first playable sample
+### First playable sample (in the game now)
 
-Restyle the player ship, one common enemy, and one explosion. Evaluate them together during actual combat before expanding the treatment across stages, bosses, and UI. Check readability in dense waves and performance on mobile.
+The player ship, the drone, and the drone's death are restyled behind `PAPER_SAMPLE` in `index.html` (the `PAPER GAMEPLAY SAMPLE` section). Add `?classic` to the URL to get the neon versions back in the same waves, so the two can be compared in play. Nothing in the sample touches a hitbox, a speed, or a spawn.
+
+- **Ship:** `drawPaperShipBody` draws the opening ship's panels (same wings, nacelles, wedge canopy, same inks) under `drawPlayer`'s existing pitch/bank/roll transform. Each panel casts a page-dark copy of itself a couple of pixels down-right onto the panel beneath, which is where the layered-paper depth comes from; there is no glow. Wings trail vertical motion, a fresh shot kicks the hull back, and the exhaust steps through a fixed seven-value cycle every three frames instead of re-rolling per frame, so it flickers like paper swapped under a camera.
+- **Drone:** `drawPaperDrone` prints the asteroid's own outline in violet ink, cuts its cracks into that base sheet as scissor lines, and glues a smaller lighter facet over them. Shapes come from the verts the enemy already carries, so nothing changes between frames. Caught in the Shepherd's suction it prints in alarm reds.
+- **Death:** `spawnPaperBurst` fires a short white flash, one expanding ring printed twice (magenta under, cream over, misregistered like the letters), and nine torn shards in the drone's inks that spin out and drop off the page. Shard shapes are cut once at spawn. Rings and shards ride the existing `particles` pool with a `kind` field.
+
+Still to evaluate: readability in dense waves, performance on mobile, and whether the drone's violet reads as hostile enough next to magenta enemy fire.
 
 ## CW planet refinement
 

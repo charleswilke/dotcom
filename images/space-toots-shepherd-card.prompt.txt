@@ -1,0 +1,10 @@
+Generated with the built-in image generation tool.
+References: before-times-door-card.webp and exploring-laibor-spiral-card.webp (style/layout); space-toots-card.webp (subject/palette).
+
+Use case: stylized-concept
+Create a finished Space Toots Recently website card matching the supplied companion cards.
+Input images: first two images are STYLE and LAYOUT references (Before Times and Exploring L.ai.bor); third is SUBJECT AND COLOR reference only (old Space Toots card).
+Canvas: landscape 20:13 aspect ratio, ideally 1400x910.
+Design: oversized irregular hand-cut paper title on the left, exact words "SPACE" above "TOOTS", cream SPACE and magenta TOOTS. On the right one bold unified emblem: The Shepherd, a bright magenta four-point gravitational core within two broad broken violet orbital rings, holding a cluster of 6 chunky irregular asteroids around it. Asteroids have dark faces and one or two cream cut-paper facets, simple angular silhouettes. A few restrained magenta dashed orbit connections visually bind the cluster to its core. Core and orbiting rocks must read as one simple main illustration.
+Style: closely match the first two companion posters: flat scissor-cut shapes, bold negative space, subtle printed paper grain, deliberately imperfect angular edges, very limited detail, confident graphic poster composition, clearly readable when small. Midnight purple background, cream, violet and hot pink ink palette inherited from old Space Toots art.
+Avoid spaceship, exhaust, lasers, perspective grid, gems, starfield clutter, tiny technical rings, 3D rendered rocks, intricate craters, gradients, neon bloom, extra words, borders or watermarks. Keep all title lettering safely inside frame. Match companion cards' balance of large title left and oversized simple emblem right.

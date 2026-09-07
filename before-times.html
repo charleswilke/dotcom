@@ -51,7 +51,7 @@
     <link rel="preload" as="image" href="/images/before-times/layers/lobby-clean-v4-newsstand-guestbook-v3.webp?v=20260718e" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/title-the-v1.webp?v=202607241328" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="/images/before-times/layers/guestbook-fresh-v1.webp?v=20260718d" type="image/webp">
-    <link rel="stylesheet" href="/before-times.css?v=38fa38f9">
+    <link rel="stylesheet" href="/before-times.css?v=ivory-dice-year-12s-20260907">
     <noscript><style>.bt-noscript{position:fixed;z-index:9999;inset:2rem;display:grid;place-items:center}</style></noscript>
 </head>
 <body class="before-times-page">
@@ -281,6 +281,13 @@
 
                 <div class="bt-alchemy-hero-screen" id="bt-alchemy-hero-screen" data-crt-source="vimeo" aria-live="polite">
                     <span class="bt-crt-video-plane">
+                        <span class="bt-trial-year" aria-label="Made in 2001"><span>Made In</span><strong>2001</strong></span>
+                        <span class="bt-trial-lower-third">
+                            <span class="bt-trial-lower-kicker">Music Video</span>
+                            <strong>Pink Floyd’s “The Trial”</strong>
+                            <span>Cut to <em>The Nightmare Before Christmas</em><br>and <em>Vincent</em> (short)</span>
+                        </span>
+                        <video id="bt-alchemy-player-local" playsinline preload="none" aria-label="Trial screening"></video>
                         <iframe
                             id="bt-alchemy-player"
                             title="Absurd Alchemy screening room player"
@@ -338,6 +345,16 @@
                 <span class="bt-door-light bt-alchemy-exit-door-light" aria-hidden="true"></span>
                 <img class="bt-alchemy-curio-layer bt-alchemy-hand-layer" id="bt-alchemy-hand-layer" src="/images/before-times/layers/alchemy-hand-logo-v1.webp?v=20260717e" width="1672" height="941" alt="" aria-hidden="true" decoding="async" loading="lazy">
 
+                <button class="bt-dice" id="bt-alchemy-dice" type="button" data-alchemy-action="dice" data-label="The Trial" aria-label="Play The Trial from the ivory dice">
+                    <svg viewBox="100 240 1100 830" aria-hidden="true" focusable="false">
+                        <defs>
+                            <clipPath id="bt-die-front"><path d="M145 555Q148 496 199 478L494 408Q530 399 572 434L660 523Q716 571 719 647L709 871Q705 943 670 963L371 1041Q321 1056 287 1027L181 915Q139 870 141 804Z"/></clipPath>
+                            <clipPath id="bt-die-back"><path d="M624 493 731 301Q756 258 795 261Q836 257 906 281L1069 338Q1110 353 1128 403L1176 604Q1196 652 1164 708L1053 872Q1030 907 980 898L715 824 719 645Q722 576 662 524Z"/></clipPath>
+                        </defs>
+                        <g class="bt-die-leaning"><image href="/images/before-times/layers/alchemy-ivory-dice-v1.png" width="1280" height="1280" clip-path="url(#bt-die-back)"/></g>
+                        <image href="/images/before-times/layers/alchemy-ivory-dice-v1.png" width="1280" height="1280" clip-path="url(#bt-die-front)"/>
+                    </svg>
+                </button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-chair" type="button" data-alchemy-action="playlist" data-label="Director's playlist" aria-label="Open the director's playlist"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-door" type="button" data-alchemy-action="lobby" data-label="Back to the lobby" aria-label="Return to the Before Times lobby"></button>
                 <button class="bt-hotspot bt-alchemy-hotspot bt-alchemy-hotspot-25" type="button" data-alchemy-action="twenty-five" aria-label="Inspect VHS tape 25"></button>
@@ -1042,6 +1059,6 @@
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="/before-times-archive.js?v=52aae1d8" defer></script>
     <script src="/before-times-game-binder.js?v=1b4624e3" defer></script>
-    <script src="/before-times.js?v=a6dd4131" defer></script>
+    <script src="/before-times.js?v=ivory-dice-year-12s-20260907" defer></script>
 </body>
 </html>

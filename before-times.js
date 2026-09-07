@@ -3795,16 +3795,19 @@
     function bindAlchemyPlayerEvents() {
         if (!alchemyPlayer) return;
         alchemyPlayer.on('play', () => {
+            if (heroSource !== 'vimeo') return;
             alchemyHeroScreen.classList.add('is-playing', 'is-loaded');
             alchemyPlayFallback.hidden = true;
             alchemyTapToggle.hidden = false;
             alchemyTapToggle.setAttribute('aria-label', 'Pause the current reel');
         });
         alchemyPlayer.on('pause', () => {
+            if (heroSource !== 'vimeo') return;
             alchemyHeroScreen.classList.remove('is-playing');
             alchemyTapToggle.setAttribute('aria-label', 'Resume the current reel');
         });
         alchemyPlayer.on('ended', () => {
+            if (heroSource !== 'vimeo') return;
             alchemyHeroScreen.classList.remove('is-playing');
             powerDownHeroScreen();
             showStatus('The reel clicks to a stop. The chair has more tapes.', 3600);
@@ -3826,7 +3829,76 @@
         return alchemyPlayer.ready().then(() => alchemyPlayer);
     }
 
+    const alchemyLocalVideo = document.getElementById('bt-alchemy-player-local');
+    const alchemyDice = document.getElementById('bt-alchemy-dice');
+
+    async function playDiceVideo() {
+        if (alchemyPlayer) alchemyPlayer.pause().catch(() => {});
+        stopYtGlowPoll();
+        if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
+        setHeroSource('local');
+        markInvestigationMilestone('investigate-alchemy');
+        markCurrentAlchemyVideo({ key: 'trial', title: 'The Trial' });
+        alchemyDice.classList.remove('is-open');
+        void alchemyDice.offsetWidth;
+        alchemyDice.classList.add('is-open');
+        alchemyDice.setAttribute('aria-label', 'Replay The Trial from the ivory dice');
+        if (!alchemyLocalVideo.getAttribute('src')) alchemyLocalVideo.src = '/bt-assets/trial.mp4';
+        alchemyLocalVideo.currentTime = 0;
+        resetGlow();
+        // Start inside the click gesture so mobile browsers allow sound.
+        await playLocalReel();
+    }
+
+    async function playLocalReel() {
+        try {
+            await alchemyLocalVideo.play();
+        } catch (error) {
+            if (heroSource !== 'local') return;
+            alchemyPlayFallback.hidden = false;
+            showStatus(alchemyLocalVideo.error ? 'The reel could not load. Try the dice again.' : 'Press play on the television to start the reel.', 4200);
+        }
+    }
+
+    function updateTrialCredits() {
+        alchemyHeroScreen.classList.toggle('is-showing-trial-year',
+            heroSource === 'local' && !alchemyLocalVideo.ended && alchemyLocalVideo.currentTime < 12);
+        alchemyHeroScreen.classList.toggle('is-showing-trial-credits',
+            heroSource === 'local' && !alchemyLocalVideo.ended && alchemyLocalVideo.currentTime < 6);
+    }
+    alchemyLocalVideo.addEventListener('timeupdate', updateTrialCredits);
+    alchemyLocalVideo.addEventListener('seeked', updateTrialCredits);
+
+    alchemyLocalVideo.addEventListener('play', () => {
+        updateTrialCredits();
+        if (heroSource !== 'local') return;
+        alchemyHeroScreen.classList.add('is-loaded', 'is-playing');
+        alchemyPlayFallback.hidden = true;
+        alchemyTapToggle.hidden = false;
+        alchemyTapToggle.setAttribute('aria-label', 'Pause the current reel');
+    });
+    alchemyLocalVideo.addEventListener('pause', () => {
+        if (heroSource !== 'local') return;
+        alchemyHeroScreen.classList.remove('is-playing');
+        alchemyTapToggle.setAttribute('aria-label', 'Resume the current reel');
+    });
+    alchemyLocalVideo.addEventListener('error', () => {
+        if (heroSource !== 'local') return;
+        alchemyHeroScreen.classList.remove('is-playing');
+        alchemyPlayFallback.hidden = false;
+        showStatus('The reel could not load. Try the dice again.', 4200);
+    });
+    alchemyLocalVideo.addEventListener('ended', () => {
+        if (heroSource !== 'local') return;
+        alchemyDice.classList.remove('is-open');
+        powerDownHeroScreen();
+    });
+
     function setHeroSource(source) {
+        if (source !== 'local') {
+            alchemyLocalVideo.pause();
+            alchemyDice.classList.remove('is-open');
+        }
         heroSource = source;
         alchemyHeroScreen.dataset.crtSource = source;
     }
@@ -4019,6 +4091,11 @@
     }
 
     async function toggleAlchemyPlayback() {
+        if (heroSource === 'local') {
+            if (alchemyLocalVideo.paused) await playLocalReel();
+            else alchemyLocalVideo.pause();
+            return;
+        }
         if (heroSource === 'youtube') {
             if (!ytPlayer || !window.YT) return;
             const states = window.YT.PlayerState;
@@ -4049,6 +4126,10 @@
     }
 
     async function retryAlchemyPlayback() {
+        if (heroSource === 'local') {
+            await playLocalReel();
+            return;
+        }
         if (heroSource === 'youtube') {
             if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
                 ytPlayer.playVideo();
@@ -5266,6 +5347,8 @@
         if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo();
         if (alchemyPlayer) alchemyPlayer.pause().catch(() => {});
         alchemyHeroScreen.classList.remove('is-playing');
+        alchemyLocalVideo.pause();
+        alchemyDice.classList.remove('is-open');
         alchemyScroll.hidden = true;
         lobbyScroll.hidden = false;
         presentArchiveSignal();
@@ -6308,6 +6391,7 @@
             if (action === 'twenty-five') playTapeTwentyFive();
             if (action === 'sagan') cueAlchemyVideo('sagan');
             if (action === 'cat') cueAlchemyVideo('french-kitty');
+            if (action === 'dice') playDiceVideo();
             if (action === 'hand') {
                 animateLayer(button, 'is-activating', 620);
                 openPanel('alchemyHand');

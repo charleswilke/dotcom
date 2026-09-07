@@ -77,3 +77,7 @@ bt-assets/The Sisters Hayes - short/The Assistant*.docx
 # Nick's read-through notes: nothing links to them, and "only the scrubbed PDFs
 # are served" above should be literally true. Delete this line to publish them.
 bt-assets/The Sisters Hayes - short/nicks-notes-on-the-sisters-hayes.rtf
+
+# Screening-room Trial Easter egg.
+!bt-assets/trial.mp4
+!images/before-times/layers/alchemy-ivory-dice-v1.png

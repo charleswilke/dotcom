@@ -3494,6 +3494,16 @@ footer p {
         border-left: 3px solid var(--showcase-accent);
     }
 
+    /* No orbiting blips on phones. They only ever showed under hover, which
+       on touch means the sticky :hover a tap leaves behind, so they read as a
+       glitch the visitor did not ask for. display: none rather than
+       visibility: the pulse on the svg and the lap on the rect stop ticking
+       with it, six fewer animations per phone. The about portrait keeps its
+       own (.about-photo-signal), which the 767px block below tunes on purpose. */
+    .showcase-item > .showcase-signal {
+        display: none;
+    }
+
     /* Keep the complete title art visible on mobile. The image occupies a
        contained bay on the right rather than being enlarged and cropped as a
        background; the left edge dissolves gently into the copy panel. */
@@ -3511,6 +3521,11 @@ footer p {
         border: 0;
         border-radius: inherit;
         box-shadow: none;
+        /* The media spans the whole card here (the art is right-aligned inside
+           it), so its overflow: hidden clips the hover scale on three sides
+           but lets it spill left past the bay's accent line into the copy.
+           Clip the bay's left edge too; the art still grows, inside the bay. */
+        clip-path: inset(0 0 0 calc(100% - var(--showcase-mobile-image-width)));
     }
 
     .showcase-item img {

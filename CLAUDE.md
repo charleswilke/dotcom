@@ -180,11 +180,13 @@ It compares every selector the two sheets share, context-aware about `@media` bl
 Both styles.css and subpages.css carried a dead `/* ===== BEFORE TIMES WORKSPACE ===== */` block long after that split — ~780 lines each of a System-7-style window UI (`.bt-window`, `.bt-titlebar`, `.bt-file-window`, `.bt-shelf`, 44 classes plus `--bt-*` variables). None of those classes existed in `before-times.css` or in any markup or JS; it was the generation of the page that preceded the standalone sheet. Removed 2026-08-15 — recoverable from git history if that workspace look is ever wanted again.
 
 ### Foil (Balatro-style holofoil)
-**One place carries it: the About card portrait (`.foil`).** A pointer-driven hue field, a hairline etch, a specular glare, clipped by an alpha mask generated from the artwork itself, never hand-drawn:
+**One place carries it: the About card portrait (`.foil`).** A pointer-driven hue field, a hairline etch whose angle swings a few degrees with the tilt (`--foil-etch`), and a specular glare that travels 1.6x as far as the pointer, all clipped by an alpha mask generated from the artwork itself, never hand-drawn:
 
 ```
 node tools/make-foil-mask.js            # about-card portrait
 ```
+
+**The "card in your hand" feel is mostly not the foil.** It is the tilt, a box-shadow that slides opposite the pointer and drops as the card lifts, and a glare that overshoots the cursor. Two evolutions were tried and rejected on 2026-09-07: a sparkle canvas (twinkling stars scaled by tilt) and a full refractor (rainbow over the whole print in `color` blend, prism starburst). Both replaced the plate with a pattern instead of moving light over an object, which is why the restrained sheen read as more physical. [FOIL_V1_REFERENCE.md](FOIL_V1_REFERENCE.md) holds the pre-evolution stack verbatim, the rejected sparkle controller as an appendix, and the refractor's CSS is in this session's history if it's ever wanted for a different surface.
 
 The four "Recently" cards used to carry the same stack plus a pointer tilt (`.showcase-foil`, `initShowcaseFoil`, `--tile-tilt-*`). **All of it was removed.** Five holofoils answering the cursor turned the top of the page into a light show and cost the portrait its status as the one object that does this. The cards keep their float, their hover scale, and their CRT treatment; the motion is now the three individual transform properties, `rotate`/`translate` from the float keyframes and `scale` from hover, never a single `transform`.
 

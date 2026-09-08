@@ -5589,7 +5589,11 @@ function initFoilCard() {
     // --- Pointer tilt --------------------------------------------------------
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const MAX_TILT = 9; // degrees at the very edge of the card
+    const MAX_TILT = 10; // degrees at the very edge of the card
+    // Degrees the etch swings at the edge. Small on purpose: the grooves are a
+    // 6px repeat, so a few degrees is already a visible shift in how they
+    // catch the light, and more reads as the texture sliding around.
+    const ETCH_SWING = 4;
 
     let pointerX = 0;
     let pointerY = 0;
@@ -5609,6 +5613,9 @@ function initFoilCard() {
         card.style.setProperty('--foil-tilt-y', (dx * MAX_TILT * 2).toFixed(2) + 'deg');
         card.style.setProperty('--foil-px', (dx + 0.5).toFixed(4));
         card.style.setProperty('--foil-py', (dy + 0.5).toFixed(4));
+        // Etch follows the roll mostly, with a little pitch so a purely
+        // vertical move still stirs the grooves.
+        card.style.setProperty('--foil-etch', ((dx * 2 + dy) * ETCH_SWING).toFixed(2) + 'deg');
     };
 
     const onPointerMove = (e) => {
@@ -5629,6 +5636,7 @@ function initFoilCard() {
         card.style.setProperty('--foil-tilt-y', '0deg');
         card.style.setProperty('--foil-px', '0.5');
         card.style.setProperty('--foil-py', '0.5');
+        card.style.setProperty('--foil-etch', '0deg');
     };
 
     let tiltBound = false;
@@ -5727,6 +5735,8 @@ function initFoilMotion() {
     // Gentler than the pointer's 9deg: the tilt is now on top of a moving hand
     // rather than a still screen, and the same amplitude reads as wobble.
     const MAX_TILT = 6;
+    // Etch swing, as on the pointer path.
+    const ETCH_SWING = 4;
     // Exponential moving average on the screen-space delta. 0.16 lands about
     // where a gyro stops looking twitchy without feeling like syrup.
     const SMOOTH = 0.16;
@@ -5778,6 +5788,7 @@ function initFoilMotion() {
         // plate answers with the opposite sign.
         card.style.setProperty('--foil-tilt-x', (-ny * MAX_TILT).toFixed(2) + 'deg');
         card.style.setProperty('--foil-tilt-y', (-nx * MAX_TILT).toFixed(2) + 'deg');
+        card.style.setProperty('--foil-etch', ((nx + ny * 0.5) * ETCH_SWING).toFixed(2) + 'deg');
     };
 
     // The class is what un-hides the foil on touch (styles.css), so it's set on
@@ -5827,6 +5838,7 @@ function initFoilMotion() {
         card.style.removeProperty('--foil-py');
         card.style.removeProperty('--foil-tilt-x');
         card.style.removeProperty('--foil-tilt-y');
+        card.style.removeProperty('--foil-etch');
     };
 
     // The card sits well below the fold, and every write is a transform on a

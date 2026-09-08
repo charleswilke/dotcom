@@ -3974,13 +3974,24 @@ html {
     --foil-scale: 1;
     --foil-px: 0.5;
     --foil-py: 0.5;
+    /* Etch angle offset, degrees. Real foil's grooves catch light differently
+       as the card turns, so the diffraction lines swing a few degrees with the
+       tilt (both drivers write it, next to the tilt angles). */
+    --foil-etch: 0deg;
     width: 100%;
     max-width: 420px;
     margin: 0 auto;
     align-self: start;
     border-radius: 8px 8px 16px 16px;
     overflow: visible;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 0 2px #ffb93a;
+    /* The shadow is where the weight lives. It slides opposite the pointer,
+       as if the cursor were the light, and drops lower as the card lifts on
+       hover — a card held up off the table throws its shadow further. Static
+       at rest (the vars sit at 0.5), so nothing here paints until a driver
+       moves them. */
+    box-shadow:
+        calc((0.5 - var(--foil-px)) * 28px) calc(10px + (0.5 - var(--foil-py)) * 22px) 22px rgba(0, 0, 0, 0.22),
+        0 0 0 2px #ffb93a;
     /* perspective() as a transform function rather than a wrapper element, so
        the ring and border tilt with the card and the markup stays flat. */
     transform:
@@ -4008,14 +4019,18 @@ html {
 .image-compare:hover {
     --foil-lift: -10px;
     --foil-scale: 1.02;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 0 15px rgba(255, 185, 58, 0.55);
+    box-shadow:
+        calc((0.5 - var(--foil-px)) * 36px) calc(18px + (0.5 - var(--foil-py)) * 28px) 30px rgba(0, 0, 0, 0.26),
+        0 0 15px rgba(255, 185, 58, 0.55);
 }
 
 /* While tracking the pointer, swap the springy return for a short ease that
    acts as a low-pass filter: the card feels weighted instead of glued to the
    cursor, and there's no jump on entry the way `transition: none` would give. */
 .image-compare.is-tilting {
-    transition: transform 0.12s ease-out, box-shadow 0.3s ease;
+    /* A hair longer than the 0.12s it started at: the extra lag is mass. The
+       shadow follows on the same clock so it never detaches from the card. */
+    transition: transform 0.16s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.16s cubic-bezier(0.2, 0.7, 0.3, 1);
     will-change: transform;
 }
 
@@ -4126,7 +4141,7 @@ html {
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(
-        112deg,
+        calc(112deg + var(--foil-etch)),
         rgba(255, 255, 255, 0) 0px,
         rgba(255, 255, 255, 0.16) 1.5px,
         rgba(255, 255, 255, 0) 3px,
@@ -4136,17 +4151,20 @@ html {
     mix-blend-mode: overlay;
 }
 
-/* Specular glare, pinned to the pointer. This is the gloss cue: it says the
-   surface is laminated rather than printed. */
+/* Specular glare. This is the gloss cue: it says the surface is laminated
+   rather than printed. It travels 1.6x as far as the pointer, because a
+   reflection of a light source moves faster than the surface it's on — the
+   overshoot is what makes it read as a reflection and not a spotlight painted
+   where the cursor is. Tight core, so it flashes rather than glows. */
 .foil::after {
     content: '';
     position: absolute;
     inset: 0;
     background: radial-gradient(
-        circle at calc(var(--foil-px) * 100%) calc(var(--foil-py) * 100%),
-        rgba(255, 255, 255, 0.6) 0%,
-        rgba(255, 255, 255, 0.15) 26%,
-        rgba(255, 255, 255, 0) 58%
+        circle at calc(50% + (var(--foil-px) - 0.5) * 160%) calc(50% + (var(--foil-py) - 0.5) * 160%),
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.22) 16%,
+        rgba(255, 255, 255, 0) 44%
     );
     mix-blend-mode: screen;
 }
@@ -4182,6 +4200,7 @@ html {
         opacity: 0.38;
     }
 }
+
 
 /* Reveal is click/tap-toggled rather than hover, so the pointer is free to
    drive the tilt and so touch devices get a real gesture instead of the

@@ -7016,12 +7016,12 @@ html {
 
 .theatrical-projections-section::before {
     background-image:
-        linear-gradient(rgba(0, 247, 194, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 194, 0.08) 1px, transparent 1px),
+        linear-gradient(rgba(0, 247, 194, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 247, 194, 0.035) 1px, transparent 1px),
         repeating-linear-gradient(
             0deg,
-            rgba(0, 247, 194, 0.06) 0px,
-            rgba(0, 247, 194, 0.06) 1px,
+            rgba(0, 247, 194, 0.015) 0px,
+            rgba(0, 247, 194, 0.015) 1px,
             transparent 1px,
             transparent 3px
         ),
@@ -7303,10 +7303,10 @@ html {
     }
 }
 
-/* The fan stage */
+/* Playbill covers: shared proportions, individual production typography. */
 .playbill-fan {
     display: flex;
-    gap: 2rem;
+    gap: 2.5rem;
     max-width: 760px;
     margin: 0 auto;
     padding: 1rem 0 2rem;
@@ -7319,103 +7319,113 @@ html {
     text-decoration: none;
     color: inherit;
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    cursor: pointer;
     transform-origin: 50% 100%;
+    border-radius: 3px;
 }
 
-.playbill[data-playbill="aiw"] { transform: rotate(-2.5deg); }
-.playbill[data-playbill="jb"]  { transform: rotate(2.5deg); }
+.playbill[data-playbill="aiw"] { transform: rotate(-1.5deg); }
+.playbill[data-playbill="jb"] { transform: rotate(1.5deg); }
+
+.playbill:focus-visible {
+    outline: 3px solid var(--neon);
+    outline-offset: 7px;
+}
 
 @media (hover: hover) {
-    .playbill[data-playbill="aiw"]:hover { transform: rotate(-1deg) translateY(-6px); }
-    .playbill[data-playbill="jb"]:hover  { transform: rotate(1deg) translateY(-6px); }
+    .playbill:hover { transform: rotate(0deg) translateY(-6px); }
 }
 
-/* The paper itself */
 .playbill-paper {
     position: relative;
-    background: #f4e9cf;
-    background-image:
-        radial-gradient(ellipse at 30% 20%, rgba(255, 250, 235, 0.6), transparent 60%),
-        radial-gradient(ellipse at 70% 90%, rgba(180, 150, 110, 0.18), transparent 55%);
+    background: linear-gradient(120deg, #fbf5e6, #f0e5ce);
     color: #1a1010;
-    padding: 1.2rem 1.1rem 1.3rem;
-    border-radius: 2px 2px 3px 3px;
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.5) inset,
-        0 -2px 0 rgba(120, 95, 60, 0.15) inset,
-        0 14px 32px rgba(0, 0, 0, 0.45),
-        0 28px 60px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    box-shadow: 0 2px 0 rgba(255,255,255,0.4) inset,
+        0 12px 28px rgba(0,0,0,0.3), 0 25px 48px rgba(0,0,0,0.18);
     overflow: hidden;
     aspect-ratio: 5 / 7;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 7.1rem minmax(0, 1fr) auto;
 }
 
-/* Subtle paper grain */
 .playbill-paper::after {
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-        repeating-linear-gradient(
-            90deg,
-            rgba(120, 95, 60, 0.04) 0 1px,
-            transparent 1px 3px
-        );
-    mix-blend-mode: multiply;
+    background: repeating-linear-gradient(90deg, rgba(120,95,60,0.025) 0 1px, transparent 1px 4px);
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.3;
 }
 
-/* Iconic yellow Playbill cap — wordmark + venue */
 .playbill-cap {
     background: #ffd400;
     color: #1a1010;
     text-align: center;
-    padding: 0.55rem 0.7rem 0.6rem;
-    margin: -1.2rem -1.1rem 0.55rem;
+    padding: 0.55rem 0.9rem 0.5rem;
     border-bottom: 2px solid #1a1010;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
-    position: relative;
-    z-index: 1;
 }
 
 .playbill-cap-wordmark {
     font-family: 'Cinzel', 'Trajan Pro', 'Times New Roman', Georgia, serif;
     font-weight: 600;
-    font-size: clamp(2rem, 4.4vw, 2.75rem);
-    letter-spacing: 0.22em;
+    font-size: clamp(1.7rem, 3.5vw, 2.1rem);
+    letter-spacing: 0.2em;
     line-height: 1;
-    text-transform: uppercase;
-    /* Trim the trailing letter-spacing on the right so the wordmark stays optically centered */
-    padding-left: 0.22em;
+    padding-left: 0.2em;
 }
 
 .playbill-cap-venue {
     font-family: 'IBM Plex Sans Condensed', 'Helvetica Neue', sans-serif;
     font-weight: 700;
-    font-size: clamp(0.62rem, 1.1vw, 0.72rem);
-    letter-spacing: 0.18em;
-    line-height: 1.25;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
     text-transform: uppercase;
     margin-top: 0.35rem;
-    padding-top: 0.35rem;
-    border-top: 1px solid rgba(26, 16, 16, 0.55);
+    padding-top: 0.3rem;
+    border-top: 1px solid rgba(26,16,16,0.35);
 }
 
 .playbill-header {
+    display: grid;
+    place-items: center;
     text-align: center;
-    padding: 0.55rem 0.2rem 0.7rem;
+    padding: 0.6rem 0.8rem;
+    background: #17131e;
+}
+
+.playbill-title {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    display: grid;
+    place-items: center;
+}
+
+.playbill-title-art {
+    /* Reverse the ink for dark paper while retaining the accent hues. */
+    filter: invert(1) hue-rotate(180deg);
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: contain;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+.playbill[data-playbill="jb"] .playbill-title-art {
+    filter: none;
+    width: 70%;
+    mix-blend-mode: screen;
 }
 
 .playbill-art {
-    flex: 1 1 auto;
-    margin: 0 -1.1rem;
     overflow: hidden;
     background: #0a0828;
-    border-top: none;
-    border-bottom: none;
     position: relative;
     min-height: 0;
 }
@@ -7424,94 +7434,106 @@ html {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
     display: block;
-    filter: saturate(1.1) contrast(1.05);
     border: none;
     border-radius: 0;
     margin: 0;
     box-shadow: none;
 }
 
-.playbill[data-playbill="jb"] .playbill-art img { object-position: center top; }
-.playbill[data-playbill="aiw"] .playbill-art img { object-position: center 30%; }
+.playbill[data-playbill="jb"] .playbill-art img {
+    object-position: 62% center;
+    position: absolute;
+    top: 13%;
+    height: 74%;
+    mask-image: linear-gradient(transparent, #000 8%, #000 92%, transparent);
+}
+/* Production photos form the covers, with titles and credits layered above. */
+.playbill[data-playbill="aiw"] .playbill-paper,
+.playbill[data-playbill="jb"] .playbill-paper {
+    aspect-ratio: 5 / 7;
+    grid-template-rows: auto minmax(0, 1fr);
+}
+
+.playbill[data-playbill="aiw"] .playbill-cap,
+.playbill[data-playbill="jb"] .playbill-cap { grid-area: 1 / 1; }
+.playbill[data-playbill="aiw"] .playbill-art,
+.playbill[data-playbill="jb"] .playbill-art {
+    grid-area: 2 / 1;
+    background: #000;
+}
+.playbill[data-playbill="aiw"] .playbill-art img {
+    /* Preserve the previous framing and trim only the cover's lower edge. */
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center bottom;
+}
+.playbill[data-playbill="aiw"] .playbill-header {
+    grid-area: 2 / 1;
+    z-index: 1;
+    align-self: start;
+    justify-self: center;
+    width: 60%;
+    margin-top: 37%;
+    padding: 0;
+    background: transparent;
+    pointer-events: none;
+}
+.playbill[data-playbill="aiw"] .playbill-title-art,
+.playbill[data-playbill="jb"] .playbill-title-art {
+    height: auto;
+}
+.playbill[data-playbill="aiw"] .playbill-footer,
+.playbill[data-playbill="jb"] .playbill-footer {
+    grid-area: 2 / 1;
+    align-self: end;
+    z-index: 1;
+    padding: 1.6rem 0.5rem 0.85rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
+}
+.playbill[data-playbill="aiw"] .playbill-meta,
+.playbill[data-playbill="jb"] .playbill-meta { color: #e9d8b6; }
+.playbill[data-playbill="aiw"] .playbill-cta,
+.playbill[data-playbill="jb"] .playbill-cta { color: #fff5e2; }
+
+.playbill[data-playbill="jb"] .playbill-header {
+    grid-area: 2 / 1;
+    z-index: 1;
+    align-self: start;
+    padding: 0.65rem 1.1rem 2.25rem;
+    background: transparent;
+    mix-blend-mode: screen;
+    pointer-events: none;
+}
 
 .playbill-footer {
     text-align: center;
-    padding: 0.7rem 0.2rem 0.4rem;
-}
-
-.playbill-title {
-    font-family: 'Simonetta', 'Bodoni Moda', Georgia, serif;
-    font-weight: 900;
-    font-style: italic;
-    font-size: clamp(1.85rem, 3.6vw, 2.4rem);
-    line-height: 1.0;
-    color: #1a1010;
-    margin: 0;
-    letter-spacing: -0.005em;
+    padding: 0.8rem 0.5rem 0.85rem;
 }
 
 .playbill-meta {
     font-family: 'IBM Plex Sans Condensed', sans-serif;
     font-weight: 700;
-    font-size: 0.65rem;
-    letter-spacing: 0.22em;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #5a3a1a;
+    color: #624b32;
     margin: 0;
 }
 
-/* The CRT layer — restrained, sits over the paper */
-.playbill-scan {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-        repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.06) 0 1px,
-            transparent 1px 3px
-        ),
-        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.25) 100%);
-    mix-blend-mode: multiply;
-    border-radius: inherit;
-    /* Clips the travelling band below, which is now a tall pseudo moved by
-       transform instead of a background-position animation (a repaint per
-       frame, for a layer nobody is looking at most of the time). */
-    overflow: hidden;
+.playbill-cta {
+    display: inline-block;
+    margin-top: 0.35rem;
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1a1010;
+    text-underline-offset: 0.2em;
 }
 
-/* The scan band. It used to be a 200%-tall repeating gradient whose
-   background-position ran from -100% to 200% over 7s: with a 2H tile that is
-   band centres at y = o + H + 2Hk drifting from o = +H to o = -2H, one pass
-   through the box every 4.67s. Same picture, built to be composited: the
-   pseudo is 6H tall, starts 2H above the box, carries the same 2H tile, and
-   translates by the same +H -> -2H (16.667% and 33.333% of its own 6H). Phase
-   is preserved because -2H is a whole tile. */
-.playbill-scan::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -200%;
-    height: 600%;
-    background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(0, 247, 194, 0.07) 50%,
-        transparent 100%
-    );
-    background-size: 100% 33.3333%;
-    animation: playbill-scanline 7s linear infinite;
-    mix-blend-mode: screen;
-    opacity: 0.6;
-}
-
-@keyframes playbill-scanline {
-    0%   { transform: translateY(16.6667%); }
-    100% { transform: translateY(-33.3333%); }
-}
+.playbill:hover .playbill-cta,
+.playbill:focus-visible .playbill-cta { text-decoration: underline; }
 
 /* Chyron — OWH critic quote as a lower-third */
 .playbill-chyron {
@@ -7601,14 +7623,11 @@ html {
         width: 100%;
         transform: none;
     }
-    .playbill-cap-wordmark { font-size: 2.25rem; }
-    .playbill-title { font-size: 1.4rem; }
-    .playbill-cap-venue { font-size: 0.65rem; }
+    .playbill-paper { grid-template-rows: auto 6.25rem minmax(0, 1fr) auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .playbill,
-    .playbill-scan::after {
+    .playbill {
         transition: none !important;
         animation: none !important;
     }

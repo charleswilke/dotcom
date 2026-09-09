@@ -14562,15 +14562,51 @@ body.reader-open {
 .article-reader-body strong { color: var(--fiche-ink); }
 .article-reader-body em { color: var(--fiche-ink-soft); }
 .article-reader-body blockquote {
-    margin: 1.6em auto;
-    padding: 4px 0 4px 22px;
-    border-left: 3px solid var(--fiche-accent);
+    position: relative;
+    margin: 1.4em auto;
+    padding: 16px 20px;
+    border: 1px solid rgba(168, 90, 29, 0.18);
+    border-left: 2px solid var(--fiche-accent);
+    border-radius: 0;
     font-family: 'Space Mono', monospace;
-    font-weight: 700;
+    font-weight: 400;
     font-style: normal;
-    font-size: 20px;
-    color: var(--fiche-ink-soft);
-    background: linear-gradient(90deg, rgba(168, 90, 29, 0.08), transparent 70%);
+    font-size: 1em;
+    line-height: 1.65;
+    color: var(--fiche-ink);
+    background:
+        repeating-linear-gradient(0deg, transparent 0 3px, rgba(168, 90, 29, 0.025) 3px 4px),
+        linear-gradient(110deg, rgba(168, 90, 29, 0.065), rgba(168, 90, 29, 0.02));
+    overflow-wrap: anywhere;
+}
+.article-reader-body blockquote::before,
+.article-reader-body blockquote::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    width: 10px;
+    height: 6px;
+    border-right: 2px solid var(--fiche-accent);
+    pointer-events: none;
+}
+.article-reader-body blockquote::before {
+    top: -1px;
+    border-top: 2px solid var(--fiche-accent);
+}
+.article-reader-body blockquote::after {
+    bottom: -1px;
+    border-bottom: 2px solid var(--fiche-accent);
+}
+.article-reader-body blockquote > :first-child,
+.article-reader-body blockquote > p:first-child {
+    margin-top: 0;
+}
+.article-reader-body blockquote > :last-child,
+.article-reader-body blockquote > p:last-child {
+    margin-bottom: 0;
+}
+.article-reader-body blockquote > p + p {
+    margin-top: 0.85em;
 }
 .article-reader-body hr {
     border: 0;

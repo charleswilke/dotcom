@@ -4246,6 +4246,115 @@ html {
     margin-bottom: 1.6rem;
 }
 
+.about-footnote {
+    padding: 0.15em 0.35em;
+    border: 0;
+    background: transparent;
+    color: #ffd78b;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    cursor: pointer;
+}
+
+.about-footnote:hover {
+    color: #fff;
+}
+
+.about-footnote:focus-visible,
+.about-footnote-close:focus-visible {
+    outline: 2px solid #ffd78b;
+    outline-offset: 3px;
+}
+
+.about-footnote-dialog {
+    box-sizing: border-box;
+    width: min(350px, calc(100% - 2rem));
+    max-height: calc(100dvh - 2rem);
+    position: fixed;
+    inset: auto;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #8baac5;
+    border-radius: 12px;
+    background: #f2f7fa;
+    background-image:
+        linear-gradient(rgba(47, 101, 149, 0.065) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47, 101, 149, 0.065) 1px, transparent 1px);
+    background-size: 16px 16px;
+    color: #234e78;
+    font-family: 'Space Mono', monospace;
+    box-shadow: 0 5px 18px rgba(10, 32, 57, 0.16);
+}
+
+.about-footnote-dialog::backdrop {
+    background: transparent;
+}
+
+.about-footnote-dialog::before {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    left: calc(var(--speech-tail, 24px) - 7px);
+    top: -8px;
+    border-top: 1px solid #8baac5;
+    border-left: 1px solid #8baac5;
+    background: #234e78;
+    transform: rotate(45deg);
+    pointer-events: none;
+}
+
+.about-footnote-dialog[data-above]::before {
+    top: auto;
+    bottom: -8px;
+    background: #f2f7fa;
+    transform: rotate(225deg);
+}
+
+.about-footnote-dialog h2 {
+    box-sizing: border-box;
+    min-height: 44px;
+    margin: 0;
+    padding: 0.75rem 3rem 0.75rem 1rem;
+    border-radius: 11px 11px 0 0;
+    background: #234e78;
+    color: #f2f7fa;
+    font: 700 0.8rem/1.5 'Space Mono', monospace;
+    letter-spacing: 0.04em;
+}
+
+.about-footnote-dialog h2 span {
+    opacity: 0.65;
+}
+
+.about-footnote-dialog p {
+    margin: 0;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+.about-footnote-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    color: #f2f7fa;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.about-footnote-close:focus-visible {
+    outline-color: #f2f7fa;
+    outline-offset: -5px;
+}
+
 /* Social Links */
 .social-links {
     display: flex;

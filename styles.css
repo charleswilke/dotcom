@@ -7020,7 +7020,7 @@ html {
 
 /* Theatrical Projections uses the About background with inverted edge bars */
 .theatrical-projections-section {
-    padding-top: clamp(4.25rem, 6vw, 5.25rem);
+    padding-top: 1rem;
     scroll-margin-top: 72px;
     background-color: var(--accent);
     background-image:
@@ -7034,6 +7034,7 @@ html {
 }
 
 .theatrical-projections-section::before {
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), #000 360px);
     background-image:
         linear-gradient(rgba(0, 247, 194, 0.035) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 247, 194, 0.035) 1px, transparent 1px),
@@ -7129,124 +7130,17 @@ html {
     color: #fff5df;
 }
 
+/* Transparent projected-lettering artwork. */
 .projections-section-title {
-    --draft-blue: #176aa5;
-    --draft-blue-deep: #0d477c;
-    --draft-blue-soft: rgba(23, 106, 165, 0.16);
-    --draft-paper: #f7f1dc;
-    --draft-paper-warm: #ead89a;
-    width: min(100%, 720px);
-    margin-bottom: 2.2rem;
-    padding: clamp(0.78rem, 1.8vw, 1rem) clamp(0.9rem, 3.2vw, 1.75rem) clamp(0.88rem, 1.9vw, 1.12rem);
-    color: var(--draft-blue-deep);
-    background:
-        linear-gradient(104deg, transparent 0 9%, rgba(255, 235, 160, 0.46) 9% 88%, transparent 88%) 1.75rem -0.14rem / 5.8rem 0.88rem no-repeat,
-        linear-gradient(104deg, transparent 0 9%, rgba(255, 235, 160, 0.32) 9% 88%, transparent 88%) calc(100% - 7rem) calc(100% + 0.18rem) / 5.6rem 0.84rem no-repeat,
-        linear-gradient(172deg, transparent 0 48%, rgba(13, 71, 124, 0.055) 48.4% 49.2%, rgba(255, 255, 255, 0.32) 49.3% 49.9%, transparent 50.2%),
-        radial-gradient(circle at 12% 22%, rgba(207, 178, 82, 0.28) 0 0.08rem, transparent 0.1rem) 0 0 / 1.1rem 1.1rem,
-        radial-gradient(ellipse at 18% 20%, rgba(234, 216, 154, 0.44), transparent 46%),
-        radial-gradient(ellipse at 86% 74%, rgba(23, 106, 165, 0.08), transparent 50%),
-        linear-gradient(var(--draft-blue-soft) 1px, transparent 1px) 0 0 / 24px 24px,
-        linear-gradient(90deg, var(--draft-blue-soft) 1px, transparent 1px) 0 0 / 24px 24px,
-        linear-gradient(180deg, rgba(255, 252, 238, 0.98), rgba(247, 241, 220, 0.96) 58%, rgba(232, 219, 174, 0.94));
-    border: 0;
-    box-shadow:
-        0 0 0 1px rgba(23, 106, 165, 0.28) inset,
-        0 0 0 2px rgba(255, 255, 255, 0.28) inset,
-        0 14px 28px rgba(8, 11, 33, 0.24),
-        5px 8px 16px rgba(8, 11, 33, 0.13),
-        0 0 26px rgba(255, 207, 101, 0.12);
-    justify-items: stretch;
-    overflow: visible;
-    text-align: center;
-    text-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.54),
-        0 0 1px rgba(23, 106, 165, 0.3);
-    transform: rotate(-0.82deg);
-    transform-origin: 52% 48%;
+    width: min(78%, 530px);
+    margin-bottom: -0.5rem;
+    padding: 0;
 }
 
-.projections-section-title::before,
-.projections-section-title::after,
-.games-section-title::before,
-.games-section-title::after {
-    content: '';
-    position: absolute;
-    pointer-events: none;
-}
-
-.projections-section-title::before {
-    inset: 0;
-    background:
-        linear-gradient(var(--draft-blue), var(--draft-blue)) left top / 3rem 1px no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) left top / 1px 1.45rem no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) right top / 3rem 1px no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) right top / 1px 1.45rem no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) left bottom / 3rem 1px no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) left bottom / 1px 1.45rem no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) right bottom / 3rem 1px no-repeat,
-        linear-gradient(var(--draft-blue), var(--draft-blue)) right bottom / 1px 1.45rem no-repeat;
-    opacity: 0.84;
-    filter: drop-shadow(0 0 5px rgba(23, 106, 165, 0.18));
-    z-index: 1;
-}
-
-.projections-section-title::after {
-    left: clamp(0.8rem, 3vw, 1.75rem);
-    right: clamp(0.8rem, 3vw, 1.75rem);
-    bottom: 0.5rem;
-    height: 0.36rem;
-    background:
-        linear-gradient(90deg, transparent, rgba(23, 106, 165, 0.5), transparent) 0 50% / 100% 1px no-repeat,
-        repeating-linear-gradient(90deg, transparent 0 0.86rem, rgba(23, 106, 165, 0.46) 0.86rem calc(0.86rem + 1px), transparent calc(0.86rem + 1px) 1.32rem);
-    opacity: 0.82;
-    z-index: 1;
-}
-
-.projections-section-title .work-section-name {
-    position: relative;
+.projections-title-art {
     display: block;
     width: 100%;
-    margin: 0;
-    padding: 0.08rem 0 0.16rem;
-    border: 0;
-    font-family: 'IBM Plex Sans Condensed', 'Exo', sans-serif;
-    font-size: clamp(1.55rem, 3.25vw, 2.38rem);
-    font-weight: 700;
-    letter-spacing: 0.055em;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 1.12px rgba(13, 71, 124, 0.9);
-    paint-order: stroke fill;
-    text-align: center;
-    text-transform: uppercase;
-    text-shadow:
-        0.025em 0 rgba(23, 106, 165, 0.18),
-        -0.018em 0.015em rgba(13, 71, 124, 0.16),
-        0 1px 0 rgba(255, 255, 255, 0.52);
-    z-index: 2;
-}
-
-.projections-section-title .work-section-name::before,
-.projections-section-title .work-section-name::after {
-    content: attr(data-text);
-    position: absolute;
-    inset: 0;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    pointer-events: none;
-}
-
-.projections-section-title .work-section-name::before {
-    -webkit-text-stroke: 0.54px rgba(23, 106, 165, 0.36);
-    clip-path: polygon(0 8%, 100% 0, 100% 31%, 0 40%, 0 55%, 100% 48%, 100% 100%, 0 92%);
-    transform: translate(0.035em, -0.018em);
-}
-
-.projections-section-title .work-section-name::after {
-    -webkit-text-stroke: 0.38px rgba(13, 71, 124, 0.28);
-    clip-path: polygon(0 0, 100% 6%, 100% 18%, 0 12%, 0 44%, 100% 39%, 100% 62%, 0 69%, 0 100%, 100% 94%, 100% 100%, 0 100%);
-    transform: translate(-0.022em, 0.02em);
+    height: auto;
 }
 
 .games-section-title {
@@ -7305,12 +7199,8 @@ html {
     }
 
     .projections-section-title {
-        padding: 0.62rem 0.62rem 0.74rem;
-        transform: rotate(-0.45deg);
-    }
-
-    .projections-section-title .work-section-name {
-        font-size: clamp(1.18rem, 6.7vw, 1.55rem);
+        padding: 0;
+        margin-bottom: -0.5rem;
     }
 
     .games-section-title .work-section-name {

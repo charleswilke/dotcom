@@ -2878,6 +2878,7 @@ function drawAsteroidEnemy(e) {
 
   if (PAPER_SAMPLE && e.type === 'drone') drawPaperDrone(e, sucked);
   else if (PAPER_SAMPLE && e.type === 'charger') drawPaperCharger(e, sucked, triggered);
+  else if (PAPER_SAMPLE && e.type === 'spawner') drawPaperSpawner(e, sucked);
   else drawAsteroidShape(e.verts, e.cracks, glowColor, shadowBlur);
 }
 
@@ -3807,6 +3808,7 @@ function killPlayer() {
 
   if (player.lives <= 0) {
     gameState = 'GAME_OVER';
+    paperGameOverStart = performance.now();
     stopMusic(3000);
   } else {
     player.respawnTimer = 90; // 1.5 seconds
@@ -7210,8 +7212,9 @@ const PAPER_INKS = {
   weaver:  ['#ff4fb0', '#c92a8c', '#fff0bf', '#ffb060'],
   charger: ['#ff7a3d', '#e0572b', '#fff0bf', '#ffb060'],
   bomber:  ['#c92a8c', '#8a1c5e', '#fff0bf', '#ffb060'],
+  spawner: ['#c92a8c', '#ec78bd', '#c96bd6', '#fff0bf'],
 };
-const PAPER_BURST_SIZE = { drone: 15, weaver: 19, charger: 22, bomber: 22 };
+const PAPER_BURST_SIZE = { drone: 15, weaver: 19, charger: 22, bomber: 22, spawner: 28 };
 
 // Draws a stack of paper panels: each panel first casts a page-dark copy of itself a
 // couple of pixels down and right onto whatever is already there, then lays its colour.
@@ -7369,6 +7372,40 @@ function drawPaperDrone(e, sucked) {
     ctx.beginPath(); ctx.moveTo(c.x1, c.y1); ctx.lineTo(c.xm, c.ym); ctx.lineTo(c.x2, c.y2); ctx.stroke();
   }
   paperPanels([[facet, sucked ? '#ff8a5c' : '#c96bd6']], 1.4, 1.8);
+}
+
+// The HOA is a three-part paper shell around three violet drone fragments.
+// Damage opens the seams visually; the original asteroid outline and collision stay put.
+function drawPaperSpawner(e, sucked) {
+  ctx.shadowBlur = 0;
+  const outline = e.verts.map(v => [v.x, v.y]);
+  const damage = 1 - Math.max(0, Math.min(1, e.hp / CONFIG.enemies.spawner.hp));
+  paperPanels([[outline, sucked ? '#8e302d' : '#8a1c5e']], 2.5, 3);
+  for (let sector = 0; sector < 3; sector++) {
+    const angle = sector * Math.PI * 2 / 3;
+    ctx.save(); ctx.rotate(angle); ctx.translate(7, 0);
+    paperPanels([
+      [[[-3,-5],[4,-7],[9,-2],[6,5],[-1,4],[-5,0]], sucked ? '#ff8a5c' : '#c96bd6'],
+      [[[0,-4],[4,-5],[6,-1],[1,1]], '#fff0bf'],
+    ], 1, 1.5);
+    ctx.restore();
+  }
+  // Each panel follows a contiguous third of the enemy's own fixed vertices.
+  for (let sector = 0; sector < 3; sector++) {
+    const start = Math.floor(sector * outline.length / 3);
+    const end = Math.floor((sector + 1) * outline.length / 3);
+    const edge = [];
+    for (let i = start; i <= end; i++) edge.push(outline[i % outline.length]);
+    const middle = edge[Math.floor(edge.length / 2)];
+    const breathe = Math.sin(e.frame * .045 + sector * 2) * .35;
+    const gap = .06 + damage * .12;
+    ctx.save(); ctx.translate(middle[0] * gap + breathe, middle[1] * gap);
+    paperPanels([
+      [[...edge, [middle[0] * .29, middle[1] * .29]], sucked ? '#c9472f' : '#c92a8c'],
+      [[edge[0].map(v => v * .83), middle.map(v => v * .85), middle.map(v => v * .45)], sucked ? '#ff8a5c' : '#ec78bd'],
+    ], 1.5, 2);
+    ctx.restore();
+  }
 }
 
 // The Wobbler as a paper interceptor: canards, a double-delta main wing, twin tail fins
@@ -7730,9 +7767,9 @@ function openingSpring(t, beat, strength = 1) {
 function openingShipPose(t) {
   const w = CONFIG.width, cy = CONFIG.height*.43;
   const collapse = openingEase((t-11.5)/1.5);
-  // Skim above the planet, brake beyond it, and turn to inspect the wake.
+  // Skim the GAMES strip's lower edge, brake beyond it, and inspect the loose label.
   let x = -80 + openingEase(t/2.65)*(w*.81+80);
-  let y = cy-86, angle = 0;
+  let y = cy+105, angle = 0;
   const brake = openingBump(t,2.65,.22);
   // The acting, in story order. Each beat is a local-time bump so it reads the same on replay.
   const peek = openingBump(t,2.95,.1);     // a glance over the shoulder before committing to the turn
@@ -7749,7 +7786,7 @@ function openingShipPose(t) {
   angle = Math.PI*openingEase((t-3.05)/.45) - peek*.55;
   y += puzzle*Math.sin((t-3.5)*11)*5 - gasp*18 + hope*6;
   angle += puzzle*Math.sin((t-3.5)*5.5)*.12 + nod*.28 - hope*.18;
-  // Retrace the same side of the planet in the opposite direction: counter-torque.
+  // Come back along the label to "fix" it with a second pass.
   x -= openingEase((t-4.4)/1.3)*w*.5;
   x += windup*10-kick*17+hope*8;
   y += recoil*5;
@@ -7778,6 +7815,8 @@ function openingShipPose(t) {
 // Each entry is a list of designs; a letter that appears twice in the title gets a different
 // design each time, on top of its own jitter, so the two S's, T's and O's are not twins.
 const PAPER_GLYPHS = {
+  V: [[[[0,0],[3,0],[5,6.6],[7,0],[10,0],[6.5,10],[3.5,10]]]],
+  Y: [[[[0,0],[3,0],[5,3.7],[7,0],[10,0],[6.4,6.5],[6.4,10],[3.6,10],[3.6,6.5]]]],
   W: [[[[0,0],[2.5,0],[3,6],[4,3.5],[6,3.5],[7,6],[7.5,0],[10,0],[9,10],[6.5,10],[5,7],[3.5,10],[1,10]]]],
   G: [[[[0,0],[10,0],[10,2.6],[2.8,2.6],[2.8,7.4],[7.2,7.4],[7.2,6],[5,6],[5,4],[10,4],[10,10],[0,10]]]],
   M: [[[[0,10],[0,0],[2.7,0],[5,4],[7.3,0],[10,0],[10,10],[7.3,10],[7.3,4.8],[5,8],[2.7,4.8],[2.7,10]]]],
@@ -7980,110 +8019,59 @@ function drawOpening(t) {
     }
     cutout(x,y,(i<6?12:3+i%4)*(1-collapse*.9),i%3?'#42ebed':'#ffe5a0',caught*angle+(i===0?openingEase(t-4)*1.8:0),'star');
   }
-  const planetX = cx + Math.sin(Math.max(0,t-3)*2)*openingEase((t-3)/3)*23;
-  const planetJiggle=openingSpring(t,1.75,.22)+openingSpring(t,5.05,.32)+trouble*Math.sin(t*9)*.07;
-  ctx.save();ctx.translate(planetX,cy);ctx.scale(1+planetJiggle,1/(1+planetJiggle));ctx.translate(-planetX,-cy);
-  // First wake spins clockwise; the corrective pass stalls and reverses it.
-  const spin = Math.max(0,t-1.7)*2.5-Math.max(0,t-4.95)*7;
-  const morph=openingEase((t-1.85)/1.5);
-  const ringPull=openingEase((t-6.2)/5.8);
-  // All band and ink vertices share one tilted plane and perspective projection.
-  const gamesRing = front => {
-    if(collapse>=1)return;
-    const dissolve=openingEase((t-5.4)/2.8);
-    const radius=112*(1-collapse)*(1-ringPull*.7);
-    const tilt=-.24+Math.sin(t*1.1)*.035+ringPull*Math.sin(spin*.2)*.3;
-    const circulation=ringPull*orbitTime*1.1;
-    const project=(angle,r,drop=0)=>{
-      const z=Math.sin(angle)*r;
-      const perspective=1/(1-z/480);
-      const x=Math.cos(angle)*r*perspective;
-      const y=(z*(.42+ringPull*.15)+drop)*perspective;
-      return [x*Math.cos(tilt)-y*Math.sin(tilt),x*Math.sin(tilt)+y*Math.cos(tilt)];
-    };
-    ctx.save();ctx.translate(planetX,cy);
-    const start=front?0:Math.PI,end=start+Math.PI;
-    const band=(drop,color)=>{
-      ctx.beginPath();
-      // Fixed sector thresholds erode the paper into a stable dither, not frame noise.
-      for(let j=0;j<96;j++) {
-        const seed=(j*37+(front?17:0))%97/97;
-        if(dissolve>seed)continue;
-        const a=start+(end-start)*j/96,b=start+(end-start)*(j+1)/96;
-        ctx.moveTo(...project(a,radius*1.18,drop));
-        ctx.lineTo(...project(b,radius*1.18,drop));
-        ctx.lineTo(...project(b,radius*.87,drop));
-        ctx.lineTo(...project(a,radius*.87,drop));ctx.closePath();
-      }
-      ctx.fillStyle=color;ctx.fill();
-    };
-    ctx.save();ctx.globalAlpha*=1-dissolve*.65;
-    band(3*(1-collapse),front?'#95537c':'#413453');
-    ctx.shadowColor='#67fff0';ctx.shadowBlur=front?17:9;
-    band(0,front?'#d5ffe1':'#7aadae');
-    ctx.restore();
-    // Freed flecks join the larger vortex early, then share its final collapse.
-    if(dissolve>0) {
-      ctx.save();ctx.shadowColor='#67fff0';ctx.shadowBlur=6;
-      for(let j=0;j<48;j++) {
-        const seed=((j*29)%47)/47;
-        if(dissolve<seed)continue;
-        const age=openingClamp((dissolve-seed)/.45);
-        const angle=start+j*Math.PI/48+age*(1+orbitTime*.35);
-        if((Math.sin(angle)>=0)!==front)continue;
-        const r=(112+age*(35+j%7*9))*(1-collapse)*(1-ringPull*.45);
-        const [x,y]=project(angle,r);
-        ctx.globalAlpha=(1-collapse)*(1-age*.65)*.8;
-        ctx.fillStyle=j%3?'#80ffe4':'#ffe5b0';
-        const size=(1.5+j%3)*(1-collapse);
-        ctx.fillRect(x,y,size,size);
-      }
+  // A handmade production credit gets caught in the cartoon, one loose piece at a time.
+  // The first puff unglues the label's right edge; the second tears it free.
+  const peel = openingEase((t-1.75)/.65);
+  const loose = openingEase((t-4.65)/1.2);
+  const caught = openingEase((t-5.2)/3.5);
+  const creditScale = 1-collapse;
+  if (creditScale > 0) {
+    // Two oversized individual letters, deliberately not fitted into a monogram.
+    for (let i=0;i<2;i++) {
+      const pull = openingEase((t-5.5-i*.3)/3);
+      const angle = orbitTime*orbitTime*.27+i*Math.PI;
+      const radius = (88+i*25)*pull;
+      const x = cx+(i?48:-48)*(1-pull)+Math.cos(angle)*radius;
+      const y = cy-22*(1-pull)+Math.sin(angle)*radius*.65;
+      const kick = openingSpring(t,1.75+i*.1,.18)+openingSpring(t,4.65+i*.13,.35);
+      ctx.save();
+      ctx.translate(cx+(x-cx)*creditScale,cy+(y-cy)*creditScale);
+      ctx.rotate((i?.085:-.09)+kick*(i?1:-1)+pull*angle);
+      ctx.scale(creditScale*(1+kick*.2),creditScale/(1+kick*.2));
+      drawPaperLetter(i?'W':'C',96,i?'#ff75bb':'#fff0bf',i?4:2);
       ctx.restore();
     }
+    // Cream pasted label: pivot around its left corner before tumbling into the well.
+    const labelAngle = .045+peel*.48+openingSpring(t,1.85,.2)+loose*orbitTime*1.8;
+    const labelOrbit = orbitTime*orbitTime*.35+1.4;
+    const labelX = cx-94+(Math.cos(labelOrbit)*150+94)*caught;
+    const labelY = cy+42+(Math.sin(labelOrbit)*105-42)*caught;
+    ctx.save();
+    ctx.translate(cx+(labelX-cx)*creditScale,cy+(labelY-cy)*creditScale);
+    ctx.rotate(labelAngle); ctx.scale(creditScale,creditScale);
+    paperPanels([
+      [[[0,-5],[193,-2],[189,43],[4,39]],'#fff0bf'],
+    ],3,4);
     for(let i=0;i<5;i++) {
-      const center=Math.PI/2+(2-i)*.255+circulation;
-      const depth=Math.sin(center);
-      if((depth>=0)!==front)continue;
-      ctx.save();ctx.globalAlpha*=(front?1:.3)*(1-openingEase((t-5.4)/1.9));
-      ctx.beginPath();
-      for(const ring of PAPER_LETTERS['GAMES'[i]][i]) {
-        ring.forEach(([x,y],j)=>{
-          const angle=center-(x-5)*.019;
-          const r=radius*(1.025+(y-5)*.025);
-          const p=project(angle,r);
-          j?ctx.lineTo(...p):ctx.moveTo(...p);
-        });ctx.closePath();
-      }
-      ctx.fillStyle='#352344';ctx.fill('evenodd');ctx.restore();
+      ctx.save();ctx.translate(24+i*35,18);ctx.rotate(i%2?.025:-.025);
+      drawPaperLetter('GAMES'[i],27,PAPER_PAGE,i+2,null);ctx.restore();
+    }
+    // A tiny torn adhesive tab stays behind as the label leaves.
+    if(loose<1) {
+      ctx.fillStyle='#ec78bd';ctx.fillRect(-4,-8,17,12*(1-loose));
     }
     ctx.restore();
-  };
-  gamesRing(false);
-  ctx.save();ctx.translate(planetX,cy);ctx.rotate(-.12+spin*morph);
-  ctx.scale(1-collapse,1-collapse);
-  // Two interlocking cuts make the globe itself; there is no disk behind the CW.
-  const pieces=CW_PIECES;
-  const trace=(points,offset)=>{
-    ctx.beginPath();points.forEach(([x,y],i)=>{
-      // Close the letter gaps as the pieces inflate into the spinning world.
-      const angle=Math.atan2(y,x),r=Math.hypot(x,y);
-      const inflate=morph*.92;
-      const rr=r+(69-r)*inflate;
-      const px=Math.cos(angle)*rr,py=Math.sin(angle)*rr;
-      i?ctx.lineTo(px+offset,py+offset):ctx.moveTo(px+offset,py+offset);
-    });ctx.closePath();
-  };
-  ctx.globalAlpha*=1-openingEase((morph-.7)/.3);
-  pieces.forEach((points,i)=>{
-    trace(points,3);ctx.fillStyle='#942469';ctx.fill();
-    trace(points,0);ctx.fillStyle=i?'#ef43a4':'#ff75bb';ctx.fill();
-  });
-  ctx.restore();
-  ctx.save();ctx.globalAlpha*=openingEase((morph-.7)/.3);
-  cutout(planetX,cy,69*(1-collapse),'#f53ba8',-.12+spin*morph,'rock');
-  ctx.restore();
-  gamesRing(true);
-  ctx.restore(); // planet and ring squash together
+    if(loose>0) {
+      for(let i=0;i<7;i++) {
+        const a=labelOrbit+i*2.399;
+        const r=(45+i*19)*caught*creditScale;
+        ctx.save();ctx.shadowBlur=0;
+        paperCutout(cx+Math.cos(a)*r,cy+Math.sin(a)*r*.7,
+          (2+i%3)*loose*creditScale,i%2?'#fff0bf':'#ec78bd',a,'rock');
+        ctx.restore();
+      }
+    }
+  }
   const shipPose = openingShipPose(t);
   drawOpeningShip(shipPose,t,trouble);
   for (const beat of [1.7,4.6]) {
@@ -8310,7 +8298,70 @@ function drawBossWarning() {
   ctx.restore();
 }
 
+let paperGameOverStart = null;
+
+function drawPaperGameOver() {
+  const w = CONFIG.width, h = CONFIG.height;
+  if (paperGameOverStart === null) paperGameOverStart = performance.now();
+  const age = reducedMotion.matches ? 20 : (performance.now() - paperGameOverStart) / 1000;
+  ctx.save();
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = PAPER_PAGE; ctx.fillRect(0, 0, w, h);
+  // A quiet end card: only the lettering and a few fallen scraps move.
+  for (let i = 0; i < 24; i++) {
+    ctx.globalAlpha = .25;
+    paperCutout((i * 173 + 51) % w, 30 + (i * 83) % (h - 90), 2 + i % 4,
+      i % 3 ? '#fff0bf' : '#42ebed', i * 2.399, 'star');
+  }
+  ctx.globalAlpha = 1;
+  const word = (text, y, size, color, animate = false) => {
+    const advance = size * 1.08;
+    for (let i = 0; i < text.length; i++) {
+      if (text[i] === ' ') continue;
+      const t = Math.max(0, age - i * .055 - (y > h * .35 ? .14 : 0));
+      const settle = animate ? Math.exp(-t * 6) * Math.cos(t * 12) : 0;
+      ctx.save();
+      ctx.translate(w / 2 + (i - (text.length - 1) / 2) * advance, y - settle * 95);
+      ctx.rotate((i % 2 ? .035 : -.04) + settle * (i % 2 ? .16 : -.16));
+      drawPaperLetter(text[i], size, color, (i + (y > h * .35 ? 5 : 0)) % 10);
+      ctx.restore();
+    }
+  };
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.font = '12px monospace'; ctx.fillStyle = '#ec78bd';
+  ctx.fillText('END OF TRANSMISSION', w / 2, h * .105);
+  word('GAME', h * .27, 78, '#fff0bf', true);
+  word('OVER', h * .445, 86, '#ec78bd', true);
+
+  // A cream score slip with an offset magenta backing, like a printed arcade receipt.
+  ctx.save(); ctx.translate(w / 2, h * .65); ctx.rotate(-.018);
+  paperPanels([
+    [[[-171,-32],[172,-29],[168,37],[-174,33]], '#c92a8c'],
+    [[[-177,-38],[165,-35],[161,30],[-180,27]], '#fff0bf'],
+  ], 3, 4);
+  ctx.fillStyle = PAPER_PAGE; ctx.font = '11px monospace';
+  ctx.fillText('FINAL SCORE', 0, -17);
+  ctx.font = 'bold 29px monospace'; ctx.fillText(String(score).padStart(8, '0'), 0, 16);
+  ctx.restore();
+
+  // Detached wings and canopy: an exhausted little heap, not another active ship.
+  for (const [x, flip] of [[w * .19, 1], [w * .81, -1]]) {
+    ctx.save(); ctx.translate(x, h * .72); ctx.scale(flip, 1);
+    ctx.rotate(-.2 + Math.exp(-age * 4) * Math.sin(age * 9) * .7);
+    paperPanels([
+      [[[-27,8],[22,-23],[12,12],[-14,17]], '#42beca'],
+      [[[2,19],[28,12],[35,19],[10,24]], '#fff0bf'],
+      [[[-13,30],[-2,24],[8,31],[-5,34]], '#c92a8c'],
+    ], 2, 3); ctx.restore();
+  }
+  word(isMobile ? 'TAP TO RETRY' : 'CLICK TO RETRY', h * .84, 22, '#fff0bf');
+  ctx.font = '11px monospace'; ctx.fillStyle = '#ec78bd';
+  ctx.fillText('ONE MORE FLIGHT?', w / 2, h * .91);
+  ctx.restore();
+}
+
 function drawGameOver() {
+  if (PAPER_SAMPLE) { drawPaperGameOver(); return; }
   drawBackground();
 
   ctx.save();

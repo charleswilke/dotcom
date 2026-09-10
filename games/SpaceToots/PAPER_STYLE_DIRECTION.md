@@ -26,31 +26,28 @@ The player ship, the drone, the weaver, Karen, the bomber, their deaths, and the
 - **Sky:** `drawPaperSky` replaces the one-layer white starfield, gradient nebulae and glowing planets with a multiplane camera, the cut-paper animator's own trick: flat sheets at different distances, each sliding at its own speed. Far to near: 90 cream specks; five torn nebula sheets in deep violet, navy and plum at 11 to 13% with a page-dark second sheet under each for thickness; cut planets (flat disc, glued page-dark crescent on the shadow side, a flat paper band behind and in front when ringed), moons and galaxies (a cut annulus with a cream core on a tilted ellipse); 22 of the opening's paper stars turning on their threads; and three big dim stars that cross fast in front of the grid. Twinkle is a stepped flip between three cut poses on each star's own clock, never a fade. One body in eight is the opening's CW planet, far back, as a wink (`CW_PIECES` is shared with `drawOpening`). No gradients anywhere. Foreground debris streaks are cream. The classic sky is intact under `?classic`.
 - **Death:** `spawnPaperBurst` fires a short white flash, one expanding ring printed twice (magenta under, cream over, misregistered like the letters), and nine torn shards in the enemy's own inks (`PAPER_INKS`) that spin out and drop off the page; the weaver's burst is a size larger than the drone's, and Karen's and the bomber's larger again. Shard shapes are cut once at spawn. Rings and shards ride the existing `particles` pool with a `kind` field.
 
+### HOA spawner exploration
+
+The spawner now uses `drawPaperSpawner`: three magenta shell panels follow contiguous sections of its existing asteroid outline, with pink facets and three violet drone fragments tucked inside. The seams spread as HP falls; a restrained staggered breathing motion keeps the shell alive. Suction uses the existing alarm reds. Its death uses a larger paper burst in matching inks. Rendering and burst styling only: spawn, damage, and collision logic are unchanged; `?classic` retains the neon version. Browser rendering was checked at full, middle, and low HP.
+
 Still to evaluate: readability in dense waves, performance on mobile, and whether the drone's violet reads as hostile enough next to magenta enemy fire.
 
-## CW planet refinement
+## Game-over closing card
 
-The letters themselves should form the planet silhouette, rather than sitting on a circular backing.
+`drawPaperGameOver` carries the title's paper lettering into a two-line cream and pink GAME OVER card. Letters fall into place with staggered damped motion, above an offset cream score ticket and detached cyan wing scraps. The retry prompt remains visible, with TAP wording on mobile. Reduced motion shows the settled card immediately. The animation clock resets on the final player death; score and retry behavior are unchanged. `?classic` retains the previous neon screen. V and Y were added to the shared cut-paper alphabet.
 
-- Design a bespoke CW monogram with a roughly circular outer contour: broad curved/faceted C at left, W fitted into the right hemisphere.
-- Keep recognizable internal negative spaces and a few deliberate jagged cuts. Think two paper pieces cut to assemble into a small world.
-- Use a small offset underlayer for depth, without placing a separate disk behind the letters.
-- On the first ship puff, rotate and compress the letterforms. Their gaps narrow, facets sweep around the edge, and the silhouette resolves into the existing more solid planet.
-- Preserve enough of the CW's color and facets during the transformation that it reads as the same object changing, not a logo fading into a replacement.
+## CW GAMES opening credit — current direction
 
-## GAMES ring refinement
+The user chose a playful opening credit. The intro now uses separate cream C
+and pink W paper letters above a taped cream GAMES strip. The first ship puff
+loosens the strip, and the second tears it free; the label and letters then
+orbit independently into the collapse. Shapes stay flat, with printed offsets
+instead of ring glow or a geometric monogram morph. The existing ship acting,
+gravity mesh and title reveal remain.
 
-Replace the individually rotated orbiting letters with a tilted, physically coherent ring carrying printed text on its upper surface.
+This supersedes the earlier CW planet and perspective GAMES-ring exploration.
+The monogram geometry remains available to the gameplay sky. Key intro beats
+were rendered in the browser without errors; timing and humor remain open to
+visual feedback.
 
-- Project an annular band as a plane in perspective, with a visible upper face and a restrained darker edge for thickness.
-- Treat GAMES as a word printed on that surface. Project its glyph vertices with the same transform as the band, so its scale and foreshortening agree with the ring.
-- Make the near/front arc the readable hero area. The far arc should be occluded by the CW where appropriate and visually subdued.
-- Avoid flipping individual letters to keep them upright; this breaks the illusion of a shared surface. Arrange the word on the readable near arc, and control its circulation so upside-down far-side text is hidden or fades before becoming distracting.
-- Start with one clear GAMES word and generous spacing. Add repetitions only if they improve the composition.
-- Let the ring rock or precess gently when the ship disturbs it. During the gravity buildup, tighten its radius, tip the plane, and stretch the printed word with the band as both spiral inward.
-
-### Questions to resolve visually
-
-- How circular can the CW silhouette become while remaining immediately recognizable?
-- Should the ring feel like a thin cream paper strip or a translucent cyan orbital surface? A thin paper strip is the initial preference for consistency with the intro.
-- How much text movement is needed? A slowly rocking ring with a readable word may communicate the idea better than continuous full-orbit circulation.
+The ship now skims directly beneath the GAMES strip on both passes, with its upper wing and exhaust beside the lower paper edge when the first puff loosens it. This replaces the old above-planet flight lane so the disturbance has a visible cause.

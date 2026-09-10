@@ -488,29 +488,14 @@ The SPACE TOOTS letters stay hidden through the whole buildup. On the nova beat
 the frame hard-cuts to flat colour cards (cream, then magenta) for a few frames,
 and the letters blast out of the card rather than the ember.
 
-**The planet is the CW monogram.** Two bespoke faceted paper pieces, a broad C on
-the left and a W fitted into the right hemisphere, form a roughly circular
-silhouette with no disk behind them; a darker magenta underlayer offset a few
-pixels gives them thickness. The first ship puff (t≈1.85) starts a 1.5s morph:
-the pieces rotate with the planet’s spin while their inward cuts inflate toward
-the outer contour, so the gaps close and the facets sweep around the edge, and
-over the last third the closed shape cross-fades into the solid pink `paperCutout`
-planet that the rest of the sequence deforms. It should read as the same object
-changing, not a logo fading into a replacement.
-
-**GAMES is printed once on a Saturn ring.** The ring is an annular paper band
-projected in perspective on a tilted plane, drawn in two passes (rear half
-before the planet, front half after) so the planet occludes it correctly. A
-darker band offset downward gives the paper an edge; the cream face carries a
-soft mint glow. The five glyphs’ vertices go through the same projection as the
-band, so the word foreshortens with the surface instead of being rotated letter
-by letter; it rests on the readable front arc, and the ring rocks gently on its
-own. From t≈6.2 the gravity pull tightens the radius, tips the plane and sets
-the word circulating; far-side letters are drawn subdued and fade out. Starting
-at 5.4s the band dithers away over 2.8s in fixed angular sectors (stable
-thresholds, not per-frame noise) and releases glowing flecks that join the
-vortex early and share the final collapse. The printed word fades slightly
-faster; no solid band remains by 8.2s. All shadow blur stays inside canvas saves.
+**CW GAMES is a playful opening credit.** Two oversized, crooked cut-paper C and W
+letters sit above a cream GAMES strip held by a small pink adhesive tab. The
+first puff loosens the strip's right side, which swings from its left corner;
+the corrective puff tears it free. The letters and label tumble independently
+into the gravity well, accompanied by a few torn scraps, and share the final
+collapse. This replaces the intro's monogram-to-planet morph and projected
+Saturn ring. `CW_PIECES` remains in use by the gameplay sky. Intro duration,
+ship acting, mesh, skip/replay controls and final title reveal are unchanged.
 
 **The floor is one projected mesh.** `drawOpening` samples a perspective grid
 (49 depth lines, 41 cross lines; every fourth line a brighter cyan major to

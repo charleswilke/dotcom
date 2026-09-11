@@ -18,12 +18,12 @@
   <g class="bt-door-scene">
     <polygon class="bt-door-interior" fill="#fbe1b6" points="904,263 1103,208 1120,679 850,685"/>
     <g class="bt-door-blocks" data-origin="1060 420">
-      <polygon fill="#a7ac84" points="910,339 905,418 924,422 927,390 955,391 953,348"/>
-      <polygon fill="#6a7b5d" points="928,390 925,423 983,437 986,515 990,516 987,540 991,613 1017,612 1009,401"/>
-      <polygon fill="#034240" points="982,437 905,421 888,674 991,642"/>
-      <polygon fill="#a7ac84" points="1012,447 1018,612 1028,612 1031,537 1041,536 1043,497 1058,496 1055,454"/>
-      <polygon fill="#6a7b5d" points="1044,497 1042,536 1101,533 1105,567 1109,567 1104,497"/>
-      <polygon fill="#0b4d4a" points="1101,534 1033,538 1030,612 1111,613"/>
+      <polygon fill="#a7ac84" data-depth="1.6" points="910,339 905,418 924,422 927,390 955,391 953,348"/>
+      <polygon fill="#6a7b5d" data-depth="0.9" points="928,390 925,423 983,437 986,515 990,516 987,540 991,613 1017,612 1009,401"/>
+      <polygon fill="#034240" data-depth="0.4" points="982,437 905,421 888,674 991,642"/>
+      <polygon fill="#a7ac84" data-depth="1.6" points="1012,447 1018,612 1028,612 1031,537 1041,536 1043,497 1058,496 1055,454"/>
+      <polygon fill="#6a7b5d" data-depth="0.9" points="1044,497 1042,536 1101,533 1105,567 1109,567 1104,497"/>
+      <polygon fill="#0b4d4a" data-depth="0.4" points="1101,534 1033,538 1030,612 1111,613"/>
     </g>
     <path class="bt-door-wall" fill="#080e0f" fill-rule="evenodd" d="M1291 38 L1106 76 L810 148 L785 689 L841 690 L850 685 L1275 716 L1383 743 L1339 376 Z M904 263 L1103 208 L1120 679 L850 685 Z"/>
     <polygon class="bt-door-floor" fill="#f8dbb0" points="849,691 316,909 1256,909 1119,681"/>

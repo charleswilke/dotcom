@@ -6165,7 +6165,7 @@ function initBeforeTimesDoor() {
     const media = card.querySelector('.showcase-media img');
     if (!media || typeof card.animate !== 'function' || typeof window.fetch !== 'function') return;
 
-    const SVG_URL = 'images/before-times-door-card.svg?v=20260911b';
+    const SVG_URL = 'images/before-times-door-card.svg?v=20260911c';
     const ARRIVAL_KEY = 'before-times:door-arrival';
     const DURATION = 1150;
     const VIEW = { w: 1400, h: 910 };
@@ -6299,11 +6299,12 @@ function initBeforeTimesDoor() {
             { duration: DURATION, easing: 'linear', fill: 'forwards' }
         );
 
-        // The slab swings on its hinge and the blocks recede, both driven off
-        // the same animation clock so they can't drift from the approach.
+        // The slab swings on its hinge and the blocks sit at their depths,
+        // both driven off the same animation clock so they can't drift from
+        // the approach.
         const slab = svg.querySelector('.bt-door-slab');
         const shade = svg.querySelector('.bt-door-slab-shade');
-        const blocks = svg.querySelector('.bt-door-blocks');
+        const blockShapes = Array.from(svg.querySelectorAll('.bt-door-blocks [data-depth]'));
         const hinge = ((slab && slab.dataset.hinge) || '1104 208 1120 679').split(' ').map(Number);
         const hx = (hinge[0] + hinge[2]) / 2;
         const hy = (hinge[1] + hinge[3]) / 2;
@@ -6340,13 +6341,21 @@ function initBeforeTimesDoor() {
             if (shade) shade.setAttribute('opacity', (0.3 * eased).toFixed(3));
         }
 
+        // Pinhole perspective for the blocks. The poster's scale s says how
+        // far the camera has come toward the door plane; a block a depth d
+        // behind that plane (data-depth, as a fraction of the starting
+        // distance) projects at (1 + d) / (d * s + 1) times the poster's
+        // scale, about the point the camera is flying at. Near blocks keep
+        // up with the frame, far ones lag, and none of them fades: the bloom
+        // is what washes them out at the threshold.
         function recede(progress) {
-            if (!blocks) return;
-            const p = Math.min(1, progress / 0.8);
-            const depth = 1 - 0.45 * p;
-            const fade = Math.min(1, Math.max(0, (progress - 0.5) / 0.32));
-            blocks.setAttribute('transform', `translate(${TARGET.x} ${TARGET.y}) scale(${depth.toFixed(4)}) translate(${-TARGET.x} ${-TARGET.y})`);
-            blocks.setAttribute('opacity', (1 - fade).toFixed(3));
+            const e = progress * progress * (3 - 2 * progress);
+            const s = 1 / (1 - k * e);
+            blockShapes.forEach((shape) => {
+                const depth = parseFloat(shape.dataset.depth) || 0;
+                const relative = (1 + depth) / (depth * s + 1);
+                shape.setAttribute('transform', `translate(${TARGET.x} ${TARGET.y}) scale(${relative.toFixed(5)}) translate(${-TARGET.x} ${-TARGET.y})`);
+            });
         }
 
         let navigated = false;

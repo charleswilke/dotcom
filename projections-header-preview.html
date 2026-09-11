@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Projection header studies</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#13132b;color:#fff3d4;font:16px/1.5 system-ui,sans-serif}header{padding:22px 28px 18px;max-width:1200px;margin:auto}h1{font-size:20px;margin:0 0 12px;font-weight:600}.toolbar{display:flex;gap:8px;flex-wrap:wrap}button,a{font:inherit}button{border:1px solid #73718b;color:#fff3d4;background:transparent;padding:8px 16px;border-radius:6px;cursor:pointer}button[aria-pressed=true]{background:#fff3d4;color:#242048;border-color:#fff3d4}button:focus-visible,a:focus-visible{outline:3px solid #00f7c2;outline-offset:3px}p{font-size:14px;color:#c3c2d2;margin:12px 0 0;min-height:21px}a{color:#8cddd8;margin-left:auto;align-self:center;font-size:14px}iframe{display:block;width:100%;height:calc(100vh - 174px);min-height:560px;border:0;border-top:1px solid #45405f;background:#252354}@media(max-width:600px){header{padding:16px}a{margin-left:0}iframe{height:75vh}}
+</style>
+</head>
+<body>
+<header>
+<h1>Projection header studies</h1>
+<div class="toolbar" role="group" aria-label="Header version">
+<button data-version="clean" aria-pressed="true">Clean</button>
+<button data-version="textured" aria-pressed="false">Textured</button>
+<button data-version="animated" aria-pressed="false">Animated</button>
+<button data-version="combined" aria-pressed="false">Texture + animation</button>
+<a href="index.html#projections">Back to site ↗</a>
+</div>
+<p id="description" aria-live="polite">The original vector artwork, with crisp lettering and static light.</p>
+</header>
+<iframe title="Live portfolio with selected projection header" src="index.html#projections"></iframe>
+<script>
+const frame = document.querySelector('iframe');
+const descriptions = {
+clean:'The original vector artwork, with crisp lettering and static light.',
+textured:'Fine, stationary grain and soft surface variation within the letter faces.',
+animated:'Amber and cyan light sweep slowly across stationary letters. Watch for about 20 seconds.',
+combined:'The textured letter faces with both slow-moving beams. Watch for about 20 seconds.'
+};
+let version = 'clean';
+function applyVersion() {
+const art = frame.contentDocument?.querySelector('.projections-title-art');
+if (art) art.src = `images/projections/section-title-${version}.svg`;
+}
+frame.addEventListener('load', () => {
+applyVersion();
+frame.contentDocument.querySelector('#projections')?.scrollIntoView({behavior:'instant'});
+});
+document.querySelectorAll('button[data-version]').forEach(button => {
+button.addEventListener('click', () => {
+version = button.dataset.version;
+document.querySelectorAll('button[data-version]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+document.querySelector('#description').textContent = descriptions[version] + (matchMedia('(prefers-reduced-motion: reduce)').matches && ['animated','combined'].includes(version) ? ' Motion is off to respect your reduced-motion setting.' : '');
+applyVersion();
+});
+});
+</script>
+</body>
+</html>

@@ -1944,6 +1944,12 @@ function initTimeDial() {
             date: 'July 2026',
             file: 'audio/july-2026-substack-recap.mp3',
             label: 'JUL \'26'
+        },
+        {
+            angle: 80,
+            date: 'August 2026',
+            file: 'audio/aug-2026-substack-recap.mp3',
+            label: 'AUG \'26'
         }
     ];
     
@@ -1960,7 +1966,7 @@ function initTimeDial() {
         'audio/radio_tuning9.mp3'
     ];
     
-    let currentStation = 14; // Start at station 14 (July '26)
+    let currentStation = 15; // Start at station 15 (August '26)
     const oscilloscopeCanvas = document.getElementById('recap-oscilloscope');
     const dateDisplay = document.getElementById('current-recap-date');
     const recapAudio = document.getElementById('recap-audio');

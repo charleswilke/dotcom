@@ -33,21 +33,21 @@ It lives in the **Writing** section of the main site
   up ~18%. **Inactive stations are dimmed** (~42% opacity, low glow blur) so they
   recede but stay legible.
 - **Hover** lifts an inactive label with a neon glow + slight scale.
-- CRT flavor (in `styles.css`, ~line 4876+): scanlines, static noise during
+- CRT flavor (in `styles.css`, ~line 6291+, `CRT TUNER ENHANCEMENTS`): scanlines, static noise during
   tuning, phosphor decay on the old marker, vacuum-tube warmup + signal-lock
   pulse on the new one, subtle screen flicker, plus a random radio-tuning sound
   effect from `audio/radio_tuning1–9.mp3`.
 
 ## Where things live
 - **Station data:** `main.js`, inside `initTimeDial()` → the `recapStations`
-  array (~line 1578).
-- **Selected-on-load station:** `currentStation` in `main.js` (~line 1684).
-- **Date sync on load:** `syncInitialStation()` in `main.js` (~line 2063) copies
+  array (~line 1857).
+- **Selected-on-load station:** `currentStation` in `main.js` (~line 1969).
+- **Date sync on load:** `syncInitialStation()` in `main.js` (~line 2458) copies
   the current station's date into both date displays, so the HTML date defaults
   don't need to be kept in sync by hand.
-- **Dial markup:** `index.html`, the `.tuner-scale` block (~line 203).
+- **Dial markup:** `index.html`, the `.tuner-scale` block (~line 292).
 - **Default audio source:** `index.html`, `<audio id="recap-audio" src="…">`
-  (~line 247).
+  (~line 338).
 
 ### Station data shape
 ```javascript
@@ -76,53 +76,65 @@ new recaps to the **end** to make them the newest (right-most) station.
 ## Adding a new recap
 
 ### 1. Add the audio file
-Drop the MP3 in `/audio/` (e.g. `audio/jun-2026-substack-recap.mp3`). Use a
-consistent, chronological name.
+Drop the MP3 in `/audio/` (e.g. `audio/aug-2026-substack-recap.mp3`). Use a
+consistent, chronological name. Substack's download is an `.m4a` (AAC); convert
+it rather than serving it as-is, so the whole dial stays one format:
+
+```
+ffmpeg -i ~/Downloads/<episode>.m4a -vn -codec:a libmp3lame -b:a 192k -ar 44100 -ac 2 -id3v2_version 3 audio/aug-2026-substack-recap.mp3
+```
+
+Then bake the touch-device scope data for it (see CLAUDE.md, "Album players
+on touch"), or the phone's oscilloscope idles on that station:
+
+```
+python3 tools/make-scope-data.py audio/aug-2026-substack-recap.mp3
+```
 
 ### 2. Add the station to `main.js`
-Append an entry to the **end** of `recapStations` (~line 1578):
+Append an entry to the **end** of `recapStations` (~line 1857):
 ```javascript
 {
     angle: 0,                                   // value doesn't matter (unused)
-    date: 'July 2026',
-    file: 'audio/july-2026-substack-recap.mp3',
-    label: 'JUL \'26'
+    date: 'August 2026',
+    file: 'audio/aug-2026-substack-recap.mp3',
+    label: 'AUG \'26'
 }
 ```
 
 ### 3. Point `currentStation` at the new newest station
-Update `currentStation` (~line 1684) to the new last index so it loads selected:
+Update `currentStation` (~line 1969) to the new last index so it loads selected:
 ```javascript
-let currentStation = 14; // Start at the newest station
+let currentStation = 15; // Start at the newest station
 ```
 This one value now drives both the displayed dates *and* the initial needle/active
-marker position — the load-time `updateTunerIndicator(currentStation)` call (~line 2073)
+marker position — the load-time `updateTunerIndicator(currentStation)` call (~line 2468)
 derives from it, so there's no separate hardcoded index to bump.
 
 ### 4. Add the marker to `index.html`
-In the `.tuner-scale` block (~line 203): add a `.scale-marker.scale-minor` spacer,
+In the `.tuner-scale` block (~line 292): add a `.scale-marker.scale-minor` spacer,
 then the new major marker. Move the `active` class onto the new (newest) marker,
 and alternate `label-top` so labels keep staggering above/below the line:
 ```html
 <div class="scale-marker scale-minor"></div>
-<div class="scale-marker scale-major scale-clickable active" data-period="Jul '26" data-station="14">
-    <span class="marker-label">JUL<br>2026</span>
+<div class="scale-marker scale-major scale-clickable label-top active" data-period="Aug '26" data-station="15">
+    <span class="marker-label">AUG<br>2026</span>
 </div>
 ```
 Remove `active` from the previous newest marker.
 
 ### 5. Update the default audio source
-Set the `<audio id="recap-audio">` `src` (~line 247) to the newest MP3 so the
+Set the `<audio id="recap-audio">` `src` (~line 338) to the newest MP3 so the
 right station is cued before JS runs:
 ```html
 <audio id="recap-audio" class="custom-audio"
-       src="audio/july-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
+       src="audio/aug-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
 ```
 
 ### 6. (Optional) Extend the animation stagger
-`styles.css` has a `--marker-index` list keyed by `:nth-child` (~line 5441) that
+`styles.css` has a `--marker-index` list keyed by `:nth-child` (~line 6564) that
 staggers the idle "breathing" animation. It covers the first 19 `.scale-marker`
-children (majors *and* minors), so with 15 stations the dial already runs past
+children (majors *and* minors), so with 16 stations the dial already runs past
 it — the tail markers just share the default delay. Add more `:nth-child` rules
 only if you want the stagger to keep going. Purely cosmetic.
 
@@ -141,11 +153,11 @@ so you don't have to hand-edit the right-side date or the oscilloscope meta date
 
 ## Tips
 1. Keep file names chronological and consistent.
-2. The dial is getting dense (15 stations on one line). If it gets too tight,
+2. The dial is getting dense (16 stations on one line). If it gets too tight,
    consider grouping by year, abbreviating labels, or paginating.
 3. If you replace an existing recap MP3 **in place** (same filename), run
    `./bump-cover.sh <file>.mp3` to cache-bust it — assets are served `immutable`.
 
 ---
 
-Last updated: 2026-07-25
+Last updated: 2026-09-11

@@ -3,9 +3,9 @@
 Build images/before-times-door-card.svg from the raster Recently card art.
 
 The Before Times card (images/before-times-door-card.webp) is a cut-paper
-poster: six flat colours, a slanted door frame, an orange slab hinged on the
-right, a stack of sage/teal blocks in the opening, and a spill of light across
-the floor. main.js's door flight (initBeforeTimesDoor) needs that design as
+poster: six flat colours, a slanted door frame, an orange slab hinged at the
+opening's right jamb and swung out toward the viewer, a stack of sage/teal
+blocks in the opening, and a spill of light across the floor. main.js's door flight (initBeforeTimesDoor) needs that design as
 vectors so it can scale the poster eight times over without pixelating, swing
 the slab, and push the blocks away for parallax. Raster zooms can't do that.
 
@@ -18,8 +18,8 @@ Two kinds of geometry come out of here:
 
   * The door, wall, blocks and floor are hand-authored polygons below, read off
     the same trace once and tidied. They have to be authored, not traced: the
-    flight reveals what the slab covers, so the wall needs an opening behind the
-    door and the interior needs to exist where the raster only shows orange.
+    flight sweeps the slab aside, so the wall has to be solid where the raster
+    only shows orange, and the opening has to stop at the hinge.
 
 Re-run this whenever the source art changes. The output is deterministic, so a
 no-op run produces no diff. Needs numpy, Pillow and opencv-python (the
@@ -79,16 +79,19 @@ FILL = {
 
 # Outer silhouette of the dark wall, clockwise from the top-right corner.
 WALL_OUTER = "1291,38 1106,76 810,148 785,689 841,690 850,685 1275,716 1383,743 1339,376"
-# The opening cut through it. The slab hides its right half in the art.
-OPENING = "904,263 1216,96 1275,716 850,685"
+# The opening cut through it. Its right jamb is the slab's hinge edge: the
+# door is swung open toward the viewer and to the right, so its taller right
+# edge is the free edge nearest the camera, and the wall is solid behind it.
+OPENING = "904,263 1103,208 1120,679 850,685"
 # Backing plane that shows through the opening once the slab swings away: the
 # opening itself, so nothing of it can peek past the wall's slanted top edge.
 INTERIOR = OPENING
 
-# Orange slab. Hinge runs down its right edge, (1213,98) -> (1275,751).
+# Orange slab. Hinge runs down its LEFT edge, (1104,208) -> (1120,679); the
+# right edge is the free edge, swung out toward the viewer.
 DOOR = "1211,98 1104,208 1120,679 1275,751 1215,98"
-HINGE_TOP = (1213, 98)
-HINGE_BOTTOM = (1275, 751)
+HINGE_TOP = (1104, 208)
+HINGE_BOTTOM = (1120, 679)
 
 # Spill of light across the floor, in front of the wall.
 FLOOR = "849,691 316,909 1256,909 1119,681"

@@ -6165,7 +6165,7 @@ function initBeforeTimesDoor() {
     const media = card.querySelector('.showcase-media img');
     if (!media || typeof card.animate !== 'function' || typeof window.fetch !== 'function') return;
 
-    const SVG_URL = 'images/before-times-door-card.svg?v=20260911';
+    const SVG_URL = 'images/before-times-door-card.svg?v=20260911b';
     const ARRIVAL_KEY = 'before-times:door-arrival';
     const DURATION = 1150;
     const VIEW = { w: 1400, h: 910 };
@@ -6304,46 +6304,40 @@ function initBeforeTimesDoor() {
         const slab = svg.querySelector('.bt-door-slab');
         const shade = svg.querySelector('.bt-door-slab-shade');
         const blocks = svg.querySelector('.bt-door-blocks');
-        const hinge = ((slab && slab.dataset.hinge) || '1213 98 1275 751').split(' ').map(Number);
+        const hinge = ((slab && slab.dataset.hinge) || '1104 208 1120 679').split(' ').map(Number);
         const hx = (hinge[0] + hinge[2]) / 2;
         const hy = (hinge[1] + hinge[3]) / 2;
         const hdx = hinge[2] - hinge[0];
         const hdy = hinge[3] - hinge[1];
         const hlen = Math.hypot(hdx, hdy) || 1;
-        // Unit direction along the hinge and its normal. The slab is propped
-        // open toward the viewer, so flying through pushes it wider: its free
-        // edge sweeps across the hinge line (scale along the normal runs from
-        // 1 through 0, edge-on, to negative, showing its back on the far side
-        // of the hinge) and it grows along the hinge as it comes closer. It
-        // must never simply shrink to the hinge: that reads as the door
-        // closing in our face, which is the one thing this door doesn't do.
-        const ux = hdx / hlen;
-        const uy = hdy / hlen;
-        const nx = uy;
-        const ny = -ux;
+        // Unit normal to the hinge, pointing at the free edge. The hinge is
+        // the slab's LEFT edge, at the opening's right jamb; the door is
+        // swung open toward the viewer and to the right, which is why its
+        // right edge is the taller one. Flying through pushes it wider still:
+        // the free edge sweeps further right, flattening against the outer
+        // wall, so the scale across the hinge only ever grows. Two things it
+        // must never do: shrink toward the hinge (a door closing in our
+        // face) or flip across it (a door hinged on the wrong side). Both
+        // shipped once; both were wrong on sight.
+        const nx = hdy / hlen;
+        const ny = -hdx / hlen;
 
         function swing(progress) {
             if (!slab) return;
-            // Spread over the middle of the flight so the door turns while
-            // the poster is already filling the screen: edge-on lands near
-            // 40% and the back face is clear of the opening by 72%.
+            // Spread over the middle of the flight so the door moves while
+            // the poster is already filling the screen.
             const p = Math.min(1, Math.max(0, (progress - 0.12) / 0.6));
             const eased = p * p * (3 - 2 * p);
-            const across = 1 - 2.3 * eased;
-            const along = 1 + 0.45 * eased;
-            const a = 1 + (across - 1) * nx * nx + (along - 1) * ux * ux;
-            const b = (across - 1) * nx * ny + (along - 1) * ux * uy;
+            const across = 1 + 1.1 * eased;
+            const a = 1 + (across - 1) * nx * nx;
+            const b = (across - 1) * nx * ny;
             const c = b;
-            const d = 1 + (across - 1) * ny * ny + (along - 1) * uy * uy;
+            const d = 1 + (across - 1) * ny * ny;
             const e = hx - (a * hx + c * hy);
             const f = hy - (b * hx + d * hy);
             slab.setAttribute('transform', `matrix(${a.toFixed(5)} ${b.toFixed(5)} ${c.toFixed(5)} ${d.toFixed(5)} ${e.toFixed(3)} ${f.toFixed(3)})`);
-            // Darkest as it turns edge-on (across = 0), then the back face
-            // settles into a lighter, steady shadow.
-            const edgeOn = 1 / 2.3;
-            const bell = Math.exp(-Math.pow((eased - edgeOn) / 0.16, 2));
-            const back = Math.min(1, Math.max(0, (eased - edgeOn) / 0.35));
-            if (shade) shade.setAttribute('opacity', Math.max(0.45 * bell, 0.22 * back).toFixed(3));
+            // Its lit face turns away from the doorway's light as it flattens.
+            if (shade) shade.setAttribute('opacity', (0.3 * eased).toFixed(3));
         }
 
         function recede(progress) {

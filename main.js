@@ -6324,11 +6324,12 @@ function initBeforeTimesDoor() {
 
         function swing(progress) {
             if (!slab) return;
-            // Spread over the middle of the flight so the door moves while
-            // the poster is already filling the screen.
-            const p = Math.min(1, Math.max(0, (progress - 0.12) / 0.6));
+            // Spread over nearly the whole flight, so the door is still
+            // easing open as we pass through it. It ran 12-72% once and
+            // read as a slam.
+            const p = Math.min(1, Math.max(0, (progress - 0.08) / 0.9));
             const eased = p * p * (3 - 2 * p);
-            const across = 1 + 1.1 * eased;
+            const across = 1 + 0.95 * eased;
             const a = 1 + (across - 1) * nx * nx;
             const b = (across - 1) * nx * ny;
             const c = b;

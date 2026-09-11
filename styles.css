@@ -492,6 +492,28 @@ header {
     justify-content: center;
 }
 
+.header-wordmark {
+    width: min(850px, 90vw);
+    margin: 1.25rem auto 0.6rem;
+    line-height: 0;
+}
+
+.header-wordmark img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 3px rgba(255, 220, 158, 0.55))
+            drop-shadow(0 0 12px rgba(255, 166, 91, 0.3))
+            drop-shadow(0 0 26px rgba(255, 114, 80, 0.18));
+}
+
+@media (max-width: 767px) {
+    .header-wordmark {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+}
+
 .header-content {
     position: relative;
     z-index: 3;

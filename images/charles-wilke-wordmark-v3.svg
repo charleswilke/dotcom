@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1115 175" role="img" aria-labelledby="title desc">
+  <title id="title">Charles Wilke</title>
+  <desc id="desc">Custom cream adventure lettering composed along a shared rising and falling arc, with a sweeping R, expressive W, and coral shadow.</desc>
+  <!-- All lettering is editable vector geometry. No fonts or external assets required. -->
+  <defs>
+    <linearGradient id="cream" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff5d5"/>
+      <stop offset="1" stop-color="#ffdda1"/>
+    </linearGradient>
+    <filter id="grain" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="12" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.24"/>
+      </feComponentTransfer>
+      <feComposite in2="SourceGraphic" operator="in" result="clippedNoise"/>
+      <feBlend in="SourceGraphic" in2="clippedNoise" mode="soft-light"/>
+    </filter>
+    <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+      <path d="M0 1 H4" stroke="#b46a39" stroke-opacity="0.13" stroke-width="0.65"/>
+    </pattern>
+    <!-- Individual silhouettes retain their transforms; masks cut real transparent gaps at close joins. -->
+    <g id="glyph-c" fill-rule="evenodd" transform="translate(0 -19.09) rotate(-1.5 52 70) scale(1 1.13)"><path d="M108 -1 L100 25 L57 26 Q40 26 36 42 L25 80 Q22 91 35 91 L99 87 L91 115 Q55 120 17 119 Q-8 118 -5 97 L8 39 Q15 3 49 1 Z"/></g>
+    <g id="glyph-h" fill-rule="evenodd" transform="translate(-8 -8.97) rotate(-3.65 153 70) translate(32.4 0) skewX(-16)"><path d="M115 19 L142 18 L143 53 L174 52 L173 18 L200 17 L202 113 L175 115 L174 76 L143 77 L144 114 L117 116 Z"/></g>
+    <g id="glyph-a" fill-rule="evenodd" transform="translate(0 -13.41) rotate(-3.65 239 70)"><path d="M244 20 L276 18 L278 114 L252 113 L251 93 L220 94 L210 114 L184 115 Z M231 73 L251 72 L252 45 Z"/></g>
+    <g id="glyph-r" fill-rule="evenodd" transform="translate(0 -17.78) rotate(-2.36 343 70)"><path d="M284 16 L361 16 Q386 16 384 38 Q382 63 354 70 Q373 93 419 132 L370 129 Q347 101 330 75 L326 75 L323 113 L296 114 L305 35 Z M332 37 L330 55 L345 55 Q356 55 359 44 L360 37 Z"/></g>
+    <g id="glyph-l-first" fill-rule="evenodd" transform="translate(0 -20.39) rotate(-1.50 432 70)"><path d="M403 18 L431 17 L424 84 L479 84 L470 108 L397 108 Z"/></g>
+    <g id="glyph-e-first" fill-rule="evenodd" transform="translate(-18 -21.78) rotate(-0.56 521 70)"><path d="M487 19 Q524 18 562 15 L556 40 L514 42 L512 56 L551 54 L545 76 L510 78 L509 91 Q534 92 561 87 L554 112 Q518 116 480 114 Z"/></g>
+    <g id="glyph-s" fill-rule="evenodd" transform="translate(-18 -21.85) rotate(0.47 615 70)"><path d="M662 18 L656 41 Q631 37 611 40 Q601 41 601 48 Q601 55 617 56 L634 58 Q657 62 654 85 Q651 110 626 114 Q602 119 570 112 L575 88 Q602 94 620 90 Q630 88 629 82 Q628 76 614 75 L598 73 Q574 69 577 46 Q580 19 609 17 Q635 14 662 18 Z"/></g>
+    <g id="glyph-w" fill-rule="evenodd" transform="translate(0 -19.09) rotate(1.5 762 70) scale(1 1.13)"><path d="M663 0 L739 2 Q730 34 723 66 L763 28 L775 66 L804 0 L860 0 Q825 64 793 115 L765 120 L758 74 L724 114 L696 120 Q700 67 696 25 Z"/></g>
+    <g id="glyph-i" fill-rule="evenodd" transform="translate(-2 -15.63) rotate(2.81 857 70)"><path d="M848 17 L875 16 L873 37 L846 38 Z M845 49 L872 48 L867 113 L839 116 Z"/></g>
+    <g id="glyph-l-last" fill-rule="evenodd" transform="translate(-3 -12.69) rotate(3.27 921 70)"><path d="M888 18 L916 17 L910 86 L962 84 L954 109 L881 112 Z"/></g>
+    <g id="glyph-k" fill-rule="evenodd" transform="translate(-24 -8.02) rotate(3.72 1009 70)"><path d="M971 19 L997 17 L994 54 L1028 18 L1059 17 L1018 62 Q1036 93 1064 125 L1027 120 L992 77 L989 114 L963 115 Z"/></g>
+    <g id="glyph-e-last" fill-rule="evenodd" transform="translate(-26 -2.47) rotate(3.97 1104 70)"><path d="M1070 19 L1145 16 L1139 40 L1097 41 L1095 56 L1134 54 L1128 76 L1093 77 L1092 90 L1144 88 L1137 112 L1063 114 Z"/></g>
+    <mask id="gap-c" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-h" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-h" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-a" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-a" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-r" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-r" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-l-first" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-l-first" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-e-first" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-e-first" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-s" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#glyph-l-first" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-s" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-w" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-w" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-i" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-i" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-l-last" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-l-last" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-k" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="gap-k" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="400" style="mask-type:luminance"><rect x="-100" y="-100" width="1400" height="400" fill="white"/><use href="#glyph-e-last" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#glyph-l-last" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <g id="lettering" fill-rule="evenodd" transform="translate(49 32) skewX(-14)">
+      <use href="#glyph-c" mask="url(#gap-c)"/>
+      <use href="#glyph-h" mask="url(#gap-h)"/>
+      <use href="#glyph-a" mask="url(#gap-a)"/>
+      <use href="#glyph-r" mask="url(#gap-r)"/>
+      <use href="#glyph-l-first"/>
+      <use href="#glyph-e-first" mask="url(#gap-e-first)"/>
+      <use href="#glyph-s" mask="url(#gap-s)"/>
+      <use href="#glyph-w" mask="url(#gap-w)"/>
+      <use href="#glyph-i" mask="url(#gap-i)"/>
+      <use href="#glyph-l-last"/>
+      <use href="#glyph-k" mask="url(#gap-k)"/>
+      <use href="#glyph-e-last"/>
+    </g>
+  </defs>
+  <g transform="translate(1 4) scale(.92 1)">
+    <use href="#lettering" transform="translate(2 4)" fill="#ff885b" opacity="0.65"/>
+    <use href="#lettering" fill="url(#cream)" filter="url(#grain)"/>
+    <use href="#lettering" fill="url(#scanlines)"/>
+  </g>
+</svg>

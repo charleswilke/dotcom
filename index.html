@@ -49,7 +49,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="styles.css?v=e2251643">
+    <link rel="stylesheet" href="styles.css?v=23d5c9b0">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -385,6 +385,54 @@
                      <button id="dynamicButton" class="load-more-btn">Load more</button>
                  </div>
             </div>
+
+            <!-- Episode monitor: a lab video monitor that bookends the radio at the top of
+                 the section. One channel on purpose — it shows the latest video episode and
+                 nothing older. Episode data lives in main.js (tvEpisodes); these defaults
+                 match its first entry so the slate reads right before JS runs. -->
+            <aside class="episode-monitor" id="episodeMonitor" aria-label="Latest video episode">
+                <div class="monitor-chassis">
+                    <div class="monitor-plate">
+                        <span class="monitor-plate-kicker"><span class="monitor-led" aria-hidden="true"></span>Now Showing</span>
+                        <span class="monitor-plate-episode"><span id="monitorPlateTitle">The AI Mirror</span><span class="monitor-plate-sep">&middot;</span><span id="monitorPlateDate">August 2026</span></span>
+                    </div>
+                    <div class="monitor-bezel">
+                        <div class="monitor-screen" id="monitorScreen">
+                            <video id="episodeVideo" class="monitor-video"
+                                   src="video/the-ai-mirror.mp4"
+                                   poster="video/the-ai-mirror-poster.webp"
+                                   preload="none" playsinline
+                                   aria-label="The AI Mirror, August 2026 video episode"></video>
+                            <div class="monitor-slate" aria-hidden="true">
+                                <div class="slate-bars"></div>
+                                <div class="slate-reverse"></div>
+                                <div class="slate-pluge"></div>
+                                <div class="slate-card">
+                                    <span class="slate-card-kicker"><span class="slate-card-dot"></span>Standby</span>
+                                    <span class="slate-card-title" id="monitorSlateTitle">The AI Mirror</span>
+                                    <span class="slate-card-meta" id="monitorSlateMeta">August 2026 &middot; 9:45</span>
+                                </div>
+                            </div>
+                            <div class="monitor-glass"></div>
+                            <button type="button" class="monitor-tap" id="monitorTap" aria-label="Turn the monitor on and play the episode"></button>
+                        </div>
+                    </div>
+                    <div class="monitor-controls">
+                        <button type="button" class="monitor-transport" id="monitorTransport" aria-label="Play">
+                            <span class="monitor-transport-icon" id="monitorTransportIcon" aria-hidden="true">&#9654;</span>
+                        </button>
+                        <div class="monitor-rail" id="monitorRail" role="slider" tabindex="0" aria-label="Episode position" aria-valuemin="0" aria-valuemax="585" aria-valuenow="0" aria-valuetext="0:00 of 9:45">
+                            <div class="monitor-rail-fill" id="monitorRailFill"></div>
+                        </div>
+                        <span class="monitor-readout"><span id="monitorTime">0:00</span><span class="monitor-readout-sep">/</span><span id="monitorDuration">9:45</span></span>
+                        <button type="button" class="monitor-full" id="monitorFull" aria-label="Fullscreen" disabled>
+                            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+                                <path d="M1 6V1h5M10 1h5v5M15 10v5h-5M6 15H1v-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </aside>
 
             <!-- Substack subscribe CTA, matches the section's CRT/radio vocabulary -->
             <aside class="subscribe-cta" aria-label="Subscribe to Exploring L.ai.bor on Substack">
@@ -891,6 +939,6 @@
     <h2 id="aboutFootnoteTitle"><span>01 /</span> What’s that mean?</h2>
     <p id="aboutFootnoteDescription">I design how the AI interprets requests and coordinates its response, translating product intent into instructions that guide its behavior. This includes IQ’s voice and tone, and how and when it chooses tools to use.</p>
 </div>
-<script src="main.js?v=20668ee9" defer></script>
+<script src="main.js?v=d4c436f2" defer></script>
 </body>
 </html>

@@ -4903,6 +4903,471 @@ html {
     }
 }
 
+/* ===== EPISODE MONITOR =====
+   The lab video monitor at the foot of the Writing section: the radio at the top
+   plays the archive, this plays whatever is on now. Styled as an instrument, not
+   a living-room set — graphite chassis, engraved plate with a status LED, keys, a 16:9
+   panel behind flat glass, the episode named on the plate rather than on the
+   glass. Off, it shows SMPTE-style bars with a slate; the
+   seven bar colors are the same values the FAQ's test card uses. The only
+   things that animate are the standby dot and a slow band on the glass, both
+   composited, both paused offscreen by the section observer. */
+
+.episode-monitor {
+    position: relative;
+    z-index: 2;
+    max-width: 880px;
+    margin: 3rem auto 1rem;
+    --mon-chassis: #1e2126;
+    --mon-chassis-hi: #2a2e35;
+    --mon-chassis-lo: #15171b;
+    --mon-line: rgba(255, 255, 255, 0.09);
+    --mon-ink: #aeb6c2;
+    --mon-ink-dim: #6c7481;
+    --mon-standby: #ffb347;
+    --mon-on: var(--neon);
+}
+
+.monitor-chassis {
+    position: relative;
+    padding: 0.85rem 1rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background:
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 3px),
+        linear-gradient(180deg, var(--mon-chassis-hi) 0%, var(--mon-chassis) 18%, var(--mon-chassis) 82%, var(--mon-chassis-lo) 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.07),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+        0 14px 30px rgba(0, 0, 0, 0.45),
+        0 2px 6px rgba(0, 0, 0, 0.35);
+    font-family: 'Space Mono', monospace;
+    color: var(--mon-ink);
+}
+
+/* Four corner screws, engraved not raised. */
+.monitor-chassis::before,
+.monitor-chassis::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    right: 7px;
+    height: 5px;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 2.5px 2.5px, #0e1013 2.2px, transparent 2.6px) left / 5px 5px no-repeat,
+        radial-gradient(circle at 2.5px 2.5px, #0e1013 2.2px, transparent 2.6px) right / 5px 5px no-repeat;
+}
+
+.monitor-chassis::before { top: 7px; }
+.monitor-chassis::after { bottom: 7px; }
+
+/* Engraved plate above the panel */
+.monitor-plate {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0 0.15rem 0.6rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.monitor-plate-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: 'Orbitron', 'Exo', 'Space Mono', monospace, sans-serif;
+    font-weight: 600;
+    color: #ffe0a8;
+    text-shadow: 0 0 8px rgba(255, 168, 30, 0.3);
+}
+
+/* Episode readout: the title and date live here, on the chassis, not on the glass —
+   text over a bright frame behind scanlines was unreadable. */
+.monitor-plate-episode {
+    color: var(--mon-ink);
+    text-align: right;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.monitor-plate-sep {
+    margin: 0 0.5em;
+    color: var(--mon-ink-dim);
+}
+
+/* Bezel: a thin recessed step around the panel */
+.monitor-bezel {
+    padding: 6px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #101215 0%, #17191d 100%);
+    box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.8),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.monitor-screen {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 2px;
+    background: #000;
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+}
+
+.monitor-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    background: #000;
+}
+
+/* --- Standby slate: SMPTE-style bars behind a card --- */
+.monitor-slate {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    transform-origin: 50% 50%;
+    transition: opacity 0.22s ease 0.18s, transform 0.32s cubic-bezier(0.6, 0, 0.9, 0.4);
+}
+
+.slate-bars,
+.slate-reverse,
+.slate-pluge {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.slate-bars {
+    top: 0;
+    height: 67%;
+    background: linear-gradient(90deg,
+        #c0c0c0 0 14.285%, #c0c000 0 28.571%, #00c0c0 0 42.857%, #00c000 0 57.142%,
+        #c000c0 0 71.428%, #c00000 0 85.714%, #0000c0 0 100%);
+}
+
+.slate-reverse {
+    top: 67%;
+    height: 8%;
+    background: linear-gradient(90deg,
+        #0000c0 0 14.285%, #131313 0 28.571%, #c000c0 0 42.857%, #131313 0 57.142%,
+        #00c0c0 0 71.428%, #131313 0 85.714%, #c0c0c0 0 100%);
+}
+
+.slate-pluge {
+    top: 75%;
+    height: 25%;
+    background: linear-gradient(90deg,
+        #00214c 0 17.857%, #ffffff 0 35.714%, #32006a 0 53.571%, #131313 0 71.428%,
+        #090909 0 75%, #131313 0 78.571%, #1d1d1d 0 82.142%, #131313 0 100%);
+}
+
+.slate-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 46%;
+    padding: 0.9rem 1.4rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(0, 0, 0, 0.82);
+    color: #e9edf2;
+    text-align: center;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.82);
+}
+
+.slate-card-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mon-standby);
+}
+
+.slate-card-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--mon-standby);
+    box-shadow: 0 0 6px var(--mon-standby);
+    animation: monitor-standby-blink 2.4s steps(1, end) infinite;
+}
+
+@keyframes monitor-standby-blink {
+    0%, 78% { opacity: 1; }
+    79%, 100% { opacity: 0.15; }
+}
+
+.slate-card-title {
+    font-family: 'Orbitron', 'Exo', 'Space Mono', monospace, sans-serif;
+    font-size: clamp(0.95rem, 2.4vw, 1.35rem);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.slate-card-meta {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #b9c0cc;
+}
+
+/* --- Glass: scanlines, vignette, a slow drifting band --- */
+.monitor-glass {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.42) 100%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 12%, transparent 30%),
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+}
+
+.monitor-glass::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -12%;
+    height: 12%;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: monitor-band 9s linear infinite;
+}
+
+@keyframes monitor-band {
+    to { transform: translateY(950%); }
+}
+
+/* Whole-screen tap target: powers on when off, play/pause when on */
+.monitor-tap {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.monitor-tap:focus-visible {
+    outline: 2px solid var(--mon-on);
+    outline-offset: -3px;
+}
+
+/* --- Power states --- */
+.episode-monitor.is-on .monitor-slate {
+    opacity: 0;
+    transform: scaleY(0.006);
+    pointer-events: none;
+    transition: transform 0.32s cubic-bezier(0.6, 0, 0.9, 0.4), opacity 0.12s ease 0.3s;
+}
+
+.episode-monitor.is-on .monitor-video {
+    animation: monitor-bloom 0.55s ease-out 0.28s both;
+}
+
+@keyframes monitor-bloom {
+    0% { filter: brightness(2.6) blur(3px); }
+    60% { filter: brightness(1.25) blur(0.5px); }
+    100% { filter: brightness(1) blur(0); }
+}
+
+/* --- Controls strip --- */
+.monitor-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 0.8rem;
+    padding: 0.55rem 0.6rem;
+    border-radius: 4px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.16));
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6), 0 1px 0 var(--mon-line);
+}
+
+.monitor-transport,
+.monitor-full {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 32px;
+    padding: 0 0.7rem;
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    border-radius: 3px;
+    background: linear-gradient(180deg, #33373f 0%, #262a30 55%, #1f2227 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 1px 0 rgba(0, 0, 0, 0.6);
+    color: var(--mon-ink);
+    font: inherit;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+}
+
+.monitor-transport:hover:not(:disabled),
+.monitor-full:hover:not(:disabled) {
+    color: #e9edf2;
+    background: linear-gradient(180deg, #3b4048 0%, #2b2f36 55%, #23262c 100%);
+}
+
+.monitor-transport:active:not(:disabled),
+.monitor-full:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.monitor-transport:focus-visible,
+.monitor-full:focus-visible,
+.monitor-rail:focus-visible {
+    outline: 2px solid var(--mon-on);
+    outline-offset: 2px;
+}
+
+.monitor-transport:disabled,
+.monitor-full:disabled {
+    color: var(--mon-ink-dim);
+    cursor: default;
+    opacity: 0.6;
+}
+
+.monitor-transport {
+    width: 40px;
+    padding: 0;
+}
+
+.monitor-transport-icon {
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
+.monitor-full {
+    width: 36px;
+    padding: 0;
+}
+
+.monitor-led {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--mon-standby);
+    box-shadow: 0 0 5px var(--mon-standby), inset 0 0 1px rgba(0, 0, 0, 0.5);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.episode-monitor.is-on .monitor-led {
+    background: var(--mon-on);
+    box-shadow: 0 0 7px var(--mon-on), 0 0 14px rgba(0, 247, 194, 0.35);
+}
+
+.monitor-rail {
+    position: relative;
+    flex: 1 1 auto;
+    height: 6px;
+    min-width: 60px;
+    border-radius: 3px;
+    background: #0e1013;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9), 0 1px 0 var(--mon-line);
+    cursor: pointer;
+}
+
+/* Fat invisible hit area so the 6px rail is easy to grab */
+.monitor-rail::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -10px;
+    bottom: -10px;
+}
+
+.monitor-rail-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    border-radius: 3px;
+    background: linear-gradient(90deg, rgba(0, 247, 194, 0.55), var(--mon-on));
+    box-shadow: 0 0 6px rgba(0, 247, 194, 0.5);
+}
+
+.monitor-readout {
+    display: inline-flex;
+    gap: 0.35rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    color: #9fe8d3;
+    text-shadow: 0 0 6px rgba(0, 247, 194, 0.3);
+    white-space: nowrap;
+}
+
+.monitor-readout-sep { color: var(--mon-ink-dim); text-shadow: none; }
+
+/* Fullscreen: the screen div goes up, so the glass and tap target come along */
+.monitor-screen:fullscreen {
+    aspect-ratio: auto;
+    border-radius: 0;
+}
+
+.monitor-screen:fullscreen .monitor-video {
+    object-fit: contain;
+}
+
+@media (max-width: 640px) {
+    .episode-monitor { margin-top: 2.2rem; }
+    .monitor-chassis { padding: 0.7rem 0.7rem 0.75rem; }
+    /* One row, kicker left and episode right; wraps only when a narrow phone forces it. */
+    .monitor-plate { flex-wrap: wrap; gap: 0.2rem 0.8rem; font-size: 0.56rem; letter-spacing: 0.12em; }
+    .monitor-plate-episode { margin-left: auto; }
+    /* One line: play, rail, fullscreen. The readout goes; the rail still carries
+       the position for assistive tech through its slider attributes. */
+    .monitor-controls { gap: 0.6rem; }
+    .monitor-readout { display: none; }
+    .slate-card { min-width: 60%; padding: 0.7rem 1rem 0.8rem; }
+}
+
+/* Narrowest phones: tighten the type so the plate stays one row and the
+   keys and rail stay comfortable on one line. */
+@media (max-width: 360px) {
+    .monitor-plate { font-size: 0.52rem; letter-spacing: 0.08em; gap: 0.2rem 0.5rem; }
+    .monitor-controls { gap: 0.4rem; padding: 0.5rem 0.45rem; }
+    .monitor-transport { width: 34px; }
+    .monitor-full { width: 32px; }
+    .slate-card { min-width: 72%; padding: 0.6rem 0.8rem 0.7rem; }
+    .slate-card-meta { white-space: nowrap; font-size: 0.62rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .slate-card-dot,
+    .monitor-glass::after,
+    .episode-monitor.is-on .monitor-video {
+        animation: none;
+    }
+    .monitor-slate,
+    .episode-monitor.is-on .monitor-slate {
+        transition: opacity 0.2s ease;
+        transform: none;
+    }
+}
+
 /* Substack subscribe CTA — a single "broadcast monitor" between the feed
    and the next section. Cyan corner brackets, soft neon halo, scanlines. */
 .subscribe-cta {

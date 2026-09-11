@@ -242,6 +242,24 @@ Things that will bite:
 - Pure Python + ffmpeg by design: `tools/` has no numpy, and the script's radix-2 FFT only has to transform 60 windows per second. Numbers were calibrated against Chrome's real analyser on the same track (bass band mean 237, max 255 on both).
 - No desktop browser can exercise the lock screen. The Chrome pane's mobile preset does match `(pointer: coarse)`, so it *does* take the native path, which is enough to verify the scope draws and no `AudioContext` is created; the actual lock-screen behavior has to be checked on a phone.
 
+### Episode monitor (latest video)
+
+The Writing section is bookended by two instruments: the Time Dial at the top plays the recap archive, and a lab-style video monitor at the bottom (`.episode-monitor`, between the article grid and the Tune In card) plays **the latest video episode and nothing older**. One channel on purpose: no video is owed every month, and the page carries one ~50MB mp4 rather than a growing shelf of them.
+
+- **Data:** `tvEpisodes` in main.js, a one-element list so a channel selector can be added later without a rewrite; only the first entry plays. `initEpisodeMonitor` syncs the slate, plate readout and `<video>` src/poster from it on load, so the HTML defaults don't need hand-editing, but keep them matching anyway for the no-JS first paint.
+- **Files:** `video/<episode>.mp4` plus `video/<episode>-poster.webp`. Remux with `-movflags +faststart` (moov atom first, or the browser has to fetch the whole file before it can start), and grab the poster from a few seconds in:
+
+  ```
+  ffmpeg -i ~/Downloads/<episode>.mp4 -c copy -movflags +faststart video/<episode>.mp4
+  ffmpeg -ss 4 -i video/<episode>.mp4 -frames:v 1 -vf scale=1280:-1 -c:v libwebp -quality 82 video/<episode>-poster.webp
+  ```
+
+- **Replacing an episode:** new filenames, so no cache-bust; update `tvEpisodes` and the HTML defaults, and **delete the previous mp4 and poster from the tree** in the same commit, naming them in the message so the way back is git history. Don't accumulate them.
+- **Nothing is written on the glass.** The title and date sit on the chassis plate; a chyron over a bright frame behind scanlines was unreadable, so don't bring one back.
+- **Behaviour:** off, the screen shows SMPTE-style bars (same seven values as the FAQ test card) with a slate. The play key or a tap on the screen turns it on and plays; after that both toggle play/pause, and a pause holds the frame. There is no power key (there was one; it was redundant with play): the LED on the plate is the standby/on cue, and a finished episode rewinds and drops back to bars. It's a managed player, so starting it pauses the recap and album players and their buttons pause it. `preload="none"`: the mp4 costs nothing until play.
+- **Fullscreen** goes up on the screen div so the glass rides along; iOS has no element fullscreen and gets the native player via `webkitEnterFullscreen`.
+- **Animation budget:** the standby dot blink and the slow band on the glass, both composited and both paused offscreen by the section observer. Don't add always-on effects here; it sits under nineteen cards and is offscreen most of the time.
+
 ### Content organization
 - `songs/{album}/{song-name}/` — metadata per song
 - `audio/` — MP3s organized by project

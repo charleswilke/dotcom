@@ -2970,6 +2970,163 @@ function initLaiborGlitchEffects() {
     scheduleEffectTimeout(() => triggerLaiborGlitch(el), 3000 + Math.random() * 3000);
 }
 
+// ===== EPISODE MONITOR =====
+// The lab video monitor at the foot of the Writing section. The Time Dial at
+// the top of the section plays the archive; this plays whatever is on now, and
+// nothing older. It is a one-channel set on purpose: no video is owed every
+// month, and the page carries one 50MB mp4, not a growing shelf of them. The
+// data is a list so a channel selector can be added later without rewriting
+// this, but today only the first entry plays. When an episode is replaced the
+// old mp4 leaves the tree (git history keeps it); see CLAUDE.md.
+//
+// Off, the screen shows bars and a slate. The play key (or a tap on the
+// screen) turns it on and plays; after that both toggle play/pause and a
+// pause holds the frame. There is no power key: the LED on the plate is the
+// standby/on cue, and a finished episode rewinds and drops back to bars. The
+// video is a managed player, so starting it pauses the recap and the album
+// players, and vice versa.
+const tvEpisodes = [
+    {
+        title: 'The AI Mirror',
+        date: 'August 2026',
+        file: 'video/the-ai-mirror.mp4',
+        poster: 'video/the-ai-mirror-poster.webp',
+        duration: '9:45'
+    }
+];
+
+function initEpisodeMonitor() {
+    const root = document.getElementById('episodeMonitor');
+    const video = document.getElementById('episodeVideo');
+    const episode = tvEpisodes[0];
+    if (!root || !video || !episode) return;
+
+    const screen = document.getElementById('monitorScreen');
+    const tap = document.getElementById('monitorTap');
+    const transport = document.getElementById('monitorTransport');
+    const transportIcon = document.getElementById('monitorTransportIcon');
+    const rail = document.getElementById('monitorRail');
+    const railFill = document.getElementById('monitorRailFill');
+    const timeEl = document.getElementById('monitorTime');
+    const durationEl = document.getElementById('monitorDuration');
+    const full = document.getElementById('monitorFull');
+
+    const formatTime = (sec) => {
+        if (!isFinite(sec) || sec < 0) return '0:00';
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return m + ':' + (s < 10 ? '0' : '') + s;
+    };
+
+    // Sync the slate and plate from data so the HTML defaults never have to be
+    // kept in step by hand (same arrangement as the dial's syncInitialStation).
+    const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    setText('monitorSlateTitle', episode.title);
+    setText('monitorSlateMeta', episode.date + ' · ' + episode.duration);
+    setText('monitorPlateTitle', episode.title);
+    setText('monitorPlateDate', episode.date);
+    if (durationEl) durationEl.textContent = episode.duration;
+    if (video.getAttribute('src') !== episode.file) video.setAttribute('src', episode.file);
+    if (episode.poster && video.getAttribute('poster') !== episode.poster) video.setAttribute('poster', episode.poster);
+    video.setAttribute('aria-label', episode.title + ', ' + episode.date + ' video episode');
+
+    registerManagedAudio(video);
+
+    const isOn = () => root.classList.contains('is-on');
+
+    const play = () => {
+        pauseManagedAudioExcept(video);
+        video.play().catch(() => { /* autoplay policy or aborted load; the UI stays paused */ });
+    };
+
+    const setOn = (on) => {
+        root.classList.toggle('is-on', on);
+        full.disabled = !on;
+        tap.setAttribute('aria-label', on ? 'Play or pause the episode' : 'Turn the monitor on and play the episode');
+        if (!on) root.classList.remove('is-playing');
+    };
+
+    const powerOn = () => { setOn(true); play(); };
+
+    transport.addEventListener('click', () => {
+        if (!isOn()) powerOn();
+        else if (video.paused) play();
+        else video.pause();
+    });
+    tap.addEventListener('click', () => {
+        if (!isOn()) powerOn();
+        else if (video.paused) play();
+        else video.pause();
+    });
+
+    const syncTransport = () => {
+        const playing = !video.paused && !video.ended;
+        root.classList.toggle('is-playing', playing);
+        transportIcon.textContent = playing ? '❚❚' : '▶';
+        transport.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    };
+    video.addEventListener('play', syncTransport);
+    video.addEventListener('pause', syncTransport);
+    video.addEventListener('ended', () => {
+        syncTransport();
+        // Sign-off: hold the last frame for a beat, then back to bars, rewound
+        // so the next POWER starts the episode from the top.
+        setTimeout(() => {
+            if (!video.ended) return;
+            video.currentTime = 0;
+            setOn(false);
+        }, 1400);
+    });
+
+    const syncPosition = () => {
+        const d = video.duration;
+        const t = video.currentTime || 0;
+        if (railFill) railFill.style.width = (d ? (t / d) * 100 : 0) + '%';
+        if (timeEl) timeEl.textContent = formatTime(t);
+        if (rail) {
+            rail.setAttribute('aria-valuenow', String(Math.floor(t)));
+            rail.setAttribute('aria-valuetext', formatTime(t) + ' of ' + (durationEl ? durationEl.textContent : episode.duration));
+        }
+    };
+    video.addEventListener('timeupdate', syncPosition);
+    video.addEventListener('seeked', syncPosition);
+    video.addEventListener('loadedmetadata', () => {
+        if (durationEl && isFinite(video.duration)) durationEl.textContent = formatTime(video.duration);
+        if (rail && isFinite(video.duration)) rail.setAttribute('aria-valuemax', String(Math.floor(video.duration)));
+        syncPosition();
+    });
+
+    setupProgressScrubbing(rail, video);
+    rail.addEventListener('keydown', (e) => {
+        if (!video.duration) return;
+        const step = e.shiftKey ? 30 : 5;
+        let next = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = video.currentTime + step;
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = video.currentTime - step;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = video.duration;
+        if (next === null) return;
+        e.preventDefault();
+        video.currentTime = Math.max(0, Math.min(video.duration, next));
+    });
+
+    // Fullscreen the screen div so the glass and tap target ride along.
+    // iOS has no element fullscreen; it gets the native player instead.
+    full.addEventListener('click', () => {
+        if (!isOn()) return;
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+        } else if (screen.requestFullscreen) {
+            screen.requestFullscreen().catch(() => {});
+        } else if (typeof video.webkitEnterFullscreen === 'function') {
+            video.webkitEnterFullscreen();
+        }
+    });
+
+    syncTransport();
+    syncPosition();
+}
+
 // Custom Audio Player Script
 function initCustomAudioPlayers() {
   function formatTime(sec) {
@@ -5988,6 +6145,7 @@ onReady(() => {
     initDeferredTimeDial();
     initEmailGlitchEffects();
     initCustomAudioPlayers();
+    initEpisodeMonitor();
     initPetLightboxLinks();
     initFoilCard();
     initFoilMotion();

@@ -257,7 +257,7 @@ The Writing section is bookended by two instruments: the Time Dial at the top pl
 - **Replacing an episode:** new filenames, so no cache-bust; update `tvEpisodes` and the HTML defaults, and **delete the previous mp4 and poster from the tree** in the same commit, naming them in the message so the way back is git history. Don't accumulate them.
 - **Nothing is written on the glass.** The title and date sit on the chassis plate; a chyron over a bright frame behind scanlines was unreadable, so don't bring one back.
 - **Behaviour:** off, the screen shows SMPTE-style bars (same seven values as the FAQ test card) with a slate. The play key or a tap on the screen turns it on and plays; after that both toggle play/pause, and a pause holds the frame. There is no power key (there was one; it was redundant with play): the LED on the plate is the standby/on cue, and a finished episode rewinds and drops back to bars. It's a managed player, so starting it pauses the recap and album players and their buttons pause it. `preload="none"`: the mp4 costs nothing until play.
-- **Fullscreen** goes up on the screen div so the glass rides along; iOS has no element fullscreen and gets the native player via `webkitEnterFullscreen`.
+- **Fullscreen** goes up on the whole chassis so the transport and rail come along and the same key exits (fullscreening only the screen left no way out but Esc); iOS has no element fullscreen and gets the native player via `webkitEnterFullscreen`.
 - **Animation budget:** the standby dot blink and the slow band on the glass, both composited and both paused offscreen by the section observer. Don't add always-on effects here; it sits under nineteen cards and is offscreen most of the time.
 
 ### Content organization

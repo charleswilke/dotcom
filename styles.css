@@ -5343,14 +5343,57 @@ html {
 
 .monitor-readout-sep { color: var(--mon-ink-dim); text-shadow: none; }
 
-/* Fullscreen: the screen div goes up, so the glass and tap target come along */
-.monitor-screen:fullscreen {
-    aspect-ratio: auto;
+/* Fullscreen: the whole chassis goes up, so the transport, the rail and the
+   fullscreen key (now an exit key) come along. Fullscreening only the screen
+   left no way out but Esc. */
+.monitor-chassis:fullscreen {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0.75rem 1rem 0.8rem;
+    border: 0;
     border-radius: 0;
+    background: #0b0c0e;
+    box-shadow: none;
 }
 
-.monitor-screen:fullscreen .monitor-video {
-    object-fit: contain;
+.monitor-chassis:fullscreen::before,
+.monitor-chassis:fullscreen::after {
+    display: none;
+}
+
+.monitor-chassis:fullscreen .monitor-bezel {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+}
+
+.monitor-chassis:fullscreen .monitor-screen {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    aspect-ratio: auto;
+}
+
+.monitor-chassis:fullscreen .monitor-controls {
+    flex: 0 0 auto;
+}
+
+.monitor-full svg {
+    display: none;
+}
+
+.monitor-full .monitor-full-enter {
+    display: block;
+}
+
+.episode-monitor.is-fullscreen .monitor-full .monitor-full-enter {
+    display: none;
+}
+
+.episode-monitor.is-fullscreen .monitor-full .monitor-full-exit {
+    display: block;
 }
 
 @media (max-width: 640px) {

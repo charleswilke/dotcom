@@ -3001,7 +3001,7 @@ function initEpisodeMonitor() {
     const episode = tvEpisodes[0];
     if (!root || !video || !episode) return;
 
-    const screen = document.getElementById('monitorScreen');
+    const chassis = root.querySelector('.monitor-chassis');
     const tap = document.getElementById('monitorTap');
     const transport = document.getElementById('monitorTransport');
     const transportIcon = document.getElementById('monitorTransportIcon');
@@ -3110,17 +3110,23 @@ function initEpisodeMonitor() {
         video.currentTime = Math.max(0, Math.min(video.duration, next));
     });
 
-    // Fullscreen the screen div so the glass and tap target ride along.
-    // iOS has no element fullscreen; it gets the native player instead.
+    // Fullscreen the whole chassis so the transport and the rail ride along and
+    // the same key exits; fullscreening only the screen left no way out but
+    // Esc. iOS has no element fullscreen; it gets the native player instead.
     full.addEventListener('click', () => {
         if (!isOn()) return;
         if (document.fullscreenElement) {
             document.exitFullscreen().catch(() => {});
-        } else if (screen.requestFullscreen) {
-            screen.requestFullscreen().catch(() => {});
+        } else if (chassis.requestFullscreen) {
+            chassis.requestFullscreen().catch(() => {});
         } else if (typeof video.webkitEnterFullscreen === 'function') {
             video.webkitEnterFullscreen();
         }
+    });
+    document.addEventListener('fullscreenchange', () => {
+        const fs = document.fullscreenElement === chassis;
+        root.classList.toggle('is-fullscreen', fs);
+        full.setAttribute('aria-label', fs ? 'Exit fullscreen' : 'Fullscreen');
     });
 
     syncTransport();

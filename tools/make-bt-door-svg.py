@@ -96,20 +96,14 @@ HINGE_BOTTOM = (1120, 679)
 # Spill of light across the floor, in front of the wall.
 FLOOR = "849,691 316,909 1256,909 1119,681"
 
-# The stacked blocks seen through the opening, back to front. Each carries a
-# depth behind the door plane as a fraction of the camera's starting distance
-# to that plane; the flight scales every block by (1 + depth) / (depth * s + 1)
-# relative to the poster's scale s, which is exact pinhole perspective for an
-# object that far behind a wall the camera is flying at. Depth 0 would ride
-# the wall; a huge depth would stay fixed on screen. The two teal blocks stand
-# nearest the doorway, the pale sage tops are furthest back.
+# The stacked blocks seen through the opening, back to front.
 BLOCKS = [
-    ("sageLight", 1.6, "910,339 905,418 924,422 927,390 955,391 953,348"),
-    ("sageMid", 0.9, "928,390 925,423 983,437 986,515 990,516 987,540 991,613 1017,612 1009,401"),
-    ("tealBlockDeep", 0.4, "982,437 905,421 888,674 991,642"),
-    ("sageLight", 1.6, "1012,447 1018,612 1028,612 1031,537 1041,536 1043,497 1058,496 1055,454"),
-    ("sageMid", 0.9, "1044,497 1042,536 1101,533 1105,567 1109,567 1104,497"),
-    ("tealBlock", 0.4, "1101,534 1033,538 1030,612 1111,613"),
+    ("sageLight", "910,339 905,418 924,422 927,390 955,391 953,348"),
+    ("sageMid", "928,390 925,423 983,437 986,515 990,516 987,540 991,613 1017,612 1009,401"),
+    ("tealBlockDeep", "982,437 905,421 888,674 991,642"),
+    ("sageLight", "1012,447 1018,612 1028,612 1031,537 1041,536 1043,497 1058,496 1055,454"),
+    ("sageMid", "1044,497 1042,536 1101,533 1105,567 1109,567 1104,497"),
+    ("tealBlock", "1101,534 1033,538 1030,612 1111,613"),
 ]
 
 
@@ -173,7 +167,7 @@ def polyline(contour, epsilon):
 
 def build(title):
     blocks = "\n".join(
-        f'      <polygon fill="{FILL[colour]}" data-depth="{depth}" points="{points}"/>' for colour, depth, points in BLOCKS
+        f'      <polygon fill="{FILL[colour]}" points="{points}"/>' for colour, points in BLOCKS
     )
     hinge_mid = ((HINGE_TOP[0] + HINGE_BOTTOM[0]) / 2, (HINGE_TOP[1] + HINGE_BOTTOM[1]) / 2)
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-labelledby="bt-door-title">

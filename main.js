@@ -6310,24 +6310,40 @@ function initBeforeTimesDoor() {
         const hdx = hinge[2] - hinge[0];
         const hdy = hinge[3] - hinge[1];
         const hlen = Math.hypot(hdx, hdy) || 1;
-        // Unit normal to the hinge: the slab is squeezed along this direction
-        // toward the hinge line, which is a door seen swinging away edge-on.
-        const nx = hdy / hlen;
-        const ny = -hdx / hlen;
+        // Unit direction along the hinge and its normal. The slab is propped
+        // open toward the viewer, so flying through pushes it wider: its free
+        // edge sweeps across the hinge line (scale along the normal runs from
+        // 1 through 0, edge-on, to negative, showing its back on the far side
+        // of the hinge) and it grows along the hinge as it comes closer. It
+        // must never simply shrink to the hinge: that reads as the door
+        // closing in our face, which is the one thing this door doesn't do.
+        const ux = hdx / hlen;
+        const uy = hdy / hlen;
+        const nx = uy;
+        const ny = -ux;
 
         function swing(progress) {
             if (!slab) return;
-            const p = Math.min(1, Math.max(0, (progress - 0.1) / 0.5));
-            const eased = 1 - Math.pow(1 - p, 3);
-            const kk = 1 - 0.94 * eased;
-            const a = 1 + (kk - 1) * nx * nx;
-            const b = (kk - 1) * nx * ny;
+            // Spread over the middle of the flight so the door turns while
+            // the poster is already filling the screen: edge-on lands near
+            // 40% and the back face is clear of the opening by 72%.
+            const p = Math.min(1, Math.max(0, (progress - 0.12) / 0.6));
+            const eased = p * p * (3 - 2 * p);
+            const across = 1 - 2.3 * eased;
+            const along = 1 + 0.45 * eased;
+            const a = 1 + (across - 1) * nx * nx + (along - 1) * ux * ux;
+            const b = (across - 1) * nx * ny + (along - 1) * ux * uy;
             const c = b;
-            const d = 1 + (kk - 1) * ny * ny;
+            const d = 1 + (across - 1) * ny * ny + (along - 1) * uy * uy;
             const e = hx - (a * hx + c * hy);
             const f = hy - (b * hx + d * hy);
             slab.setAttribute('transform', `matrix(${a.toFixed(5)} ${b.toFixed(5)} ${c.toFixed(5)} ${d.toFixed(5)} ${e.toFixed(3)} ${f.toFixed(3)})`);
-            if (shade) shade.setAttribute('opacity', (0.55 * eased).toFixed(3));
+            // Darkest as it turns edge-on (across = 0), then the back face
+            // settles into a lighter, steady shadow.
+            const edgeOn = 1 / 2.3;
+            const bell = Math.exp(-Math.pow((eased - edgeOn) / 0.16, 2));
+            const back = Math.min(1, Math.max(0, (eased - edgeOn) / 0.35));
+            if (shade) shade.setAttribute('opacity', Math.max(0.45 * bell, 0.22 * back).toFixed(3));
         }
 
         function recede(progress) {

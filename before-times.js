@@ -6140,6 +6140,25 @@
         });
     }
 
+    // The present-day site's Before Times card flies through its poster door
+    // and lands here under a cream wash (html.bt-door-arrival, set by the
+    // inline script in before-times.html). Hold it until the lobby art has
+    // decoded so the lift reveals a finished room, capped so a slow image
+    // can't strand the visitor behind it.
+    function releaseDoorArrival() {
+        const root = document.documentElement;
+        if (!root.classList.contains('bt-door-arrival')) return;
+        const lobbyArt = document.querySelector('.bt-lobby-art');
+        const decoded = lobbyArt && !(lobbyArt.complete && lobbyArt.naturalWidth)
+            ? lobbyArt.decode().catch(() => {})
+            : Promise.resolve();
+        const cap = new Promise((resolve) => window.setTimeout(resolve, 1500));
+        Promise.race([decoded, cap]).then(() => {
+            root.classList.add('is-arriving');
+            window.setTimeout(() => root.classList.remove('bt-door-arrival', 'is-arriving'), 1000);
+        });
+    }
+
     function exitToPresent(source) {
         try {
             const rect = source && typeof source.getBoundingClientRect === 'function'
@@ -6919,4 +6938,5 @@
     initializeProductionCalibration();
     syncRoomFromLocation();
     warmRoomArt();
+    releaseDoorArrival();
 }());

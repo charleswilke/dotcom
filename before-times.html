@@ -6,6 +6,23 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script>
+        (() => {
+            // The present-day site's Before Times card flies through its
+            // poster's door and lands on the doorway's cream. Set by
+            // initBeforeTimesDoor in main.js; before-times.css paints that
+            // same cream over the lobby and before-times.js lifts it once the
+            // lobby art has decoded, so the two pages read as one move.
+            try {
+                const key = 'before-times:door-arrival';
+                if (window.sessionStorage.getItem(key) === null) return;
+                window.sessionStorage.removeItem(key);
+                document.documentElement.classList.add('bt-door-arrival');
+            } catch (error) {
+                // Without storage the lobby simply appears as it always has.
+            }
+        })();
+    </script>
     <title>Before Times | Charles Wilke</title>
     <meta name="description" content="A career archive from before the machines started talking back.">
     <meta name="robots" content="index,follow,max-image-preview:large">

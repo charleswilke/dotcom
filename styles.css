@@ -237,6 +237,55 @@ html.bt-present-arrival::before {
     }
 }
 
+/* ===== BEFORE TIMES DOOR FLIGHT =====
+   Built by initBeforeTimesDoor in main.js when the Before Times card is
+   clicked: a fixed stage over the whole page, and inside it the card's poster
+   as an SVG, sized and placed over the card's screen, which the Web Animations
+   API then flies at the door. The stage's sky is the poster's own teal so the
+   page beneath reads as the poster's background spreading out, not as a fade
+   to black; it comes in with a delay so the first frames show the card lifting
+   off the page. Nothing here needs mirroring in subpages.css: the card only
+   exists on index.html. */
+.bt-door-flight {
+    position: fixed;
+    z-index: 2147483000;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: #013a3a;
+    animation: bt-door-flight-sky 420ms cubic-bezier(0.55, 0, 1, 0.45) both;
+}
+
+@keyframes bt-door-flight-sky {
+    from { background-color: rgba(1, 58, 58, 0); }
+    to { background-color: rgba(1, 58, 58, 1); }
+}
+
+.bt-door-flight-poster {
+    position: absolute;
+    /* Matches .showcase-media so the lift-off doesn't square the corners. */
+    border-radius: 0.42rem;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.bt-door-flight-poster svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Same gradient as html.bt-door-arrival::before in before-times.css: the
+   flight ends on it and the archive opens under it. Keep the two in step. */
+.bt-door-flight-bloom {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity;
+    background:
+        radial-gradient(ellipse 70vmax 55vmax at 50% 45%, #fbe1b6 0, #f6d9ac 58%, #e6c493 100%);
+}
+
 html::-webkit-scrollbar {
     width: 0;
     height: 0;

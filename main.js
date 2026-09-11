@@ -6144,6 +6144,232 @@ function initFoilMotion() {
     }
 }
 
+// ===== BEFORE TIMES DOOR FLIGHT =====
+// Clicking the Before Times card flies the visitor through the door in its
+// poster instead of cutting to the archive. The poster is the card art redrawn
+// as vectors (images/before-times-door-card.svg, built by
+// tools/make-bt-door-svg.py) so it can grow to many times the viewport with
+// crisp edges while the slab swings open and the blocks in the opening fall
+// away. It ends on the doorway's cream interior filling the screen; the
+// archive page opens under that same cream and lifts it once its lobby art has
+// decoded (html.bt-door-arrival in before-times.css), so the two pages read as
+// one continuous move through the door.
+//
+// The SVG is fetched on first intent (hover/focus) or on idle, whichever
+// comes first. If it isn't in hand at click time the link simply navigates:
+// nothing here may ever leave the card broken. Modified clicks, middle
+// clicks and reduced-motion visitors also get the plain link.
+function initBeforeTimesDoor() {
+    const card = document.querySelector('.showcase-item-bt');
+    if (!card) return;
+    const media = card.querySelector('.showcase-media img');
+    if (!media || typeof card.animate !== 'function' || typeof window.fetch !== 'function') return;
+
+    const SVG_URL = 'images/before-times-door-card.svg?v=20260911';
+    const ARRIVAL_KEY = 'before-times:door-arrival';
+    const DURATION = 1150;
+    const VIEW = { w: 1400, h: 910 };
+    // Centre of the opening in poster units: the point the camera flies at.
+    const TARGET = { x: 1060, y: 420 };
+    // The opening is roughly 400 x 560 units; the flight ends once it covers
+    // the viewport with a margin, so the last frame is all cream.
+    const OPENING = { w: 400, h: 560 };
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    let svgMarkup = null;
+    let fetching = null;
+    let flight = null;
+
+    function warm() {
+        if (svgMarkup || fetching) return fetching;
+        fetching = fetch(SVG_URL)
+            .then(response => (response.ok ? response.text() : Promise.reject(new Error(String(response.status)))))
+            .then(text => { svgMarkup = text; return text; })
+            .catch(() => { fetching = null; return null; });
+        return fetching;
+    }
+
+    if (!reduceMotion.matches) {
+        card.addEventListener('pointerenter', warm);
+        card.addEventListener('focus', warm);
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(warm, { timeout: 4000 });
+        } else {
+            window.setTimeout(warm, 2500);
+        }
+    }
+
+    card.addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.button !== 0) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (reduceMotion.matches || !svgMarkup || flight) return;
+        event.preventDefault();
+        fly(card.href);
+    });
+
+    // Back/forward cache can restore this page mid-flight, with the poster
+    // still covering the card and the lock still held. Tear it down.
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) abort();
+    });
+
+    function abort() {
+        if (!flight) return;
+        window.cancelAnimationFrame(flight.raf);
+        flight.stage.remove();
+        flight = null;
+    }
+
+    function fly(destination) {
+        const stage = document.createElement('div');
+        stage.className = 'bt-door-flight';
+        stage.setAttribute('aria-hidden', 'true');
+        const poster = document.createElement('div');
+        poster.className = 'bt-door-flight-poster';
+        poster.innerHTML = svgMarkup;
+        const svg = poster.querySelector('svg');
+        if (!svg) {
+            window.location.assign(destination);
+            return;
+        }
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+
+        // Size and place the poster over the card's screen exactly as it is
+        // this frame: layout size times the card's hover scale, centred on
+        // the screen's bounding box (rotation and scale both keep the centre),
+        // and carrying the float's current rotation so it doesn't snap.
+        const rect = media.getBoundingClientRect();
+        const cardStyle = getComputedStyle(card);
+        const cardScale = parseFloat(cardStyle.scale) || 1;
+        const cardRotate = parseFloat(cardStyle.rotate) || 0;
+        const width = media.offsetWidth * cardScale;
+        const height = media.offsetHeight * cardScale;
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const originX = TARGET.x / VIEW.w * width;
+        const originY = TARGET.y / VIEW.h * height;
+        poster.style.width = `${width}px`;
+        poster.style.height = `${height}px`;
+        poster.style.left = `${cx - width / 2}px`;
+        poster.style.top = `${cy - height / 2}px`;
+        poster.style.transformOrigin = `${originX}px ${originY}px`;
+        stage.appendChild(poster);
+        // Light floods the lens over the last quarter: it hides whatever
+        // corner of the frame a tall or wide viewport still reaches past the
+        // opening, and it is the same cream the archive page opens under.
+        const bloom = document.createElement('div');
+        bloom.className = 'bt-door-flight-bloom';
+        stage.appendChild(bloom);
+        document.body.appendChild(stage);
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const unit = width / VIEW.w;
+        const endScale = Math.max(vw / (OPENING.w * unit), vh / (OPENING.h * unit)) * 1.25;
+        const startX = cx - width / 2 + originX;
+        const startY = cy - height / 2 + originY;
+        const endX = vw / 2;
+        const endY = vh / 2;
+
+        // A camera moving at constant speed toward a wall sees it grow as
+        // 1 / (1 - k t): slow to start, then a rush through the frame. The
+        // smoothstep on t takes the edge off both ends. The opening's centre
+        // eases from the card to the middle of the viewport on the same clock,
+        // and the float's rotation unwinds in the first third.
+        const k = 1 - 1 / endScale;
+        const STEPS = 48;
+        const frames = [];
+        for (let i = 0; i <= STEPS; i += 1) {
+            const t = i / STEPS;
+            const e = t * t * (3 - 2 * t);
+            const s = 1 / (1 - k * e);
+            const dx = (endX - startX) * e;
+            const dy = (endY - startY) * e;
+            const r = cardRotate * Math.max(0, 1 - t / 0.33);
+            frames.push({
+                offset: t,
+                transform: `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${r.toFixed(3)}deg) scale(${s.toFixed(4)})`,
+            });
+        }
+        const animation = poster.animate(frames, { duration: DURATION, easing: 'linear', fill: 'forwards' });
+        bloom.animate(
+            [{ opacity: 0, offset: 0 }, { opacity: 0, offset: 0.74 }, { opacity: 1, offset: 1 }],
+            { duration: DURATION, easing: 'linear', fill: 'forwards' }
+        );
+
+        // The slab swings on its hinge and the blocks recede, both driven off
+        // the same animation clock so they can't drift from the approach.
+        const slab = svg.querySelector('.bt-door-slab');
+        const shade = svg.querySelector('.bt-door-slab-shade');
+        const blocks = svg.querySelector('.bt-door-blocks');
+        const hinge = ((slab && slab.dataset.hinge) || '1213 98 1275 751').split(' ').map(Number);
+        const hx = (hinge[0] + hinge[2]) / 2;
+        const hy = (hinge[1] + hinge[3]) / 2;
+        const hdx = hinge[2] - hinge[0];
+        const hdy = hinge[3] - hinge[1];
+        const hlen = Math.hypot(hdx, hdy) || 1;
+        // Unit normal to the hinge: the slab is squeezed along this direction
+        // toward the hinge line, which is a door seen swinging away edge-on.
+        const nx = hdy / hlen;
+        const ny = -hdx / hlen;
+
+        function swing(progress) {
+            if (!slab) return;
+            const p = Math.min(1, Math.max(0, (progress - 0.1) / 0.5));
+            const eased = 1 - Math.pow(1 - p, 3);
+            const kk = 1 - 0.94 * eased;
+            const a = 1 + (kk - 1) * nx * nx;
+            const b = (kk - 1) * nx * ny;
+            const c = b;
+            const d = 1 + (kk - 1) * ny * ny;
+            const e = hx - (a * hx + c * hy);
+            const f = hy - (b * hx + d * hy);
+            slab.setAttribute('transform', `matrix(${a.toFixed(5)} ${b.toFixed(5)} ${c.toFixed(5)} ${d.toFixed(5)} ${e.toFixed(3)} ${f.toFixed(3)})`);
+            if (shade) shade.setAttribute('opacity', (0.55 * eased).toFixed(3));
+        }
+
+        function recede(progress) {
+            if (!blocks) return;
+            const p = Math.min(1, progress / 0.8);
+            const depth = 1 - 0.45 * p;
+            const fade = Math.min(1, Math.max(0, (progress - 0.5) / 0.32));
+            blocks.setAttribute('transform', `translate(${TARGET.x} ${TARGET.y}) scale(${depth.toFixed(4)}) translate(${-TARGET.x} ${-TARGET.y})`);
+            blocks.setAttribute('opacity', (1 - fade).toFixed(3));
+        }
+
+        let navigated = false;
+        function depart() {
+            if (navigated) return;
+            navigated = true;
+            try {
+                window.sessionStorage.setItem(ARRIVAL_KEY, '1');
+            } catch (error) {
+                // Private browsing: the lobby appears without the cream lift.
+            }
+            window.location.assign(destination);
+        }
+
+        function tick() {
+            if (!flight) return;
+            const progress = Math.min(1, (animation.currentTime || 0) / DURATION);
+            swing(progress);
+            recede(progress);
+            if (progress >= 1) {
+                depart();
+                return;
+            }
+            flight.raf = window.requestAnimationFrame(tick);
+        }
+
+        flight = { stage, raf: 0 };
+        flight.raf = window.requestAnimationFrame(tick);
+        animation.addEventListener('finish', depart);
+        animation.addEventListener('cancel', () => { abort(); depart(); });
+    }
+}
+
 onReady(() => {
     initDeferredFonts();
     initSubstackSubscribeEmbed();
@@ -6155,6 +6381,7 @@ onReady(() => {
     initPetLightboxLinks();
     initFoilCard();
     initFoilMotion();
+    initBeforeTimesDoor();
     initDeferredHomepageMedia();
     initDeferredHomepageEffects();
     initCoverZoom();

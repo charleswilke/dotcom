@@ -1769,22 +1769,24 @@ function displayItems(count) {
 }
 
 // Function to update the dynamic button state
+// While the grid still has cards to deal, the key under it loads them. Once it is
+// fully dealt the key steps aside for the archive tray (#archiveTray in index.html),
+// a plain link styled as the grid's last row. At two columns and up that is the
+// state from first paint, since getFeedPageSize lands the whole feed at once.
 function updateDynamicButton() {
     const dynamicBtn = document.getElementById('dynamicButton');
     if (!dynamicBtn) return;
+    const tray = document.getElementById('archiveTray');
+    const container = dynamicBtn.closest('.load-more-container');
+    const archiveMode = currentItems >= allItems.length - 1;
 
-    if (currentItems < allItems.length - 1) {
-        dynamicBtn.textContent = 'Load more';
-        dynamicBtn.className = 'load-more-btn';
+    dynamicBtn.hidden = archiveMode;
+    if (tray) tray.hidden = !archiveMode;
+    if (container) container.classList.toggle('is-archive', archiveMode);
+
+    if (!archiveMode) {
         dynamicBtn.onclick = () => displayItems(getFeedPageSize());
-        return;
     }
-
-    dynamicBtn.innerHTML = 'Full Archive <span class="arrow" aria-hidden="true">&rarr;</span>';
-    dynamicBtn.className = 'archive-btn';
-    dynamicBtn.onclick = () => {
-        window.open('https://charleswilke.substack.com/archive?sort=new', '_blank', 'noopener,noreferrer');
-    };
 }
 
 // Fallback: parse RSS XML manually (via AllOrigins proxy) if rss2json fails

@@ -4865,9 +4865,156 @@ html {
     padding: 0.5rem 0;
     width: 100%;
 }
+/* With the tray out there is no key to cushion: the grid's 2rem bottom margin
+   is exactly one grid gap, so the tray reads as the grid's last row. */
+.load-more-container.is-archive {
+    padding-top: 0;
+}
+
+/* ===== ARCHIVE TRAY =====
+   The grid's last row once every card is dealt: the door to the essays older
+   than the feed carries. A card with no picture, in the cards' own vocabulary
+   (cream frame, navy printed panel with the rotated dot grid, Audiowide title,
+   amber Space Mono stamp tilted the same seven degrees), so it belongs to the
+   library rather than to the instruments above and below it. It is a plain
+   link, not a control: no LED, no glass. */
+.archive-tray {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--primary);
+    background: rgba(255, 255, 255, 0.95);
+    background-image: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.03) 75%, rgba(0, 0, 0, 0.05) 100%);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 0 10px rgba(255, 185, 58, 0.3);
+    text-decoration: none;
+    text-align: left;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.archive-tray::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.04) 2.5px, transparent 2.5px);
+    background-size: 8px 8px;
+    transform: rotate(-13deg);
+    pointer-events: none;
+}
+/* The cards lift, scale a hair and roll a degree. A degree on a row this wide
+   hoists the far end 20px, so the roll is scaled down to the same end lift. */
+.archive-tray:hover, .archive-tray:focus-visible {
+    box-shadow: 0 20px 40px var(--light), 0 0 24px var(--light);
+    transform: translateY(-6px) scale(1.005) rotate(0.3deg);
+    outline: none;
+}
+.archive-tray:focus-visible {
+    outline: 3px solid #ffb347;
+    outline-offset: 3px;
+}
+.archive-tray-panel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 1.05rem 1.4rem;
+    background: var(--primary);
+    border-top: 2px solid var(--light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.archive-tray-panel::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -50%;
+    width: 200%;
+    height: 300%;
+    background-image: radial-gradient(circle, rgba(150, 165, 255, 0.1) 2.6px, transparent 2.6px);
+    background-size: 8.5px 8.5px;
+    transform: rotate(-13deg);
+    pointer-events: none;
+}
+.archive-tray-panel > * {
+    position: relative;
+}
+.archive-tray-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.archive-tray-title {
+    color: var(--light);
+    font-family: 'Audiowide', 'Orbitron', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1.2rem;
+    line-height: 1.25;
+}
+.archive-tray-blurb {
+    color: rgba(248, 233, 210, 0.82);
+    font-size: 1rem;
+    line-height: 1.4;
+}
+.archive-tray-stamp {
+    flex-shrink: 0;
+    padding: 0.12rem 0.4rem;
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #ffb347;
+    border: 1.5px solid rgba(255, 179, 71, 0.55);
+    border-radius: 2px;
+    transform: rotate(-7deg);
+    text-shadow: 0 0 1px rgba(255, 179, 71, 0.25);
+    opacity: 0.95;
+}
+.archive-tray-arrow {
+    flex-shrink: 0;
+    margin-left: 0.4rem;
+    color: var(--light);
+    font-family: 'Audiowide', 'Orbitron', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.archive-tray:hover .archive-tray-arrow, .archive-tray:focus-visible .archive-tray-arrow {
+    transform: translateX(6px);
+}
+@media (max-width: 767px) {
+    .archive-tray-panel {
+        flex-wrap: wrap;
+        gap: 0.8rem 1rem;
+        padding: 0.85rem 1.1rem;
+    }
+    .archive-tray-copy {
+        flex-basis: 100%;
+    }
+    .archive-tray-title {
+        font-size: 1.05rem;
+    }
+    .archive-tray-blurb {
+        font-size: 0.95rem;
+    }
+    .archive-tray-stamp {
+        margin-left: 0.3rem;
+    }
+    .archive-tray-arrow {
+        margin-left: auto;
+        font-size: 1.4rem;
+    }
+}
 
 /* Smoky glass button — translucent, softly lit */
-.load-more-btn, .archive-btn {
+.load-more-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -4903,8 +5050,14 @@ html {
     isolation: isolate;
 }
 
+/* The key's own display beats the UA's [hidden] rule; once the grid is fully
+   dealt main.js hides it in favour of the archive tray below. */
+.load-more-btn[hidden] {
+    display: none;
+}
+
 /* Frosted sheen running across the top of the glass */
-.load-more-btn::after, .archive-btn::after {
+.load-more-btn::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -4915,7 +5068,7 @@ html {
 }
 
 /* LED indicator — pulses like a tuner's "on air" light */
-.load-more-btn::before, .archive-btn::before {
+.load-more-btn::before {
     content: '';
     width: 8px;
     height: 8px;
@@ -4928,27 +5081,12 @@ html {
     animation: tuner-led-pulse 1.8s ease-in-out infinite;
 }
 
-/* Archive variant: green "ready" LED + arrow */
-.archive-btn::before {
-    background: radial-gradient(circle at 30% 30%, #7dffd4 0%, #00f7c2 55%, #046b56 100%);
-    box-shadow:
-        0 0 6px rgba(0, 247, 194, 0.95),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.archive-btn .arrow {
-    display: inline-block;
-    font-weight: 400;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 @keyframes tuner-led-pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.55; }
 }
 
-.load-more-btn:hover, .load-more-btn:focus-visible,
-.archive-btn:hover, .archive-btn:focus-visible {
+.load-more-btn:hover, .load-more-btn:focus-visible {
     transform: translateY(-1px);
     border-color: rgba(255, 255, 255, 0.22);
     background:
@@ -4962,19 +5100,15 @@ html {
     text-shadow: 0 0 14px rgba(255, 168, 30, 0.85), 0 0 4px rgba(255, 214, 122, 0.7);
 }
 
-.archive-btn:hover .arrow, .archive-btn:focus-visible .arrow {
-    transform: translateX(6px);
-}
-
 @media (max-width: 767px) {
-    .load-more-btn, .archive-btn {
+    .load-more-btn {
         font-size: 0.85rem;
         padding: 0.7rem 1.3rem;
         letter-spacing: 2.5px;
     }
 }
 @media (max-width: 480px) {
-    .load-more-btn, .archive-btn {
+    .load-more-btn {
         font-size: 0.8rem;
         padding: 0.65rem 1.1rem;
         letter-spacing: 2px;
@@ -10951,8 +11085,6 @@ section.production-header.alice p {
         filter: brightness(1);
     }
 }
-
-/* Substack Archive Button — shares tuner styling with .load-more-btn above */
 
 @media (max-width: 767px) {
     .dimensional-showcase {

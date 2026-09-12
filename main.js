@@ -652,6 +652,14 @@ const LOCAL_ARTICLES = [
         pubDate: '2026-09-05T16:00:00.000Z',
         contentUrl: '/transcripts/strap-in-transcript.html',
         link: ''
+    },
+    {
+        slug: 'reckless-intelligence-transcript',
+        title: 'Reckless Intelligence: The Conversation',
+        cleanDescription: "The working session behind \"Reckless Intelligence\" — sovereignty, memory, belonging, draft revisions, and the search for its visual language with Codex.",
+        pubDate: '2026-09-12T16:00:00.000Z',
+        contentUrl: '/transcripts/reckless-intelligence-transcript.html',
+        link: ''
     }
 ];
 

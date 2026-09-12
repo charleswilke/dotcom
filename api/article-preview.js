@@ -32,6 +32,13 @@ const LOCAL_ARTICLES = {
         thumbnail: '/images/transcripts/strap-in/01-pottery-header.webp',
         image: { width: 1774, height: 887 },
         pubDate: '2026-09-05T16:00:00.000Z'
+    },
+    'reckless-intelligence-transcript': {
+        title: 'Reckless Intelligence: The Conversation',
+        description: "The working session behind \"Reckless Intelligence\" — sovereignty, memory, belonging, draft revisions, and the search for its visual language with Codex.",
+        thumbnail: '/images/transcripts/reckless-intelligence/02-reckless-intelligence-header.webp',
+        image: { width: 1774, height: 887 },
+        pubDate: '2026-09-12T16:00:00.000Z'
     }
 };
 

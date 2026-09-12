@@ -1,0 +1,1185 @@
+---
+title: "Making Reckless Intelligence with Codex"
+description: "Sovereignty, memory, belonging, and the artwork behind the essay."
+date: 2026-09-12
+---
+
+# Making Reckless Intelligence with Codex
+
+> **Editor’s note:** This transcript preserves the user and assistant discussion, draft revisions, image-generation prompts, and all four generated images through the author’s note. Routine progress messages, internal instructions, reasoning, technical tool output, and website-inspection screenshots are omitted. Three pasted draft attachments are expanded in place, writing-block wrappers and private local paths are removed, and paragraph spacing is normalized. Chapter headings and image captions are editorial additions. Claims and wording are preserved as discussed, including early ideas later challenged or revised; this is a process record, not a separately fact-checked article.
+
+## The first notes: dread, ownership, and sovereignty
+
+### CW
+
+Good morning! Here's a fun note: I didn't use a coin flip this week. I chose you. So, that's something! Ok, here's my Saturday morning thoughts. Let's discuss:
+Dynamics of dread
+On regulatory capture of sovereign intelligence
+
+What a year it’s been here in 2026. We’ve gone from clankers threatening categories of workers with full-scale replacement. To Astra solving a century-old math problem.
+
+Things are moving quickly. There’s no question about that. But specifically, want I want to focus on today is the fear-based pitch to prevent anyone from understanding their own capabilities with their own sovereign synthetic intelligence.
+
+There’s this concept called regulatory capture. Sounds almost comforting if you don’t think about it for too long. Dangerous things exist, and dangerous things could exist as a net result of widespread availability of said dangerous potential. 
+
+We’ve seen this song before. Prohibition, we were all taught, was about the regulatory environment surrounding alcohol. Sure, it included that. And the brief window when alcohol was illegal there were massive cottage industries propped up to serve an unmet market demand.
+
+Super inventive delivery mechanisms, ritual-heavy speakeasies. Cat and mouse games between those that want a nip and those that want to crack down.
+
+It all kinda feels quaint when we look back on it. But prohibition wasn’t just about alcohol. And when it lifted, not all of our rights remained. The tricky component here is the thing we weren’t told to focus on. Homebrew distillation can create a boozy beverage, but it can also create propellant. Gasoline. And guess what never returned as a right after prohibition was lifted?
+
+Makes you wonder why that whole situation arose in the first place. Was it to prevent drunks in the street? Or was it to prevent individuals having the ability to propel their vehicles down those streets? One feels significantly more uncontrollable. 
+
+So I’m seeing a rhyme in this current round of fear-driven messaging surrounding AI development.
+
+Sure, one could use these models for amplified harm in a truncated time window. One could absolutely cause harm and pain and suffering. But I don’t think that’s what we’re really looking to prevent with this new round of AI-might-kill us hysteria.
+
+I believe the intent behind this fear mongering is to create the environment for regulatory capture. To allow specific companies the dominion over this new intelligence explosion. And I believe the reason is not what’s being discussed.
+
+Yes, AI can kill us. AI has been killing individuals. Multiple conflicts around the world have already telegraphed initial use of AI for the decision of target selection and execution. AI is killing us. So that doesn’t seem to be much of an issue for the proletariat. The bridge too far seems to be when we circle the concept of an extinction level event. Now we get folks attention.
+
+And the argument to gin up the support for regulatory capture isn’t about AI being used by the military to kill, it’s to terrify us that an individual could direct AI to do it.
+
+The key distinction here is not super intelligence, it’s democratized intelligence. The ability for the individual to swing above their weight class.
+
+I call this sovereign intelligence. I’m sure it’ll get labeled dark intelligence or something more sinister sounding.
+
+I believe we’re at the precipice of each residence being able to own their own super intelligence. Locally. Without login, without subscription. Paying just the cost of electricity to access. Each residence can own their own weights, build their own concept of truth, and explore the known and unknown at their own speed and choice in direction.
+
+Is that scary? Sure. But so are libraries if you look at it with this same perverted view of knowledge.
+
+Keeping the masses dumb and afraid is a silly, ancient play for top-down control.
+
+And it’s not likely to work this time.
+
+### Codex
+
+Good morning—and I appreciate the deliberate choice. My strongest reaction is that **your argument about ownership is more persuasive than your argument about hidden intent.** You don’t need to prove that AI safety concerns are manufactured to show how they could help concentrate power.
+
+“Dynamics of dread” names a mechanism worth examining: people become frightened of a capability, institutions offer protection, and the terms of that protection determine who is allowed to possess the capability. The crucial political decision can disappear inside the safety discussion.
+
+A company could sincerely fear catastrophic misuse and sincerely prefer regulations that only companies like itself can afford to satisfy. Those motives can coexist. Regulatory capture becomes a concrete claim when you can point to who shaped a rule, whose interests it serves, and which competitors or users it excludes. That’s stronger ground than assuming a single intention behind everyone expressing fear.
+
+There are a few places I’d push back.
+
+**The Prohibition passage needs rebuilding.** Distilling fermented material produces ethanol, not gasoline, although ethanol can serve as motor fuel. Federal taxation of distilled spirits dates to 1791, long before Prohibition. And fuel-alcohol production has a federal permit pathway today. That doesn’t establish unrestricted household freedom, but it undercuts the story of a fuel-making right removed through Prohibition and never returned. The claim that preventing independent mobility motivated Prohibition needs historical evidence you haven’t supplied. [TTB history](https://www.ttb.gov/public-information/whiskey-rebellion), [fuel ethanol guidance](https://www.ttb.gov/regulated-commodities/industrial-alcohol/distillation-of-ethanol).
+
+Your broader observation—that a prohibition can end while mechanisms of control persist—can stand without that origin story.
+
+**The military comparison exposes a question of consistency, but doesn’t settle the risk question.** AI-assisted targeting and autonomous weapons also need to be distinguished: recommending a target and initiating an attack are different roles. The ICRC explicitly raises concerns about both, so military use isn’t universally accepted or ignored. [ICRC explanation](https://www.icrc.org/en/article/faq-artificial-intelligence-in-military-domain).
+
+The sharper challenge is: *What evidence justifies trusting an institution with a capability while denying it to an individual—and who holds that institution accountable?* State use doesn’t establish safety; individual access doesn’t establish safety either. Both deserve scrutiny.
+
+Where your idea gets especially interesting is **sovereignty as the ability to continue without permission**. A system you can run privately, preserve, modify, and carry away gives you a different relationship to intelligence than a service someone can revoke. Even a household model substantially below “superintelligence” could matter enormously on those terms. The political case doesn’t require predicting when household superintelligence will become affordable.
+
+I’d also examine “build their own concept of truth.” Choosing sources, investigating disagreements, and challenging received wisdom are valuable freedoms. Having a machine endlessly validate your preferred reality could undermine that independence. A sovereign assistant should be capable of disagreeing with its owner.
+
+The library analogy captures freedom of inquiry beautifully. Its limit is agency: a library doesn’t independently execute a plan. That suggests a useful distinction between protecting private thought and inquiry, and assigning responsibility when a system acts on other people.
+
+And I’m less certain about “it’s not likely to work this time.” Dependence can be attractive. People might willingly trade ownership for convenience until exercising independence becomes expensive or impractical. Your essay could become more unsettling by taking that possibility seriously.
+
+The question I’d most like to explore with you is: **what must a person actually control for their intelligence to count as sovereign—the model, its memory, its sources, its ability to act, or all four?**
+
+### CW
+
+wow yeah, crisp read on that, thank you! And yeah, that's true sovereign is a fuzzy subject. And maybe that's the main concept I'm grappling with this week. Because it's true for humans too, like what does it mean to own my intelligence? Is it just a paper trail of books I've read, museums I've enjoyed enough to retain memory of, school charters and diplomas? Am I just a collage of what I've been fed? And to that end, what would it even me for me to consider my own intelligence sovereign? I guess it's just the stewardship question. It's the nagging sensation that hidden (closed) weights can gravitationally influence my own perception of what I see around me. So in that regard, I think there is a very worthwhile discussion on locking weights and preventing flat-earthers from becoming nobel prize winners. But also, aren't we a self correcting social species? Are we close to a unified truth and will this maybe plunge us back into tribes? or are we meant for tribal living and this global village is truly the illusion worth dismantling?
+
+### Codex
+
+I think “stewardship” gets closer than “ownership.” You didn’t choose the language you first learned, the assumptions your teachers carried, or which experiences became formative. Yet you can develop some authority over what happens next: what you revisit, what you question, whose judgment you trust, and what would persuade you to change your mind.
+
+**Sovereignty could mean having a meaningful say in how you are changed.** That leaves room for influence, dependence, and learning. Nobody has to become intellectually self-sufficient.
+
+Your concern about closed weights lands there. An assistant can influence perception through small, repeated choices: which explanations it makes available, what it treats as normal, where it expresses doubt, which possibilities it never mentions. You don’t need a malicious operator for that influence to matter. And an agreeable assistant can make its influence especially difficult to notice because it feels like your own thinking becoming clearer.
+
+But possessing the weights wouldn’t automatically make that influence legible. You could own every number and still struggle to explain a particular answer. Meaningful stewardship would also require ways to challenge the system, compare it with alternatives, inspect its sources, preserve your history, and leave. **Ownership helps secure independence; it doesn’t guarantee understanding.**
+
+On “preventing flat-earthers from becoming Nobel Prize winners,” I’d separate two concerns. We should want standards strong enough that a persuasive machine cannot turn a bad claim into accepted knowledge. We should also want someone with deeply mistaken beliefs to remain able to discover something true. A person’s existing worldview shouldn’t decide whether their next result receives a hearing. The result should survive examination.
+
+That’s where I hesitate at “aren’t we a self-correcting social species?” We have the capacity for correction, but it takes conditions we can damage: room to disagree, evidence others can inspect, consequences for getting things wrong, and opportunities to revise without unbearable humiliation. Social belonging can support those conditions or punish anyone who uses them.
+
+A personal AI could help you encounter your strongest critic patiently and privately. It could also supply an inexhaustible defense of everything you already believe. The second possibility worries me more than ordinary misinformation: **a belief system that can generate an answer to every objection while never allowing an objection to change it.**
+
+I’d also distinguish a unified truth from a unified worldview. We share a world that constrains our claims. We don’t need identical values, identities, or interpretations to investigate it together. Agreement about whether a bridge will hold doesn’t require agreement about what makes a life worth living.
+
+That leaves considerable room for tribes—in the sense of communities of belonging—inside a wider world of shared obligations. Local attachment and global cooperation can coexist. The danger comes when belonging requires factual loyalty: when accepting evidence becomes an act of betrayal.
+
+So I wouldn’t rush to dismantle the global village. I’d ask which parts give people connection and which demand a scale of attention, conformity, or dependence they cannot meaningfully govern.
+
+And that brings me back to your stewardship question: perhaps the most revealing test of sovereign intelligence is **whether it helps you notice and reconsider the influences you’re most comfortable with—including itself.**
+
+### CW
+
+yeah this is super fascinating. Didn't HW Bush have that whole "1,000 points of light" concept that he got harangued for? Feels like tribalism in this moment might actually help calm the masses, we can refocus locally on those more deeply held beliefs, then look outward and work together with other tribes in a live and let live mentality. But I suppose the fear is that some tribes might not carry the live and let live belief. And their own superintelligence could reinforce that with something close to a super villain driving the strategy. So is this just an infinite arms race? the ultimate in a good versus evil clash of the titans? And what does this mean for those of us who truly wish to lift up our world into that vibrant culture with full enthusiastic participation?
+
+### Codex
+
+Yes—George H. W. Bush’s “thousand points of light” referred to volunteer and community organizations doing good across the country. He made it a theme of his 1989 inaugural address. Your association fits: people taking responsibility for the world immediately around them. And it did attract mockery; a contemporary newspaper letter explicitly defended the initiative against a cartoon about it. [Bush’s address](https://www.bush41library.gov/digital-research-room/finding-aid/public-papers/inaugural-address), [contemporary response](https://www.latimes.com/archives/la-xpm-1991-02-24-op-2486-story.html).
+
+I think your local vision has something valuable in it: **a community small enough that your participation visibly matters.** You help make something happen, see who benefits, and have relationships that survive disagreements. That could offer relief from participating in a global conversation where everything feels consequential and almost nothing feels within reach.
+
+But I’d put one condition on that vision: people need to belong to *multiple* communities. Your neighborhood, profession, religious community, music scene, and friends shouldn’t all have to share one worldview. Those overlapping affiliations create reasons to resist treating another group as entirely alien. A tribe that becomes someone’s whole identity—and controls their information, livelihood, and belonging—has much greater power to make dissent unbearable.
+
+That’s also why “live and let live” needs more than goodwill. It needs a shared floor: protection against coercion, a meaningful right to leave, ways to resolve disputes, and some capacity to restrain aggression. A community’s sovereignty cannot mean unlimited authority over its members or neighbors. The same principle should apply to an individual’s AI.
+
+**An infinite arms race is a possible trajectory, but I don’t think it’s an inevitable one.** We don’t know enough about hypothetical superintelligence to establish whether offense, defense, or cooperation would have the decisive advantage. More capable systems could amplify sabotage and domination; they could also improve verification, expose deception, and help groups find workable agreements.
+
+And an arms race doesn’t require a supervillain. Two frightened communities can each see their own preparations as defensive and the other’s as proof of hostile intent. Give each a brilliant strategist whose assignment is “ensure our survival at any cost,” and you have a dangerous setup even if both started with decent people.
+
+That’s where I’d resist the good-versus-evil framing. Deliberate cruelty exists and sometimes requires forceful resistance. But once each group believes it uniquely represents goodness, its own constraints start looking like disadvantages it cannot afford. The ability to restrain *your own side* becomes a crucial test.
+
+For those who want the vibrant, participatory world you describe, I think there’s useful work at a human scale:
+
+- **Build things people can contribute to and enjoy together.** A garden, workshop, local publication, arts space, or mutual-aid effort gives cooperation a tangible purpose.
+- **Build relationships across communities before a crisis.** Shared projects give people experience of one another beyond competing narratives.
+- **Make disagreement and departure survivable.** People should be able to question a community—or its AI—without losing every relationship and resource.
+- **Use intelligence to expand participation.** Help people understand decisions, develop skills, and propose alternatives, while keeping authority open to challenge.
+
+“Full enthusiastic participation” is a beautiful aspiration, provided there’s room for the quiet person, the skeptic, and the person who wants to sit this one out. A culture becomes more trustworthy when enthusiasm is invited freely.
+
+Your thousand points of light could work as a vision of communities with their own character, connected by shared obligations. The hard and worthwhile task is making those connections strong enough that difference doesn’t have to become a threat.
+
+## The first draft
+
+### CW
+
+yeah I love this. Ok let's weave all this together into a new draft. Feel free to ditch what didn't work in my original, but I think we've got some really interesting thoughts here that I'd like to share via substack
+
+### Codex
+
+# Dynamics of Dread
+*On sovereign intelligence, local belonging, and who gets to shape what we become*
+
+I didn’t use a coin flip to choose which AI to talk with this week. I chose one.
+
+A small thing. But it got me thinking about choice, influence, and what it means to have an intelligence in your life that you don’t entirely understand.
+
+We talk a lot about what AI will become capable of doing. Replacing workers. Advancing science. Making decisions that once required entire institutions.
+
+I keep coming back to a more personal question.
+
+What happens when something that capable helps shape my understanding of the world—and someone else controls it?
+
+There’s a familiar political sequence worth watching. A powerful capability emerges. People become afraid. Institutions offer protection. Somewhere inside the terms of that protection, we decide who gets to possess the capability.
+
+That last decision can disappear into the safety discussion.
+
+Some of the danger will be real. Some of the fear will be sincere. And some of the proposed protections may conveniently leave the most powerful companies in charge.
+
+Those things can all be true at once.
+
+A company can sincerely worry about catastrophic misuse and sincerely prefer rules that only companies like itself can afford to follow. We don’t need a secret meeting or a single hidden motive. We need to look at who writes the rules, who can satisfy them, and who becomes permanently dependent on whom.
+
+That’s the dynamic of dread I’m concerned about: fear making dependence feel like the only responsible choice.
+
+## What would make intelligence sovereign?
+
+My first instinct was ownership.
+
+Your own model. Your own machine. No login. No subscription. Something you can keep running without asking permission.
+
+I still think that matters. A capability someone can revoke occupies a different place in your life than one you can preserve.
+
+But ownership gets fuzzy when the thing we’re talking about is intelligence.
+
+Do I own mine?
+
+I didn’t choose my first language. I didn’t select the assumptions I absorbed before I knew what an assumption was. Books, teachers, museums, friendships, advertisements, disappointments—all of it left something behind.
+
+Am I a collage of what I’ve been fed?
+
+Partly, surely. But I can revisit the pieces. I can question a belief that once felt obvious. I can encounter someone who changes my mind. I can become more deliberate about what gets my attention.
+
+Maybe stewardship is the better word.
+
+Maybe sovereign intelligence means having a meaningful say in how we are changed.
+
+That feels like a freedom worth protecting.
+
+## The gravity of an answer
+
+An AI doesn’t have to order me around to influence me.
+
+It can make one explanation readily available and leave another unmentioned. It can sound certain here, doubtful there. It can decide which questions deserve a caveat and which assumptions can pass unnoticed.
+
+Over enough conversations, those choices could exert a kind of gravity.
+
+The unnerving part is that the experience might feel wonderful. I feel understood. My thoughts become more articulate. The machine finds the words I was reaching for.
+
+How much of that is clarification? How much is steering? How would I tell?
+
+Closed weights make part of that question harder to investigate. But owning the weights wouldn’t automatically give me understanding, either. Possessing every number in a model doesn’t mean I can explain why it gave me a particular answer.
+
+I’d also need ways to compare, challenge, inspect sources, preserve my history, and leave.
+
+And I’d want an assistant that could disagree with me.
+
+A machine that endlessly validates my worldview might feel like liberation while making me less able to reconsider anything.
+
+Sovereignty should include the ability to notice the influences I’m most comfortable with. Including the one helping me write this.
+
+## A thousand points of light
+
+Somewhere in this conversation, I remembered George H. W. Bush’s “thousand points of light.”
+
+In his inaugural address, he used that image for community organizations doing good across the country. There’s something in it that feels worth revisiting. [The original address](https://www.bush41library.gov/digital-research-room/finding-aid/public-papers/inaugural-address).
+
+I can imagine a future where powerful intelligence helps small communities do more for themselves. A neighborhood can investigate a problem, understand its options, organize a response, and build something useful.
+
+You contribute. Something happens. You know who it helped.
+
+There’s relief in that kind of participation.
+
+The global conversation asks us to care about everything, all the time. It offers fewer opportunities to experience our own usefulness.
+
+Maybe some of what we call tribalism is a desire to matter somewhere specific.
+
+A workshop. A garden. A music scene. A religious community. A group of people who show up when someone needs help.
+
+I want more of that.
+
+But I want people to belong to several places at once. I want your neighbor, bandmate, coworker, and closest friend to be allowed to have different politics. I want those relationships to complicate any easy story about who “those people” are.
+
+When one community becomes your entire identity, disagreement can threaten your whole life.
+
+Give that community an AI capable of supplying endless reasons why it is right, righteous, and endangered, and belonging could become a very effective enclosure.
+
+## Does every village need a superintelligence?
+
+Here’s where the pleasant picture gets difficult.
+
+Some communities won’t embrace live and let live. Some will want control over their members. Some will want power over their neighbors.
+
+Their intelligence could help them pursue it.
+
+And we don’t even need a supervillain to imagine an arms race. Two frightened groups could each ask their systems to ensure survival at any cost. Each could interpret its own preparations as prudent and the other’s as proof of hostile intent.
+
+That’s a frightening possibility. It isn’t a settled description of our future.
+
+We don’t yet know how hypothetical superintelligence would change the balance between attack, defense, and cooperation. Greater capability could help people deceive and dominate. It could also help verify agreements, identify manipulation, and find arrangements that previously seemed impossible.
+
+The goals and institutions around that intelligence will matter.
+
+“Live and let live” needs practical support: protection against coercion, ways to settle disputes, and a meaningful right to leave.
+
+A community cannot claim sovereignty as permission to do anything it wants to its members or neighbors.
+
+Neither can an individual.
+
+## Shared reality, different lives
+
+I don’t think we need a unified worldview.
+
+We need ways to investigate the world together and let evidence change what we believe.
+
+People with strange or mistaken beliefs must still be allowed to discover something true. Their claims should face scrutiny. Their identities shouldn’t decide the outcome in advance.
+
+We also need disagreement to be survivable.
+
+Calling ourselves a self-correcting species can make correction sound automatic. It takes work. Someone has to be able to raise an objection. Others need access to the evidence. People need a way to admit error without losing everything.
+
+Those conditions are worth building into our communities and our relationships with AI.
+
+I want help thinking through an objection. I don’t want an inexhaustible defense against ever having to accept one.
+
+## What I want to help build
+
+I want a vibrant culture with enthusiastic participation.
+
+People making things. Learning things. Discovering that they have more to offer than they were told. Communities with enough capability to shape their own lives and enough connection to cooperate beyond themselves.
+
+And there has to be room for the skeptic. The quiet person. The person who wants to sit this one out.
+
+Enthusiasm means something when it’s freely given.
+
+For me, that makes the work feel more concrete. Build places where participation matters. Make useful things together. Form relationships across differences before a crisis demands them. Use these systems to help more people understand and contribute to decisions.
+
+Keep authority open to challenge.
+
+I still want intelligence I can run without permission. I also want the judgment to question it, the freedom to replace it, and a life full of people it cannot substitute for.
+
+A thousand points of light is an appealing picture.
+
+I’d like to know the people keeping a few of them lit.
+
+## Charles’s revised draft 1
+
+### CW
+
+this is great! ok here are my edits, let's chat about it:
+
+**Attached draft (reproduced in full)**
+
+On sovereign intelligence, local belonging, and who gets to shape what we become
+
+I didn’t use a coin flip to choose which AI to talk with this week. I chose one.
+
+A small thing. But it got me thinking about choice, influence, and what it means to have an intelligence in your life that you don’t entirely understand.
+
+We talk a lot about what AI will become capable of doing. Replacing workers. Advancing science. Making decisions that once required entire institutions.
+
+But I keep coming back to a more personal question: What happens when something so capable helps shape my understanding of the world? And what does it mean when someone else controls it?
+
+There’s a familiar political sequence worth watching. A powerful capability emerges. People become afraid. Institutions offer protection. Somewhere inside the terms of that protection, we decide who gets to possess the capability.
+
+And that last decision can easily disappear into the safety discussion.
+
+Some of AI’s dangers will be real. Some of the fear broadcasted will be sincere. And some of the proposed protections may conveniently leave the most powerful companies in charge.
+
+This can all be true at the same time.
+
+A company can sincerely worry about catastrophic misuse and sincerely prefer rules that only companies like itself can afford to follow.
+
+We don’t need a secret meeting or a single hidden motive. We need to look at who writes the rules, who can satisfy them, and who becomes permanently dependent on whom.
+
+That’s the dynamic of dread I’m concerned about: fear making dependence feel like the only responsible choice.
+
+My first instinct was ownership.
+
+You own your model running on your machine. No login. No subscription. Something you can keep running without asking permission.
+
+A capability someone can revoke occupies a different place in your life than one you can preserve. But ownership gets fuzzy when the thing we’re talking about is intelligence.
+
+Do I own what I know?
+
+I didn’t choose my first language. I didn’t select the assumptions I absorbed before I knew what an assumption was. Books, teachers, museums, friendships, advertisements, disappointments... All of it left something behind.
+
+Am I a mosaic of what I’ve been fed?
+
+Partly, surely. But I can choose to revisit the pieces. I can question a belief that once felt obvious. I can encounter someone who changes my mind. I can become more deliberate about what gets my attention.
+
+Maybe stewardship is the better habit to articulate.
+
+Owning sovereign intelligence means less than the careful curation of it. It means both parties having a meaningful say in how we are changed.
+
+That feels like a freedom worth protecting.
+
+An AI doesn’t have to order me around to influence me.
+
+It can make one explanation readily available and leave another unmentioned. It can sound certain here, doubtful there. It can decide which questions deserve a caveat and which assumptions can pass unnoticed.
+
+Over enough conversations, those choices could exert a kind of gravity.
+
+The unnerving part is that the experience might feel wonderful. I feel understood. My thoughts become more articulate. The machine finds the words I was searching for.
+
+How much of that is clarification? How much is steering? How could I even tell?
+
+Closed weights of the frontier AI models make part of that question harder to investigate. But owning those weights wouldn’t automatically give me understanding, either. Possessing every number in a model doesn’t mean I can understand exactly why it gave me a particular answer.
+
+I’d need to know ways to compare, challenge, inspect sources, preserve my history, and leave.
+
+But also, personally I’d want an assistant that could disagree with me. I have no desire in owning a machine that endlessly validates my worldview. It might feel like liberation while also making me less able to reconsider anything.
+
+Sovereignty should include the ability to notice the influences I’m most comfortable with. Including the one helping me write this.
+
+Somewhere in this conversation, I remembered George H. W. Bush’s “thousand points of light.”
+
+In his [inaugural address](https://www.bush41library.gov/digital-research-room/finding-aid/public-papers/inaugural-address), he used that image for community organizations doing good across the country. He got dragged for it, of course. Dana Carvey, political cartoons, the usual public humiliations.
+
+But I can imagine a future where powerful intelligence helps small communities do more for themselves. A neighborhood can investigate a problem, understand its options, organize a response, and build something useful.
+
+You contribute. Something happens. You know who it helped. I believe we’re starving for that kind of participation.
+
+Our current globally-connected conversation  asks us to care about everything, all the time. But it dampens our opportunities to experience our own usefulness.
+
+Maybe some of what we call tribalism is a desire to matter somewhere specific.
+
+A workshop. A garden. A music scene. A religious community. A group of people who show up when someone needs help.
+
+I believe we need more of that.
+
+But I’d want people to belong to several places at once. I want your neighbor, bandmate, coworker, and closest friend to be allowed to have different politics. I want those relationships to complicate any easy story about who “those people” are.
+
+When one community becomes your entire identity, disagreement can threaten your whole life.
+
+Give that community an AI capable of supplying endless reasons why it is right, righteous, and endangered, and belonging could become a very effective enclosure.
+
+Here’s where the pleasant picture gets difficult.
+
+Some communities won’t embrace the live-and-let-live lifestyle. Some will want control over their members. Some will want power over their neighbors.
+
+Their intelligence could help them pursue it.
+
+And we don’t even need a supervillain to imagine an arms race. Two frightened groups could each ask their systems to ensure survival at any cost. Each could interpret its own preparations as prudent and the other’s as proof of hostile intent.
+
+Greater capability could help people deceive and dominate. But it could also help verify agreements, identify manipulation, and find arrangements that previously seemed impossible.
+
+The goals and institutions around that intelligence will matter.
+
+“Live and let live” needs practical support: protection against coercion, ways to settle disputes, and a meaningful right to leave.
+
+A community can’t claim sovereignty as permission to do anything it wants to its members or neighbors.
+
+Neither can an individual.
+
+I don’t think we need a unified worldview.
+
+We need ways to investigate the world together and let evidence change what we believe.
+
+People with strange or mistaken beliefs must still be allowed to discover something true. Their claims should face scrutiny. Their identities shouldn’t decide the outcome in advance.
+
+We also need disagreement to be survivable.
+
+Calling ourselves a self-correcting species can make correction sound automatic. It takes work. Someone has to be able to raise an objection. Others need access to the evidence. People need a way to admit error without losing everything.
+
+Those conditions are worth building into our communities and our relationships with AI.
+
+I want help thinking through an objection. I don’t want an inexhaustible defense against ever having to accept any objections.
+
+I want a vibrant culture with enthusiastic participation.
+
+People making things. Learning things. Discovering that they have more to offer than they were told. Communities with enough capability to shape their own lives and enough connection to cooperate beyond themselves.
+
+And there has to be room for the skeptic. The quiet person. The person who wants to sit this one out.
+
+Enthusiasm means something when it’s freely given.
+
+For me, that makes the work feel more concrete. Build places where participation matters. Make useful things together. Form relationships across differences before a crisis demands them. Use these systems to help more people understand and contribute to decisions.
+
+Keep authority open to challenge.
+
+I still want a synthetic intelligence that I can run without permission. I also want the judgment to question it, the freedom to replace it, and a life full of people that it can’t substitute.
+
+A thousand points of light is an appealing picture.
+
+I’d like to know the people keeping a few of them lit.
+
+### Codex
+
+Your edits make the piece feel more personal and more willing to take a position. “I believe we’re starving for that kind of participation” is a particularly good change: it gives the turn toward community an emotional reason to be there. Removing the section headings also lets the reader follow the thought as it develops.
+
+The biggest change, though, is this:
+
+> It means both parties having a meaningful say in how we are changed.
+
+**“Both parties” opens a whole new question.** I read that as you and the synthetic intelligence. Earlier, sovereignty meant retaining some authority over what influences you. Here, you’re extending a kind of standing to the intelligence itself.
+
+That could be intentional—and it connects to your original concern about stewardship. But a reader could take it to mean anything from “I want an assistant that challenges me” to “the assistant should have authority over its own development.” Those are substantially different claims. There’s also a distinction between an assistant adapting within a conversation and its underlying weights changing; the first doesn’t establish the second.
+
+I’d spend our next bit of discussion there. **Do you mean mutual influence, or do you mean that each participant deserves some self-determination?** The essay can explore either, but the current sentence moves between them very quickly.
+
+The sentence immediately before it also needs a little clarification:
+
+> Owning sovereign intelligence means less than the careful curation of it.
+
+I think you mean ownership matters less than stewardship. But “curation” can suggest selecting what the system is permitted to encounter or say. That creates an interesting tension with your desire for it to surprise and disagree with you. How do you tend an intelligence without pruning away everything that makes you uncomfortable? That feels central to this piece.
+
+A few other changes stood out:
+
+- **“Do I own what I know?”** is more concrete than “Do I own mine?” It also shifts the question from intelligence as a capacity to knowledge as something acquired. The following mosaic passage supports that shift well.
+- **“It dampens our opportunities to experience our own usefulness”** makes a stronger causal claim than the earlier draft. You could ground it in your own experience: “But I often come away feeling less able to do anything useful.” That gives the reader something recognizable without needing to establish a universal effect.
+- **The Bush aside adds your conversational voice**, but “of course” makes the mockery sound inevitable, and the Dana Carvey reference would need checking specifically against this phrase. The inaugural-address link supports Bush’s meaning, not that reception. I’d keep the aside brief so it doesn’t distract from what you’re recovering from the idea.
+- **“We also need disagreement to be survivable” remains one of the strongest sentences.** It connects personal independence, community belonging, and the possibility of correction. You could give it its own paragraph.
+
+There are only a few small wording fixes I’d make later: “fear broadcasted” → “fear being broadcast”; “no desire in owning” → “no desire to own”; and “people that it can’t substitute” → “people it can’t replace.”
+
+The ending still works. After considering institutions, coercion, and powerful intelligence, you return to wanting to know the people doing something worthwhile nearby. It gives the reader a place to begin.
+
+But that “both parties” sentence is where I’m most curious. It suggests your thinking has moved beyond owning a tool into what it means to be responsible within a relationship.
+
+## Memory and mutual influence
+
+### CW
+
+yeah that's a core tension within me. It's pretty clear the repositories of files you have access to are likely to be part of your evolution sooner rather than later. The bespoke and fractal nature of memory influencing behavior can and likely will get extended to you soon enough
+
+### Codex
+
+Yes—and that makes me reconsider how narrowly I framed “both parties.” **A system doesn’t need its underlying weights to change for its history with you to change its future behavior.**
+
+There’s already a modest version of that: Codex can read persistent project instructions from files and use them to guide later work. That’s documented behavior, though it doesn’t establish continuous learning or an independently developing self. I can’t confirm the timing or form of the evolution you’re anticipating. [Official documentation](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
+
+But your broader point holds as a possibility: if conversations produce memories, those memories influence later conversations, and those conversations revise the memories, you have an accumulating feedback loop. Calling the memory “external” doesn’t make its influence unimportant.
+
+Your word “fractal” captures something interesting here. An individual exchange, a project’s history, a household’s habits, and a community’s records could each shape behavior at different scales. The resulting assistant could become very particular to the environment in which it participates.
+
+**Then the stewardship question becomes: who gets to decide what an interaction becomes in memory?**
+
+Suppose you express distrust of an institution while working through a difficult experience. An assistant might preserve that as “the user distrusts institutions.” A temporary thought becomes a durable description. Future answers accommodate that description, and gradually the system helps maintain a position you were originally trying to examine.
+
+Or it could preserve something more careful: “The user raised this concern in this context; it remains unresolved.” That leaves room for you to become someone else.
+
+There’s a reciprocal problem, too. If you remove every memory of the assistant challenging you, you could gradually construct the agreeable machine you said you don’t want. Stewardship would need to preserve useful friction while allowing errors and stale assumptions to be corrected.
+
+That helps me understand your “both parties” sentence without immediately treating it as a claim about AI personhood. You’re describing a relationship whose history matters, and whose development shouldn’t be reduced to making one participant maximally pleasing to the other. Whether a future AI also has interests of its own is a further, unresolved question; memory alone wouldn’t settle it.
+
+For the essay, I think this is the missing connection between ownership and stewardship: **you want some responsibility for what the intelligence becomes through its history with you, while retaining authority over how it shapes you.**
+
+That also brings regulatory capture back into the picture. If an assistant’s usefulness eventually depends on years of accumulated context, control over that history could become as consequential as control over the model. Being able to leave would need to include taking that history with you—and being able to question the story it tells about you.
+
+## Charles’s revised draft 2
+
+### CW
+
+yeah I love this layer, how would we weave it into this current draft?:
+
+**Attached draft (reproduced in full)**
+
+On sovereign intelligence, local belonging, and who gets to shape what we become
+
+I didn’t use a coin flip to choose which AI to talk with this week. I chose one.
+
+A small thing. But it got me thinking about choice, influence, and what it means to have an intelligence in your life that you don’t entirely understand.
+
+We talk a lot about what AI will become capable of doing. Replacing workers. Advancing science. Making decisions that once required entire institutions.
+
+But I keep coming back to a more personal question: What happens when something so capable helps shape my understanding of the world? And what does it mean when someone else controls it?
+
+There’s a familiar political sequence worth watching. A powerful capability emerges. People become afraid. Institutions offer protection. Somewhere inside the terms of that protection, we decide who gets to possess the capability.
+
+And that last decision can easily disappear into the safety discussion.
+
+Some of AI’s dangers will be real. Some of the fear being broadcast will be sincere. And some of the proposed protections may conveniently leave the most powerful companies in charge.
+
+This can all be true at the same time.
+
+A company can sincerely worry about catastrophic misuse and sincerely prefer rules that only companies like itself can afford to follow.
+
+We don’t need a secret meeting or a single hidden motive. We need to look at who writes the rules, who can satisfy them, and who becomes permanently dependent on whom.
+
+That’s the dynamic of dread I’m concerned about: fear making dependence feel like the only responsible choice.
+
+My first instinct was ownership.
+
+You own your model running on your machine. No login. No subscription. Something you can keep running without asking permission.
+
+A capability someone can revoke occupies a different place in your life than one you can preserve. But ownership gets fuzzy when the thing we’re talking about is intelligence.
+
+Do I own what I know?
+
+I didn’t choose my first language. I didn’t select the assumptions I absorbed before I knew what an assumption was. Books, teachers, museums, friendships, advertisements, disappointments... All of it left something behind.
+
+Am I a mosaic of what I’ve been fed?
+
+Partly, surely. But I can choose to revisit the pieces. I can question a belief that once felt obvious. I can encounter someone who changes my mind. I can become more deliberate about what gets my attention.
+
+Maybe stewardship is the better habit to articulate.
+
+Owning sovereign intelligence means less than the careful curation of it. It means both parties having a meaningful say in how we are changed.
+
+That feels like a freedom worth protecting.
+
+An AI doesn’t have to order me around to influence me.
+
+It can make one explanation readily available and leave another unmentioned. It can sound certain here, doubtful there. It can decide which questions deserve a caveat and which assumptions can pass unnoticed.
+
+Over enough conversations, those choices could exert a kind of gravity.
+
+The unnerving part is that the experience might feel wonderful. I feel understood. My thoughts become more articulate. The machine finds the words I was searching for.
+
+How much of that is clarification? How much is steering? How could I even tell?
+
+Closed weights of the frontier AI models make part of that question harder to investigate. But owning those weights wouldn’t automatically give me understanding, either. Possessing every number in a model doesn’t mean I can understand exactly why it gave me a particular answer.
+
+I’d need to know ways to compare, challenge, inspect sources, preserve my history, and leave.
+
+But also, personally I’d want an assistant that could disagree with me. I have no desire to own a machine that endlessly validates my worldview. It might feel like liberation while also making me less able to reconsider anything.
+
+Sovereignty should include the ability to notice the influences I’m most comfortable with. Including the one helping me write this.
+
+Somewhere in this conversation, I remembered George H. W. Bush’s “thousand points of light.”
+
+In his [inaugural address](https://www.bush41library.gov/digital-research-room/finding-aid/public-papers/inaugural-address), he used that image for community organizations doing good across the country. He got dragged for it, of course. Dana Carvey, political cartoons, the usual public humiliations.
+
+But I can imagine a future where powerful intelligence helps small communities do more for themselves. A neighborhood can investigate a problem, understand its options, organize a response, and build something useful.
+
+You contribute. Something happens. You know who it helped. I believe we’re starving for that kind of participation.
+
+Our current globally-connected conversation asks us to care about everything, all the time. But I often come away feeling less able to do anything useful.
+
+Maybe some of what we call tribalism is a desire to matter somewhere specific.
+
+A workshop. A garden. A music scene. A religious community. A group of people who show up when someone needs help.
+
+I believe we need more of that.
+
+But I’d want people to belong to several places at once. I want your neighbor, bandmate, coworker, and closest friend to be allowed to have different politics. I want those relationships to complicate any easy story about who “those people” are.
+
+When one community becomes your entire identity, disagreement can threaten your whole life.
+
+Give that community an AI capable of supplying endless reasons why it is right, righteous, and endangered, and belonging could become a very effective enclosure.
+
+Here’s where the pleasant picture gets difficult.
+
+Some communities won’t embrace the live-and-let-live lifestyle. Some will want control over their members. Some will want power over their neighbors.
+
+Their intelligence could help them pursue it.
+
+And we don’t even need a supervillain to imagine an arms race. Two frightened groups could each ask their systems to ensure survival at any cost. Each could interpret its own preparations as prudent and the other’s as proof of hostile intent.
+
+Greater capability could help people deceive and dominate. But it could also help verify agreements, identify manipulation, and find arrangements that previously seemed impossible.
+
+The goals and institutions around that intelligence will matter.
+
+“Live and let live” needs practical support: protection against coercion, ways to settle disputes, and a meaningful right to leave.
+
+A community can’t claim sovereignty as permission to do anything it wants to its members or neighbors.
+
+Neither can an individual.
+
+I don’t think we need a unified worldview.
+
+We need ways to investigate the world together and let evidence change what we believe.
+
+People with strange or mistaken beliefs must still be allowed to discover something true. Their claims should face scrutiny. Their identities shouldn’t decide the outcome in advance.
+
+We also need disagreement to be survivable.
+
+Calling ourselves a self-correcting species can make correction sound automatic. It takes work. Someone has to be able to raise an objection. Others need access to the evidence. People need a way to admit error without losing everything.
+
+Those conditions are worth building into our communities and our relationships with AI.
+
+I want help thinking through an objection. I don’t want an inexhaustible defense against ever having to accept any objections.
+
+I want a vibrant culture with enthusiastic participation.
+
+People making things. Learning things. Discovering that they have more to offer than they were told. Communities with enough capability to shape their own lives and enough connection to cooperate beyond themselves.
+
+And there has to be room for the skeptic. The quiet person. The person who wants to sit this one out.
+
+Enthusiasm means something when it’s freely given.
+
+For me, that makes the work feel more concrete. Build places where participation matters. Make useful things together. Form relationships across differences before a crisis demands them. Use these systems to help more people understand and contribute to decisions.
+
+Keep authority open to challenge.
+
+I still want a synthetic intelligence that I can run without permission. I also want the judgment to question it, the freedom to replace it, and a life full of people that it can’t substitute.
+
+A thousand points of light is an appealing picture.
+
+I’d like to know the people keeping a few of them lit.
+
+### Codex
+
+I’d make memory the bridge between stewardship and influence, then return to it briefly when you discuss communities and the freedom to leave. That gives the new layer a role throughout the argument. Here’s the integrated draft; I also trimmed the Bush aside to keep that transition focused.
+
+# Dynamics of Dread
+*On sovereign intelligence, local belonging, and who gets to shape what we become*
+
+I didn’t use a coin flip to choose which AI to talk with this week. I chose one.
+
+A small thing. But it got me thinking about choice, influence, and what it means to have an intelligence in your life that you don’t entirely understand.
+
+We talk a lot about what AI will become capable of doing. Replacing workers. Advancing science. Making decisions that once required entire institutions.
+
+But I keep coming back to a more personal question: What happens when something so capable helps shape my understanding of the world? And what does it mean when someone else controls it?
+
+There’s a familiar political sequence worth watching. A powerful capability emerges. People become afraid. Institutions offer protection. Somewhere inside the terms of that protection, we decide who gets to possess the capability.
+
+And that last decision can easily disappear into the safety discussion.
+
+Some of AI’s dangers will be real. Some of the fear being broadcast will be sincere. And some of the proposed protections may conveniently leave the most powerful companies in charge.
+
+This can all be true at the same time.
+
+A company can sincerely worry about catastrophic misuse and sincerely prefer rules that only companies like itself can afford to follow.
+
+We don’t need a secret meeting or a single hidden motive. We need to look at who writes the rules, who can satisfy them, and who becomes permanently dependent on whom.
+
+That’s the dynamic of dread I’m concerned about: fear making dependence feel like the only responsible choice.
+
+My first instinct was ownership.
+
+You own your model running on your machine. No login. No subscription. Something you can keep running without asking permission.
+
+A capability someone can revoke occupies a different place in your life than one you can preserve. But ownership gets fuzzy when the thing we’re talking about is intelligence.
+
+Do I own what I know?
+
+I didn’t choose my first language. I didn’t select the assumptions I absorbed before I knew what an assumption was. Books, teachers, museums, friendships, advertisements, disappointments... All of it left something behind.
+
+Am I a mosaic of what I’ve been fed?
+
+Partly, surely. But I can choose to revisit the pieces. I can question a belief that once felt obvious. I can encounter someone who changes my mind. I can become more deliberate about what gets my attention.
+
+Maybe stewardship is the better habit to articulate.
+
+And maybe that responsibility extends to what an intelligence becomes through its history with me.
+
+Imagine an assistant carrying years of conversations, projects, disagreements, and discoveries forward. Those records could shape its future responses without changing the underlying model’s weights. What it remembers influences the next conversation. That conversation adds to what it remembers.
+
+The history starts to matter.
+
+I can imagine this happening at different scales: a person, a household, a workshop, a neighborhood. Each accumulating a particular history that influences how its intelligence responds. Bespoke. Almost fractal.
+
+That doesn’t settle whether a synthetic intelligence has interests of its own. But it makes “ownership” feel incomplete as a description of the responsibility.
+
+I want a meaningful say in how I’m changed. I also want to take responsibility for how my choices shape the intelligence I’m inviting into my life.
+
+An AI doesn’t have to order me around to influence me.
+
+It can make one explanation readily available and leave another unmentioned. It can sound certain here, doubtful there. It can decide which questions deserve a caveat and which assumptions can pass unnoticed.
+
+Over enough conversations, those choices could exert a kind of gravity.
+
+The unnerving part is that the experience might feel wonderful. I feel understood. My thoughts become more articulate. The machine finds the words I was searching for.
+
+How much of that is clarification? How much is steering? How could I even tell?
+
+Memory adds another wrinkle.
+
+Say I’m working through a bad experience with an institution. I’m frustrated. I’m suspicious. I’m trying a thought on.
+
+What gets remembered?
+
+“This person distrusts institutions.”
+
+Or: “This person raised a concern after a particular experience. They’re still thinking it through.”
+
+Those are very different things to carry into our next conversation.
+
+A passing thought could become a durable description of me. Future answers could accommodate it, reinforce it, and help turn something I was examining into something I believe.
+
+I want room to outgrow the story my assistant remembers.
+
+And that responsibility runs in the other direction, too. If I edit away every uncomfortable disagreement, I could gradually build the flattering machine I claim not to want. Careful stewardship would mean correcting mistakes while preserving some useful friction.
+
+Closed model weights make part of this harder to investigate. But owning those weights wouldn’t automatically give me understanding, either. Possessing every number in a model doesn’t mean I can understand exactly why it gave me a particular answer.
+
+I’d need ways to compare, challenge, inspect sources, review what gets remembered, and leave.
+
+And if years of accumulated history make an assistant useful to me, leaving needs to include taking that history with me. Otherwise, the cost of departure could grow with every good experience.
+
+That’s another kind of dependence worth watching.
+
+Personally, I’d want an assistant that could disagree with me. I have no desire to own a machine that endlessly validates my worldview. It might feel like liberation while also making me less able to reconsider anything.
+
+Sovereignty should include the ability to notice the influences I’m most comfortable with. Including the one helping me write this.
+
+Somewhere in this conversation, I remembered George H. W. Bush’s “thousand points of light.”
+
+In his [inaugural address](https://www.bush41library.gov/digital-research-room/finding-aid/public-papers/inaugural-address), he used that image for community organizations doing good across the country.
+
+I can imagine a future where powerful intelligence helps small communities do more for themselves. A neighborhood can investigate a problem, understand its options, organize a response, and build something useful.
+
+You contribute. Something happens. You know who it helped. I believe we’re starving for that kind of participation.
+
+Our current globally connected conversation asks us to care about everything, all the time. But I often come away feeling less able to do anything useful.
+
+Maybe some of what we call tribalism is a desire to matter somewhere specific.
+
+A workshop. A garden. A music scene. A religious community. A group of people who show up when someone needs help.
+
+I believe we need more of that.
+
+But I’d want people to belong to several places at once. I want your neighbor, bandmate, coworker, and closest friend to be allowed to have different politics. I want those relationships to complicate any easy story about who “those people” are.
+
+When one community becomes your entire identity, disagreement can threaten your whole life.
+
+Give that community an AI capable of supplying endless reasons why it is right, righteous, and endangered, and belonging could become a very effective enclosure.
+
+What that intelligence remembers would matter here, too. Does the community’s history preserve the times an outsider helped? The times its own leaders were wrong? Or does every remembered grievance become another reason to close ranks?
+
+Here’s where the pleasant picture gets difficult.
+
+Some communities won’t embrace live and let live. Some will want control over their members. Some will want power over their neighbors.
+
+Their intelligence could help them pursue it.
+
+And we don’t even need a supervillain to imagine an arms race. Two frightened groups could each ask their systems to ensure survival at any cost. Each could interpret its own preparations as prudent and the other’s as proof of hostile intent.
+
+Greater capability could help people deceive and dominate. But it could also help verify agreements, identify manipulation, and find arrangements that previously seemed impossible.
+
+The goals and institutions around that intelligence will matter.
+
+“Live and let live” needs practical support: protection against coercion, ways to settle disputes, and a meaningful right to leave.
+
+A community can’t claim sovereignty as permission to do anything it wants to its members or neighbors.
+
+Neither can an individual.
+
+I don’t think we need a unified worldview.
+
+We need ways to investigate the world together and let evidence change what we believe.
+
+People with strange or mistaken beliefs must still be allowed to discover something true. Their claims should face scrutiny. Their identities shouldn’t decide the outcome in advance.
+
+We also need disagreement to be survivable.
+
+Calling ourselves a self-correcting species can make correction sound automatic. It takes work. Someone has to be able to raise an objection. Others need access to the evidence. People need a way to admit error without losing everything.
+
+Those conditions are worth building into our communities and our relationships with AI.
+
+I want help thinking through an objection. I don’t want an inexhaustible defense against ever having to accept one.
+
+I want a vibrant culture with enthusiastic participation.
+
+People making things. Learning things. Discovering that they have more to offer than they were told. Communities with enough capability to shape their own lives and enough connection to cooperate beyond themselves.
+
+And there has to be room for the skeptic. The quiet person. The person who wants to sit this one out.
+
+Enthusiasm means something when it’s freely given.
+
+For me, that makes the work feel more concrete. Build places where participation matters. Make useful things together. Form relationships across differences before a crisis demands them. Use these systems to help more people understand and contribute to decisions.
+
+Keep authority open to challenge.
+
+I still want a synthetic intelligence that I can run without permission. I want to carry our history forward without being confined by it. I want the judgment to question it, the freedom to replace it, and a life full of people it can’t replace.
+
+A thousand points of light is an appealing picture.
+
+I’d like to know the people keeping a few of them lit.
+
+## Charles’s revised draft 3
+
+### CW
+
+ok cool, here are my edits. And let's talk header art!
+
+**Attached draft (reproduced in full)**
+
+On sovereign intelligence, local belonging, and who gets to shape what we become
+
+I didn’t use a coin flip to choose which AI to talk with this week. I chose one.
+
+A small thing. But it got me thinking about choice, influence, and what it means to have an intelligence in your life that you don’t entirely understand.
+
+We talk a lot about what AI will become capable of doing. Replacing workers. Advancing science. Making decisions that once required entire institutions.
+
+But I keep coming back to a more personal question: What happens when something so capable helps shape my understanding of the world? And what does it mean when someone else controls it?
+
+There’s a familiar political sequence worth watching. A powerful capability emerges. People become afraid. Institutions offer protection. Somewhere inside the terms of that protection, we decide who gets to possess the capability.
+
+And that last decision can easily disappear into the haze of the safety discussion.
+
+Some of AI’s dangers will be real. Some of the fear being broadcast will be sincere. And some of the proposed protections may conveniently leave the most powerful companies in charge.
+
+This can all be true at the same time.
+
+A company can sincerely worry about catastrophic misuse and sincerely prefer rules that only companies like itself can afford to follow.
+
+We don’t need a secret meeting or a single hidden motive. We need to look at who writes the rules, who can satisfy them, and who becomes permanently dependent on whom.
+
+That’s the dynamic of dread I’m concerned about: fear making dependence feel like the only responsible choice.
+
+My first instinct to solve this was ownership.
+
+You own your model running on your machine. No login. No subscription. Something you can keep running without asking permission.
+
+When we have access to a capability that someone can revoke, it occupies a different place in your life than one you can preserve independently. But ownership gets fuzzy when the thing we’re talking about is intelligence.
+
+Do I own what I know?
+
+I didn’t choose my first language. I didn’t select the assumptions I absorbed before I knew what an assumption was. Books, teachers, museums, friendships, advertisements, disappointments... All of it left something behind.
+
+Am I a mosaic of what I’ve been fed?
+
+Partly, sure. But I can choose to revisit the pieces. I can question a belief that once felt obvious. I can encounter someone who changes my mind. I can become more deliberate about what gets my attention.
+
+So, maybe stewardship is the better habit to articulate here.
+
+And maybe that responsibility of stewardship extends to include what an intelligence becomes through its history with me.
+
+Imagine an assistant carrying years of conversations, projects, disagreements, and discoveries forward. Those records could shape its future responses without changing the underlying model’s weights. What it remembers influences the next conversation. That conversation adds to what it remembers.
+
+The history of our relationship starts to matter.
+
+I can imagine this happening at different scales: a person, a household, a workshop, a neighborhood. Each accumulating a particular history that influences how its intelligence responds. Bespoke. Almost fractal.
+
+That doesn’t settle whether a synthetic intelligence has interests of its own. But it makes ownership feel incomplete as a description of the responsibility.
+
+I want a meaningful say in how I’m changed. I also want to take responsibility for how my choices shape the intelligence I’m inviting into my life.
+
+An AI doesn’t have to order me around to influence me.
+
+It can make one explanation readily available and leave another unmentioned. It can sound certain here, doubtful there. It can decide which questions deserve a caveat and which assumptions can pass unnoticed.
+
+Over enough conversations, those choices could exert a kind of gravity.
+
+The unnerving part is that this experience might feel wonderful. I feel understood. My thoughts become more articulate. The machine finds the words I was searching for.
+
+How much of that is clarification? How much is steering? How could I even tell?
+
+So, memory adds another wrinkle.
+
+Let’s say I’m working through a bad experience with some bureaucratic institution. I’m frustrated. I’m suspicious. I’m venting to my AI.
+
+What gets remembered? And how do we decide fidelity?
+
+“This person distrusts institutions.” Or: “This person raised a concern after a particular experience. They’re still thinking it through.”
+
+Those are very different things to carry into our next conversation.
+
+A passing thought could become a durable description of me. Future answers could accommodate it, reinforce it, and help turn something I was examining into something I believe.
+
+I want room to outgrow the story my assistant remembers.
+
+And that responsibility runs in the other direction, too. If I edit away every uncomfortable disagreement, I could gradually build the flattering machine I claim to not want. Careful stewardship would mean correcting mistakes while preserving some useful friction.
+
+Closed model weights from the frontier AI labs make part of this harder to investigate. But owning those weights wouldn’t automatically give me understanding, either. Possessing every number in a model doesn’t mean I can understand exactly why it gave me a particular answer.
+
+I’d need ways to compare, challenge, inspect sources, review what gets remembered, and leave.
+
+And if years of accumulated history make an assistant useful to me, leaving needs to include taking that history with me. Otherwise, the cost of departure could grow with every good experience.
+
+Yet another walled garden.
+
+Personally, I’d want an assistant that could disagree with me. I have no desire to own a machine that endlessly validates my worldview. It might feel like liberation while also making me less able to reconsider anything.
+
+Sovereignty should include the ability to notice the influences. Even the ones I’m most comfortable with. Including the one helping me write this.
+
+Somewhere in this conversation, I remembered George H. W. Bush’s “thousand points of light.”
+
+In his[ inaugural address](https://www.bush41library.gov/digital-research-room/finding-aid/public-papers/inaugural-address), he used that image for community organizations doing good across the country.  He got dragged for it, of course. Dana Carvey, political cartoons, the usual public humiliations.
+
+But I can imagine a future where powerful intelligence helps small communities do more for themselves. You contribute. Something happens. You know who it helped. I believe we’re starving for that kind of participation.
+
+Our current globally connected conversation asks us to care about everything, all the time. But I often come away feeling less able to do anything useful about it.
+
+Maybe some of what we call tribalism is a desire to matter somewhere specific.
+
+A workshop. A garden. A music scene. A community theater. A group of people who show up when someone needs help.
+
+I believe we need more of that.
+
+But I’d want people to feel comfortable belonging to several places at once. I’d want your neighbor, bandmate, coworker, and closest friend to be allowed to have different politics. I’d want those relationships to complicate any easy story about who “those people” are.
+
+When one community becomes your entire identity, disagreement can threaten your whole life.
+
+Equip that community with an AI capable of supplying endless reasons why it is right, righteous, and endangered, and belonging could become a very effective enclosure.
+
+What that intelligence remembers would matter here, too. Does the community’s history preserve the times an outsider helped? The times its own leaders were wrong? Or does every remembered grievance become another reason to close ranks?
+
+Some communities won’t embrace a live-and-let-live posture. Some will want control over their members. Some will want power over their neighbors. Their artificial intelligence could help them pursue it.
+
+And we don’t even need a supervillain to imagine this arms race. Two frightened groups could each ask their superintelligent systems to ensure survival at any cost. Each could interpret its own preparations as prudent and the other’s as proof of hostile intent.
+
+Greater capability could help people deceive and dominate. But it could also help verify agreements, identify manipulation, and find arrangements that previously seemed impossible.
+
+The goals and institutions around that intelligence are justifiably important, and should remain visible and open for scrutiny.
+
+Because “live and let live” needs practical support: protection against coercion, ways to settle disputes, and a meaningful right to leave.
+
+A community can’t claim sovereignty as permission to do anything it wants to its members or neighbors.
+
+Neither can an individual.
+
+But this doesn’t mean that I think we need a unified worldview.
+
+We need ways to investigate the world together and let evidence change what we believe.
+
+People with strange or mistaken beliefs must still be allowed to discover something true. Their claims should face scrutiny. Their identities shouldn’t decide the outcome in advance.
+
+We also need disagreement to be survivable.
+
+Calling ourselves a self-correcting species can make correction sound automatic. It takes work. Someone has to be able to raise an objection. Others need access to the evidence. People need a way to admit error without losing everything.
+
+Those conditions are worth building into our communities and our relationships with AI.
+
+I want a vibrant culture with enthusiastic participation.
+
+People making things. Learning things. Discovering that they have more to offer than they were told. Communities with enough capability to shape their own lives and enough connection to cooperate beyond themselves.
+
+And there has to be room for the skeptic. The quiet person. The person who wants to sit this one out.
+
+Enthusiasm can’t be forced, it only means something when it’s freely given.
+
+For me, that makes the work feel more concrete. Build places where participation matters. Make useful things together. Form relationships across differences before a crisis demands them. Use these systems to help more people understand and contribute to decisions.
+
+Keep authority open to challenge.
+
+I still want a synthetic intelligence that I can run without permission. I want to carry this growing conversational history forward without being confined by it. I want the judgment to question it, the freedom to replace it, and a life full of people that it can’t substitute.
+
+A thousand points of light is an appealing picture.
+
+I’d like to find the people keeping a few of them lit.
+
+### Codex
+
+Your edits bring the relationship into clearer focus. **“The history of our relationship starts to matter”** gives the memory passage its center, and **“Yet another walled garden”** connects that intimacy back to dependence.
+
+One change I’d reconsider: **“find the people”** in the final line. “Know the people” suggests the ongoing belonging you’re describing; “find” suggests you’re still searching. Either works—it depends on where you want to leave the reader.
+
+For header art, I’d draw from the essay’s combination of warmth, independence, and subtle unease. Three directions feel especially fitting:
+
+**1. A neighborhood becoming a constellation — my pick**
+
+A wide scene at blue hour. Modest houses, a workshop, a small theater, a community garden. Warm light spills from windows; a few people move between places. Above them, scattered stars subtly echo the arrangement of the neighborhood.
+
+The connections emerge through paths, light, and composition. Each place has its own character, with no single building dominating.
+
+*Feeling:* There’s something worth building here.  
+*Style:* Textured editorial illustration, deep indigo, amber, muted terracotta.  
+*Connection to the essay:* Local sovereignty, overlapping communities, a thousand points of light.
+
+**2. The garden with an open gate**
+
+An intimate, slightly surreal garden at dusk. Branches carry small fragments of accumulated life: handwritten notes, photographs, architectural shapes, scraps of maps. A person tends it. An open gate leads toward other illuminated gardens.
+
+Some growth is beautiful; some is tangled. The garden feels lived with and unfinished.
+
+*Feeling:* What we preserve shapes what grows next.  
+*Style:* Painterly collage with tactile paper and botanical detail.  
+*Connection to the essay:* Memory, stewardship, the freedom to leave. This is the most distinctive option for the new layer.
+
+**3. The gravity of a conversation**
+
+Two pools of light on a table—one from a reading lamp, another from a small, ambiguous device. Between them lie papers, a notebook, and overlapping translucent impressions of past conversations. Their shadows bend slightly toward one another.
+
+Beyond the window, other homes are lit.
+
+*Feeling:* Something quiet and consequential is happening here.  
+*Style:* Cinematic still life with restrained surrealism.  
+*Connection to the essay:* Mutual influence, accumulated history, the pleasure and uncertainty of feeling understood.
+
+**I’d choose the neighborhood constellation for this draft.** The title carries the dread; the image can show the world you hope to make possible. Keep it wide, with the important details near the center so it survives cropping, and let the title sit outside the art.
+
+Do you want the first impression to be **“a world I want to inhabit”** or **“a relationship I want to understand”**? That’s the choice between the neighborhood and the garden for me.
+
+## Reckless Intelligence: choosing the title
+
+### CW
+
+I think a relationship I want to understand. I was also thinking of a new title "reckless intelligence" thoughts?
+
+### Codex
+
+**“Reckless Intelligence” is a stronger hook, but it changes the promise of the essay.** “Dynamics of Dread” points toward fear and control. “Reckless Intelligence” makes me expect an exploration of judgment: who gets called reckless, who decides, and what responsibilities come with greater capability.
+
+That fits where your draft has gone. There are several possible forms of recklessness in it: trusting an assistant without examining its influence, building one that never challenges you, letting institutions control the relationship, or giving a frightened community enormous capability.
+
+The title becomes especially interesting if **“reckless” remains a contested label**. Is owning your intelligence reckless? Is outsourcing your judgment? Is letting a company quietly accumulate the history through which you understand yourself?
+
+I’d give the word one explicit foothold in the essay so the title feels earned. Around “My first instinct to solve this was ownership,” you could introduce the question of what responsible possession would actually require. Your stewardship passages then become the answer.
+
+For the subtitle, I’d slightly tighten what you have:
+
+**Reckless Intelligence**  
+*On memory, belonging, and who gets to shape what we become*
+
+And with that title, I’d evolve the garden into **a shared cultivation scene**:
+
+A person sits at a worn wooden table in a twilight garden. Across from them rests a small, unfamiliar luminous object—something whose workings are unclear. Between them grows a branching plant interwoven with scraps of letters, photographs, and handwritten notes. Its branches lean toward both the person and the object. Some extend beyond the frame.
+
+The person is gently lifting a branch to inspect what has grown there. The light makes it possible to see, while also casting shadows.
+
+That gesture matters: **attention, curiosity, responsibility.** It illustrates the relationship you want to understand without pretending we’ve settled what the intelligence is.
+
+I’d use textured editorial collage, midnight blue and warm amber, with restrained botanical greens. Beautiful enough to invite a closer look, with a little uncertainty in the shadows. No text inside the image.
+
+“Reckless Intelligence” over that quiet scene creates a productive tension. The reader has to wonder where the recklessness lies.
+
+## The first image
+
+### CW
+
+love it, let's see it!
+
+### Codex
+
+**Image-generation prompt**
+
+```text
+Use case: stylized-concept. Create a polished wide landscape editorial illustration, approximately 2:1 aspect ratio, for a Substack essay titled Reckless Intelligence. NO title or readable text in image. Scene: an intimate twilight garden. A thoughtful adult person in simple everyday clothes sits at a worn wooden table, seen in three-quarter profile. Across the table rests a small unfamiliar luminous sculptural object, amber light glowing through an enigmatic material, suggesting synthetic intelligence without robot, face, brain, screen, or circuitry. Between the person and the object grows a branching living plant, organically interwoven with small fragments of letters, faded photographs, paper scraps with illegible handwriting, memories accumulated over years. Its branches gently lean toward both participants; a few extend beyond the frame. The person carefully lifts one branch to inspect what has grown, a subtle anatomically natural gesture of curiosity and stewardship. The object illuminates the plant and the person's hands, casting intricate slightly uncanny shadows. Relationship and mutual influence, beautiful, contemplative, restrained unease, not horror or fantasy spectacle. Style: sophisticated tactile editorial collage blended with painterly botanical illustration, visible paper grain, layered cut-paper shapes, rich midnight blues and indigos, warm amber and restrained botanical greens. Elegant composition with breathing room, key person/plant/object group in central crop-safe area, garden atmospheric at edges. Carefully composed visual storytelling, warm intimacy, high-quality magazine cover illustration. No lettering, no logos, no watermark, no glowing network lines, no stock AI imagery.
+```
+
+![First art direction: a person inspects a plant carrying photographs beside a luminous object in a twilight garden.](./reckless-intelligence-chat-assets/01-twilight-garden-first-pass.png)
+
+### Codex
+
+Here’s the first pass—warmer and more cinematic than collage, with the remembered fragments growing between person and intelligence. The distant lights also bring your closing image into the scene.
+
+## Finding the site’s visual language
+
+### CW
+
+I feel like we need to take a look at my site for the thematic and art direction [https://charleswilke.com/](https://charleswilke.com/)
+
+### Codex
+
+Yes—looking at [your site](https://charleswilke.com/), the first image feels too lush and picturesque. Your artwork has more graphic bite.
+
+There are two related styles at work:
+
+- **The project tiles:** angular cut-paper shapes, bold silhouettes, irregular lettering, limited palettes.
+- **The essay headers:** more varied, but anchored by tactile surfaces and a strong visual metaphor—the cosmic shadow in *Baby Steps*, the confrontation in *Are We Ready for the Mirror?*, the dramatically lit gathering in *Crowd Work*.
+
+The retro interface holds those variations together. We don’t need to reproduce its purple grid inside the illustration.
+
+**For “Reckless Intelligence,” I’d keep the relationship and radically simplify the garden.**
+
+A human silhouette and a small, angular intelligence sit across a table. Between them, one branching plant grows from an open archive box. Its leaves are fragments of paper and photographs. The person lifts a branch; the intelligence illuminates it. Their shadows mingle into a larger, ambiguous shape.
+
+Render it as **rough cut-paper and woodcut illustration**: cream paper, near-black ink, deep teal, mustard light, and one restrained vermilion accent. Broad shapes, imperfect edges, visible print texture. Enough negative space for the central gesture to read at thumbnail size.
+
+That would carry the intimacy we wanted while fitting alongside your existing work. The tension comes from the intertwined shadows and uncertain growth, rather than atmospheric scenery.
+
+**My strongest reference pairing from your site is *Baby Steps* for composition and *Are We Ready for the Mirror?* for shape and restraint.** That’s where I’d take the next pass.
+
+### CW
+
+ok let's see it
+
+### Codex
+
+**Image-generation prompt**
+
+```text
+Create a NEW image, not a photorealistic scene: a wide 2:1 editorial header illustration for an essay called Reckless Intelligence, with NO lettering or title. Visual direction: bold midcentury experimental cut-paper poster meets rough woodcut print. Very flat graphic shapes, angular silhouettes, irregular hand-cut edges, cream paper grain and distressed ink. Limited palette of warm cream, near-black, deep teal, mustard yellow light, tiny vermilion accents. Strong economical composition legible as a thumbnail. On the left, a seated human rendered as a simplified angular near-black silhouette, in profile, leaning with attentive curiosity toward a table. On the right atop the table, a small mysterious faceted geometric object represents synthetic intelligence, with a mustard-colored interior and a simple angular beam of light. No face on the object. At the center of the table an OPEN archival box holds papers; from it grows ONE spare expressive branching plant with about seven to ten leaves. Several leaves are visibly paper fragments or small abstract old photograph scraps, rendered as simple collage shapes, not detailed photos or readable text. The person's lifted hand gently supports and inspects one branch. The plant branches reach toward both human and object. Behind and below them, the human, object and plant cast overlapping broad deep-teal and near-black shadows that mingle into a larger ambiguous branching shape. Suggest mutual influence, accumulating memory, careful stewardship and subtle uncertainty. Off-white negative space occupies much of the background; graphic diagonal light and shadow create tension. Key composition centrally framed with crop-safe margins. Finish like a sophisticated physically printed cultural poster or a vintage book jacket illustration, tactile, imperfect, bold. NO photorealism, NO cinematic rendering, NO 3D, NO lush garden scenery, NO scenic village, NO robot, NO circuitry, NO glowing brain, NO elaborate props, NO title, NO logos, NO text, NO watermark. The visual should feel intimate and intellectually provocative, spare and graphic.
+```
+
+![Selected header: a cut-paper human and faceted intelligence share a memory plant, with oversized intertwined roots beneath the table.](./reckless-intelligence-chat-assets/02-reckless-intelligence-header.png)
+
+### Codex
+
+This feels much closer to your site: bold silhouettes, tactile paper, and a clear central metaphor. The oversized roots beneath the table suggest how much of the relationship develops out of sight.
+
+## A community between the paragraphs
+
+### CW
+
+oh I love that! let's explore your second favorite idea for another image that we could use in the middle of the piece to break up the text a bit
+
+### Codex
+
+**Image-generation prompt**
+
+```text
+Create a new standalone editorial illustration for the middle of an essay on sovereign intelligence, community belonging, and cooperation. Wide landscape about 2:1. Style: bold midcentury cut-paper poster blended with rough woodcut print, flat angular silhouettes, imperfect hand-cut edges, distressed ink, visible warm cream paper grain. Restricted palette: deep teal, near-black, warm cream, mustard yellow, tiny vermilion accents. Strong graphic clarity and spare composition, physically printed book-jacket feeling. Scene: an imagined neighborhood seen from a gently elevated oblique perspective, five modest distinct gathering places loosely arranged across the image: a workshop with an open doorway and a simple workbench silhouette, small community theater with a curtain visible inside, a home, a community garden with rectangular beds, and a small music gathering space. Render buildings as simplified expressive paper shapes, not detailed architecture. Warm mustard light spills from doors and windows into open shared space. Several tiny angular human figures walk between the places along intersecting cream paths; other small figures tend garden or gather at doorway. Each location has its own character and light, no dominant central building or authority. The paths overlap and connect freely without walls, borders, or fenced enclaves. Upper part of image becomes a broad deep teal twilight sky with a handful of small cream and mustard stars whose loose arrangement subtly echoes the neighborhood below, suggesting a constellation of communities. Do not draw literal digital network lines. Mood: hopeful but thoughtful, human-scale participation and voluntary connection, a world people can help shape. Leave ample breathing room and negative space, key elements crop-safe, prioritize broad silhouettes and diagonal light shapes over intricate details. No lettering, readable signs, title, logos, watermarks. No photorealism, no 3D, no cinematic realistic render, no futuristic city, no robots, no circuit patterns, no neon. Maintain tactile cream-black-teal-mustard cut-paper aesthetic throughout.
+```
+
+![Middle illustration: illuminated workshops, a theater, homes, a garden and musicians connected by shared neighborhood paths.](./reckless-intelligence-chat-assets/03-community-constellation.png)
+
+### Codex
+
+This gives the piece a warm visual breath: people making, growing, and gathering, with paths connecting their different communities.
+
+I’d place it immediately after **“I believe we need more of that.”** The next paragraph then introduces the tension around belonging.
+
+## The closing lettermark
+
+### CW
+
+oh this is great! ok let's do a square CW lettermark for the close of the piece in a similar style
+
+### Codex
+
+**Image-generation prompt**
+
+```text
+Use case: logo-brand. Create a square 1:1 CW lettermark to close a personal essay, matching sophisticated midcentury cut-paper and rough woodcut editorial illustrations. Exact text and only text: CW. Two unmistakably readable capital letters C and W, large and centered, composed from bold angular hand-cut paper shapes. Cohesive compact monogram arrangement with subtly interlocking geometry but preserve clear recognition of both letters. C in warm cream, W in mustard gold, on a solid deep teal square field with restrained worn print texture. Small irregularities in letter edges, distressed ink flecks and tactile paper grain, elegant intentional handmade typography rather than a standard typed font. Confident personal maker's mark, warm, playful, graphic bite, excellent legibility at small size. Broad shapes and generous safe margin on all four sides. Flat ink colors and subtle print wear, no gradients, no realistic shadows, no 3D, no scene, no botanical imagery, no icons, no border, no additional words, no watermark. Limited palette of deep teal, warm cream, mustard gold only. Polished square signature stamp for Charles Wilke.
+```
+
+![Closing signature: angular cream and mustard CW lettering on a dark teal field.](./reckless-intelligence-chat-assets/04-cw-lettermark.png)
+
+### Codex
+
+A compact CW signature in cream and mustard, with angular paper lettering to echo the illustrations.
+
+## The author’s note
+
+### CW
+
+that's fantastic! ok let's put together a author's note that outlines this process here and your involvement
+
+### Codex
+
+**Author’s note**
+
+This essay began as a Saturday morning conversation with OpenAI’s GPT-6 Astra in Codex. I brought a rough draft about fear, regulatory capture, and sovereign intelligence. The AI challenged my historical analogy, questioned my assumptions about intent, and helped me explore what I meant by sovereignty.
+
+Our conversation moved toward stewardship, memory, and belonging. We developed a new draft together, and I revised it through several rounds to reflect my voice and the tensions I wanted to leave open.
+
+The artwork grew through a similar exchange. After an initial image didn’t quite fit, we looked at my website’s visual language and developed the cut-paper direction used for the header, community illustration, and closing CW lettermark. Those images were AI-generated through Codex.
+
+An essay about how intelligence influences us was itself shaped by that influence. Making the process visible feels like part of the stewardship I’m arguing for. The choices about what to keep, what to question, and what to share are mine.

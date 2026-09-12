@@ -3759,7 +3759,9 @@ footer p {
         display: -webkit-box;
         overflow: hidden;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
+        /* Three lines on every card. It used to be two with three cards
+           excepted; the monospace copy carries three fine at these widths. */
+        -webkit-line-clamp: 3;
         color: var(--showcase-label);
         opacity: 0.9;
         text-shadow:
@@ -3771,12 +3773,6 @@ footer p {
 
     .showcase-item-bt .showcase-caption h3 {
         white-space: nowrap;
-    }
-
-    .showcase-item-bt .showcase-caption p,
-    .showcase-item-mixtape .showcase-caption p,
-    .showcase-item-game .showcase-caption p {
-        -webkit-line-clamp: 3;
     }
 
     .showcase-mobile-break {
@@ -3878,7 +3874,7 @@ footer p {
     .showcase-caption p {
         font-size: 0.66rem;
         line-height: 1.2;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
     }
     
     footer p {

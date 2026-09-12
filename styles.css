@@ -3650,7 +3650,10 @@ footer p {
         align-content: center;
         min-width: 0;
         box-sizing: border-box;
-        padding: 0.78rem 48% 0.75rem 0.9rem;
+        /* Right padding is the artwork bay plus a gutter, not a fixed percentage:
+           the bay is 52% (--showcase-mobile-image-width) and the old 48% let
+           the description run 4% of the card under the art. */
+        padding: 0.78rem calc(var(--showcase-mobile-image-width) + 0.55rem) 0.75rem 0.9rem;
         gap: 0.32rem;
         border-top: 0;
         border-radius: inherit;
@@ -3853,7 +3856,7 @@ footer p {
     }
 
     .showcase-caption {
-        padding: 0.38rem 47% 0.38rem 0.75rem;
+        padding: 0.38rem calc(var(--showcase-mobile-image-width) + 0.45rem) 0.38rem 0.75rem;
         gap: 0.22rem;
     }
 
@@ -3888,15 +3891,22 @@ footer p {
     .showcase-item {
         --showcase-mobile-image-width: 58%;
     }
-
-    .showcase-caption {
-        padding-right: 45%;
-    }
+    /* No padding override here: the 480px rule derives the caption's right
+       padding from --showcase-mobile-image-width, so widening the bay above
+       narrows the copy column with it. A fixed 45% used to sit here and let
+       the description run 13% of the card under the art. */
 
     .showcase-caption h3,
     .showcase-item-featured .showcase-caption h3 {
         font-size: 0.88rem;
         line-height: 1.02;
+    }
+
+    /* "BEFORE TIMES" is nowrap on phones; at 320px cards it is wider than the
+       copy column, and a nowrap child stretches the caption's column past its
+       padding so the description under it runs into the art too. Wrap it. */
+    .showcase-item-bt .showcase-caption h3 {
+        white-space: normal;
     }
 }
 

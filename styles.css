@@ -4859,10 +4859,11 @@ html {
     position: relative;
     z-index: 2;
     display: block;
-    margin-top: 2rem;
-    padding-top: 2rem;
+    /* The grid's 2rem bottom margin above and the episode monitor's top margin
+       below already frame the button; the container adds only a hair of its own. */
+    margin-top: 0;
+    padding: 0.5rem 0;
     width: 100%;
-    padding-bottom: 2rem;
 }
 
 /* Smoky glass button — translucent, softly lit */
@@ -4994,7 +4995,7 @@ html {
     position: relative;
     z-index: 2;
     max-width: 880px;
-    margin: 3rem auto 1rem;
+    margin: 2.5rem auto 1rem;
     --mon-chassis: #1e2126;
     --mon-chassis-hi: #2a2e35;
     --mon-chassis-lo: #15171b;

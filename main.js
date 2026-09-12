@@ -1387,7 +1387,16 @@ document.querySelectorAll('section').forEach(section => sectionObserver.observe(
 let currentItems = 0;
 let allItems = [];
 let isLoading = false;
+// Phones page the grid in twelves; at two columns and up the whole feed lands
+// at once (18 cards, three rows past the old first page) so the button below
+// the grid is the archive link from first paint instead of one click later.
+// Same 767px breakpoint the grid collapses to a single column at.
 const ITEMS_PER_PAGE = 12;
+const PHONE_FEED_QUERY = '(max-width: 767px)';
+function getFeedPageSize() {
+    const isPhone = window.matchMedia && window.matchMedia(PHONE_FEED_QUERY).matches;
+    return isPhone ? ITEMS_PER_PAGE : Math.max(ITEMS_PER_PAGE, allItems.length);
+}
 let isArchiveMode = false;
 const RSS_CACHE_KEY = 'charleswilke:rss-feed:v4';
 const RSS_CACHE_TTL_MS = 30 * 60 * 1000;
@@ -1482,7 +1491,7 @@ function renderFeedItems(items, feedContent) {
     }
 
     populateLatestArticleSpotlight();
-    displayItems(ITEMS_PER_PAGE);
+    displayItems(getFeedPageSize());
     maybeOpenReaderFromLocation();
 }
 
@@ -1767,7 +1776,7 @@ function updateDynamicButton() {
     if (currentItems < allItems.length - 1) {
         dynamicBtn.textContent = 'Load more';
         dynamicBtn.className = 'load-more-btn';
-        dynamicBtn.onclick = () => displayItems(ITEMS_PER_PAGE);
+        dynamicBtn.onclick = () => displayItems(getFeedPageSize());
         return;
     }
 

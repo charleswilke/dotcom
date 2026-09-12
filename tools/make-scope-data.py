@@ -179,9 +179,9 @@ def output_path(mp3):
 def tracks_from_main_js():
     with open(MAIN_JS, encoding='utf-8') as fh:
         src = fh.read()
-    # Every `file: 'audio/....mp3'` entry: the album tracks (one directory down)
+    # Every `file: '/audio/....mp3'` entry: the album tracks (one directory down)
     # and the top-level Time Dial recaps, which take the same native-audio path.
-    files = re.findall(r"file:\s*'(audio/[^'?]+\.mp3)", src)
+    files = re.findall(r"file:\s*'/?(audio/[^'?]+\.mp3)", src)
     seen = []
     for rel in files:
         if rel not in seen:

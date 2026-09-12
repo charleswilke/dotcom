@@ -1866,112 +1866,112 @@ function initTimeDial() {
         {
             angle: 40,
             date: 'Q3 2023',
-            file: 'audio/q3-2023-substack-recap.mp3',
+            file: '/audio/q3-2023-substack-recap.mp3',
             label: 'Q3 \'23'
         },
         {
             angle: 80,
             date: 'Q4 2023',
-            file: 'audio/q4-2023-substack-recap.mp3',
+            file: '/audio/q4-2023-substack-recap.mp3',
             label: 'Q4 \'23'
         },
         {
             angle: 120,
             date: 'H1 2024',
-            file: 'audio/h1-2024-substack-recap.mp3',
+            file: '/audio/h1-2024-substack-recap.mp3',
             label: 'H1 \'24'
         },
         {
             angle: 160,
             date: 'H2 2024',
-            file: 'audio/h2-2024-substack-recap.mp3',
+            file: '/audio/h2-2024-substack-recap.mp3',
             label: 'H2 \'24'
         },
         {
             angle: 200,
             date: 'Q3 2025',
-            file: 'audio/aug-sept-substack-summary.mp3',
+            file: '/audio/aug-sept-substack-summary.mp3',
             label: 'Q3 \'25'
         },
         {
             angle: 240,
             date: 'October 2025',
-            file: 'audio/oct-substack-recap.mp3',
+            file: '/audio/oct-substack-recap.mp3',
             label: 'OCT \'25'
         },
         {
             angle: 280,
             date: 'November 2025',
-            file: 'audio/nov-2025-substack-recap.mp3',
+            file: '/audio/nov-2025-substack-recap.mp3',
             label: 'NOV \'25'
         },
         {
             angle: 320,
             date: 'December 2025',
-            file: 'audio/dec-2025-substack-recap.mp3',
+            file: '/audio/dec-2025-substack-recap.mp3',
             label: 'DEC \'25'
         },
         {
             angle: 0,
             date: 'January 2026',
-            file: 'audio/jan-2026-substack-recap.mp3',
+            file: '/audio/jan-2026-substack-recap.mp3',
             label: 'JAN \'26'
         },
         {
             angle: 20,
             date: 'February 2026',
-            file: 'audio/feb-2026-substack-recap.mp3',
+            file: '/audio/feb-2026-substack-recap.mp3',
             label: 'FEB \'26'
         },
         {
             angle: 40,
             date: 'March 2026',
-            file: 'audio/mar-2026-substack-recap.mp3',
+            file: '/audio/mar-2026-substack-recap.mp3',
             label: 'MAR \'26'
         },
         {
             angle: 60,
             date: 'April 2026',
-            file: 'audio/april-2026-substack-recap.mp3',
+            file: '/audio/april-2026-substack-recap.mp3',
             label: 'APR \'26'
         },
         {
             angle: 80,
             date: 'May 2026',
-            file: 'audio/may-2026-substack-recap.mp3',
+            file: '/audio/may-2026-substack-recap.mp3',
             label: 'MAY \'26'
         },
         {
             angle: 80,
             date: 'June 2026',
-            file: 'audio/jun-2026-substack-recap.mp3',
+            file: '/audio/jun-2026-substack-recap.mp3',
             label: 'JUN \'26'
         },
         {
             angle: 80,
             date: 'July 2026',
-            file: 'audio/july-2026-substack-recap.mp3',
+            file: '/audio/july-2026-substack-recap.mp3',
             label: 'JUL \'26'
         },
         {
             angle: 80,
             date: 'August 2026',
-            file: 'audio/aug-2026-substack-recap.mp3',
+            file: '/audio/aug-2026-substack-recap.mp3',
             label: 'AUG \'26'
         }
     ];
     
     // Radio tuning sound effects
     const tuningSounds = [
-        'audio/radio_tuning1.mp3',
-        'audio/radio_tuning2.mp3',
-        'audio/radio_tuning3.mp3',
-        'audio/radio_tuning4.mp3',
-        'audio/radio_tuning5.mp3',
-        'audio/radio_tuning6.mp3',
-        'audio/radio_tuning7.mp3',
-        'audio/radio_tuning8.mp3',
-        'audio/radio_tuning9.mp3'
+        '/audio/radio_tuning1.mp3',
+        '/audio/radio_tuning2.mp3',
+        '/audio/radio_tuning3.mp3',
+        '/audio/radio_tuning4.mp3',
+        '/audio/radio_tuning5.mp3',
+        '/audio/radio_tuning6.mp3',
+        '/audio/radio_tuning7.mp3',
+        '/audio/radio_tuning8.mp3',
+        '/audio/radio_tuning9.mp3'
     ];
     
     let currentStation = 15; // Start at station 15 (August '26)
@@ -2418,7 +2418,7 @@ function initTimeDial() {
                     title: 'Substack Recap: ' + station.date,
                     artist: 'Charles Wilke',
                     album: 'The Time Dial',
-                    artwork: [{ src: new URL('images/og-image.jpg', window.location.href).href }]
+                    artwork: [{ src: new URL('/images/og-image.jpg', window.location.href).href }]
                 });
             } catch (e) { /* no MediaMetadata → controls still bind */ }
         };
@@ -2530,39 +2530,39 @@ let currentImageIndex = 0;
 let currentImageSet = [];
 const imageSets = {
     'jb': [
-        'images/jb/jb1.webp',
-        'images/jb/jb2.webp',
-        'images/jb/jb3.webp',
-        'images/jb/jb4.webp',
-        'images/jb/jb5.webp',
-        'images/jb/jb6.webp',
-        'images/jb/jb7.webp',
-        'images/jb/jb8.webp',
-        'images/jb/jb9.webp',
-        'images/jb/jb10.webp',
-        'images/jb/jb11.webp',
-        'images/jb/jb12.webp'
+        '/images/jb/jb1.webp',
+        '/images/jb/jb2.webp',
+        '/images/jb/jb3.webp',
+        '/images/jb/jb4.webp',
+        '/images/jb/jb5.webp',
+        '/images/jb/jb6.webp',
+        '/images/jb/jb7.webp',
+        '/images/jb/jb8.webp',
+        '/images/jb/jb9.webp',
+        '/images/jb/jb10.webp',
+        '/images/jb/jb11.webp',
+        '/images/jb/jb12.webp'
     ],
     'aiw': [
-        'images/aiw/aiw1.webp',
-        'images/aiw/aiw2.webp',
-        'images/aiw/aiw3.webp',
-        'images/aiw/aiw4.webp',
-        'images/aiw/aiw5.webp',
-        'images/aiw/aiw6.webp',
-        'images/aiw/aiw7.webp',
-        'images/aiw/aiw8.webp',
-        'images/aiw/aiw9.webp',
-        'images/aiw/aiw10.webp',
-        'images/aiw/aiw11.webp',
-        'images/aiw/aiw12.webp',
-        'images/aiw/aiw13.webp',
-        'images/aiw/aiw14.webp',
-        'images/aiw/aiw15.webp',
-        'images/aiw/aiw16.webp'
+        '/images/aiw/aiw1.webp',
+        '/images/aiw/aiw2.webp',
+        '/images/aiw/aiw3.webp',
+        '/images/aiw/aiw4.webp',
+        '/images/aiw/aiw5.webp',
+        '/images/aiw/aiw6.webp',
+        '/images/aiw/aiw7.webp',
+        '/images/aiw/aiw8.webp',
+        '/images/aiw/aiw9.webp',
+        '/images/aiw/aiw10.webp',
+        '/images/aiw/aiw11.webp',
+        '/images/aiw/aiw12.webp',
+        '/images/aiw/aiw13.webp',
+        '/images/aiw/aiw14.webp',
+        '/images/aiw/aiw15.webp',
+        '/images/aiw/aiw16.webp'
     ],
-    'fv': ['images/fv1.webp'],
-    'dogs': ['images/doc_resist.webp', 'images/astro-justhappy2behere.webp']
+    'fv': ['/images/fv1.webp'],
+    'dogs': ['/images/doc_resist.webp', '/images/astro-justhappy2behere.webp']
 };
 
 function openLightbox(imageSrc) {
@@ -2997,8 +2997,8 @@ const tvEpisodes = [
     {
         title: 'The AI Mirror',
         date: 'August 2026',
-        file: 'video/the-ai-mirror.mp4',
-        poster: 'video/the-ai-mirror-poster.webp',
+        file: '/video/the-ai-mirror.mp4',
+        poster: '/video/the-ai-mirror-poster.webp',
         duration: '9:45'
     }
 ];
@@ -3205,13 +3205,13 @@ function initPetLightboxLinks() {
     if (docLink) {
         docLink.addEventListener('click', function(e) {
             e.preventDefault();
-            openLightbox('images/doc_resist.webp');
+            openLightbox('/images/doc_resist.webp');
         });
     }
     if (astroLink) {
         astroLink.addEventListener('click', function(e) {
             e.preventDefault();
-            openLightbox('images/astro-justhappy2behere.webp');
+            openLightbox('/images/astro-justhappy2behere.webp');
         });
     }
 }
@@ -5085,35 +5085,35 @@ function createAlbumPlayer(config) {
 
 function initMixtapeLightbox() {
     const aSideTracks = [
-        { title: 'Hum of Humanity', file: 'audio/exploring-laibor-mixtape/hum-of-humanity.mp3', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
-        { title: 'Protect the Hollow', file: 'audio/exploring-laibor-mixtape/protect-the-hollow.mp3', article: 'https://charleswilke.substack.com/p/protect-the-hollow' },
-        { title: 'Data Dignity', file: 'audio/exploring-laibor-mixtape/data-dignity.mp3', article: 'https://charleswilke.substack.com/p/the-quest-for-data-dignity' },
-        { title: 'Compounding Fuzziness', file: 'audio/exploring-laibor-mixtape/compounding-fuzziness.mp3', video: 'audio/exploring-laibor-mixtape/compounding-fuzziness.mp4', article: 'https://charleswilke.substack.com/p/compounding-fuzziness' },
-        { title: 'Conjured Impunity', file: 'audio/exploring-laibor-mixtape/conjured-impunity.mp3', video: 'audio/exploring-laibor-mixtape/conjured-impunity.mp4', article: 'https://charleswilke.substack.com/p/imagined-impunity' },
-        { title: 'Hypnotic Crimes', file: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp3', video: 'audio/exploring-laibor-mixtape/hypnotic-crimes.mp4', article: 'https://charleswilke.substack.com/p/hypnotic-crimes' },
-        { title: 'Rubicon\'d', file: 'audio/exploring-laibor-mixtape/rubicon-d.mp3', video: 'audio/exploring-laibor-mixtape/rubicon-d.mp4', article: 'https://charleswilke.substack.com/p/rubicond' },
-        { title: 'Certainty\'s Whimpering End', file: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp3', video: 'audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp4', article: 'https://charleswilke.substack.com/p/certaintys-whimpering-end' },
-        { title: 'Terminal Uniqueness', file: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp3', video: 'audio/exploring-laibor-mixtape/terminal-uniqueness.mp4', article: 'https://charleswilke.substack.com/p/terminal-uniqueness' },
-        { title: 'G(ai)ve it Away', file: 'audio/exploring-laibor-mixtape/gave-it-away.mp3', video: 'audio/exploring-laibor-mixtape/gave-it-away.mp4', article: 'https://charleswilke.substack.com/p/gave-it-away' },
-        { title: 'Value is Myth', file: 'audio/exploring-laibor-mixtape/value-is-myth.mp3', video: 'audio/exploring-laibor-mixtape/value-is-myth.mp4', article: 'https://charleswilke.substack.com/p/value-is-myth' }
+        { title: 'Hum of Humanity', file: '/audio/exploring-laibor-mixtape/hum-of-humanity.mp3', article: 'https://charleswilke.substack.com/p/the-hum-of-humanity' },
+        { title: 'Protect the Hollow', file: '/audio/exploring-laibor-mixtape/protect-the-hollow.mp3', article: 'https://charleswilke.substack.com/p/protect-the-hollow' },
+        { title: 'Data Dignity', file: '/audio/exploring-laibor-mixtape/data-dignity.mp3', article: 'https://charleswilke.substack.com/p/the-quest-for-data-dignity' },
+        { title: 'Compounding Fuzziness', file: '/audio/exploring-laibor-mixtape/compounding-fuzziness.mp3', video: '/audio/exploring-laibor-mixtape/compounding-fuzziness.mp4', article: 'https://charleswilke.substack.com/p/compounding-fuzziness' },
+        { title: 'Conjured Impunity', file: '/audio/exploring-laibor-mixtape/conjured-impunity.mp3', video: '/audio/exploring-laibor-mixtape/conjured-impunity.mp4', article: 'https://charleswilke.substack.com/p/imagined-impunity' },
+        { title: 'Hypnotic Crimes', file: '/audio/exploring-laibor-mixtape/hypnotic-crimes.mp3', video: '/audio/exploring-laibor-mixtape/hypnotic-crimes.mp4', article: 'https://charleswilke.substack.com/p/hypnotic-crimes' },
+        { title: 'Rubicon\'d', file: '/audio/exploring-laibor-mixtape/rubicon-d.mp3', video: '/audio/exploring-laibor-mixtape/rubicon-d.mp4', article: 'https://charleswilke.substack.com/p/rubicond' },
+        { title: 'Certainty\'s Whimpering End', file: '/audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp3', video: '/audio/exploring-laibor-mixtape/certaintys-whimpering-end.mp4', article: 'https://charleswilke.substack.com/p/certaintys-whimpering-end' },
+        { title: 'Terminal Uniqueness', file: '/audio/exploring-laibor-mixtape/terminal-uniqueness.mp3', video: '/audio/exploring-laibor-mixtape/terminal-uniqueness.mp4', article: 'https://charleswilke.substack.com/p/terminal-uniqueness' },
+        { title: 'G(ai)ve it Away', file: '/audio/exploring-laibor-mixtape/gave-it-away.mp3', video: '/audio/exploring-laibor-mixtape/gave-it-away.mp4', article: 'https://charleswilke.substack.com/p/gave-it-away' },
+        { title: 'Value is Myth', file: '/audio/exploring-laibor-mixtape/value-is-myth.mp3', video: '/audio/exploring-laibor-mixtape/value-is-myth.mp4', article: 'https://charleswilke.substack.com/p/value-is-myth' }
     ];
 
     const bSideTracks = [
-        { title: 'Clear as Day', file: 'audio/exploring-laibor-mixtape/clear-as-day.mp3', video: 'audio/exploring-laibor-mixtape/clear-as-day.mp4', article: 'https://www.theguardian.com/us-news/2026/jan/24/alex-pretti-minneapolis-minnesota-shooting' },
-        { title: 'Permission to Ache', file: 'audio/exploring-laibor-mixtape/permission-to-ache.mp3', video: 'audio/exploring-laibor-mixtape/permission-to-ache.mp4', article: 'https://charleswilke.substack.com/p/whats-next' },
-        { title: 'The Siege of Social Atomization', file: 'audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp3', video: 'audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp4', article: 'https://charleswilke.substack.com/p/the-social-siege-of-atomization' },
-        { title: 'The Copy Blinked First', file: 'audio/exploring-laibor-mixtape/the-copy-blinked-first.mp3', video: 'audio/exploring-laibor-mixtape/the-copy-blinked-first.mp4', article: 'https://charleswilke.substack.com/p/after-normal' },
-        { title: 'What We Carry', file: 'audio/exploring-laibor-mixtape/what-we-carry.mp3', video: 'audio/exploring-laibor-mixtape/what-we-carry.mp4', article: 'https://charleswilke.substack.com/p/our-loss-of-discernment' },
-        { title: 'No Model for This', file: 'audio/exploring-laibor-mixtape/no-model-for-this.mp3', video: 'audio/exploring-laibor-mixtape/no-model-for-this.mp4', article: 'https://charleswilke.substack.com/p/rehearsing-tomorrow' },
-        { title: 'What Passes Through Us', file: 'audio/exploring-laibor-mixtape/what-passes-through-us.mp3', video: 'audio/exploring-laibor-mixtape/what-passes-through-us.mp4', article: 'https://charleswilke.substack.com/p/what-passes-through-us' },
-        { title: 'The Space Between', file: 'audio/exploring-laibor-mixtape/the-space-between.mp3', video: 'audio/exploring-laibor-mixtape/the-space-between.mp4', article: 'https://charleswilke.substack.com/p/the-space-between' },
-        { title: 'Treasure in the Mess', file: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp3', video: 'audio/exploring-laibor-mixtape/treasure-in-the-mess.mp4', article: 'https://charleswilke.substack.com/p/treasure-in-the-mess' },
-        { title: 'Leave Room for the Signal', file: 'audio/exploring-laibor-mixtape/leave-room-for-the-signal.mp3', video: 'audio/exploring-laibor-mixtape/leave-room-for-the-signal.mp4', article: 'https://charleswilke.substack.com/p/confusing-clarity' },
-        { title: 'After Normal', file: 'audio/exploring-laibor-mixtape/after-normal.mp3', video: 'audio/exploring-laibor-mixtape/after-normal.mp4', article: 'https://charleswilke.substack.com/p/after-normal' }
+        { title: 'Clear as Day', file: '/audio/exploring-laibor-mixtape/clear-as-day.mp3', video: '/audio/exploring-laibor-mixtape/clear-as-day.mp4', article: 'https://www.theguardian.com/us-news/2026/jan/24/alex-pretti-minneapolis-minnesota-shooting' },
+        { title: 'Permission to Ache', file: '/audio/exploring-laibor-mixtape/permission-to-ache.mp3', video: '/audio/exploring-laibor-mixtape/permission-to-ache.mp4', article: 'https://charleswilke.substack.com/p/whats-next' },
+        { title: 'The Siege of Social Atomization', file: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp3', video: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp4', article: 'https://charleswilke.substack.com/p/the-social-siege-of-atomization' },
+        { title: 'The Copy Blinked First', file: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp3', video: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp4', article: 'https://charleswilke.substack.com/p/after-normal' },
+        { title: 'What We Carry', file: '/audio/exploring-laibor-mixtape/what-we-carry.mp3', video: '/audio/exploring-laibor-mixtape/what-we-carry.mp4', article: 'https://charleswilke.substack.com/p/our-loss-of-discernment' },
+        { title: 'No Model for This', file: '/audio/exploring-laibor-mixtape/no-model-for-this.mp3', video: '/audio/exploring-laibor-mixtape/no-model-for-this.mp4', article: 'https://charleswilke.substack.com/p/rehearsing-tomorrow' },
+        { title: 'What Passes Through Us', file: '/audio/exploring-laibor-mixtape/what-passes-through-us.mp3', video: '/audio/exploring-laibor-mixtape/what-passes-through-us.mp4', article: 'https://charleswilke.substack.com/p/what-passes-through-us' },
+        { title: 'The Space Between', file: '/audio/exploring-laibor-mixtape/the-space-between.mp3', video: '/audio/exploring-laibor-mixtape/the-space-between.mp4', article: 'https://charleswilke.substack.com/p/the-space-between' },
+        { title: 'Treasure in the Mess', file: '/audio/exploring-laibor-mixtape/treasure-in-the-mess.mp3', video: '/audio/exploring-laibor-mixtape/treasure-in-the-mess.mp4', article: 'https://charleswilke.substack.com/p/treasure-in-the-mess' },
+        { title: 'Leave Room for the Signal', file: '/audio/exploring-laibor-mixtape/leave-room-for-the-signal.mp3', video: '/audio/exploring-laibor-mixtape/leave-room-for-the-signal.mp4', article: 'https://charleswilke.substack.com/p/confusing-clarity' },
+        { title: 'After Normal', file: '/audio/exploring-laibor-mixtape/after-normal.mp3', video: '/audio/exploring-laibor-mixtape/after-normal.mp4', article: 'https://charleswilke.substack.com/p/after-normal' }
     ];
 
-    const aSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.webp';
-    const bSideCover = 'audio/exploring-laibor-mixtape/exploring-laibor-side2-cover-card.webp';
+    const aSideCover = '/audio/exploring-laibor-mixtape/exploring-laibor-mixtape-cover.webp';
+    const bSideCover = '/audio/exploring-laibor-mixtape/exploring-laibor-side2-cover-card.webp';
 
     // Both sides live in one continuous playlist. The first track of each side
     // carries an `act` label (the vertical container label) plus an `actClass`
@@ -5216,17 +5216,17 @@ function initMixtapeLightbox() {
 
 function initGWORLightbox() {
     const tracks = [
-        { title: 'Waiting for Something', file: 'audio/grief-without-ritual/waiting-for-something.mp3', cover: 'audio/grief-without-ritual/waiting-for-something-title.webp', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
-        { title: 'Underlined Once', file: 'audio/grief-without-ritual/underlined-once.mp3', cover: 'audio/grief-without-ritual/underlined-once-title.webp', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
-        { title: 'Letter to the Editor', file: 'audio/grief-without-ritual/letter-to-the-editor.mp3', cover: 'audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
-        { title: 'Love at Machine Speed', file: 'audio/grief-without-ritual/love-at-machine-speed.mp3', cover: 'audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
-        { title: 'Slow the Clock', file: 'audio/grief-without-ritual/slow-the-clock.mp3', cover: 'audio/grief-without-ritual/slow-the-clock-title.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
-        { title: 'Respect the Exhale', file: 'audio/grief-without-ritual/respect-the-exhale.mp3', cover: 'audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
-        { title: 'From the Beginning', file: 'audio/grief-without-ritual/from-the-beginning.mp3', cover: 'audio/grief-without-ritual/from-the-beginning-title.webp', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
-        { title: 'Dearly Beloved', file: 'audio/grief-without-ritual/dearly-beloved.mp3', cover: 'audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'As We Speak It', file: 'audio/grief-without-ritual/as-we-speak-it.mp3', cover: 'audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
-        { title: 'When Doctrine Slips', file: 'audio/grief-without-ritual/when-doctrine-slips.mp3', cover: 'audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: 'Surviving Salem', file: 'audio/grief-without-ritual/surviving-salem.mp3', cover: 'audio/grief-without-ritual/surviving-salem-title.webp', article: 'https://charleswilke.substack.com/p/surviving-salem' }
+        { title: 'Waiting for Something', file: '/audio/grief-without-ritual/waiting-for-something.mp3', cover: '/audio/grief-without-ritual/waiting-for-something-title.webp', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
+        { title: 'Underlined Once', file: '/audio/grief-without-ritual/underlined-once.mp3', cover: '/audio/grief-without-ritual/underlined-once-title.webp', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
+        { title: 'Letter to the Editor', file: '/audio/grief-without-ritual/letter-to-the-editor.mp3', cover: '/audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
+        { title: 'Love at Machine Speed', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
+        { title: 'Slow the Clock', file: '/audio/grief-without-ritual/slow-the-clock.mp3', cover: '/audio/grief-without-ritual/slow-the-clock-title.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'Respect the Exhale', file: '/audio/grief-without-ritual/respect-the-exhale.mp3', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        { title: 'From the Beginning', file: '/audio/grief-without-ritual/from-the-beginning.mp3', cover: '/audio/grief-without-ritual/from-the-beginning-title.webp', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
+        { title: 'Dearly Beloved', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
+        { title: 'As We Speak It', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
+        { title: 'When Doctrine Slips', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        { title: 'Surviving Salem', file: '/audio/grief-without-ritual/surviving-salem.mp3', cover: '/audio/grief-without-ritual/surviving-salem-title.webp', article: 'https://charleswilke.substack.com/p/surviving-salem' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');
@@ -5286,23 +5286,23 @@ function initGWORLightbox() {
 
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', act: 'Act I', file: 'audio/junkyard-cabaret/why-this-way.mp3', cover: 'audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
-        { title: 'Cathedral of Junk', file: 'audio/junkyard-cabaret/cathedral-of-junk.mp3', cover: 'audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
-        { title: 'Pauses Gone', file: 'audio/junkyard-cabaret/pauses-gone.mp3', cover: 'audio/junkyard-cabaret/pauses-gone-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/staccato-again' },
-        { title: 'Three Fifteen', file: 'audio/junkyard-cabaret/three-fifteen.mp3', cover: 'audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
-        { title: 'The New Survivalism', file: 'audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: 'audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
-        { title: 'House Lights', file: 'audio/junkyard-cabaret/house-lights.mp3', cover: 'audio/junkyard-cabaret/house-lights-title.webp?v=202608081643', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
-        { title: 'Hip Height', file: 'audio/junkyard-cabaret/hip-height.mp3', cover: 'audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
-        { title: 'How Dare It Rise', file: 'audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: 'audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
-        { title: 'Take Your Time', act: 'Intermission', actInline: true, file: 'audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: 'audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp?v=202608132052', noShare: true, noNumber: true },
-        { title: 'Everything Must Go', act: 'Act II', file: 'audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: 'audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
-        { title: 'What You Get', file: 'audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: 'audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales' },
-        { title: "Morning's Flood", file: 'audio/junkyard-cabaret/mornings-flood.mp3?v=202607051245', cover: 'audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
-        { title: 'Mind the Drop', file: 'audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: 'audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
-        { title: 'Refuse the Frequency', file: 'audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606190959', cover: 'audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
-        { title: 'Fits and Starts', file: 'audio/junkyard-cabaret/fits-and-starts.mp3?v=202607051543', cover: 'audio/junkyard-cabaret/fits-and-starts-title.webp?v=202607042140', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
-        { title: 'Misdirected.', file: 'audio/junkyard-cabaret/misdirected.mp3?v=202608291336', cover: 'audio/junkyard-cabaret/misdirected-title.webp?v=202607051217', article: 'https://charleswilke.substack.com/p/misdirected' },
-        { title: 'Scarce', act: 'Encore', actInline: true, file: 'audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: 'audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }
+        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
+        { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
+        { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/staccato-again' },
+        { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
+        { title: 'The New Survivalism', file: '/audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: '/audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
+        { title: 'House Lights', file: '/audio/junkyard-cabaret/house-lights.mp3', cover: '/audio/junkyard-cabaret/house-lights-title.webp?v=202608081643', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
+        { title: 'Hip Height', file: '/audio/junkyard-cabaret/hip-height.mp3', cover: '/audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
+        { title: 'How Dare It Rise', file: '/audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: '/audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
+        { title: 'Take Your Time', act: 'Intermission', actInline: true, file: '/audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: '/audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp?v=202608132052', noShare: true, noNumber: true },
+        { title: 'Everything Must Go', act: 'Act II', file: '/audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: '/audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
+        { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales' },
+        { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=202607051245', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
+        { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
+        { title: 'Refuse the Frequency', file: '/audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202606190959', cover: '/audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202606142108', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
+        { title: 'Fits and Starts', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=202607051543', cover: '/audio/junkyard-cabaret/fits-and-starts-title.webp?v=202607042140', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
+        { title: 'Misdirected.', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202608291336', cover: '/audio/junkyard-cabaret/misdirected-title.webp?v=202607051217', article: 'https://charleswilke.substack.com/p/misdirected' },
+        { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');
@@ -6173,7 +6173,7 @@ function initBeforeTimesDoor() {
     const media = card.querySelector('.showcase-media img');
     if (!media || typeof card.animate !== 'function' || typeof window.fetch !== 'function') return;
 
-    const SVG_URL = 'images/before-times-door-card.svg?v=20260911b';
+    const SVG_URL = '/images/before-times-door-card.svg?v=20260911b';
     const ARRIVAL_KEY = 'before-times:door-arrival';
     const DURATION = 1150;
     const VIEW = { w: 1400, h: 910 };

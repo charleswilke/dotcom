@@ -4672,7 +4672,7 @@ html {
 }
 
 .feed-item:hover, .feed-item:focus {
-    box-shadow: 0 20px 40px var(--light), 0 0 24px var(--light);
+    box-shadow: 0 6px 12px rgba(248, 233, 210, 0.35), 0 0 8px rgba(248, 233, 210, 0.6);
     transform: translateY(-6px) scale(1.01) rotate(1deg);
     outline: none;
 }
@@ -4906,7 +4906,7 @@ html {
 /* The cards lift, scale a hair and roll a degree. A degree on a row this wide
    hoists the far end 20px, so the roll is scaled down to the same end lift. */
 .archive-tray:hover, .archive-tray:focus-visible {
-    box-shadow: 0 20px 40px var(--light), 0 0 24px var(--light);
+    box-shadow: 0 6px 12px rgba(248, 233, 210, 0.35), 0 0 8px rgba(248, 233, 210, 0.6);
     transform: translateY(-6px) scale(1.005) rotate(0.3deg);
     outline: none;
 }
@@ -10961,7 +10961,7 @@ section.production-header.alice p {
     transition: box-shadow 0.3s, transform 0.2s;
 }
 .feed-item:hover, .feed-item:focus {
-    box-shadow: 0 20px 40px var(--light), 0 0 24px var(--light);
+    box-shadow: 0 6px 12px rgba(248, 233, 210, 0.35), 0 0 8px rgba(248, 233, 210, 0.6);
     transform: translateY(-6px) scale(1.01) rotate(1deg);
     outline: none;
 }

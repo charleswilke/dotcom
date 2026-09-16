@@ -6,10 +6,9 @@
    every face (~280ms desktop, ~320ms phone) and lets index.html preload the
    title and body faces so the hero title paints in Audiowide instead of
    swapping into it. Exo and Orbitron are variable (one file, 400-700).
-   Rock Salt is a 4K subset of the twelve glyphs in "Charles Wilke" and nothing
-   else: the unicode-range says so, so any other text set in it falls back to
-   Caveat/cursive rather than to .notdef boxes. If the About card's name ever
-   changes, re-subset (fonts/README.md). Sources and licences: fonts/README.md. */
+   Rock Salt is subset to the About card's greeting. If that text changes,
+   re-subset and update its unicode-range (fonts/README.md).
+   Sources and licences: fonts/README.md. */
 @font-face {
     font-family: 'Audiowide';
     font-style: normal;
@@ -55,9 +54,9 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('/fonts/rock-salt-v24-subset.woff2') format('woff2');
-    /* C h a r l e s [space] W i k */
-    unicode-range: U+0020, U+0043, U+0057, U+0061, U+0065, U+0068-0069, U+006B-006C, U+0072-0073;
+    src: url('/fonts/rock-salt-v24-greeting.woff2') format('woff2');
+    /* hey, I’m Charles. */
+    unicode-range: U+0020, U+002C, U+002E, U+0043, U+0049, U+0061, U+0065, U+0068, U+006C-006D, U+0072-0073, U+0079, U+2019;
 }
 
 /* CSS Variables */
@@ -10953,11 +10952,11 @@ section.production-header.alice p {
     text-align: center;
     font-family: 'Rock Salt', 'Caveat', cursive;
     font-weight: 400;
-    font-size: 1.5rem;
-    line-height: 1;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.5;
     color: #1a1550;
     background: #f5e9d0;
-    padding: 0.35em 1em 0.5em;
+    padding: 0.65em 1em 0.8em;
     margin: -6px 0 0;
     border-top: 1px solid rgba(26, 21, 80, 0.15);
     border-radius: 0 0 12px 12px;

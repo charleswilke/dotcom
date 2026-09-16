@@ -13,22 +13,22 @@ because `.woff2` is served `immutable` (vercel.json).
 | orbitron-v35.woff2 | Orbitron (variable) | 400-700 | https://fonts.google.com/specimen/Orbitron |
 | space-mono-v17-400.woff2 | Space Mono | 400 | https://fonts.google.com/specimen/Space+Mono |
 | space-mono-v17-700.woff2 | Space Mono | 700 | https://fonts.google.com/specimen/Space+Mono |
-| rock-salt-v24-subset.woff2 | Rock Salt | 400 | https://fonts.google.com/specimen/Rock+Salt |
+| rock-salt-v24-greeting.woff2 | Rock Salt | 400 | https://fonts.google.com/specimen/Rock+Salt |
 
 All six are licensed under the SIL Open Font License 1.1
 (https://openfontlicense.org). The full licence text ships with each family on
 its Google Fonts page; the fonts are used here unmodified except for subsetting.
 
-**Rock Salt is a subset of exactly the twelve glyphs in "Charles Wilke"**
-(the About card's signature), 4K instead of 50K. It was produced by Google's
-own subsetter via the `text=` parameter:
+**Rock Salt contains “hey, I’m Charles” plus a period**, retained from the
+initial greeting design.
+It was produced by Google's subsetter via the `text=` parameter:
 
-    https://fonts.googleapis.com/css2?family=Rock+Salt&text=Charles%20Wilke&display=swap
+    https://fonts.googleapis.com/css2?family=Rock+Salt&text=hey%2C%20I%E2%80%99m%20Charles.&display=swap
 
 Fetch that CSS with a Chrome user agent, take the `url(...)` it returns, and
-save the file. If the name on the About card ever changes, do it again with
-the new text and update the `unicode-range` on the `@font-face` in styles.css,
-or the new letters fall back to Caveat/cursive.
+save the woff2 file with a new filename for immutable caching. If the caption
+changes, repeat with the new text and update the `unicode-range` in styles.css.
+The original `rock-salt-v24-subset.woff2` contains the previous name caption.
 
 `before-times.html` still loads Special Elite and Space Mono from Google; it
 has its own stylesheet and was left alone.

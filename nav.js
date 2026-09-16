@@ -9,7 +9,7 @@
 
     var navHtml = '<nav class="site-nav" id="siteNav" aria-label="Main navigation">\n' +
         '    <div class="nav-inner">\n' +
-        '        <a href="/" class="nav-logo" id="navLogo" aria-label="Home">Charles Wilke</a>\n' +
+        '        <a href="/" class="nav-logo" id="navLogo" aria-label="Charles Wilke — Home">' + (isHome ? '<img src="/images/cw-nav-monogram-v7.svg" width="84" height="43" alt="">' : 'Charles Wilke') + '</a>\n' +
         '        <div class="nav-links" id="navLinks">\n' +
         '            <a href="' + p + '#writing" class="nav-link"' + ds('writing') + '>Writing</a>\n' +
         '            <a href="' + p + '#game-cartridges" class="nav-link"' + ds('game-cartridges') + '>Games</a>\n' +

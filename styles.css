@@ -14500,7 +14500,15 @@ section.production-header.alice p {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(10, 8, 40, 0.92);
+    /* Drafting-paper grid: fine squares with stronger major divisions. */
+    background:
+        linear-gradient(rgba(165, 186, 204, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(165, 186, 204, 0.09) 1px, transparent 1px),
+        linear-gradient(rgba(165, 186, 204, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(165, 186, 204, 0.045) 1px, transparent 1px),
+        rgba(10, 8, 40, 0.95);
+    background-size: 64px 64px, 64px 64px, 8px 8px, 8px 8px, auto;
+    background-position: center center;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 185, 58, 0.3);
@@ -14547,6 +14555,14 @@ section.production-header.alice p {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease, text-shadow 0.2s ease;
+}
+
+.nav-logo img {
+    display: block;
+    width: 84px;
+    height: 43px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 4px rgba(255, 185, 100, 0.18));
 }
 
 .nav-logo.visible {

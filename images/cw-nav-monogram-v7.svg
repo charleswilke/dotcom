@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 80" role="img" aria-labelledby="title desc">
+  <title id="title">CW — Charles Wilke</title>
+  <desc id="desc">An irregular cut-paper C and zigzag W, in warm cream with a small vermilion accent.</desc>
+  <!-- Deliberately uneven silhouettes: broad cuts, blunt corners, no font. -->
+  <path fill="#f5e9d0" d="M65 11 57 29 33 25 24 34 22 52 34 58 60 50 57 69 26 72 7 58 10 28 28 9Z"/>
+  <path fill="#f5e9d0" d="M70 20 87 15 88 48 102 28 114 49 127 10 148 14 127 70 112 66 103 50 89 73 73 64Z"/>
+  <path fill="#ed7250" d="M137 57 151 53 153 67 139 70Z"/>
+</svg>

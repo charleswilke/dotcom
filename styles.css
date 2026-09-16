@@ -541,7 +541,7 @@ header {
 }
 
 .header-wordmark {
-    width: min(850px, 90vw);
+    width: min(1100px, 96vw);
     margin: 1.25rem auto 0.6rem;
     line-height: 0;
 }
@@ -550,9 +550,8 @@ header {
     display: block;
     width: 100%;
     height: auto;
-    filter: drop-shadow(0 0 3px rgba(255, 220, 158, 0.55))
-            drop-shadow(0 0 12px rgba(255, 166, 91, 0.3))
-            drop-shadow(0 0 26px rgba(255, 114, 80, 0.18));
+    filter: drop-shadow(0 0 3px rgba(255, 220, 158, 0.4))
+            drop-shadow(0 0 14px rgba(255, 150, 80, 0.12));
 }
 
 @media (max-width: 767px) {

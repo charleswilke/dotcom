@@ -541,6 +541,7 @@ header {
 }
 
 .header-wordmark {
+    position: relative;
     width: min(850px, 90vw);
     margin: 1.25rem auto 0.6rem;
     line-height: 0;
@@ -553,6 +554,95 @@ header {
     filter: drop-shadow(0 0 3px rgba(255, 220, 158, 0.55))
             drop-shadow(0 0 12px rgba(255, 166, 91, 0.3))
             drop-shadow(0 0 26px rgba(255, 114, 80, 0.18));
+}
+
+/* Reuse the actual artwork for momentary signal breakup; resting art stays crisp. */
+.wordmark-signal {
+    --chroma-offset: clamp(5px, 1vw, 12px);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    visibility: hidden;
+    background: var(--wordmark-art) center / 100% 100% no-repeat;
+}
+
+.wordmark-signal::before,
+.wordmark-signal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    mask: var(--wordmark-art) center / 100% 100% no-repeat;
+}
+
+.wordmark-signal::before {
+    background: #ff244c;
+    transform: translateX(calc(-1 * var(--chroma-offset)));
+    opacity: 0.9;
+}
+
+.wordmark-signal::after {
+    background: #00cfff;
+    transform: translateX(var(--chroma-offset));
+    opacity: 0.85;
+}
+
+.header-wordmark.signal-soft .wordmark-signal { --chroma-offset: 3px; }
+.header-wordmark.signal-soft .wordmark-signal::before { background: #ff5a36; opacity: .55; }
+.header-wordmark.signal-soft .wordmark-signal::after { background: #00f7c2; opacity: .45; }
+
+/* Signal tear remains available only in the comparison lab. */
+.header-wordmark.signal-tear .wordmark-signal {
+    visibility: visible;
+    /* A fixed damaged scanline region; never sweep a band down the artwork. */
+    clip-path: inset(36% 0 43%);
+    animation: wordmark-tear 300ms steps(1, end) both;
+}
+
+.header-wordmark.signal-tear > img {
+    animation: wordmark-sync 300ms steps(1, end) both;
+}
+
+.header-wordmark.signal-chroma .wordmark-signal {
+    visibility: visible;
+    background: none;
+    animation: wordmark-chroma 240ms steps(1, end) both;
+}
+
+@keyframes wordmark-tear {
+    0%, 100% { transform: none; opacity: 0; }
+    8% { transform: translateX(-7px); opacity: 0.85; }
+    20% { transform: translateX(4px); opacity: 0.65; }
+    32% { transform: none; opacity: 0; }
+    59% { transform: translateX(-3px); opacity: 0.55; }
+    70% { transform: translateX(1px); opacity: 0.25; }
+    80% { transform: none; opacity: 0; }
+}
+
+@keyframes wordmark-sync {
+    0%, 32%, 70%, 100% { transform: none; }
+    8% { transform: translateX(1px); }
+    20% { transform: translateX(-1px); }
+    59% { transform: translateX(0.5px); }
+}
+
+@keyframes wordmark-chroma {
+    0%, 100% { opacity: 0; transform: none; }
+    8% { opacity: 0.9; transform: translateX(-1px); }
+    24% { opacity: 0.55; transform: translateX(1px); }
+    38% { opacity: 0; transform: none; }
+    62% { opacity: 0.4; transform: translateX(-0.5px); }
+    76% { opacity: 0; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header-wordmark.signal-tear > img {
+        animation: none;
+    }
+
+    .header-wordmark .wordmark-signal {
+        display: none;
+        animation: none;
+    }
 }
 
 @media (max-width: 767px) {

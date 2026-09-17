@@ -14339,6 +14339,47 @@ section.production-header.alice p {
     z-index: 10;
 }
 
+/* Flatter utility buttons and tighter rows in the two-column players. */
+@media (min-width: 769px) {
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item {
+        padding-top: 0.45rem;
+        padding-bottom: 0.45rem;
+    }
+
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-article-link,
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-share-button {
+        min-width: 4rem;
+        min-height: 2.125rem;
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+}
+
+/* Give titles priority over cover size on compact two-column album players. */
+@media (min-width: 769px) and (max-width: 1200px) {
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-content {
+        width: 94%;
+        padding: 1.25rem;
+        gap: 1.25rem;
+    }
+
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-left-section { flex: 0.9; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-right-section { flex: 1.2; }
+
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-act-group { gap: 0.15rem; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item {
+        padding-left: 0.3rem;
+        padding-right: 0.9rem;
+    }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-number { margin-right: 0.25rem; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group { padding-left: 0.5rem; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-article-link,
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-share-button {
+        min-width: 3.5rem;
+        min-height: 2.125rem;
+    }
+}
+
 /* Mobile Responsiveness for Mixtape */
 @media (max-width: 768px) {
     .mixtape-lightbox {

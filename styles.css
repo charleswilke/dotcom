@@ -14341,6 +14341,15 @@ section.production-header.alice p {
 
 /* Flatter utility buttons and tighter rows in the two-column players. */
 @media (min-width: 769px) {
+    /* Reserve less vertical space for the scope so the cover can grow on
+       short laptop windows, where the left column is height-constrained. */
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .modal-oscilloscope-frame {
+        flex: 0 0 auto;
+        height: clamp(120px, 20vh, 150px);
+        min-height: 120px;
+        max-height: 150px;
+    }
+
     :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item {
         padding-top: 0.45rem;
         padding-bottom: 0.45rem;

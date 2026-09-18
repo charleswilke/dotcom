@@ -75,6 +75,7 @@
     { "source": "/before-times/content-factory(/?)", "destination": "/before-times-content-factory.html" },
     { "source": "/before-times/knowledge-maze(/?)", "destination": "/before-times-knowledge-maze.html" },
     { "source": "/before-times(/?)", "destination": "/before-times.html" },
+    { "source": "/l.ai.bor(/?)", "destination": "/l.ai.bor.html" },
     { "source": "/mixtape(/?)", "destination": "/mixtape.html" },
     { "source": "/bsides(/?)", "destination": "/bsides.html" },
     { "source": "/side-two(/?)", "destination": "/side-two.html" },

@@ -4693,12 +4693,19 @@ html {
 /* RSS Feed Section */
 .rss-feed {
     padding: 3.5rem 0 2rem;
+    /* Leave room for the fixed nav when arriving through the share link. */
+    scroll-margin-top: 72px;
     background:
         radial-gradient(ellipse at 50% 40%, rgba(0, 247, 194, 0.18) 0%, transparent 55%),
         radial-gradient(ellipse at 50% 100%, rgba(255, 90, 54, 0.22) 0%, transparent 60%),
         linear-gradient(180deg, #1a1550 0%, #0e0a36 100%);
     position: relative;
     overflow: hidden;
+}
+
+/* The legacy bookmark sits inside the section, after its top padding. */
+.rss-feed > #writing {
+    scroll-margin-top: calc(72px + 3.5rem);
 }
 
 /* CRT scanlines */

@@ -141,7 +141,7 @@ module.exports = async function handler(req, res) {
     const slug = normalizeSlug(req.query && req.query.slug);
 
     if (!slug) {
-        res.setHeader('Location', '/#writing');
+        res.setHeader('Location', '/#l.ai.bor');
         res.status(302).end();
         return;
     }

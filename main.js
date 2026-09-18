@@ -716,7 +716,7 @@ function getArticleRouteFromLocation() {
 }
 
 function getArticleReaderReturnUrl() {
-    return getArticleRouteFromLocation() ? '/#writing' : getCurrentRelativeUrl();
+    return getArticleRouteFromLocation() ? '/#l.ai.bor' : getCurrentRelativeUrl();
 }
 
 function _formatScopeTime(s) {
@@ -1246,7 +1246,7 @@ function closeArticleReader() {
     document.body.classList.remove('reader-open');
     if (getArticleRouteFromLocation()) {
         try {
-            history.replaceState(null, '', _readerPrevUrl || '/#writing');
+            history.replaceState(null, '', _readerPrevUrl || '/#l.ai.bor');
         } catch (e) { /* ignore */ }
     }
     _readerPrevUrl = '';
@@ -1365,8 +1365,11 @@ function normalizeFeedItems(items) {
 // Add smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
+        // IDs can contain periods; resolve the fragment as an ID, not a CSS selector.
+        const target = document.getElementById(this.getAttribute('href').slice(1));
+        if (!target || e.defaultPrevented) return;
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
+        target.scrollIntoView({
             behavior: 'smooth'
         });
     });

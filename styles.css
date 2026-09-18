@@ -500,7 +500,7 @@ body::after {
    section retains a realistic placeholder height until the browser approaches
    it, then remembers its real size after the first render. */
 @supports (content-visibility: auto) {
-    #writing {
+    [id="l.ai.bor"] {
         content-visibility: auto;
         contain-intrinsic-size: auto 3000px;
     }

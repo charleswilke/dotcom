@@ -85,3 +85,7 @@ bt-assets/The Sisters Hayes - short/nicks-notes-on-the-sisters-hayes.rtf
 # Security build preparation and local-only regression tests
 !tools/prepare-security-assets.js
 tests/
+
+# Public, reviewed downloads linked from the God shuffled his feet transcript.
+!transcripts/09-19-26/god-shuffled-his-feet/conversation.md
+!transcripts/09-19-26/god-shuffled-his-feet/god-shuffled-his-feet-conversation.zip

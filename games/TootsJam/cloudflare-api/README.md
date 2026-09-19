@@ -70,3 +70,10 @@ ALLOWED_ORIGIN = "https://your-site.example"
 ```
 
 If `ALLOWED_ORIGIN` is empty, the API allows all origins.
+
+## Submission protection
+
+Deploy the `SCORE_LIMITER` binding in wrangler.toml with the Worker. It permits
+five submissions per client IP per minute (per Cloudflare location); missing
+bindings fail closed. JSON bodies are limited to 2 KiB. Scores remain
+client-reported, so this is spam protection, not proof that a game was played.

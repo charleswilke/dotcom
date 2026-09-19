@@ -9,7 +9,7 @@ const TOTAL_RSS_ITEMS = 19; // 1 spotlight + 18 grid cards for an even 2-column 
 function decodeHtmlEntities(text) {
     if (!text) return '';
     // Create a temporary DOM element to decode HTML entities
-    const div = document.createElement('div');
+    const div = document.implementation.createHTMLDocument('').createElement('div');
     div.innerHTML = text;
     return div.textContent || div.innerText || '';
 }
@@ -580,6 +580,13 @@ function applyResponsiveFeedImage(img, item, sizes) {
     img.height = image.height;
 }
 
+function safeArticleUrl(value) {
+    try {
+        const url = new URL(value, window.location.origin);
+        return /^https?:$/.test(url.protocol) ? url.href : '';
+    } catch { return ''; }
+}
+
 function escapeHtmlAttribute(value = '') {
     return String(value)
         .replace(/&/g, '&amp;')
@@ -806,7 +813,7 @@ function hydrateNativeMedia(root) {
         let id = '';
         try { id = (JSON.parse(el.getAttribute('data-attrs') || '{}') || {}).mediaUploadId; } catch (e) { /* ignore */ }
         if (!id) { el.remove(); return; }
-        const src = `${SUBSTACK_BASE}/api/v1/audio/upload/${id}/src`;
+        const src = `${SUBSTACK_BASE}/api/v1/audio/upload/${encodeURIComponent(id)}/src`;
         el.replaceWith(createScopePlayer(src, 'Recap'));
     });
 
@@ -821,7 +828,7 @@ function hydrateNativeMedia(root) {
             poster = attrs.thumbnailUrl;
         } catch (e) { /* ignore */ }
         if (!id) { el.remove(); return; }
-        const src = `${SUBSTACK_BASE}/api/v1/video/upload/${id}/src`;
+        const src = `${SUBSTACK_BASE}/api/v1/video/upload/${encodeURIComponent(id)}/src`;
         const v = document.createElement('video');
         v.src = src;
         v.controls = true;
@@ -835,7 +842,17 @@ function hydrateNativeMedia(root) {
 
 function sanitizeArticleHtml(html) {
     const doc = document.implementation.createHTMLDocument('article');
-    doc.body.innerHTML = html || '';
+    // Fail closed if the bundled sanitizer could not load.
+    if (!window.DOMPurify?.isSupported) {
+        doc.body.textContent = html || '';
+        return doc.body.innerHTML;
+    }
+    doc.body.innerHTML = window.DOMPurify.sanitize(html || '', {
+        USE_PROFILES: { html: true },
+        FORBID_TAGS: ['style', 'form', 'input', 'button', 'textarea', 'select'],
+        FORBID_ATTR: ['style', 'srcdoc'],
+        SANITIZE_NAMED_PROPS: true
+    });
 
     // Remove Substack chrome that doesn't belong on our site.
     const killSelectors = [
@@ -1189,8 +1206,8 @@ function openArticleReader(item, options = {}) {
     const sepEl = overlay.querySelector('.reader-sep');
     const footerEl = overlay.querySelector('.article-reader-footer');
     if (item.link) {
-        topLink.href = item.link;
-        footLink.href = item.link;
+        topLink.href = safeArticleUrl(item.link) || '#';
+        footLink.href = safeArticleUrl(item.link) || '#';
         topLink.style.display = '';
         if (sepEl) sepEl.style.display = '';
         if (footerEl) footerEl.style.display = '';
@@ -1734,7 +1751,7 @@ function displayItems(count) {
 
         const feedItem = document.createElement('a');
         feedItem.className = 'feed-item';
-        feedItem.href = link;
+        feedItem.href = safeArticleUrl(link) || '#';
         feedItem.target = '_blank';
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
@@ -1743,8 +1760,8 @@ function displayItems(count) {
                  alt="${escapeHtmlAttribute(title)}" width="${feedImage.width}" height="${feedImage.height}"
                  loading="lazy" decoding="async">
             <div class="feed-item-body">
-                <h3>${title}</h3>
-                <p>${item.shortDescription || ''}</p>
+                <h3>${escapeHtmlAttribute(title)}</h3>
+                <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
                 <div class="feed-item-meta">
                     <span class="date">${stampDate}</span>
                 </div>

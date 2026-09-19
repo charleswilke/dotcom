@@ -81,3 +81,7 @@ bt-assets/The Sisters Hayes - short/nicks-notes-on-the-sisters-hayes.rtf
 # Screening-room Trial Easter egg.
 !bt-assets/trial.mp4
 !images/before-times/layers/alchemy-ivory-dice-v1.png
+
+# Security build preparation and local-only regression tests
+!tools/prepare-security-assets.js
+tests/

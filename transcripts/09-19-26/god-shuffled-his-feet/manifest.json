@@ -1,0 +1,52 @@
+{
+  "title": "God shuffled his feet: The Conversation",
+  "date": "2026-09-19",
+  "url": "https://charleswilke.com/read/god-shuffled-his-feet-transcript",
+  "messages": 36,
+  "main_discussion_messages": 30,
+  "creative_process_updates": 6,
+  "images": [
+    {
+      "name": "01-header-first-pass",
+      "width": 1774,
+      "height": 887,
+      "sha256": "1de55a0211b0a976e31dd88e5cffc8a7f520cfc039737474c6d969512d4c332d",
+      "caption": "First header exploration: enormous worn shoes beside a warm gathering."
+    },
+    {
+      "name": "02-header-selected",
+      "width": 1774,
+      "height": 887,
+      "sha256": "4b2cf6cbab987738ace0de278cd35cc907d2a1029bc5341f5f146a103e6652fa",
+      "caption": "Selected header: the same scene in blue-and-amber illustrated print style."
+    },
+    {
+      "name": "03-cw-first-pass",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "56464a674609c7d222d11f192221b1c5a001013cd309ecf459c493c15a7a3af1",
+      "caption": "First closing mark: separate slab-serif letters and a sliver of light."
+    },
+    {
+      "name": "04-cw-joined-strokes",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "4201a4094792bdb9ab53586275a8c2ce222f93b99f582542d7f1aa91dcb6ccee",
+      "caption": "Second closing mark: joined strokes that Charles found ambiguous."
+    },
+    {
+      "name": "05-cw-separated-letters",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "94b8651c7ecb4085bb902d6ea1096cf24a52c38d839441118d6c240bde2d3491",
+      "caption": "Third closing mark: separate letterforms with a literal doorway beneath."
+    },
+    {
+      "name": "06-cw-selected",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "36ee0e611c03907e947656113bfb1031a737577f8c030ce4c8d2dffd869f82f7",
+      "caption": "Selected closing mark: light through the natural gap between C and W."
+    }
+  ]
+}

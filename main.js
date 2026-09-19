@@ -637,6 +637,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "god-shuffled-his-feet-transcript",
+        "title": "God shuffled his feet: The Conversation",
+        "cleanDescription": "The working session behind \"God shuffled his feet\" — human worth, care, the mercy of speed, draft revisions, and six artwork explorations with Codex.",
+        "pubDate": "2026-09-19T16:00:00.000Z",
+        "contentUrl": "/transcripts/god-shuffled-his-feet-transcript.html",
+        "link": ""
+    },
+    {
         slug: 'surviving-salem-transcript',
         title: 'Surviving Salem: The Conversation',
         cleanDescription: 'The full working session behind "Vilify and Deny" — workshopping the essay with Codex, from first draft to final polish, generated art included.',

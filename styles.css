@@ -1501,6 +1501,13 @@ footer .electric {
 }
 
 @media (max-width: 767px) {
+    /* The corner brackets sit hard against the viewport edges at phone width,
+       where the panel is nearly full-bleed. The faint border carries the
+       instrument-panel read on its own. */
+    .header-subtitle::before {
+        display: none;
+    }
+
     /* Shorten the designer role on mobile while keeping the same order. */
     .header-subtitle .role-product {
         display: none;

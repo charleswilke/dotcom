@@ -1431,10 +1431,6 @@ header:has(.header-title.glitch-interlace)::before {
     color: rgba(245, 233, 208, 0.5);
 }
 
-.header-subtitle .mobile-break {
-    display: none;
-}
-
 /* Roles read writer-first on one line here; the narrow order is hidden. */
 .header-subtitle .roles-narrow {
     display: none;
@@ -1506,12 +1502,7 @@ footer .electric {
 }
 
 @media (max-width: 767px) {
-    .header-subtitle .mobile-break {
-        display: block;
-    }
-
-    /* Two lines fit evenly as "product designer //" / "writer // builder";
-       the writer-first order only wraps to an orphaned word here. */
+    /* Keep the mobile role order, with one line for roles and one for the tagline. */
     .header-subtitle .roles-wide {
         display: none;
     }
@@ -1522,8 +1513,10 @@ footer .electric {
 
     .header-subtitle .subtitle-line-2 {
         display: inline-block;
-        margin-top: 0.4em;
-        letter-spacing: 0.21em;
+        margin-top: 0.3em;
+        font-size: clamp(0.625rem, 3vw, 0.75rem);
+        line-height: 1.5;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -3652,8 +3645,9 @@ footer p {
     }
     
     .header-subtitle {
-        font-size: 1.2rem;
-        letter-spacing: 1px;
+        padding: 0.5rem 0.625rem;
+        font-size: clamp(0.75rem, 3.75vw, 1rem);
+        letter-spacing: 0.01em;
         margin-left: 0.6rem;
         margin-right: 0.6rem;
         margin-bottom: 0;
@@ -3950,12 +3944,6 @@ footer p {
            already covers this range. An override would re-introduce the
            two-line wrap this size was originally chosen to force. */
         line-height: 1.1;
-    }
-    
-    .header-subtitle {
-        font-size: 1rem;
-        margin-left: 0.6rem;
-        margin-right: 0.6rem;
     }
     
     .section-title {

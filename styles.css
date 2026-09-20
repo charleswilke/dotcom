@@ -1430,9 +1430,9 @@ header:has(.header-title.glitch-interlace)::before {
     color: rgba(245, 233, 208, 0.5);
 }
 
-/* Roles read writer-first on one line here; the narrow order is hidden. */
-.header-subtitle .roles-narrow {
-    display: none;
+/* Keep the role order on a single line at every breakpoint. */
+.header-subtitle .subtitle-roles {
+    white-space: nowrap;
 }
 
 .header-subtitle .subtitle-line-2 {
@@ -1501,13 +1501,9 @@ footer .electric {
 }
 
 @media (max-width: 767px) {
-    /* Keep the mobile role order, with one line for roles and one for the tagline. */
-    .header-subtitle .roles-wide {
+    /* Shorten the designer role on mobile while keeping the same order. */
+    .header-subtitle .role-product {
         display: none;
-    }
-
-    .header-subtitle .roles-narrow {
-        display: inline;
     }
 
     .header-subtitle .subtitle-line-2 {

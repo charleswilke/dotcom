@@ -1,5 +1,5 @@
-// Returns all play counters as JSON. Gated by a shared-secret query param.
-// Usage: GET /api/plays-report?token=<PLAYS_REPORT_TOKEN>
+// Returns counters to clients using Authorization: Bearer <PLAYS_REPORT_TOKEN>.
+const { timingSafeEqual } = require('node:crypto');
 
 async function kvCommand(url, token, command) {
     const res = await fetch(url, {
@@ -32,9 +32,14 @@ async function mget(url, token, keys) {
 }
 
 module.exports = async function handler(req, res) {
-    const expected = (process.env.PLAYS_REPORT_TOKEN || '').trim();
-    const provided = req.query.token;
-    if (!expected || provided !== expected) {
+    res.setHeader('Cache-Control', 'no-store');
+    if (req.method !== 'GET') {
+        res.setHeader('Allow', 'GET');
+        return res.status(405).end();
+    }
+    const expected = Buffer.from((process.env.PLAYS_REPORT_TOKEN || '').trim());
+    const provided = Buffer.from((String(req.headers.authorization || '').match(/^Bearer (\S+)$/i) || [])[1] || '');
+    if (!expected.length || expected.length !== provided.length || !timingSafeEqual(expected, provided)) {
         return res.status(404).end();
     }
 
@@ -79,6 +84,6 @@ module.exports = async function handler(req, res) {
         });
     } catch (err) {
         console.error('plays-report failed', err);
-        return res.status(502).json({ error: String(err) });
+        return res.status(502).json({ error: 'Report temporarily unavailable' });
     }
 }

@@ -49,7 +49,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="/styles.css?v=8434a76e4fb4">
+    <link rel="stylesheet" href="/styles.css?v=2d13fbdf">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -87,14 +87,14 @@
       ]
     }
     </script>
-    <script src="/nav.js?v=080c0131a234"></script>
+    <script src="/nav.js?v=96dc7804"></script>
 
     <header>
         <div class="header-bg"></div>
         <div class="grid-overlay"></div>
         <div class="header-content">
             <h1 class="header-wordmark"><picture><source media="(max-width: 767px)" srcset="/images/charles-wilke-wordmark-v4-compact.svg" width="1219" height="174"><img src="/images/charles-wilke-wordmark-v4.svg" alt="Charles Wilke" width="1463" height="174" fetchpriority="high"></picture></h1>
-            <p class="header-subtitle"><span class="roles-wide">writer // product designer // builder</span><span class="roles-narrow">product designer //<br /> writer // builder</span><br /><span class="subtitle-line-2">exploring <span class="electric">ai co-creation</span><br class="mobile-break" /> across mediums</span></p>
+            <p class="header-subtitle"><span class="roles-wide">writer // product designer // builder</span><span class="roles-narrow">designer // writer // builder</span><br /><span class="subtitle-line-2">exploring <span class="electric">ai co-creation</span> across mediums</span></p>
         </div>
     </header>
     
@@ -157,7 +157,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="/mixtape" class="showcase-item showcase-item-mixtape" data-col="3">
+                <a href="/mixtape" class="showcase-item showcase-item-mixtape" id="mixtapeTile" data-col="3">
                     <svg class="showcase-signal" aria-hidden="true" focusable="false"><rect class="showcase-signal-blip" pathLength="100"></rect></svg>
                     <div class="showcase-media">
                         <img src="/images/exploring-laibor-spiral-card.webp?v=20260909101216" alt="Exploring L.ai.bor Mixtape: a jagged red record spiral with a cream tonearm and cut-paper lettering against midnight blue" width="1400" height="910" loading="lazy" decoding="async">
@@ -253,7 +253,9 @@
         </div>
     </section>
     
-    <section class="rss-feed" id="writing" data-tuner-theme="dark">
+    <section class="rss-feed" id="l.ai.bor" data-tuner-theme="dark">
+        <!-- Preserve existing bookmarks to the writing section. -->
+        <span id="writing" aria-hidden="true"></span>
         <div class="container">
             <h2 class="section-title section-title-light crt-hover rss-section-title">
                 <span class="rss-title-kicker">Exploring</span>
@@ -962,12 +964,13 @@
         <img class="cover-zoom-img" id="coverZoomImg" alt="">
     </div>
 
-    <script src="/common.js?v=65022cad" defer></script>
+    <script src="/common.js?v=e2323abd" defer></script>
 <div popover="auto" role="note" class="about-footnote-dialog" id="aboutFootnoteDialog" aria-labelledby="aboutFootnoteTitle" aria-describedby="aboutFootnoteDescription">
     <button type="button" class="about-footnote-close" aria-label="Close footnote">×</button>
     <h2 id="aboutFootnoteTitle"><span>01 /</span> What’s that mean?</h2>
     <p id="aboutFootnoteDescription">I design how the AI interprets requests and coordinates its response, translating product intent into instructions that guide its behavior. This includes IQ’s voice and tone, and how and when it chooses tools to use.</p>
 </div>
-<script src="/main.js?v=4d2e4660" defer></script>
+<script src="/vendor/dompurify.min.js?v=3.4.15" defer></script>
+<script src="/main.js?v=8a030b65" defer></script>
 </body>
 </html>

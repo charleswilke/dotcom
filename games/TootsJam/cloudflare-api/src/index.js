@@ -9,6 +9,7 @@ function json(status, payload, origin = "*") {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
       "Cache-Control": "no-store",
       "Access-Control-Allow-Origin": origin,
       "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
@@ -89,9 +90,40 @@ async function handlePostScore(request, env) {
     return json(500, { error: "D1 binding missing. Expected DB (or tootsjam_scores)." }, getAllowedOrigin(request, env));
   }
 
+  // The Cloudflare binding is shared across Worker instances in each location.
+  // Fail closed if deployment omitted it; never silently accept unlimited writes.
+  if (!env.SCORE_LIMITER) return json(503, { error: "Score submissions temporarily unavailable." }, getAllowedOrigin(request, env));
+  const ip = request.headers.get("CF-Connecting-IP");
+  if (!ip) return json(403, { error: "Missing client address." }, getAllowedOrigin(request, env));
+  const { success } = await env.SCORE_LIMITER.limit({ key: ip });
+  if (!success) {
+    const response = json(429, { error: "Too many scores. Please wait a minute." }, getAllowedOrigin(request, env));
+    response.headers.set("Retry-After", "60");
+    return response;
+  }
+  if (!(request.headers.get("Content-Type") || "").toLowerCase().startsWith("application/json")) {
+    return json(415, { error: "Expected JSON." }, getAllowedOrigin(request, env));
+  }
   let parsed;
   try {
-    parsed = await request.json();
+    const reader = request.body?.getReader();
+    if (!reader) return json(400, { error: "Missing body." }, getAllowedOrigin(request, env));
+    const chunks = [];
+    let size = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > 2048) {
+        await reader.cancel();
+        return json(413, { error: "Score submission too large." }, getAllowedOrigin(request, env));
+      }
+      chunks.push(value);
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+    parsed = JSON.parse(new TextDecoder().decode(bytes));
   } catch {
     return json(400, { error: "Invalid JSON body." }, getAllowedOrigin(request, env));
   }
@@ -164,8 +196,8 @@ export default {
       }
       return json(405, { error: "Method not allowed." }, getAllowedOrigin(request, env));
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Internal server error.";
-      return json(500, { error: message }, getAllowedOrigin(request, env));
+      console.error("Leaderboard request failed", err);
+      return json(500, { error: "Leaderboard temporarily unavailable." }, getAllowedOrigin(request, env));
     }
   }
 };

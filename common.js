@@ -70,7 +70,7 @@ function initStickyNav() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // --- Active section tracking (homepage only) ---
-    const sectionIds = ['writing', 'game-cartridges', 'albums', 'projections', 'about'];
+    const sectionIds = ['l.ai.bor', 'game-cartridges', 'albums', 'projections', 'about'];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean)
         .sort((a, b) => a.offsetTop - b.offsetTop);
 

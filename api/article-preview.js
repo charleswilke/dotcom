@@ -12,6 +12,16 @@ const DEFAULT_DESCRIPTION = 'Essays on capitalism, humanity, and AI from Charles
 // Repo-hosted articles that open in the reader but aren't in the Substack feed.
 // Keep in sync with LOCAL_ARTICLES in main.js.
 const LOCAL_ARTICLES = {
+    "god-shuffled-his-feet-transcript": {
+        "title": "God shuffled his feet: The Conversation",
+        "description": "The working session behind \"God shuffled his feet\" — human worth, care, the mercy of speed, draft revisions, and six artwork explorations with Codex.",
+        "thumbnail": "/images/transcripts/god-shuffled-his-feet/02-header-selected.webp",
+        "image": {
+            "width": 1774,
+            "height": 887
+        },
+        "pubDate": "2026-09-19T16:00:00.000Z"
+    },
     'surviving-salem-transcript': {
         title: 'Surviving Salem: The Conversation',
         description: 'The full working session behind "Vilify and Deny" — workshopping the essay with Codex, from first draft to final polish, generated art included.',
@@ -141,7 +151,7 @@ module.exports = async function handler(req, res) {
     const slug = normalizeSlug(req.query && req.query.slug);
 
     if (!slug) {
-        res.setHeader('Location', '/#writing');
+        res.setHeader('Location', '/#l.ai.bor');
         res.status(302).end();
         return;
     }

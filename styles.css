@@ -500,7 +500,7 @@ body::after {
    section retains a realistic placeholder height until the browser approaches
    it, then remembers its real size after the first render. */
 @supports (content-visibility: auto) {
-    #writing {
+    [id="l.ai.bor"] {
         content-visibility: auto;
         contain-intrinsic-size: auto 3000px;
     }
@@ -541,6 +541,7 @@ header {
 }
 
 .header-wordmark {
+    position: relative;
     width: min(1100px, 96vw);
     margin: 1.25rem auto 0.6rem;
     line-height: 0;
@@ -552,6 +553,95 @@ header {
     height: auto;
     filter: drop-shadow(0 0 3px rgba(255, 220, 158, 0.4))
             drop-shadow(0 0 14px rgba(255, 150, 80, 0.12));
+}
+
+/* Reuse the actual artwork for momentary signal breakup; resting art stays crisp. */
+.wordmark-signal {
+    --chroma-offset: clamp(5px, 1vw, 12px);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    visibility: hidden;
+    background: var(--wordmark-art) center / 100% 100% no-repeat;
+}
+
+.wordmark-signal::before,
+.wordmark-signal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    mask: var(--wordmark-art) center / 100% 100% no-repeat;
+}
+
+.wordmark-signal::before {
+    background: #ff244c;
+    transform: translateX(calc(-1 * var(--chroma-offset)));
+    opacity: 0.9;
+}
+
+.wordmark-signal::after {
+    background: #00cfff;
+    transform: translateX(var(--chroma-offset));
+    opacity: 0.85;
+}
+
+.header-wordmark.signal-soft .wordmark-signal { --chroma-offset: 3px; }
+.header-wordmark.signal-soft .wordmark-signal::before { background: #ff5a36; opacity: .55; }
+.header-wordmark.signal-soft .wordmark-signal::after { background: #00f7c2; opacity: .45; }
+
+/* Signal tear remains available only in the comparison lab. */
+.header-wordmark.signal-tear .wordmark-signal {
+    visibility: visible;
+    /* A fixed damaged scanline region; never sweep a band down the artwork. */
+    clip-path: inset(36% 0 43%);
+    animation: wordmark-tear 300ms steps(1, end) both;
+}
+
+.header-wordmark.signal-tear > img {
+    animation: wordmark-sync 300ms steps(1, end) both;
+}
+
+.header-wordmark.signal-chroma .wordmark-signal {
+    visibility: visible;
+    background: none;
+    animation: wordmark-chroma 240ms steps(1, end) both;
+}
+
+@keyframes wordmark-tear {
+    0%, 100% { transform: none; opacity: 0; }
+    8% { transform: translateX(-7px); opacity: 0.85; }
+    20% { transform: translateX(4px); opacity: 0.65; }
+    32% { transform: none; opacity: 0; }
+    59% { transform: translateX(-3px); opacity: 0.55; }
+    70% { transform: translateX(1px); opacity: 0.25; }
+    80% { transform: none; opacity: 0; }
+}
+
+@keyframes wordmark-sync {
+    0%, 32%, 70%, 100% { transform: none; }
+    8% { transform: translateX(1px); }
+    20% { transform: translateX(-1px); }
+    59% { transform: translateX(0.5px); }
+}
+
+@keyframes wordmark-chroma {
+    0%, 100% { opacity: 0; transform: none; }
+    8% { opacity: 0.9; transform: translateX(-1px); }
+    24% { opacity: 0.55; transform: translateX(1px); }
+    38% { opacity: 0; transform: none; }
+    62% { opacity: 0.4; transform: translateX(-0.5px); }
+    76% { opacity: 0; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header-wordmark.signal-tear > img {
+        animation: none;
+    }
+
+    .header-wordmark .wordmark-signal {
+        display: none;
+        animation: none;
+    }
 }
 
 @media (max-width: 767px) {
@@ -1340,10 +1430,6 @@ header:has(.header-title.glitch-interlace)::before {
     color: rgba(245, 233, 208, 0.5);
 }
 
-.header-subtitle .mobile-break {
-    display: none;
-}
-
 /* Roles read writer-first on one line here; the narrow order is hidden. */
 .header-subtitle .roles-narrow {
     display: none;
@@ -1415,12 +1501,7 @@ footer .electric {
 }
 
 @media (max-width: 767px) {
-    .header-subtitle .mobile-break {
-        display: block;
-    }
-
-    /* Two lines fit evenly as "product designer //" / "writer // builder";
-       the writer-first order only wraps to an orphaned word here. */
+    /* Keep the mobile role order, with one line for roles and one for the tagline. */
     .header-subtitle .roles-wide {
         display: none;
     }
@@ -1431,8 +1512,10 @@ footer .electric {
 
     .header-subtitle .subtitle-line-2 {
         display: inline-block;
-        margin-top: 0.4em;
-        letter-spacing: 0.21em;
+        margin-top: 0.3em;
+        font-size: clamp(0.625rem, 3vw, 0.75rem);
+        line-height: 1.5;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -3561,8 +3644,9 @@ footer p {
     }
     
     .header-subtitle {
-        font-size: 1.2rem;
-        letter-spacing: 1px;
+        padding: 0.5rem 0.625rem;
+        font-size: clamp(0.75rem, 3.75vw, 1rem);
+        letter-spacing: 0.01em;
         margin-left: 0.6rem;
         margin-right: 0.6rem;
         margin-bottom: 0;
@@ -3859,12 +3943,6 @@ footer p {
            already covers this range. An override would re-introduce the
            two-line wrap this size was originally chosen to force. */
         line-height: 1.1;
-    }
-    
-    .header-subtitle {
-        font-size: 1rem;
-        margin-left: 0.6rem;
-        margin-right: 0.6rem;
     }
     
     .section-title {
@@ -4602,12 +4680,19 @@ html {
 /* RSS Feed Section */
 .rss-feed {
     padding: 3.5rem 0 2rem;
+    /* Leave room for the fixed nav when arriving through the share link. */
+    scroll-margin-top: 72px;
     background:
         radial-gradient(ellipse at 50% 40%, rgba(0, 247, 194, 0.18) 0%, transparent 55%),
         radial-gradient(ellipse at 50% 100%, rgba(255, 90, 54, 0.22) 0%, transparent 60%),
         linear-gradient(180deg, #1a1550 0%, #0e0a36 100%);
     position: relative;
     overflow: hidden;
+}
+
+/* The legacy bookmark sits inside the section, after its top padding. */
+.rss-feed > #writing {
+    scroll-margin-top: calc(72px + 3.5rem);
 }
 
 /* CRT scanlines */
@@ -14246,6 +14331,56 @@ section.production-header.alice p {
     top: 0.75rem;
     right: 1rem;
     z-index: 10;
+}
+
+/* Flatter utility buttons and tighter rows in the two-column players. */
+@media (min-width: 769px) {
+    /* Reserve less vertical space for the scope so the cover can grow on
+       short laptop windows, where the left column is height-constrained. */
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .modal-oscilloscope-frame {
+        flex: 0 0 auto;
+        height: clamp(120px, 20vh, 150px);
+        min-height: 120px;
+        max-height: 150px;
+    }
+
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item {
+        padding-top: 0.45rem;
+        padding-bottom: 0.45rem;
+    }
+
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-article-link,
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-share-button {
+        min-width: 4rem;
+        min-height: 2.125rem;
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+}
+
+/* Give titles priority over cover size on compact two-column album players. */
+@media (min-width: 769px) and (max-width: 1200px) {
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-content {
+        width: 94%;
+        padding: 1.25rem;
+        gap: 1.25rem;
+    }
+
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-left-section { flex: 0.9; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-right-section { flex: 1.2; }
+
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-act-group { gap: 0.15rem; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item {
+        padding-left: 0.3rem;
+        padding-right: 0.9rem;
+    }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-number { margin-right: 0.25rem; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group { padding-left: 0.5rem; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-article-link,
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-share-button {
+        min-width: 3.5rem;
+        min-height: 2.125rem;
+    }
 }
 
 /* Mobile Responsiveness for Mixtape */

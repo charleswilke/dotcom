@@ -9,7 +9,7 @@ const TOTAL_RSS_ITEMS = 19; // 1 spotlight + 18 grid cards for an even 2-column 
 function decodeHtmlEntities(text) {
     if (!text) return '';
     // Create a temporary DOM element to decode HTML entities
-    const div = document.createElement('div');
+    const div = document.implementation.createHTMLDocument('').createElement('div');
     div.innerHTML = text;
     return div.textContent || div.innerText || '';
 }
@@ -580,6 +580,13 @@ function applyResponsiveFeedImage(img, item, sizes) {
     img.height = image.height;
 }
 
+function safeArticleUrl(value) {
+    try {
+        const url = new URL(value, window.location.origin);
+        return /^https?:$/.test(url.protocol) ? url.href : '';
+    } catch { return ''; }
+}
+
 function escapeHtmlAttribute(value = '') {
     return String(value)
         .replace(/&/g, '&amp;')
@@ -629,6 +636,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // same reader. Content is a pre-rendered HTML fragment fetched on demand.
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
+    {
+        "slug": "god-shuffled-his-feet-transcript",
+        "title": "God shuffled his feet: The Conversation",
+        "cleanDescription": "The working session behind \"God shuffled his feet\" — human worth, care, the mercy of speed, draft revisions, and six artwork explorations with Codex.",
+        "pubDate": "2026-09-19T16:00:00.000Z",
+        "contentUrl": "/transcripts/god-shuffled-his-feet-transcript.html",
+        "link": ""
+    },
     {
         slug: 'surviving-salem-transcript',
         title: 'Surviving Salem: The Conversation',
@@ -716,7 +731,7 @@ function getArticleRouteFromLocation() {
 }
 
 function getArticleReaderReturnUrl() {
-    return getArticleRouteFromLocation() ? '/#writing' : getCurrentRelativeUrl();
+    return getArticleRouteFromLocation() ? '/#l.ai.bor' : getCurrentRelativeUrl();
 }
 
 function _formatScopeTime(s) {
@@ -806,7 +821,7 @@ function hydrateNativeMedia(root) {
         let id = '';
         try { id = (JSON.parse(el.getAttribute('data-attrs') || '{}') || {}).mediaUploadId; } catch (e) { /* ignore */ }
         if (!id) { el.remove(); return; }
-        const src = `${SUBSTACK_BASE}/api/v1/audio/upload/${id}/src`;
+        const src = `${SUBSTACK_BASE}/api/v1/audio/upload/${encodeURIComponent(id)}/src`;
         el.replaceWith(createScopePlayer(src, 'Recap'));
     });
 
@@ -821,7 +836,7 @@ function hydrateNativeMedia(root) {
             poster = attrs.thumbnailUrl;
         } catch (e) { /* ignore */ }
         if (!id) { el.remove(); return; }
-        const src = `${SUBSTACK_BASE}/api/v1/video/upload/${id}/src`;
+        const src = `${SUBSTACK_BASE}/api/v1/video/upload/${encodeURIComponent(id)}/src`;
         const v = document.createElement('video');
         v.src = src;
         v.controls = true;
@@ -835,7 +850,17 @@ function hydrateNativeMedia(root) {
 
 function sanitizeArticleHtml(html) {
     const doc = document.implementation.createHTMLDocument('article');
-    doc.body.innerHTML = html || '';
+    // Fail closed if the bundled sanitizer could not load.
+    if (!window.DOMPurify?.isSupported) {
+        doc.body.textContent = html || '';
+        return doc.body.innerHTML;
+    }
+    doc.body.innerHTML = window.DOMPurify.sanitize(html || '', {
+        USE_PROFILES: { html: true },
+        FORBID_TAGS: ['style', 'form', 'input', 'button', 'textarea', 'select'],
+        FORBID_ATTR: ['style', 'srcdoc'],
+        SANITIZE_NAMED_PROPS: true
+    });
 
     // Remove Substack chrome that doesn't belong on our site.
     const killSelectors = [
@@ -1189,8 +1214,8 @@ function openArticleReader(item, options = {}) {
     const sepEl = overlay.querySelector('.reader-sep');
     const footerEl = overlay.querySelector('.article-reader-footer');
     if (item.link) {
-        topLink.href = item.link;
-        footLink.href = item.link;
+        topLink.href = safeArticleUrl(item.link) || '#';
+        footLink.href = safeArticleUrl(item.link) || '#';
         topLink.style.display = '';
         if (sepEl) sepEl.style.display = '';
         if (footerEl) footerEl.style.display = '';
@@ -1246,7 +1271,7 @@ function closeArticleReader() {
     document.body.classList.remove('reader-open');
     if (getArticleRouteFromLocation()) {
         try {
-            history.replaceState(null, '', _readerPrevUrl || '/#writing');
+            history.replaceState(null, '', _readerPrevUrl || '/#l.ai.bor');
         } catch (e) { /* ignore */ }
     }
     _readerPrevUrl = '';
@@ -1365,8 +1390,11 @@ function normalizeFeedItems(items) {
 // Add smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
+        // IDs can contain periods; resolve the fragment as an ID, not a CSS selector.
+        const target = document.getElementById(this.getAttribute('href').slice(1));
+        if (!target || e.defaultPrevented) return;
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
+        target.scrollIntoView({
             behavior: 'smooth'
         });
     });
@@ -1731,7 +1759,7 @@ function displayItems(count) {
 
         const feedItem = document.createElement('a');
         feedItem.className = 'feed-item';
-        feedItem.href = link;
+        feedItem.href = safeArticleUrl(link) || '#';
         feedItem.target = '_blank';
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
@@ -1740,8 +1768,8 @@ function displayItems(count) {
                  alt="${escapeHtmlAttribute(title)}" width="${feedImage.width}" height="${feedImage.height}"
                  loading="lazy" decoding="async">
             <div class="feed-item-body">
-                <h3>${title}</h3>
-                <p>${item.shortDescription || ''}</p>
+                <h3>${escapeHtmlAttribute(title)}</h3>
+                <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
                 <div class="feed-item-meta">
                     <span class="date">${stampDate}</span>
                 </div>
@@ -2904,10 +2932,60 @@ function triggerGlitch(header) {
 }
 
 function initHeaderGlitchEffects() {
-    const header = document.querySelector('.header-title');
-    if (!header) return;
+    const header = document.querySelector('.header-wordmark');
+    const artwork = header?.querySelector('img');
+    if (!artwork || window.__headerGlitchInit) return;
     window.__headerGlitchInit = true;
-    scheduleEffectTimeout(() => triggerGlitch(header), 1500 + Math.random() * 2000);
+
+    const signal = document.createElement('span');
+    signal.className = 'wordmark-signal';
+    signal.setAttribute('aria-hidden', 'true');
+    // The wordmark is a <picture>: under 768px the compact SVG is served, so read the
+    // face the browser actually chose, not the src attribute, or the overlay stretches
+    // the wide artwork into the compact box. currentSrc is empty until the image starts
+    // loading, hence the fallback.
+    const syncArt = () => {
+        signal.style.setProperty('--wordmark-art', `url("${artwork.currentSrc || artwork.getAttribute('src')}")`);
+    };
+    syncArt();
+    header.appendChild(signal);
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const classes = ['signal-chroma', 'signal-soft'];
+    let visible = false;
+    let firstBurst = true;
+    let nextBurst;
+    let endBurst;
+
+    const clear = () => {
+        clearTimeout(nextBurst);
+        clearTimeout(endBurst);
+        header.classList.remove(...classes);
+    };
+    const canAnimate = () => visible && !document.hidden && !reducedMotion.matches;
+    const schedule = () => {
+        clear();
+        if (!canAnimate()) return;
+        const delay = firstBurst ? 6000 + Math.random() * 4000 : 12000 + Math.random() * 12000;
+        nextBurst = setTimeout(() => {
+            if (!canAnimate()) return;
+            firstBurst = false;
+            syncArt();
+            header.classList.add('signal-chroma');
+            // Favor the subtle split, with an occasional stronger red/cyan burst.
+            header.classList.toggle('signal-soft', Math.random() < 0.65);
+            endBurst = setTimeout(schedule, 240);
+        }, delay);
+    };
+
+    // Returning to the header starts a fresh quiet interval, never a catch-up burst.
+    const observer = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        schedule();
+    });
+    observer.observe(header);
+    document.addEventListener('visibilitychange', schedule);
+    reducedMotion.addEventListener('change', schedule);
 }
 
 // Timed glitch effect for the FAQ link
@@ -3252,7 +3330,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '5';
+const SCOPE_DATA_VERSION = '7';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -5297,7 +5375,7 @@ function initGWORLightbox() {
 
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
+        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=202609191636', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
         { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
         { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/staccato-again' },
         { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },

@@ -3,7 +3,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
 
-const host = process.env.HOST || "0.0.0.0";
+const host = process.env.HOST || "127.0.0.1";
 const port = Number(process.env.PORT || 8080);
 const rootDir = __dirname;
 const dataDir = path.join(rootDir, "data");
@@ -83,15 +83,14 @@ async function writeScores(scores) {
 }
 
 function clientIp(req) {
-  const forwarded = req.headers["x-forwarded-for"];
-  if (typeof forwarded === "string" && forwarded.trim()) {
-    return forwarded.split(",")[0].trim();
-  }
   return req.socket.remoteAddress || "unknown";
 }
 
 function allowedToPost(ip) {
   const now = Date.now();
+  for (const [key, value] of postCounters) {
+    if (now >= value.resetAt) postCounters.delete(key);
+  }
   const current = postCounters.get(ip);
   if (!current || now >= current.resetAt) {
     postCounters.set(ip, { count: 1, resetAt: now + postWindowMs });
@@ -201,7 +200,7 @@ function safeFilePath(pathname) {
   const relativePath = decoded === "/" ? "tootsjam.html" : decoded.slice(1);
   const normalized = path.normalize(relativePath);
   const resolved = path.resolve(rootDir, normalized);
-  if (!resolved.startsWith(rootDir)) return null;
+  if (!resolved.startsWith(rootDir + path.sep)) return null;
   return resolved;
 }
 

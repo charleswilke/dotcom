@@ -11,3 +11,9 @@ ALLOWED_ORIGIN = ""
 binding = "DB"
 database_name = "tootsjam-scores"
 database_id = "a868a537-0ceb-42a1-990c-3ccd62d20bf3"
+
+# Per-client submission throttle (Cloudflare counters are per location).
+[[ratelimits]]
+name = "SCORE_LIMITER"
+namespace_id = "26091901"
+simple = { limit = 5, period = 60 }

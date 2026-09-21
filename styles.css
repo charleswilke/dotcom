@@ -1394,6 +1394,7 @@ header:has(.header-title.glitch-interlace)::before {
 }
 
 .header-subtitle {
+    --subtitle-role-tracking: 2px;
     position: relative;
     isolation: isolate;
     display: inline-block;
@@ -1407,7 +1408,7 @@ header:has(.header-title.glitch-interlace)::before {
     line-height: 1.5;
     margin-bottom: 2rem;
     animation: fadeIn 1.5s ease-in-out;
-    letter-spacing: 2px;
+    letter-spacing: var(--subtitle-role-tracking);
     text-shadow: 0 1px 6px rgba(15, 12, 40, 0.5);
 }
 
@@ -1440,7 +1441,9 @@ header:has(.header-title.glitch-interlace)::before {
     margin-top: 0.45em;
     font-size: 0.65em;
     line-height: 1.7;
-    letter-spacing: 0.432em;
+    /* Match the 35-character role line with this 39-character line. Both use
+       the same monospace face; divide by 0.65 to recover the role glyph width. */
+    letter-spacing: calc((35 * (1ch / 0.65 + var(--subtitle-role-tracking)) - 39ch) / 39);
     text-transform: uppercase;
     color: var(--light);
     text-shadow: 0 1px 6px rgba(15, 12, 40, 0.5);
@@ -3502,7 +3505,7 @@ footer p {
 
     .header-subtitle {
         font-size: 1.1rem;
-        letter-spacing: 1.5px;
+        --subtitle-role-tracking: 1.5px;
     }
 
     .showcase-grid {

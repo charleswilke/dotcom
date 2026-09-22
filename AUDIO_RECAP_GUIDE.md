@@ -81,8 +81,14 @@ consistent, chronological name. Substack's download is an `.m4a` (AAC); convert
 it rather than serving it as-is, so the whole dial stays one format:
 
 ```
-ffmpeg -i ~/Downloads/<episode>.m4a -vn -codec:a libmp3lame -b:a 192k -ar 44100 -ac 2 -id3v2_version 3 audio/aug-2026-substack-recap.mp3
+ffmpeg -i ~/Downloads/<episode>.m4a -vn -codec:a libmp3lame -b:a 128k -ar 44100 -ac 2 -id3v2_version 3 audio/aug-2026-substack-recap.mp3
 ```
+
+**128k, not higher.** These are ~20-minute spoken episodes; above 128k the
+difference is inaudible and the cost is not. June through August 2026 went out
+at 192k and 256k (a 20-minute July at 38MB) and were re-encoded to 128k on
+2026-09-22, saving about 41MB across the three with durations unchanged to the
+microsecond and loudness within half a dB.
 
 Then bake the touch-device scope data for it (see CLAUDE.md, "Album players
 on touch"), or the phone's oscilloscope idles on that station:

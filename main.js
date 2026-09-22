@@ -1983,19 +1983,19 @@ function initTimeDial() {
         {
             angle: 80,
             date: 'June 2026',
-            file: '/audio/jun-2026-substack-recap.mp3',
+            file: '/audio/jun-2026-substack-recap.mp3?v=202609221446',
             label: 'JUN \'26'
         },
         {
             angle: 80,
             date: 'July 2026',
-            file: '/audio/july-2026-substack-recap.mp3',
+            file: '/audio/july-2026-substack-recap.mp3?v=202609221446',
             label: 'JUL \'26'
         },
         {
             angle: 80,
             date: 'August 2026',
-            file: '/audio/aug-2026-substack-recap.mp3',
+            file: '/audio/aug-2026-substack-recap.mp3?v=202609221446',
             label: 'AUG \'26'
         }
     ];

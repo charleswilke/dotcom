@@ -1588,59 +1588,15 @@ async function fetchRSSFeed() {
                 console.warn('[RSS] Primary endpoint failed:', cacheErr);
             }
         }
-        
-        // Fallback: Direct RSS2JSON (only if cache failed)
-        if (!success) {
-            try {
-                logFeedAttempt('rss2json-fallback-start');
-                const fallbackUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + 
-                    encodeURIComponent('https://charleswilke.substack.com/feed') + `&count=${TOTAL_RSS_ITEMS}`;
-                
-                const response = await fetch(fallbackUrl, {
-                    cache: 'default',
-                    headers: { 'Accept': 'application/json' }
-                });
-                logFeedAttempt('rss2json-fallback-response', {
-                    ok: response.ok,
-                    status: response.status
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                        writeCachedFeedItems(data.items, 'rss2json');
-                        renderFeedItems(data.items, feedContent);
-                        logFeedAttempt('rss2json-fallback-success', { itemCount: allItems.length });
-                        success = true;
-                    }
-                }
-            } catch(fallbackErr) {
-                console.warn('[RSS] RSS2JSON fallback failed:', fallbackErr);
-            }
-        }
-        
-        // Last resort: XML parsing
-        if (!success) {
-            try {
-                logFeedAttempt('xml-fallback-start');
-                const xmlItems = await fetchRssXmlFallback();
-                if (xmlItems && xmlItems.length > 0) {
-                    writeCachedFeedItems(xmlItems, 'xml');
-                    renderFeedItems(xmlItems, feedContent);
-                    logFeedAttempt('xml-fallback-success', { itemCount: allItems.length });
-                    success = true;
-                }
-            } catch (xmlErr) {
-                console.warn('[RSS] XML fallback failed:', xmlErr);
-            }
-        }
-
     } catch (error) {
         console.error('All RSS feed attempts failed:', error);
     }
 
-    // Local-dev fallback: if all live sources failed, load the on-disk cache.
-    // Lets the inline reader and cards be developed without the Vercel API.
+    // Fallback: if /api/substack-feed failed, load the snapshot committed at
+    // the repo root. It deploys, so production gets it too: a stale grid
+    // beats an error card. Also lets the reader and cards be developed
+    // without the Vercel API. (Two public proxies, rss2json and AllOrigins,
+    // used to sit between these; removed 2026-09-22, see git history.)
     if (!success) {
         try {
             logFeedAttempt('local-cache-fallback-start');
@@ -1815,54 +1771,6 @@ function updateDynamicButton() {
     if (!archiveMode) {
         dynamicBtn.onclick = () => displayItems(getFeedPageSize());
     }
-}
-
-// Fallback: parse RSS XML manually (via AllOrigins proxy) if rss2json fails
-async function fetchRssXmlFallback() {
-    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://charleswilke.substack.com/feed');
-    const res = await fetch(proxyUrl);
-    if (!res.ok) throw new Error('AllOrigins error ' + res.status);
-    const json = await res.json();
-    const xmlString = json.contents;
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(xmlString, 'text/xml');
-    const items = Array.from(xml.querySelectorAll('item')).map(node => {
-        const get = sel => (node.querySelector(sel) ? node.querySelector(sel).textContent : '');
-        const title = get('title');
-        const link = get('link');
-        const descriptionHtml = get('description');
-        // Use getElementsByTagNameNS for reliable content:encoded extraction
-        const contentEl = node.getElementsByTagNameNS('http://purl.org/rss/1.0/modules/content/', 'encoded')[0];
-        const contentEncoded = contentEl ? contentEl.textContent : get('content\\:encoded');
-        const description = contentEncoded || descriptionHtml || '';
-        const pubDate = get('pubDate');
-        // Try to find first image URL in content/description
-        let thumbnail = '';
-        const imgMatch = description.match(/<img[^>]+src="([^">]+)"/i)
-            || description.match(/<img[^>]+src='([^'>]+)'/i);
-        if (imgMatch) thumbnail = imgMatch[1];
-        // Also check media:thumbnail and enclosure as fallbacks
-        if (!thumbnail) {
-            const mediaThumb = node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail')[0];
-            if (mediaThumb) thumbnail = mediaThumb.getAttribute('url') || '';
-        }
-        if (!thumbnail) {
-            const enclosure = node.querySelector('enclosure[type^="image"]');
-            if (enclosure) thumbnail = enclosure.getAttribute('url') || '';
-        }
-        
-        // Extract categories from RSS
-        const categories = [];
-        const categoryNodes = node.querySelectorAll('category');
-        categoryNodes.forEach(catNode => {
-            if (catNode.textContent.trim()) {
-                categories.push(catNode.textContent.trim());
-            }
-        });
-        
-        return { title, link, description, pubDate, thumbnail, content: description, categories };
-    });
-    return items;
 }
 
 // Skip RSS calls on localhost/file audits to avoid noisy fetch failures.

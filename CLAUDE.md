@@ -19,7 +19,7 @@ python3 transcribe.py <audio-file>
 python3 verify-lyrics.py
 ```
 
-No build step locally — all files are served directly, authored-as-is. **CSS is minified in Vercel's build container only** (see "CSS minification" under Deployment); nothing in git is ever minified, and the local server serves the same unminified files you edit.
+No build step locally — all files are served directly, authored-as-is. **CSS and JS are minified in Vercel's build container only** (see "Build step" under Deployment); nothing in git is ever minified, and the local server serves the same unminified files you edit.
 
 **npm security:** Global `~/.npmrc` has `ignore-scripts=true` and `min-release-age=7` (supply chain protection). If `npm install` fails because a package needs lifecycle scripts, use `npm install --ignore-scripts=false` for that one install.
 
@@ -29,29 +29,46 @@ No build step locally — all files are served directly, authored-as-is. **CSS i
 
 `.htaccess` exists but is no longer active (legacy DreamHost config).
 
-### CSS minification (build-container only)
+### Build step (build-container only)
 
-`vercel.json` sets:
+`vercel.json` runs three scripts, in order, and `&&`-chained, so any one failing fails the deploy:
 
 ```
-"buildCommand": "node tools/minify-css.js styles.css subpages.css before-times.css"
-"outputDirectory": "."
+node tools/prepare-security-assets.js
+node tools/minify-css.js styles.css subpages.css before-times.css
+node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js
 ```
+
+with `"outputDirectory": "."`. **`package.json` deploys, so Vercel runs an `npm install` first** (dependencies: `dompurify`; devDependencies: `terser`, `playwright`). Two of the three scripts need it. This section used to say the opposite. That was true until 194838b (2026-08-28) un-ignored `package.json` to bring in terser, and the doc went stale for a month.
+
+Note that Vercel's install does **not** read your global `~/.npmrc`, so the `ignore-scripts=true` / `min-release-age=7` posture from the Development section does not apply in the build container. There is no repo-level `.npmrc`. Keep the dependency list short and pinned via `package-lock.json`.
+
+#### prepare-security-assets.js
+
+Does two jobs, both from `node_modules` or the tree, never the network:
+
+- Copies `dompurify/dist/purify.min.js` to `vendor/dompurify.min.js` (plus its licence). The vendored copy is **also committed**, so the local server has it without an install. The build overwrites it with whatever `package-lock.json` resolved. index.html references it as `?v=<dompurify version>`, not a content hash. **If you bump dompurify, bump that `?v=` by hand** and commit the new vendored file, or returning visitors keep the old sanitizer for a year under `immutable`.
+- Walks `audio/` and writes `lib/play-catalog.json`: the `album/slug` allowlist `api/play.js` accepts for play counts (recaps directly in `audio/` are `recaps/<slug>`). The slug rules match `parsePlayTarget` in main.js; keep the two regexes identical. It is regenerated on every deploy, so a new track is counted without touching the file. But commit the regenerated file when you add audio anyway, so the local API agrees.
+
+#### minify-css.js
 
 [tools/minify-css.js](tools/minify-css.js) rewrites those three files **in place inside Vercel's build container**, which is a throwaway checkout. Git keeps the authored files, and `node .claude/static-server.js` keeps serving them unminified, so the repo's no-build-step character is intact where you actually work. It is zero-dependency, deterministic, idempotent, and refuses to write if minifying changed the brace balance.
 
 Worth it because Vercel compresses on the fly at a low brotli level and cannot squeeze whitespace: `styles.css` goes from **86K to roughly 45K on the wire**. Since `.css` is now `immutable`, this only affects first visits.
 
-**Fail-safe, not fail-broken:** if the build step ever stops running, the site serves the unminified sources exactly as it did before. And because minification is deterministic, hashing the *source* in `stamp-code.sh` still identifies the deployed bytes uniquely.
+**Fail-safe, not fail-broken:** if the build *command* is ever removed, the site serves the unminified sources exactly as it did before. (A build command that runs and *fails* is different: that fails the deploy, and the previous deployment stays live.) And because minification is deterministic, hashing the *source* in `stamp-code.sh` still identifies the deployed bytes uniquely.
 
 **`tools/` is `.vercelignore`d, so the build script has to be re-included by hand.** The first deploy of this failed with `Cannot find module '/vercel/path0/tools/minify-css.js'`: committed to git, filtered out of the deploy. And it could not be fixed with a bare `!tools/minify-css.js`, because a path under a flatly-excluded directory cannot come back — the same trap the `OMAxAI/*` and `bt-assets/*` rules are already shaped around. The directory is excluded by its contents instead:
 
 ```
 tools/*
 !tools/minify-css.js
+!tools/minify-js.js
 ```
 
-**So a build step may only depend on files that actually reach the container.** `package.json` is `.vercelignore`d too, which means no install step runs and a build tool cannot have dependencies — another reason `minify-css.js` is zero-dependency. If you add a second build script, re-include it explicitly and verify before pushing. Note `git check-ignore` reads `.gitignore`, so it is the wrong tool here; point `--exclude-from` at the right file instead:
+(`!tools/prepare-security-assets.js` is re-included further down the file, line ~86.)
+
+**So a build step may only depend on files that actually reach the container.** If you add another build script, re-include it explicitly and verify before pushing. Note `git check-ignore` reads `.gitignore`, so it is the wrong tool here; point `--exclude-from` at the right file instead:
 
 ```
 git ls-files -c --ignored --exclude-from=.vercelignore | grep '^tools/your-script.js$'
@@ -92,7 +109,18 @@ Current coverage, all PASS at 0 differences and 0 control drift:
 | alice-in-wonderland / jersey-boys | 1280 | 18,270 / 15,680 |
 | before-times | 1280 | 57,260 |
 
-**JS is deliberately not minified.** `main.js` is ~5,400 lines and terser would be a new dependency against the `ignore-scripts` posture, with silent-breakage risk; CSS is the larger win anyway.
+#### minify-js.js
+
+[tools/minify-js.js](tools/minify-js.js) runs **terser** (`compress: { passes: 2 }`, `mangle: true`, comments stripped) over the six standalone scripts, in place, in the container. Measured 2026-09-22: 1,068K → 604K raw across the six, and `main.js` **69K → 35K gzipped**, which is now a bigger first-visit win than the CSS. Since hashing is over the source, `stamp-code.sh` works unchanged, the same as for CSS.
+
+What it does **not** have is the CSS minifier's safety net. There is no `--check` or `--out`, and no structural guard; it overwrites whatever it is given. terser is far more battle-tested than a hand-rolled CSS minifier, so the real risk is not a terser bug but code that depends on names or text surviving: `Function.prototype.name`, `fn.toString()`, or a comment the code reads. Mangling only renames locals, so globals the HTML calls (`onclick="…"`) and `window.*` handles like `__foilMotion` survive. **The same "never on your working copy" rule applies, and more so, since it has no non-destructive mode.** To exercise it, copy the scripts, `package.json` and `package-lock.json` into the scratchpad and `npm ci` there:
+
+```
+cp main.js … package.json package-lock.json "$SCRATCH/" && mkdir -p "$SCRATCH/tools" && cp tools/minify-js.js "$SCRATCH/tools/"
+(cd "$SCRATCH" && npm ci && node tools/minify-js.js main.js … && node --check main.js)
+```
+
+`node --check` only proves it parses. For a behavioral check, serve the scratch copy and click through the lightboxes, the Time Dial and an album player with the console open.
 
 ## Cache busting for in-place asset replacements
 

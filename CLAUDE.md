@@ -249,6 +249,19 @@ The name in the header is not text. It is `images/charles-wilke-wordmark-v4.svg`
 - **The viewBox is the painted bounds plus 10 units, measured from pixels.** `getBBox()` on the mark over-reports by 100+ units once the masks are in play, and a fat viewBox silently pushes the name off-centre in the header. Draw the SVG into a canvas and scan for the first and last opaque pixel on each side, then set `viewBox` and the `width`/`height` attributes in index.html to match, or the header's reserved space is wrong before the image lands.
 - Both files live under `/images/`, so they are immutable: a change means a new filename, not `bump-cover.sh`.
 
+### Games section title (`.games-title-art`)
+
+"Playable Browser Games" is lettering, not text: `images/games/section-title-marquee.svg`, an `<img>` in the `h2` (alt text carries the name, same pattern as the Projections title). It is **generated**, so don't hand-edit it:
+
+```
+python3 tools/make-games-title-svg.py                    # the live one
+python3 tools/make-games-title-svg.py --variant vector   # the runner-up
+```
+
+The glyphs are polygons on a 100-unit cap height in the script (BROWSER GAMES as chamfered arcade block capitals, PLAYABLE as single-stroke vector capitals). The one-point-perspective extrusion toward a vanishing point below the line, its hidden faces, the lit-from-top-left shading and the viewBox are all derived, so a letter changes in one place. The viewBox is computed from the geometry (no masks here, so unlike the header wordmark it doesn't over-report); a canvas scan of the painted pixels agreed, with 10 units of margin each side.
+
+Marquee (cream-to-amber face, shaded magenta extrusion, cyan rim) was picked on sight over "vector" (dark face, cyan outline, wireframe extrusion with hidden lines removed), whose wire competed with the letters at phone width. The file is under `/images/`, so it is immutable: **after regenerating, bump the `?v=` on the `<img>` in index.html by hand.** It replaced a small cyan-to-amber label plate in Space Mono, which is in git history if it's ever wanted back.
+
 ### Fonts are self-hosted
 
 The five Google families (Audiowide, Exo, Orbitron, Space Mono, Rock Salt) live in `/fonts/` as the latin-subset woff2 files Google itself serves, declared in `@font-face` blocks at the top of both styles.css and subpages.css, with the Google version in each filename because `.woff2` is served `immutable`. index.html and the three subpages preload the two faces first paint needs (title and body; the nav's Orbitron is deliberately not preloaded, since on slow 4G every preloaded font is bandwidth taken from the stylesheet) and no longer touch fonts.googleapis.com. Rock Salt is a 4K subset of exactly the glyphs in "Charles Wilke"; its `unicode-range` says so, so if the About card's name ever changes, re-subset it (recipe in `fonts/README.md`) or the new letters fall back to cursive. `before-times.html` still loads its own faces from Google. Don't bring the Google `<link>` back for a new family: add the file and a `@font-face`, and check `fonts/README.md`'s licence table.

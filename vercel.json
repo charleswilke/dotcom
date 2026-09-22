@@ -63,7 +63,9 @@
   "redirects": [
     { "source": "/tootsjam", "destination": "/tootsjam/", "permanent": true },
     { "source": "/chessblaster", "destination": "/chessblaster/", "permanent": true },
-    { "source": "/before-times/sound-stage(/?)", "destination": "/before-times/screening-room", "permanent": true }
+    { "source": "/before-times/sound-stage(/?)", "destination": "/before-times/screening-room", "permanent": true },
+    { "source": "/alice-in-wonderland/", "destination": "/alice-in-wonderland", "permanent": true },
+    { "source": "/jersey-boys/", "destination": "/jersey-boys", "permanent": true }
   ],
   "rewrites": [
     { "source": "/read/:slug", "destination": "/api/article-preview?slug=:slug" },
@@ -77,6 +79,8 @@
     { "source": "/before-times(/?)", "destination": "/before-times.html" },
     { "source": "/l.ai.bor(/?)", "destination": "/l.ai.bor.html" },
     { "source": "/faq(/?)", "destination": "/faq.html" },
+    { "source": "/alice-in-wonderland", "destination": "/alice-in-wonderland.html" },
+    { "source": "/jersey-boys", "destination": "/jersey-boys.html" },
     { "source": "/mixtape(/?)", "destination": "/mixtape.html" },
     { "source": "/bsides(/?)", "destination": "/bsides.html" },
     { "source": "/side-two(/?)", "destination": "/side-two.html" },

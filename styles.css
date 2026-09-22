@@ -8470,7 +8470,8 @@ html {
 /* Game cards - TurboGrafx/HuCard-inspired playable links */
 .game-cartridges-section {
     --cart-ink: #121018;
-    padding: clamp(4.25rem, 6vw, 5.25rem) 0 4.6rem;
+    /* Same top as the Albums section below, so the two openings match. */
+    padding: clamp(2.25rem, 3vw, 3rem) 0 4.6rem;
     scroll-margin-top: 72px;
     color: var(--light);
     position: relative;
@@ -9469,7 +9470,7 @@ html {
 
 @media (max-width: 820px) {
     .game-cartridges-section {
-        padding: 2.75rem 0 3.7rem;
+        padding: 2.25rem 0 3.7rem;
     }
 
     .cartridge-deck {

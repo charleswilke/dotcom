@@ -2839,63 +2839,6 @@ function triggerGlitch(header) {
     }, duration);
 }
 
-function initHeaderGlitchEffects() {
-    const header = document.querySelector('.header-wordmark');
-    const artwork = header?.querySelector('img');
-    if (!artwork || window.__headerGlitchInit) return;
-    window.__headerGlitchInit = true;
-
-    const signal = document.createElement('span');
-    signal.className = 'wordmark-signal';
-    signal.setAttribute('aria-hidden', 'true');
-    // The wordmark is a <picture>: under 768px the compact SVG is served, so read the
-    // face the browser actually chose, not the src attribute, or the overlay stretches
-    // the wide artwork into the compact box. currentSrc is empty until the image starts
-    // loading, hence the fallback.
-    const syncArt = () => {
-        signal.style.setProperty('--wordmark-art', `url("${artwork.currentSrc || artwork.getAttribute('src')}")`);
-    };
-    syncArt();
-    header.appendChild(signal);
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const classes = ['signal-chroma', 'signal-soft'];
-    let visible = false;
-    let firstBurst = true;
-    let nextBurst;
-    let endBurst;
-
-    const clear = () => {
-        clearTimeout(nextBurst);
-        clearTimeout(endBurst);
-        header.classList.remove(...classes);
-    };
-    const canAnimate = () => visible && !document.hidden && !reducedMotion.matches;
-    const schedule = () => {
-        clear();
-        if (!canAnimate()) return;
-        const delay = firstBurst ? 6000 + Math.random() * 4000 : 12000 + Math.random() * 12000;
-        nextBurst = setTimeout(() => {
-            if (!canAnimate()) return;
-            firstBurst = false;
-            syncArt();
-            header.classList.add('signal-chroma');
-            // Favor the subtle split, with an occasional stronger red/cyan burst.
-            header.classList.toggle('signal-soft', Math.random() < 0.65);
-            endBurst = setTimeout(schedule, 240);
-        }, delay);
-    };
-
-    // Returning to the header starts a fresh quiet interval, never a catch-up burst.
-    const observer = new IntersectionObserver(([entry]) => {
-        visible = entry.isIntersecting;
-        schedule();
-    });
-    observer.observe(header);
-    document.addEventListener('visibilitychange', schedule);
-    reducedMotion.addEventListener('change', schedule);
-}
-
 // Timed glitch effect for the FAQ link
 function triggerGlitchFAQ(faqLink) {
     if (!faqLink) return;
@@ -5684,7 +5627,6 @@ function initDeferredHomepageMedia() {
 
 function initDeferredHomepageEffects() {
     scheduleIdleWork(() => {
-        initHeaderGlitchEffects();
         initLaiborGlitchEffects();
         initFaqGlitchTimer();
     }, 2000);

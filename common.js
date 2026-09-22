@@ -168,82 +168,65 @@ function initStickyNav() {
 }());
 // ===== END STICKY NAV =====
 
-// ===== HEADER CRT GLITCH (subpages - skipped when main.js handles it) =====
-const COMMON_GLITCH_CLASSES = ['glitch', 'glitch-scanlines', 'glitch-tear', 'glitch-vhold', 'glitch-interlace', 'glitch-static'];
+// ===== HEADER WORDMARK SIGNAL =====
+// Every page's header is the SVG wordmark, so its momentary chroma burst lives
+// here rather than in main.js; index and the three subpages share this copy.
+function initHeaderGlitchEffects() {
+    const header = document.querySelector('.header-wordmark');
+    const artwork = header?.querySelector('img');
+    if (!artwork) return;
 
-function commonClearGlitch(el) {
-    el.classList.remove(...COMMON_GLITCH_CLASSES);
+    const signal = document.createElement('span');
+    signal.className = 'wordmark-signal';
+    signal.setAttribute('aria-hidden', 'true');
+    // The wordmark is a <picture>: under 768px the compact SVG is served, so read the
+    // face the browser actually chose, not the src attribute, or the overlay stretches
+    // the wide artwork into the compact box. currentSrc is empty until the image starts
+    // loading, hence the fallback.
+    const syncArt = () => {
+        signal.style.setProperty('--wordmark-art', `url("${artwork.currentSrc || artwork.getAttribute('src')}")`);
+    };
+    syncArt();
+    header.appendChild(signal);
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const classes = ['signal-chroma', 'signal-soft'];
+    let visible = false;
+    let firstBurst = true;
+    let nextBurst;
+    let endBurst;
+
+    const clear = () => {
+        clearTimeout(nextBurst);
+        clearTimeout(endBurst);
+        header.classList.remove(...classes);
+    };
+    const canAnimate = () => visible && !document.hidden && !reducedMotion.matches;
+    const schedule = () => {
+        clear();
+        if (!canAnimate()) return;
+        const delay = firstBurst ? 6000 + Math.random() * 4000 : 12000 + Math.random() * 12000;
+        nextBurst = setTimeout(() => {
+            if (!canAnimate()) return;
+            firstBurst = false;
+            syncArt();
+            header.classList.add('signal-chroma');
+            // Favor the subtle split, with an occasional stronger red/cyan burst.
+            header.classList.toggle('signal-soft', Math.random() < 0.65);
+            endBurst = setTimeout(schedule, 240);
+        }, delay);
+    };
+
+    // Returning to the header starts a fresh quiet interval, never a catch-up burst.
+    const observer = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        schedule();
+    });
+    observer.observe(header);
+    document.addEventListener('visibilitychange', schedule);
+    reducedMotion.addEventListener('change', schedule);
 }
-
-function commonTriggerGlitch(header) {
-    if (!header) return;
-
-    const roll = Math.random();
-    const classes = ['glitch'];
-    let duration;
-
-    // Hold times are floors, not tastes: crt-glitch-main runs 420ms and spends
-    // its last third easing back to rest, so clearing the class early amputates
-    // the settle -- which is the part that reads as phosphor letting go rather
-    // than a class being removed. Every branch below sits at or above 420ms.
-    // (crt-vertical-hold is 600ms and already matched.) The deliberately
-    // clipped ones are the bad-signal stutters further down; those are
-    // re-triggers and are supposed to be cut off.
-
-    if (roll > 0.88) {
-        classes.length = 0;
-        classes.push('glitch-vhold');
-        duration = 600;
-    } else if (roll > 0.72) {
-        classes.push('glitch-tear', 'glitch-interlace');
-        duration = 430 + Math.random() * 140;
-    } else if (roll > 0.55) {
-        classes.push('glitch-scanlines');
-        duration = 430 + Math.random() * 150;
-    } else if (roll > 0.40) {
-        classes.push('glitch-interlace');
-        duration = 430 + Math.random() * 120;
-    } else {
-        duration = 430 + Math.random() * 110;
-    }
-
-    classes.forEach(cls => header.classList.add(cls));
-
-    setTimeout(() => {
-        commonClearGlitch(header);
-
-        if (Math.random() > 0.85) {
-            setTimeout(() => {
-                header.classList.add('glitch');
-                setTimeout(() => {
-                    header.classList.remove('glitch');
-                    if (Math.random() > 0.5) {
-                        setTimeout(() => {
-                            header.classList.add('glitch', 'glitch-tear');
-                            setTimeout(() => {
-                                commonClearGlitch(header);
-                                setTimeout(() => commonTriggerGlitch(header), 3000 + Math.random() * 4000);
-                            }, 150);
-                        }, 80 + Math.random() * 50);
-                    } else {
-                        setTimeout(() => commonTriggerGlitch(header), 3000 + Math.random() * 4000);
-                    }
-                }, 120 + Math.random() * 80);
-            }, 100 + Math.random() * 100);
-        } else {
-            setTimeout(() => commonTriggerGlitch(header), 2500 + Math.random() * 5000);
-        }
-    }, duration);
-}
-
-function initCommonHeaderGlitch() {
-    // Skip if main.js already initialized the header glitch (index.html)
-    if (window.__headerGlitchInit) return;
-    const header = document.querySelector('.header-title');
-    if (!header) return;
-    setTimeout(() => commonTriggerGlitch(header), 1500 + Math.random() * 2000);
-}
-// ===== END HEADER CRT GLITCH =====
+// ===== END HEADER WORDMARK SIGNAL =====
 
 document.addEventListener('DOMContentLoaded', () => {
     // Update copyright year dynamically (fallback for hardcoded value)
@@ -253,8 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(triggerGlitchFooterNote, 2500 + Math.random() * 3000);
 
-    // Init header glitch for subpages (deferred to let main.js claim it first if present)
-    setTimeout(initCommonHeaderGlitch, 100);
+    // Off the critical path: the first burst is 6-10s out anyway.
+    (window.requestIdleCallback || (cb => setTimeout(cb, 1)))(initHeaderGlitchEffects, { timeout: 2000 });
 });
 
 // ===== TUNER SCROLLBAR =====

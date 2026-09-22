@@ -451,13 +451,124 @@ header {
     justify-content: center;
 }
 
+.header-wordmark {
+    position: relative;
+    width: min(1100px, 96vw);
+    margin: 1.25rem auto 0.6rem;
+    line-height: 0;
+}
+
+.header-wordmark img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 3px rgba(255, 220, 158, 0.4))
+            drop-shadow(0 0 14px rgba(255, 150, 80, 0.12));
+}
+
+/* Reuse the actual artwork for momentary signal breakup; resting art stays crisp. */
+.wordmark-signal {
+    --chroma-offset: clamp(5px, 1vw, 12px);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    visibility: hidden;
+    background: var(--wordmark-art) center / 100% 100% no-repeat;
+}
+
+.wordmark-signal::before,
+.wordmark-signal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    mask: var(--wordmark-art) center / 100% 100% no-repeat;
+}
+
+.wordmark-signal::before {
+    background: #ff244c;
+    transform: translateX(calc(-1 * var(--chroma-offset)));
+    opacity: 0.9;
+}
+
+.wordmark-signal::after {
+    background: #00cfff;
+    transform: translateX(var(--chroma-offset));
+    opacity: 0.85;
+}
+
+.header-wordmark.signal-soft .wordmark-signal { --chroma-offset: 3px; }
+.header-wordmark.signal-soft .wordmark-signal::before { background: #ff5a36; opacity: .55; }
+.header-wordmark.signal-soft .wordmark-signal::after { background: #00f7c2; opacity: .45; }
+
+/* Signal tear remains available only in the comparison lab. */
+.header-wordmark.signal-tear .wordmark-signal {
+    visibility: visible;
+    /* A fixed damaged scanline region; never sweep a band down the artwork. */
+    clip-path: inset(36% 0 43%);
+    animation: wordmark-tear 300ms steps(1, end) both;
+}
+
+.header-wordmark.signal-tear > img {
+    animation: wordmark-sync 300ms steps(1, end) both;
+}
+
+.header-wordmark.signal-chroma .wordmark-signal {
+    visibility: visible;
+    background: none;
+    animation: wordmark-chroma 240ms steps(1, end) both;
+}
+
+@keyframes wordmark-tear {
+    0%, 100% { transform: none; opacity: 0; }
+    8% { transform: translateX(-7px); opacity: 0.85; }
+    20% { transform: translateX(4px); opacity: 0.65; }
+    32% { transform: none; opacity: 0; }
+    59% { transform: translateX(-3px); opacity: 0.55; }
+    70% { transform: translateX(1px); opacity: 0.25; }
+    80% { transform: none; opacity: 0; }
+}
+
+@keyframes wordmark-sync {
+    0%, 32%, 70%, 100% { transform: none; }
+    8% { transform: translateX(1px); }
+    20% { transform: translateX(-1px); }
+    59% { transform: translateX(0.5px); }
+}
+
+@keyframes wordmark-chroma {
+    0%, 100% { opacity: 0; transform: none; }
+    8% { opacity: 0.9; transform: translateX(-1px); }
+    24% { opacity: 0.55; transform: translateX(1px); }
+    38% { opacity: 0; transform: none; }
+    62% { opacity: 0.4; transform: translateX(-0.5px); }
+    76% { opacity: 0; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header-wordmark.signal-tear > img {
+        animation: none;
+    }
+
+    .header-wordmark .wordmark-signal {
+        display: none;
+        animation: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .header-wordmark {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+}
+
 .header-content {
     position: relative;
     z-index: 3;
     text-align: center;
     color: var(--light);
     text-shadow: 0 0 10px rgba(255, 185, 58, 0.7), 0 0 20px rgba(255, 185, 58, 0.45);
-    margin-bottom: 2.8rem;
+    margin-bottom: 1.4rem;
 }
 
 .header-title {
@@ -970,27 +1081,59 @@ header:has(.header-title.glitch-scanlines)::before {
 }
 
 .header-subtitle {
+    --subtitle-role-tracking: 2px;
+    position: relative;
+    isolation: isolate;
+    display: inline-block;
+    padding: 0.65rem 1.75rem 0.75rem;
+    border: 1px solid rgba(245, 233, 208, 0.13);
+    border-radius: 0;
+    background: linear-gradient(135deg, rgba(21, 17, 49, 0.44), rgba(29, 21, 63, 0.36));
+    box-shadow: inset 0 1px 0 rgba(245, 233, 208, 0.035);
     font-family: 'Space Mono', monospace;
     font-size: 1.2rem;
+    line-height: 1.5;
     margin-bottom: 2rem;
     animation: fadeIn 1.5s ease-in-out;
-    letter-spacing: 2px;
+    letter-spacing: var(--subtitle-role-tracking);
+    text-shadow: 0 1px 6px rgba(15, 12, 40, 0.5);
 }
 
-.header-subtitle .mobile-break {
-    display: none;
+/* Fine connecting rules with stronger instrument-panel corner brackets. */
+.header-subtitle::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    background:
+        linear-gradient(currentColor, currentColor) left top / 12px 2px,
+        linear-gradient(currentColor, currentColor) left top / 2px 12px,
+        linear-gradient(currentColor, currentColor) right top / 12px 2px,
+        linear-gradient(currentColor, currentColor) right top / 2px 12px,
+        linear-gradient(currentColor, currentColor) left bottom / 12px 2px,
+        linear-gradient(currentColor, currentColor) left bottom / 2px 12px,
+        linear-gradient(currentColor, currentColor) right bottom / 12px 2px,
+        linear-gradient(currentColor, currentColor) right bottom / 2px 12px;
+    background-repeat: no-repeat;
+    color: rgba(245, 233, 208, 0.5);
 }
 
-/* Roles read writer-first on one line here; the narrow order is hidden. */
-.header-subtitle .roles-narrow {
-    display: none;
+/* Keep the role order on a single line at every breakpoint. */
+.header-subtitle .subtitle-roles {
+    white-space: nowrap;
 }
 
 .header-subtitle .subtitle-line-2 {
+    display: inline-block;
+    margin-top: 0.45em;
+    font-size: 0.65em;
+    line-height: 1.7;
+    /* Match the 35-character role line with this 39-character line. Both use
+       the same monospace face; divide by 0.65 to recover the role glyph width. */
+    letter-spacing: calc((35 * (1ch / 0.65 + var(--subtitle-role-tracking)) - 39ch) / 39);
+    text-transform: uppercase;
     color: var(--light);
-    text-shadow:
-        0 0 10px rgba(255, 185, 58, 0.7),
-        0 0 20px rgba(255, 185, 58, 0.45);
+    text-shadow: 0 1px 6px rgba(15, 12, 40, 0.5);
 }
 
 .header-subtitle .subtitle-line-2 .electric,
@@ -1044,23 +1187,17 @@ footer .electric {
 }
 
 @media (max-width: 767px) {
-    .header-subtitle .mobile-break {
-        display: block;
-    }
-
-    /* Two lines fit evenly as "product designer //" / "writer // builder";
-       the writer-first order only wraps to an orphaned word here. */
-    .header-subtitle .roles-wide {
+    /* Shorten the designer role on mobile while keeping the same order. */
+    .header-subtitle .role-product {
         display: none;
-    }
-
-    .header-subtitle .roles-narrow {
-        display: inline;
     }
 
     .header-subtitle .subtitle-line-2 {
         display: inline-block;
-        margin-top: 0.4em;
+        margin-top: 0.3em;
+        font-size: clamp(0.625rem, 3vw, 0.75rem);
+        line-height: 1.5;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -1820,7 +1957,7 @@ footer p {
 
     .header-subtitle {
         font-size: 1.1rem;
-        letter-spacing: 1.5px;
+        --subtitle-role-tracking: 1.5px;
     }
 
 }
@@ -1931,8 +2068,9 @@ footer p {
     }
     
     .header-subtitle {
-        font-size: 1.2rem;
-        letter-spacing: 1px;
+        padding: 0.5rem 0.625rem;
+        font-size: clamp(0.75rem, 3.75vw, 1rem);
+        letter-spacing: 0.01em;
         margin-left: 0.6rem;
         margin-right: 0.6rem;
         margin-bottom: 0;
@@ -1959,12 +2097,6 @@ footer p {
            already covers this range. An override would re-introduce the
            two-line wrap this size was originally chosen to force. */
         line-height: 1.1;
-    }
-    
-    .header-subtitle {
-        font-size: 1rem;
-        margin-left: 0.6rem;
-        margin-right: 0.6rem;
     }
     
     .section-title {
@@ -2934,7 +3066,15 @@ section.production-header.alice p {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(10, 8, 40, 0.92);
+    /* Drafting-paper grid: fine squares with stronger major divisions. */
+    background:
+        linear-gradient(rgba(165, 186, 204, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(165, 186, 204, 0.09) 1px, transparent 1px),
+        linear-gradient(rgba(165, 186, 204, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(165, 186, 204, 0.045) 1px, transparent 1px),
+        rgba(10, 8, 40, 0.95);
+    background-size: 64px 64px, 64px 64px, 8px 8px, 8px 8px, auto;
+    background-position: center center;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 185, 58, 0.3);

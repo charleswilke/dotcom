@@ -1,0 +1,46 @@
+<svg viewBox="0 15 900 260" role="img" aria-labelledby="grocery-sign-title grocery-sign-desc" xmlns="http://www.w3.org/2000/svg" width="900" height="260">
+  <title id="grocery-sign-title">Original Albums</title>
+  <desc id="grocery-sign-desc">Hand-painted ivory Albums lettering with a flat brick-red shadow, beneath small rust-colored Original capitals framed by tapered brush flourishes.</desc>
+  <!-- Hand-drawn source artwork. Edit the paths here; no font or generator is required. -->
+  <defs>
+    <path id="grocery-A" fill-rule="evenodd" d="M-4 129 Q16 71 42 10 Q48 0 61 2 L78 4 Q84 64 110 127 Q95 133 78 128 L69 100 L33 101 L24 128 Q10 132-4 129Z M42 75 L64 74 L55 34Z" />
+    <path id="grocery-L" d="M7 4 Q23-1 39 3 L35 101 Q65 104 104 97 L101 125 Q54 131 3 125 Q7 66 7 4Z" />
+    <path id="grocery-B" fill-rule="evenodd" d="M3 4 Q37-2 67 4 C104 10 112 44 87 62 C118 75 115 112 87 124 Q55 136 4 129 Q5 70 3 4Z M35 26 L34 53 Q62 57 70 46 Q81 24 35 26Z M34 76 L35 105 Q72 111 78 97 Q84 75 34 76Z" />
+    <path id="grocery-U" d="M4 4 Q21 1 39 5 L36 81 C34 100 41 109 56 108 C76 108 83 98 82 79 L85 3 Q99-1 114 3 L112 84 C114 116 93 134 57 134 C20 134 3 115 4 85Z" />
+    <path id="grocery-M" d="M0 130 Q4 65 6 5 L36 1 Q54 39 63 68 Q74 40 95 4 L124 7 Q128 69 137 129 Q122 132 105 128 L101 52 Q83 87 70 103 L56 104 Q44 79 33 53 L30 130Z" />
+    <path id="grocery-S" d="M105 14 L94 40 C76 24 46 22 37 34 C28 46 44 52 62 57 C96 64 113 76 108 99 C103 125 77 137 48 133 Q19 132-1 115 L11 91 C29 107 63 118 76 103 C86 91 65 85 46 79 C14 70 0 57 5 35 C11 5 62-10 105 14Z" />
+    <g id="grocery-albums" transform="translate(55 110) skewX(-7)">
+      <use href="#grocery-A" transform="translate(15 3) rotate(-2 55 70)" />
+      <use href="#grocery-L" transform="translate(147 1) rotate(1 50 65)" />
+      <use href="#grocery-B" transform="translate(264 -1) rotate(-1 55 65)" />
+      <use href="#grocery-U" transform="translate(389 2) rotate(1 55 65)" />
+      <use href="#grocery-M" transform="translate(524 -4) rotate(-1 65 65)" />
+      <use href="#grocery-S" transform="translate(681 -5) rotate(2 55 65)" />
+    </g>
+    <clipPath id="grocery-paint-clip">
+      <use href="#grocery-albums" />
+    </clipPath>
+  </defs>
+  <g transform="translate(289 41) skewX(-9) rotate(-2 145 25)" aria-hidden="true" fill="#b95637">
+    <path d="M-184 28 Q-118 18-36 22 L-36 29 Q-101 24-184 28Z" />
+    <path d="M-139 40 Q-82 30-37 34 L-37 38 Q-86 40-139 40Z" />
+    <path d="M334 22 Q402 17 478 25 Q401 26 334 29Z" />
+    <path d="M334 34 Q387 29 431 38 Q385 36 334 39Z" />
+  </g>
+  <g fill="none" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(289 41) skewX(-9) rotate(-2 145 25)" stroke="#b95637">
+    <path d="M13 5 C-3 5-7 47 11 46 C30 45 35 3 13 5Z" />
+    <path d="M44 46 L45 6 Q76-1 75 15 Q74 30 46 28 M59 27 L77 45" />
+    <path d="M94 6 L92 45" />
+    <path d="M140 9 Q113-7 110 27 Q107 51 137 43 L140 29 L126 29" />
+    <path d="M161 4 L158 44" />
+    <path d="M180 45 L182 5 L206 43 L209 4" />
+    <path d="M225 44 L242 5 L253 45 M232 29 L248 28" />
+    <path d="M275 5 L271 43 L295 42" />
+  </g>
+  <use href="#grocery-albums" transform="translate(6 7)" fill="#8f3328" />
+  <use href="#grocery-albums" fill="#f4e4bf" />
+  <g clip-path="url(#grocery-paint-clip)" fill="none" stroke="#9d5737" stroke-opacity=".18" stroke-linecap="round">
+    <path d="M125 143 L99 209 M240 145 L235 201 M368 138 L365 162 M489 142 L487 176 M642 143 L651 168 M771 208 Q790 218 806 210" stroke-width="1.6" />
+    <path d="M121 144 L112 172 M226 223 L259 224 M369 220 L392 220 M503 232 L521 231 M690 200 L692 217 M778 139 L796 139" stroke-width="1" />
+  </g>
+</svg>

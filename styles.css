@@ -9019,8 +9019,8 @@ html {
     overflow: hidden;
     background-color: #160d06;
     /* Dimly-lit wood-paneled listening-lounge wall: the honey-oak grain is
-       knocked back with a warm vignette so the neon sign reads as the light
-       source and the iridescent discs still pop off their cases. */
+       knocked back with a warm vignette so the hand-painted ivory sign reads
+       clearly and the iridescent discs pop off their cases. */
     background-image:
         radial-gradient(ellipse 95% 75% at 50% 30%, rgba(20, 11, 4, 0) 28%, rgba(8, 4, 1, 0.88) 100%),
         linear-gradient(180deg, rgba(14, 8, 3, 0.62) 0%, rgba(9, 5, 2, 0.58) 55%, rgba(7, 4, 1, 0.7) 100%),
@@ -9077,48 +9077,17 @@ html {
 }
 
 .albums-section-title {
-    margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
+    width: min(100%, 476px);
+    margin-bottom: clamp(1.3rem, 2.5vw, 2rem);
+    padding: 0;
 }
 
-/* Hot-pink neon sign mounted on the wood — warm tube glow that softly buzzes,
-   distinct from the Games section's cyan neon and the walnut microfiche below. */
-.albums-section-title .work-section-name {
-    position: relative;
-    font-family: 'Neonderthaw', cursive;
-    font-weight: 400;
-    font-size: clamp(3.4rem, 8vw, 5.2rem);
-    letter-spacing: 0.01em;
-    line-height: 1.1;
-    color: #fff1f7;
-    -webkit-text-fill-color: #fff1f7;
-    text-shadow:
-        0 0 3px rgba(255, 255, 255, 0.95),
-        0 0 8px #ff7ac0,
-        0 0 16px #ff3d97,
-        0 0 30px #ff1f86,
-        0 0 52px #d4006e,
-        0 0 80px #a8005a,
-        /* Tight directional drop shadow — the sign casts onto the wood behind it. */
-        2px 3px 2px rgba(8, 3, 10, 0.6);
-    animation: album-neon-buzz 6.5s infinite;
-}
-
-/* Subtle, irregular flicker so the tube feels alive without strobing. */
-@keyframes album-neon-buzz {
-    0%, 100%   { opacity: 1; }
-    2%         { opacity: 0.62; }
-    4%         { opacity: 1; }
-    72%        { opacity: 1; }
-    73%        { opacity: 0.78; }
-    74%        { opacity: 1; }
-    77%        { opacity: 0.86; }
-    79%        { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .albums-section-title .work-section-name {
-        animation: none;
-    }
+/* Hand-painted grocery-sign lettering, with a flat red shadow and brush
+   flourishes framing Original. The SVG paths are the editable source. */
+.albums-title-art {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .cd-rack {

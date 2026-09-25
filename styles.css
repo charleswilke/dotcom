@@ -1431,6 +1431,31 @@ header:has(.header-title.glitch-interlace)::before {
     color: rgba(245, 233, 208, 0.5);
 }
 
+/* Quiet CRT texture, contained inside the panel and behind its lettering. */
+.header-subtitle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        repeating-linear-gradient(to bottom, rgba(245, 233, 208, 0.045) 0 1px, transparent 1px 4px),
+        linear-gradient(to bottom, transparent 25%, rgba(245, 233, 208, 0.055) 50%, transparent 75%);
+    background-size: 100% 4px, 100% 160px;
+    animation: subtitle-crt-roll 12s linear infinite;
+}
+
+@keyframes subtitle-crt-roll {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 0 8px, 0 160px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header-subtitle::after {
+        animation: none;
+    }
+}
+
 /* Keep the role order on a single line at every breakpoint. */
 .header-subtitle .subtitle-roles {
     white-space: nowrap;

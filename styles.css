@@ -14578,24 +14578,18 @@ section.production-header.alice p {
     left: 0;
     width: 100%;
     z-index: 1000;
-    /* Drafting-paper grid: fine squares with stronger major divisions. */
+    /* Navy milk glass: a soft highlight over a deeply tinted, frosted pane. */
     background:
-        linear-gradient(rgba(165, 186, 204, 0.09) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(165, 186, 204, 0.09) 1px, transparent 1px),
-        linear-gradient(rgba(165, 186, 204, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(165, 186, 204, 0.045) 1px, transparent 1px),
-        rgba(10, 8, 40, 0.95);
-    background-size: 64px 64px, 64px 64px, 8px 8px, 8px 8px, auto;
-    background-position: center center;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 185, 58, 0.3);
+        linear-gradient(180deg, rgba(210, 220, 245, 0.08), rgba(210, 220, 245, 0.015)),
+        #080d24;
+    backdrop-filter: blur(24px) saturate(80%);
+    -webkit-backdrop-filter: blur(24px) saturate(80%);
+    border-bottom: 1px solid rgba(210, 220, 245, 0.16);
     box-shadow:
-        0 0 20px rgba(255, 185, 58, 0.1),
-        0 4px 6px -2px rgba(0, 0, 0, 0.6),
-        0 8px 12px -6px rgba(0, 0, 0, 0.45);
+        inset 0 1px 0 rgba(235, 240, 255, 0.07),
+        0 4px 16px rgba(4, 7, 24, 0.24);
     transform: translateY(0);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .site-nav.nav-hidden {
@@ -14603,11 +14597,12 @@ section.production-header.alice p {
 }
 
 .site-nav.nav-scrolled {
-    border-bottom-color: rgba(255, 185, 58, 0.5);
+    /* Release the solid midnight backing once the pane sits over content. */
+    background-color: rgba(15, 20, 48, 0.9);
+    border-bottom-color: rgba(210, 220, 245, 0.22);
     box-shadow:
-        0 0 30px rgba(255, 185, 58, 0.18),
-        0 4px 6px -2px rgba(0, 0, 0, 0.65),
-        0 8px 12px -6px rgba(0, 0, 0, 0.5);
+        inset 0 1px 0 rgba(235, 240, 255, 0.07),
+        0 6px 24px rgba(4, 7, 24, 0.36);
 }
 
 .nav-inner {

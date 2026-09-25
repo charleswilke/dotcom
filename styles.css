@@ -3607,7 +3607,7 @@ footer p {
     /* Social links stay in the right column on tablet */
     .about-content .social-links {
         order: 10;
-        margin-top: auto;
+        margin-top: 0;
         margin-bottom: 10px;
     }
 }
@@ -4435,7 +4435,7 @@ html {
 }
 
 .about-content p:last-of-type {
-    margin-bottom: 1.6rem;
+    margin-bottom: 0.8rem;
 }
 
 .about-footnote {
@@ -4550,12 +4550,54 @@ html {
 /* Social Links */
 .social-links {
     display: flex;
-    gap: 0.5rem;
-    justify-content: center;
+    gap: 0.65rem 1.25rem;
+    justify-content: flex-start;
     margin: 0 0 1.4rem;
     flex-wrap: wrap;
     font-family: 'Space Mono', monospace;
     font-size: 1rem;
+}
+
+.social-link-group {
+    text-align: left;
+}
+
+.social-group-label {
+    display: block;
+    margin-bottom: 0.1rem;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid rgba(185, 201, 212, 0.3);
+    color: #b9c9d4;
+    font-size: 0.65rem;
+    line-height: 1.5;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.social-group-items {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.15rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.social-group-items .social-link {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.social-group-items .social-contact {
+    margin-left: 0.65rem;
+}
+
+@media (max-width: 767px) {
+    .social-links {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 .social-link {

@@ -6380,3 +6380,305 @@ onReady(() => {
     window.addEventListener('resize', positionBubble);
     window.addEventListener('scroll', positionBubble, { passive: true });
 });
+
+// A footer transmission. The original text remains readable without JS.
+document.addEventListener('DOMContentLoaded', () => {
+    const note = document.querySelector('.footer-note');
+    const display = note?.querySelector('[aria-hidden="true"]');
+    if (!display) return;
+    const original = display.textContent;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789/#%+?';
+    let frame = 0;
+    let running = false;
+
+    const settle = () => {
+        cancelAnimationFrame(frame);
+        display.textContent = original;
+        running = false;
+    };
+
+    const decrypt = () => {
+        if (reducedMotion.matches || running) return;
+        running = true;
+        const start = performance.now();
+        let lastTick = -1;
+        const animate = now => {
+            const progress = Math.min((now - start) / 1150, 1);
+            if (progress === 1) {
+                settle();
+                return;
+            }
+            // Fixed-width characters and preserved spaces keep the line still.
+            const tick = Math.floor((now - start) / 55);
+            if (tick !== lastTick) {
+                lastTick = tick;
+                const resolved = Math.floor(progress * original.length);
+                display.textContent = Array.from(original, (character, index) =>
+                    character === ' ' || index < resolved
+                        ? character
+                        : characters[Math.floor(Math.random() * characters.length)]
+                ).join('');
+            }
+            frame = requestAnimationFrame(animate);
+        };
+        frame = requestAnimationFrame(animate);
+    };
+
+    const syncMotion = () => {
+        note.disabled = reducedMotion.matches;
+        if (reducedMotion.matches) settle();
+    };
+    syncMotion();
+    reducedMotion.addEventListener('change', syncMotion);
+    note.addEventListener('click', decrypt);
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) settle();
+    });
+    const observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+            decrypt();
+            observer.disconnect();
+        }
+    }, { threshold: 0.8 });
+    observer.observe(note);
+});
+
+// Analog tracking slips reveal a four-frame tour. Hover/focus runs one tour and holds;
+// touch runs it once on entry, then returns to the cover. Links stay unchanged.
+document.addEventListener('DOMContentLoaded', () => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    document.querySelectorAll('.game-cartridge').forEach(card => {
+        const art = card.querySelector('.cartridge-label-art');
+        const previews = Array.from(art?.querySelectorAll('.cartridge-gameplay') || []);
+        if (!previews.length) return;
+        const canvas = document.createElement('canvas');
+        canvas.className = 'cartridge-signal-canvas';
+        canvas.width = 640;
+        canvas.height = 360;
+        canvas.setAttribute('aria-hidden', 'true');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        art.appendChild(canvas);
+        let available = [];
+        let loading = false;
+        let frame = 0;
+        let timer = 0;
+        let wanted = false;
+        let visible = false;
+        let touchPlayed = false;
+        let hovered = false;
+        let focused = false;
+        let current = -1;
+        let remaining = 0;
+
+        const commit = index => {
+            current = index;
+            previews.forEach(image => image.classList.toggle('is-current', image === available[index]));
+            art.classList.toggle('is-preview', index >= 0);
+        };
+        const stop = () => {
+            cancelAnimationFrame(frame);
+            clearTimeout(timer);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            art.classList.remove('is-tuning');
+        };
+        const reveal = index => {
+            stop();
+            if (!visible || reducedMotion.matches || document.hidden) {
+                commit(index);
+                return;
+            }
+            art.classList.add('is-tuning');
+            canvas.width = 640;
+            canvas.height = Math.round(640 * art.clientHeight / art.clientWidth);
+            const width = canvas.width, height = canvas.height;
+            const cover = art.querySelector('img:not(.cartridge-gameplay)');
+            // Render the actual object-fit crop before bending its scanlines.
+            const picture = image => {
+                const buffer = document.createElement('canvas');
+                buffer.width = width;
+                buffer.height = height;
+                const paint = buffer.getContext('2d');
+                if (!image?.naturalWidth) return buffer;
+                const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+                const cropWidth = width / scale, cropHeight = height / scale;
+                const position = getComputedStyle(image).objectPosition.split(' ');
+                const fraction = value => value === 'bottom' || value === 'right' ? 1
+                    : value === 'top' || value === 'left' ? 0
+                    : value.endsWith('%') ? parseFloat(value) / 100 : .5;
+                paint.drawImage(image,
+                    (image.naturalWidth - cropWidth) * fraction(position[0]),
+                    (image.naturalHeight - cropHeight) * fraction(position[1] || '50%'),
+                    cropWidth, cropHeight, 0, 0, width, height);
+                return buffer;
+            };
+            const outgoing = picture(available[current] || cover);
+            const incoming = picture(available[index] || cover);
+            const start = performance.now();
+            let committed = false;
+            const animate = now => {
+                const progress = Math.min((now - start) / 850, 1);
+                if (progress >= .5 && !committed) {
+                    commit(index);
+                    committed = true;
+                }
+                ctx.clearRect(0, 0, width, height);
+                const distress = Math.pow(Math.sin(progress * Math.PI), 2);
+                const source = progress < .5 ? outgoing : incoming;
+                const band = progress * height * 1.35 - height * .15;
+                const roll = Math.sin(progress * Math.PI * 2) * height * .1 * distress;
+                ctx.fillStyle = '#08090c';
+                ctx.fillRect(0, 0, width, height);
+                // A soft horizontal tracking fold drags adjacent scanlines with
+                // it; a little vertical hold drift wraps the picture at the edge.
+                for (let y = 0; y < height; y += 2) {
+                    const fold = Math.exp(-Math.pow((y - band) / (height * .055), 2));
+                    const slip = distress * (Math.sin(y * .055 + progress * 19) * 2 + fold * 32);
+                    const sy = ((Math.floor(y + roll) % height) + height) % height;
+                    const stripHeight = Math.min(2, height - sy, height - y);
+                    ctx.globalAlpha = 1;
+                    ctx.drawImage(source, 0, sy, width, stripHeight, slip, y, width, stripHeight);
+                    // Weak displaced ghost: analog signal smear, not RGB blocks.
+                    ctx.globalAlpha = distress * .12;
+                    ctx.drawImage(source, 0, sy, width, stripHeight, slip + 5, y, width, stripHeight);
+                }
+                ctx.globalAlpha = 1;
+                const shadow = ctx.createLinearGradient(0, band - 18, 0, band + 18);
+                shadow.addColorStop(0, 'transparent');
+                shadow.addColorStop(.5, `rgba(5,6,10,${distress * .55})`);
+                shadow.addColorStop(1, 'transparent');
+                ctx.fillStyle = shadow;
+                ctx.fillRect(0, band - 18, width, 36);
+                // Fine monochrome snow clings to the tracking band.
+                for (let i = 0; i < 130; i++) {
+                    ctx.fillStyle = `rgba(235,229,210,${Math.random() * distress * .42})`;
+                    ctx.fillRect(Math.random() * width, band + (Math.random() - .5) * 22, 1 + Math.random() * 9, 1);
+                }
+                if (progress === 1) ctx.clearRect(0, 0, width, height);
+                if (progress === 1) art.classList.remove('is-tuning');
+                if (progress < 1) frame = requestAnimationFrame(animate);
+                else if (index >= 0 && wanted) {
+                    remaining--;
+                    timer = setTimeout(() => {
+                        if (!wanted || !visible || document.hidden) return;
+                        if (remaining > 0) reveal((current + 1) % available.length);
+                        else if (!hovered && !focused) endTour();
+                    }, 2000);
+                }
+            };
+            frame = requestAnimationFrame(animate);
+        };
+        const beginTour = () => {
+            if (wanted) return;
+            wanted = true;
+            if (!available.length) return;
+            remaining = available.length;
+            reveal(0);
+        };
+        const endTour = () => {
+            wanted = false;
+            reveal(-1);
+        };
+        const touchPreview = () => {
+            if (!available.length || !visible || finePointer.matches || reducedMotion.matches || touchPlayed) return;
+            touchPlayed = true;
+            beginTour();
+        };
+        const loadPreviews = async () => {
+            if (loading) return;
+            loading = true;
+            // Fetch the small stills only when their cartridge enters view.
+            const results = await Promise.allSettled(previews.map(image => {
+                image.loading = 'eager';
+                return image.decode();
+            }));
+            available = previews.filter((image, i) => results[i].status === 'fulfilled' && image.naturalWidth);
+            if (wanted && available.length) {
+                remaining = available.length;
+                reveal(0);
+            }
+            touchPreview();
+        };
+        card.addEventListener('pointerenter', event => {
+            if (event.pointerType !== 'mouse' || !finePointer.matches) return;
+            hovered = true;
+            beginTour();
+        });
+        card.addEventListener('pointerleave', () => {
+            hovered = false;
+            if (!focused && finePointer.matches) endTour();
+        });
+        card.addEventListener('focus', () => {
+            focused = card.matches(':focus-visible');
+            if (focused) beginTour();
+        });
+        card.addEventListener('blur', () => {
+            focused = false;
+            if (!hovered) endTour();
+        });
+        const observer = new IntersectionObserver(entries => {
+            visible = entries[0].intersectionRatio >= .35;
+            if (visible) {
+                loadPreviews();
+                touchPreview();
+                if (hovered || focused) beginTour();
+            } else {
+                wanted = false;
+                stop();
+                commit(-1);
+            }
+        }, { threshold: [0, .35] });
+        observer.observe(art);
+        reducedMotion.addEventListener('change', () => {
+            stop();
+            wanted = false;
+            commit(-1);
+            if (hovered || focused) beginTour();
+        });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                wanted = false;
+                stop();
+                commit(-1);
+            }
+        });
+    });
+});
+
+// A small, deterministic field of dust inside each stage-light cone. CSS does
+// the drifting; the existing offscreen animation pause covers all the motes.
+document.addEventListener('DOMContentLoaded', () => {
+    const rays = document.querySelector('.stage-rays');
+    if (!rays) return;
+    let seed = 47;
+    const random = () => {
+        seed = (seed * 16807) % 2147483647;
+        return (seed - 1) / 2147483646;
+    };
+    const beams = [
+        { left: '18%', sweep: '18s', phase: '0s' },
+        { left: '-22%', sweep: '23s', phase: '-9s' },
+        { left: '55%', sweep: '27s', phase: '-17s' }
+    ];
+    beams.forEach(beam => {
+        const dust = document.createElement('div');
+        dust.className = 'stage-dust';
+        dust.style.setProperty('--dust-left', beam.left);
+        dust.style.setProperty('--dust-sweep', beam.sweep);
+        dust.style.setProperty('--dust-phase', beam.phase);
+        for (let i = 0; i < 32; i++) {
+            const mote = document.createElement('i');
+            mote.style.setProperty('--mote-x', `${20 + random() * 60}%`);
+            mote.style.setProperty('--mote-y', `${12 + random() * 72}%`);
+            mote.style.setProperty('--mote-size', `${1 + random() * 1.6}px`);
+            mote.style.setProperty('--mote-opacity', (0.2 + random() * 0.35).toFixed(2));
+            mote.style.setProperty('--mote-duration', `${18 + random() * 18}s`);
+            mote.style.setProperty('--mote-delay', `${-random() * 36}s`);
+            mote.style.setProperty('--mote-drift', `${-24 + random() * 48}px`);
+            dust.appendChild(mote);
+        }
+        rays.appendChild(dust);
+    });
+});

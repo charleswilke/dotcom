@@ -8122,6 +8122,92 @@ html {
     z-index: 2;
 }
 
+/* Warm, soft-edged stage beams. Transform-only motion keeps the light behind
+   the paper playbills; the site's offscreen observer pauses these animations. */
+.stage-rays {
+    position: absolute;
+    inset: 8px 0 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: screen;
+    mask-image: linear-gradient(#000 0%, #000 40%, transparent 95%);
+}
+
+.stage-rays > span {
+    position: absolute;
+    top: -100px;
+    left: 18%;
+    width: 70%;
+    height: calc(100% + 200px);
+    transform-origin: 50% 0;
+    background: conic-gradient(from 155deg at 50% 0,
+        transparent 0deg, #ffde9e08 6deg, #ffe6b83b 19deg,
+        #fff1cf52 25deg, #ffe6b82e 32deg, transparent 50deg);
+    filter: blur(10px);
+    animation: stage-ray-drift 18s ease-in-out infinite alternate;
+}
+
+.stage-rays > span:nth-child(2) {
+    left: -22%;
+    opacity: .55;
+    animation-duration: 23s;
+    animation-delay: -9s;
+}
+
+.stage-rays > span:nth-child(3) {
+    left: 55%;
+    opacity: .4;
+    animation-duration: 27s;
+    animation-delay: -17s;
+}
+
+@keyframes stage-ray-drift {
+    from { transform: rotate(-12deg); }
+    to { transform: rotate(12deg); }
+}
+
+/* Dust shares each beam's origin and sweep, but stays outside its blur filter.
+   The cone mask lets motes catch the light and disappear into the darkness. */
+.stage-dust {
+    position: absolute;
+    top: -100px;
+    left: var(--dust-left);
+    width: 70%;
+    height: calc(100% + 200px);
+    transform-origin: 50% 0;
+    mask-image: conic-gradient(from 155deg at 50% 0,
+        transparent 0deg, #0004 8deg, #000 20deg,
+        #000 29deg, #0004 40deg, transparent 50deg);
+    animation: stage-ray-drift var(--dust-sweep) ease-in-out var(--dust-phase) infinite alternate;
+}
+
+.stage-dust i {
+    position: absolute;
+    left: var(--mote-x);
+    top: var(--mote-y);
+    width: var(--mote-size);
+    height: var(--mote-size);
+    border-radius: 50%;
+    background: #fff0cf;
+    box-shadow: 0 0 3px #ffe6b866;
+    opacity: 0;
+    animation: stage-dust-float var(--mote-duration) ease-in-out var(--mote-delay) infinite alternate;
+}
+
+@keyframes stage-dust-float {
+    0% { transform: translate3d(0, 18px, 0); opacity: 0; }
+    30% { opacity: var(--mote-opacity); }
+    70% { opacity: var(--mote-opacity); }
+    100% { transform: translate3d(var(--mote-drift), -45px, 0); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stage-rays > span { animation: none; transform: rotate(-5deg); }
+    .stage-dust { animation: none; transform: rotate(-5deg); }
+    .stage-dust i { animation: none; opacity: .2; }
+}
+
 /* ─────────────────────────────────────────────────────────
    Theatrical Projections — Playbill / CRT fan
    ───────────────────────────────────────────────────────── */
@@ -8351,7 +8437,7 @@ html {
 .playbill[data-playbill="jb"] .playbill-art img {
     object-position: 62% center;
     position: absolute;
-    top: 13%;
+    top: 18%;
     height: 74%;
     mask-image: linear-gradient(transparent, #000 8%, #000 92%, transparent);
 }
@@ -8831,6 +8917,38 @@ html {
 
 .game-cartridge-spacetoots .cartridge-label-art img {
     object-position: 8% 48%;
+}
+
+.cartridge-label-art img.cartridge-gameplay {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    object-position: center bottom;
+    filter: none;
+}
+
+.cartridge-label-art.is-preview .cartridge-gameplay.is-current { visibility: visible; }
+
+.cartridge-signal-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: auto;
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* The moving picture distortion is drawn on the canvas. Fine phosphor lines
+   sit over it without flashing or shifting the whole cartridge. */
+.cartridge-label-art.is-tuning::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, #06061955 0 1px, transparent 1px 3px);
+    opacity: .45;
 }
 
 .cartridge-label-copy {
@@ -11120,12 +11238,20 @@ section.production-header.alice p {
     font-family: 'Space Mono', monospace;
     letter-spacing: 1.2px;
     z-index: 3;
-    pointer-events: none;
-    user-select: none;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
     text-align: center;
     text-shadow: 0 0 2px var(--primary), 0 0 4px var(--primary);
     width: 100%;
     max-width: 100vw;
+}
+
+.footer-note:disabled { cursor: default; }
+.footer-note:focus-visible {
+    outline: 1px dashed currentColor;
+    outline-offset: 6px;
 }
 
 .footer-note.glitch {

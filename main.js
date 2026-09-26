@@ -2918,6 +2918,48 @@ function initLaiborGlitchEffects() {
     scheduleEffectTimeout(() => triggerLaiborGlitch(el), 3000 + Math.random() * 3000);
 }
 
+// Decorative pilot lights respond to nearby mice without adding controls.
+function initLaiborIndicatorLights() {
+    const section = document.getElementById('l.ai.bor');
+    if (!section || section.dataset.indicatorLightsReady) return;
+    section.dataset.indicatorLightsReady = 'true';
+    const rails = [...section.querySelectorAll('.rss-title-rail')];
+    const finePointer = window.matchMedia('(any-hover: hover) and (any-pointer: fine)');
+    let frame = 0;
+    let pointer = null;
+
+    const reset = () => {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        pointer = null;
+        rails.forEach(rail => {
+            ['--lamp-halo', '--lamp-bloom', '--lamp-brightness'].forEach(name => rail.style.removeProperty(name));
+        });
+    };
+    section.addEventListener('pointermove', event => {
+        if (event.pointerType !== 'mouse' || !finePointer.matches) return;
+        pointer = { x: event.clientX, y: event.clientY };
+        if (frame) return;
+        frame = requestAnimationFrame(() => {
+            frame = 0;
+            rails.forEach(rail => {
+                const rect = rail.getBoundingClientRect();
+                const x = rail.classList.contains('rss-title-rail-left') ? rect.right : rect.left;
+                const distance = Math.hypot(pointer.x - x, pointer.y - (rect.top + rect.height / 2));
+                const proximity = Math.max(0, 1 - distance / 180);
+                rail.style.setProperty('--lamp-halo', `${6 + proximity * 12}px`);
+                rail.style.setProperty('--lamp-bloom', `${12 + proximity * 24}px`);
+                rail.style.setProperty('--lamp-brightness', `${0.85 + proximity * 0.8}`);
+            });
+        });
+    }, { passive: true });
+    section.addEventListener('pointerleave', reset);
+    section.addEventListener('pointercancel', reset);
+    window.addEventListener('blur', reset);
+    window.addEventListener('scroll', reset, { passive: true });
+    finePointer.addEventListener('change', reset);
+}
+
 // ===== EPISODE MONITOR =====
 // The lab video monitor at the foot of the Writing section. The Time Dial at
 // the top of the section plays the archive; this plays whatever is on now, and
@@ -5628,6 +5670,7 @@ function initDeferredHomepageMedia() {
 function initDeferredHomepageEffects() {
     scheduleIdleWork(() => {
         initLaiborGlitchEffects();
+        initLaiborIndicatorLights();
         initFaqGlitchTimer();
     }, 2000);
 }

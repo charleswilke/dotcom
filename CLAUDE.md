@@ -279,7 +279,7 @@ The rest of the animation work is in the commits from 2026-09-01: the Recently f
 
 ### Album players on touch: native audio + baked scope data
 
-On desktop each album player routes its `<audio>` through Web Audio (`createMediaElementSource` → `AnalyserNode`) so the oscilloscope reads the live signal. **On coarse-pointer devices (`PREFER_NATIVE_AUDIO` in main.js) Web Audio is never touched.** iOS suspends the `AudioContext` when the screen locks, and because the element's only output path runs through it, the music stops with it. Chrome on iOS is WebKit, so it behaves identically. Leaving the element native is what lets playback survive the lock screen, and the same change is what makes the Media Session card (title, artist, album, cover, prev/next/seek handlers in `createAlbumPlayer`) worth having.
+On desktop each album player routes its `<audio>` through Web Audio (`createMediaElementSource` → `AnalyserNode`) so the oscilloscope reads the live signal. **On coarse-pointer devices (`PREFER_NATIVE_AUDIO` in main.js) Web Audio is never touched.** iOS suspends the `AudioContext` when the screen locks, and because the element's only output path runs through it, the music stops with it. Chrome on iOS is WebKit, so it behaves identically. Leaving the element native is what lets playback survive the lock screen, and the same change is what makes the Media Session card (title, artist, album, cover, prev/next track and scrub handlers in `createAlbumPlayer`; `seekbackward`/`seekforward` are deliberately set to `null`, because iOS shows ±seek buttons instead of track skipping whenever either is registered, and the Time Dial leaves its own on the shared session) worth having.
 
 The scope still needs a signal, so it reads a precomputed file instead:
 

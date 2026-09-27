@@ -4875,8 +4875,12 @@ function createAlbumPlayer(config) {
             pause: () => audio.pause(),
             previoustrack: () => { loadTrack((currentIndex - 1 + tracks.length) % tracks.length); playTrack(); },
             nexttrack: () => { loadTrack((currentIndex + 1) % tracks.length); playTrack(); },
-            seekbackward: (d) => { audio.currentTime = Math.max(0, audio.currentTime - ((d && d.seekOffset) || 10)); },
-            seekforward: (d) => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + ((d && d.seekOffset) || 10)); },
+            // Cleared, not omitted: iOS gives the lock screen two side buttons and
+            // shows ±seek over prev/next track whenever a seek handler exists, and
+            // the Time Dial leaves its own registered on the shared session.
+            // Songs want track skipping; the scrubber (seekto) still seeks.
+            seekbackward: null,
+            seekforward: null,
             seekto: (d) => { if (d && typeof d.seekTime === 'number') audio.currentTime = d.seekTime; }
         };
         Object.keys(handlers).forEach((action) => {

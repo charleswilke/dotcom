@@ -12851,10 +12851,10 @@ section.production-header.alice p {
     font-size: 0.46em;
     letter-spacing: 0.34em;
     color: #fff3d7;
-    text-shadow:
-        2px 2px 0 rgba(17, 28, 44, 0.9),
-        0 0 8px rgba(255, 214, 122, 0.6),
-        0 0 18px rgba(255, 168, 30, 0.45);
+    /* Printed like the wordmark below it: a teal second plate slightly out of
+       register instead of a glow. The tagline keeps its navy shadow and glow;
+       this offset at its size blurred the letters. */
+    text-shadow: 2px 1.5px 0 rgba(47, 230, 194, 0.55);
 }
 
 /* Full-width radio scale frames the live HTML wordmark and its CRT effects. */

@@ -3495,7 +3495,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '15';
+const SCOPE_DATA_VERSION = '16';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -5558,7 +5558,7 @@ function initJCLightbox() {
         { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=202607051245', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
         { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
         { title: 'Refuse the Frequency', file: '/audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202609271647', cover: '/audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202609271700', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
-        { title: 'Fits and Starts', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=202609271235', cover: '/audio/junkyard-cabaret/fits-and-starts-title.webp?v=202607042140', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
+        { title: 'Fits and Starts', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=202609271705', cover: '/audio/junkyard-cabaret/fits-and-starts-title.webp?v=202607042140', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
         { title: 'Misdirected.', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202609271137', cover: '/audio/junkyard-cabaret/misdirected-title.webp?v=202607051217', article: 'https://charleswilke.substack.com/p/misdirected' },
         { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }
     ];

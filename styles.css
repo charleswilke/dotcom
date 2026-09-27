@@ -12865,6 +12865,7 @@ section.production-header.alice p {
     gap: clamp(0.85rem, 2.2vw, 1.6rem);
     width: 100%;
     margin: 0.04rem auto 0;
+    position: relative;
 }
 
 .rss-title-rail {
@@ -12921,6 +12922,37 @@ section.production-header.alice p {
     .rss-scale-compact { display: block; }
 }
 
+/* Live wire: initLaiborRails clones each scale into a white-hot copy that is
+   only visible in a pool around the cursor (--hot-x) and draws sparks and arcs
+   on .rss-title-sparks. The mask here replaces the edge fade on purpose. */
+.rss-title-rail .rss-title-scale-hot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: var(--hot, 0);
+    -webkit-mask-image: radial-gradient(ellipse 72px 90% at var(--hot-x, -999px) 50%, #000 0%, rgba(0, 0, 0, 0.45) 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 72px 90% at var(--hot-x, -999px) 50%, #000 0%, rgba(0, 0, 0, 0.45) 40%, transparent 100%);
+    filter: drop-shadow(0 0 2px rgba(255, 214, 122, 0.95)) drop-shadow(0 0 7px rgba(255, 120, 30, 0.8));
+}
+
+.rss-title-scale-hot .rss-scale-baseline,
+.rss-title-scale-hot .rss-scale-ticks,
+.rss-title-scale-hot .rss-scale-compact {
+    stroke: #fffaf0;
+    stroke-width: 1.4;
+    opacity: 1;
+}
+
+.rss-title-sparks {
+    position: absolute;
+    left: 0;
+    top: -48px;
+    width: 100%;
+    height: calc(100% + 160px);
+    pointer-events: none;
+    z-index: 1;
+}
+
 /* Amber indicator lights brighten independently with pointer proximity. */
 .rss-title-rail::after {
     content: "";
@@ -12941,6 +12973,9 @@ section.production-header.alice p {
 
 .rss-title-rail-left::after { right: -4.8px; }
 .rss-title-rail-right::after { left: -4.8px; }
+
+/* Flicker is driven per frame while the wire is live; easing would smear it. */
+.rss-title-rail.is-live::after { transition: none; }
 
 @media (prefers-reduced-motion: reduce) {
     .rss-title-rail::after { transition: none; }

@@ -251,6 +251,22 @@ The name in the header is not text. It is `images/charles-wilke-wordmark-v5.svg`
 - **The compact viewBox is the painted bounds plus 10 units, measured from pixels.** The desktop v5 intentionally retains the previous wider framing to preserve the lettering scale and header height. `getBBox()` on the mark over-reports by 100+ units once the masks are in play, and a fat viewBox silently pushes the name off-centre in the header. Draw the SVG into a canvas and scan for the first and last opaque pixel on each side, then set `viewBox` and the `width`/`height` attributes in index.html to match, or the header's reserved space is wrong before the image lands.
 - Both files live under `/images/`, so they are immutable: a change means a new filename, not `bump-cover.sh`.
 
+### L.AI.BOR wordmark (`.rss-title-art`)
+
+The Writing section's "l.ai.bor" is lettering, not text: `images/laibor-wordmark.svg`, an `<img>` inside `.rss-title-main` (alt text carries the name). It is **generated**, so don't hand-edit it:
+
+```
+python3 tools/make-laibor-wordmark.py            # write it
+python3 tools/make-laibor-wordmark.py --check    # exit 1 if stale
+```
+
+The look is a figure from a 1970s technical manual: squared capitals with rounded corners and an 8 degree lean, halftone dots darkening toward the baseline, a teal second plate out of register, crop marks and registration targets, light ink grain. L and BOR are cream and AI is teal, the machine inside the word. Picked on sight on 2026-09-26 over a stencil/wireframe, an oscilloscope trace, a radio nameplate, a brush-script sign, a linocut and a sunset-stripe version of the same letters. Those lived in a throwaway lab page; the generator code for them is not in the tree.
+
+- **It is fitted to the tagline.** The letters span exactly the width of "Weekly field notes on capitalism, humanity & AI" (320-692px against 318-694 at 1012 wide; the tagline's box includes trailing letter-spacing). That was done by narrowing the glyphs in `glyphs()`, not by squashing: a horizontal scale would leave the verticals lighter than the bars. The fit holds at every width because both scale with the h2's font size, and it happens to hold at phone width too, where the tagline wraps. **If the tagline text changes, re-fit** with the widths in `glyphs()` and `GAPS`.
+- **Sizing is in em.** Cap height is 100 of the viewBox's 119 units, so `height: 1em` on the `<img>` gives 0.84em letters, which matches the old Exo cap height, and `margin: -0.08em 0` gives the crop-mark margin back to the line.
+- **The glitch still fires on it, through the same classes.** `.glitch`, `.glitch-tear` and `.glitch-vhold` (from `triggerLaiborGlitch` and the rail pops in `initLaiborRails`) still animate `transform`, `filter` and `clip-path` on the span. The red/cyan `::before`/`::after` are masked to the artwork via `--laibor-art` (set inline on the span) instead of carrying `data-text`. The shared glitch keyframes put the colour split in `text-shadow`, which does nothing to an image, so the art layers get their own sideways throw (`laibor-art-red`/`-cyan`). The hover glow is a `drop-shadow` on the img for the same reason.
+- The file lives under `/images/`, so it is immutable: **after regenerating, bump the `?v=` in both places on that span in index.html by hand** (the `src` and `--laibor-art`), and update `width`/`height` if the tool prints a new viewBox.
+
 ### Games section title (`.games-title-art`)
 
 "Playable Browser Games" is lettering, not text: `images/games/section-title-marquee.svg`, an `<img>` in the `h2` (alt text carries the name, same pattern as the Projections title). It is **generated**, so don't hand-edit it:

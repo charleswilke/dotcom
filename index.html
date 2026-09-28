@@ -49,7 +49,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="/styles.css?v=d16b5d4a">
+    <link rel="stylesheet" href="/styles.css?v=39556a59">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -486,15 +486,20 @@
                         <span class="subscribe-cta-kicker">Tune In</span>
                         <p class="subscribe-cta-blurb">New essays, delivered to you the moment they ship. No spam, no upsells. Just the next signal.</p>
                     </div>
-                    <div class="subscribe-cta-embed" id="substackSubscribeEmbed">
-                        <button type="button" class="subscribe-load-btn" id="substackSubscribeButton"
-                                aria-controls="substackSubscribeFrame" aria-expanded="false">
-                            Open the subscription form
-                        </button>
-                        <a class="subscribe-direct-link" href="https://charleswilke.substack.com/subscribe"
-                           target="_blank" rel="noopener noreferrer">Or subscribe on Substack&nbsp;&rarr;</a>
-                        <div class="subscribe-frame-slot" id="substackSubscribeFrame" aria-live="polite" hidden></div>
-                    </div>
+                    <!-- Posts straight to Substack's no-JS signup endpoint, which answers on
+                         its own confirmation page (new tab, so the visitor keeps their place).
+                         No iframe, no third-party load until someone actually subscribes. -->
+                    <form class="subscribe-form" action="https://charleswilke.substack.com/api/v1/free?nojs=true"
+                          method="post" target="_blank" rel="noopener">
+                        <div class="subscribe-form-row">
+                            <label class="sr-only" for="subscribeEmail">Email address</label>
+                            <input class="subscribe-input" id="subscribeEmail" type="email" name="email"
+                                   placeholder="you@example.com" autocomplete="email" required>
+                            <button class="subscribe-submit" type="submit">Subscribe</button>
+                        </div>
+                        <p class="subscribe-fineprint">Free, via <a href="https://charleswilke.substack.com/subscribe"
+                           target="_blank" rel="noopener noreferrer">Substack</a>. Unsubscribe anytime.</p>
+                    </form>
                 </div>
             </aside>
         </div>
@@ -994,6 +999,6 @@
     <p id="aboutFootnoteDescription">I design how the AI interprets requests and coordinates its response, translating product intent into instructions that guide its behavior. This includes IQ’s voice and tone, and how and when it chooses tools to use.</p>
 </div>
 <script src="/vendor/dompurify.min.js?v=3.4.15" defer></script>
-<script src="/main.js?v=725bd93f" defer></script>
+<script src="/main.js?v=f251f19e" defer></script>
 </body>
 </html>

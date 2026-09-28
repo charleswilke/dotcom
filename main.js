@@ -344,28 +344,6 @@ function initDeferredFonts() {
     targets.forEach(target => observer.observe(target));
 }
 
-function initSubstackSubscribeEmbed() {
-    const button = document.getElementById('substackSubscribeButton');
-    const slot = document.getElementById('substackSubscribeFrame');
-    if (!button || !slot) return;
-
-    button.addEventListener('click', () => {
-        if (slot.querySelector('iframe')) return;
-
-        const frame = document.createElement('iframe');
-        frame.src = 'https://charleswilke.substack.com/embed?transparent=1&light=1';
-        frame.width = '480';
-        frame.height = '150';
-        frame.title = 'Subscribe to Exploring L.ai.bor';
-        frame.setAttribute('scrolling', 'no');
-        frame.setAttribute('loading', 'lazy');
-        slot.hidden = false;
-        slot.appendChild(frame);
-        button.setAttribute('aria-expanded', 'true');
-        button.hidden = true;
-    }, { once: true });
-}
-
 const managedAudioPlayers = new Set();
 
 function registerManagedAudio(audio) {
@@ -6649,7 +6627,6 @@ function initBeforeTimesDoor() {
 
 onReady(() => {
     initDeferredFonts();
-    initSubstackSubscribeEmbed();
     initRSSFallbackFetch();
     initDeferredTimeDial();
     initEmailGlitchEffects();

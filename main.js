@@ -3247,6 +3247,8 @@ function initEpisodeMonitor() {
     const transportIcon = document.getElementById('monitorTransportIcon');
     const rail = document.getElementById('monitorRail');
     const railFill = document.getElementById('monitorRailFill');
+    const railBuffer = document.getElementById('monitorRailBuffer');
+    const railTag = document.getElementById('monitorRailTag');
     const timeEl = document.getElementById('monitorTime');
     const durationEl = document.getElementById('monitorDuration');
     const full = document.getElementById('monitorFull');
@@ -3334,6 +3336,35 @@ function initEpisodeMonitor() {
         if (durationEl && isFinite(video.duration)) durationEl.textContent = formatTime(video.duration);
         if (rail && isFinite(video.duration)) rail.setAttribute('aria-valuemax', String(Math.floor(video.duration)));
         syncPosition();
+    });
+
+    // How far the download has got past the playhead, drawn behind the fill.
+    const syncBuffer = () => {
+        const d = video.duration;
+        if (!railBuffer || !d) return;
+        const t = video.currentTime || 0;
+        let end = 0;
+        for (let i = 0; i < video.buffered.length; i++) {
+            if (video.buffered.start(i) <= t + 0.5) end = Math.max(end, video.buffered.end(i));
+        }
+        railBuffer.style.width = Math.min(100, (end / d) * 100) + '%';
+    };
+    video.addEventListener('progress', syncBuffer);
+    video.addEventListener('timeupdate', syncBuffer);
+    video.addEventListener('seeked', syncBuffer);
+
+    // Hover preview: a ghost fill to the pointer and a time tag above it. Before
+    // the metadata lands (preload="none") the tag reads off the episode data.
+    const episodeSeconds = (() => {
+        const parts = String(episode.duration || '').split(':').map(Number);
+        return parts.reduce((acc, n) => acc * 60 + (n || 0), 0);
+    })();
+    rail.addEventListener('pointermove', (e) => {
+        const rect = rail.getBoundingClientRect();
+        const frac = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        const d = isFinite(video.duration) && video.duration ? video.duration : episodeSeconds;
+        rail.style.setProperty('--hover', (frac * 100) + '%');
+        if (railTag) railTag.textContent = formatTime(frac * d);
     });
 
     setupProgressScrubbing(rail, video);

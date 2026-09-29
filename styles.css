@@ -9480,18 +9480,43 @@ html {
     z-index: 1;
 }
 
+/* Slightly askew lettering directly on the wood above the jewel cases. */
+.albums-header-artwork {
+    position: relative;
+    width: min(100%, 510px);
+    margin: 0 auto clamp(2rem, 3.5vw, 2.8rem);
+    padding: 12px 15px 7px;
+    color: #29231e;
+    transform: rotate(-2.5deg);
+}
+
 .albums-section-title {
-    width: min(100%, 476px);
-    margin-bottom: clamp(1.3rem, 2.5vw, 2rem);
+    display: block;
+    width: 100%;
+    margin: 0;
     padding: 0;
 }
 
-/* Hand-painted grocery-sign lettering, with a flat red shadow and brush
-   flourishes framing Original. The SVG paths are the editable source. */
+.albums-title-label {
+    display: block;
+    width: min(56.62%, 263.57px);
+    height: auto;
+    margin: 0 auto;
+    transform: rotate(-2deg);
+}
+
 .albums-title-art {
     display: block;
     width: 100%;
     height: auto;
+    margin: 1px auto 0;
+}
+
+@media (max-width: 600px) {
+    .albums-header-artwork {
+        width: calc(100% - 24px);
+        padding: 10px 10px 5px;
+    }
 }
 
 .cd-rack {

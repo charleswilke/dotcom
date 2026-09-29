@@ -3164,6 +3164,22 @@ function initLaiborRails() {
             ctx.stroke();
         }
 
+        // Fade all canvas effects at the same outer edges as the SVG scales.
+        // Mask after drawing so moving sparks and arcs fade at each pixel.
+        ctx.globalCompositeOperation = 'destination-in';
+        rails.forEach(rail => {
+            const svg = rail.scale.getBoundingClientRect();
+            const fade = parseFloat(getComputedStyle(rail.el).getPropertyValue('--rail-fade-end')) / 100;
+            if (!svg.width || !fade) return;
+            const outer = (rail.left ? svg.left : svg.right) - box.left;
+            const inner = outer + (rail.left ? 1 : -1) * svg.width * fade;
+            const mask = ctx.createLinearGradient(outer, 0, inner, 0);
+            mask.addColorStop(0, 'transparent');
+            mask.addColorStop(1, '#000');
+            ctx.fillStyle = mask;
+            ctx.fillRect(0, 0, box.width, box.height);
+        });
+
         if (busy) frame = requestAnimationFrame(tick);
         else last = 0;
     };

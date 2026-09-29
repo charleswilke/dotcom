@@ -13082,6 +13082,7 @@ section.production-header.alice p {
 }
 
 .rss-title-rail {
+    --rail-fade-end: 35%;
     flex: 1 1 0;
     min-width: 0;
     height: clamp(44px, 6vw, 84px);
@@ -13106,13 +13107,15 @@ section.production-header.alice p {
 }
 
 .rss-title-rail-left .rss-title-scale {
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%);
-    mask-image: linear-gradient(90deg, transparent, #000 35%);
+    --rail-edge-mask: linear-gradient(90deg, transparent, #000 var(--rail-fade-end));
+    -webkit-mask-image: var(--rail-edge-mask);
+    mask-image: var(--rail-edge-mask);
 }
 
 .rss-title-rail-right .rss-title-scale {
-    -webkit-mask-image: linear-gradient(270deg, transparent, #000 35%);
-    mask-image: linear-gradient(270deg, transparent, #000 35%);
+    --rail-edge-mask: linear-gradient(270deg, transparent, #000 var(--rail-fade-end));
+    -webkit-mask-image: var(--rail-edge-mask);
+    mask-image: var(--rail-edge-mask);
 }
 
 .rss-scale-baseline,
@@ -13137,14 +13140,16 @@ section.production-header.alice p {
 
 /* Live wire: initLaiborRails clones each scale into a white-hot copy that is
    only visible in a pool around the cursor (--hot-x) and draws sparks and arcs
-   on .rss-title-sparks. The mask here replaces the edge fade on purpose. */
+   on .rss-title-sparks. Intersect the hot spot with the scale's edge fade. */
 .rss-title-rail .rss-title-scale-hot {
     position: absolute;
     top: 0;
     left: 0;
     opacity: var(--hot, 0);
-    -webkit-mask-image: radial-gradient(ellipse 72px 90% at var(--hot-x, -999px) 50%, #000 0%, rgba(0, 0, 0, 0.45) 40%, transparent 100%);
-    mask-image: radial-gradient(ellipse 72px 90% at var(--hot-x, -999px) 50%, #000 0%, rgba(0, 0, 0, 0.45) 40%, transparent 100%);
+    -webkit-mask-image: var(--rail-edge-mask), radial-gradient(ellipse 72px 90% at var(--hot-x, -999px) 50%, #000 0%, rgba(0, 0, 0, 0.45) 40%, transparent 100%);
+    mask-image: var(--rail-edge-mask), radial-gradient(ellipse 72px 90% at var(--hot-x, -999px) 50%, #000 0%, rgba(0, 0, 0, 0.45) 40%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
     filter: drop-shadow(0 0 2px rgba(255, 214, 122, 0.95)) drop-shadow(0 0 7px rgba(255, 120, 30, 0.8));
 }
 

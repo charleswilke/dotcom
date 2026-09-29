@@ -4807,6 +4807,43 @@ html {
     pointer-events: none;
 }
 
+/* Color bars close Exploring L.ai.bor, independent of section order. */
+.rss-feed-divider {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.16) 0px,
+            rgba(0, 0, 0, 0.16) 1px,
+            transparent 1px,
+            transparent 3px
+        ),
+        linear-gradient(
+            90deg,
+            #d8d300 0 14%,
+            #18d8d0 14% 29%,
+            #00d922 29% 43%,
+            #e500cb 43% 58%,
+            #d50000 58% 72%,
+            #1000d7 72% 86%,
+            #0b1036 86% 100%
+        );
+    background-size: 100% 100%, 100% 100%;
+    background-position: 0 0, 0 0;
+    background-repeat: no-repeat, no-repeat;
+    box-shadow:
+        0 7px 16px rgba(255, 185, 58, 0.28),
+        0 14px 28px rgba(255, 185, 58, 0.12),
+        0 -8px 18px rgba(255, 185, 58, 0.42),
+        0 -16px 34px rgba(255, 185, 58, 0.26);
+    z-index: 2;
+    pointer-events: none;
+}
+
 .feed-container {
     position: relative;
     z-index: 2;
@@ -8260,7 +8297,7 @@ html {
     text-shadow: 0 0 10px #ffb93a;
 }
 
-/* Theatrical Projections uses the About background with inverted edge bars */
+/* Theatrical Projections uses the About background. */
 .theatrical-projections-section {
     padding-top: 1rem;
     scroll-margin-top: 72px;
@@ -8293,42 +8330,6 @@ html {
     pointer-events: none;
 }
 
-.theatrical-projections-section::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 8px;
-    background-image:
-        repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.16) 0px,
-            rgba(0, 0, 0, 0.16) 1px,
-            transparent 1px,
-            transparent 3px
-        ),
-        linear-gradient(
-            90deg,
-            #d8d300 0 14%,
-            #18d8d0 14% 29%,
-            #00d922 29% 43%,
-            #e500cb 43% 58%,
-            #d50000 58% 72%,
-            #1000d7 72% 86%,
-            #0b1036 86% 100%
-        );
-    background-size: 100% 100%, 100% 100%;
-    background-position: 0 0, 0 0;
-    background-repeat: no-repeat, no-repeat;
-    box-shadow:
-        0 7px 16px rgba(255, 185, 58, 0.28),
-        0 14px 28px rgba(255, 185, 58, 0.12),
-        0 -8px 18px rgba(255, 185, 58, 0.42),
-        0 -16px 34px rgba(255, 185, 58, 0.26);
-    z-index: 1;
-    pointer-events: none;
-}
 
 .theatrical-projections-section > .container {
     position: relative;

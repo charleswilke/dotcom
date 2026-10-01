@@ -8849,22 +8849,16 @@ html {
     color: var(--light);
     position: relative;
     overflow: hidden;
-    background-color: #04050a;
-    /* Vector-monitor black: a near-black void with a faint cyan vector glow
-       rising from the bottom, a cool purple wash up top, and a CRT vignette.
-       The starfield itself lives on ::before so it can be animated. */
-    background-image:
-        radial-gradient(ellipse 80% 70% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
-        radial-gradient(ellipse 130% 70% at 50% 118%, rgba(0, 247, 194, 0.14) 0%, transparent 58%),
-        radial-gradient(ellipse 100% 60% at 50% -12%, rgba(75, 40, 140, 0.2) 0%, transparent 60%),
-        linear-gradient(180deg, #06070f 0%, #04050a 62%, #030409 100%);
+    /* Match Terminal Jockey's violet and cyan space behind the Canvas scene. */
+    background:
+        radial-gradient(ellipse at 12% 20%, #35145b, transparent 65%),
+        radial-gradient(ellipse at 92% 80%, #093a55, transparent 65%),
+        #07091c;
     border-top: 1px solid rgba(0, 247, 194, 0.28);
     border-bottom: 1px solid rgba(0, 247, 194, 0.42);
 }
 
-/* Warp starfield — a <canvas> driven by main.js projects stars outward from a
-   central vanishing point so it reads as flying forward toward the horizon.
-   Sits above the void background but below the cards. */
+/* Colorful stars, nebulae, and galaxies from Terminal Jockey, below the cards. */
 .cartridge-starfield {
     position: absolute;
     inset: 0;

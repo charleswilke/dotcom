@@ -216,7 +216,7 @@ onReady(() => {
 
   function galaxy(seed, palette, shape = 'spiral') {
     const random = randomGenerator(seed);
-    return texture(640, (ctx, size) => {
+    const sharp = texture(640, (ctx, size) => {
       ctx.translate(size / 2, size / 2);
       ctx.globalCompositeOperation = 'screen';
 
@@ -313,6 +313,11 @@ onReady(() => {
       }
       core(0, 0, 28);
     });
+    // Soften the dust once, keeping Gaussian filtering out of the animation loop.
+    return texture(640, (ctx) => {
+      ctx.filter = 'blur(2px)';
+      ctx.drawImage(sharp, 0, 0);
+    });
   }
 
   const galaxyCatalog = [
@@ -388,8 +393,29 @@ onReady(() => {
         }
       }
       const size = horizon * object.size / object.z;
+      const x = centerX + object.x * width * .5 / object.z;
+      const y = centerY + object.y * height * .5 / object.z;
       context.save();
-      context.translate(centerX + object.x * width * .5 / object.z, centerY + object.y * height * .5 / object.z);
+      context.translate(x, y);
+      if (object.galaxyIndex !== undefined) {
+        // A short, inward trail follows the outward flight direction.
+        const distance = Math.hypot(x - centerX, y - centerY);
+        const trail = Math.min(5, size * .012) * flightAmount;
+        const angle = object.angle + sceneryTime * object.spin;
+        for (const [offset, weight] of [[1, .12], [.5, .23], [0, .65]]) {
+          context.save();
+          context.translate(
+            distance ? -(x - centerX) / distance * trail * offset : 0,
+            distance ? -(y - centerY) / distance * trail * offset : 0
+          );
+          context.rotate(angle);
+          context.globalAlpha = object.alpha * weight;
+          context.drawImage(object.image, -size / 2, -size / 2, size, size);
+          context.restore();
+        }
+        context.restore();
+        continue;
+      }
       context.rotate(object.angle + sceneryTime * object.spin);
       context.globalAlpha = object.alpha;
       context.drawImage(object.image, -size / 2, -size / 2, size, size);

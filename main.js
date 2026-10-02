@@ -2125,9 +2125,18 @@ function initTimeDial() {
     const tunerIndicator = document.getElementById('tuner-indicator');
     const scaleMarkers = Array.from(document.querySelectorAll('.scale-marker.scale-major'));
     const clickableMarkers = Array.from(document.querySelectorAll('.scale-marker.scale-clickable'));
-    let scrollAccumulator = 0; // Accumulate scroll for stepping
-    const SCROLL_THRESHOLD = 50; // Pixels of scroll needed to change station
+    const dialViewport = document.querySelector('.tuner-dial-viewport');
+    const dialTrack = document.querySelector('.tuner-dial-track');
+    const mobileDial = window.matchMedia('(max-width: 767px)');
+    if (dialTrack) dialTrack.style.setProperty('--station-count', scaleMarkers.length);
     let tunerMarkerPositions = [];
+
+    function updateOlderRecapsHint() {
+        if (tunerGlass && dialViewport) {
+            tunerGlass.classList.toggle('has-older-recaps', mobileDial.matches && dialViewport.scrollLeft > 2);
+        }
+    }
+    if (dialViewport) dialViewport.addEventListener('scroll', updateOlderRecapsHint, { passive: true });
     
     // Create audio element for tuning sounds
     const tuningAudio = new Audio();
@@ -2135,7 +2144,7 @@ function initTimeDial() {
 
     function cacheTunerMarkerPositions() {
         if (!tunerGlass || !scaleMarkers.length) return;
-        const tunerRect = tunerGlass.getBoundingClientRect();
+        const tunerRect = (dialTrack || tunerGlass).getBoundingClientRect();
         tunerMarkerPositions = scaleMarkers.map(marker => {
             const markerRect = marker.getBoundingClientRect();
             return markerRect.left - tunerRect.left + (markerRect.width / 2);
@@ -2226,7 +2235,10 @@ function initTimeDial() {
         if (!tunerIndicator || !tunerGlass) return;
         
         // Remove active class from all markers (but don't remove phosphor-decay, that's handled separately)
-        scaleMarkers.forEach(marker => marker.classList.remove('active'));
+        scaleMarkers.forEach((marker, index) => {
+            marker.classList.remove('active');
+            marker.setAttribute('aria-pressed', String(index === stationIndex));
+        });
 
         if (!tunerMarkerPositions.length) {
             cacheTunerMarkerPositions();
@@ -2237,6 +2249,13 @@ function initTimeDial() {
         if (targetMarker && typeof leftPosition === 'number') {
             tunerIndicator.style.left = leftPosition + 'px';
             targetMarker.classList.add('active');
+            if (dialViewport && mobileDial.matches) {
+                dialViewport.scrollTo({
+                    left: leftPosition - dialViewport.clientWidth / 2,
+                    behavior: 'instant'
+                });
+            }
+            updateOlderRecapsHint();
         }
     }
     
@@ -2286,40 +2305,8 @@ function initTimeDial() {
         tunerIndicator.style.left = leftPosition + 'px';
     }
     
-    // Handle scroll/wheel events
-    function handleScroll(e) {
-        e.preventDefault();
-        
-        // Get scroll delta (normalize across browsers)
-        const delta = e.deltaY || e.detail || -e.wheelDelta;
-        
-        // Accumulate scroll
-        scrollAccumulator += delta;
-        
-        // Check if we've scrolled enough to change station
-        if (Math.abs(scrollAccumulator) >= SCROLL_THRESHOLD) {
-            const direction = scrollAccumulator > 0 ? 1 : -1; // Down = forward, Up = backward
-            
-            // Calculate new station (wrapping around)
-            let newStation = currentStation + direction;
-            if (newStation < 0) newStation = recapStations.length - 1;
-            if (newStation >= recapStations.length) newStation = 0;
-            
-            // Update station
-            updateStation(newStation);
-            
-            // Haptic feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate(15);
-            }
-            
-            // Reset accumulator (keep remainder for smooth feel)
-            scrollAccumulator = scrollAccumulator % SCROLL_THRESHOLD;
-        }
-    }
-    
-    // Scroll/swipe tuning removed — was hijacking page scroll when crossing the dial.
-    // Stations are selected via the period markers (click/touch) below.
+    // Native horizontal scrolling browses without changing the playing recap.
+    // Do not intercept vertical touch or wheel gestures here.
 
     // Oscilloscope visualizer
     (function initOscilloscope() {
@@ -2600,7 +2587,16 @@ function initTimeDial() {
     dateDisplay.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
 
     cacheTunerMarkerPositions();
-    window.addEventListener('resize', cacheTunerMarkerPositions);
+    window.addEventListener('resize', () => {
+        cacheTunerMarkerPositions();
+        updateTunerIndicator(currentStation);
+    });
+    if (dialTrack && typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(() => {
+            cacheTunerMarkerPositions();
+            updateTunerIndicator(currentStation);
+        }).observe(dialTrack);
+    }
     
     // Sync displayed dates from the initial station's data.
     // updateStation() early-returns when the index already equals currentStation,
@@ -2620,6 +2616,15 @@ function initTimeDial() {
     
     // Add click handlers to clickable scale markers
     clickableMarkers.forEach(marker => {
+        marker.setAttribute('role', 'button');
+        marker.setAttribute('tabindex', '0');
+        marker.setAttribute('aria-label', recapStations[Number(marker.dataset.station)].date);
+        marker.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                marker.click();
+            }
+        });
         marker.addEventListener('click', function(e) {
             e.stopPropagation();
             const stationIndex = parseInt(this.getAttribute('data-station'));

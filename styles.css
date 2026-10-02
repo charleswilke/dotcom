@@ -16725,3 +16725,110 @@ body.reader-open {
 .is-offscreen *::after {
     animation-play-state: paused !important;
 }
+
+/* Keep the desktop tuner intact; phones browse a spacious, native scroll strip. */
+.tuner-dial-viewport,
+.tuner-dial-track {
+    position: absolute;
+    inset: 0;
+}
+.tuner-scroll-hint { display: none; }
+.scale-marker.scale-clickable:focus-visible {
+    outline: 1px solid #ffc94a;
+    outline-offset: -2px;
+}
+@media (max-width: 767px) {
+    .tuner-glass { height: 179px; }
+    .tuner-dial-viewport {
+        top: 95px;
+        bottom: 22px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+        z-index: 4;
+    }
+    .tuner-dial-viewport::-webkit-scrollbar { display: none; }
+    .tuner-dial-track {
+        position: relative;
+        width: max(100%, calc(var(--station-count, 17) * 64px + 24px));
+        height: 100%;
+    }
+    .tuner-dial-track .tuner-scale { top: 0; padding: 0 8px 0 30px; }
+    .tuner-dial-track .tuner-scale::before { left: 30px; right: 8px; }
+    .tuner-dial-track .scale-major { min-width: 44px; }
+    .tuner-dial-track .marker-label { font-size: .6rem; bottom: 2px; }
+    .tuner-dial-track .label-top .marker-label { top: 2px; }
+    .tuner-dial-track .tuner-indicator { top: 0; height: 100%; }
+    .tuner-scroll-hint {
+        display: block;
+        position: absolute;
+        top: 95px;
+        bottom: 22px;
+        left: 0;
+        width: min(180px, 48%);
+        overflow: hidden;
+        z-index: 5;
+        opacity: 0;
+        transition: opacity .25s ease;
+        pointer-events: none;
+    }
+    /* The source sits beyond the edge, spilling light into the visible dial. */
+    .tuner-scroll-hint::before {
+        content: '';
+        position: absolute;
+        inset: -10px 0;
+        background:
+            radial-gradient(ellipse at -12% 50%,
+                rgba(255, 238, 192, .64) 0%,
+                rgba(255, 211, 126, .29) 28%,
+                rgba(255, 188, 79, .1) 50%,
+                transparent 76%);
+        filter: blur(4px);
+    }
+    .tuner-scroll-hint::after {
+        content: '';
+        position: absolute;
+        top: 12%;
+        bottom: 12%;
+        left: -4px;
+        width: 9px;
+        border-radius: 50%;
+        background: rgba(255, 232, 174, .65);
+        box-shadow: 0 0 12px 4px rgba(255, 209, 117, .28);
+        filter: blur(4px);
+    }
+    .tuner-dust {
+        position: absolute;
+        left: var(--dust-x);
+        top: var(--dust-y);
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        background: rgba(255, 233, 181, .8);
+        box-shadow: 0 0 4px rgba(255, 201, 110, .65);
+        opacity: .35;
+    }
+    .has-older-recaps .tuner-dust {
+        animation: tuner-dust-drift var(--dust-duration) ease-in-out var(--dust-delay) infinite;
+    }
+    .tuner-glass.has-older-recaps .tuner-scroll-hint {
+        opacity: 1;
+        animation: tuner-light-spill 6s ease-in-out infinite;
+    }
+}
+
+@keyframes tuner-dust-drift {
+    0% { transform: translate3d(-12px, 3px, 0); opacity: 0; }
+    25% { opacity: .65; }
+    70% { opacity: .3; }
+    100% { transform: translate3d(24px, -5px, 0); opacity: 0; }
+}
+@keyframes tuner-light-spill {
+    0%, 100% { opacity: .4; }
+    50% { opacity: .7; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .tuner-glass.has-older-recaps .tuner-scroll-hint,
+    .has-older-recaps .tuner-dust { animation: none; }
+}

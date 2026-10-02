@@ -23,8 +23,12 @@ It lives in the **Writing** section of the main site
   progress bar, and current-time readout — driven by `<audio id="recap-audio">`.
 
 ### Interaction
-- **Click/tap a station marker** to switch recaps. (Scroll/swipe tuning was
-  removed; it hijacked page scroll when the cursor crossed the dial.)
+- **Click/tap a station marker** to switch recaps; keyboard users can focus a
+  marker and press Enter or Space.
+- **On phones (767px and below), swipe the timeline horizontally** to browse
+  older recaps. It opens at the newest station with spacious markers. Browsing
+  does not change playback, and vertical gestures still scroll the page. The
+  needle travels with the timeline; selecting a station brings it into view.
 - On change, the dates fade-update, the audio source swaps, and playback resumes
   if it was already playing.
 
@@ -160,11 +164,11 @@ so you don't have to hand-edit the right-side date or the oscilloscope meta date
 
 ## Tips
 1. Keep file names chronological and consistent.
-2. The dial is getting dense (16 stations on one line). If it gets too tight,
-   consider grouping by year, abbreviating labels, or paginating.
+2. Mobile marker spacing grows automatically with the station count. Desktop
+   keeps the full timeline visible.
 3. If you replace an existing recap MP3 **in place** (same filename), run
    `./bump-cover.sh <file>.mp3` to cache-bust it — assets are served `immutable`.
 
 ---
 
-Last updated: 2026-09-11
+Last updated: 2026-10-02

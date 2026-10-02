@@ -49,7 +49,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="/styles.css?v=20261002-radio-proportional-trail">
+    <link rel="stylesheet" href="/styles.css?v=20261002-radio-cutout-glyphs-v2">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -368,7 +368,10 @@
                                     <audio id="recap-audio" class="custom-audio" src="/audio/sep-2026-substack-recap.mp3" preload="metadata" style="display:none;"></audio>
                                     <div class="custom-audio-player">
                                         <button class="audio-btn audio-summary-btn" aria-label="Play/Pause Audio Summary">
-                                            <span class="audio-icon">▶</span>
+                                            <span class="audio-icon audio-cutout-icon" aria-hidden="true">
+                                                <svg class="cutout-play" viewBox="0 0 24 24" focusable="false"><path d="M4 3 21 10.5 5 21 6 12Z" fill="currentColor"/></svg>
+                                                <svg class="cutout-pause" viewBox="0 0 24 24" focusable="false"><path d="M3.5 4 9.5 2.5 11 20 5 21ZM14 3 20.5 4.5 19 21 13 19.5Z" fill="currentColor"/></svg>
+                                            </span>
                                         </button>
                                         <div class="audio-progress-container">
                                             <div class="audio-progress-bar">
@@ -1019,6 +1022,6 @@
     <p id="aboutFootnoteDescription">I design how the AI interprets requests and coordinates its response, translating product intent into instructions that guide its behavior. This includes IQ’s voice and tone, and how and when it chooses tools to use.</p>
 </div>
 <script src="/vendor/dompurify.min.js?v=3.4.15" defer></script>
-<script src="/main.js?v=20261002-radio-proportional-trail" defer></script>
+<script src="/main.js?v=20261002-radio-cutout-glyphs-v2" defer></script>
 </body>
 </html>

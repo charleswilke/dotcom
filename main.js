@@ -3661,6 +3661,14 @@ function initCustomAudioPlayers() {
     if (!audio) return;
     const playPauseBtn = player.querySelector('.audio-btn');
     const icon = playPauseBtn.querySelector('.audio-icon');
+    function updateTransportIcon(playing) {
+      if (!icon.classList.contains('audio-cutout-icon')) {
+        icon.textContent = playing ? '❚❚' : '▶';
+      }
+      player.classList.toggle('playing', playing);
+      playPauseBtn.setAttribute('aria-label', playing ? 'Pause audio' : 'Play audio');
+    }
+
     const progressBar = player.querySelector('.audio-progress');
     const progressContainer = player.querySelector('.audio-progress-container') || player.querySelector('.audio-progress-bar');
     const currentTimeEl = player.querySelector('.audioCurrent') || player.querySelector('#audioCurrent');
@@ -3675,23 +3683,23 @@ function initCustomAudioPlayers() {
       pauseManagedAudioExcept(audio);
       if (audio.paused) {
         audio.play();
-        icon.textContent = '❚❚';
+        updateTransportIcon(true);
       } else {
         audio.pause();
-        icon.textContent = '▶';
+        updateTransportIcon(false);
       }
     });
 
     audio.addEventListener('play', function() {
-      icon.textContent = '❚❚';
+      updateTransportIcon(true);
       player.classList.add('playing');
     });
     audio.addEventListener('pause', function() {
-      icon.textContent = '▶';
+      updateTransportIcon(false);
       player.classList.remove('playing');
     });
     audio.addEventListener('ended', function() {
-      icon.textContent = '▶';
+      updateTransportIcon(false);
       player.classList.remove('playing');
     });
 

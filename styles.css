@@ -17103,3 +17103,15 @@ body.reader-open {
 .audio-summary-player .audio-progress::after {
     mask-image: linear-gradient(90deg, transparent 0%, #000 45%, #000 100%);
 }
+
+/* Uneven paper-cut silhouettes, with an open wedge and offset pause strips. */
+.audio-summary-player .audio-summary-btn .audio-cutout-icon {
+    display: block;
+    width: 19px;
+    height: 21px;
+    margin-left: 0;
+}
+.audio-cutout-icon svg { display: block; width: 100%; height: 100%; }
+.audio-cutout-icon .cutout-pause { display: none; }
+.playing .audio-cutout-icon .cutout-play { display: none; }
+.playing .audio-cutout-icon .cutout-pause { display: block; }

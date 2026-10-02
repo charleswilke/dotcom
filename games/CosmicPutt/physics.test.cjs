@@ -7,7 +7,7 @@ function run(position, angle, power, bypass = null, course = P.level) {
   return body;
 }
 test('preview and actual shot reach identical outcomes, including a wall bounce', () => {
-  for (const [angle, power] of [[-.25, .1], [-.25, .25], [-.25, .4], [.17, .425]]) {
+  for (const [angle, power] of [[-.25, .1], [-.25, .25], [-.25, .4], [-.14, .42]]) {
     const preview = P.predict(P.level.tee, angle, power);
     assert.equal(preview.truncated, false);
     assert.deepEqual(preview.body, run(P.level.tee, angle, power));
@@ -19,33 +19,40 @@ test('slow core entry captures and records the well responsible', () => {
   assert.equal(body.capturedBy, 'violet');
 });
 test('fast balls pass through the core without immediate capture', () => {
-  const body = P.launch({ x: 500, y: 367 }, 0, 1);
+  const well = P.level.wells[0];
+  const body = P.launch({ x: well.x - 50, y: well.y }, 0, 1);
   let crossed = false;
-  while (body.x < 575 && body.status === 'moving') {
+  while (body.x < well.x + 25 && body.status === 'moving') {
     P.step(body);
-    if (Math.abs(body.x - 550) < 18) crossed = true;
+    if (Math.abs(body.x - well.x) < well.core) crossed = true;
   }
   assert.ok(crossed);
   assert.equal(body.status, 'moving');
 });
 test('bypass removes gravity for the whole escape shot, including after bounces', () => {
-  const escape = run(P.level.wells[0], -.25, .45, 'violet');
-  const noWells = run(P.level.wells[0], -.25, .45, null, { ...P.level, wells: [] });
+  const escape = run(P.level.wells[0], -.25, .35, 'violet');
+  const noWells = run(P.level.wells[0], -.25, .35, null, { ...P.level, wells: [] });
   assert.deepEqual(escape, noWells);
   assert.equal(escape.status, 'stopped');
   assert.ok(escape.bounces >= 1);
-  assert.ok(Math.hypot(escape.x - 550, escape.y - 367) > 160);
+  assert.ok(Math.hypot(escape.x - P.level.wells[0].x, escape.y - P.level.wells[0].y) > P.level.wells[0].influence);
 });
 test('bypass affects only the captured well; other wells still pull', () => {
   const course = { ...P.level, wells: [...P.level.wells, { ...P.level.wells[0], id: 'other', x: 580 }] };
-  assert.deepEqual(P.gravity({ x: 590, y: 367 }, course, 'violet'),
-    P.gravity({ x: 590, y: 367 }, { ...course, wells: [course.wells[1]] }));
+  assert.deepEqual(P.gravity({ x: 590, y: P.level.wells[0].y }, course, 'violet'),
+    P.gravity({ x: 590, y: P.level.wells[0].y }, { ...course, wells: [course.wells[1]] }));
 });
-test('a skill shot can ace the test hole', () => {
-  const body = run(P.level.tee, .17, .425);
-  assert.equal(body.status, 'sunk');
-  assert.equal(body.x, P.level.cup.x);
-  assert.equal(body.y, P.level.cup.y);
+test('a gravity swing can ace without a wall bounce, with room to fine-tune power', () => {
+  for (const power of [.41, .415, .42, .425]) {
+    const body = run(P.level.tee, -.14, power);
+    assert.equal(body.status, 'sunk');
+    assert.equal(body.bounces, 0);
+    assert.equal(body.x, P.level.cup.x);
+    assert.equal(body.y, P.level.cup.y);
+    assert.ok(body.age > 4 && body.age < 6, 'The swing should have time to unfold');
+    const straight = run(P.level.tee, -.14, power, null, { ...P.level, wells: [] });
+    assert.notEqual(straight.status, 'sunk', 'Gravity should be what carries this shot to the cup');
+  }
 });
 test('cup accepts soft putts and lets fast putts overshoot', () => {
   const start = { x: P.level.cup.x - 25, y: P.level.cup.y };
@@ -57,7 +64,7 @@ test('cup accepts soft putts and lets fast putts overshoot', () => {
   assert.ok(hard.x > P.level.cup.x + P.level.cup.radius);
 });
 test('preview stops at a second bounce rather than promising hidden later motion', () => {
-  const preview = P.predict(P.level.tee, -.25, .75);
+  const preview = P.predict(P.level.tee, .4, .7);
   assert.equal(preview.truncated, true);
   assert.equal(preview.body.bounces, 2);
 });
@@ -79,5 +86,74 @@ test('a range of full shots stays inside the course and always resolves', () => 
       }
       assert.ok(body.age <= 24 + P.DT);
     }
+  }
+});
+
+test('new holes have gravity-only aces that depend on every well', () => {
+  for (const [index, angle, power] of [[1, -.05, .44], [2, -.05, .46]]) {
+    const course = P.levels[index], body = P.launch(course.tee, angle, power);
+    const closest = course.wells.map(() => Infinity);
+    while (body.status === 'moving') {
+      P.step(body, course);
+      course.wells.forEach((well, i) => {
+        closest[i] = Math.min(closest[i], Math.hypot(body.x - well.x, body.y - well.y));
+      });
+    }
+    assert.equal(body.status, 'sunk', course.hole);
+    assert.equal(body.bounces, 0, course.hole);
+    assert.ok(body.age > 4 && body.age < 6);
+    assert.deepEqual(P.predict(course.tee, angle, power, course).body, body);
+    course.wells.forEach((well, i) => {
+      assert.ok(closest[i] < well.influence && closest[i] > well.core + P.RADIUS, `Skim safely past ${well.id}`);
+      const missingWell = { ...course, wells: course.wells.filter(w => w !== well) };
+      assert.notEqual(run(course.tee, angle, power, null, missingWell).status, 'sunk', `${well.id} must matter to the ace`);
+    });
+  }
+});
+
+test('bypassing one well on the new holes leaves all other fields active', () => {
+  for (const course of P.levels.slice(1)) {
+    for (const well of course.wells) {
+      const position = { x: well.x + 30, y: well.y + 30 };
+      assert.deepEqual(P.gravity(position, course, well.id),
+        P.gravity(position, { ...course, wells: course.wells.filter(w => w.id !== well.id) }));
+    }
+  }
+});
+
+test('new hole boundaries contain full shots through settling and capture', () => {
+  function inside(body, points) {
+    let value = false;
+    for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+      const a = points[i], b = points[j];
+      if ((a[1] > body.y) !== (b[1] > body.y) && body.x < (b[0] - a[0]) * (body.y - a[1]) / (b[1] - a[1]) + a[0]) value = !value;
+    }
+    return value;
+  }
+  for (const course of P.levels.slice(1)) {
+    for (let angle = -Math.PI; angle < Math.PI; angle += .15) {
+      for (const power of [.05, .35, .7, 1]) {
+        const body = P.launch(course.tee, angle, power);
+        while (body.status === 'moving') {
+          P.step(body, course);
+          assert.ok(inside(body, course.boundary), `${course.hole}: angle ${angle}, power ${power}`);
+        }
+        assert.ok(body.age <= 24 / .9 + P.DT);
+      }
+    }
+  }
+});
+
+test('the long hole links both pairs of wells into a clean ace', () => {
+  const course = P.levels[3];
+  for (const power of [.8, .81, .82, .83]) {
+    const body = P.launch(course.tee, -.05, power), seen = new Set();
+    while (body.status === 'moving') {
+      P.step(body, course);
+      course.wells.forEach(well => { if (Math.hypot(body.x - well.x, body.y - well.y) < well.influence) seen.add(well.id); });
+    }
+    assert.equal(body.status, 'sunk'); assert.equal(body.bounces, 0);
+    assert.equal(seen.size, 4); assert.ok(body.age > 6 && body.age < 8);
+    assert.deepEqual(P.predict(course.tee, -.05, power, course).body, body);
   }
 });

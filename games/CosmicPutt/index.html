@@ -4,27 +4,38 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#080f1d">
-  <meta name="description" content="A miniature golf playground among the stars. Bend your shot around a gravity well in Cosmic Putt's Lunar Gardens test hole.">
-  <title>Cosmic Putt · Lunar Gardens</title>
+  <meta name="description" content="A miniature golf playground among the stars. Play four blueprint minigolf holes, link gravity swings, and earn up to twelve stars in Cosmic Putt.">
+  <title>Cosmic Putt · Blueprint Course</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23080f1d'/%3E%3Ccircle cx='20' cy='20' r='12' fill='none' stroke='%23c19aff' stroke-width='3'/%3E%3Ccircle cx='28' cy='12' r='5' fill='%23fff0d3'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=3">
-  <script defer src="physics.js?v=2"></script>
-  <script defer src="game.js?v=6"></script>
+  <link rel="stylesheet" href="styles.css?v=8">
+  <script defer src="physics.js?v=5"></script>
+  <script defer src="scoring.js?v=1"></script>
+  <script defer src="view.js?v=3"></script>
+  <script defer src="game.js?v=11"></script>
 </head>
 <body>
   <main class="observatory">
     <header class="topbar">
       <div class="brand"><svg class="planet" aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="12"/><ellipse cx="24" cy="24" rx="22" ry="7" transform="rotate(-28 24 24)"/><circle class="satellite" cx="40" cy="12" r="3"/></svg><h1>COSMIC PUTT<span>MINIATURE GOLF · MAXIMUM ORBIT</span></h1></div>
-      <div class="course-title"><span class="hole-badge">01</span><div><span class="eyebrow">LUNAR GARDENS</span><strong>First orbit</strong></div></div>
-      <div class="score"><div><span>PAR</span><b>3</b></div><div><span>STROKES</span><b id="strokes">0</b></div></div>
+      <div class="course-title"><span id="hole-badge" class="hole-badge">01</span><div><span class="eyebrow">BLUEPRINT COURSE</span><strong id="hole-title">First orbit</strong></div></div>
+      <div class="score"><div><span>PAR</span><b id="par">3</b></div><div><span>STROKES</span><b id="strokes">0</b></div></div>
     </header>
+    <div class="round-bar"><nav id="hole-navigation" aria-label="Choose a hole"></nav><div class="round-total"><span>ROUND STARS</span><strong id="round-stars">0 / 12</strong><small>Best per hole</small></div></div>
     <section class="viewport" aria-label="Miniature golf course">
-      <div class="corner-label"><span class="live-dot"></span> OBSERVATORY 01 <span class="sub-label">LUNAR SURFACE · PRACTICE HOLE</span></div>
+      <div class="corner-label"><span class="live-dot"></span> <span id="blueprint-number">BLUEPRINT 01</span> <span id="study-label" class="sub-label">1 GRAVITY WELL · COURSE STUDY</span></div>
       <canvas id="course" width="1100" height="650" tabindex="0" aria-label="Golf course. Drag backward from the ball and release to putt. Or use arrow keys to aim and set power, then Space to shoot." aria-describedby="instructions">Your browser needs Canvas support to play Cosmic Putt.</canvas>
+      <button id="overview" class="view-button" aria-pressed="false" aria-controls="course">Course overview ↗</button>
+      <div id="cup-inset" class="cup-inset" hidden>
+        <div class="cup-camera-label"><span>CUP CAM</span><span id="cup-camera-mode">APPROACH PREVIEW</span></div>
+        <canvas id="cup-camera" width="360" height="240" role="img" aria-label="Close-up of the approach to the cup"></canvas>
+      </div>
       <div class="well-key"><i></i> GRAVITY FIELD <span>Slow entry = capture</span></div>
       <div id="result" class="result" hidden>
-        <span class="eyebrow">LUNAR GARDENS / 01</span><h2 id="result-title">Beautiful orbit.</h2>
-        <p id="result-description"></p><button id="play-again" class="primary">Play this hole again <span>↗</span></button>
+        <span id="result-course" class="eyebrow">BLUEPRINT COURSE / 01</span><h2 id="result-title">Beautiful orbit.</h2>
+        <div id="result-stars" class="result-stars" role="img" aria-label="0 of 3 stars"></div>
+        <p id="result-description"></p><p id="round-summary"></p>
+        <button id="next-hole" class="primary">Next hole ↗</button>
+        <button id="play-again" class="secondary">Replay this hole ↺</button>
       </div>
     </section>
     <section class="console" aria-label="Shot controls">
@@ -39,10 +50,10 @@
         </svg>
         <div class="power-settings"><div class="power-label"><span id="power-label">SHOT POWER</span><output id="power-output" aria-labelledby="power-label" aria-live="off">55%</output></div><div class="gauge" aria-hidden="true"><div id="power-fill"></div></div><div class="power-scale" aria-hidden="true"><span>SOFT</span><span>FULL</span></div></div>
       </div>
-      <div class="actions"><button id="reset" class="secondary" title="Restart this hole">Restart <span aria-hidden="true">↺</span></button></div>
+      <div class="actions"><button id="reset" class="secondary" title="Restart this hole">Restart hole <span aria-hidden="true">↺</span></button></div>
     </section>
     <footer><p id="message" role="status" aria-live="polite">Drag back from the ball. Find your curve.</p><button id="help" class="text-button" aria-expanded="false" aria-controls="instructions">How to play <span>?</span></button></footer>
-    <aside id="instructions" hidden><p><b>Mouse / touch:</b> drag backward from the ball to aim and set power; release to putt. Drag back to the ball to cancel.</p><p><b>Keyboard:</b> ← → aim, ↑ ↓ change power, Space or Enter putts, Esc cancels aim.</p><p><b>Gravity:</b> skim the violet well to bend your shot. Enter its dark center slowly and you'll be captured. That stroke counts normally; the well turns navy and ignores your entire next shot, letting you escape. The dotted preview includes gravity and one wall bounce. A ring marks where the ball will stop; a × marks capture.</p></aside>
+    <aside id="instructions" hidden><p><b>Mouse / touch:</b> drag backward from the ball to aim and set power; release to putt. Drag back to the ball to cancel.</p><p><b>Keyboard:</b> ← → aim, ↑ ↓ change power, Space or Enter putts, Esc cancels aim.</p><p><b>Gravity:</b> skim the violet wells to bend your shot. Enter its dark center slowly and you'll be captured. That stroke counts normally; the captured well turns navy and ignores your entire next shot, letting you escape. Other wells remain active. The dotted preview includes gravity and one wall bounce. A ring marks where the ball will stop; a × marks capture.</p><p><b>Camera:</b> the three-quarter view follows the ball on long holes. Course overview shows the full route; return to the ball to aim close up. Swipe with two fingers on a touchscreen or trackpad to move the camera across the course. Lift both fingers to place it; Return to ball brings you back. Adding a second finger cancels a putt safely. The camera stays still during a one-finger aim. The small route map tracks your position. Release in overview automatically returns to the ball.</p><p><b>Cup cam:</b> a fixed close-up appears when your preview passes near the cup, including near misses and overshoots. It shows the predicted approach while aiming and switches to the live ball after release. On phones, it replaces the route map.</p><p><b>Stars:</b> 1 putt = ★★★, 2 putts = ★★☆, 3 putts = ★☆☆, 4 or more = ☆☆☆. Each hole keeps its best result this round. Replay to improve; a new round clears the scorecard.</p></aside>
     <noscript><p>Enable JavaScript to play this hole.</p></noscript>
   </main>
 </body>

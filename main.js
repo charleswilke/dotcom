@@ -3662,7 +3662,7 @@ function initCustomAudioPlayers() {
     const playPauseBtn = player.querySelector('.audio-btn');
     const icon = playPauseBtn.querySelector('.audio-icon');
     const progressBar = player.querySelector('.audio-progress');
-    const progressContainer = player.querySelector('.audio-progress-bar');
+    const progressContainer = player.querySelector('.audio-progress-container') || player.querySelector('.audio-progress-bar');
     const currentTimeEl = player.querySelector('.audioCurrent') || player.querySelector('#audioCurrent');
 
     audio.addEventListener('timeupdate', function() {

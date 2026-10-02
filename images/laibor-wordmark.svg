@@ -17,11 +17,11 @@
 <pattern id="h13" patternUnits="userSpaceOnUse" x="2" y="98" width="4" height="4"><circle cx="2" cy="2" r="1.88"/></pattern>
 <mask id="halftone" maskUnits="userSpaceOnUse" x="-23.5" y="-10" width="574.05" height="120">
 <rect x="-23.5" y="-10" width="574.05" height="120" fill="#fff"/>
-<rect x="-10" y="46" width="547.05" height="4" fill="url(#h0)"/><rect x="-10" y="50" width="547.05" height="4" fill="url(#h1)"/><rect x="-10" y="54" width="547.05" height="4" fill="url(#h2)"/><rect x="-10" y="58" width="547.05" height="4" fill="url(#h3)"/><rect x="-10" y="62" width="547.05" height="4" fill="url(#h4)"/><rect x="-10" y="66" width="547.05" height="4" fill="url(#h5)"/><rect x="-10" y="70" width="547.05" height="4" fill="url(#h6)"/><rect x="-10" y="74" width="547.05" height="4" fill="url(#h7)"/><rect x="-10" y="78" width="547.05" height="4" fill="url(#h8)"/><rect x="-10" y="82" width="547.05" height="4" fill="url(#h9)"/><rect x="-10" y="86" width="547.05" height="4" fill="url(#h10)"/><rect x="-10" y="90" width="547.05" height="4" fill="url(#h11)"/><rect x="-10" y="94" width="547.05" height="4" fill="url(#h12)"/><rect x="-10" y="98" width="547.05" height="4" fill="url(#h13)"/>
+<rect x="-10" y="46" width="547.05" height="4" fill="url(#h0)" opacity=".22"/><rect x="-10" y="50" width="547.05" height="4" fill="url(#h1)" opacity=".22"/><rect x="-10" y="54" width="547.05" height="4" fill="url(#h2)" opacity=".22"/><rect x="-10" y="58" width="547.05" height="4" fill="url(#h3)" opacity=".22"/><rect x="-10" y="62" width="547.05" height="4" fill="url(#h4)" opacity=".22"/><rect x="-10" y="66" width="547.05" height="4" fill="url(#h5)" opacity=".22"/><rect x="-10" y="70" width="547.05" height="4" fill="url(#h6)" opacity=".22"/><rect x="-10" y="74" width="547.05" height="4" fill="url(#h7)" opacity=".22"/><rect x="-10" y="78" width="547.05" height="4" fill="url(#h8)" opacity=".22"/><rect x="-10" y="82" width="547.05" height="4" fill="url(#h9)" opacity=".22"/><rect x="-10" y="86" width="547.05" height="4" fill="url(#h10)" opacity=".22"/><rect x="-10" y="90" width="547.05" height="4" fill="url(#h11)" opacity=".22"/><rect x="-10" y="94" width="547.05" height="4" fill="url(#h12)" opacity=".22"/><rect x="-10" y="98" width="547.05" height="4" fill="url(#h13)" opacity=".22"/>
 </mask>
 <filter id="grain" x="-5%" y="-10%" width="110%" height="125%">
 <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="21" result="n"/>
-<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -24 18.2" result="grain"/>
+<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.18 1" result="grain"/>
 <feComposite in="SourceGraphic" in2="grain" operator="in"/>
 </filter>
 </defs>

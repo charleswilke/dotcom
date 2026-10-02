@@ -144,14 +144,15 @@ def build():
     width = x + LEAN * 100            # the lean carries the tops past the last advance
 
     # Halftone: one pattern per row, dots growing toward the baseline and
-    # staggered on alternate rows. Knocked out of the letters through a mask.
+    # staggered on alternate rows. A light tint through the mask keeps the
+    # printed shading smooth when the dots shrink below a mobile pixel.
     patterns, rows = [], []
     for row, y in enumerate(range(48, 104, 4)):
         r = 0.25 + (y - 48) / 56 * 1.75
         patterns.append(
             f'<pattern id="h{row}" patternUnits="userSpaceOnUse" x="{2 if row % 2 else 0}" y="{y - 2}" '
             f'width="4" height="4"><circle cx="2" cy="2" r="{r:.2f}"/></pattern>')
-        rows.append(f'<rect x="-10" y="{y - 2}" width="{fmt(width + 20)}" height="4" fill="url(#h{row})"/>')
+        rows.append(f'<rect x="-10" y="{y - 2}" width="{fmt(width + 20)}" height="4" fill="url(#h{row})" opacity=".22"/>')
 
     left, right = -12, width + 12
     crop = (f'M{left} -8H{left + 10}M{left} -8V2M{fmt(right)} -8H{fmt(right - 10)}M{fmt(right)} -8V2'
@@ -173,7 +174,7 @@ def build():
 </mask>
 <filter id="grain" x="-5%" y="-10%" width="110%" height="125%">
 <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="21" result="n"/>
-<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -24 18.2" result="grain"/>
+<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.18 1" result="grain"/>
 <feComposite in="SourceGraphic" in2="grain" operator="in"/>
 </filter>
 </defs>

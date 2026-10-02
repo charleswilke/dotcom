@@ -16809,10 +16809,10 @@ body.reader-open {
         box-shadow: 0 0 4px rgba(255, 201, 110, .65);
         opacity: .35;
     }
-    .has-older-recaps .tuner-dust {
+    .has-scrollable-recaps .tuner-dust {
         animation: tuner-dust-drift var(--dust-duration) ease-in-out var(--dust-delay) infinite;
     }
-    .tuner-glass.has-older-recaps .tuner-scroll-hint {
+    .tuner-glass.has-scrollable-recaps .tuner-scroll-hint {
         opacity: 1;
         animation: tuner-light-spill 6s ease-in-out infinite;
     }
@@ -16829,8 +16829,8 @@ body.reader-open {
     50% { opacity: .7; }
 }
 @media (prefers-reduced-motion: reduce) {
-    .tuner-glass.has-older-recaps .tuner-scroll-hint,
-    .has-older-recaps .tuner-dust { animation: none; }
+    .tuner-glass.has-scrollable-recaps .tuner-scroll-hint,
+    .has-scrollable-recaps .tuner-dust { animation: none; }
 }
 
 /* Matching recessed instrument windows for the timeline and scrubber. */
@@ -17115,3 +17115,14 @@ body.reader-open {
 .audio-cutout-icon .cutout-pause { display: none; }
 .playing .audio-cutout-icon .cutout-play { display: none; }
 .playing .audio-cutout-icon .cutout-pause { display: block; }
+
+/* Edge light shows the proportion of the archive remaining in each direction. */
+@media (max-width: 767px) {
+    .tuner-scroll-hint { filter: opacity(var(--dial-left-light, 1)); }
+    .tuner-scroll-hint-right {
+        left: auto;
+        right: 9px;
+        transform: scaleX(-1);
+        filter: opacity(var(--dial-right-light, 0));
+    }
+}

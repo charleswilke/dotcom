@@ -2133,7 +2133,12 @@ function initTimeDial() {
 
     function updateOlderRecapsHint() {
         if (tunerGlass && dialViewport) {
-            tunerGlass.classList.toggle('has-older-recaps', mobileDial.matches && dialViewport.scrollLeft > 2);
+            const scrollRange = dialViewport.scrollWidth - dialViewport.clientWidth;
+            const progress = scrollRange > 0
+                ? Math.max(0, Math.min(1, dialViewport.scrollLeft / scrollRange)) : 0;
+            tunerGlass.classList.toggle('has-scrollable-recaps', mobileDial.matches && scrollRange > 0);
+            tunerGlass.style.setProperty('--dial-left-light', progress);
+            tunerGlass.style.setProperty('--dial-right-light', scrollRange > 0 ? 1 - progress : 0);
         }
     }
     if (dialViewport) dialViewport.addEventListener('scroll', updateOlderRecapsHint, { passive: true });

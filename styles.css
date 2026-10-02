@@ -17021,13 +17021,14 @@ body.reader-open {
     left: auto;
     right: 0;
     top: -12px;
-    width: 120px;
+    width: 100%;
     height: 34px;
     border-radius: 0;
     background:
         radial-gradient(ellipse at 100% 50%,
             rgba(255, 233, 179, .48), rgba(255, 201, 108, .24) 35%, transparent 82%),
-        linear-gradient(0deg, rgba(255, 207, 123, .2), transparent 55%);
+        radial-gradient(ellipse at 100% 100%,
+            rgba(255, 207, 123, .2), transparent 78%);
     pointer-events: none;
 }
 .audio-summary-player .audio-progress::before {
@@ -17038,7 +17039,7 @@ body.reader-open {
     position: absolute;
     right: 2px;
     top: -9px;
-    width: 62px;
+    width: 100%;
     height: 28px;
     pointer-events: none;
     background:
@@ -17096,4 +17097,9 @@ body.reader-open {
     color: #ffe5a9;
     filter: drop-shadow(0 0 3px rgba(255, 211, 125, .9))
         drop-shadow(0 0 7px rgba(255, 190, 60, .55));
+}
+
+/* Feather the light overlay into the played section without a visible seam. */
+.audio-summary-player .audio-progress::after {
+    mask-image: linear-gradient(90deg, transparent 0%, #000 45%, #000 100%);
 }

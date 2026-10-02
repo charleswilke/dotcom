@@ -124,10 +124,11 @@ and alternate `label-top` so labels keep staggering above/below the line:
 ```html
 <div class="scale-marker scale-minor"></div>
 <div class="scale-marker scale-major scale-clickable label-top active" data-period="Aug '26" data-station="15">
-    <span class="marker-label">AUG<br>2026</span>
+    <span class="marker-label">AUG<br>'26</span>
 </div>
 ```
-Remove `active` from the previous newest marker.
+Use apostrophe plus two digits for the year (`'26`) to keep the dial compact
+on mobile. Remove `active` from the previous newest marker.
 
 ### 5. Update the default audio source
 Set the `<audio id="recap-audio">` `src` (~line 338) to the newest MP3 so the

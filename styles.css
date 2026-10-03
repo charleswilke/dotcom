@@ -8097,6 +8097,8 @@ html {
 }
 
 .spotlight-description {
+    /* Keep wrapped subtitles balanced instead of leaving a short final line. */
+    text-wrap: balance;
     font-size: 1.2rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;

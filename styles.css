@@ -9413,7 +9413,7 @@ html {
    ========================================================= */
 .album-cases-section {
     position: relative;
-    padding: clamp(2.25rem, 3vw, 3rem) 0 4.6rem;
+    padding: clamp(1.25rem, 2vw, 2rem) 0 4.6rem;
     scroll-margin-top: 72px;
     color: var(--light);
     overflow: hidden;
@@ -9511,7 +9511,7 @@ html {
     display: block;
     width: 100%;
     height: auto;
-    margin: 1px auto 0;
+    margin: -9px auto 0;
 }
 
 @media (max-width: 600px) {

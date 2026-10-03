@@ -826,6 +826,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "situational-awareness-transcript",
+        "title": "Situational Awareness: The Conversation",
+        "cleanDescription": "The working session behind “Situational Awareness” — sovereign AI, communal intelligence, draft revisions, and pulp-comic artwork with Codex.",
+        "pubDate": "2026-10-03T16:00:00.000Z",
+        "contentUrl": "/transcripts/situational-awareness-transcript.html",
+        "link": ""
+    },
+    {
         "slug": "god-shuffled-his-feet-transcript",
         "title": "God shuffled his feet: The Conversation",
         "cleanDescription": "The working session behind \"God shuffled his feet\" — human worth, care, the mercy of speed, draft revisions, and six artwork explorations with Codex.",

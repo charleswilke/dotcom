@@ -12,6 +12,16 @@ const DEFAULT_DESCRIPTION = 'Essays on capitalism, humanity, and AI from Charles
 // Repo-hosted articles that open in the reader but aren't in the Substack feed.
 // Keep in sync with LOCAL_ARTICLES in main.js.
 const LOCAL_ARTICLES = {
+    "situational-awareness-transcript": {
+        "title": "Situational Awareness: The Conversation",
+        "description": "The working session behind “Situational Awareness” — sovereign AI, communal intelligence, draft revisions, and pulp-comic artwork with Codex.",
+        "thumbnail": "/images/transcripts/situational-awareness/02-pulp-network-header.webp",
+        "image": {
+            "width": 1774,
+            "height": 887
+        },
+        "pubDate": "2026-10-03T16:00:00.000Z"
+    },
     "god-shuffled-his-feet-transcript": {
         "title": "God shuffled his feet: The Conversation",
         "description": "The working session behind \"God shuffled his feet\" — human worth, care, the mercy of speed, draft revisions, and six artwork explorations with Codex.",

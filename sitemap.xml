@@ -108,4 +108,8 @@
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://charleswilke.com/read/situational-awareness-transcript</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
 </urlset>

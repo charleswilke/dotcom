@@ -9497,11 +9497,14 @@ html {
     max-width: none;
     position: relative;
     height: auto;
-    aspect-ratio: 6 / 1;
+    aspect-ratio: 5 / 1;
     object-fit: cover;
     margin: 0 calc((100% - min(69.54%, 323.73px)) / 2);
     transform: rotate(-2deg);
     opacity: 0.8;
+    /* Subpixel smoothing for the fine alpha edges at this reduced size. */
+    image-rendering: auto;
+    filter: blur(0.25px);
 }
 
 .albums-title-art {

@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const P = window.CosmicPhysics, S = window.CosmicScoring, V = window.CosmicView;
+  const P = window.CosmicPhysics, S = window.CosmicScoring, V = window.CosmicView, M = window.CosmicMotion;
   let holeIndex = 0, L = P.levels[holeIndex];
   let scores = P.levels.map(() => null);
   const holeNumber = () => String(holeIndex + 1).padStart(2, '0');
@@ -12,8 +12,10 @@
     message: $('message'), result: $('result') };
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let ball, phase, strokes, angle, power, pendingBypass, shotBypass;
-  let prediction, drag = null, trail = [], capture = null, shotTime = 0, shotOrigin = null;
+  let prediction, drag = null, trail = [], capture = null, shotOrigin = null;
   let accumulator = 0, lastTime = 0, time = 0;
+  let motion = M.create();
+  const noteImpact = contact => M.hit(motion, time, contact);
   let coursePath, camera, overview = false, displayScale = 1, compactView = false;
   const touches = new Map();
   let panGesture = false, panCenter = null, manualPan = false;
@@ -80,6 +82,7 @@
     ball = { ...L.tee }; phase = 'ready'; strokes = 0; power = L.aim?.power ?? .4; angle = L.aim?.angle ?? -.08;
     pendingBypass = null; shotBypass = null; drag = null; trail = []; capture = null; shotOrigin = null;
     accumulator = 0; releaseStretch = 0; ui.result.hidden = true;
+    motion = M.create();
     cupShot = false; cupHoldUntil = 0; cupCamera = V.cupView(L.cup);
     camera = V.create(L, overview, ball); updateViewControl();
     updatePrediction(); updateUI(L.hint ?? 'Drag back from the ball. Find your curve.');
@@ -133,7 +136,8 @@
     shotOrigin = { x: ball.x, y: ball.y, stretch: releaseStretch };
     ball = P.launch(ball, angle, power); shotBypass = pendingBypass; pendingBypass = null;
     if (overview || manualPan) { overview = false; manualPan = false; camera = V.create(L, false, ball); updateViewControl(); }
-    phase = 'moving'; strokes++; trail = []; accumulator = 0; shotTime = time;
+    motion = M.create(time, angle, power, reduced, Math.hypot(ball.vx, ball.vy));
+    phase = reduced ? 'moving' : 'striking'; strokes++; trail = []; accumulator = 0;
     updateUI(shotBypass ? 'A free orbit. This well is bypassed until the ball stops.' : 'Off into orbit…');
   }
   function resolveShot() {
@@ -141,11 +145,15 @@
       pendingBypass = ball.capturedBy; shotBypass = null; phase = 'capturing';
       const well = L.wells.find(w => w.id === pendingBypass);
       capture = { from: { x: ball.x, y: ball.y }, well, started: time };
+      motion.captureTime = time;
       updateUI('Captured! No extra penalty. The well will ignore your next shot.');
     } else if (ball.status === 'sunk') {
-      phase = 'sunk'; shotBypass = null; showResult();
+      phase = 'sinking'; shotBypass = null; motion.sinkTime = time;
+      motion.stretch = 0; motion.hit = null; cupShot = true;
+      updateUI('In the cup. Beautiful orbit.');
     } else {
       phase = 'ready'; shotBypass = null; updatePrediction();
+      motion.settleTime = time; motion.stretch = 0; motion.hit = null;
       if (cupShot) cupHoldUntil = time + 1.5;
       updateUI('Ball settled. Line up your next orbit.');
     }
@@ -154,7 +162,7 @@
     const button = $('overview'), label = overview || manualPan ? 'Return to ball ↙' : 'Course overview ↗';
     if (button.getAttribute('aria-pressed') !== String(overview)) button.setAttribute('aria-pressed', String(overview));
     if (button.textContent !== label) button.textContent = label;
-    button.disabled = Boolean(drag) || panGesture || phase === 'moving' || phase === 'capturing' || phase === 'sunk';
+    button.disabled = Boolean(drag) || panGesture || phase !== 'ready';
     canvas.dataset.view = overview ? 'overview' : manualPan ? 'panned' : 'local';
     canvas.dataset.gesture = panGesture ? 'pan' : drag ? 'aim' : 'idle';
   }
@@ -221,9 +229,9 @@
   function drawCupCamera() {
     const arriving = phase === 'moving' && Math.hypot(ball.x - L.cup.x, ball.y - L.cup.y) < 220;
     if (arriving) cupShot = true;
-    const live = phase === 'moving' && cupShot || phase === 'ready' && !drag && time < cupHoldUntil;
+    const live = phase === 'sinking' || phase === 'moving' && cupShot || phase === 'ready' && !drag && time < cupHoldUntil;
     const preview = phase === 'ready' && !live && cupPreview;
-    const visible = live || preview;
+    const visible = !V.cupVisible(L.cup, camera) && (live || preview);
     $('cup-inset').hidden = !visible;
     document.querySelector('.viewport').classList.toggle('cup-camera-active', visible);
     canvas.dataset.cupCamera = visible ? live ? 'live' : 'preview' : 'hidden';
@@ -244,10 +252,13 @@
       else if (!prediction.truncated) circle(c, end.x, end.y, 7, null, '#dcf2ff99', 1.5);
     } else {
       if (trail.length > 1) line(c, trail.map(p => [p.x, p.y]), '#8ce4d9bb', 2);
-      circle(c, ball.x + 2, ball.y + 4, 9, '#061b2799');
+      drawBallShadow(c);
     }
     c.restore(); drawWalls(c, cupCamera); drawFlag(c, cupCamera);
-    if (live) drawBallSphere(c, cupCamera, cupCanvas.getBoundingClientRect().width / 360 || 1);
+    if (live) {
+      drawImpactGlint(c, cupCamera);
+      drawBallSphere(c, cupCamera, cupCanvas.getBoundingClientRect().width / 360 || 1);
+    }
     return true;
   }
   function drawHUD() {
@@ -281,12 +292,53 @@
     circle(c, x, y, well.core + 3, '#15233f', bypass ? '#5279b5' : '#c49ef3', 2);
     circle(c, x, y, well.core, '#060e1b');
     circle(c, x + 2, y + 3, well.core - 5, '#030810');
+    if (!reduced && capture?.well.id === well.id) {
+      const progress = (time - capture.started) / .22;
+      if (progress >= 0 && progress < 1) {
+        circle(c, x, y, well.core + 8 * (1 - progress), null, `rgba(190,227,255,${.5 * (1 - progress)})`, 1.5);
+      }
+    }
   }
   function drawCup(c = ctx) {
     const { x, y, radius } = L.cup;
+    drawFlagShadow(c);
     circle(c, x, y + 2, radius + 5, '#102b30');
     circle(c, x, y, radius + 3, '#b6e3ff', '#e1f4ff', 1);
     circle(c, x, y, radius, '#06141d');
+    if (phase === 'sinking' || phase === 'sunk') {
+      const progress = phase === 'sunk' ? 1 : (time - motion.sinkTime) / (reduced ? .045 : M.SINK_DURATION);
+      const glimpse = Math.max(0, Math.min(1, (progress - .68) / .14));
+      if (glimpse > 0) {
+        c.save(); c.globalAlpha = glimpse * .75;
+        c.beginPath(); c.arc(x, y, radius, 0, Math.PI * 2); c.clip();
+        // Only the upper cap of the resting ball peeks past the near rim.
+        const resting = c.createRadialGradient(x - 1, y + radius - 3, .5, x, y + radius - 1, 4.5);
+        resting.addColorStop(0, '#b6cbd7'); resting.addColorStop(1, '#415767');
+        circle(c, x, y + radius - 1, 4.5, resting);
+        c.restore();
+      }
+    }
+    if (phase === 'sinking' && !reduced) {
+      const progress = (time - motion.sinkTime) / M.SINK_DURATION;
+      const ripple = Math.max(0, Math.min(1, (progress - .55) / .45));
+      if (ripple > 0 && ripple < 1) {
+        circle(c, x, y, radius + 3 + ripple * 17, null, `rgba(140,228,217,${(1 - ripple) * .7})`, 1.6);
+      }
+    }
+  }
+  function drawFlagShadow(c) {
+    // Ground projection of the upright pole and pennant, away from the
+    // lower-left light. World coordinates keep both cameras in agreement.
+    const cast = (x, height) => {
+      const p = V.unproject({ x: x + height * .35, y: -height * .28 });
+      return [L.cup.x + p.x, L.cup.y + p.y];
+    };
+    c.save(); c.globalAlpha = .3; c.lineCap = 'round';
+    c.shadowColor = '#031324'; c.shadowBlur = 2;
+    line(c, [cast(2, 0), cast(2, 49)], '#031324', 2);
+    const pennant = [cast(3, 49), cast(27, 39), cast(3, 30)];
+    c.beginPath(); pennant.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y));
+    c.closePath(); c.fillStyle = '#031324'; c.fill(); c.restore();
   }
   function drawFlag(c = ctx, view = camera) {
     const p = V.toScreen(L.cup, view), z = view.zoom;
@@ -298,12 +350,20 @@
   }
   function drawPrediction() {
     if (phase !== 'ready' || !prediction) {
-      // A quick follow-through makes the release feel like a physical tap.
-      const progress = (time - shotTime) / .18;
-      if (phase === 'moving' && shotOrigin && progress < 1 && !reduced) {
-        const recoil = (1 - progress) ** 3;
-        drawPutter(shotOrigin, 5 + (18 + shotOrigin.stretch * .45) * recoil, 1 - progress);
-        if (shotOrigin.stretch > 0) drawTether(shotOrigin, shotOrigin.stretch * recoil, power, 1 - progress);
+      if ((phase === 'striking' || phase === 'moving') && shotOrigin && !reduced) {
+        const stroke = M.putter(motion, time, 23 + shotOrigin.stretch * .45, P.RADIUS);
+        if (stroke) {
+          if (phase === 'moving') {
+            const travel = (ball.x - shotOrigin.x) * Math.cos(angle) + (ball.y - shotOrigin.y) * Math.sin(angle);
+            const pose = M.sample(motion, time, V.matrix(camera));
+            // A soft putt must clear the face before the club can follow through.
+            stroke.setback = Math.max(stroke.setback, P.RADIUS * pose.scaleX + 3.5 - travel);
+          }
+          if (shotOrigin.stretch > 0 && stroke.tether > 0) {
+            drawTether(shotOrigin, shotOrigin.stretch * stroke.tether, power, stroke.tether);
+          }
+          drawPutter(shotOrigin, stroke.setback, stroke.opacity);
+        }
       }
       return;
     }
@@ -328,8 +388,8 @@
     // Pull-back putter points in the same direction as the shot.
     const stretch = drag ? elasticStretch(drag.distance) : 0;
     const setback = 23 + stretch * .45;
-    drawPutter(ball, setback);
     if (drag && drag.distance > 5) drawTether(ball, stretch, power);
+    drawPutter(ball, setback);
   }
   // The handle yields less as the band stretches, giving visible resistance.
   const elasticStretch = distance => 180 * (1 - Math.exp(-distance / 180));
@@ -354,14 +414,81 @@
   }
   function drawPutter(origin, setback, opacity = 1) {
     ctx.save(); ctx.translate(origin.x, origin.y); ctx.rotate(angle); ctx.globalAlpha = opacity;
-    line(ctx, [[-setback, 0], [-setback - 7, 31]], '#a7b9c4', 3);
-    line(ctx, [[-setback + 1, -8], [-setback + 1, 8]], '#e1f4ff', 5);
-    line(ctx, [[-setback - 7, 24], [-setback - 8, 36]], '#66c9c2', 4);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // Like the flagpole, height rises vertically on screen instead of lying
+    // on the projected course. Undo the course projection and aim rotation.
+    const raised = (x, y) => {
+      const p = V.unproject({ x, y }), cos = Math.cos(angle), sin = Math.sin(angle);
+      return { x: p.x * cos + p.y * sin, y: -p.x * sin + p.y * cos };
+    };
+    const base = { x: -setback - 4, y: 5 }, lift = raised(-5, -49);
+    const point = t => [base.x + lift.x * t, base.y + lift.y * t];
+    // Pull-back rocks the club around the upper grip rather than sliding it
+    // across the course. At address it returns to the existing contact stroke.
+    const pull = Math.max(0, setback - 23);
+    const direction = V.project({ x: Math.cos(angle), y: Math.sin(angle) });
+    const tilt = Math.max(-.95, Math.min(.95, Math.atan2(pull * direction.x, 49)));
+    const [px, py] = point(.92), cosTilt = Math.cos(tilt), sinTilt = Math.sin(tilt);
+    const elevation = raised(0, -3);
+    const turn = (x, y) => {
+      const screen = V.project({ x: x * Math.cos(angle) - y * Math.sin(angle),
+        y: x * Math.sin(angle) + y * Math.cos(angle) });
+      return raised(screen.x * cosTilt - screen.y * sinTilt, screen.x * sinTilt + screen.y * cosTilt);
+    };
+    // Project the raised shaft onto the ground using the same lower-left
+    // light as the ball. Cast direction stays fixed while the club rocks.
+    const shadowPoint = t => {
+      const [x, y] = point(t);
+      const p = turn(x + elevation.x - px, y + elevation.y - py);
+      const height = 3 * cosTilt + 49 * (.92 * (1 - cosTilt) + t * cosTilt);
+      const drop = raised(height * .35, height * .72);
+      return [px + pull + p.x + drop.x, py + p.y + drop.y];
+    };
+    ctx.save(); ctx.globalAlpha = opacity * .3;
+    ctx.shadowColor = '#031324'; ctx.shadowBlur = 3;
+    line(ctx, [shadowPoint(0), shadowPoint(.72)], '#031324', 3);
+    line(ctx, [shadowPoint(.72), shadowPoint(1)], '#031324', 6);
+    const [hx, hy] = shadowPoint(0);
+    line(ctx, [[hx, hy - 14], [hx, hy + 8]], '#031324', 10);
+    ctx.restore();
+    if (pull > 0) {
+      const xAxis = turn(1, 0), yAxis = turn(0, 1);
+      ctx.translate(px + pull, py);
+      ctx.transform(xAxis.x, xAxis.y, yAxis.x, yAxis.y, 0, 0);
+      ctx.translate(-px, -py);
+    }
+    // The head has a dark lower edge and sits just above its contact shadow.
+    line(ctx, [[-setback - 5, -10], [-setback - 5, 14]], '#17384b', 12);
+    ctx.translate(elevation.x, elevation.y);
+    const shaft = [point(0), point(1)];
+    // Navy outlines separate the club from grid lines, walls, and the aiming tether.
+    line(ctx, shaft, '#061b2d', 7);
+    line(ctx, shaft, '#e1f4ff', 3);
+    line(ctx, [point(.72), point(1)], '#061b2d', 10);
+    line(ctx, [point(.72), point(1)], '#d4e3eb', 6);
+    const rib = raised(2, 0);
+    for (let i = 0; i < 3; i++) {
+      const [x, y] = point(.78 + i * .075);
+      line(ctx, [[x - rib.x, y - rib.y], [x + rib.x, y + rib.y]], '#5b7183', 1);
+    }
+    // A rounded mallet silhouette, with its bright striking edge facing the ball.
+    const metal = ctx.createLinearGradient(-setback - 9, 0, -setback + 3.5, 0);
+    metal.addColorStop(0, '#6c8292'); metal.addColorStop(.55, '#bfced8'); metal.addColorStop(1, '#f4fbff');
+    ctx.beginPath(); ctx.moveTo(-setback + 1, -12);
+    ctx.lineTo(-setback - 5, -12);
+    ctx.quadraticCurveTo(-setback - 10, -12, -setback - 10, -7);
+    ctx.lineTo(-setback - 10, 7);
+    ctx.quadraticCurveTo(-setback - 10, 12, -setback - 5, 12);
+    ctx.lineTo(-setback + 1, 12); ctx.closePath();
+    ctx.fillStyle = metal; ctx.fill(); ctx.strokeStyle = '#061b2d'; ctx.lineWidth = 3; ctx.stroke();
+    line(ctx, [[-setback - 7, 0], [-setback - 2, 0]], '#f4fbff', 2);
+    ctx.lineCap = 'butt';
+    line(ctx, [[-setback + 1, -11], [-setback + 1, 11]], '#e1f4ff', 5);
     ctx.restore();
   }
   function drawBall() {
     if (phase === 'sunk') {
-      const r = 20 + Math.min(1, (time - shotTime) / 8) * 70;
+      const r = 20 + Math.min(1, (time - motion.sinkTime) / 8) * 70;
       circle(ctx, L.cup.x, L.cup.y, r, null, '#b6e3ff44'); return;
     }
     if (trail.length > 1) {
@@ -369,29 +496,70 @@
         line(ctx, [[trail[i - 1].x, trail[i - 1].y], [trail[i].x, trail[i].y]], `rgba(101,238,228,${i / trail.length * .55})`, i / trail.length * 3);
       }
     }
-    circle(ctx, ball.x + 2, ball.y + 4, 9, '#061b2799');
+    drawBallShadow(ctx);
     if (phase === 'ready' && strokes === 0) {
       text(ctx, 'DRAG TO AIM', ball.x, ball.y + 54, '#e1f4ff', 10, 'center');
       line(ctx, [[ball.x, ball.y + 22], [ball.x, ball.y + 35]], '#b6e3ff77');
     }
   }
+  function drawBallShadow(c) {
+    const progress = phase === 'sinking' ? Math.min(1, (time - motion.sinkTime) / (reduced ? .045 : M.SINK_DURATION)) : 0;
+    if (progress >= 1) return;
+    c.save(); c.globalAlpha = 1 - progress;
+    const offset = V.unproject({ x: 2, y: -3 });
+    circle(c, ball.x + offset.x, ball.y + offset.y, (P.RADIUS + 2) * (1 - progress), '#061b2799'); c.restore();
+  }
+  function drawImpactGlint(c = ctx, view = camera) {
+    if (reduced || !motion.hit) return;
+    const age = time - motion.hit.time;
+    if (age < 0 || age >= .1) return;
+    const p = V.toScreen(motion.hit, view);
+    c.save(); c.globalAlpha = (1 - age / .1) * motion.hit.strength;
+    circle(c, p.x, p.y, 2 * view.zoom, '#e1f4ff'); c.restore();
+  }
   function drawBallSphere(c = ctx, view = camera, screenScale = displayScale) {
     if (phase === 'sunk') return;
-    const p = V.toScreen(ball, view), r = Math.max(5, 4 / screenScale, P.RADIUS * view.zoom);
-    c.save(); c.shadowColor = '#a3ede6'; c.shadowBlur = phase === 'moving' ? 12 : 4;
-    const marble = c.createRadialGradient(p.x - r * .3, p.y - r * .5, 1, p.x, p.y - 2, r);
+    const sinkProgress = phase === 'sinking' ? Math.min(1, (time - motion.sinkTime) / M.SINK_DURATION) : 0;
+    const centerBlend = reduced ? 0 : Math.min(1, sinkProgress / .12);
+    const rattle = phase === 'sinking' ? M.cupRattle(sinkProgress, L.cup.radius - P.RADIUS - 1, reduced) : { x: 0, y: 0 };
+    const entry = Math.atan2(ball.y - L.cup.y, ball.x - L.cup.x);
+    const p = V.toScreen({ x: ball.x + (L.cup.x - ball.x) * centerBlend + rattle.x * Math.cos(entry) - rattle.y * Math.sin(entry),
+      y: ball.y + (L.cup.y - ball.y) * centerBlend + rattle.x * Math.sin(entry) + rattle.y * Math.cos(entry) }, view);
+    const r = Math.max(4, 3 / screenScale, P.RADIUS * view.zoom);
+    const pose = M.sample(motion, time, V.matrix(view), reduced);
+    if (pose.size <= 0 || pose.opacity <= 0) return;
+    c.save(); c.globalAlpha = pose.opacity;
+    if (phase === 'sinking' && !reduced && sinkProgress > .08) {
+      // The near rim occludes the falling ball instead of letting it slide
+      // onto the course below the hole. Clip in the cup's projected plane.
+      c.save(); c.transform(...V.matrix(view));
+      c.beginPath(); c.arc(L.cup.x, L.cup.y, L.cup.radius, 0, Math.PI * 2);
+      c.restore(); c.clip();
+    }
+    const rimLift = phase === 'sinking' && !reduced && sinkProgress < .08 ? Math.sin(Math.PI * sinkProgress / .08) : 0;
+    c.translate(p.x, p.y - 2 * (1 - pose.drop) - rimLift + L.cup.radius * view.zoom * 1.2 * pose.drop);
+    // Deform in screen space, preserving area and the true world-space center.
+    c.rotate(pose.angle); c.scale(pose.scaleX * pose.size, pose.scaleY * pose.size);
+    // A tight glow keeps the actual deformed marble silhouette readable.
+    c.shadowColor = '#a3ede6'; c.shadowBlur = 2;
+    // Keep the light at screen lower-left even as the travel direction changes.
+    const lightX = -r * .3, lightY = r * .5;
+    const marble = c.createRadialGradient((Math.cos(pose.angle) * lightX + Math.sin(pose.angle) * lightY) / pose.scaleX,
+      (-Math.sin(pose.angle) * lightX + Math.cos(pose.angle) * lightY) / pose.scaleY, 1, 0, 0, r);
     marble.addColorStop(0, '#ffffff'); marble.addColorStop(.55, '#e1f4ff'); marble.addColorStop(1, '#8bb9da');
-    circle(c, p.x, p.y - 2, r, marble); c.restore();
+    circle(c, 0, 0, r, marble, '#e1f4ff', .6); c.restore();
   }
   function frame(stamp) {
     const elapsed = lastTime ? Math.min(.1, (stamp - lastTime) / 1000) : 0;
     lastTime = stamp;
     if (!document.hidden) {
       time += elapsed;
+      if (phase === 'striking' && time >= motion.launchTime) phase = 'moving';
       if (phase === 'moving') {
-        accumulator += elapsed;
+        // Only simulate the portion after contact, including a frame that spans it.
+        accumulator += Math.min(elapsed, Math.max(0, time - motion.launchTime));
         while (accumulator >= P.DT && phase === 'moving') {
-          P.step(ball, L, shotBypass); accumulator -= P.DT;
+          P.step(ball, L, shotBypass, noteImpact); accumulator -= P.DT;
           if (Math.hypot(ball.x - L.cup.x, ball.y - L.cup.y) < 220) cupShot = true;
           if (Math.round(ball.age / P.DT) % 3 === 0) {
             trail.push({ x: ball.x, y: ball.y }); if (trail.length > 48) trail.shift();
@@ -406,9 +574,15 @@
         ball.y = capture.well.y + Math.sin(a + startAngle) * radius;
         if (p === 1) {
           ball = { x: capture.well.x, y: capture.well.y }; phase = 'ready'; trail = [];
+          motion.stretch = 0;
           updatePrediction(); updateUI(`Well bypassed. Aim your escape shot.${L.wells.length > 1 ? ' The other wells still pull.' : ''}`);
         }
+      } else if (phase === 'sinking') {
+        if (time - motion.sinkTime >= (reduced ? .045 : M.SINK_DURATION)) {
+          phase = 'sunk'; showResult();
+        }
       } else if (trail.length) trail.shift();
+      if (phase !== 'striking') M.update(motion, ball, P.gravity(ball, L, shotBypass), elapsed, reduced);
     }
     if (!document.hidden && !overview && L.width > V.WIDTH && (phase === 'moving' || phase === 'capturing')) {
       V.follow(camera, L, ball, elapsed, reduced);
@@ -416,7 +590,7 @@
     ctx.fillStyle = '#103866'; ctx.fillRect(0, 0, V.WIDTH, V.HEIGHT);
     ctx.save(); ctx.transform(...V.matrix(camera));
     drawSpace(); L.wells.forEach(well => drawWell(well)); drawCup(); drawPrediction(); drawBall(); ctx.restore();
-    drawWalls(); drawWellLabels(); drawFlag(); drawBallSphere(); drawHUD(); updateViewControl();
+    drawWalls(); drawWellLabels(); drawFlag(); drawImpactGlint(); drawBallSphere(); drawHUD(); updateViewControl();
     requestAnimationFrame(frame);
   }
   function position(event) {
@@ -460,6 +634,7 @@
     }
     event.preventDefault(); canvas.focus({ preventScroll: true }); canvas.setPointerCapture(event.pointerId);
     drag = { id: event.pointerId, angle, power, point, distance: 0 };
+    motion.settleTime = -Infinity;
     updateUI('Pull opposite your shot. Release to putt; return to the ball to cancel.');
   });
   canvas.addEventListener('pointermove', event => {

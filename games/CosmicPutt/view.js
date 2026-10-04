@@ -44,6 +44,11 @@
     return unproject({ x: (point.x - WIDTH / 2) / view.zoom + view.x,
       y: (point.y - HEIGHT / 2) / view.zoom + view.y });
   }
+  function cupVisible(cup, view) {
+    const p = toScreen(cup, view), radius = (cup.radius || 13) * view.zoom;
+    const rx = radius * Math.hypot(A, C), ry = radius * Math.hypot(B, D);
+    return p.x >= rx && p.x <= WIDTH - rx && p.y >= ry && p.y <= HEIGHT - ry;
+  }
   function matrix(view) {
     return [A * view.zoom, B * view.zoom, C * view.zoom, D * view.zoom,
       WIDTH / 2 - view.x * view.zoom, HEIGHT / 2 - view.y * view.zoom];
@@ -72,7 +77,7 @@
     // Cup sits right of center, leaving room for the incoming approach and flag.
     return { x: p.x + (WIDTH / 2 - 230) / zoom, y: p.y + (HEIGHT / 2 - 155) / zoom, zoom };
   }
-  const api = { WIDTH, HEIGHT, project, unproject, fit, create, follow, toScreen, toWorld, matrix, pan, approachesCup, cupView };
+  const api = { WIDTH, HEIGHT, project, unproject, fit, create, follow, toScreen, toWorld, cupVisible, matrix, pan, approachesCup, cupView };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.CosmicView = api;
 })(typeof window !== 'undefined' ? window : globalThis);

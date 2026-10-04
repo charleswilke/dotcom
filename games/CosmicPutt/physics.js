@@ -4,7 +4,7 @@
   const DT = 1 / 120;
   // Slow the full motion model together so gravity arcs unfold without losing reach.
   const PACE = 0.9;
-  const RADIUS = 7;
+  const RADIUS = 5.5;
   const FRICTION = 32 * PACE * PACE;
   // Sample rounded corners once; rendering and collisions use the same outline.
   function roundedBoundary(vertices) {
@@ -100,7 +100,7 @@
     }
     return { x, y };
   }
-  function step(body, course = level, bypass = null) {
+  function step(body, course = level, bypass = null, onImpact = null) {
     if (body.status !== 'moving') return body;
     const force = gravity(body, course, bypass);
     body.vx += force.x * DT; body.vy += force.y * DT;
@@ -126,6 +126,9 @@
       if (dot < 0) {
         body.vx -= 1.78 * dot * nx; body.vy -= 1.78 * dot * ny;
         body.bounces++;
+        // Optional visual observer; prediction runs the identical simulation without it.
+        if (onImpact) onImpact({ x: body.x - nx * RADIUS, y: body.y - ny * RADIUS,
+          nx, ny, speed: -dot });
       }
     }
     speed = length(body.vx, body.vy);

@@ -14,7 +14,7 @@ button, input { font: inherit; }
 button { cursor: pointer; transition: background .15s, box-shadow .15s, transform .15s; }
 button:disabled { cursor: default; opacity: .4; }
 button:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid #7ee9e1; outline-offset: 4px; }
-.observatory { max-width: 1320px; margin: auto; padding: 24px 32px 16px; }
+.observatory { width: 100%; margin: auto; padding: 24px clamp(12px, 2vw, 40px) 16px; }
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 25px; border: 1px solid var(--line); border-radius: 4px 4px 0 0; background: linear-gradient(115deg, #12365d, #0b2848 65%); box-shadow: inset 0 1px #f5dbb51a, 0 15px 60px #0003; }
 .brand { display: flex; align-items: center; gap: 14px; }
 .planet { width: 43px; height: 43px; flex-shrink: 0; fill: #91cfff22; stroke: var(--amber); stroke-width: 1.6; }
@@ -89,7 +89,6 @@ aside { border: 1px solid var(--line); border-radius: 10px; padding: 12px 20px; 
 .result h2 { font-size: 30px; font-family: Georgia, serif; font-weight: 400; margin: 15px 0; }
 .result p { font-size: 12px; color: #b1bdc9; line-height: 1.8; margin-bottom: 24px; }
 .result button { width: 100%; }
-@media(min-width:900px) { .observatory { max-width: min(1320px, max(800px, calc((100svh - 395px)*1.692 + 64px))); } }
 @media(max-width:1100px) { .planet { width: 34px; height: 34px; }h1 { font-size: 17px; }h1 span { font-size: 7px; }.brand { gap: 10px; }.topbar { gap: 14px; padding: 18px 20px; }.course-title { gap: 8px; }.hole-badge { width: 29px; height: 34px; }.score>div { min-width: 56px; padding: 9px; }.console { gap: 16px; padding: 20px; }.well-orbit { width: 38px; height: 38px; }.well-orbit::before { inset: 6px; }.well-orbit::after { inset: 12px; }.well-orbit i { inset: 16px; }.power-control { grid-template-columns: 74px minmax(100px, 1fr); gap: 12px; padding: 0 14px; } }
 @media(max-width:760px) {
   .observatory { padding: 12px; }.topbar { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 16px; }.brand { min-width: 0; }h1 { font-size: 14px; letter-spacing: .12em; }h1 span { font-size: 5px; letter-spacing: .08em; }.planet { width: 30px; height: 30px; }.score { grid-column: 2; grid-row: 1; gap: 6px; }.score>div { min-width: 43px; padding: 8px 6px; }.score b { font-size: 19px; }.score span { font-size: 6px; }
@@ -164,4 +163,72 @@ aside { border: 1px solid var(--line); border-radius: 10px; padding: 12px 20px; 
   .cup-inset { width: 44%; bottom: 7%; right: 2.9%; }
   .cup-camera-label { font-size: 7px; padding: 5px 6px; gap: 4px; }
   .cup-camera-label>span:last-child { font-size: 6px; letter-spacing: 0; }
+}
+
+/* Compact game chrome: the selected hole tab carries the course title. */
+.topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: 12px 18px; gap: 12px 14px; }
+.topbar .brand { grid-column: 1; grid-row: 1; }
+.topbar .score { grid-column: 2; grid-row: 1; }
+.topbar .round-bar { grid-column: 1/-1; border: 0; border-top: 1px solid var(--line); padding: 10px 0 0; background: none; min-width: 0; }
+.course-title { display: none; }
+.brand { gap: 10px; }
+.planet { width: 32px; height: 32px; }
+h1 { font-size: 17px; letter-spacing: .15em; }
+h1 span { margin-top: 5px; font-size: 7px; }
+.score { gap: 12px; }
+.score>div { display: flex; align-items: baseline; gap: 8px; min-width: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+.score>div:last-child { padding-left: 12px; border-left: 1px solid var(--line); border-radius: 0; }
+.score b { font-size: 23px; }
+.round-bar { padding: 8px 18px; gap: 16px; }
+.hole-choice { grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; padding: 9px 10px; }
+.choice-number { grid-row: auto; font-size: 13px; }
+.hole-stars { font-size: 12px; letter-spacing: 2px; }
+.round-total { gap: 2px; }
+.round-total strong { font-size: 16px; }
+@media(max-width:760px) {
+  .topbar { padding: 12px; gap: 10px; }
+  .planet { width: 24px; height: 24px; }
+  .brand { gap: 7px; }
+  h1 { font-size: 13px; letter-spacing: .1em; }
+  h1 span { display: none; }
+  .score { gap: 8px; }
+  .score>div { gap: 5px; }
+  .score>div:last-child { padding-left: 8px; }
+  .score span { font-size: 6px; letter-spacing: .06em; }
+  .score b { font-size: 18px; }
+  .round-bar { padding: 8px; gap: 6px; }
+  .hole-choice { grid-template-columns: 1fr; gap: 3px; padding: 6px 3px; }
+  .choice-number { font-size: 11px; }
+  .hole-stars { font-size: 10px; letter-spacing: 1px; }
+  .round-total strong { font-size: 13px; }
+}
+@media(min-width:1200px) {
+  .topbar { display: flex; gap: 20px; }
+  .topbar .brand, .topbar .score { flex-shrink: 0; }
+  .topbar .round-bar { flex: 1; border: 0; padding: 0; gap: 16px; justify-content: center; }
+  .topbar #hole-navigation { flex: 0 1 560px; grid-template-columns: repeat(4, minmax(110px, 140px)); gap: 6px; }
+  .topbar .hole-choice { grid-template-columns: auto 1fr; gap: 3px 7px; padding: 7px 9px; }
+  .topbar .choice-number { grid-row: span 2; }
+  .topbar .hole-stars { grid-column: 2; font-size: 10px; }
+  .topbar .choice-title { font-size: 9px; }
+}
+@media(max-width:1199px) {
+  .topbar #hole-navigation { flex: 0 0 auto; grid-template-columns: repeat(4, 44px); gap: 5px; }
+  .choice-title { display: none; }
+  .hole-choice { grid-template-columns: 1fr; justify-items: center; gap: 3px; padding: 6px; min-height: 44px; }
+  .choice-number { grid-row: auto; }
+  .hole-stars { grid-column: auto; font-size: 10px; letter-spacing: 1px; }
+  .score>div { flex-direction: column; align-items: center; gap: 4px; }
+}
+@media(min-width:761px) and (max-width:1199px) {
+  .topbar { display: flex; gap: 14px; }
+  .topbar .brand, .topbar .score { flex-shrink: 0; }
+  .topbar .round-bar { flex: 1; border: 0; padding: 0; gap: 12px; justify-content: center; }
+  h1 { font-size: 14px; }
+  .planet { width: 26px; height: 26px; }
+}
+@media(max-width:760px) {
+  .topbar #hole-navigation { flex-basis: auto; }
+  .topbar .round-bar { justify-content: center; }
+  .topbar .round-total { display: grid; gap: 2px; margin-left: 0; }
 }

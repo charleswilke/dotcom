@@ -15,6 +15,7 @@
   let prediction, drag = null, trail = [], capture = null, shotOrigin = null;
   let accumulator = 0, lastTime = 0, time = 0;
   let motion = M.create();
+  let putterDraw = null;
   const noteImpact = contact => M.hit(motion, time, contact);
   let coursePath, camera, overview = false, displayScale = 1, compactView = false;
   const touches = new Map();
@@ -362,7 +363,8 @@
           if (shotOrigin.stretch > 0 && stroke.tether > 0) {
             drawTether(shotOrigin, shotOrigin.stretch * stroke.tether, power, stroke.tether);
           }
-          drawPutter(shotOrigin, stroke.setback, stroke.opacity);
+          putterDraw = { origin: shotOrigin, setback: stroke.setback, opacity: stroke.opacity };
+          drawPutter(shotOrigin, stroke.setback, stroke.opacity, true);
         }
       }
       return;
@@ -389,7 +391,8 @@
     const stretch = drag ? elasticStretch(drag.distance) : 0;
     const setback = 23 + stretch * .45;
     if (drag && drag.distance > 5) drawTether(ball, stretch, power);
-    drawPutter(ball, setback);
+    putterDraw = { origin: ball, setback, opacity: 1 };
+    drawPutter(ball, setback, 1, true);
   }
   // The handle yields less as the band stretches, giving visible resistance.
   const elasticStretch = distance => 180 * (1 - Math.exp(-distance / 180));
@@ -412,78 +415,66 @@
     ctx.quadraticCurveTo(-1, 0, -4, -rootWidth); ctx.closePath(); ctx.fill();
     ctx.restore();
   }
-  function drawPutter(origin, setback, opacity = 1) {
+  function drawPutter(origin, setback, opacity = 1, shadowOnly = false) {
     ctx.save(); ctx.translate(origin.x, origin.y); ctx.rotate(angle); ctx.globalAlpha = opacity;
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    // Like the flagpole, height rises vertically on screen instead of lying
-    // on the projected course. Undo the course projection and aim rotation.
-    const raised = (x, y) => {
-      const p = V.unproject({ x, y }), cos = Math.cos(angle), sin = Math.sin(angle);
-      return { x: p.x * cos + p.y * sin, y: -p.x * sin + p.y * cos };
+    const headScale = .82, heel = { x: 3.5 + (-4 - 3.5) * headScale, y: -8 * headScale };
+    const grip = { x: heel.x - 7, y: heel.y - 3, z: 52 };
+    const swing = Math.atan2(Math.max(0, setback - 23), 49);
+    const cos = Math.cos(swing), sin = Math.sin(swing);
+    const vertical = V.unproject({ x: 0, y: -1 });
+    // A single rigid 3D model: rotate on the course, then project its height.
+    // The backswing pivots every part around the same upper-grip fulcrum.
+    const model = (x, y, z) => setback > 23 ? {
+      x: -23 + grip.x + (x - grip.x) * cos + (z - grip.z) * sin,
+      y, z: grip.z - (x - grip.x) * sin + (z - grip.z) * cos
+    } : { x: x - setback, y, z };
+    const project = (x, y, z, shadow = false) => {
+      const p = model(x, y, z);
+      const v = shadow ? V.unproject({ x: p.z * .35, y: -p.z * .28 }) :
+        { x: vertical.x * p.z, y: vertical.y * p.z };
+      // Convert screen-space height/light offsets back into the rotated frame.
+      return [p.x + v.x * Math.cos(angle) + v.y * Math.sin(angle),
+        p.y - v.x * Math.sin(angle) + v.y * Math.cos(angle)];
     };
-    const base = { x: -setback - 4, y: 5 }, lift = raised(-5, -49);
-    const point = t => [base.x + lift.x * t, base.y + lift.y * t];
-    // Pull-back rocks the club around the upper grip rather than sliding it
-    // across the course. At address it returns to the existing contact stroke.
-    const pull = Math.max(0, setback - 23);
-    const direction = V.project({ x: Math.cos(angle), y: Math.sin(angle) });
-    const tilt = Math.max(-.95, Math.min(.95, Math.atan2(pull * direction.x, 49)));
-    const [px, py] = point(.92), cosTilt = Math.cos(tilt), sinTilt = Math.sin(tilt);
-    const elevation = raised(0, -3);
-    const turn = (x, y) => {
-      const screen = V.project({ x: x * Math.cos(angle) - y * Math.sin(angle),
-        y: x * Math.sin(angle) + y * Math.cos(angle) });
-      return raised(screen.x * cosTilt - screen.y * sinTilt, screen.x * sinTilt + screen.y * cosTilt);
+    const head = [[3.5, -9], [-4, -9], [-7.5, -5], [-8, 0], [-7.5, 5], [-4, 9], [3.5, 9]];
+    const socket = [heel.x, heel.y, 4], neck = [heel.x, heel.y, 12];
+    const upper = [grip.x, grip.y, grip.z];
+    const gripStart = [neck[0] + (upper[0] - neck[0]) * .72,
+      neck[1] + (upper[1] - neck[1]) * .72, 12 + 40 * .72];
+    const path = (points, fill, stroke = '#183347', width = 1) => {
+      ctx.beginPath(); points.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+      ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = stroke; ctx.lineWidth = width; ctx.stroke();
     };
-    // Project the raised shaft onto the ground using the same lower-left
-    // light as the ball. Cast direction stays fixed while the club rocks.
-    const shadowPoint = t => {
-      const [x, y] = point(t);
-      const p = turn(x + elevation.x - px, y + elevation.y - py);
-      const height = 3 * cosTilt + 49 * (.92 * (1 - cosTilt) + t * cosTilt);
-      const drop = raised(height * .35, height * .72);
-      return [px + pull + p.x + drop.x, py + p.y + drop.y];
-    };
-    ctx.save(); ctx.globalAlpha = opacity * .3;
-    ctx.shadowColor = '#031324'; ctx.shadowBlur = 3;
-    line(ctx, [shadowPoint(0), shadowPoint(.72)], '#031324', 3);
-    line(ctx, [shadowPoint(.72), shadowPoint(1)], '#031324', 6);
-    const [hx, hy] = shadowPoint(0);
-    line(ctx, [[hx, hy - 14], [hx, hy + 8]], '#031324', 10);
-    ctx.restore();
-    if (pull > 0) {
-      const xAxis = turn(1, 0), yAxis = turn(0, 1);
-      ctx.translate(px + pull, py);
-      ctx.transform(xAxis.x, xAxis.y, yAxis.x, yAxis.y, 0, 0);
-      ctx.translate(-px, -py);
+    if (shadowOnly) {
+      ctx.globalAlpha = opacity * .3; ctx.shadowColor = '#031324'; ctx.shadowBlur = 3;
+      path(head.map(([x, y]) => project(x, y, 1, true)), '#031324', '#031324');
+      line(ctx, [socket, neck, upper].map(p => project(...p, true)), '#031324', 3);
+      line(ctx, [gripStart, upper].map(p => project(...p, true)), '#031324', 6);
+      ctx.restore(); return;
     }
-    // The head has a dark lower edge and sits just above its contact shadow.
-    line(ctx, [[-setback - 5, -10], [-setback - 5, 14]], '#17384b', 12);
-    ctx.translate(elevation.x, elevation.y);
-    const shaft = [point(0), point(1)];
-    // Navy outlines separate the club from grid lines, walls, and the aiming tether.
-    line(ctx, shaft, '#061b2d', 7);
-    line(ctx, shaft, '#e1f4ff', 3);
-    line(ctx, [point(.72), point(1)], '#061b2d', 10);
-    line(ctx, [point(.72), point(1)], '#d4e3eb', 6);
-    const rib = raised(2, 0);
-    for (let i = 0; i < 3; i++) {
-      const [x, y] = point(.78 + i * .075);
-      line(ctx, [[x - rib.x, y - rib.y], [x + rib.x, y + rib.y]], '#5b7183', 1);
+    // Rounded mallet with a broad top plate and a continuous metal side wall.
+    for (let i = 0; i < head.length; i++) {
+      const a = head[i], b = head[(i + 1) % head.length];
+      path([project(...a, 1), project(...b, 1), project(...b, 4), project(...a, 4)],
+        i === head.length - 1 ? '#a3b7c5' : '#536d80');
     }
-    // A rounded mallet silhouette, with its bright striking edge facing the ball.
-    const metal = ctx.createLinearGradient(-setback - 9, 0, -setback + 3.5, 0);
-    metal.addColorStop(0, '#6c8292'); metal.addColorStop(.55, '#bfced8'); metal.addColorStop(1, '#f4fbff');
-    ctx.beginPath(); ctx.moveTo(-setback + 1, -12);
-    ctx.lineTo(-setback - 5, -12);
-    ctx.quadraticCurveTo(-setback - 10, -12, -setback - 10, -7);
-    ctx.lineTo(-setback - 10, 7);
-    ctx.quadraticCurveTo(-setback - 10, 12, -setback - 5, 12);
-    ctx.lineTo(-setback + 1, 12); ctx.closePath();
-    ctx.fillStyle = metal; ctx.fill(); ctx.strokeStyle = '#061b2d'; ctx.lineWidth = 3; ctx.stroke();
-    line(ctx, [[-setback - 7, 0], [-setback - 2, 0]], '#f4fbff', 2);
+    const topLight = project(-6, 3, 4), topDark = project(3, -7, 4);
+    const metal = ctx.createLinearGradient(...topLight, ...topDark);
+    metal.addColorStop(0, '#eef6fa'); metal.addColorStop(.55, '#b6c8d4'); metal.addColorStop(1, '#657e91');
+    path(head.map(([x, y]) => project(x, y, 4)), metal, '#183347', 1.3);
+    line(ctx, [project(-5, 0, 4.2), project(1, 0, 4.2)], '#f4fbff', 1.2);
     ctx.lineCap = 'butt';
-    line(ctx, [[-setback + 1, -11], [-setback + 1, 11]], '#e1f4ff', 5);
+    line(ctx, [project(1, -8.5, 3), project(1, 8.5, 3)], '#e1f4ff', 5);
+    ctx.lineCap = 'round';
+    // The bent neck is physically joined to the heel, drawn over its socket.
+    const steel = ctx.createLinearGradient(...project(heel.x - 2, heel.y, 12), ...project(heel.x + 2, heel.y, 12));
+    steel.addColorStop(0, '#eef7fc'); steel.addColorStop(.35, '#bcced9'); steel.addColorStop(1, '#425e73');
+    line(ctx, [socket, neck, upper].map(p => project(...p)), '#102b3d', 6);
+    line(ctx, [socket, neck, upper].map(p => project(...p)), steel, 3.5);
+    circle(ctx, ...project(...socket), 2.2, '#c9d9e2', '#425e73', .8);
+    line(ctx, [gripStart, upper].map(p => project(...p)), '#102b3d', 8);
+    line(ctx, [gripStart, upper].map(p => project(...p)), steel, 5.5);
     ctx.restore();
   }
   function drawBall() {
@@ -588,9 +579,17 @@
       V.follow(camera, L, ball, elapsed, reduced);
     }
     ctx.fillStyle = '#103866'; ctx.fillRect(0, 0, V.WIDTH, V.HEIGHT);
+    putterDraw = null;
     ctx.save(); ctx.transform(...V.matrix(camera));
     drawSpace(); L.wells.forEach(well => drawWell(well)); drawCup(); drawPrediction(); drawBall(); ctx.restore();
-    drawWalls(); drawWellLabels(); drawFlag(); drawImpactGlint(); drawBallSphere(); drawHUD(); updateViewControl();
+    drawWalls(); drawWellLabels(); drawFlag();
+    if (putterDraw) {
+      // The upright club belongs above the raised barriers, like the flagpole.
+      ctx.save(); ctx.transform(...V.matrix(camera));
+      drawPutter(putterDraw.origin, putterDraw.setback, putterDraw.opacity);
+      ctx.restore();
+    }
+    drawImpactGlint(); drawBallSphere(); drawHUD(); updateViewControl();
     requestAnimationFrame(frame);
   }
   function position(event) {

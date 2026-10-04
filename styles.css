@@ -15005,12 +15005,21 @@ section.production-header.alice p {
     }
 
     .rss-title-kicker {
-        font-size: 0.42em;
+        font-size: 0.625em;
         letter-spacing: 0.24em;
     }
 
     .rss-title-main {
         font-size: 1.3em;
+    }
+
+    .rss-title-main.rss-title-art {
+        width: 92%;
+    }
+
+    .rss-title-art img {
+        width: 100%;
+        height: auto;
     }
 
     .rss-title-line {
@@ -15019,23 +15028,15 @@ section.production-header.alice p {
     }
 
     .rss-title-rail {
-        height: 32px;
+        display: none;
     }
-
-    .rss-title-rail::after {
-        width: 8px;
-        height: 8px;
-    }
-
-    .rss-title-rail-left::after { right: -4px; }
-    .rss-title-rail-right::after { left: -4px; }
 
     .rss-title-tagline {
-        font-size: 0.34em;
-        letter-spacing: 0.16em;
-        margin-top: 0.45rem;
-        white-space: normal;
-        max-width: 28ch;
+        font-size: clamp(0.5rem, 2.95vw, 0.885rem);
+        letter-spacing: 0.07em;
+        margin-top: 0.65rem;
+        white-space: nowrap;
+        max-width: none;
     }
 
     .mixtape-left-section {

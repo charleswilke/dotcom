@@ -1,0 +1,8 @@
+Generated with the built-in image_gen tool, 2026-10-05.
+The user's attached galaxy image was supplied as the visual reference.
+
+Use case: stylized-concept
+Asset type: transparent galaxy sprite for an animated website starscape.
+Input image 1 is the user's visual reference. Create an isolated Milky Way-like spiral galaxy closely matching its smoky richness, wide oblique perspective, dense star-speckled cloud arms, warm white luminous oval core, rose-pink inner nebulae, lavender middle arms, cobalt/cyan outer wisps, and deep irregular dust lanes.
+The galaxy's major axis slopes about 14 degrees downward to the right; it is viewed from above at an oblique angle, with a projected disk height about half its width. Keep the full galaxy visible, centered in the image, with generous transparent padding around all sides. Core at the exact image center. The outermost gas must dissolve smoothly to zero alpha. Dense tangled filamentary clouds, uneven organic arms with real depth and local color variation, not thin parallel spirals or a geometric pinwheel.
+Remove the reference's unrelated background starfield and black rectangle. Genuine transparent background, including empty spaces beyond the galactic halo. Only tiny stars embedded in the galaxy's own clouds. No foreground objects, isolated flare stars, typography, border, or watermark. Landscape composition. Rich detailed astronomical illustration with soft photographic glow, recognizable even when displayed 500 pixels wide.

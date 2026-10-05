@@ -166,6 +166,7 @@ onReady(() => {
   let inView = false;
   let flightAmount = 1;
   let sceneryTime = 0;
+  let approachTime = 0;
 
   // Paint the detailed scenery once, then move these textures through space.
   function texture(size, paint) {
@@ -307,8 +308,11 @@ onReady(() => {
       }
       if (shape === 'barred') {
         for (let i = 0; i < 700; i++) {
-          dust((random() - .5) * 120, (random() - .5) * 20,
-            '255,214,169', .25 + random() * .6);
+          // An elliptical bar with fading edges blends into the spiral arms.
+          const radius = Math.sqrt(random());
+          const angle = random() * Math.PI * 2;
+          dust(Math.cos(angle) * radius * 65, Math.sin(angle) * radius * 14,
+            '255,214,169', (.25 + random() * .6) * (1 - radius * radius));
         }
       }
       core(0, 0, 28);
@@ -318,6 +322,39 @@ onReady(() => {
       ctx.filter = 'blur(2px)';
       ctx.drawImage(sharp, 0, 0);
     });
+  }
+
+  // Load the detailed destination only when the games section enters view.
+  let homeGalaxy = null;
+  let homeGalaxyRequested = false;
+  function loadHomeGalaxy() {
+    if (homeGalaxyRequested) return;
+    homeGalaxyRequested = true;
+    const image = new Image();
+    image.decoding = 'async';
+    image.onload = () => {
+      const surface = document.createElement('canvas');
+      surface.width = image.naturalWidth;
+      surface.height = image.naturalHeight;
+      const ctx = surface.getContext('2d');
+      // Soften the distant galaxy once before animating the cached texture.
+      ctx.filter = `blur(${image.naturalWidth * .008}px)`;
+      ctx.drawImage(image, 0, 0);
+      ctx.filter = 'none';
+      // Feather the outer cloud envelope once, preserving the dark dust lanes.
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.translate(surface.width / 2, surface.height / 2);
+      ctx.scale(surface.width / 2, surface.height / 2);
+      const edge = ctx.createRadialGradient(0, 0, .52, 0, 0, 1);
+      edge.addColorStop(0, 'rgba(0,0,0,1)');
+      edge.addColorStop(.55, 'rgba(0,0,0,.85)');
+      edge.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = edge;
+      ctx.fillRect(-1, -1, 2, 2);
+      homeGalaxy = surface;
+      if (width && height) draw(0);
+    };
+    image.src = '/images/home-galaxy.webp';
   }
 
   const galaxyCatalog = [
@@ -381,6 +418,20 @@ onReady(() => {
     const speed = .46 * flightAmount;
     const still = motionPreference.matches;
     context.globalCompositeOperation = 'screen';
+
+    // Ease toward home without a looping zoom reset or horizontal wandering.
+    if (!still) approachTime += delta * flightAmount;
+    const approach = 1 - Math.exp(-approachTime / 100);
+    const homeSize = Math.min(196, Math.max(84, width * .154)) * (1 + approach * .05);
+    const homeY = height * (.46 + approach * .015);
+    if (homeGalaxy) {
+      const homeHeight = homeSize * homeGalaxy.height / homeGalaxy.width;
+      context.save();
+      context.globalCompositeOperation = 'source-over';
+      context.drawImage(homeGalaxy, width * .5 - homeSize / 2, homeY - homeHeight / 2,
+        homeSize, homeHeight);
+      context.restore();
+    }
 
     for (const object of scenery) {
       object.z -= delta * .028 * flightAmount;
@@ -456,6 +507,7 @@ onReady(() => {
     }
     context.globalAlpha = 1;
     context.globalCompositeOperation = 'source-over';
+
   }
 
   function animate(time) {
@@ -482,10 +534,12 @@ onReady(() => {
   if (typeof IntersectionObserver !== 'undefined') {
     new IntersectionObserver(entries => {
       inView = entries.some(entry => entry.isIntersecting);
+      if (inView) loadHomeGalaxy();
       updateMotion();
     }).observe(section);
   } else {
     inView = true;
+    loadHomeGalaxy();
   }
   motionPreference.addEventListener('change', updateMotion);
   document.addEventListener('visibilitychange', updateMotion);

@@ -422,14 +422,20 @@ onReady(() => {
     // Ease toward home without a looping zoom reset or horizontal wandering.
     if (!still) approachTime += delta * flightAmount;
     const approach = 1 - Math.exp(-approachTime / 100);
-    const homeSize = Math.min(196, Math.max(84, width * .154)) * (1 + approach * .05);
+    const homeSize = Math.min(117.6, Math.max(50.4, width * .0924)) * (1 + approach * .05);
     const homeY = height * (.46 + approach * .015);
     if (homeGalaxy) {
       const homeHeight = homeSize * homeGalaxy.height / homeGalaxy.width;
+      // A slow breath and gentle rocking keep the distant destination alive.
+      const breath = still ? 0 : Math.sin(approachTime * Math.PI * 2 / 18);
+      const tilt = still ? 0 : Math.sin(approachTime * Math.PI * 2 / 26) * .06;
       context.save();
       context.globalCompositeOperation = 'source-over';
-      context.drawImage(homeGalaxy, width * .5 - homeSize / 2, homeY - homeHeight / 2,
-        homeSize, homeHeight);
+      context.globalAlpha = still ? 1 : .94 + breath * .06;
+      context.translate(width * .5, homeY);
+      context.rotate(tilt);
+      context.scale(1 + breath * .045, 1 + breath * .065);
+      context.drawImage(homeGalaxy, -homeSize / 2, -homeHeight / 2, homeSize, homeHeight);
       context.restore();
     }
 

@@ -4,22 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#080f1d">
-  <meta name="description" content="A miniature golf playground among the stars. Play four blueprint minigolf holes, link gravity swings, and earn up to twelve stars in Cosmic Putt.">
+  <meta name="description" content="A miniature golf playground among the stars. Play five blueprint minigolf holes, link gravity swings, and earn up to fifteen stars in Cosmic Putt.">
   <title>Cosmic Putt · Blueprint Course</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23080f1d'/%3E%3Ccircle cx='20' cy='20' r='12' fill='none' stroke='%23c19aff' stroke-width='3'/%3E%3Ccircle cx='28' cy='12' r='5' fill='%23fff0d3'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=14">
-  <script defer src="physics.js?v=7"></script>
+  <link rel="stylesheet" href="styles.css?v=17">
+  <script defer src="physics.js?v=11"></script>
   <script defer src="scoring.js?v=1"></script>
-  <script defer src="view.js?v=4"></script>
+  <script defer src="view.js?v=6"></script>
   <script defer src="motion.js?v=6"></script>
-  <script defer src="game.js?v=33"></script>
+  <script defer src="game.js?v=37"></script>
 </head>
 <body>
   <main class="observatory">
     <header class="topbar">
       <div class="brand"><svg class="planet" aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="12"/><ellipse cx="24" cy="24" rx="22" ry="7" transform="rotate(-28 24 24)"/><circle class="satellite" cx="40" cy="12" r="3"/></svg><h1>COSMIC PUTT<span>MINIATURE GOLF · MAXIMUM ORBIT</span></h1></div>
       <div class="course-title"><span id="hole-badge" class="hole-badge">01</span><div><span class="eyebrow">BLUEPRINT COURSE</span><strong id="hole-title">First orbit</strong></div></div>
-      <div class="round-bar"><nav id="hole-navigation" aria-label="Choose a hole"></nav><div class="round-total"><span>ROUND STARS</span><strong id="round-stars">0 / 12</strong><small>Best per hole</small></div></div>
+      <div class="round-bar"><nav id="hole-navigation" aria-label="Choose a hole"></nav><div class="round-total"><span>ROUND STARS</span><strong id="round-stars">0 / 15</strong><small>Best per hole</small></div></div>
       <div class="score"><div><span>PAR</span><b id="par">3</b></div><div><span>STROKES</span><b id="strokes">0</b></div></div>
     </header>
     <section class="viewport" aria-label="Miniature golf course">
@@ -54,7 +54,7 @@
       <div class="actions"><button id="reset" class="secondary" title="Restart this hole">Restart hole <span aria-hidden="true">↺</span></button></div>
     </section>
     <footer><p id="message" role="status" aria-live="polite">Drag back from the ball. Find your curve.</p><button id="help" class="text-button" aria-expanded="false" aria-controls="instructions">How to play <span>?</span></button></footer>
-    <aside id="instructions" hidden><p><b>Mouse / touch:</b> drag backward from the ball to aim and set power; release to putt. Drag back to the ball to cancel.</p><p><b>Keyboard:</b> ← → aim, ↑ ↓ change power, Space or Enter putts, Esc cancels aim.</p><p><b>Gravity:</b> skim the violet wells to bend your shot. Enter its dark center slowly and you'll be captured. That stroke counts normally; the captured well turns navy and ignores your entire next shot, letting you escape. Other wells remain active. The dotted preview includes gravity and one wall bounce. A ring marks where the ball will stop; a × marks capture.</p><p><b>Camera:</b> the three-quarter view follows the ball on long holes. Course overview shows the full route; return to the ball to aim close up. Swipe with two fingers on a touchscreen or trackpad to move the camera across the course. Lift both fingers to place it; Return to ball brings you back. Adding a second finger cancels a putt safely. The camera stays still during a one-finger aim. The small route map tracks your position. Release in overview automatically returns to the ball.</p><p><b>Cup cam:</b> a fixed close-up appears when your preview passes near the cup, including near misses and overshoots. It shows the predicted approach while aiming and switches to the live ball after release. On phones, it replaces the route map.</p><p><b>Stars:</b> 1 putt = ★★★, 2 putts = ★★☆, 3 putts = ★☆☆, 4 or more = ☆☆☆. Each hole keeps its best result this round. Replay to improve; a new round clears the scorecard.</p></aside>
+    <aside id="instructions" hidden><p><b>Mouse / touch:</b> drag backward from the ball to aim and set power; release to putt. Drag back to the ball to cancel.</p><p><b>Keyboard:</b> ← → aim, ↑ ↓ change power, Space or Enter putts, Esc cancels aim.</p><p><b>Gravity:</b> skim the violet wells to bend your shot. Enter its dark center slowly and you'll be captured. That stroke counts normally; the captured well turns navy and ignores your entire next shot, letting you escape. Other wells remain active. The dotted preview includes gravity and one wall bounce. A ring marks where the ball will stop; a × marks capture.</p><p><b>Wormholes:</b> cyan wall openings with matching numbers form a pair. Enter either mouth to emerge from its twin with the same speed; your entry angle determines the exit direction. The preview resumes beyond the exit. Clear the mouths before using the pair again.</p><p><b>Camera:</b> the three-quarter view follows the ball on long holes. Course overview shows the full route; return to the ball to aim close up. Swipe with two fingers on a touchscreen or trackpad to move the camera across the course. Lift both fingers to place it; Return to ball brings you back. Adding a second finger cancels a putt safely. The camera stays still during a one-finger aim. The small route map tracks your position. Release in overview automatically returns to the ball.</p><p><b>Cup cam:</b> a fixed close-up appears when your preview passes near the cup, including near misses and overshoots. It shows the predicted approach while aiming and switches to the live ball after release. On phones, it replaces the route map.</p><p><b>Stars:</b> 1 putt = ★★★, 2 putts = ★★☆, 3 putts = ★☆☆, 4 or more = ☆☆☆. Each hole keeps its best result this round. Replay to improve; a new round clears the scorecard.</p></aside>
     <noscript><p>Enable JavaScript to play this hole.</p></noscript>
   </main>
 </body>

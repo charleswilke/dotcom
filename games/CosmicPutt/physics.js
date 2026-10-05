@@ -68,7 +68,7 @@
     ]
   }, {
     name: 'Blueprint Course', hole: 'Long orbit', par: 3,
-    width: 2200, height: 800,
+    width: 2200, height: 800, vertical: true,
     tee: { x: 160, y: 440 }, cup: { x: 1870, y: 400, radius: 13 },
     aim: { angle: -.025, power: .78 },
     hint: 'Link A–B, cross the quiet stretch, then swing through C–D. Overview shows the whole route.',
@@ -86,6 +86,22 @@
       { id: 'long-c', label: 'C', x: 1250, y: 250, influence: 220, core: 18, strength: 1200000 },
       { id: 'long-d', label: 'D', x: 1590, y: 420, influence: 210, core: 18, strength: 900000 }
     ]
+  }, {
+    name: 'Blueprint Course', hole: 'Event horizon', par: 3,
+    width: 1100, height: 650,
+    tee: { x: 180, y: 470 }, cup: { x: 180, y: 180, radius: 13 },
+    aim: { angle: -.16, power: .445 },
+    hint: 'Follow the broad hairpin around well A, or thread the cyan wormhole. Its twin sends you back toward the cup.',
+    boundary: roundedBoundary([
+      [90, 100], [850, 100], [1010, 140], [1050, 300], [1020, 540],
+      [850, 580], [90, 580], [90, 400], [740, 400], [820, 360],
+      [820, 300], [740, 260], [90, 260]
+    ]),
+    wells: [{ id: 'hairpin-a', label: 'A', x: 920, y: 330, influence: 250, core: 18, strength: 2200000 }],
+    portals: [
+      { id: 'fold-in', pair: 'fold', label: '01', x: 600, y: 400, radius: 20, wall: true, angle: Math.PI / 2, target: 'fold-out' },
+      { id: 'fold-out', pair: 'fold', label: '01', x: 600, y: 100, radius: 20, wall: true, angle: Math.PI / 2, target: 'fold-in' }
+    ]
   }];
   const length = (x, y) => Math.hypot(x, y);
   function gravity(body, course, bypass) {
@@ -102,6 +118,8 @@
   }
   function step(body, course = level, bypass = null, onImpact = null) {
     if (body.status !== 'moving') return body;
+    body.teleport = null;
+    const previous = { x: body.x, y: body.y };
     const force = gravity(body, course, bypass);
     body.vx += force.x * DT; body.vy += force.y * DT;
     let speed = length(body.vx, body.vy);
@@ -118,6 +136,10 @@
       const px = a[0] + t * dx, py = a[1] + t * dy;
       const distance = length(body.x - px, body.y - py);
       if (distance >= RADIUS) continue;
+      // An incoming ball can cross the wall only inside a paired tunnel mouth.
+      if ((course.portals ?? []).some(p => p.wall && p.pair !== body.portalLock &&
+        length(px - p.x, py - p.y) < p.radius &&
+        body.vx * Math.cos(p.angle) + body.vy * Math.sin(p.angle) < 0)) continue;
       const len = Math.sqrt(len2), nx = -dy / len, ny = dx / len;
       const signedDistance = (body.x - px) * nx + (body.y - py) * ny;
       body.x += nx * (RADIUS - signedDistance + 0.02);
@@ -130,6 +152,30 @@
         if (onImpact) onImpact({ x: body.x - nx * RADIUS, y: body.y - ny * RADIUS,
           nx, ny, speed: -dot });
       }
+    }
+    // Lock the pair until the ball clears both mouths; no immediate ping-pong.
+    const portals = course.portals ?? [];
+    if (body.portalLock && portals.filter(p => p.pair === body.portalLock)
+      .every(p => length(body.x - p.x, body.y - p.y) > p.radius + RADIUS + 8)) body.portalLock = null;
+    for (const entrance of portals) {
+      if (entrance.pair === body.portalLock) continue;
+      if (entrance.wall && body.vx * Math.cos(entrance.angle) + body.vy * Math.sin(entrance.angle) >= 0) continue;
+      const dx = body.x - previous.x, dy = body.y - previous.y, d2 = dx * dx + dy * dy;
+      const t = d2 ? Math.max(0, Math.min(1, ((entrance.x - previous.x) * dx + (entrance.y - previous.y) * dy) / d2)) : 0;
+      if (length(previous.x + t * dx - entrance.x, previous.y + t * dy - entrance.y) > entrance.radius) continue;
+      const exit = portals.find(p => p.id === entrance.target);
+      if (!exit) continue;
+      const turn = exit.angle - entrance.angle + (entrance.wall ? Math.PI : 0), cos = Math.cos(turn), sin = Math.sin(turn);
+      const vx = body.vx * cos - body.vy * sin, vy = body.vx * sin + body.vy * cos;
+      const speed = length(vx, vy), direction = speed ? { x: vx / speed, y: vy / speed } :
+        { x: Math.cos(exit.angle), y: Math.sin(exit.angle) };
+      body.x = exit.x + direction.x * (exit.radius + RADIUS + 4);
+      body.y = exit.y + direction.y * (exit.radius + RADIUS + 4);
+      if (exit.wall) { body.x += Math.cos(exit.angle) * (RADIUS + 4); body.y += Math.sin(exit.angle) * (RADIUS + 4); }
+      body.vx = vx; body.vy = vy; body.portalLock = entrance.pair;
+      body.teleports = (body.teleports || 0) + 1;
+      body.teleport = { from: { x: entrance.x, y: entrance.y }, to: { x: body.x, y: body.y } };
+      break;
     }
     speed = length(body.vx, body.vy);
     if (length(body.x - course.cup.x, body.y - course.cup.y) < course.cup.radius && speed < 160 * PACE) {
@@ -158,6 +204,7 @@
     let bounce = 0;
     while (body.status === 'moving') {
       step(body, course, bypass);
+      if (body.teleport) points.push(body.teleport.from, { ...body.teleport.to, break: true });
       if (Math.round(body.age / DT) % 5 === 0) points.push({ x: body.x, y: body.y });
       if (body.bounces > 1) { bounce = body.bounces; break; }
     }

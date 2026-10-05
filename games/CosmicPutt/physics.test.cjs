@@ -157,3 +157,49 @@ test('the long hole links both pairs of wells into a clean ace', () => {
     assert.deepEqual(P.predict(course.tee, -.05, power, course).body, body);
   }
 });
+
+test('hairpin offers a wormhole ace and a gravity-assisted route around the bend', () => {
+  const course = P.levels[4];
+  const shortcut = run(course.tee, -.16, .465, null, course);
+  assert.equal(shortcut.status, 'sunk');
+  assert.equal(shortcut.teleports, 1);
+  assert.equal(shortcut.bounces, 0);
+  const preview = P.predict(course.tee, -.16, .465, course);
+  assert.deepEqual(preview.body, shortcut);
+  assert.equal(preview.points.filter(p => p.break).length, 1);
+  const bend = run(course.tee, -.07, .97, null, course);
+  assert.equal(bend.status, 'sunk');
+  assert.equal(bend.teleports || 0, 0);
+  assert.notEqual(run(course.tee, -.07, .97, null, { ...course, wells: [] }).status, 'sunk');
+});
+
+test('wormholes rotate velocity without changing speed, lock until clear, and work in reverse', () => {
+  const base = P.levels[4], start = { x: 600, y: 425 };
+  const course = { ...base, wells: [] };
+  const body = P.launch(start, -Math.PI / 2, .8), control = P.launch(start, -Math.PI / 2, .8);
+  while (!body.teleport && body.status === 'moving') { P.step(body, course); P.step(control, { ...course, portals: [] }); }
+  assert.ok(Math.abs(body.vx + control.vx) < 1e-8);
+  assert.ok(Math.abs(body.vy + control.vy) < 1e-8);
+  assert.equal(body.portalLock, 'fold');
+  body.x = 600; body.y = 100; P.step(body, course);
+  assert.equal(body.teleports, 1, 'cannot immediately re-enter the exit');
+  body.x = 600; body.y = 140; body.vx = 0; body.vy = -200;
+  P.step(body, course);
+  assert.equal(body.portalLock, null);
+  while (body.teleports === 1 && body.status === 'moving') P.step(body, course);
+  assert.equal(body.teleports, 2);
+  assert.ok(body.y > 400 && body.vy > 0, 'reverse transit exits toward the bend');
+});
+
+test('swept portal entry catches a fast ball that crosses an entire mouth in one step', () => {
+  const course = { width: 5000, height: 1000, wells: [], cup: { x: 4500, y: 800, radius: 13 },
+    boundary: [[0,0],[5000,0],[5000,1000],[0,1000]], portals: [
+      { id: 'a', pair: 'p', x: 500, y: 500, radius: 10, angle: 0, target: 'b' },
+      { id: 'b', pair: 'p', x: 3000, y: 500, radius: 10, angle: Math.PI / 2, target: 'a' }
+    ] };
+  const body = { ...P.launch({ x: 470, y: 500 }, 0, 1), vx: 12000 };
+  P.step(body, course);
+  assert.equal(body.teleports, 1);
+  assert.ok(Math.abs(body.x - 3000) < 1e-8 && body.y > 500);
+  assert.ok(body.vy > 11000);
+});

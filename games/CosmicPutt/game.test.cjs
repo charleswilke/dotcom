@@ -105,7 +105,7 @@ test('successful putt sinks before results and scores exactly once with the visi
   for (const reduced of [false, true]) {
     const g = game(reduced); ace(g);
     assert.equal(g.get('result').hidden, true);
-    assert.equal(g.get('round-stars').textContent, '0 / 12');
+    assert.equal(g.get('round-stars').textContent, '0 / 15');
     g.key(' '); // Input during sinking cannot add a stroke.
     g.frame(); assert.equal(g.get('cup-inset').hidden, true);
     const duration = reduced ? .045 : M.SINK_DURATION;
@@ -114,9 +114,9 @@ test('successful putt sinks before results and scores exactly once with the visi
     }
     g.until(() => !g.get('result').hidden);
     assert.equal(g.get('strokes').textContent, 1);
-    assert.equal(g.get('round-stars').textContent, '3 / 12');
+    assert.equal(g.get('round-stars').textContent, '3 / 15');
     for (let i = 0; i < 60; i++) g.frame();
-    assert.equal(g.get('round-stars').textContent, '3 / 12');
+    assert.equal(g.get('round-stars').textContent, '3 / 15');
   }
 });
 test('restart and hole changes during sinking cancel pending results', () => {
@@ -125,7 +125,7 @@ test('restart and hole changes during sinking cancel pending results', () => {
     for (let i = 0; i < 120; i++) g.frame();
     assert.equal(g.get('result').hidden, true);
     assert.equal(g.get('strokes').textContent, 0);
-    assert.equal(g.get('round-stars').textContent, '0 / 12');
+    assert.equal(g.get('round-stars').textContent, '0 / 15');
     assert.match(g.get('course').attributes['aria-label'], /Ready to aim/);
   }
 });
@@ -143,4 +143,15 @@ test('capture becomes ready, escape retains bypass until settling, and restart c
   g.click('reset');
   assert.equal(g.get('strokes').textContent, 0);
   assert.match(g.get('course').attributes['aria-label'], /Ready to aim/);
+});
+
+test('wormhole shortcut completes the new hole and adds its score once', () => {
+  const g = game(); g.hole(4); g.frame(); g.key('ArrowUp'); g.key(' ');
+  g.until(() => !g.get('result').hidden);
+  assert.equal(g.get('strokes').textContent, 1);
+  assert.equal(g.get('round-stars').textContent, '3 / 15');
+  assert.ok(g.steps.some(b => b.teleports === 1));
+  g.click('reset'); g.frame();
+  assert.equal(g.get('strokes').textContent, 0);
+  assert.equal(g.get('round-stars').textContent, '3 / 15');
 });

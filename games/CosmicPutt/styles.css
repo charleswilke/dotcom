@@ -101,7 +101,7 @@ aside { border: 1px solid var(--line); border-radius: 10px; padding: 12px 20px; 
 @media(prefers-reduced-motion:reduce) { button { transition: none; } }
 
 .round-bar { display: flex; gap: 18px; align-items: center; padding: 12px 20px; border-inline: 1px solid var(--line); background: #0b2848; }
-#hole-navigation { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; flex: 1; }
+#hole-navigation { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; flex: 1; }
 .hole-choice { display: grid; grid-template-columns: auto 1fr; gap: 5px 9px; text-align: left; background: #071b3355; color: var(--muted); border: 1px solid #91cfff30; padding: 9px 12px; border-radius: 3px; }
 .hole-choice[aria-pressed="true"] { background: #91cfff14; border-color: #91cfffaa; color: var(--cream); }
 .hole-choice:hover { background: #91cfff22; }
@@ -206,14 +206,14 @@ h1 span { margin-top: 5px; font-size: 7px; }
   .topbar { display: flex; gap: 20px; }
   .topbar .brand, .topbar .score { flex-shrink: 0; }
   .topbar .round-bar { flex: 1; border: 0; padding: 0; gap: 16px; justify-content: center; }
-  .topbar #hole-navigation { flex: 0 1 560px; grid-template-columns: repeat(4, minmax(110px, 140px)); gap: 6px; }
+  .topbar #hole-navigation { flex: 0 1 650px; grid-template-columns: repeat(5, minmax(100px, 140px)); gap: 6px; }
   .topbar .hole-choice { grid-template-columns: auto 1fr; gap: 3px 7px; padding: 7px 9px; }
   .topbar .choice-number { grid-row: span 2; }
   .topbar .hole-stars { grid-column: 2; font-size: 10px; }
   .topbar .choice-title { font-size: 9px; }
 }
 @media(max-width:1199px) {
-  .topbar #hole-navigation { flex: 0 0 auto; grid-template-columns: repeat(4, 44px); gap: 5px; }
+  .topbar #hole-navigation { flex: 0 0 auto; grid-template-columns: repeat(5, 44px); gap: 5px; }
   .choice-title { display: none; }
   .hole-choice { grid-template-columns: 1fr; justify-items: center; gap: 3px; padding: 6px; min-height: 44px; }
   .choice-number { grid-row: auto; }
@@ -231,4 +231,15 @@ h1 span { margin-top: 5px; font-size: 7px; }
   .topbar #hole-navigation { flex-basis: auto; }
   .topbar .round-bar { justify-content: center; }
   .topbar .round-total { display: grid; gap: 2px; margin-left: 0; }
+}
+
+.vertical-course .well-key { bottom: 40%; }
+
+/* Leave the tall route map visible below the up-screen hole's cup view. */
+@media(min-width:761px) {
+  .vertical-course .cup-inset { bottom: 40%; width: 24%; }
+}
+@media(max-width:760px) {
+  .vertical-course .cup-inset { width: 32%; }
+  .vertical-course .cup-camera-label { flex-wrap: wrap; gap: 2px; }
 }

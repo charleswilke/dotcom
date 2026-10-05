@@ -20,6 +20,7 @@
   let coursePath, camera, overview = false, displayScale = 1, compactView = false;
   const touches = new Map();
   let panGesture = false, panCenter = null, manualPan = false;
+  let portalFlash = null;
   let cupPreview = false, cupShot = false, cupHoldUntil = 0, cupCamera;
   const terrain = document.createElement('canvas'); terrain.width = L.width; terrain.height = L.height;
   const terrainCtx = terrain.getContext('2d');
@@ -32,9 +33,43 @@
     c.font = `${size}px ui-monospace, monospace`; c.fillStyle = color;
     c.textAlign = align; c.fillText(value, x, y);
   }
+  function courseText(c, value, x, y, color, size, align = 'center') {
+    c.save(); c.translate(x, y);
+    if (L.vertical) c.rotate(Math.atan2(1, .24));
+    text(c, value, 0, 0, color, size, align); c.restore();
+  }
   function line(c, points, color, width = 1) {
     c.beginPath(); points.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y));
     c.strokeStyle = color; c.lineWidth = width; c.stroke();
+  }
+  function routeLine(c, points, color, width) {
+    let segment = [];
+    for (const p of points) {
+      if (p.break) { if (segment.length > 1) line(c, segment, color, width); segment = []; }
+      segment.push([p.x, p.y]);
+    }
+    if (segment.length > 1) line(c, segment, color, width);
+  }
+  function drawPortals(c = ctx) {
+    for (const portal of L.portals ?? []) {
+      if (portal.wall) continue;
+      const { x, y, radius, angle } = portal;
+      circle(c, x, y, radius + 11, '#36dfe51a', '#54e9ef55', 1);
+      circle(c, x, y, radius, '#041d2f', '#65f2ee', 3);
+      c.save(); c.setLineDash([5, 5]);
+      c.translate(x, y); c.rotate(reduced ? 0 : time * .6);
+      circle(c, 0, 0, radius - 6, null, '#a9ffef', 1.5); c.restore();
+      courseText(c, portal.label, x, y + 3, '#c5fff7', 9);
+      const dx = Math.cos(angle), dy = Math.sin(angle), reach = radius + 23;
+      const tip = [x + dx * reach, y + dy * reach];
+      line(c, [[x + dx * (radius + 5), y + dy * (radius + 5)], tip], '#65f2ee', 2);
+      line(c, [[tip[0] - dx * 8 - dy * 5, tip[1] - dy * 8 + dx * 5], tip,
+        [tip[0] - dx * 8 + dy * 5, tip[1] - dy * 8 - dx * 5]], '#65f2ee', 2);
+      if (portalFlash && time - portalFlash.time < .45 && !reduced) {
+        const age = (time - portalFlash.time) / .45;
+        circle(c, x, y, radius + age * 24, null, `rgba(101,242,238,${1 - age})`, 2);
+      }
+    }
   }
   function buildTerrain() {
     terrain.width = L.width; terrain.height = L.height;
@@ -57,7 +92,8 @@
     circle(c, L.tee.x, L.tee.y, 18, null, '#b6e3ff88');
     line(c, [[L.tee.x - 26, L.tee.y], [L.tee.x + 26, L.tee.y]], '#b6e3ff66');
     line(c, [[L.tee.x, L.tee.y - 26], [L.tee.x, L.tee.y + 26]], '#b6e3ff66');
-    text(c, `TEE / ${holeNumber()}`, L.tee.x, L.tee.y - 37, '#c4e7ff', 10, 'center');
+    const teeLabel = L.vertical ? V.unproject({ x: 0, y: 37 }, L) : { x: 0, y: -37 };
+    courseText(c, `TEE / ${holeNumber()}`, L.tee.x + teeLabel.x, L.tee.y + teeLabel.y, '#c4e7ff', 10, 'center');
   }
   function updatePrediction() {
     prediction = P.predict(ball, angle, power, L, pendingBypass);
@@ -79,13 +115,14 @@
     if (message) ui.message.textContent = message;
   }
   function reset() {
-    clearInput(); manualPan = false;
+    clearInput(); manualPan = false; portalFlash = null;
     ball = { ...L.tee }; phase = 'ready'; strokes = 0; power = L.aim?.power ?? .4; angle = L.aim?.angle ?? -.08;
     pendingBypass = null; shotBypass = null; drag = null; trail = []; capture = null; shotOrigin = null;
     accumulator = 0; releaseStretch = 0; ui.result.hidden = true;
     motion = M.create();
-    cupShot = false; cupHoldUntil = 0; cupCamera = V.cupView(L.cup);
+    cupShot = false; cupHoldUntil = 0; cupCamera = V.cupView(L.cup, L);
     camera = V.create(L, overview, ball); updateViewControl();
+    document.querySelector('.viewport').classList.toggle('vertical-course', Boolean(L.vertical));
     updatePrediction(); updateUI(L.hint ?? 'Drag back from the ball. Find your curve.');
   }
   function renderStars(element, count) {
@@ -167,7 +204,7 @@
     canvas.dataset.view = overview ? 'overview' : manualPan ? 'panned' : 'local';
     canvas.dataset.gesture = panGesture ? 'pan' : drag ? 'aim' : 'idle';
   }
-  function drawSpace(c = ctx) {
+  function drawSpace(c = ctx, view = camera) {
     // Grid belongs to the course plane, so it moves naturally with the camera.
     c.fillStyle = '#103866'; c.fillRect(-600, -600, L.width + 1200, L.height + 1200);
     for (let x = -500; x <= L.width + 500; x += 25) {
@@ -177,11 +214,12 @@
       line(c, [[-500, y], [L.width + 500, y]], y % 100 === 0 ? '#a1d8ff22' : '#a1d8ff0c');
     }
     // Offset slab and upright sides give the blueprint a small model's depth.
-    c.save(); c.translate(0, 18); c.fillStyle = '#071e38'; c.fill(coursePath);
+    const slab = L.vertical ? V.unproject({ x: 0, y: 13 }, view) : { x: 0, y: 18 };
+    c.save(); c.translate(slab.x, slab.y); c.fillStyle = '#071e38'; c.fill(coursePath);
     c.strokeStyle = '#071e38'; c.lineWidth = 16; c.stroke(coursePath); c.restore();
     c.drawImage(terrain, 0, 0);
     for (const section of L.sections ?? []) {
-      text(c, section.label, section.x, section.y, '#b6e3ff99', 13, 'center');
+      courseText(c, section.label, section.x, section.y, '#b6e3ff99', 13, 'center');
     }
   }
   function drawWalls(c = ctx, view = camera) {
@@ -194,6 +232,34 @@
       c.fillStyle = b.x < a.x ? '#619bc9' : '#2d6594'; c.fill();
     }
     line(c, [...points, points[0]].map(p => [p.x, p.y - height]), '#d7efff', 2 * view.zoom);
+    drawPortalDoors(c, view);
+  }
+  function drawPortalDoors(c, view) {
+    for (const portal of L.portals ?? []) {
+      if (!portal.wall) continue;
+      const tangent = { x: -Math.sin(portal.angle), y: Math.cos(portal.angle) };
+      const center = V.toScreen(portal, view), arch = [];
+      // The opening stands upright on the wall, with its sill on the course plane.
+      for (let i = 0; i <= 20; i++) {
+        const a = Math.PI * i / 20, offset = Math.cos(a) * (portal.radius + 4);
+        const p = V.toScreen({ x: portal.x + tangent.x * offset, y: portal.y + tangent.y * offset }, view);
+        arch.push([p.x, p.y - (8 + Math.sin(a) * 24) * view.zoom]);
+      }
+      const left = V.toScreen({ x: portal.x + tangent.x * (portal.radius + 4), y: portal.y + tangent.y * (portal.radius + 4) }, view);
+      const right = V.toScreen({ x: portal.x - tangent.x * (portal.radius + 4), y: portal.y - tangent.y * (portal.radius + 4) }, view);
+      c.save(); c.lineJoin = 'round';
+      c.beginPath(); c.moveTo(left.x, left.y); arch.forEach(([x,y]) => c.lineTo(x,y));
+      c.lineTo(right.x, right.y); c.closePath();
+      c.fillStyle = '#031426'; c.fill(); c.strokeStyle = '#173f60'; c.lineWidth = 9 * view.zoom; c.stroke();
+      c.strokeStyle = '#65f2ee'; c.lineWidth = 2 * view.zoom; c.stroke();
+      line(c, [[left.x, left.y], [right.x, right.y]], '#c5fff7', 2 * view.zoom);
+      text(c, portal.label, center.x, center.y - 11 * view.zoom, '#c5fff7', Math.max(9, 9 * view.zoom), 'center');
+      if (portalFlash && time - portalFlash.time < .45 && !reduced) {
+        c.globalAlpha = 1 - (time - portalFlash.time) / .45;
+        c.strokeStyle = '#c5fff7'; c.lineWidth = 5 * view.zoom; c.stroke();
+      }
+      c.restore();
+    }
   }
   function drawWellLabels() {
     for (const well of L.wells) {
@@ -201,7 +267,7 @@
       const bypass = well.id === (pendingBypass || shotBypass);
       const center = V.toScreen(well, camera);
       if (p.x < 50 || p.x > V.WIDTH - 50 || center.y < -40 || center.y > V.HEIGHT + 40) continue;
-      p.y = Math.max(92, Math.min(V.HEIGHT - 70, p.y));
+      p.y = Math.max(compactView && p.x > V.WIDTH * .6 ? 165 : 92, Math.min(V.HEIGHT - 70, p.y));
       ctx.fillStyle = bypass ? '#10284c' : '#271c40'; ctx.strokeStyle = bypass ? '#6488bc' : '#9f7acb';
       const font = Math.max(10, 8 / displayScale), width = font * 6.4 + 16, height = font + 12;
       ctx.lineWidth = 1; ctx.beginPath(); ctx.roundRect(p.x - width / 2, p.y - height / 2, width, height, 4); ctx.fill(); ctx.stroke();
@@ -210,13 +276,18 @@
   }
   function drawMap() {
     if (L.width <= V.WIDTH) return;
-    const x = 838, y = 514, width = 230, height = 104;
-    const scale = Math.min((width - 20) / L.width, (height - 20) / L.height);
-    const ox = x + (width - L.width * scale) / 2, oy = y + (height - L.height * scale) / 2;
+    const x = L.vertical ? 958 : 838, y = L.vertical ? 398 : 514;
+    const width = L.vertical ? 110 : 230, height = L.vertical ? 220 : 104;
+    const map = V.fit(L), projected = L.boundary.map(([x, y]) => V.project({ x, y }, map));
+    const spanX = Math.max(...projected.map(p => p.x)) - Math.min(...projected.map(p => p.x));
+    const spanY = Math.max(...projected.map(p => p.y)) - Math.min(...projected.map(p => p.y));
+    const scale = Math.min((width - 24) / spanX, (height - 38) / spanY);
+    map.zoom = scale;
     ctx.fillStyle = '#071e38ee'; ctx.strokeStyle = '#91cfff66'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.roundRect(x, y, width, height, 4); ctx.fill(); ctx.stroke();
     ctx.save(); ctx.beginPath(); ctx.rect(x + 2, y + 2, width - 4, height - 4); ctx.clip();
-    ctx.translate(ox, oy); ctx.scale(scale, scale);
+    ctx.translate(x + width / 2 - V.WIDTH / 2, y + height / 2 + 7 - V.HEIGHT / 2);
+    ctx.transform(...V.matrix(map));
     ctx.fillStyle = '#285782'; ctx.fill(coursePath); ctx.strokeStyle = '#b6e3ff'; ctx.lineWidth = 1 / scale; ctx.stroke(coursePath);
     for (const well of L.wells) circle(ctx, well.x, well.y, 3 / scale, '#bc9ff5');
     circle(ctx, L.cup.x, L.cup.y, 3 / scale, '#fff');
@@ -225,7 +296,7 @@
       .map(([sx, sy]) => V.toWorld({ x: sx, y: sy }, camera));
     line(ctx, corners.map(p => [p.x, p.y]), '#8ce4d966', 1 / scale);
     ctx.restore();
-    text(ctx, 'ROUTE / 01 → 02', x + 10, y + 14, '#b6e3ff', 9);
+    text(ctx, L.vertical ? 'ROUTE ↑' : 'ROUTE / 01 → 02', x + 10, y + 14, '#b6e3ff', 9);
   }
   function drawCupCamera() {
     const arriving = phase === 'moving' && Math.hypot(ball.x - L.cup.x, ball.y - L.cup.y) < 220;
@@ -243,16 +314,16 @@
     const c = cupCtx;
     c.fillStyle = '#103866'; c.fillRect(0, 0, 360, 240);
     c.save(); c.transform(...V.matrix(cupCamera));
-    drawSpace(c); L.wells.forEach(well => drawWell(well, c)); drawCup(c);
+    drawSpace(c, cupCamera); L.wells.forEach(well => drawWell(well, c)); drawPortals(c); drawCup(c);
     if (preview) {
       c.setLineDash([3, 5]);
-      line(c, prediction.points.map(p => [p.x, p.y]), '#dcf2ffcc', 1.5);
+      routeLine(c, prediction.points, '#dcf2ffcc', 1.5);
       c.setLineDash([]);
       const end = prediction.body;
       if (end.status === 'sunk') circle(c, L.cup.x, L.cup.y, 21, null, '#8ce4d9', 1.5);
       else if (!prediction.truncated) circle(c, end.x, end.y, 7, null, '#dcf2ff99', 1.5);
     } else {
-      if (trail.length > 1) line(c, trail.map(p => [p.x, p.y]), '#8ce4d9bb', 2);
+      if (trail.length > 1) routeLine(c, trail, '#8ce4d9bb', 2);
       drawBallShadow(c);
     }
     c.restore(); drawWalls(c, cupCamera); drawFlag(c, cupCamera);
@@ -303,7 +374,8 @@
   function drawCup(c = ctx) {
     const { x, y, radius } = L.cup;
     drawFlagShadow(c);
-    circle(c, x, y + 2, radius + 5, '#102b30');
+    const rim = L.vertical ? V.unproject({ x: 0, y: 1.44 }, L) : { x: 0, y: 2 };
+    circle(c, x + rim.x, y + rim.y, radius + 5, '#102b30');
     circle(c, x, y, radius + 3, '#b6e3ff', '#e1f4ff', 1);
     circle(c, x, y, radius, '#06141d');
     if (phase === 'sinking' || phase === 'sunk') {
@@ -313,9 +385,10 @@
         c.save(); c.globalAlpha = glimpse * .75;
         c.beginPath(); c.arc(x, y, radius, 0, Math.PI * 2); c.clip();
         // Only the upper cap of the resting ball peeks past the near rim.
-        const resting = c.createRadialGradient(x - 1, y + radius - 3, .5, x, y + radius - 1, 4.5);
+        const cap = L.vertical ? V.unproject({ x: 0, y: (radius - 1) * .72 }, L) : { x: 0, y: radius - 1 };
+        const resting = c.createRadialGradient(x + cap.x - 1, y + cap.y - 2, .5, x + cap.x, y + cap.y, 4.5);
         resting.addColorStop(0, '#b6cbd7'); resting.addColorStop(1, '#415767');
-        circle(c, x, y + radius - 1, 4.5, resting);
+        circle(c, x + cap.x, y + cap.y, 4.5, resting);
         c.restore();
       }
     }
@@ -331,7 +404,7 @@
     // Ground projection of the upright pole and pennant, away from the
     // lower-left light. World coordinates keep both cameras in agreement.
     const cast = (x, height) => {
-      const p = V.unproject({ x: x + height * .35, y: -height * .28 });
+      const p = V.unproject({ x: x + height * .35, y: -height * .28 }, camera);
       return [L.cup.x + p.x, L.cup.y + p.y];
     };
     c.save(); c.globalAlpha = .3; c.lineCap = 'round';
@@ -373,7 +446,9 @@
     // Space dots by distance so slow portions don't become a solid bright knot.
     let distance = 0;
     for (let i = 1; i < points.length; i++) {
-      const a = points[i - 1], b = points[i]; distance += Math.hypot(b.x - a.x, b.y - a.y);
+      const a = points[i - 1], b = points[i];
+      if (b.break) { distance = 0; continue; }
+      distance += Math.hypot(b.x - a.x, b.y - a.y);
       if (distance < 9) continue;
       distance = 0;
       circle(ctx, b.x, b.y, Math.max(1.6, 1 / displayScale / camera.zoom), `rgba(220,242,255,${.8 - i / points.length * .5})`);
@@ -422,7 +497,7 @@
     const grip = { x: heel.x - 7, y: heel.y - 3, z: 52 };
     const swing = Math.atan2(Math.max(0, setback - 23), 49);
     const cos = Math.cos(swing), sin = Math.sin(swing);
-    const vertical = V.unproject({ x: 0, y: -1 });
+    const vertical = V.unproject({ x: 0, y: -1 }, camera);
     // A single rigid 3D model: rotate on the course, then project its height.
     // The backswing pivots every part around the same upper-grip fulcrum.
     const model = (x, y, z) => setback > 23 ? {
@@ -431,7 +506,7 @@
     } : { x: x - setback, y, z };
     const project = (x, y, z, shadow = false) => {
       const p = model(x, y, z);
-      const v = shadow ? V.unproject({ x: p.z * .35, y: -p.z * .28 }) :
+      const v = shadow ? V.unproject({ x: p.z * .35, y: -p.z * .28 }, camera) :
         { x: vertical.x * p.z, y: vertical.y * p.z };
       // Convert screen-space height/light offsets back into the rotated frame.
       return [p.x + v.x * Math.cos(angle) + v.y * Math.sin(angle),
@@ -484,20 +559,22 @@
     }
     if (trail.length > 1) {
       for (let i = 1; i < trail.length; i++) {
+        if (trail[i].break) continue;
         line(ctx, [[trail[i - 1].x, trail[i - 1].y], [trail[i].x, trail[i].y]], `rgba(101,238,228,${i / trail.length * .55})`, i / trail.length * 3);
       }
     }
     drawBallShadow(ctx);
     if (phase === 'ready' && strokes === 0) {
-      text(ctx, 'DRAG TO AIM', ball.x, ball.y + 54, '#e1f4ff', 10, 'center');
-      line(ctx, [[ball.x, ball.y + 22], [ball.x, ball.y + 35]], '#b6e3ff77');
+      const label = L.vertical ? V.unproject({ x: 0, y: 105 }, camera) : { x: 0, y: 54 };
+      courseText(ctx, 'DRAG TO AIM', ball.x + label.x, ball.y + label.y, '#e1f4ff', 10, 'center');
+      if (!L.vertical) line(ctx, [[ball.x, ball.y + 22], [ball.x, ball.y + 35]], '#b6e3ff77');
     }
   }
   function drawBallShadow(c) {
     const progress = phase === 'sinking' ? Math.min(1, (time - motion.sinkTime) / (reduced ? .045 : M.SINK_DURATION)) : 0;
     if (progress >= 1) return;
     c.save(); c.globalAlpha = 1 - progress;
-    const offset = V.unproject({ x: 2, y: -3 });
+    const offset = V.unproject({ x: 2, y: -3 }, camera);
     circle(c, ball.x + offset.x, ball.y + offset.y, (P.RADIUS + 2) * (1 - progress), '#061b2799'); c.restore();
   }
   function drawImpactGlint(c = ctx, view = camera) {
@@ -551,6 +628,11 @@
         accumulator += Math.min(elapsed, Math.max(0, time - motion.launchTime));
         while (accumulator >= P.DT && phase === 'moving') {
           P.step(ball, L, shotBypass, noteImpact); accumulator -= P.DT;
+          if (ball.teleport) {
+            trail.push(ball.teleport.from, { ...ball.teleport.to, break: true });
+            portalFlash = { time };
+            updateUI('Through the wormhole. Same speed, new direction.');
+          }
           if (Math.hypot(ball.x - L.cup.x, ball.y - L.cup.y) < 220) cupShot = true;
           if (Math.round(ball.age / P.DT) % 3 === 0) {
             trail.push({ x: ball.x, y: ball.y }); if (trail.length > 48) trail.shift();
@@ -581,7 +663,7 @@
     ctx.fillStyle = '#103866'; ctx.fillRect(0, 0, V.WIDTH, V.HEIGHT);
     putterDraw = null;
     ctx.save(); ctx.transform(...V.matrix(camera));
-    drawSpace(); L.wells.forEach(well => drawWell(well)); drawCup(); drawPrediction(); drawBall(); ctx.restore();
+    drawSpace(); L.wells.forEach(well => drawWell(well)); drawPortals(); drawCup(); drawPrediction(); drawBall(); ctx.restore();
     drawWalls(); drawWellLabels(); drawFlag();
     if (putterDraw) {
       // The upright club belongs above the raised barriers, like the flagpole.

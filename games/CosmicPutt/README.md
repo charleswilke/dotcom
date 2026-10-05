@@ -1,6 +1,6 @@
 # Cosmic Putt — blueprint round
 
-A standalone vanilla Canvas prototype: four Blueprint Course holes, each par 3. No build,
+A standalone vanilla Canvas prototype: five Blueprint Course holes, each par 3. No build,
 dependencies, external assets, storage, or network services.
 
 Serve the repository with `python3 -m http.server 8080`, then visit
@@ -28,7 +28,7 @@ Serve the repository with `python3 -m http.server 8080`, then visit
 - The captured well turns navy and ignores the entire next stroke, including
   any return through its center. It reactivates once that shot stops.
 - Use the numbered scorecard to jump between holes. Next hole advances to an
-  unplayed hole; after completing all four, start a new round or replay a hole.
+  unplayed hole; after completing all five, start a new round or replay a hole.
 - Earn 3 stars for one putt, 2 for two, 1 for three, and 0 for four or more.
   Best completed results stay on the scorecard during this session round;
   replaying cannot double-count stars or erase a better result. New round clears
@@ -48,6 +48,10 @@ Serve the repository with `python3 -m http.server 8080`, then visit
   recenters before the ball starts moving. Course bounds limit panning.
 - Course overview fits the entire playable outline. Return to ball restores the
   local view. A shot released from overview returns to local view automatically.
+- Long orbit plays up-screen, with the ball in the lower third and space below
+  it for a full pull-back. The drawing plane turns while world geometry and physics
+  remain unchanged. Its overview, upright labels, cup cam, and vertical route map
+  share that orientation. The moving camera looks ahead along the shot.
 - Long orbit has two gravity sections and a route map. Its camera follows only
   while the ball is moving or being captured; a one-finger aim never pans or zooms the view.
   Overview is disabled during a drag and during motion. Restart resets the camera.
@@ -61,12 +65,23 @@ Serve the repository with `python3 -m http.server 8080`, then visit
   too. It briefly holds on a settled near miss; a new aim switches back to preview.
   Results and restarts clear it. On phones it replaces the route map; desktop
   places it above the map. The inset passes pointer input through to the course.
+- Event horizon folds into a broad hairpin around one bend well. Its optional cyan
+  wormhole pair is set into the divider and the upper lane’s outer wall, like
+  small arched tunnels. It connects the outward and return lanes. Either mouth works in both
+  directions: velocity rotates from the entrance’s inward travel direction to the exit’s
+  outward direction,
+  preserving speed after the normal timestep friction. The ball emerges beyond the
+  exit sill, safely inside the course. Wall collisions yield only within an
+  active mouth for an incoming ball. The pair stays locked until the ball clears both mouths, preventing
+  immediate re-entry. Matching numbers identify the pair; the arches briefly glow
+  on transit (the pulse is omitted with reduced motion). Preview and trail break at teleport
+  gaps, so no path is drawn across the divider. Transit adds no stroke or penalty.
 - The prediction uses the live fixed-step physics and shows up to one bounce.
   A ring marks rest, a cross marks capture, and a cup ring marks a predicted sink.
 
 ## Structure
 
-- `physics.js`: shared deterministic 120 Hz simulation and four-hole course data.
+- `physics.js`: shared deterministic 120 Hz simulation and five-hole course data.
 - `game.js`: input, hole navigation, shot state, prediction, and blueprint rendering.
 - `scoring.js`: star awards and best-result aggregation.
 - `view.js`: three-quarter projection, inverse aim mapping, overview, camera tracking, and cup-approach detection.
@@ -122,11 +137,16 @@ The reference ace unfolds over roughly 4–5 seconds.
 4. **Long orbit:** two pairs of wells connected by a quiet stretch in a 2200×800
    world. Reference ace: -0.05 rad, 80–83% power; roughly 6–8 seconds.
 
-The first three reference aces take roughly 4–5 seconds. All reference aces skim
+5. **Event horizon:** wide hairpin, one bend well, one optional wormhole pair.
+   Wormhole ace: -0.16 rad, 44.5% power; roughly 6 seconds. The conventional route uses
+   -0.07 rad at 97% power, swings around the well with two wall bounces, and sinks
+   in roughly 8 seconds. Removing the bend well makes that route miss.
+
+The first three reference aces take roughly 4–5 seconds. The first four reference aces skim
 each well safely and sink without a wall bounce. Removing any well from Double
 swing or Triple relay makes its reference shot miss. Rendering and collisions always use the same rounded course outline.
 
 ## Next experiments
 
-Tune the four holes through play. Preview upgrades, sound, persistent best
+Tune the five holes through play. Preview upgrades, sound, persistent best
 scores, and a full six-hole round are future work.

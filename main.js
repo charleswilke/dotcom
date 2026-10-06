@@ -1181,11 +1181,12 @@ function ensureReaderOverlay() {
             <div class="article-reader-topbar">
                 <span class="reader-lead">
                     <span class="reader-source">exploring <span class="reader-break">l.ai.bor</span></span>
-                    <span class="reader-sep">//</span>
-                    <a class="substack-link" href="#" target="_blank" rel="noopener noreferrer">Read on <span class="link-break">Substack &rarr;</span></a>
                 </span>
                 <span class="reader-actions">
-                    <button type="button" class="article-reader-close" aria-label="Close article">&times;</button>
+                    <a class="substack-link" href="#" target="_blank" rel="noopener noreferrer">Read on Substack <span aria-hidden="true">&nearr;</span></a>
+                    <button type="button" class="article-reader-close" aria-label="Close article">
+                        <span class="reader-close-mark" aria-hidden="true"><span class="reader-close-bracket">[</span><span class="reader-close-x">X</span><span class="reader-close-bracket">]</span></span>
+                    </button>
                 </span>
             </div>
             <div class="article-reader-scroll-wrap">
@@ -1468,17 +1469,14 @@ function openArticleReader(item, options = {}) {
     });
 
     // Local (repo-hosted) articles have no Substack page; hide the links to it.
-    const sepEl = overlay.querySelector('.reader-sep');
     const footerEl = overlay.querySelector('.article-reader-footer');
     if (item.link) {
         topLink.href = safeArticleUrl(item.link) || '#';
         footLink.href = safeArticleUrl(item.link) || '#';
         topLink.style.display = '';
-        if (sepEl) sepEl.style.display = '';
         if (footerEl) footerEl.style.display = '';
     } else {
         topLink.style.display = 'none';
-        if (sepEl) sepEl.style.display = 'none';
         if (footerEl) footerEl.style.display = 'none';
     }
 

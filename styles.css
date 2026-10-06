@@ -15500,10 +15500,13 @@ body {
     --fiche-walnut: #2a1d0c;
     --fiche-glow: rgba(255, 235, 170, 0.55);
     --reader-gutter: clamp(28px, 5vw, 43px);
+    --reader-top-gap: 6px;
 
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse at center, rgba(60, 40, 15, 0.72) 0%, rgba(20, 12, 4, 0.92) 100%);
+    padding-top: var(--reader-top-gap);
+    box-sizing: border-box;
+    background: radial-gradient(ellipse at center, rgba(26, 31, 54, 0.72) 0%, rgba(9, 14, 29, 0.92) 100%);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     z-index: 9999;
@@ -15622,10 +15625,10 @@ body.reader-open {
 .article-reader-shell {
     max-width: 880px;
     margin: 0 auto;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--reader-top-gap));
     background: var(--fiche-paper);
     color: var(--fiche-ink);
-    border-radius: 4px;
+    border-radius: 0;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55),
                 0 0 0 1px rgba(46, 33, 19, 0.35),
                 inset 0 0 0 1px rgba(255, 240, 200, 0.4);
@@ -15661,7 +15664,7 @@ body.reader-open {
     font-size: 11px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    border-radius: 4px 4px 0 0;
+    border-radius: 0;
 }
 .article-reader-topbar .reader-lead {
     display: inline-flex;
@@ -16544,7 +16547,7 @@ body.reader-open {
     .article-reader-shell {
         margin: 0;
         border-radius: 0;
-        min-height: 100vh;
+        min-height: calc(100vh - var(--reader-top-gap));
     }
     .article-reader-scroll-area {
         max-height: calc(100vh - 60px);

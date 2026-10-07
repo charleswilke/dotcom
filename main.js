@@ -48,6 +48,7 @@ onReady(() => {
 
     function syncDialogs() {
         const open = [...document.querySelectorAll(selector)];
+        const dismissed = stack.filter(dialog => !open.includes(dialog));
         const previous = stack[stack.length - 1];
         const added = open.filter(dialog => !stack.includes(dialog));
         added.forEach(dialog => {
@@ -76,7 +77,10 @@ onReady(() => {
         }
 
         if (previous !== current) {
-            const trigger = previous && returnFocus.get(previous);
+            // Back can dismiss both a player and its nested cover together.
+            // Return to the outer player's opener rather than its hidden cover.
+            const focusOwner = current ? previous : dismissed[0];
+            const trigger = focusOwner && returnFocus.get(focusOwner);
             if (trigger && trigger.isConnected && !trigger.closest('[inert]') &&
                 (!current || current.contains(trigger))) {
                 trigger.focus({ preventScroll: true });
@@ -84,8 +88,8 @@ onReady(() => {
             } else if (current) {
                 focusDialog(current);
             }
-            if (previous && !open.includes(previous)) returnFocus.delete(previous);
         }
+        dismissed.forEach(dialog => returnFocus.delete(dialog));
         if (!current) {
             bodyOverflow = document.body.style.overflow;
             rootOverflow = document.documentElement.style.overflow;
@@ -5183,9 +5187,11 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
         trackNumber.className = 'track-number';
         trackNumber.textContent = displayNumbers[index];
 
-        const titleText = document.createElement('span');
+        const titleText = document.createElement('button');
+        titleText.type = 'button';
         titleText.className = 'track-title-text';
         titleText.textContent = track.title;
+        titleText.setAttribute('aria-label', `Play ${track.title}`);
 
         const actionGroup = document.createElement('div');
         actionGroup.className = 'track-action-group';
@@ -5302,6 +5308,11 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
 function setActiveTrackListItem(trackItems, activeIndex) {
     trackItems.forEach((item, index) => {
         item.classList.toggle('active', index === activeIndex);
+        const button = item.querySelector('.track-title-text');
+        if (button) {
+            if (index === activeIndex) button.setAttribute('aria-current', 'true');
+            else button.removeAttribute('aria-current');
+        }
     });
     scrollTrackItemIntoView(trackItems[activeIndex]);
 }
@@ -6215,7 +6226,7 @@ function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
             event.stopImmediatePropagation();
             openCallback(instance);
         }
-    }, { capture: true, once: true });
+    }, { capture: true });
 }
 
 // Game Lightbox: the browser-game cartridges open the game in an overlay
@@ -6415,22 +6426,29 @@ function initCoverZoom() {
     const zoomImg = document.getElementById('coverZoomImg');
     const zoomClose = document.getElementById('coverZoomClose');
     if (!zoom || !zoomImg) return;
+    let openFrame = 0;
+    let closeTimer = 0;
 
     const open = (src, alt) => {
+        clearTimeout(closeTimer);
+        cancelAnimationFrame(openFrame);
         zoomImg.src = src;
         zoomImg.alt = alt || '';
         zoom.hidden = false;
-        requestAnimationFrame(() => zoom.setAttribute('data-open', 'true'));
+        openFrame = requestAnimationFrame(() => zoom.setAttribute('data-open', 'true'));
         document.body.style.overflow = 'hidden';
     };
 
-    const close = () => {
+    const close = (immediate = false) => {
+        cancelAnimationFrame(openFrame);
+        clearTimeout(closeTimer);
         zoom.removeAttribute('data-open');
-        document.body.style.overflow = '';
-        setTimeout(() => {
+        const finish = () => {
             zoom.hidden = true;
             zoomImg.src = '';
-        }, 200);
+        };
+        if (immediate) finish();
+        else closeTimer = setTimeout(finish, 200);
     };
 
     document.querySelectorAll('.mixtape-cover').forEach(img => {
@@ -6448,10 +6466,13 @@ function initCoverZoom() {
         });
     });
 
-    zoom.addEventListener('click', close);
+    zoom.addEventListener('click', () => close());
     if (zoomClose) zoomClose.addEventListener('click', (e) => { e.stopPropagation(); close(); });
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && zoom.getAttribute('data-open') === 'true') close();
+    });
+    window.addEventListener('popstate', () => {
+        if (!zoom.hidden) close(true);
     });
 }
 

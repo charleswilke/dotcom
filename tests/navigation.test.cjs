@@ -186,3 +186,83 @@ test('slide deck closes to its opening section without reopening on Back', async
     assert.equal(await page.locator('.lightbox.active').count(), 0);
     assert.equal(await page.locator('main').evaluate(element => element.inert), false);
 }));
+
+for (const width of [390, 1440]) {
+    test(`album cards reopen without document navigation at ${width}px`, async () => withPage(width, async page => {
+        const documents = [];
+        page.on('request', request => {
+            if (request.isNavigationRequest() && request.frame() === page.mainFrame()) documents.push(request.url());
+        });
+        await page.goto(origin);
+        await nav(page, 'albums');
+        const startScroll = await page.evaluate(() => scrollY);
+        for (const [card, dialog, close] of [
+            ['.album-case-mixtape', '#mixtapeLightbox', '#mixtapeClose'],
+            ['.album-case-jc', '#jcLightbox', '#jcClose'],
+            ['.album-case-gwor', '#gworLightbox', '#gworClose']
+        ]) {
+            for (let opening = 0; opening < 2; opening++) {
+                await page.locator(card).click();
+                await page.waitForFunction(selector => document.querySelector(selector).classList.contains('active'), dialog);
+                await page.locator(close).click();
+                await page.waitForURL(`${origin}/#albums`);
+                await aligned(page, 'albums');
+                assert.equal(await page.locator('.lightbox.active').count(), 0);
+            }
+        }
+        assert.deepEqual(documents, [`${origin}/`], 'Only the initial page load may navigate a document');
+        assert.ok(Math.abs(await page.evaluate(() => scrollY) - startScroll) < 2);
+    }));
+}
+
+test('Back dismisses player and nested cover; Forward opens only the player', async () => withPage(390, async page => {
+    await page.goto(origin);
+    await nav(page, 'albums');
+    await page.locator('.album-case-mixtape').click();
+    await page.locator('#mixtapeCoverImg').click();
+    await page.waitForFunction(() => !document.getElementById('coverZoom').hidden);
+    await page.goBack();
+    await page.waitForURL(`${origin}/#albums`);
+    await page.waitForFunction(() => document.getElementById('coverZoom').hidden);
+    assert.equal(await page.locator('.lightbox.active').count(), 0);
+    assert.equal(await page.evaluate(() => document.body.style.overflow), '');
+    assert.equal(await page.locator('main').evaluate(element => element.inert), false);
+    await page.waitForFunction(() => document.activeElement.classList.contains('album-case-mixtape'));
+    await page.goForward();
+    await page.waitForFunction(() => document.getElementById('mixtapeLightbox').classList.contains('active'));
+    assert.equal(await page.locator('#coverZoom').evaluate(element => element.hidden), true);
+    assert.equal(await page.evaluate(() => document.body.style.overflow), 'hidden');
+}));
+
+test('song buttons select with Enter and Space without selecting article/share actions', async () => withPage(1440, async page => {
+    await page.goto(origin);
+    await nav(page, 'albums');
+    await page.locator('.album-case-mixtape').click();
+    const songs = page.locator('#mixtapeTrackList button.track-title-text');
+    await songs.nth(1).focus();
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.querySelectorAll('#mixtapeTrackList .mixtape-track-item')[1].classList.contains('active'));
+    assert.ok(new URL(page.url()).hash.endsWith('/protect-the-hollow'));
+    await songs.nth(2).focus();
+    await page.keyboard.press('Space');
+    await page.waitForFunction(() => document.querySelectorAll('#mixtapeTrackList .mixtape-track-item')[2].classList.contains('active'));
+    assert.equal(await songs.nth(2).getAttribute('aria-current'), 'true');
+    assert.equal(await songs.nth(1).getAttribute('aria-current'), null);
+    await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(() => document.activeElement.classList.contains('track-article-link')), true);
+    await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(() => document.activeElement.classList.contains('track-share-button')), true);
+    assert.ok(new URL(page.url()).hash.endsWith('/data-dignity'));
+}));
+
+test('hidden home logo is skipped by Tab and becomes focusable after the header leaves', async () => withPage(1440, async page => {
+    await page.goto(origin);
+    await page.keyboard.press('Tab');
+    assert.notEqual(await page.evaluate(() => document.activeElement.id), 'navLogo');
+    assert.equal(await page.locator('#navLogo').evaluate(element => element.inert), true);
+    await nav(page, 'albums');
+    await page.waitForFunction(() => !document.getElementById('navLogo').inert);
+    await page.locator('#navLogo').focus();
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'navLogo');
+    assert.equal(await page.locator('#navLogo').getAttribute('aria-hidden'), 'false');
+}));

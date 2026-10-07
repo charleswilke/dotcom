@@ -38,9 +38,13 @@ function initStickyNav() {
     // --- Show nav logo only after header scrolls out of view ---
     const siteHeader = document.querySelector('header');
     if (navLogo && siteHeader) {
+        navLogo.inert = true;
+        navLogo.setAttribute('aria-hidden', 'true');
         const headerObserver = new IntersectionObserver(
             ([entry]) => {
                 navLogo.classList.toggle('visible', !entry.isIntersecting);
+                navLogo.inert = entry.isIntersecting;
+                navLogo.setAttribute('aria-hidden', String(entry.isIntersecting));
             },
             { threshold: 0 }
         );

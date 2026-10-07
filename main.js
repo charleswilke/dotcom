@@ -1644,6 +1644,9 @@ function normalizeFeedItems(items) {
 
 // Add smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // common.js owns nav links, including their sticky-header offset and
+    // layout-shift correction. Don't start a second competing smooth scroll.
+    if (anchor.hasAttribute('data-section')) return;
     anchor.addEventListener('click', function(e) {
         // IDs can contain periods; resolve the fragment as an ID, not a CSS selector.
         const target = document.getElementById(this.getAttribute('href').slice(1));

@@ -52,10 +52,20 @@ function initStickyNav() {
     let ticking = false;
 
     function onScroll() {
+        if (navigationTarget) {
+            clearTimeout(navigationSettleTimer);
+            navigationSettleTimer = setTimeout(() => {
+                if (!navigationTarget) return;
+                navigationTop = getNavigationTop(navigationTarget);
+                if (Math.abs(window.scrollY - navigationTop) > 1) {
+                    window.scrollTo({ top: navigationTop, behavior: 'instant' });
+                }
+            }, 150);
+        }
         if (!ticking) {
             requestAnimationFrame(() => {
                 const currentY = window.scrollY;
-                if (currentY > lastScrollY && currentY > 80) {
+                if (!navigationTarget && currentY > lastScrollY && currentY > 80) {
                     nav.classList.add('nav-hidden');
                 } else {
                     nav.classList.remove('nav-hidden');
@@ -91,6 +101,41 @@ function initStickyNav() {
         updateActiveLink();
     }
 
+    // Keep the destination aligned when lazy sections replace their estimated
+    // heights or the RSS feed arrives during/after the smooth scroll. Yield as
+    // soon as the visitor interacts so late content never pulls them back.
+    let navigationTarget = null;
+    let navigationTop = 0;
+    let navigationFrame = 0;
+    let navigationSettleTimer = 0;
+    const navigationObserver = typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => {
+            cancelAnimationFrame(navigationFrame);
+            navigationFrame = requestAnimationFrame(() => {
+                if (!navigationTarget) return;
+                const top = getNavigationTop(navigationTarget);
+                if (Math.abs(top - navigationTop) > 1) {
+                    navigationTop = top;
+                    window.scrollTo({ top, behavior: 'instant' });
+                }
+            });
+        }) : null;
+
+    function getNavigationTop(target) {
+        return target.getBoundingClientRect().top + window.scrollY - nav.offsetHeight - 8;
+    }
+
+    function releaseNavigationTarget() {
+        navigationTarget = null;
+        clearTimeout(navigationSettleTimer);
+        cancelAnimationFrame(navigationFrame);
+        if (navigationObserver) navigationObserver.disconnect();
+    }
+
+    ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(type => {
+        window.addEventListener(type, releaseNavigationTarget, { passive: true });
+    });
+
     // --- Smooth scroll for section links (homepage only) ---
     sectionNavLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -101,9 +146,16 @@ function initStickyNav() {
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
                 closeAllDropdowns();
-                const offset = nav.offsetHeight + 8;
-                const top = target.getBoundingClientRect().top + window.scrollY - offset;
-                window.scrollTo({ top, behavior: 'smooth' });
+                releaseNavigationTarget();
+                navigationTarget = target;
+                navigationTop = getNavigationTop(target);
+                if (navigationObserver) {
+                    document.querySelectorAll('body > header, main > section').forEach(section => {
+                        navigationObserver.observe(section);
+                    });
+                    navigationObserver.observe(nav);
+                }
+                window.scrollTo({ top: navigationTop, behavior: 'smooth' });
             }
         });
     });

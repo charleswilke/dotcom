@@ -23,6 +23,123 @@ document.addEventListener('DOMContentLoaded', () => {
     readyCallbacks.forEach(callback => callback());
 });
 
+// Give all page overlays one focus/scroll boundary, including nested cover
+// zooms. Existing player close and Back handlers still own their media state.
+onReady(() => {
+    const selector = '.lightbox.active, .article-reader-overlay.is-open, .cover-zoom:not([hidden])';
+    const focusSelector = 'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+    const originalInert = new Map();
+    const returnFocus = new Map();
+    let stack = [];
+    let restoredTrigger = null;
+    let bodyOverflow = document.body.style.overflow;
+    let rootOverflow = document.documentElement.style.overflow;
+
+    function focusable(dialog) {
+        return [...dialog.querySelectorAll(focusSelector)].filter(element =>
+            element.getClientRects().length && !element.closest('[inert], [hidden]'));
+    }
+
+    function focusDialog(dialog) {
+        const target = focusable(dialog)[0] || dialog;
+        if (target === dialog) dialog.tabIndex = -1;
+        target.focus({ preventScroll: true });
+    }
+
+    function syncDialogs() {
+        const open = [...document.querySelectorAll(selector)];
+        const previous = stack[stack.length - 1];
+        const added = open.filter(dialog => !stack.includes(dialog));
+        added.forEach(dialog => {
+            returnFocus.set(dialog, document.activeElement);
+            dialog.setAttribute('role', 'dialog');
+            dialog.setAttribute('aria-modal', 'true');
+            if (!dialog.hasAttribute('aria-label') && !dialog.hasAttribute('aria-labelledby')) {
+                dialog.setAttribute('aria-label', dialog.querySelector('img')?.alt || 'Media viewer');
+            }
+        });
+        stack = stack.filter(dialog => open.includes(dialog)).concat(added);
+        const current = stack[stack.length - 1];
+
+        if (current) {
+            [...document.body.children].forEach(element => {
+                if (!originalInert.has(element)) originalInert.set(element, element.inert);
+                element.inert = !element.contains(current);
+            });
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+        } else if (originalInert.size) {
+            originalInert.forEach((inert, element) => { element.inert = inert; });
+            originalInert.clear();
+            document.body.style.overflow = bodyOverflow;
+            document.documentElement.style.overflow = rootOverflow;
+        }
+
+        if (previous !== current) {
+            const trigger = previous && returnFocus.get(previous);
+            if (trigger && trigger.isConnected && !trigger.closest('[inert]') &&
+                (!current || current.contains(trigger))) {
+                trigger.focus({ preventScroll: true });
+                if (!current) restoredTrigger = trigger;
+            } else if (current) {
+                focusDialog(current);
+            }
+            if (previous && !open.includes(previous)) returnFocus.delete(previous);
+        }
+        if (!current) {
+            bodyOverflow = document.body.style.overflow;
+            rootOverflow = document.documentElement.style.overflow;
+        }
+    }
+
+    const dialogSelector = '.lightbox, .article-reader-overlay, .cover-zoom';
+    new MutationObserver(records => {
+        const changed = records.some(record => record.type === 'attributes'
+            ? record.target.matches(dialogSelector)
+            : [...record.addedNodes, ...record.removedNodes].some(node => node.nodeType === 1 &&
+                (node.matches(dialogSelector) || node.querySelector(dialogSelector))));
+        if (changed) syncDialogs();
+    }).observe(document.body, {
+        subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'hidden']
+    });
+    document.addEventListener('focusin', event => {
+        const dialog = stack[stack.length - 1];
+        if (dialog && !dialog.contains(event.target)) focusDialog(dialog);
+    });
+    // Fragment history traversal can reset focus after the close handler has
+    // restored it. Finish restoration once the browser has applied the route.
+    window.addEventListener('popstate', () => {
+        requestAnimationFrame(() => {
+            const trigger = restoredTrigger;
+            restoredTrigger = null;
+            if (!stack.length && trigger && trigger.isConnected && document.activeElement === document.body) {
+                trigger.focus({ preventScroll: true });
+            }
+        });
+    });
+    window.addEventListener('pointerdown', () => { restoredTrigger = null; }, { passive: true });
+    document.addEventListener('keydown', event => {
+        const dialog = stack[stack.length - 1];
+        if (!dialog) return;
+        if (event.key === 'Escape') {
+            const close = dialog.querySelector('.lightbox-close, .article-reader-close, .cover-zoom-close, .game-lightbox-close');
+            if (close) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                close.click();
+            }
+        } else if (event.key === 'Tab') {
+            const elements = focusable(dialog);
+            const index = elements.indexOf(document.activeElement);
+            if (!elements.length || (event.shiftKey ? index <= 0 : index === elements.length - 1 || index === -1)) {
+                event.preventDefault();
+                (elements[event.shiftKey ? elements.length - 1 : 0] || dialog).focus({ preventScroll: true });
+            }
+        }
+    }, true);
+    syncDialogs();
+});
+
 // Pause every CSS animation inside a header/section/footer that is scrolled out
 // of view. A CSS animation ticks a main-thread style update on every frame
 // whether or not its element is visible, and by now the page runs about 65 of
@@ -4941,7 +5058,20 @@ function findTrackIndexBySlug(tracks, trackSlug) {
 function updateHistoryHash(nextHash, method = 'replaceState') {
     if (!nextHash || window.location.hash === nextHash) return;
     if (history && typeof history[method] === 'function') {
-        history[method](null, '', nextHash);
+        const state = method === 'pushState'
+            ? { dialogReturnUrl: getCurrentRelativeUrl() }
+            : history.state;
+        history[method](state, '', nextHash);
+    }
+}
+
+function closeDialogRoute(fallbackHash) {
+    if (history.state && history.state.dialogReturnUrl) {
+        history.back();
+    } else {
+        // A directly shared player has no in-site entry to go back to.
+        history.replaceState(null, '', `${location.pathname}${location.search}${fallbackHash}`);
+        window.dispatchEvent(new Event('hashchange'));
     }
 }
 
@@ -5523,7 +5653,7 @@ function createAlbumPlayer(config) {
         if (oscilloscope) oscilloscope.stop();
         const currentRoute = parseMusicHash();
         if (currentRoute && currentRoute.player === playerKey) {
-            history.pushState(null, '', window.location.pathname);
+            closeDialogRoute('#albums');
         }
 
         const mini = getMiniPlayer();
@@ -6011,7 +6141,7 @@ function initS2ILightbox() {
         document.documentElement.style.overflow = 'hidden';
         if (loaded) render(); else loadSlides();
         if (window.location.hash !== '#s2i') {
-            history.pushState(null, '', '#s2i');
+            updateHistoryHash('#s2i', 'pushState');
         }
     }
 
@@ -6022,7 +6152,7 @@ function initS2ILightbox() {
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
         if (window.location.hash === '#s2i') {
-            history.pushState(null, '', window.location.pathname + window.location.search);
+            closeDialogRoute('#portfolio');
         }
     }
 
@@ -6153,7 +6283,7 @@ function initGameLightbox() {
         const closingKey = activeKey;
         hideLightbox();
         if (closingKey && window.location.hash === `#${closingKey}`) {
-            history.pushState(null, '', window.location.pathname);
+            closeDialogRoute('#game-cartridges');
         }
     }
 

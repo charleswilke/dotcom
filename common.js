@@ -136,26 +136,52 @@ function initStickyNav() {
         window.addEventListener(type, releaseNavigationTarget, { passive: true });
     });
 
+    function navigateToSection(target, behavior = 'instant') {
+        nav.classList.remove('nav-hidden');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        closeAllDropdowns();
+        releaseNavigationTarget();
+        navigationTarget = target;
+        navigationTop = getNavigationTop(target);
+        if (navigationObserver) {
+            document.querySelectorAll('body > header, main > section').forEach(section => {
+                navigationObserver.observe(section);
+            });
+            navigationObserver.observe(nav);
+        }
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: navigationTop, behavior: reducedMotion ? 'instant' : behavior });
+    }
+
+    function navigateFromLocation() {
+        releaseNavigationTarget();
+        const id = window.location.hash.slice(1);
+        // Only section routes belong to the nav; media/article hashes are
+        // handled by their own players and must not scroll the background.
+        if (![...sectionIds, 'portfolio', 'writing'].includes(id)) return;
+        const target = document.getElementById(id);
+        if (target) navigateToSection(target);
+    }
+
+    window.addEventListener('popstate', navigateFromLocation);
+    window.addEventListener('hashchange', navigateFromLocation);
+    navigateFromLocation();
+    window.addEventListener('load', () => {
+        if (navigationTarget) navigateToSection(navigationTarget);
+    }, { once: true });
+
     // --- Smooth scroll for section links (homepage only) ---
     sectionNavLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const target = document.getElementById(link.dataset.section);
             if (target) {
                 e.preventDefault();
-                nav.classList.remove('nav-hidden');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                closeAllDropdowns();
-                releaseNavigationTarget();
-                navigationTarget = target;
-                navigationTop = getNavigationTop(target);
-                if (navigationObserver) {
-                    document.querySelectorAll('body > header, main > section').forEach(section => {
-                        navigationObserver.observe(section);
-                    });
-                    navigationObserver.observe(nav);
+                const hash = `#${target.id}`;
+                if (window.location.hash !== hash) {
+                    history.pushState({ sectionNavigation: target.id }, '', hash);
                 }
-                window.scrollTo({ top: navigationTop, behavior: 'smooth' });
+                navigateToSection(target, 'smooth');
             }
         });
     });
@@ -165,10 +191,16 @@ function initStickyNav() {
         allDropdownWraps.forEach(wrap => {
             const btn = wrap.querySelector('.nav-explore-btn');
             const dd = wrap.querySelector('.nav-dropdown');
-            if (dd) dd.classList.remove('open');
+            if (dd) {
+                if (dd.contains(document.activeElement) && btn) btn.focus();
+                dd.classList.remove('open');
+                dd.inert = true;
+                dd.setAttribute('aria-hidden', 'true');
+            }
             if (btn) btn.setAttribute('aria-expanded', 'false');
         });
     }
+    closeAllDropdowns();
 
     allDropdownWraps.forEach(wrap => {
         const btn = wrap.querySelector('.nav-explore-btn');
@@ -181,6 +213,8 @@ function initStickyNav() {
             closeAllDropdowns();
             if (!isOpen) {
                 dd.classList.add('open');
+                dd.inert = false;
+                dd.setAttribute('aria-hidden', 'false');
                 btn.setAttribute('aria-expanded', 'true');
             }
         });
@@ -191,7 +225,14 @@ function initStickyNav() {
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeAllDropdowns();
+        if (e.key === 'Escape') {
+            closeAllDropdowns();
+            if (navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+                hamburger.focus();
+            }
+        }
     });
 
     // --- Hamburger (mobile) ---

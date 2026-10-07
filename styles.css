@@ -15317,6 +15317,7 @@ section.production-header.alice p {
 }
 
 .nav-dropdown {
+    visibility: hidden;
     position: absolute;
     top: calc(100% + 0.6rem);
     right: 0;
@@ -15333,6 +15334,7 @@ section.production-header.alice p {
 }
 
 .nav-dropdown.open {
+    visibility: visible;
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);

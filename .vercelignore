@@ -92,3 +92,6 @@ tests/
 
 # Approved transparent carved lettering used by the albums heading.
 !images/albums/original-carved-v6.png
+
+# Transparent nine-slice frame used by the microfiche reader.
+!images/microfiche-frame-v1.png

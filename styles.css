@@ -10173,147 +10173,144 @@ html {
     margin: 0 auto;
 }
 
+/* Alpha-transparent enamel frame; nine-slice keeps corners intact at any height. */
 .microfiche-viewer {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 12%),
-        linear-gradient(145deg, var(--fiche-case-mid) 0%, var(--fiche-case) 38%, var(--fiche-case-dark) 100%);
-    border: 1px solid rgba(255, 241, 185, 0.18);
-    border-radius: 8px 8px 4px 4px;
-    padding: 0.9rem;
-    box-shadow:
-        0 28px 70px rgba(0, 0, 0, 0.58),
-        0 0 0 1px rgba(0, 247, 194, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12),
-        inset 0 -24px 34px rgba(0, 0, 0, 0.28);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 0;
+    border: 26px solid transparent;
+    background: #101312;
+    background-clip: padding-box;
 }
 
-.microfiche-viewer:hover {
-    transform: translateY(-2px);
-    box-shadow:
-        0 34px 82px rgba(0, 0, 0, 0.62),
-        0 0 0 1px rgba(255, 219, 122, 0.2),
-        0 0 36px rgba(255, 219, 122, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.14),
-        inset 0 -24px 34px rgba(0, 0, 0, 0.28);
+/* Remove low-alpha color residue from the generated border, independently of content. */
+.microfiche-filter-defs { position: absolute; pointer-events: none; }
+.microfiche-viewer::before {
+    content: '';
+    position: absolute;
+    inset: -26px;
+    border: 26px solid transparent;
+    border-image: url('/images/microfiche-frame-v1.png') 80 / 26px / 0 stretch;
+    filter: url('#microfiche-clean-alpha') drop-shadow(0 12px 18px #0006);
+    pointer-events: none;
 }
 
 .microfiche-screen {
     position: relative;
     overflow: hidden;
-    border-radius: 6px 6px 3px 3px;
-    padding: 1.1rem;
-    background:
-        radial-gradient(ellipse at 50% 32%, rgba(255, 241, 185, 0.28) 0%, rgba(255, 219, 122, 0.12) 35%, transparent 72%),
-        linear-gradient(180deg, rgba(218, 246, 214, 0.24) 0%, rgba(122, 154, 102, 0.18) 55%, rgba(40, 32, 18, 0.32) 100%);
-    border: 1px solid rgba(255, 241, 185, 0.28);
-    box-shadow:
-        inset 0 0 0 1px rgba(0, 0, 0, 0.45),
-        inset 0 0 42px rgba(255, 219, 122, 0.24),
-        inset 0 0 120px rgba(0, 0, 0, 0.28);
+    padding: clamp(0.65rem, 2vw, 1.4rem);
+    border: 1px solid #0b0d0c;
+    border-radius: 9px;
+    background: #101312;
+    box-shadow: 0 1px 0 #ffffff26, inset 0 4px 10px #000,
+        inset 0 0 0 5px #1c201e;
 }
 
 .microfiche-screen::before {
     content: '';
     position: absolute;
-    inset: 0.7rem;
-    border: 1px solid rgba(255, 241, 185, 0.22);
-    background-image:
-        linear-gradient(rgba(38, 28, 16, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(38, 28, 16, 0.08) 1px, transparent 1px);
-    background-size: 42px 42px;
-    box-shadow:
-        inset 0 0 34px rgba(255, 241, 185, 0.18),
-        0 0 18px rgba(255, 219, 122, 0.12);
+    inset: 5px;
+    border: 1px solid #ffffff0e;
+    border-radius: 5px;
     pointer-events: none;
-    z-index: 0;
 }
 
 .microfiche-screen::after {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 6px),
-        radial-gradient(ellipse at center, transparent 0%, transparent 58%, rgba(0, 0, 0, 0.34) 100%);
+    border-radius: inherit;
+    box-shadow: inset 0 0 18px #0009;
     pointer-events: none;
     z-index: 4;
-    mix-blend-mode: soft-light;
 }
 
 .microfiche-lamp {
     position: absolute;
-    inset: 2.4rem 2rem auto;
-    height: 46%;
-    background: radial-gradient(ellipse at 50% 35%, rgba(255, 245, 198, 0.46) 0%, rgba(255, 219, 122, 0.18) 44%, transparent 74%);
-    filter: blur(10px);
+    inset: 15% 6% 0;
+    background: radial-gradient(ellipse, #fff0ba33, transparent 72%);
     pointer-events: none;
-    z-index: 0;
 }
 
 .testimonial-carousel {
     position: relative;
+    display: grid;
     width: 100%;
+    overflow: hidden;
+    border-radius: 5px;
+    background: #101312;
     z-index: 1;
 }
 
+/* All four sheets share a grid cell so the viewing window keeps a fixed height. */
 .testimonial-carousel .blurb-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(8px) scale(0.985);
-    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, transform 0.4s ease-in-out;
-}
-
-.testimonial-carousel .blurb-card.active {
     position: relative;
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
+    grid-area: 1 / 1;
+    min-width: 0;
+    width: 100%;
+    visibility: hidden;
+    filter: url('#microfiche-fresnel-refraction');
 }
 
+.testimonial-carousel .blurb-card.active,
 .testimonial-carousel .blurb-card.leaving {
-    transform: translateY(-7px) scale(0.99);
+    visibility: visible;
+}
+
+.testimonial-carousel .blurb-card.leaving { pointer-events: none; }
+
+/* The optical screen stays still while the projected film travels behind it. */
+.testimonial-carousel::before,
+.fiche-seek-light {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.testimonial-carousel::before {
+    z-index: 4;
+    background:
+        repeating-radial-gradient(circle at 50% 38%, #493b2210 0 0.7px, #fff9df0a 1px 1.5px, transparent 2px 4px),
+        radial-gradient(ellipse at 50% 38%, #fff9df12 0%, transparent 48%, #372a1924 100%);
+}
+
+.fiche-seek-light {
+    z-index: 5;
+    opacity: 0;
+    background:
+        linear-gradient(90deg, transparent 35%, #d9811812 43%, #f8bb5266 48%, #fff3cddd 49.6%, #fffcefff 50%, #fff3cddd 50.4%, #f8bb5266 52%, #d9811812 57%, transparent 65%),
+        radial-gradient(ellipse at 50% 42%, #fff8ddbb 0%, #ffd58966 12%, #e5982926 33%, transparent 65%),
+        conic-gradient(from 0deg at 50% 42%, transparent 12deg, #ffe1a333 17deg, transparent 23deg 54deg, #ffd17e26 59deg, transparent 65deg 114deg, #ffe9b333 120deg, transparent 127deg 160deg, #ffd17e33 165deg, transparent 172deg 197deg, #ffe1a333 203deg, transparent 210deg 246deg, #ffd17e26 252deg, transparent 259deg 297deg, #ffe9b333 303deg, transparent 310deg 337deg, #ffd17e26 343deg, transparent 350deg);
+    /* Normal compositing keeps amber rays visible against the pale film. */
+    mix-blend-mode: normal;
 }
 
 .blurb-card {
-    background:
-        radial-gradient(ellipse at 24% 5%, rgba(255, 255, 255, 0.54) 0%, transparent 36%),
-        radial-gradient(ellipse at 78% 94%, rgba(0, 247, 194, 0.1) 0%, transparent 34%),
-        repeating-linear-gradient(90deg, transparent 0 53px, rgba(38, 28, 16, 0.055) 53px 54px),
-        repeating-linear-gradient(0deg, transparent 0 39px, rgba(38, 28, 16, 0.055) 39px 40px),
-        linear-gradient(135deg, rgba(255, 241, 185, 0.95) 0%, rgba(223, 207, 150, 0.92) 100%);
-    color: var(--fiche-ink);
-    padding: 3.2rem 3.2rem 2.4rem;
-    border-radius: 2px;
-    border: 1px solid rgba(255, 241, 185, 0.72);
-    box-shadow:
-        0 20px 42px rgba(0, 0, 0, 0.32),
-        0 0 34px rgba(255, 219, 122, 0.22),
-        inset 0 0 0 1px rgba(38, 28, 16, 0.08),
-        inset 0 0 64px rgba(38, 28, 16, 0.12);
     position: relative;
     overflow: hidden;
     isolation: isolate;
+    padding: 3rem clamp(1.25rem, 4.6vw, 3.6rem);
+    color: var(--fiche-ink);
+    border: 1px solid #fdf2d0;
+    border-radius: 5px;
+    background: radial-gradient(ellipse at 50% 38%, #fffef0 0%, #f6efd2 52%, #d6c99e 100%);
+    box-shadow: 0 0 12px #fff2bb55, 0 0 38px #ffe3a52b,
+        inset 0 0 65px #71623d33, inset 0 0 8px #fff8d8;
 }
 
 .blurb-card::before {
     content: '';
     position: absolute;
-    inset: 0.75rem;
-    border: 1px solid rgba(38, 28, 16, 0.18);
-    background-image:
-        linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(38, 28, 16, 0.11) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
-        linear-gradient(0deg, transparent calc(50% - 0.5px), rgba(38, 28, 16, 0.09) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
-        radial-gradient(circle, rgba(38, 28, 16, 0.08) 0 1px, transparent 1.25px);
-    background-size: 100% 100%, 100% 100%, 9px 9px;
+    inset: 1.3rem;
+    border: 1px solid #574e3026;
+    background: linear-gradient(90deg, #5d502d 12px, transparent 12px) top left / 13px 1px no-repeat,
+        linear-gradient(#5d502d 12px, transparent 12px) top left / 1px 13px no-repeat,
+        linear-gradient(90deg, #5d502d 12px, transparent 12px) bottom right / 13px 1px no-repeat,
+        linear-gradient(#5d502d 12px, transparent 12px) bottom right / 1px 13px no-repeat;
     pointer-events: none;
     z-index: 0;
-    mix-blend-mode: multiply;
 }
+
 
 .blurb-card > * {
     position: relative;
@@ -10397,8 +10394,13 @@ html {
     }
 
     .microfiche-viewer {
-        padding: 0.55rem;
-        border-radius: 6px;
+        border-width: 18px;
+    }
+
+    .microfiche-viewer::before {
+        inset: -18px;
+        border-width: 18px;
+        border-image-width: 18px;
     }
 
     .microfiche-screen {
@@ -10411,7 +10413,7 @@ html {
     }
 
     .blurb-card {
-        padding: 3.1rem 0.9rem 1.3rem;
+        padding: 1.6rem 0.9rem 1.3rem;
         margin: 0;
     }
 
@@ -10444,7 +10446,7 @@ html {
     }
 
     .blurb-card {
-        padding: 3rem 0.75rem 1.1rem;
+        padding: 1.5rem 0.75rem 1.1rem;
         margin: 0;
     }
 
@@ -10921,163 +10923,84 @@ section.production-header.alice p {
     z-index: 0;
 }
 
-.carousel-nav {
-    text-align: center;
-    margin-bottom: 0.85rem;
+.microfiche-nav {
     position: relative;
     z-index: 2;
+    margin-bottom: 1.4rem;
 }
 
-.carousel-tabs {
+.microfiche-nav .carousel-tabs {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.35rem;
-    margin: 0;
-    padding: 0.38rem;
-    background:
-        linear-gradient(180deg, rgba(255, 241, 185, 0.12), transparent 45%),
-        rgba(6, 5, 11, 0.78);
-    border: 1px solid rgba(255, 241, 185, 0.18);
-    border-radius: 4px;
-    box-shadow:
-        inset 0 0 0 1px rgba(0, 0, 0, 0.38),
-        0 10px 20px rgba(0, 0, 0, 0.28);
+    gap: 0.75rem;
+    padding: 0.4rem;
+    background: #080b0a;
+    border: 1px solid #ffffff0e;
+    border-radius: 3px;
+    box-shadow: inset 0 2px 6px #000;
 }
 
-.carousel-tab {
-    font-family: 'Space Mono', 'Courier New', monospace;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: 1.2;
-    text-transform: uppercase;
-    color: rgba(39, 35, 27, 0.66);
-    background:
-        radial-gradient(circle at 18% 26%, rgba(39, 35, 27, 0.1) 0 1px, transparent 1.2px),
-        radial-gradient(circle at 76% 64%, rgba(39, 35, 27, 0.08) 0 1.4px, transparent 1.6px),
-        repeating-linear-gradient(88deg, transparent 0 9px, rgba(39, 35, 27, 0.05) 9px 10px),
-        linear-gradient(180deg, rgba(236, 229, 197, 0.62) 0%, rgba(181, 172, 137, 0.5) 100%);
-    background-size: 17px 17px, 23px 23px, 100% 100%, 100% 100%;
-    border: 1px solid rgba(236, 229, 197, 0.28);
-    border-radius: 2px;
-    cursor: pointer;
+.microfiche-nav .carousel-tab {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 3.65rem;
-    padding: 0.58rem 0.7rem;
-    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    position: relative;
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.16),
-        inset 0 -8px 12px rgba(39, 35, 27, 0.12),
-        0 0 0 1px rgba(0, 0, 0, 0.18);
-    text-shadow:
-        0.8px 0 rgba(39, 35, 27, 0.2),
-        -1px 0.6px rgba(39, 35, 27, 0.12),
-        0 0 2px rgba(39, 35, 27, 0.24);
+    min-width: 0;
+    min-height: 4.6rem;
+    aspect-ratio: 2 / 1;
+    padding: 0.45rem;
+    border: 1px solid #9f9b7e;
+    border-radius: 2px;
+    background: linear-gradient(135deg, #b2b09b, #737664);
+    cursor: pointer;
+    box-shadow: inset 0 0 16px #18221940, 0 2px 3px #0008;
+    transition: background 0.25s, box-shadow 0.25s, border-color 0.25s;
 }
 
-.carousel-tab-label {
-    display: inline-block;
-    position: relative;
-    z-index: 1;
-    transform: rotate(var(--label-angle, 0deg)) translateY(var(--label-drift-y, 0));
-    transform-origin: 50% 55%;
-    will-change: transform;
-}
-
-.carousel-tab:nth-child(1) .carousel-tab-label {
-    --label-angle: -3.2deg;
-    --label-drift-y: 1px;
-}
-
-.carousel-tab:nth-child(2) .carousel-tab-label {
-    --label-angle: 2.4deg;
-    --label-drift-y: -1px;
-}
-
-.carousel-tab:nth-child(3) .carousel-tab-label {
-    --label-angle: -1.4deg;
-    --label-drift-y: 0;
-}
-
-.carousel-tab:nth-child(4) .carousel-tab-label {
-    --label-angle: 3.6deg;
-    --label-drift-y: 1px;
-}
-
-.carousel-tab::before {
-    content: '';
-    display: none;
-}
-
-.carousel-tab::after {
+.microfiche-nav .carousel-tab::before {
     content: '';
     position: absolute;
-    inset: -12%;
-    background:
-        radial-gradient(circle at 16% 30%, rgba(39, 35, 27, 0.16) 0 1px, transparent 1.4px),
-        radial-gradient(circle at 58% 72%, rgba(39, 35, 27, 0.12) 0 1px, transparent 1.3px),
-        linear-gradient(92deg, transparent 0 18%, rgba(39, 35, 27, 0.08) 18% 20%, transparent 20% 100%),
-        repeating-linear-gradient(0deg, transparent 0 5px, rgba(255, 255, 255, 0.08) 5px 6px);
-    background-size: 19px 19px, 29px 29px, 100% 100%, 100% 100%;
-    mix-blend-mode: multiply;
-    opacity: 0.58;
+    inset: 0.35rem;
+    border: 1px solid #20271840;
+    background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 1px), #2027181c calc(25% - 1px) 25%),
+        repeating-linear-gradient(0deg, transparent 0 calc(33.333% - 1px), #2027181c calc(33.333% - 1px) 33.333%);
     pointer-events: none;
-    transform: rotate(-1.2deg);
 }
 
-.carousel-tab.active {
-    color: rgba(21, 18, 14, 0.84);
-    background:
-        radial-gradient(ellipse at 28% 16%, rgba(255, 255, 255, 0.62) 0%, transparent 46%),
-        radial-gradient(circle at 74% 62%, rgba(39, 35, 27, 0.12) 0 1.4px, transparent 1.6px),
-        repeating-linear-gradient(88deg, transparent 0 8px, rgba(39, 35, 27, 0.08) 8px 9px),
-        linear-gradient(180deg, rgba(255, 244, 202, 0.92) 0%, rgba(216, 199, 139, 0.78) 100%);
-    background-size: 100% 100%, 21px 21px, 100% 100%, 100% 100%;
-    border-color: rgba(255, 241, 185, 0.62);
-    transform: translateY(-1px);
-    box-shadow:
-        0 0 16px rgba(255, 219, 122, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -10px 14px rgba(39, 35, 27, 0.1),
-        0 0 0 1px rgba(0, 0, 0, 0.24);
+.fiche-index-card {
+    position: relative;
+    display: block;
+    width: 56%;
+    height: auto;
+    object-fit: contain;
+    transform: rotate(-1.4deg);
+    filter: url('#microfiche-clean-alpha') brightness(0.92) drop-shadow(0 1px 1px #0007);
+    transition: filter 0.25s, transform 0.25s;
+    pointer-events: none;
 }
-
-.carousel-tab.active::before {
-    display: none;
+.microfiche-nav .carousel-tab:nth-child(even) .fiche-index-card { transform: rotate(1.2deg); }
+.microfiche-nav .carousel-tab.active {
+    border-color: #fff0b7;
+    background: linear-gradient(135deg, #fff9d7, #d5cc9e);
+    box-shadow: 0 0 14px #ffe3a538, inset 0 0 16px #fff9dd70;
 }
-
-.carousel-tab.active::after {
-    opacity: 0.72;
+.microfiche-nav .carousel-tab.active .fiche-index-card {
+    filter: url('#microfiche-clean-alpha') brightness(1.04) drop-shadow(0 1px 1px #0007);
 }
-
-.carousel-tab:hover:not(.active) {
-    color: rgba(21, 18, 14, 0.74);
-    background:
-        radial-gradient(circle at 20% 26%, rgba(39, 35, 27, 0.12) 0 1px, transparent 1.2px),
-        repeating-linear-gradient(88deg, transparent 0 9px, rgba(39, 35, 27, 0.07) 9px 10px),
-        linear-gradient(180deg, rgba(244, 235, 198, 0.72), rgba(194, 181, 135, 0.58));
-    border-color: rgba(255, 241, 185, 0.4);
-    opacity: 1;
+.microfiche-nav .carousel-tab:hover:not(.active) { background: #c6c5aa; border-color: #dfd9b7; }
+.microfiche-nav .carousel-tab:hover:not(.active) .fiche-index-card {
+    filter: url('#microfiche-clean-alpha') brightness(1) drop-shadow(0 1px 1px #0007);
 }
+.microfiche-nav .carousel-tab:focus-visible { outline: 2px solid #fff5cd; outline-offset: 3px; }
 
 @media (max-width: 767px) {
-    .carousel-tabs {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        width: 100%;
-    }
-    .carousel-tab {
-        text-align: center;
-        font-size: 0.88rem;
-        min-height: 3.2rem;
-        padding: 0.48rem 0.5rem;
-        letter-spacing: 0;
-    }
+    .microfiche-nav { margin-bottom: 0.85rem; }
+    .microfiche-nav .carousel-tabs { gap: 0.4rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .blurb-card::before { inset: 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .microfiche-blurb .blurb-card, .microfiche-nav .carousel-tab, .microfiche-nav .fiche-index-card { transition: none; }
 }
 
 .testimonial {

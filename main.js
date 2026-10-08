@@ -3014,44 +3014,91 @@ function handleSwipe() {
 // Testimonial Carousel
 const carousel = document.querySelector('.testimonial-carousel');
 const cards = Array.from(carousel.children);
+const ficheSeekLight = document.createElement('div');
+ficheSeekLight.className = 'fiche-seek-light';
+ficheSeekLight.setAttribute('aria-hidden', 'true');
+carousel.append(ficheSeekLight);
 const dots = Array.from(document.querySelectorAll('.dot'));
 let currentIndex = 0;
 let isAutoRotating = true;
 let autoRotateInterval;
 
-function updateCarousel(newIndex) {
+const ficheReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let ficheAnimations = [];
+let ficheTransitionId = 0;
+
+function settleFicheTransition() {
+    // Invalidate prior completion handlers before canceling a rapid selection.
+    ficheTransitionId++;
+    ficheAnimations.forEach(animation => animation.cancel());
+    ficheAnimations = [];
+    cards.forEach(card => card.classList.remove('leaving'));
+}
+
+function updateCarousel(newIndex, direction = newIndex > currentIndex ? 1 : -1) {
+    if (newIndex === currentIndex) return;
+    settleFicheTransition();
+    const transitionId = ficheTransitionId;
     const currentCard = cards[currentIndex];
     const nextCard = cards[newIndex];
-    
-    // Remove active class and add leaving class to current card
+
     currentCard.classList.remove('active');
-    currentCard.classList.add('leaving');
-    
-    // After the out animation, hide the card and remove leaving class
-    setTimeout(() => {
-        currentCard.style.visibility = 'hidden';
-        currentCard.classList.remove('leaving');
-    }, 500);
-    
-    // Show and activate the next card
-    nextCard.style.visibility = 'visible';
+    currentCard.inert = true;
+    currentCard.setAttribute('aria-hidden', 'true');
     nextCard.classList.add('active');
-    
-    // Update dots
+    nextCard.inert = false;
+    nextCard.setAttribute('aria-hidden', 'false');
     dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === newIndex);
         dot.setAttribute('aria-pressed', index === newIndex ? 'true' : 'false');
     });
-    
     currentIndex = newIndex;
+
+    if (ficheReducedMotion.matches) return;
+    currentCard.classList.add('leaving');
+    const travel = direction * (carousel.clientWidth + 16);
+    // Both sheets move together; the projector flare follows their shared seam.
+    const keyframes = start => [
+        { transform: `translateX(${start}px)`, filter: "url('#microfiche-fresnel-refraction') blur(0px)", offset: 0 },
+        { transform: `translateX(${start - travel * 0.72}px)`, filter: "url('#microfiche-fresnel-refraction') blur(0.7px)", offset: 0.45 },
+        { transform: `translateX(${start - travel - direction * 3}px)`, filter: "url('#microfiche-fresnel-refraction') blur(0px)", offset: 0.88 },
+        { transform: `translateX(${start - travel + direction}px)`, filter: "url('#microfiche-fresnel-refraction') blur(0px)", offset: 0.96 },
+        { transform: `translateX(${start - travel}px)`, filter: "url('#microfiche-fresnel-refraction') blur(0px)", offset: 1 }
+    ];
+    const options = { duration: 760, easing: 'cubic-bezier(0.22, 0.68, 0.3, 1)', fill: 'both' };
+    const seamStart = travel / 2;
+    const flareFrames = keyframes(seamStart).map((frame, index) => ({
+        transform: frame.transform,
+        offset: frame.offset,
+        opacity: [0, 1, 0.35, 0.1, 0][index]
+    }));
+    ficheAnimations = [
+        currentCard.animate(keyframes(0), options),
+        nextCard.animate(keyframes(travel), options),
+        ficheSeekLight.animate(flareFrames, options),
+        carousel.animate([
+            { opacity: 1, offset: 0 },
+            { opacity: 0.55, offset: 0.35 },
+            { opacity: 0.85, offset: 0.75 },
+            { opacity: 1, offset: 1 }
+        ], { ...options, pseudoElement: '::before' })
+    ];
+    Promise.all(ficheAnimations.map(animation => animation.finished)).then(() => {
+        if (transitionId === ficheTransitionId) settleFicheTransition();
+    }).catch(() => { /* A newer selection or reduced-motion preference canceled this glide. */ });
 }
+
+ficheReducedMotion.addEventListener('change', () => {
+    if (ficheReducedMotion.matches) settleFicheTransition();
+});
 
 function rotateCards() {
     const nextIndex = (currentIndex + 1) % cards.length;
-    updateCarousel(nextIndex);
+    updateCarousel(nextIndex, 1);
 }
 
 function startAutoRotate() {
+    clearInterval(autoRotateInterval);
     if (isAutoRotating) {
         autoRotateInterval = setInterval(rotateCards, 45000);
     }
@@ -3061,14 +3108,11 @@ function stopAutoRotate() {
     clearInterval(autoRotateInterval);
 }
 
-// Initialize carousel
+// Initialize sheets; inactive audio controls and links stay out of the focus order.
 cards.forEach((card, index) => {
-    if (index === 0) {
-        card.classList.add('active');
-        card.style.visibility = 'visible';
-    } else {
-        card.style.visibility = 'hidden';
-    }
+    card.classList.toggle('active', index === 0);
+    card.inert = index !== 0;
+    card.setAttribute('aria-hidden', index === 0 ? 'false' : 'true');
 });
 startAutoRotate();
 
@@ -3148,11 +3192,11 @@ function handleTestimonialSwipe() {
         if (swipeDistance > 0) {
             // Swipe right - show previous testimonial
             const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
-            updateCarousel(prevIndex);
+            updateCarousel(prevIndex, -1);
         } else {
             // Swipe left - show next testimonial
             const nextIndex = (currentIndex + 1) % cards.length;
-            updateCarousel(nextIndex);
+            updateCarousel(nextIndex, 1);
         }
     }
 }

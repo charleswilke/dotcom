@@ -49,7 +49,7 @@
     <meta name="twitter:description" content="Writer, Conversational UX Product Designer and AI co-creation explorer.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="/styles.css?v=20261007-player-polish">
+    <link rel="stylesheet" href="/styles.css?v=20261007-microfiche-reader-v9">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -730,16 +730,29 @@
     </section>
 
     <section class="chatgpt-blurb microfiche-blurb" data-tuner-theme="dark">
+        <svg width="0" height="0" aria-hidden="true" focusable="false" class="microfiche-filter-defs">
+            <defs>
+                <filter id="microfiche-clean-alpha" color-interpolation-filters="sRGB">
+                    <feComponentTransfer>
+                        <feFuncA type="linear" slope="1.111111" intercept="-0.111111" />
+                    </feComponentTransfer>
+                </filter>
+                <filter id="microfiche-fresnel-refraction" x="-1%" y="-1%" width="102%" height="102%" color-interpolation-filters="sRGB">
+                    <feImage href="/images/microfiche-fresnel-displacement.svg" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="rings" />
+                    <feDisplacementMap in="SourceGraphic" in2="rings" scale="0.66" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+            </defs>
+        </svg>
         <div class="container">
             <div class="blurb-content microfiche-viewer">
                 <div class="microfiche-screen">
                     <div class="microfiche-lamp" aria-hidden="true"></div>
                     <nav class="carousel-nav microfiche-nav" aria-label="Industry perspectives archive">
                         <div class="carousel-tabs">
-                            <button class="dot carousel-tab active" aria-label="Carbon I: industry perspectives" aria-pressed="true"><span class="carousel-tab-label">Carbon I</span></button>
-                            <button class="dot carousel-tab" aria-label="Carbon II: more perspectives" aria-pressed="false"><span class="carousel-tab-label">Carbon II</span></button>
-                            <button class="dot carousel-tab" aria-label="Silicon I: AI summary from April 2025" aria-pressed="false"><span class="carousel-tab-label">Silicon I</span></button>
-                            <button class="dot carousel-tab" aria-label="Silicon II: AI summary from April 2026" aria-pressed="false"><span class="carousel-tab-label">Silicon II</span></button>
+                            <button class="dot carousel-tab active" aria-label="Carbon I: industry perspectives" aria-pressed="true"><img class="fiche-index-card" src="/images/microfiche-carbon-i-index-v3.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" /></button>
+                            <button class="dot carousel-tab" aria-label="Carbon II: more perspectives" aria-pressed="false"><img class="fiche-index-card" src="/images/microfiche-carbon-ii-index-v3.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" /></button>
+                            <button class="dot carousel-tab" aria-label="Silicon I: AI summary from April 2025" aria-pressed="false"><img class="fiche-index-card" src="/images/microfiche-silicon-i-index-v3.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" /></button>
+                            <button class="dot carousel-tab" aria-label="Silicon II: AI summary from April 2026" aria-pressed="false"><img class="fiche-index-card" src="/images/microfiche-silicon-ii-index-v3.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" /></button>
                         </div>
                     </nav>
                     <div class="testimonial-carousel">
@@ -1031,6 +1044,6 @@
     <p id="aboutFootnoteDescription">I design how the AI interprets requests and coordinates its response, translating product intent into instructions that guide its behavior. This includes IQ’s voice and tone, and how and when it chooses tools to use.</p>
 </div>
 <script src="/vendor/dompurify.min.js?v=3.4.15" defer></script>
-<script src="/main.js?v=20261007-player-polish" defer></script>
+<script src="/main.js?v=20261007-microfiche-reader-v9" defer></script>
 </body>
 </html>

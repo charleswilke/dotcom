@@ -10931,6 +10931,8 @@ section.production-header.alice p {
 
 .microfiche-nav .carousel-tabs {
     display: grid;
+    width: 100%;
+    margin-inline: auto;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.75rem;
     padding: 0.4rem;
@@ -10946,9 +10948,8 @@ section.production-header.alice p {
     align-items: center;
     justify-content: center;
     min-width: 0;
-    min-height: 4.6rem;
-    aspect-ratio: 2 / 1;
-    padding: 0.45rem;
+    min-height: 2.9rem;
+    padding: 0.3rem 0.45rem;
     border: 1px solid #9f9b7e;
     border-radius: 2px;
     background: linear-gradient(135deg, #b2b09b, #737664);
@@ -10970,7 +10971,7 @@ section.production-header.alice p {
 .fiche-index-card {
     position: relative;
     display: block;
-    width: 56%;
+    width: 57.6%;
     height: auto;
     object-fit: contain;
     transform: rotate(-1.4deg);
@@ -10995,7 +10996,10 @@ section.production-header.alice p {
 
 @media (max-width: 767px) {
     .microfiche-nav { margin-bottom: 0.85rem; }
-    .microfiche-nav .carousel-tabs { gap: 0.4rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .microfiche-nav .carousel-tabs { width: 100%; gap: 0.25rem; padding: 0.25rem; }
+    .microfiche-nav .carousel-tab { min-height: 2.5rem; padding: 0.2rem 0.1rem; }
+    .microfiche-nav .carousel-tab::before { inset: 0.2rem; }
+    .microfiche-nav .fiche-index-card { width: 73.6%; }
     .blurb-card::before { inset: 0.5rem; }
 }
 

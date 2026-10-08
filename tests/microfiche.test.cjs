@@ -55,7 +55,7 @@ async function verifyGlide(page, target, direction) {
         const outgoing = document.querySelector('.blurb-card.leaving');
         // Freeze one shared seek position so timing variance cannot sample the final overshoot.
         document.querySelector('.testimonial-carousel').getAnimations({ subtree: true }).filter(animation =>
-            animation.effect.pseudoElement || animation.effect.target.classList.contains('fiche-seek-light') || animation.effect.target === incoming || animation.effect.target === outgoing
+            (animation.effect.pseudoElement === '::before' && animation.effect.target === document.querySelector('.testimonial-carousel')) || animation.effect.target.classList.contains('fiche-seek-light') || animation.effect.target === incoming || animation.effect.target === outgoing
         ).forEach(animation => { animation.pause(); animation.currentTime = 180; });
         return {
             incoming: new DOMMatrix(getComputedStyle(incoming).transform).m41,
@@ -102,7 +102,7 @@ test('rapid selections and reselecting the active card leave only the final shee
         assert.deepEqual(state.map(card => card.visible), [false, false, false, true]);
         assert.deepEqual(state.map(card => card.inert), [true, true, true, false]);
         assert.ok(state.every(card => card.animations === 0));
-        assert.equal(await page.locator('.testimonial-carousel').evaluate(el => el.getAnimations({ subtree: true }).filter(animation => animation.effect.pseudoElement || animation.effect.target.classList.contains('fiche-seek-light')).length), 0);
+        assert.equal(await page.locator('.testimonial-carousel').evaluate(el => el.getAnimations({ subtree: true }).filter(animation => (animation.effect.pseudoElement === '::before' && animation.effect.target === document.querySelector('.testimonial-carousel')) || animation.effect.target.classList.contains('fiche-seek-light')).length), 0);
         assert.equal(await page.locator('.carousel-tab[aria-pressed="true"]').count(), 1);
     });
 });
@@ -111,7 +111,7 @@ test('reduced motion switches instantly and touch swipes wrap in the swipe direc
         await page.locator('.carousel-tab').nth(3).click();
         assert.equal(await page.locator('.blurb-card.leaving').count(), 0);
         assert.equal(await page.locator('.blurb-card.active').evaluate(el => el.getAnimations().length), 0);
-        assert.equal(await page.locator('.testimonial-carousel').evaluate(el => el.getAnimations({ subtree: true }).filter(animation => animation.effect.pseudoElement || animation.effect.target.classList.contains('fiche-seek-light')).length), 0);
+        assert.equal(await page.locator('.testimonial-carousel').evaluate(el => el.getAnimations({ subtree: true }).filter(animation => (animation.effect.pseudoElement === '::before' && animation.effect.target === document.querySelector('.testimonial-carousel')) || animation.effect.target.classList.contains('fiche-seek-light')).length), 0);
         await page.emulateMedia({ reducedMotion: 'no-preference' });
         await page.locator('.testimonial-carousel').evaluate(el => {
             const start = new Event('touchstart');

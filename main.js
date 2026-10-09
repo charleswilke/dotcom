@@ -3026,6 +3026,57 @@ let autoRotateInterval;
 const ficheReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let ficheAnimations = [];
 let ficheTransitionId = 0;
+const ficheBulbAnimations = new Map();
+const ficheBulbLevels = [0.94, 0.86, 1, 0.90];
+// Decorative air around each lamp inherits its level, including the cooldown.
+dots.filter(dot => dot.matches('.microfiche-nav .carousel-tab')).forEach(dot => {
+    const atmosphere = document.createElement('span');
+    atmosphere.className = 'fiche-bulb-atmosphere';
+    atmosphere.setAttribute('aria-hidden', 'true');
+    dot.append(atmosphere);
+});
+
+function updateFicheBulb(dot, index, lit) {
+    if (!dot.matches('.microfiche-nav .carousel-tab')) return;
+    // Capture the live level before canceling so rapid clicks reverse smoothly.
+    const level = parseFloat(getComputedStyle(dot).getPropertyValue('--fiche-bulb')) || 0;
+    ficheBulbAnimations.get(dot)?.cancel();
+    ficheBulbAnimations.delete(dot);
+    const target = lit ? ficheBulbLevels[index] : 0;
+    dot.style.setProperty('--fiche-bulb', target);
+    if (ficheReducedMotion.matches || level === target) return;
+
+    let frames;
+    if (!lit) {
+        // Residual filament heat drops quickly, then fades through a warm tail.
+        frames = [
+            { '--fiche-bulb': level, offset: 0 },
+            { '--fiche-bulb': level * 0.48, offset: 0.24 },
+            { '--fiche-bulb': level * 0.12, offset: 0.62 },
+            { '--fiche-bulb': 0, offset: 1 }
+        ];
+    } else if (index === 2 && level < 0.35) {
+        // Silicon I has an aging starter: two soft catches, only at ignition.
+        frames = [
+            { '--fiche-bulb': level, offset: 0 },
+            { '--fiche-bulb': 0.58, offset: 0.18 },
+            { '--fiche-bulb': 0.30, offset: 0.29 },
+            { '--fiche-bulb': 0.76, offset: 0.46 },
+            { '--fiche-bulb': 0.59, offset: 0.57 },
+            { '--fiche-bulb': target, offset: 1 }
+        ];
+    } else {
+        frames = [{ '--fiche-bulb': level }, { '--fiche-bulb': target }];
+    }
+    const animation = dot.animate(frames, {
+        duration: lit ? (index === 2 ? 980 : 620) : 1450,
+        easing: 'ease-in-out'
+    });
+    ficheBulbAnimations.set(dot, animation);
+    animation.finished.then(() => {
+        if (ficheBulbAnimations.get(dot) === animation) ficheBulbAnimations.delete(dot);
+    }).catch(() => { /* A newer selection resumed from the current lamp level. */ });
+}
 
 function settleFicheTransition() {
     // Invalidate prior completion handlers before canceling a rapid selection.
@@ -3049,6 +3100,7 @@ function updateCarousel(newIndex, direction = newIndex > currentIndex ? 1 : -1) 
     nextCard.inert = false;
     nextCard.setAttribute('aria-hidden', 'false');
     dots.forEach((dot, index) => {
+        if (index === currentIndex || index === newIndex) updateFicheBulb(dot, index, index === newIndex);
         dot.classList.toggle('active', index === newIndex);
         dot.setAttribute('aria-pressed', index === newIndex ? 'true' : 'false');
     });
@@ -3089,7 +3141,11 @@ function updateCarousel(newIndex, direction = newIndex > currentIndex ? 1 : -1) 
 }
 
 ficheReducedMotion.addEventListener('change', () => {
-    if (ficheReducedMotion.matches) settleFicheTransition();
+    if (ficheReducedMotion.matches) {
+        settleFicheTransition();
+        ficheBulbAnimations.forEach(animation => animation.cancel());
+        ficheBulbAnimations.clear();
+    }
 });
 
 function rotateCards() {

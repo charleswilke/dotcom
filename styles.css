@@ -10945,7 +10945,15 @@ section.production-header.alice p {
     box-shadow: inset 0 2px 6px #000;
 }
 
+/* One continuous lamp level drives the glass, paper, and spill together. */
+@property --fiche-bulb {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
 .microfiche-nav .carousel-tab {
+    --fiche-bulb: 0;
     position: relative;
     display: flex;
     align-items: center;
@@ -10953,12 +10961,20 @@ section.production-header.alice p {
     min-width: 0;
     min-height: 2.9rem;
     padding: 0.3rem 0.45rem;
-    border: 1px solid #9f9b7e;
+    border: 1px solid rgb(calc(77 + var(--fiche-bulb) * 178) calc(83 + var(--fiche-bulb) * 157) calc(68 + var(--fiche-bulb) * 115));
     border-radius: 2px;
-    background: linear-gradient(135deg, #b2b09b, #737664);
+    background:
+        radial-gradient(ellipse at 38% 48%, rgb(255 249 215 / calc(var(--fiche-bulb) * 0.97)), transparent 82%),
+        radial-gradient(ellipse at 76% 58%, rgb(255 232 166 / calc(var(--fiche-bulb) * 0.82)), transparent 78%),
+        linear-gradient(rgb(255 239 181 / calc(var(--fiche-bulb) * 0.48)), rgb(255 226 150 / calc(var(--fiche-bulb) * 0.35))),
+        linear-gradient(135deg, #353e34, #1e2923);
     cursor: pointer;
-    box-shadow: inset 0 0 16px #18221940, 0 2px 3px #0008;
-    transition: background 0.25s, box-shadow 0.25s, border-color 0.25s;
+    box-shadow: inset 0 0 16px #18221940, 0 2px 3px #0008,
+        inset 0 0 16px rgb(255 243 194 / calc(var(--fiche-bulb) * 0.70)),
+        0 0 12px rgb(255 239 181 / calc(var(--fiche-bulb) * 0.50)),
+        0 0 36px rgb(255 216 137 / calc(var(--fiche-bulb) * 0.46)),
+        0 0 65px rgb(255 209 121 / calc(var(--fiche-bulb) * 0.20));
+    isolation: isolate;
 }
 
 .microfiche-nav .carousel-tab::before {
@@ -10969,6 +10985,20 @@ section.production-header.alice p {
     background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 1px), #2027181c calc(25% - 1px) 25%),
         repeating-linear-gradient(0deg, transparent 0 calc(33.333% - 1px), #2027181c calc(33.333% - 1px) 33.333%);
     pointer-events: none;
+    z-index: 1;
+}
+
+/* Frosted glass diffuses the bulb; a fixed reflection sits in front of the label. */
+.microfiche-nav .carousel-tab::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(115deg, #ffffff14, transparent 38%, #ffffff05 65%, transparent),
+        radial-gradient(ellipse at 42% 50%, rgb(255 245 205 / calc(var(--fiche-bulb) * 0.22)), transparent 78%);
+    box-shadow: inset 0 1px 1px #ffffff38, inset 0 -2px 4px #151b1933;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .fiche-index-card {
@@ -10978,24 +11008,61 @@ section.production-header.alice p {
     height: auto;
     object-fit: contain;
     transform: rotate(-1.4deg);
-    filter: url('#microfiche-clean-alpha') brightness(0.92) drop-shadow(0 1px 1px #0007);
-    transition: filter 0.25s, transform 0.25s;
+    filter: url('#microfiche-clean-alpha') brightness(calc(0.80 + var(--fiche-bulb) * 0.34)) drop-shadow(0 1px 1px #0007);
+    transition: transform 0.25s;
+    z-index: 1;
     pointer-events: none;
 }
 .microfiche-nav .carousel-tab:nth-child(even) .fiche-index-card { transform: rotate(1.2deg); }
 .microfiche-nav .carousel-tab.active {
-    border-color: #fff0b7;
-    background: linear-gradient(135deg, #fff9d7, #d5cc9e);
-    box-shadow: 0 0 14px #ffe3a538, inset 0 0 16px #fff9dd70;
+    --fiche-bulb: 0.94;
 }
-.microfiche-nav .carousel-tab.active .fiche-index-card {
-    filter: url('#microfiche-clean-alpha') brightness(1.04) drop-shadow(0 1px 1px #0007);
-}
-.microfiche-nav .carousel-tab:hover:not(.active) { background: #c6c5aa; border-color: #dfd9b7; }
-.microfiche-nav .carousel-tab:hover:not(.active) .fiche-index-card {
-    filter: url('#microfiche-clean-alpha') brightness(1) drop-shadow(0 1px 1px #0007);
-}
+.microfiche-nav .carousel-tab:nth-child(2).active { --fiche-bulb: 0.86; }
+.microfiche-nav .carousel-tab:nth-child(3).active { --fiche-bulb: 1; }
+.microfiche-nav .carousel-tab:nth-child(4).active { --fiche-bulb: 0.90; }
+.microfiche-nav .carousel-tab:hover:not(.active)::after { background-color: #ffffff0d; }
 .microfiche-nav .carousel-tab:focus-visible { outline: 2px solid #fff5cd; outline-offset: 3px; }
+
+/* Sparse airborne detail stays close to the lamp, never covering the controls. */
+.fiche-bulb-atmosphere {
+    position: absolute;
+    inset: -24px -20px;
+    pointer-events: none;
+    opacity: var(--fiche-bulb);
+    z-index: 3;
+}
+.fiche-bulb-atmosphere::before {
+    content: '';
+    position: absolute;
+    inset: -10px -14px;
+    background: conic-gradient(from 12deg at 48% 52%,
+        transparent 0deg 48deg, #fff1be33 54deg, transparent 63deg 116deg,
+        #ffe4a529 122deg, transparent 131deg 231deg,
+        #fff1be26 239deg, transparent 247deg 301deg,
+        #ffe4a52e 309deg, transparent 318deg);
+    mask-image: radial-gradient(ellipse, transparent 26%, #0009 49%, transparent 73%);
+    filter: blur(2px);
+}
+.fiche-bulb-atmosphere::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 14% 22%, #ffedbd99 0 0.7px, transparent 1.5px),
+        radial-gradient(circle at 32% 9%, #fff4d16b 0 0.6px, transparent 1.4px),
+        radial-gradient(circle at 76% 17%, #ffedbd80 0 0.8px, transparent 1.6px),
+        radial-gradient(circle at 93% 46%, #fff4d16b 0 0.6px, transparent 1.4px),
+        radial-gradient(circle at 87% 85%, #ffedbd73 0 0.7px, transparent 1.5px),
+        radial-gradient(circle at 22% 91%, #fff4d159 0 0.6px, transparent 1.4px);
+    animation: fiche-dust-drift 13s ease-in-out infinite alternate;
+    animation-play-state: paused;
+}
+.carousel-tab.active .fiche-bulb-atmosphere::after { animation-play-state: running; }
+.carousel-tab:nth-child(even) .fiche-bulb-atmosphere::after { animation-delay: -6s; }
+@keyframes fiche-dust-drift {
+    from { transform: translate(-2px, 3px); opacity: 0.45; }
+    to { transform: translate(3px, -4px); opacity: 0.85; }
+}
 
 @media (max-width: 767px) {
     .microfiche-nav { margin-bottom: 0.45rem; }
@@ -11003,11 +11070,13 @@ section.production-header.alice p {
     .microfiche-nav .carousel-tab { min-height: 2.5rem; padding: 0.2rem 0.1rem; }
     .microfiche-nav .carousel-tab::before { inset: 0.2rem; }
     .microfiche-nav .fiche-index-card { width: 73.6%; }
+    .fiche-bulb-atmosphere { inset: -14px -8px; }
     .blurb-card::before { inset: 0.5rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .microfiche-blurb .blurb-card, .microfiche-nav .carousel-tab, .microfiche-nav .fiche-index-card { transition: none; }
+    .fiche-bulb-atmosphere::after { animation: none; opacity: 0.6; }
 }
 
 .testimonial {

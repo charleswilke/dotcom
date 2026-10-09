@@ -4,7 +4,8 @@
   <!-- All lettering is editable vector geometry. No fonts or external assets required.
        Each glyph-* group is the letter in lettering space (pre-skew). pos-* places it on the arc.
        Every letter is drawn as one stack (extrusion, rim light, face, scanlines) inside a group
-       masked by the dilated stack of the letter in front of it, so the gutter cuts the whole stack. -->
+       masked by the dilated stack of the letter in front of it, so the gutter cuts the whole stack. H/A and W/i use a wider face-only cut
+       while preserving the coral backing in those gutters. -->
   <defs>
     <linearGradient id="cream" gradientUnits="userSpaceOnUse" x1="0" y1="8" x2="0" y2="162">
       <stop offset="0" stop-color="#fff5d5"/>
@@ -50,12 +51,14 @@
     <g id="pos-h" transform="translate(49 32) skewX(-14)"><use href="#glyph-h"/></g>
     <g id="pos-a" transform="translate(49 32) skewX(-14)"><use href="#glyph-a"/></g>
     <g id="pos-c" transform="translate(49 32) skewX(-14)"><use href="#glyph-c"/></g>
-    <mask id="cut-h" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-c" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#pos-a" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="cut-h" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-c" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#pos-a" transform="translate(0 0)" fill="black" stroke="black" stroke-width="18" stroke-linejoin="round"/></mask>
+    <mask id="cut-h-backing" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-c" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-r" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-a" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-l-first" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-r" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-e-first" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-l-first" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-s" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-e-first" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
-    <mask id="cut-w" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-s" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#pos-i" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="cut-w" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-s" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#pos-i" transform="translate(0 1)" fill="black" stroke="black" stroke-width="14" stroke-linejoin="round"/></mask>
+    <mask id="cut-w-backing" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-s" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-l-last" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-i" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-k" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-l-last" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-e-last" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-k" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
@@ -91,15 +94,18 @@
       <use href="#pos-l-last" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
       <use href="#pos-l-last" fill="url(#scanlines)"/>
     </g>
-    <g mask="url(#cut-w)">
+    <g mask="url(#cut-w-backing)">
       <use href="#pos-w" transform="translate(5 5)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-w" transform="translate(4 4)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-w" transform="translate(3 3)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-w" transform="translate(2 2)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-w" transform="translate(1 1)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
-      <use href="#pos-w" transform="translate(-1.6 -1.6)" fill="#fffdf2" stroke="#fffdf2" stroke-width="3" stroke-linejoin="miter"/>
-      <use href="#pos-w" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
-      <use href="#pos-w" fill="url(#scanlines)"/>
+      <!-- Keep the coral extrusion visible beneath the wider face gutter. -->
+      <g mask="url(#cut-w)">
+        <use href="#pos-w" transform="translate(-1.6 -1.6)" fill="#fffdf2" stroke="#fffdf2" stroke-width="3" stroke-linejoin="miter"/>
+        <use href="#pos-w" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
+        <use href="#pos-w" fill="url(#scanlines)"/>
+      </g>
     </g>
     <g>
       <use href="#pos-i" transform="translate(5 5)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
@@ -151,15 +157,18 @@
       <use href="#pos-r" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
       <use href="#pos-r" fill="url(#scanlines)"/>
     </g>
-    <g mask="url(#cut-h)">
+    <g mask="url(#cut-h-backing)">
       <use href="#pos-h" transform="translate(5 5)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-h" transform="translate(4 4)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-h" transform="translate(3 3)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-h" transform="translate(2 2)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-h" transform="translate(1 1)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
-      <use href="#pos-h" transform="translate(-1.6 -1.6)" fill="#fffdf2" stroke="#fffdf2" stroke-width="3" stroke-linejoin="miter"/>
-      <use href="#pos-h" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
-      <use href="#pos-h" fill="url(#scanlines)"/>
+      <!-- Keep the coral extrusion visible beneath the wider face gutter. -->
+      <g mask="url(#cut-h)">
+        <use href="#pos-h" transform="translate(-1.6 -1.6)" fill="#fffdf2" stroke="#fffdf2" stroke-width="3" stroke-linejoin="miter"/>
+        <use href="#pos-h" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
+        <use href="#pos-h" fill="url(#scanlines)"/>
+      </g>
     </g>
     <g>
       <use href="#pos-a" transform="translate(5 5)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>

@@ -12,8 +12,8 @@
         '        <a href="/" class="nav-logo" id="navLogo" aria-label="Charles Wilke — Home">' + (isHome ? '<img src="/images/cw-nav-monogram-v7.svg" width="84" height="43" alt="">' : 'Charles Wilke') + '</a>\n' +
         '        <div class="nav-links" id="navLinks">\n' +
         '            <a href="' + p + '#l.ai.bor" class="nav-link"' + ds('l.ai.bor') + '>Writing</a>\n' +
-        '            <a href="' + p + '#game-cartridges" class="nav-link"' + ds('game-cartridges') + '>Games</a>\n' +
         '            <a href="' + p + '#albums" class="nav-link"' + ds('albums') + '>Music</a>\n' +
+        '            <a href="' + p + '#game-cartridges" class="nav-link"' + ds('game-cartridges') + '>Games</a>\n' +
         '            <div class="nav-explore-wrap">\n' +
         '                <button class="nav-explore-btn" id="navExploreBtn" aria-haspopup="true" aria-expanded="false">\n' +
         '                    Explore <span class="nav-explore-arrow">&#9662;</span>\n' +

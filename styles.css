@@ -9415,7 +9415,7 @@ html {
    ========================================================= */
 .album-cases-section {
     position: relative;
-    padding: clamp(1.25rem, 2vw, 2rem) 0 4.6rem;
+    padding: clamp(0.65rem, 1vw, 1rem) 0 4.6rem;
     scroll-margin-top: 72px;
     color: var(--light);
     overflow: hidden;
@@ -9480,7 +9480,7 @@ html {
 .albums-header-artwork {
     position: relative;
     width: min(100%, 510px);
-    margin: 0 auto clamp(2rem, 3.5vw, 2.8rem);
+    margin: 0 auto clamp(1rem, 1.75vw, 1.4rem);
     padding: 12px 15px 7px;
     color: #29231e;
     transform: rotate(-2.5deg);
@@ -9512,7 +9512,7 @@ html {
     display: block;
     width: 100%;
     height: auto;
-    margin: -9px auto 0;
+    margin: -18px auto 0;
 }
 
 @media (max-width: 600px) {

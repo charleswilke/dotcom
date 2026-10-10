@@ -6062,7 +6062,7 @@ function initGWORLightbox() {
         { title: 'Dearly Beloved', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'As We Speak It', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
         { title: 'When Doctrine Slips', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: 'Surviving Salem', file: '/audio/grief-without-ritual/surviving-salem.mp3', cover: '/audio/grief-without-ritual/surviving-salem-title.webp', article: 'https://charleswilke.substack.com/p/surviving-salem' }
+        { title: "Haven't Heard From You Yet", file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title.webp', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');

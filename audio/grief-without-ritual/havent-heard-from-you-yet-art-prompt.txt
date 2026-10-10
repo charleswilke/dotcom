@@ -1,0 +1,11 @@
+Generated with the built-in image_gen tool, 2026-10-10.
+Style references: waiting-for-something-title.webp, dearly-beloved-title.webp,
+surviving-salem-title.webp (all in this directory).
+
+Use case: stylized-concept
+Asset type: square 1024x1024 song title artwork for track eleven of Grief without Ritual.
+Primary request: Create a NEW design belonging precisely to the visual series shown in the three reference images. References are STYLE REFERENCES only, not edit targets. Match their antique technical-manual print aesthetic, aged warm cream paper, subtle worn ink texture, thin black rectangular border, enormous condensed uppercase letterpress song typography occupying the top 38%, and ingenious metaphorical engineering diagrams below.
+Text (verbatim): "HAVEN'T HEARD" on first line, "FROM YOU YET" on second line. Top line black, second line muted brick red. Fit ALL words legibly, bold condensed type like the references; straight apostrophe acceptable.
+Lower panel: small "FIG. 11" top left. An elegant 1950s engineering schematic of an acoustic listening apparatus: large black line-art listening horn at left connected by a cable to an analog signal meter / waveform monitor at right. Below the horn is a simple empty chair drawn as a technical side elevation, suggesting a seat waiting for the listener's contribution. A dashed signal path from the empty chair toward the horn, a small muted ochre sound-wave accent. Monitor trace begins flat and ends with one small irregular hopeful waveform. Fine leader lines annotate the apparatus with these EXACT small labels: "INPUT: YOURS", "CHANNEL: OPEN", "SIGNAL: PENDING". At bottom right a neat boxed instructions panel reading "1. MAKE THE THING." "2. MAKE A SOUND." "3. CARRY ON." Bottom left small technical footer "GWOR / 011".
+Style/medium: flat antique lithographic technical illustration, midcentury instruction plate, extremely disciplined composition, tactile printed paper, black drafting lines with restrained brick red and ochre accents. Same family as the reference artwork; no photographic realism, no 3D, no neon, no modern UI. Keep diagram uncluttered, witty and inviting, emotionally hopeful rather than bleak.
+Constraints: square image, exact main title, all artwork inside border with adequate margins, no extra titles or album name, no watermark.

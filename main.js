@@ -6362,13 +6362,13 @@ function initGameLightbox() {
             // bezel shows through (see games/TootsJam/styles.css html.embed)
             src: (isLocal ? '/games/TootsJam/tootsjam.html' : '/tootsjam/') + '?embed=1',
             embed: true,
-            tile: document.querySelector('.game-cartridge-tootsjam')
+            tiles: document.querySelectorAll('.game-cartridge-tootsjam, .showcase-item-tootsjam')
         },
         'spacetoots': {
             title: 'Space Toots',
             page: '/spacetoots/',
             src: isLocal ? '/games/SpaceToots/index.html' : '/spacetoots/',
-            tile: document.querySelector('.game-cartridge-spacetoots')
+            tiles: document.querySelectorAll('.game-cartridge-spacetoots')
         }
     };
 
@@ -6407,12 +6407,12 @@ function initGameLightbox() {
     }
 
     Object.keys(games).forEach((key) => {
-        if (games[key].tile) {
-            games[key].tile.addEventListener('click', (e) => {
+        games[key].tiles.forEach((tile) => {
+            tile.addEventListener('click', (e) => {
                 e.preventDefault();
                 openGame(key);
             });
-        }
+        });
     });
 
     if (closeBtn) closeBtn.addEventListener('click', closeGame);

@@ -2762,9 +2762,10 @@ section.production-header.alice .production-details p strong {
 }
 
 .showcase-item-tootsjam {
-    --showcase-accent: #44dd88;
-    --showcase-accent-soft: rgba(68, 221, 136, 0.18);
-    --showcase-media-tint: rgba(68, 221, 136, 0.12);
+    --showcase-accent: #6cd9d0;
+    --showcase-edge: #91eee5;
+    --showcase-accent-soft: rgba(108, 217, 208, 0.18);
+    --showcase-media-tint: rgba(108, 217, 208, 0.12);
     --crt-cool: 25% 80%;
     --crt-warm: 60% 22%;
 }

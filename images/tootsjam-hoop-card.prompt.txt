@@ -1,0 +1,10 @@
+Generated with the built-in image_gen tool on 2026-10-10.
+Style reference: images/space-toots-shepherd-card.webp.
+Game references: images/tootsjam-card.webp, images/games/tootsjam-gameplay.webp.
+
+Use case: stylized-concept
+Asset type: portfolio Recently title-card artwork, wide landscape aspect ratio 1400:910.
+Primary request: Create a new TOOTS JAM basketball arcade game title card in the same bold textured cut-paper poster family as reference image 1.
+Input images: Image 1 (Space Toots) is the STYLE reference only: handmade angular paper lettering, spare composition, flat cut-paper silhouettes, rich dark negative space, subtly worn paper texture. Image 2 (existing Toots Jam card) is the GAME identity and palette reference, not a style/layout to copy. Image 3 (gameplay screenshot) is reference for the urban night basketball setting, not a layout to copy.
+Composition: giant jagged cream TOOTS above giant burnt-orange JAM on the left. On the right, one bold orange basketball with black curved seams, swooping toward a stylized cream backboard, orange rim and angular cream hanging net. One broad curved turquoise paper shot trail emphasizes an exuberant trick shot, with a few angular orange motion sparks at the rim. Low simple charcoal-indigo cut-paper city skyline along the bottom right. Let the hoop, ball and type dominate; keep skyline subordinate. Deep midnight indigo backdrop. Use warm aged cream, burnt orange, turquoise accents, near-black. Strong screenprint-like grain and irregular hand-cut edges, restrained layered paper texture, no gradients or glossy 3D. Keep all important elements inside safe margins. Full bleed landscape artwork, no frame.
+Text verbatim: "TOOTS" / "JAM". No subtitle or additional text. Legible at thumbnail size. No screenshot UI, no score counters, no watermark, no photorealism.

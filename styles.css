@@ -8096,8 +8096,11 @@ html {
     letter-spacing: 2px;
 }
 
-.spotlight-description {
-    /* Keep wrapped subtitles balanced instead of leaving a short final line. */
+.spotlight-production .spotlight-description {
+    /* Give longer subtitles two balanced lines, while short ones still fit. */
+    max-width: 30ch;
+    margin-left: 0;
+    margin-right: 0;
     text-wrap: balance;
     font-size: 1.2rem;
     line-height: 1.6;
@@ -8112,6 +8115,10 @@ html {
     .spotlight-title,
     .spotlight-description {
         text-align: right;
+    }
+
+    .spotlight-production .spotlight-description {
+        margin-left: auto;
     }
 }
 

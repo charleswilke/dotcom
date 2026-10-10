@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool on 2026-10-10.
+Style references: exploring-laibor-spiral-card.webp, junkyard-cabaret-barker-card.webp.
+Subject reference: audio/grief-without-ritual/grief-without-ritual-cover-card.webp.
+
+Use case: stylized-concept
+Asset type: wide portfolio Recently card illustration, landscape 1400:910 aspect ratio.
+Primary request: Create a new Grief without Ritual card that belongs to the same cut-paper poster family as reference images 1 and 2, using the empty folding chair motif from album cover reference image 3.
+Input images: Image 1 and Image 2 are style references only (jagged handmade lettering, confident simple paper silhouettes, grainy printed texture, large legible type and one main motif). Image 3 is the GWOR subject and palette reference, not a layout to duplicate.
+Composition: large hand-cut cream lettering on the left, stacked in three lines reading exactly "GRIEF" / "WITHOUT" / "RITUAL"; on the right a single empty unfolded folding chair in cream, black and muted brick red, with one restrained brick-red assembly arrow beside its hinge, recalling the album's instruction-sheet motif. Give chair and lettering breathing room with safe margins. Full bleed charcoal-black background, warm aged cream paper and muted brick red accents. Bold flat paper shapes with subtle ink and paper grain, slightly irregular edges, spare and poignant mood. No photographic rendering, no tiny instructions, no extra words, no border, no watermark. Title and chair must be readable at thumbnail scale. Match the wide landscape card aspect ratio of images 1 and 2.

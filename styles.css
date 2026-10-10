@@ -2743,11 +2743,22 @@ section.production-header.alice .production-details p strong {
 }
 
 .showcase-item-gwor {
-    --showcase-accent: #b48eff;
-    --showcase-accent-soft: rgba(180, 142, 255, 0.18);
-    --showcase-media-tint: rgba(180, 142, 255, 0.12);
+    --showcase-accent: #d68a80;
+    --showcase-edge: #e7aa9f;
+    --showcase-accent-soft: rgba(214, 138, 128, 0.18);
+    --showcase-media-tint: rgba(197, 74, 74, 0.12);
     --crt-cool: 88% 50%;
     --crt-warm: 12% 50%;
+}
+
+.showcase-item-gwor .showcase-caption h3 {
+    padding-right: 0;
+}
+
+@media (max-width: 480px) {
+    .showcase-item-gwor .showcase-caption h3 {
+        font-size: clamp(0.76rem, 3.3vw, 0.95rem);
+    }
 }
 
 .showcase-item-tootsjam {

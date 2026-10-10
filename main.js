@@ -1007,6 +1007,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "what-hope-do-we-have-transcript",
+        "title": "What Hope Do We Have? — The Conversation",
+        "cleanDescription": "The working session behind “What Hope Do We Have?” — creative uncertainty, AI, a student’s question, draft revisions, and ink-splattered theater artwork with Codex.",
+        "pubDate": "2026-10-10T16:00:00.000Z",
+        "contentUrl": "/transcripts/what-hope-do-we-have-transcript.html",
+        "link": ""
+    },
+    {
         "slug": "situational-awareness-transcript",
         "title": "Situational Awareness: The Conversation",
         "cleanDescription": "The working session behind “Situational Awareness” — sovereign AI, communal intelligence, draft revisions, and pulp-comic artwork with Codex.",

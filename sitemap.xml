@@ -112,4 +112,10 @@
     <loc>https://charleswilke.com/read/situational-awareness-transcript</loc>
     <lastmod>2026-10-03</lastmod>
   </url>
+  <url>
+    <loc>https://charleswilke.com/read/what-hope-do-we-have-transcript</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>

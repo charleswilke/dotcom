@@ -12,6 +12,16 @@ const DEFAULT_DESCRIPTION = 'Essays on capitalism, humanity, and AI from Charles
 // Repo-hosted articles that open in the reader but aren't in the Substack feed.
 // Keep in sync with LOCAL_ARTICLES in main.js.
 const LOCAL_ARTICLES = {
+    "what-hope-do-we-have-transcript": {
+        "title": "What Hope Do We Have? — The Conversation",
+        "description": "The working session behind “What Hope Do We Have?” — creative uncertainty, AI, a student’s question, draft revisions, and ink-splattered theater artwork with Codex.",
+        "thumbnail": "/images/transcripts/what-hope-do-we-have/02-empty-stage-header.webp",
+        "image": {
+            "width": 1774,
+            "height": 887
+        },
+        "pubDate": "2026-10-10T16:00:00.000Z"
+    },
     "situational-awareness-transcript": {
         "title": "Situational Awareness: The Conversation",
         "description": "The working session behind “Situational Awareness” — sovereign AI, communal intelligence, draft revisions, and pulp-comic artwork with Codex.",

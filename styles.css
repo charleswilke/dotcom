@@ -16838,8 +16838,8 @@ body.reader-open {
         width: max(100%, calc(var(--station-count, 17) * 64px + 24px));
         height: 100%;
     }
-    .tuner-dial-track .tuner-scale { top: 0; padding: 0 8px 0 30px; }
-    .tuner-dial-track .tuner-scale::before { left: 30px; right: 8px; }
+    .tuner-dial-track .tuner-scale { top: 0; padding: 0 8px; }
+    .tuner-dial-track .tuner-scale::before { left: 8px; right: 8px; }
     .tuner-dial-track .scale-major { min-width: 44px; }
     .tuner-dial-track .marker-label { font-size: .6rem; bottom: 2px; }
     .tuner-dial-track .label-top .marker-label { top: 2px; }

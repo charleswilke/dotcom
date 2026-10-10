@@ -5,9 +5,13 @@
   <!-- All lettering is editable vector geometry. No fonts or external assets required.
        Each glyph-* group is the letter in lettering space (pre-skew). pos-* places it on the arc.
        Every letter is drawn as one stack (extrusion, rim light, face, scanlines) inside a group
-       masked by the dilated stack of the letter in front of it, so the gutter cuts the whole stack. H/A and W/i use a wider face-only cut
+       masked by the dilated stack of the letter in front of it, so the gutter cuts the whole stack. H/A, W/i, and the final K/E crossings use a wider face-only cut
        while preserving the coral backing in those gutters. -->
   <defs>
+    <!-- Weave the final E over the upper K arm and under its lower leg.
+         The split lies in the open space between their two crossings. -->
+    <clipPath id="ke-upper" clipPathUnits="userSpaceOnUse"><rect x="-300" y="-100" width="1800" height="195"/></clipPath>
+    <clipPath id="ke-lower" clipPathUnits="userSpaceOnUse"><rect x="-300" y="95" width="1800" height="205"/></clipPath>
     <linearGradient id="cream" gradientUnits="userSpaceOnUse" x1="0" y1="8" x2="0" y2="162">
       <stop offset="0" stop-color="#fff5d5"/>
       <stop offset="1" stop-color="#ffdda1"/>
@@ -61,26 +65,32 @@
     <mask id="cut-w" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-s" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#pos-i" transform="translate(0 1)" fill="black" stroke="black" stroke-width="14" stroke-linejoin="round"/></mask>
     <mask id="cut-w-backing" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-s" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
     <mask id="cut-l-last" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-i" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
-    <mask id="cut-k" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-l-last" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
-    <mask id="cut-e-last" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-k" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
+    <mask id="cut-k" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-l-last" transform="translate(0 0)" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/><use href="#pos-e-last" clip-path="url(#ke-upper)" fill="black" stroke="black" stroke-width="18" stroke-linejoin="round"/></mask>
+    <mask id="cut-e-last" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-k" clip-path="url(#ke-lower)" fill="black" stroke="black" stroke-width="7" stroke-linejoin="round"/></mask>
+    <mask id="cut-l-last-k-backing" maskUnits="userSpaceOnUse" x="-300" y="-100" width="1800" height="400" style="mask-type:luminance"><rect x="-300" y="-100" width="1800" height="400" fill="white"/><use href="#pos-l-last" fill="black" stroke="black" stroke-width="10" stroke-linejoin="round"/></mask>
   </defs>
   <g id="mark" transform="translate(1 4) scale(.92 1)">
-    <g mask="url(#cut-e-last)">
+    <!-- Draw both coral backings before the interwoven cream faces. -->
+    <g>
       <use href="#pos-e-last" transform="translate(5 5)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-e-last" transform="translate(4 4)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-e-last" transform="translate(3 3)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-e-last" transform="translate(2 2)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-e-last" transform="translate(1 1)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
-      <use href="#pos-e-last" transform="translate(-1.6 -1.6)" fill="#fffdf2" stroke="#fffdf2" stroke-width="3" stroke-linejoin="miter"/>
-      <use href="#pos-e-last" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
-      <use href="#pos-e-last" fill="url(#scanlines)"/>
     </g>
-    <g mask="url(#cut-k)">
+    <g mask="url(#cut-l-last-k-backing)">
       <use href="#pos-k" transform="translate(5 5)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-k" transform="translate(4 4)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-k" transform="translate(3 3)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-k" transform="translate(2 2)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-k" transform="translate(1 1)" fill="url(#side)" stroke="url(#side)" stroke-width="3" stroke-linejoin="miter"/>
+    </g>
+    <g mask="url(#cut-e-last)">
+      <use href="#pos-e-last" transform="translate(-1.6 -1.6)" fill="#fffdf2" stroke="#fffdf2" stroke-width="3" stroke-linejoin="miter"/>
+      <use href="#pos-e-last" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
+      <use href="#pos-e-last" fill="url(#scanlines)"/>
+    </g>
+    <g mask="url(#cut-k)">
       <use href="#pos-k" transform="translate(-1.6 -1.6)" fill="#fffdf2" stroke="#fffdf2" stroke-width="3" stroke-linejoin="miter"/>
       <use href="#pos-k" fill="url(#cream)" stroke="url(#cream)" stroke-width="3" stroke-linejoin="miter" filter="url(#grain)"/>
       <use href="#pos-k" fill="url(#scanlines)"/>

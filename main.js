@@ -4053,7 +4053,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '19';
+const SCOPE_DATA_VERSION = '20';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -5949,7 +5949,7 @@ function initMixtapeLightbox() {
 
     const bSideTracks = [
         { title: 'Waiting for Something', file: '/audio/exploring-laibor-mixtape/waiting-for-something.mp3', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
-        { title: 'From the Beginning', file: '/audio/exploring-laibor-mixtape/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
+        { title: 'From the Beginning', file: '/audio/exploring-laibor-mixtape/from-the-beginning.mp3?v=a4f28edce073', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'The Siege of Social Atomization', file: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp3', video: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp4', article: 'https://charleswilke.substack.com/p/the-social-siege-of-atomization' },
         { title: 'The Copy Blinked First', file: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp3', video: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp4', article: 'https://charleswilke.substack.com/p/after-normal' },
         { title: 'What We Carry', file: '/audio/exploring-laibor-mixtape/what-we-carry.mp3', video: '/audio/exploring-laibor-mixtape/what-we-carry.mp4', article: 'https://charleswilke.substack.com/p/our-loss-of-discernment' },

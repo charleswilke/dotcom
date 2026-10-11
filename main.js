@@ -5150,10 +5150,20 @@ function parseMusicHash(hash = window.location.hash) {
         }
     };
 
-    const route = routes[routeSegment];
-    if (!route) return null;
-
     const trackSlug = slugifyTrackSegment(decodeURIComponent(rawTrackSlug));
+    const movedTracks = {
+        'gwor/waiting-for-something': 'mixtape-side-two',
+        'gwor/slow-the-clock': 'mixtape-side-two',
+        'mixtape/clear-as-day': 'gwor',
+        'mixtape/permission-to-ache': 'gwor',
+        'mixtape-side-two/clear-as-day': 'gwor',
+        'mixtape-side-two/permission-to-ache': 'gwor',
+        'bsides/clear-as-day': 'gwor',
+        'bsides/permission-to-ache': 'gwor'
+    };
+    const resolvedRoute = movedTracks[`${routeSegment}/${trackSlug}`] || routeSegment;
+    const route = routes[resolvedRoute];
+    if (!route) return null;
     return {
         ...route,
         trackSlug,
@@ -5935,8 +5945,8 @@ function initMixtapeLightbox() {
     ];
 
     const bSideTracks = [
-        { title: 'Clear as Day', file: '/audio/exploring-laibor-mixtape/clear-as-day.mp3', video: '/audio/exploring-laibor-mixtape/clear-as-day.mp4', article: 'https://www.theguardian.com/us-news/2026/jan/24/alex-pretti-minneapolis-minnesota-shooting' },
-        { title: 'Permission to Ache', file: '/audio/exploring-laibor-mixtape/permission-to-ache.mp3', video: '/audio/exploring-laibor-mixtape/permission-to-ache.mp4', article: 'https://charleswilke.substack.com/p/whats-next' },
+        { title: 'Waiting for Something', file: '/audio/exploring-laibor-mixtape/waiting-for-something.mp3', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
+        { title: 'Slow the Clock', file: '/audio/exploring-laibor-mixtape/slow-the-clock.mp3', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'The Siege of Social Atomization', file: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp3', video: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp4', article: 'https://charleswilke.substack.com/p/the-social-siege-of-atomization' },
         { title: 'The Copy Blinked First', file: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp3', video: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp4', article: 'https://charleswilke.substack.com/p/after-normal' },
         { title: 'What We Carry', file: '/audio/exploring-laibor-mixtape/what-we-carry.mp3', video: '/audio/exploring-laibor-mixtape/what-we-carry.mp4', article: 'https://charleswilke.substack.com/p/our-loss-of-discernment' },
@@ -6052,11 +6062,11 @@ function initMixtapeLightbox() {
 
 function initGWORLightbox() {
     const tracks = [
-        { title: 'Waiting for Something', file: '/audio/grief-without-ritual/waiting-for-something.mp3', cover: '/audio/grief-without-ritual/waiting-for-something-title.webp', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
+        { title: 'Clear as Day', file: '/audio/grief-without-ritual/clear-as-day.mp3', cover: '/audio/grief-without-ritual/clear-as-day-title.webp', article: 'https://www.theguardian.com/us-news/2026/jan/24/alex-pretti-minneapolis-minnesota-shooting' },
         { title: 'Underlined Once', file: '/audio/grief-without-ritual/underlined-once.mp3', cover: '/audio/grief-without-ritual/underlined-once-title.webp', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
         { title: 'Letter to the Editor', file: '/audio/grief-without-ritual/letter-to-the-editor.mp3', cover: '/audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
         { title: 'Love at Machine Speed', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
-        { title: 'Slow the Clock', file: '/audio/grief-without-ritual/slow-the-clock.mp3', cover: '/audio/grief-without-ritual/slow-the-clock-title.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'Permission to Ache', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
         { title: 'Respect the Exhale', file: '/audio/grief-without-ritual/respect-the-exhale.mp3', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
         { title: 'From the Beginning', file: '/audio/grief-without-ritual/from-the-beginning.mp3', cover: '/audio/grief-without-ritual/from-the-beginning-title.webp', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'Dearly Beloved', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },

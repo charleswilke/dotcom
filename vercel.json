@@ -61,14 +61,19 @@
     }
   ],
   "redirects": [
+    {"source": "/audio/grief-without-ritual/from-the-beginning.mp3", "destination": "/audio/exploring-laibor-mixtape/from-the-beginning.mp3", "permanent": true},
+    {"source": "/audio/grief-without-ritual/from-the-beginning.scope.bin", "destination": "/audio/exploring-laibor-mixtape/from-the-beginning.scope.bin", "permanent": true},
+    {"source": "/lyrics/grief-without-ritual/from-the-beginning.json", "destination": "/lyrics/exploring-laibor-mixtape/from-the-beginning.json", "permanent": true},
+    {"source": "/songs/gwor/from-the-beginning(/?)", "destination": "/songs/mixtape-side-two/from-the-beginning/", "permanent": true},
+
     {"source": "/audio/grief-without-ritual/waiting-for-something.mp3", "destination": "/audio/exploring-laibor-mixtape/waiting-for-something.mp3", "permanent": true},
     {"source": "/audio/grief-without-ritual/waiting-for-something.scope.bin", "destination": "/audio/exploring-laibor-mixtape/waiting-for-something.scope.bin", "permanent": true},
     {"source": "/lyrics/grief-without-ritual/waiting-for-something.json", "destination": "/lyrics/exploring-laibor-mixtape/waiting-for-something.json", "permanent": true},
     {"source": "/songs/gwor/waiting-for-something(/?)", "destination": "/songs/mixtape-side-two/waiting-for-something/", "permanent": true},
-    {"source": "/audio/grief-without-ritual/slow-the-clock.mp3", "destination": "/audio/exploring-laibor-mixtape/slow-the-clock.mp3", "permanent": true},
-    {"source": "/audio/grief-without-ritual/slow-the-clock.scope.bin", "destination": "/audio/exploring-laibor-mixtape/slow-the-clock.scope.bin", "permanent": true},
-    {"source": "/lyrics/grief-without-ritual/slow-the-clock.json", "destination": "/lyrics/exploring-laibor-mixtape/slow-the-clock.json", "permanent": true},
-    {"source": "/songs/gwor/slow-the-clock(/?)", "destination": "/songs/mixtape-side-two/slow-the-clock/", "permanent": true},
+    {"source": "/audio/exploring-laibor-mixtape/slow-the-clock.mp3", "destination": "/audio/grief-without-ritual/slow-the-clock.mp3", "permanent": true},
+    {"source": "/audio/exploring-laibor-mixtape/slow-the-clock.scope.bin", "destination": "/audio/grief-without-ritual/slow-the-clock.scope.bin", "permanent": true},
+    {"source": "/lyrics/exploring-laibor-mixtape/slow-the-clock.json", "destination": "/lyrics/grief-without-ritual/slow-the-clock.json", "permanent": true},
+    {"source": "/songs/mixtape-side-two/slow-the-clock(/?)", "destination": "/songs/gwor/slow-the-clock/?v=20261011", "permanent": true},
     {"source": "/audio/exploring-laibor-mixtape/clear-as-day.mp3", "destination": "/audio/grief-without-ritual/clear-as-day.mp3", "permanent": true},
     {"source": "/audio/exploring-laibor-mixtape/clear-as-day.mp4", "destination": "/audio/grief-without-ritual/clear-as-day.mp4", "permanent": true},
     {"source": "/audio/exploring-laibor-mixtape/clear-as-day.scope.bin", "destination": "/audio/grief-without-ritual/clear-as-day.scope.bin", "permanent": true},

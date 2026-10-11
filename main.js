@@ -5153,7 +5153,10 @@ function parseMusicHash(hash = window.location.hash) {
     const trackSlug = slugifyTrackSegment(decodeURIComponent(rawTrackSlug));
     const movedTracks = {
         'gwor/waiting-for-something': 'mixtape-side-two',
-        'gwor/slow-the-clock': 'mixtape-side-two',
+        'gwor/from-the-beginning': 'mixtape-side-two',
+        'mixtape/slow-the-clock': 'gwor',
+        'mixtape-side-two/slow-the-clock': 'gwor',
+        'bsides/slow-the-clock': 'gwor',
         'mixtape/clear-as-day': 'gwor',
         'mixtape/permission-to-ache': 'gwor',
         'mixtape-side-two/clear-as-day': 'gwor',
@@ -5946,7 +5949,7 @@ function initMixtapeLightbox() {
 
     const bSideTracks = [
         { title: 'Waiting for Something', file: '/audio/exploring-laibor-mixtape/waiting-for-something.mp3', article: 'https://charleswilke.substack.com/p/waiting-for-something' },
-        { title: 'Slow the Clock', file: '/audio/exploring-laibor-mixtape/slow-the-clock.mp3?v=7bb70f27b44e', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'From the Beginning', file: '/audio/exploring-laibor-mixtape/from-the-beginning.mp3', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
         { title: 'The Siege of Social Atomization', file: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp3', video: '/audio/exploring-laibor-mixtape/the-siege-of-social-atomization.mp4', article: 'https://charleswilke.substack.com/p/the-social-siege-of-atomization' },
         { title: 'The Copy Blinked First', file: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp3', video: '/audio/exploring-laibor-mixtape/the-copy-blinked-first.mp4', article: 'https://charleswilke.substack.com/p/after-normal' },
         { title: 'What We Carry', file: '/audio/exploring-laibor-mixtape/what-we-carry.mp3', video: '/audio/exploring-laibor-mixtape/what-we-carry.mp4', article: 'https://charleswilke.substack.com/p/our-loss-of-discernment' },
@@ -6068,7 +6071,7 @@ function initGWORLightbox() {
         { title: 'Love at Machine Speed', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
         { title: 'Permission to Ache', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
         { title: 'Respect the Exhale', file: '/audio/grief-without-ritual/respect-the-exhale.mp3', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
-        { title: 'From the Beginning', file: '/audio/grief-without-ritual/from-the-beginning.mp3', cover: '/audio/grief-without-ritual/from-the-beginning-title.webp', article: 'https://charleswilke.substack.com/p/stop-collaborate-and-listen' },
+        { title: 'Slow the Clock', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-v2.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'Dearly Beloved', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'As We Speak It', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
         { title: 'When Doctrine Slips', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },

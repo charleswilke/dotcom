@@ -11,7 +11,7 @@
  <filter id="on-air-bloom" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="4"/></filter>
  <linearGradient id="face" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="180"><stop stop-color="#ffe4a4"/><stop offset=".42" stop-color="#ffc46d"/><stop offset="1" stop-color="#ed9e45"/></linearGradient>
  <linearGradient id="depth" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="180"><stop stop-color="#137c85"/><stop offset="1" stop-color="#07444f"/></linearGradient>
- 
+
  <mask id="e-carves-B" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="235" style="mask-type:luminance"><rect width="1080" height="235" fill="white"/><path fill="black" stroke="black" stroke-width="13" stroke-linejoin="round" fill-rule="evenodd" transform="translate(184 38) scale(1)" d="M5 88 C8 61 27 43 47 45 C69 47 64 69 48 79 C40 85 30 88 22 89 C19 109 41 113 61 95 L65 101 C47 124 18 128 7 110 C3 104 3 96 5 88 Z M24 78 C42 74 51 63 46 57 C40 50 29 61 24 78 Z"/></mask>
  <!-- Outline the combined silhouette, so connected letters have no internal rims. -->
  <filter id="face-rim" x="-5%" y="-10%" width="110%" height="120%" color-interpolation-filters="sRGB">

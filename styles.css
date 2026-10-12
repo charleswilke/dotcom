@@ -17232,3 +17232,15 @@ body.reader-open {
         filter: opacity(var(--dial-right-light, 0));
     }
 }
+
+
+.about-link-directory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem 1.1rem; margin-bottom: 0; font-size: .85rem; }
+.about-link-directory .social-group-label { margin-bottom: .15rem; padding-bottom: .1rem; font-size: .6rem; }
+.about-link-directory .social-group-items { gap: .15rem 1rem; }
+.about-link-directory .social-link { padding: .15rem 0; }
+@media (max-width: 767px) {
+    .about-link-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 359px) {
+    .about-link-directory { grid-template-columns: 1fr; }
+}

@@ -14,7 +14,7 @@ let browser, server, origin;
 before(async () => {
     server = http.createServer((request, response) => {
         const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-        const file = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
+        const file = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname === '/about' ? '/about.html' : pathname}`);
         if (!file.startsWith(`${root}${path.sep}`)) { response.writeHead(403).end(); return; }
         fs.readFile(file, (error, content) => {
             if (error) { response.writeHead(404).end(); return; }
@@ -89,7 +89,12 @@ test('section links update history and Back/Forward restore alignment', async ()
     await page.goForward();
     await aligned(page, 'l.ai.bor');
     await nav(page, 'game-cartridges');
-    await nav(page, 'about');
+    await page.locator('#navHamburger').click();
+    await page.locator('#navExploreBtn').click();
+    await page.locator('#navDropdown a[href="/about"]').click();
+    await page.waitForURL(`${origin}/about`);
+    assert.equal(await page.locator('h1').textContent(), 'Charles Wilke.');
+    assert.equal(await page.locator('#navLogo img').getAttribute('src'), '/images/cw-nav-monogram-v7.svg');
 }));
 
 test('late layout changes yield to user scrolling', async () => withPage(390, async page => {

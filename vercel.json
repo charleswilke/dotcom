@@ -91,6 +91,7 @@
     { "source": "/jersey-boys/", "destination": "/jersey-boys", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/about(/?)", "destination": "/about.html" },
     { "source": "/writing-archive(/?)", "destination": "/writing-archive.html" },
     { "source": "/read/:slug", "destination": "/api/article-preview?slug=:slug" },
     { "source": "/read/:slug/", "destination": "/api/article-preview?slug=:slug" },

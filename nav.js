@@ -2,7 +2,7 @@
 // Detects homepage vs sub-page to set correct href prefixes and data-section attrs.
 (function () {
     var isHome = window.location.pathname === '/' || window.location.pathname === '/index.html';
-    var useMonogram = isHome || /^\/writing-archive(?:\.html)?\/?$/.test(window.location.pathname);
+    var useMonogram = isHome || /^\/(?:writing-archive|about)(?:\.html)?\/?$/.test(window.location.pathname);
     var p = isHome ? '' : '/';
     var ds = isHome
         ? function (s) { return ' data-section="' + s + '"'; }
@@ -20,7 +20,7 @@
         '                    Explore <span class="nav-explore-arrow">&#9662;</span>\n' +
         '                </button>\n' +
         '                <div class="nav-dropdown" id="navDropdown" role="menu">\n' +
-        '                    <a href="' + p + '#about" class="nav-dropdown-item" role="menuitem"' + ds('about') + '>About <span class="nav-tag">this guy</span></a>\n' +
+        '                    <a href="/about" class="nav-dropdown-item" role="menuitem">About <span class="nav-tag">this guy</span></a>\n' +
         '                    <a href="' + p + '#projections" class="nav-dropdown-item" role="menuitem"' + ds('projections') + '>Theatrical <span class="nav-tag">Projections</span></a>\n' +
         '                    <a href="https://fellowvector.com" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Fellow Vector <span class="nav-tag">consulting</span></a>\n' +
         '                    <a href="/faq.html" class="nav-dropdown-item" role="menuitem">FAQ <span class="nav-tag">ama</span></a>\n' +

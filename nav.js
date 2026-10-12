@@ -2,7 +2,7 @@
 // Detects homepage vs sub-page to set correct href prefixes and data-section attrs.
 (function () {
     var isHome = window.location.pathname === '/' || window.location.pathname === '/index.html';
-    var useMonogram = isHome || /^\/(?:writing-archive|about)(?:\.html)?\/?$/.test(window.location.pathname);
+    var useMonogram = isHome || /^\/(?:writing-archive|about)(?:\.html)?\/?$/.test(window.location.pathname) || /^\/read\//.test(window.location.pathname);
     var p = isHome ? '' : '/';
     var ds = isHome
         ? function (s) { return ' data-section="' + s + '"'; }

@@ -52,8 +52,10 @@ article social previews, and BlogPosting data identifying Charles Wilke as autho
 Saved posts and local transcripts load without contacting Substack. Newly
 published posts not yet imported can temporarily fall back to RSS.
 
-The archive uses the shared site navigation, fonts, and printed article cards,
-grouped by year. Standalone articles reuse the microfiche reader styling.
+The archive uses the shared site navigation, fonts, publication header and texture,
+with compact chronological rows grouped by year. Search matches title and description
+words and combines with year filters. Without JavaScript, all essays remain visible
+and year links jump to their sections. Standalone articles reuse the microfiche reader styling.
 
 The homepage still opens its overlay reader. Old `/#read/<slug>` links now resolve
 independently of the latest 19 cards and normalize to `/read/<slug>`. If the API

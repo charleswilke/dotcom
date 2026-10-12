@@ -40,23 +40,24 @@ function build() {
         const entries = items.filter(item => new Date(item.pubDate).getUTCFullYear() === year);
         const cards = entries.map(item => {
             const date = new Date(item.pubDate);
-            const stamp = `${String(date.getUTCMonth()+1).padStart(2,'0')}-${String(date.getUTCDate()).padStart(2,'0')}-${String(year).slice(-2)}`;
-            const image = resizeSubstackImage(item.thumbnail || '/images/exploring-laibor-publication-fresh-v2.webp',848);
+            const stamp = date.toLocaleDateString('en-US', {month:'short',day:'numeric',timeZone:'UTC'});
+            const image = resizeSubstackImage(item.thumbnail || '/images/exploring-laibor-publication-fresh-v2.webp',240);
             const description = stripHtml(item.description || '');
-            return `<a class="feed-item" href="/read/${escapeHtml(item.slug)}"><img src="${escapeHtml(image)}" alt="" width="848" height="477" loading="lazy" decoding="async"><div class="feed-item-body"><span class="archive-card-kind">Essay</span><h3>${escapeHtml(stripHtml(item.title))}</h3><p>${escapeHtml(description.slice(0,160))}${description.length > 160 ? '…' : ''}</p><div class="feed-item-meta"><time class="date" datetime="${date.toISOString()}">${stamp}</time></div></div></a>`;
+            return `<a class="archive-entry" data-search="${escapeHtml(stripHtml(item.title) + ' ' + description)}" href="/read/${escapeHtml(item.slug)}"><time datetime="${date.toISOString()}">${stamp}</time><img src="${escapeHtml(image)}" alt="" width="120" height="80" loading="lazy" decoding="async"><div class="archive-entry-copy"><h3>${escapeHtml(stripHtml(item.title))}</h3><p>${escapeHtml(description.slice(0,180))}${description.length > 180 ? '…' : ''}</p></div><span class="archive-entry-arrow" aria-hidden="true">↗</span></a>`;
         }).join('\n');
-        return `<section class="archive-year" aria-labelledby="year-${year}"><div class="archive-year-heading"><h2 id="year-${year}">${year}</h2><span>${entries.length} entries</span></div><div class="feed-grid archive-grid">${cards}</div></section>`;
+        return `<section class="archive-year" data-year="${year}" aria-labelledby="year-${year}"><div class="archive-year-heading"><h2 id="year-${year}">${year}</h2><span>${entries.length} essays</span></div><div class="archive-list">${cards}</div></section>`;
     }).join('\n');
     fs.writeFileSync(path.join(root, 'writing-archive.html'), `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Writing Archive | Charles Wilke</title><meta name="description" content="Essays on AI, humanity, creativity, and work, plus conversations behind the writing. By Charles Wilke.">
-<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261012-archive"><link rel="stylesheet" href="/article-archive.css?v=3"><link rel="icon" href="/favicon.ico">
+<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261012-archive"><link rel="stylesheet" href="/article-archive.css?v=4"><link rel="icon" href="/favicon.ico">
 <meta property="og:title" content="The Writing Archive | Charles Wilke"><meta property="og:image" content="${SITE_URL}/images/exploring-laibor-publication-fresh-v2.webp"><meta property="og:url" content="${SITE_URL}/writing-archive"><meta property="og:type" content="website">
-<script src="/common.js?v=archive2" defer></script><script src="/article-archive.js?v=2" defer></script></head>
+<script src="/common.js?v=archive2" defer></script><script src="/article-archive.js?v=3" defer></script></head>
 <body class="archive-page"><script src="/nav.js?v=2f0eb52"></script><noscript><p class="archive-fallback-nav"><a href="/">Charles Wilke</a> / <a href="/#l.ai.bor">Latest writing</a></p></noscript>
-<div class="rss-feed archive-surface"><main class="archive-main"><header class="archive-publication-header">${publicationHeader}</header><header class="archive-masthead"><div class="archive-masthead-copy"><a href="/" class="archive-home">Charles Wilke</a><p class="archive-eyebrow">Since 2023</p><h1>The writing archive<span aria-hidden="true">.</span></h1><p class="archive-intro">Essays on capitalism, humanity, and AI.<br>And the conversations behind them.</p><div class="archive-tally"><span>${Object.keys(archive).length} essays</span></div></div></header>
-<div class="archive-year-nav" aria-label="Browse by year">${years.map(year => `<a href="#year-${year}">${year}</a>`).join('')}<a class="archive-latest" href="/#l.ai.bor">Latest writing ↗</a></div>
-${sections}<footer class="archive-footer"><a href="/">Back to Charles Wilke</a><a href="https://charleswilke.substack.com/subscribe">Subscribe on Substack ↗</a></footer></main></div></body></html>\n`);
+<div class="rss-feed archive-surface"><main class="archive-main"><header class="archive-publication-header">${publicationHeader}</header><header class="archive-masthead"><h1>The writing archive<span aria-hidden="true">.</span></h1><p>${items.length} essays · Since 2023 · By <a href="/">Charles Wilke</a></p></header>
+<div class="archive-search" hidden><label for="archive-search">Search the writing</label><input id="archive-search" type="search" placeholder="Search titles and descriptions…" autocomplete="off" aria-controls="archive-results"></div>
+<nav class="archive-year-nav" aria-label="Browse by year"><a href="#archive-results" data-year="all" aria-current="true">All years</a>${years.map(year => `<a href="#year-${year}" data-year="${year}">${year}</a>`).join('')}<a class="archive-latest" href="/#l.ai.bor">Latest writing ↗</a></nav>
+<p class="archive-result-count" role="status" aria-live="polite" hidden></p><div id="archive-results">${sections}</div><p class="archive-empty" hidden>No essays match. Try another search or <button type="button" id="archive-reset">clear the filters</button>.</p><footer class="archive-footer"><a href="/">Back to Charles Wilke</a><a href="https://charleswilke.substack.com/subscribe">Subscribe on Substack ↗</a></footer></main></div></body></html>\n`);
     // Replace only archive entries; preserve unrelated sitemap pages.
     const sitemapPath = path.join(root, 'sitemap.xml');
     let sitemap = fs.readFileSync(sitemapPath, 'utf8').replace(/\s*<url>\s*<loc>https:\/\/charleswilke\.com\/(?:read\/[^<]*|writing-archive)<\/loc>[\s\S]*?<\/url>/g, '');

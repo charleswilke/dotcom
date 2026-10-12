@@ -58,7 +58,7 @@ test('direct article is readable without JavaScript at desktop and phone widths'
             await page.screenshot({path:`/tmp/dotcom-article-${width}.png`});
             await page.goto('https://archive.test/writing-archive');
             assert.ok(await page.locator(`a[href="/read/${slug}"]`).count());
-            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length);
+            assert.equal(await page.locator('.archive-list .archive-entry').count(),Object.keys(archive).length);
             assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
             await page.evaluate(()=>document.fonts.ready);
             await page.screenshot({path:`/tmp/dotcom-writing-archive-${width}.png`});
@@ -67,7 +67,7 @@ test('direct article is readable without JavaScript at desktop and phone widths'
     } finally {await browser.close();}
 });
 
-test('archive uses shared navigation and responsive printed article cards', async () => {
+test('compact archive filters essays by search and year with results above the fold', async () => {
     const browser = await chromium.launch({headless:true});
     try {
         for (const width of [1200,390]) {
@@ -78,9 +78,26 @@ test('archive uses shared navigation and responsive printed article cards', asyn
             await page.goto('https://archive.test/writing-archive');
             await page.locator('#siteNav').waitFor();
             await page.evaluate(()=>document.fonts.ready);
-            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length);
-            const columns = await page.locator('.archive-grid').first().evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
-            assert.equal(columns,width===390?1:3);
+            assert.equal(await page.locator('.archive-list .archive-entry').count(),Object.keys(archive).length);
+            const first = await page.locator('.archive-entry').first().boundingBox();
+            assert.ok(first.y + first.height < 800, `First essay should be visible above the fold: ${JSON.stringify(first)}`);
+            await page.locator('.archive-year-nav [data-year="2023"]').click();
+            const count2023 = Object.values(archive).filter(item=>new Date(item.pubDate).getUTCFullYear()===2023).length;
+            assert.equal(await page.locator('.archive-entry:visible').count(),count2023);
+            assert.equal(await page.locator('.archive-year:visible').count(),1);
+            await page.locator('#archive-search').fill('zzzz-no-matching-essay');
+            assert.equal(await page.locator('.archive-entry:visible').count(),0);
+            assert.equal(await page.locator('.archive-empty').isVisible(),true);
+            await page.locator('#archive-reset').click();
+            assert.equal(await page.locator('.archive-entry:visible').count(),Object.keys(archive).length);
+            await page.locator('#archive-search').fill('Waiting for Something');
+            assert.equal(await page.locator('.archive-entry:visible').count(),1);
+            assert.equal(await page.locator('.archive-entry:visible').getAttribute('href'),`/read/${slug}`);
+            const selectedYear = new Date(item.pubDate).getUTCFullYear();
+            const otherYear = selectedYear===2023 ? '2024' : '2023';
+            await page.locator(`.archive-year-nav [data-year="${otherYear}"]`).click();
+            assert.equal(await page.locator('.archive-entry:visible').count(),0);
+            await page.locator('#archive-reset').click();
             if (width === 390) {
                 await page.locator('#navHamburger').click();
                 assert.equal(await page.locator('#navHamburger').getAttribute('aria-expanded'),'true');

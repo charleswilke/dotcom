@@ -4,8 +4,13 @@ document.querySelectorAll('.native-audio-embed,.native-video-embed').forEach(el 
         const attrs = JSON.parse(el.getAttribute('data-attrs') || '{}');
         if (!attrs.mediaUploadId) return;
         const kind = el.classList.contains('native-video-embed') ? 'video' : 'audio';
+        const src = `https://charleswilke.substack.com/api/v1/${kind}/upload/${encodeURIComponent(attrs.mediaUploadId)}/src`;
+        if (kind === 'audio' && window.ArticleReaderUI) {
+            el.replaceWith(window.ArticleReaderUI.createScopePlayer(src, 'Recap'));
+            return;
+        }
         const media = document.createElement(kind);
-        media.src = `https://charleswilke.substack.com/api/v1/${kind}/upload/${encodeURIComponent(attrs.mediaUploadId)}/src`;
+        media.src = src;
         media.controls = true;
         media.preload = kind === 'video' ? 'metadata' : 'none';
         if (kind === 'video') {
@@ -20,6 +25,25 @@ document.addEventListener('play', event => {
     if (!event.target.matches('audio,video')) return;
     document.querySelectorAll('audio,video').forEach(media => { if (media !== event.target) media.pause(); });
 }, true);
+
+// Keep document scrolling, with the same tick rail and drag behavior as the overlay.
+if (document.body.classList.contains('article-page') && window.ArticleReaderUI) {
+    document.documentElement.classList.add('article-reader-enhanced');
+    const bar = document.createElement('div');
+    bar.className = 'article-page-scrollbar';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.innerHTML = '<div class="article-reader-rail"></div><div class="article-reader-thumb"></div>';
+    document.body.appendChild(bar);
+    const scroll = {
+        get clientHeight() { return bar.clientHeight; },
+        get scrollHeight() { return document.documentElement.scrollHeight - (innerHeight - bar.clientHeight); },
+        get scrollTop() { return window.scrollY; },
+        set scrollTop(value) { window.scrollTo({top:value, behavior:'instant'}); }
+    };
+    const update = window.ArticleReaderUI.attachScrollbar(scroll, bar.querySelector('.article-reader-thumb'), bar.querySelector('.article-reader-rail'), {scrollTarget:window, resizeTarget:document.body});
+    document.addEventListener('load', update, true);
+    document.fonts.ready.then(update);
+}
 
 // Progressive enhancement: every essay remains readable and linked without JS.
 const archiveSearch = document.querySelector('#archive-search');

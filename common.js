@@ -339,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== TUNER SCROLLBAR =====
 (() => {
+    if (document.body.classList.contains('article-page') && window.ArticleReaderUI) return;
     const root = document.documentElement;
     const THUMB_HEIGHT = 60;
 

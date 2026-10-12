@@ -230,3 +230,56 @@ test('archived video uses its saved poster and the shared responsive player styl
         }
     } finally { await browser.close(); }
 });
+
+test('archive recap controls play, pause, seek and yield to video; reader thumb drags the document', async () => {
+    const browser = await chromium.launch({headless:true});
+    const wav = Buffer.alloc(44 + 8000 * 2 * 30);
+    wav.write('RIFF',0); wav.writeUInt32LE(wav.length-8,4); wav.write('WAVEfmt ',8);
+    wav.writeUInt32LE(16,16); wav.writeUInt16LE(1,20); wav.writeUInt16LE(1,22);
+    wav.writeUInt32LE(8000,24); wav.writeUInt32LE(16000,28); wav.writeUInt16LE(2,32); wav.writeUInt16LE(16,34);
+    wav.write('data',36); wav.writeUInt32LE(wav.length-44,40);
+    try {
+        for (const width of [1200,390]) {
+            const page = await browser.newPage({viewport:{width,height:900}});
+            await routeLocal(page);
+            await page.route('**/api/v1/audio/upload/*/src', route => {
+                const range = route.request().headers().range;
+                const start = range ? Number(range.match(/bytes=(\d+)/)?.[1] || 0) : 0;
+                return route.fulfill({
+                    status: range ? 206 : 200, body: wav.subarray(start), contentType: 'audio/wav',
+                    headers: {'accept-ranges':'bytes', ...(range ? {'content-range':`bytes ${start}-${wav.length-1}/${wav.length}`} : {})}
+                });
+            });
+            await page.goto(`https://archive.test/read/${slug}`);
+            await page.waitForFunction(()=>document.querySelector('.scope-audio')?.duration>0);
+            assert.equal(await page.locator('.scope-label').textContent(),'Recap');
+            assert.equal(await page.locator('.scope-time-total').textContent(),'0:30');
+            assert.equal(await page.locator('.tuner-thumb').count(),0);
+            const play = page.locator('.scope-play');
+            await play.click();
+            await page.waitForFunction(()=>document.querySelector('.scope-player').classList.contains('is-playing'));
+            assert.equal(await play.getAttribute('aria-label'),'Pause');
+            await play.click();
+            await page.waitForFunction(()=>!document.querySelector('.scope-player').classList.contains('is-playing'));
+            assert.equal(await play.getAttribute('aria-label'),'Play');
+            await page.locator('.scope-scrub').fill('12');
+            assert.ok(Math.abs(await page.locator('.scope-audio').evaluate(a=>a.currentTime)-12)<1);
+            assert.equal(await page.locator('.scope-scrub').evaluate(e=>e.style.getPropertyValue('--scope-progress')),'40%');
+            await play.click();
+            await page.waitForFunction(()=>document.querySelector('.scope-player').classList.contains('is-playing'));
+            await page.locator('video').evaluate(v=>v.dispatchEvent(new Event('play')));
+            assert.equal(await page.locator('.scope-audio').evaluate(a=>a.paused),true);
+            await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+            await page.waitForFunction(()=>parseFloat(document.querySelector('.article-page-scrollbar .article-reader-thumb').style.top)<1);
+            const thumb = page.locator('.article-page-scrollbar .article-reader-thumb');
+            const box = await thumb.boundingBox();
+            await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
+            await page.mouse.down();
+            await page.mouse.move(box.x+box.width/2,box.y+box.height/2+120,{steps:8});
+            await page.mouse.up();
+            assert.ok(await page.evaluate(()=>window.scrollY>500));
+            assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+            await page.close();
+        }
+    } finally { await browser.close(); }
+});

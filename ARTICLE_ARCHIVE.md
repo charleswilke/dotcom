@@ -64,7 +64,10 @@ flow. Responsive repacking observes container width only, so browser chrome
 changing viewport height does not reset scroll or rearrange cards. The publication dial
 uses the same shared `laibor-rails.js` spark and electrical effects as the homepage. Search matches title, description and saved article body
 words and combines with year filters. Without JavaScript, all essays remain visible
-and year links jump to their sections. Standalone articles reuse the microfiche reader styling.
+and year links jump to their sections. Standalone articles reuse the microfiche reader styling. The recap player and
+draggable tick-rail scrollbar come from `article-reader-ui.js`, shared with the
+homepage overlay; standalone pages retain normal document scrolling and their
+server-rendered text without JavaScript.
 
 The homepage still opens its overlay reader. Old `/#read/<slug>` links now resolve
 independently of the latest 19 cards and normalize to `/read/<slug>`. If the API

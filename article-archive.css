@@ -99,3 +99,18 @@
     .archive-list .archive-entry { transition: none; }
     .archive-list .archive-entry:hover { transform: none; }
 }
+
+.article-reader-enhanced { scrollbar-width: none; }
+.article-reader-enhanced::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+/* Reader controls share their appearance with the homepage overlay. */
+.article-page-scrollbar {
+    position: fixed;
+    top: 52px;
+    bottom: 0;
+    right: max(0px, calc((100vw - 928px) / 2 + 24px));
+    width: 16px;
+    z-index: 20;
+    pointer-events: none;
+}
+@media (max-width: 600px) { .article-page-scrollbar { right: 0; } }

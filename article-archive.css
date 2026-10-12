@@ -1,1 +1,99 @@
-:root{color-scheme:light;--ink:#1a1550;--paper:#f7f3eb;--accent:#c84629}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,'Times New Roman',serif}a{color:inherit;text-underline-offset:.2em}a:hover{color:var(--accent)}nav{display:flex;justify-content:space-between;gap:1rem;padding:1.5rem clamp(1rem,5vw,4rem);border-bottom:1px solid #1a155030;font:600 .9rem system-ui,sans-serif}main{max-width:800px;margin:4rem auto;padding:0 1.5rem}header{margin-bottom:3rem}h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.08;letter-spacing:-.035em;margin:1rem 0 1.5rem}.eyebrow,.byline{font: .8rem system-ui,sans-serif}.eyebrow{text-transform:uppercase;letter-spacing:.14em}.subtitle{font-size:1.25rem;line-height:1.5;opacity:.8}.article-body{font-size:1.18rem;line-height:1.8;overflow-wrap:anywhere}.article-body img,.article-body video,.article-body iframe{max-width:100%;height:auto}.article-body iframe{width:100%;aspect-ratio:16/9;border:0}.article-body figure{margin:2rem 0}.article-body figcaption{font-size:.85rem;opacity:.75}.article-body audio{width:100%}.article-body blockquote{margin:2rem 0;padding-left:1.5rem;border-left:3px solid var(--accent)}.article-body pre{overflow:auto;font-size:.85rem}.article-body table{display:block;overflow:auto}.article-body h2,.article-body h3{line-height:1.25}.article-body hr{margin:3rem auto;border:0;border-top:1px solid #1a155040;width:50%}footer{display:flex;flex-wrap:wrap;gap:1.5rem;margin:4rem 0 2rem;padding-top:1.5rem;border-top:1px solid #1a155030;font:.9rem system-ui,sans-serif}.archive-list{list-style:none;padding:0}.archive-list li{padding:1.25rem 0;border-bottom:1px solid #1a155025}.archive-list h2{font-size:1.35rem;margin:.4rem 0}.archive-list time{font:.8rem system-ui,sans-serif}.archive-list p{line-height:1.5}button{font:inherit}@media(max-width:600px){main{margin:2.5rem auto;padding:0 1.1rem}.article-body{font-size:1.08rem}nav{font-size:.8rem}}
+/* Standalone archive pages reuse the site's fonts, navigation, printed cards,
+   and microfiche reader. Only page layout and standalone reader overrides live here. */
+.archive-page,
+.article-page {
+    color: var(--light);
+    background-color: #0d1430;
+    background-image: radial-gradient(ellipse at 12% 0, #29336c70, transparent 55%),
+        linear-gradient(#00f7c209 1px, transparent 1px),
+        linear-gradient(90deg, #00f7c209 1px, transparent 1px);
+    background-size: auto, 32px 32px, 32px 32px;
+}
+.archive-main { max-width: 1200px; margin: 0 auto; padding: 44px 28px 0; }
+.archive-masthead {
+    height: auto; min-height: 0; display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; gap: 24px; padding: 40px 0 48px;
+    overflow: visible; perspective: none; text-align: left;
+}
+.archive-masthead::before, .archive-masthead::after { display: none; }
+.archive-home { display: inline-block; color: #ffb93a; font-family: 'Orbitron',sans-serif;
+    font-size: 15px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; margin-bottom: 36px; }
+.archive-eyebrow { font-size: 11px; color: var(--neon); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+.archive-masthead h1 { font: 400 clamp(38px,5.2vw,66px)/1.08 'Audiowide',sans-serif;
+    letter-spacing: -1px; color: var(--light); text-transform: uppercase; margin: 0 0 22px; }
+.archive-masthead h1 span { color: var(--secondary); }
+.archive-intro { color: #d6d8e5; font-size: 14px; line-height: 1.8; }
+.archive-tally { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.archive-tally span { color: #ffb93a; border: 1px solid #ffb93a60; padding: 5px 10px;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+.archive-publication-art { width: 100%; height: auto; transform: rotate(-3deg);
+    filter: drop-shadow(0 18px 25px #0008); }
+.archive-year-nav { display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    padding: 18px 0; border-top: 1px solid #00f7c240; border-bottom: 1px solid #00f7c240; margin-bottom: 48px; }
+.archive-year-nav a { text-decoration: none; color: var(--light); font-size: 13px; padding: 6px 13px;
+    border: 1px solid #c8cee530; border-radius: 3px; }
+.archive-year-nav a:hover, .archive-year-nav a:focus-visible { color: var(--neon); border-color: var(--neon); }
+.archive-year-nav .archive-latest { margin-left: auto; color: var(--neon); border-color: transparent; }
+.archive-year { position: relative; padding: 0 0 40px; }
+.archive-year-heading { display: flex; gap: 20px; align-items: baseline; border-bottom: 1px solid #c8cee530; padding-bottom: 12px; }
+.archive-year-heading h2 { font: 400 32px 'Audiowide',sans-serif; color: var(--light); scroll-margin-top: 80px; }
+.archive-year-heading span { color: #adb7d0; font-size: 12px; }
+.archive-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 26px; }
+.archive-grid .feed-item { text-decoration: none; min-width: 0; }
+.archive-grid .feed-item-body { padding: 16px 16px 60px; }
+.archive-grid .feed-item-body h3 { font-size: 17px; line-height: 1.35; margin-bottom: 10px; }
+.archive-grid .feed-item-body p { padding-right: 0; font-size: 12px; line-height: 1.7; }
+.archive-card-kind { display: block; color: var(--neon); text-transform: uppercase;
+    font-size: 9px; letter-spacing: 1.5px; margin-bottom: 9px; }
+.archive-grid .feed-item-meta { right: 16px; bottom: 16px; }
+.archive-grid .date { font-size: 12px; }
+.archive-footer { height: auto; min-height: 0; perspective: none; display: flex; flex-wrap: wrap;
+    justify-content: space-between; gap: 20px; padding: 30px 0 40px; margin: 20px 0 0;
+    border-top: 1px solid #00f7c240; font-size: 12px; color: var(--light); }
+.archive-footer::before, .archive-footer::after { display: none; }
+.archive-footer a { color: inherit; text-underline-offset: 4px; }
+.archive-fallback-nav { padding: 18px; }
+.archive-fallback-nav a { color: var(--light); }
+/* The same microfiche treatment as the homepage reader, in normal document flow. */
+.article-page {
+    --fiche-paper: #ecdcad; --fiche-paper-bright: #fff5d4; --fiche-ink: #2e2113;
+    --fiche-ink-soft: #5a4628; --fiche-ink-mute: #2e21138c; --fiche-rule: #2e211347;
+    --fiche-accent: #a85a1d; --fiche-walnut: #2a1d0c; --fiche-glow: #ffebaa8c;
+    --reader-gutter: clamp(22px,5vw,43px); --reader-top-gap: 0px;
+}
+.article-main { max-width: 928px; margin: 36px auto 60px; padding: 0 24px; }
+.article-page .article-reader-shell { transform: none; min-height: 0; }
+.article-page .article-reader-topbar { padding: 12px var(--reader-gutter); }
+.article-page .article-reader-topbar a { color: #e6cf95; text-decoration: none; }
+.article-page .eyebrow { color: var(--neon); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+.article-page .article-reader-subtitle { display: block; margin-top: 18px; font-family: 'Space Mono',monospace; font-size: 17px; }
+.article-page .byline { margin-top: 20px; font-size: 11px; color: #fff5d4b3; }
+.article-page .byline a { color: var(--fiche-paper-bright); }
+.article-page .article-reader-body { overflow-wrap: anywhere; }
+.article-page .article-reader-body img, .article-page .article-reader-body video { max-width: 100%; height: auto; }
+.article-page .article-reader-body iframe { width: 100%; aspect-ratio: 16/9; border: 0; }
+.article-page .article-reader-body audio { width: 100%; }
+.article-page .article-reader-body pre { overflow: auto; }
+.article-page .article-reader-body table { display: block; overflow: auto; }
+.article-page .archive-footer { background: var(--fiche-walnut); padding: 24px var(--reader-gutter); margin: 0; }
+@media (max-width: 1000px) {
+    .archive-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 600px) {
+    .archive-main { padding: 18px 20px 0; }
+    .archive-masthead { grid-template-columns: 1fr; gap: 22px; padding: 20px 0 32px; }
+    .archive-home { font-size: 12px; letter-spacing: 2px; margin-bottom: 25px; }
+    .archive-masthead h1 { font-size: clamp(34px,9.5vw,48px); }
+    .archive-publication-art { max-width: 360px; justify-self: center; }
+    .archive-year-nav { gap: 7px; margin-bottom: 32px; }
+    .archive-year-nav a { padding: 5px 10px; font-size: 11px; }
+    .archive-year-nav .archive-latest { margin-left: 0; }
+    .archive-grid { grid-template-columns: minmax(0,1fr); gap: 24px; }
+    .article-main { padding: 0; margin-top: 0; }
+    .article-page .article-reader-topbar { font-size: 9px; }
+    .article-page .article-reader-title { font-size: 32px; overflow-wrap: anywhere; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .archive-grid .feed-item { transition: none; }
+    .archive-grid .feed-item:hover { transform: none; }
+}

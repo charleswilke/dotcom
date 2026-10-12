@@ -12,7 +12,7 @@ const csp = require('../vercel.json').headers[0].headers.find(h=>h.key==='Conten
 async function routeLocal(page) {
     await page.route('**/*', async route => {
         const url = new URL(route.request().url());
-        if (url.origin !== 'https://archive.test') return route.abort();
+        if (url.origin !== 'https://archive.test') return route.request().resourceType() === 'image' ? route.continue() : route.abort();
         if (url.pathname === '/api/substack-feed') return route.fulfill({status:503,body:''});
         if (url.pathname.startsWith('/api/')) return route.fulfill({status:204});
         if (url.pathname === `/read/${slug}`) return route.fulfill({body:renderArticle(item,slug),contentType:'text/html',headers:{'Content-Security-Policy':csp}});
@@ -58,7 +58,38 @@ test('direct article is readable without JavaScript at desktop and phone widths'
             await page.screenshot({path:`/tmp/dotcom-article-${width}.png`});
             await page.goto('https://archive.test/writing-archive');
             assert.ok(await page.locator(`a[href="/read/${slug}"]`).count());
+            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length + 7);
+            assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+            await page.evaluate(()=>document.fonts.ready);
+            await page.screenshot({path:`/tmp/dotcom-writing-archive-${width}.png`});
             await context.close();
+        }
+    } finally {await browser.close();}
+});
+
+test('archive uses shared navigation and responsive printed article cards', async () => {
+    const browser = await chromium.launch({headless:true});
+    try {
+        for (const width of [1200,390]) {
+            const page = await browser.newPage({viewport:{width,height:1000}});
+            const errors = [];
+            page.on('pageerror',error=>errors.push(error.message));
+            await routeLocal(page);
+            await page.goto('https://archive.test/writing-archive');
+            await page.locator('#siteNav').waitFor();
+            await page.evaluate(()=>document.fonts.ready);
+            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length + 7);
+            const columns = await page.locator('.archive-grid').first().evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
+            assert.equal(columns,width===390?1:3);
+            if (width === 390) {
+                await page.locator('#navHamburger').click();
+                assert.equal(await page.locator('#navHamburger').getAttribute('aria-expanded'),'true');
+                await page.locator('#navHamburger').click();
+            }
+            assert.deepEqual(errors,[]);
+            assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+            await page.screenshot({path:`/tmp/dotcom-writing-archive-styled-${width}.png`});
+            await page.close();
         }
     } finally {await browser.close();}
 });

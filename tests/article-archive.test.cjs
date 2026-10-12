@@ -19,7 +19,7 @@ test('archived links and local transcripts return full canonical HTML without Su
             assert.equal(res.code,200);
             assert.ok(res.body.includes(`rel="canonical" href="https://charleswilke.com/read/${slug}"`));
             assert.match(res.body, /"@type":"BlogPosting"/);
-            assert.match(res.body, /<div class="article-body">[\s\S]{1000}/);
+            assert.match(res.body, /<div class="article-body[^"]*">[\s\S]{1000}/);
             assert.doesNotMatch(res.body, /http-equiv="refresh"|window.location.replace/);
         }
         const res = response();

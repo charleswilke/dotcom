@@ -4,7 +4,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { SITE_URL, escapeHtml, validSlug } = require('../lib/article-archive');
 const localImages = require('../lib/local-article-images.json');
-const { stripHtml } = require('../lib/substack-utils');
+const { stripHtml, resizeSubstackImage } = require('../lib/substack-utils');
 const root = path.join(__dirname, '..');
 function build() {
     require('esbuild').buildSync({
@@ -30,8 +30,28 @@ function build() {
         fs.writeFileSync(path.join(itemsDir, `${slug}.json`), JSON.stringify(item) + '\n');
     }
     const items = Object.values(all).sort((a,b) => Date.parse(b.pubDate)-Date.parse(a.pubDate));
-    const list = items.map(item => `<li><time datetime="${escapeHtml(new Date(item.pubDate).toISOString())}">${escapeHtml(new Date(item.pubDate).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}))}</time><h2><a href="/read/${escapeHtml(item.slug)}">${escapeHtml(stripHtml(item.title))}</a></h2><p>${escapeHtml(stripHtml(item.description || ''))}</p></li>`).join('\n');
-    fs.writeFileSync(path.join(root, 'writing-archive.html'), `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Writing Archive | Charles Wilke</title><meta name="description" content="Essays on AI, humanity, creativity, and work, plus conversations behind the writing. By Charles Wilke."><link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/article-archive.css?v=1"><link rel="icon" href="/favicon.ico"></head><body><nav aria-label="Site"><a href="/">Charles Wilke</a><a href="/#l.ai.bor">Latest writing</a></nav><main><header><p class="eyebrow">Exploring L.ai.bor</p><h1>The writing archive</h1><p class="subtitle">Essays and the conversations behind them. By <a href="/">Charles Wilke</a>.</p></header><ul class="archive-list">${list}</ul></main></body></html>\n`);
+    const years = [...new Set(items.map(item => new Date(item.pubDate).getUTCFullYear()))];
+    const sections = years.map(year => {
+        const entries = items.filter(item => new Date(item.pubDate).getUTCFullYear() === year);
+        const cards = entries.map(item => {
+            const date = new Date(item.pubDate);
+            const stamp = `${String(date.getUTCMonth()+1).padStart(2,'0')}-${String(date.getUTCDate()).padStart(2,'0')}-${String(year).slice(-2)}`;
+            const image = resizeSubstackImage(item.thumbnail || '/images/exploring-laibor-publication-fresh-v2.webp',848);
+            const description = stripHtml(item.description || '');
+            return `<a class="feed-item" href="/read/${escapeHtml(item.slug)}"><img src="${escapeHtml(image)}" alt="" width="848" height="477" loading="lazy" decoding="async"><div class="feed-item-body"><span class="archive-card-kind">${item.link ? 'Essay' : 'The conversation'}</span><h3>${escapeHtml(stripHtml(item.title))}</h3><p>${escapeHtml(description.slice(0,160))}${description.length > 160 ? '…' : ''}</p><div class="feed-item-meta"><time class="date" datetime="${date.toISOString()}">${stamp}</time></div></div></a>`;
+        }).join('\n');
+        return `<section class="archive-year" aria-labelledby="year-${year}"><div class="archive-year-heading"><h2 id="year-${year}">${year}</h2><span>${entries.length} entries</span></div><div class="feed-grid archive-grid">${cards}</div></section>`;
+    }).join('\n');
+    fs.writeFileSync(path.join(root, 'writing-archive.html'), `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Writing Archive | Charles Wilke</title><meta name="description" content="Essays on AI, humanity, creativity, and work, plus conversations behind the writing. By Charles Wilke.">
+<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261012-archive"><link rel="stylesheet" href="/article-archive.css?v=2"><link rel="icon" href="/favicon.ico">
+<meta property="og:title" content="The Writing Archive | Charles Wilke"><meta property="og:image" content="${SITE_URL}/images/exploring-laibor-publication-fresh-v2.webp"><meta property="og:url" content="${SITE_URL}/writing-archive"><meta property="og:type" content="website">
+<script src="/common.js?v=archive2" defer></script><script src="/article-archive.js?v=2" defer></script></head>
+<body class="archive-page"><script src="/nav.js?v=2f0eb52"></script><noscript><p class="archive-fallback-nav"><a href="/">Charles Wilke</a> / <a href="/#l.ai.bor">Latest writing</a></p></noscript>
+<main class="archive-main"><header class="archive-masthead"><div class="archive-masthead-copy"><a href="/" class="archive-home">Charles Wilke</a><p class="archive-eyebrow">Exploring L.ai.bor / Since 2023</p><h1>The writing<br>archive<span aria-hidden="true">.</span></h1><p class="archive-intro">Essays on capitalism, humanity, and AI.<br>And the conversations behind them.</p><div class="archive-tally"><span>${Object.keys(archive).length} essays</span><span>${Object.keys(local).length} conversations</span></div></div><img class="archive-publication-art" src="/images/exploring-laibor-publication-fresh-v2.webp" alt="Exploring L.ai.bor — Weekly Field Notes" width="1735" height="907" fetchpriority="high"></header>
+<div class="archive-year-nav" aria-label="Browse by year">${years.map(year => `<a href="#year-${year}">${year}</a>`).join('')}<a class="archive-latest" href="/#l.ai.bor">Latest writing ↗</a></div>
+${sections}<footer class="archive-footer"><a href="/">Back to Charles Wilke</a><a href="https://charleswilke.substack.com/subscribe">Subscribe on Substack ↗</a></footer></main></body></html>\n`);
     // Replace only archive entries; preserve unrelated sitemap pages.
     const sitemapPath = path.join(root, 'sitemap.xml');
     let sitemap = fs.readFileSync(sitemapPath, 'utf8').replace(/\s*<url>\s*<loc>https:\/\/charleswilke\.com\/(?:read\/[^<]*|writing-archive)<\/loc>[\s\S]*?<\/url>/g, '');

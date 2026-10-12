@@ -17,6 +17,8 @@ python3 verify-lyrics.py
 
 No build step — all files are served directly.
 
+**Stylesheet cache versions:** Whenever CSS changes, bump the stylesheet's `?v=` value in every HTML entry that references it so normal visits fetch the latest styles without a hard refresh. Keep references to the same shared stylesheet on the same version.
+
 **npm security:** Global `~/.npmrc` has `ignore-scripts=true` and `min-release-age=7` (supply chain protection). If `npm install` fails because a package needs lifecycle scripts, use `npm install --ignore-scripts=false` for that one install.
 
 ## Deployment

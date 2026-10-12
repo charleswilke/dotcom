@@ -53,7 +53,10 @@ Saved posts and local transcripts load without contacting Substack. Newly
 published posts not yet imported can temporarily fall back to RSS.
 
 The archive uses the shared site navigation, fonts, publication header and texture,
-with illustrated cards grouped chronologically by year. The publication dial
+with illustrated cards grouped chronologically by year. Desktop cards pack into
+a masonry grid with natural content heights; mobile uses normal single-column
+flow. Responsive repacking observes container width only, so browser chrome
+changing viewport height does not reset scroll or rearrange cards. The publication dial
 uses the same shared `laibor-rails.js` spark and electrical effects as the homepage. Search matches title, description and saved article body
 words and combines with year filters. Without JavaScript, all essays remain visible
 and year links jump to their sections. Standalone articles reuse the microfiche reader styling.

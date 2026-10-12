@@ -29,6 +29,49 @@ if (archiveSearch) {
     const entries = sections.flatMap(section => [...section.querySelectorAll('.archive-entry')].map(el => ({
         el, year: section.dataset.year, text: normalize(el.dataset.search)
     })));
+    const grids = [...document.querySelectorAll('.archive-list')];
+    function layoutArchiveCards() {
+        grids.forEach(grid => {
+            if (grid.closest('.archive-year').hidden) return;
+            const columns = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+            const cards = [...grid.querySelectorAll('.archive-entry:not([hidden])')];
+            grid.classList.toggle('is-masonry', columns > 1);
+            if (columns === 1) {
+                cards.forEach(card => { card.style.removeProperty('grid-column'); card.style.removeProperty('grid-row'); });
+                return;
+            }
+            const bottoms = Array(columns).fill(0);
+            // Read all intrinsic heights before writing positions. Images reserve their
+            // aspect ratio in CSS, so lazy loading cannot move the cards around.
+            const heights = cards.map(card => Math.ceil(card.getBoundingClientRect().height));
+            cards.forEach((card, index) => {
+                const column = bottoms.indexOf(Math.min(...bottoms));
+                card.style.gridColumn = String(column + 1);
+                card.style.gridRow = `${bottoms[column] + 1} / span ${heights[index]}`;
+                bottoms[column] += heights[index] + 24;
+            });
+        });
+    }
+    // Mobile browser chrome changes viewport HEIGHT while scrolling. Only a real
+    // container WIDTH change may trigger responsive repacking; never reset scroll.
+    const widths = new WeakMap();
+    let layoutFrame = 0;
+    const gridObserver = new ResizeObserver(changes => {
+        let changed = false;
+        changes.forEach(({target, contentRect}) => {
+            if (!contentRect.width) return;
+            const width = Math.round(contentRect.width * 100) / 100;
+            if (widths.get(target) === width) return;
+            widths.set(target, width);
+            changed = true;
+        });
+        if (changed && !layoutFrame) layoutFrame = requestAnimationFrame(() => {
+            layoutFrame = 0;
+            layoutArchiveCards();
+        });
+    });
+    grids.forEach(grid => gridObserver.observe(grid));
+    document.fonts.ready.then(layoutArchiveCards);
     const filters = [...document.querySelectorAll('.archive-year-nav [data-year]')];
     const status = document.querySelector('.archive-result-count');
     let year = 'all';
@@ -50,6 +93,7 @@ if (archiveSearch) {
         });
         status.textContent = `${count} of ${entries.length} essays${year === 'all' ? '' : ` · ${year}`}`;
         document.querySelector('.archive-empty').hidden = count !== 0;
+        layoutArchiveCards();
     }
     document.querySelector('.archive-search').hidden = false;
     status.hidden = false;

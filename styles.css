@@ -4875,6 +4875,7 @@ html {
 }
 
 .feed-item {
+    align-self: start;
     background: rgba(255, 255, 255, 0.95);
     padding: 1rem;
     border-radius: 8px;
@@ -4957,9 +4958,8 @@ html {
    poster's printed block. */
 .feed-item-body {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    display: flow-root;
+    flex-grow: 0;
     padding: 0.65rem 1.4rem 0.6rem;
     background: var(--primary);
     border-top: 2px solid var(--light); /* printed rule on the image/navy seam */
@@ -5005,23 +5005,14 @@ html {
 .feed-item-body p {
     color: rgba(248, 233, 210, 0.82);
     line-height: 1.4;
-    /* Leave room in the bottom-right corner for the angled freshness stamp.
-       Sized off the stamp's real footprint rather than by eye: the rotated
-       box measures 103px wide and sits 0.9rem in from the panel's padding
-       edge, so it reaches 117px inward while the panel's own 1.4rem padding
-       covers only 22px of that. 6.6rem leaves the remaining 95px plus a ~10px
-       breathing gap. At 4.5rem the reserve fell ~21px short and the subtitle's
-       first line ran into the stamp's raised top-left corner. */
-    padding-right: 6.6rem;
+    padding-right: 0;
 }
 
-/* Freshness-date stamp — like a "best by" date inked onto packaging.
-   Pulled out of the text flow and rotated into the bottom-right corner of the
-   navy panel so the title/subtitle close up above it. */
+/* The stamp floats beside the subtitle so text wraps around its footprint. */
 .feed-item-meta {
-    position: absolute;
-    right: 0.9rem;
-    bottom: 0.7rem;
+    position: static;
+    float: right;
+    margin: 6px 0 10px 20px;
     z-index: 2;
     pointer-events: none;
 }
@@ -5042,6 +5033,18 @@ html {
     /* faint ink-bleed shadow so it reads as stamped onto the panel */
     text-shadow: 0 0 1px rgba(255, 179, 71, 0.25);
     opacity: 0.95;
+}
+
+/* A steeper, narrower stamp leaves the homepage subtitles more breathing room. */
+#feed-content .feed-item-meta {
+    margin: 12px -8px 18px 14px;
+}
+
+#feed-content .feed-item .date {
+    padding-inline: 0.32rem;
+    font-size: 0.84rem;
+    letter-spacing: 1px;
+    transform: rotate(-18deg);
 }
 
 /* Loading and Error States for RSS Feed */

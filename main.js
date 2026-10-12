@@ -1959,7 +1959,7 @@ async function fetchRSSFeed() {
     
     try {
         // Primary endpoint: Vercel serverless function
-        if (location.protocol === 'http:' || location.protocol === 'https:') {
+        if (shouldFetchRSS && (location.protocol === 'http:' || location.protocol === 'https:')) {
             try {
                 logFeedAttempt('primary-fetch-start', { url: `/api/substack-feed?summary=1&limit=${TOTAL_RSS_ITEMS}` });
                 const response = await fetch(`/api/substack-feed?summary=1&limit=${TOTAL_RSS_ITEMS}`, {
@@ -2135,10 +2135,10 @@ function displayItems(count) {
                  loading="lazy" decoding="async">
             <div class="feed-item-body">
                 <h3>${escapeHtmlAttribute(title)}</h3>
-                <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
                 <div class="feed-item-meta">
                     <span class="date">${stampDate}</span>
                 </div>
+                <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
             </div>
         `;
         const imageEl = feedItem.querySelector('img');
@@ -2183,11 +2183,11 @@ function updateDynamicButton() {
     }
 }
 
-// Skip RSS calls on localhost/file audits to avoid noisy fetch failures.
+// Localhost uses the saved snapshot, avoiding unavailable serverless endpoints.
 const shouldFetchRSS = !['localhost', '127.0.0.1'].includes(location.hostname) && location.protocol !== 'file:';
 
 function initRSSFallbackFetch() {
-    if (!shouldFetchRSS) return;
+    if (location.protocol === 'file:') return;
     const rssSection = document.querySelector('.rss-feed');
     if (!rssSection) return;
 

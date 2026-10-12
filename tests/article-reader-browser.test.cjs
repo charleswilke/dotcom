@@ -9,10 +9,10 @@ const archive = require('../articles/archive.json');
 const slug = 'waiting-for-something';
 const item = archive[slug];
 const csp = require('../vercel.json').headers[0].headers.find(h=>h.key==='Content-Security-Policy').value;
-async function routeLocal(page) {
+async function routeLocal(page, origin = 'https://archive.test') {
     await page.route('**/*', async route => {
         const url = new URL(route.request().url());
-        if (url.origin !== 'https://archive.test') return route.request().resourceType() === 'image' ? route.continue() : route.abort();
+        if (url.origin !== origin) return route.request().resourceType() === 'image' ? route.continue() : route.abort();
         if (url.pathname === '/api/substack-feed') return route.fulfill({status:503,body:''});
         if (url.pathname.startsWith('/api/')) return route.fulfill({status:204});
         if (url.pathname === `/read/${slug}`) return route.fulfill({body:renderArticle(item,slug),contentType:'text/html',headers:{'Content-Security-Policy':csp}});
@@ -124,6 +124,82 @@ test('illustrated archive filters full article text and shares live dial effects
             assert.deepEqual(errors,[]);
             assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
             await page.screenshot({path:`/tmp/dotcom-writing-archive-styled-${width}.png`});
+            await page.close();
+        }
+    } finally {await browser.close();}
+});
+
+test('masonry cards stay compact and height-only viewport changes preserve scroll', async () => {
+    const browser = await chromium.launch({headless:true});
+    try {
+        for (const width of [900,390]) {
+            const page = await browser.newPage({viewport:{width,height:800}});
+            await routeLocal(page);
+            await page.goto('https://archive.test/writing-archive');
+            await page.evaluate(()=>document.fonts.ready);
+            await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+            const card = page.locator('.archive-entry').first();
+            const description = await card.locator('p').boundingBox();
+            const stamp = await card.locator('.feed-item-meta').boundingBox();
+            assert.ok(stamp.y-description.y-description.height < 20, 'Date follows the description without a large empty chin');
+            const collisions = await page.locator('.archive-entry').evaluateAll(cards => cards.flatMap(card => {
+                const date = card.querySelector('.date').getBoundingClientRect();
+                const range = document.createRange();
+                range.selectNodeContents(card.querySelector('p'));
+                return [...range.getClientRects()].filter(line => line.left < date.right && line.right > date.left && line.top < date.bottom && line.bottom > date.top);
+            }).length);
+            assert.equal(collisions,0,'Subtitle text wraps clear of the rotated date stamp');
+            if (width === 900) {
+                const rects = await page.locator('.archive-year').first().locator('.archive-entry').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};}));
+                assert.ok(new Set(rects.map(r=>Math.round(r.height))).size>1, 'Cards retain individual content heights');
+                for (let i=0;i<rects.length;i++) for (let j=i+1;j<rects.length;j++) {
+                    const a=rects[i],b=rects[j];
+                    assert.ok(a.x+a.width<=b.x+1 || b.x+b.width<=a.x+1 || a.y+a.height<=b.y+1 || b.y+b.height<=a.y+1, 'Masonry cards do not overlap');
+                }
+            }
+            await page.locator('.archive-entry').nth(12).evaluate(el=>el.scrollIntoView({block:'start'}));
+            await page.locator('#navLogo.visible').waitFor({state:'attached'});
+            assert.equal(await page.locator('#navLogo img').getAttribute('src'),'/images/cw-nav-monogram-v7.svg');
+            assert.equal(await page.locator('#navLogo').getAttribute('aria-hidden'),'false');
+            const before = await page.evaluate(()=>({scroll:window.scrollY, height:document.documentElement.scrollHeight}));
+            const anchor = await page.locator('.archive-entry').nth(12).boundingBox();
+            for (const height of [650,900,750,800]) {
+                await page.setViewportSize({width,height});
+                await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+                const after = await page.evaluate(()=>({scroll:window.scrollY,height:document.documentElement.scrollHeight}));
+                const next = await page.locator('.archive-entry').nth(12).boundingBox();
+                assert.ok(Math.abs(after.scroll-before.scroll)<2, 'Browser chrome height change preserves scroll position');
+                assert.ok(Math.abs(next.y-anchor.y)<2, 'The same card stays at the same screen position');
+                assert.equal(after.height,before.height,'Height-only changes do not repack cards');
+            }
+            await page.close();
+        }
+    } finally {await browser.close();}
+});
+
+test('homepage date stamps tuck beside subtitles without text collisions', async () => {
+    const browser = await chromium.launch({headless:true});
+    try {
+        for (const width of [1200,900,390]) {
+            const page = await browser.newPage({viewport:{width,height:900}});
+            await routeLocal(page, 'http://localhost:8080');
+            await page.goto('http://localhost:8080/#l.ai.bor');
+            await page.locator('#feed-content .feed-item .feed-item-meta').first().waitFor();
+            await page.evaluate(()=>document.fonts.ready);
+            const results = await page.locator('#feed-content .feed-item').evaluateAll(cards => cards.map(card => {
+                const stamp=card.querySelector('.date').getBoundingClientRect();
+                const p=card.querySelector('.feed-item-body p');
+                const range=document.createRange(); range.selectNodeContents(p);
+                const collisions=[...range.getClientRects()].filter(line=>line.left<stamp.right && line.right>stamp.left && line.top<stamp.bottom && line.bottom>stamp.top).length;
+                const box=p.getBoundingClientRect();
+                return {collisions,delta:stamp.top-box.top};
+            }));
+            assert.ok(results.length>0);
+            assert.ok(results.every(result=>result.collisions===0),`Every subtitle wraps clear of its date stamp at ${width}px: ${JSON.stringify(results.filter(result=>result.collisions))}`);
+            assert.ok(results.every(result=>Math.abs(result.delta)<12),'Stamps tuck alongside the subtitle');
+            assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+            await page.locator('#feed-content').scrollIntoViewIfNeeded();
+            await page.screenshot({path:`/tmp/dotcom-home-stamps-${width}.png`});
             await page.close();
         }
     } finally {await browser.close();}

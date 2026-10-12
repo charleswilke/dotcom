@@ -54,7 +54,7 @@ function build() {
     fs.writeFileSync(path.join(root, 'writing-archive.html'), `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Writing Archive | Charles Wilke</title><meta name="description" content="Essays on AI, humanity, creativity, and work, plus conversations behind the writing. By Charles Wilke.">
-<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=related-reading1"><link rel="stylesheet" href="/article-archive.css?v=8"><link rel="icon" href="/favicon.ico">
+<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=related-reading1"><link rel="stylesheet" href="/article-archive.css?v=9"><link rel="icon" href="/favicon.ico">
 <meta property="og:title" content="The Writing Archive | Charles Wilke"><meta property="og:image" content="${SITE_URL}/images/exploring-laibor-publication-fresh-v2.webp"><meta property="og:url" content="${SITE_URL}/writing-archive"><meta property="og:type" content="website">
 <script src="/common.js?v=archive2" defer></script><script src="/laibor-rails.js?v=1" defer></script><script src="/article-archive.js?v=5" defer></script></head>
 <body class="archive-page"><script src="/nav.js?v=archive-cw1"></script><noscript><p class="archive-fallback-nav"><a href="/">Charles Wilke</a> / <a href="/#l.ai.bor">Latest writing</a></p></noscript>

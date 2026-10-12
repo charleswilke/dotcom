@@ -64,7 +64,7 @@
 .article-page .article-reader-topbar a { color: #e6cf95; text-decoration: none; }
 .article-page .eyebrow { color: var(--neon); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
 .article-page .article-reader-subtitle { display: block; margin-top: 18px; font-family: 'Space Mono',monospace; font-size: 17px; }
-.article-page .byline { margin-top: 20px; font-size: 11px; color: #fff5d4b3; }
+.article-page .byline { margin-top: 20px; align-items: center; justify-content: flex-end; }
 .article-page .byline a { color: var(--fiche-paper-bright); }
 .article-page .article-reader-body { overflow-wrap: anywhere; }
 .article-page .article-reader-body img, .article-page .article-reader-body video { max-width: 100%; height: auto; }

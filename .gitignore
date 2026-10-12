@@ -97,5 +97,6 @@ images/wordmark-wilke-header-preview.png
 # Rebuilt from permanent article records before deployment.
 articles/items/
 articles/local.json
+articles/related.json
 writing-archive.html
 vendor/sanitize-html.cjs

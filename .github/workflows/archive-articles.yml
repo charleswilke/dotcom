@@ -22,7 +22,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: node tools/sync-article-archive.js --backfill
       - run: node tools/build-article-archive.js
-      - run: node --test tests/article-archive.test.cjs
+      - run: node --test tests/article-archive.test.cjs tests/related-articles.test.cjs
       - name: Commit retained articles
         run: |
           git add articles/archive.json cache_substack_feed.json sitemap.xml

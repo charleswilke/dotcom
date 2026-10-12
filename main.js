@@ -1552,6 +1552,52 @@ function setReaderHeaderMode(overlay, mode) {
 
 let _readerPrevUrl = '';
 
+let relatedReadingRequest;
+let relatedReadingVersion = 0;
+function addRelatedReading(overlay, slug) {
+    const version = ++relatedReadingVersion;
+    overlay.dataset.relatedSlug = slug;
+    overlay.querySelector('.article-related')?.remove();
+    if (!relatedReadingRequest) {
+        relatedReadingRequest = fetch('/articles/related.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Related reading unavailable');
+                return response.json();
+            }).catch(() => { relatedReadingRequest = null; return {}; });
+    }
+    relatedReadingRequest.then(catalog => {
+        // A slow response must not append the previous article's selections.
+        if (version !== relatedReadingVersion || !catalog || !Object.hasOwn(catalog, slug) || !Array.isArray(catalog[slug])) return;
+        const entries = catalog[slug].filter(entry => entry && typeof entry.slug === 'string' &&
+            /^[a-z0-9][a-z0-9-]{0,100}$/i.test(entry.slug) && entry.slug !== slug).slice(0, 3);
+        if (!entries.length) return;
+        const section = document.createElement('section');
+        section.className = 'article-related';
+        section.setAttribute('aria-labelledby', 'reader-related-reading-title');
+        const heading = document.createElement('h2');
+        heading.id = 'reader-related-reading-title';
+        heading.textContent = 'Related reading';
+        const list = document.createElement('ul');
+        entries.forEach(entry => {
+            const row = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = `/read/${entry.slug}`;
+            const title = document.createElement('span');
+            title.className = 'article-related-title';
+            title.textContent = entry.title;
+            const description = document.createElement('span');
+            description.className = 'article-related-description';
+            description.textContent = entry.reason || entry.description;
+            link.append(title, description);
+            row.append(link);
+            list.append(row);
+        });
+        section.append(heading, list);
+        overlay.querySelector('.article-reader-body').after(section);
+        if (typeof overlay._updateReaderThumb === 'function') overlay._updateReaderThumb();
+    });
+}
+
 function openArticleReader(item, options = {}) {
     if (!item || !(item.content || item.description)) return false;
 
@@ -1610,6 +1656,7 @@ function openArticleReader(item, options = {}) {
     }
 
     const slug = slugifyArticle(item);
+    addRelatedReading(overlay, slug);
     if (!wasOpen) {
         _readerPrevUrl = getArticleReaderReturnUrl();
     }

@@ -33,6 +33,8 @@ The offline build generates:
 
 - `vendor/sanitize-html.cjs`: bundled sanitizer for Vercel runtime compatibility.
 - `articles/items/<slug>.json`: per-article fallback for the homepage reader.
+- `articles/related.json`: three related essays for each essay and its conversation,
+  used by the standalone pages and homepage reader.
 - `articles/local.json`: existing repository transcripts and their metadata,
   derived from `LOCAL_ARTICLES` in `main.js` and the transcript HTML files,
   with social images from `lib/local-article-images.json`.
@@ -71,6 +73,31 @@ snapshot fallback remains available. The homepage archive tray links to
 Unknown articles return 404; upstream outages for unsaved articles return 502.
 Error pages are marked noindex. Neither redirects visitors into a silent failure.
 
+## Related reading
+
+Each essay ends with three related essay links, rendered in the standalone HTML
+and loaded from the same generated catalog in the homepage reader. The 95 initial
+essays have editorial selections in `lib/related-article-selections.json`, chosen
+for connections between their arguments and themes. Each selection includes its
+target slug and a single-sentence `reason` explaining that specific pairing;
+the reason appears beneath the title instead of repeating the target's subtitle.
+Write each connection individually, varying its structure and opening; distinguish
+the linked article from what the reader just read without repeating a standard
+setup across the three recommendations. Use “what you just read” when an explicit
+reference to the current article helps avoid ambiguity.
+Titles come from the retained records, so they stay in sync. Conversations reuse their parent
+essay's selections and are never recommendation targets.
+
+Newly retained essays receive deterministic TF-IDF text-similarity selections
+at build time until an editorial entry is added. This fallback emphasizes the
+title, subtitle and first 12,000 characters of body text; it is lexical matching,
+not an AI editorial review. These fallback selections display the target's subtitle
+until an editor supplies a reason, rather than inventing an editorial explanation.
+To curate a new essay, add its slug with three `{ "slug": "target-essay", "reason":
+"One sentence connecting the two essays." }` entries to the selections file and
+run the archive build. Invalid targets, self-links, duplicate selections and
+missing editorial reasons fail the build.
+
 The site declares the dot com as the preferred version. Google ultimately chooses
 its canonical; this does not change canonical tags on Substack. Search Console
 setup, sitemap submission, and Google URL inspection are separate next steps.
@@ -98,7 +125,7 @@ requires an explicit deletion from the source archive and sitemap regeneration.
 
 ```sh
 node tools/build-article-archive.js
-node --test tests/article-archive.test.cjs tests/article-reader-browser.test.cjs tests/security.test.js
+node --test tests/article-archive.test.cjs tests/related-articles.test.cjs tests/article-reader-browser.test.cjs tests/security.test.js
 ```
 
 These checks cover rollover retention, invalid and missing slugs, offline archive

@@ -15970,6 +15970,39 @@ body.reader-open {
 }
 .article-reader-tags { display: none; }
 
+.article-related {
+    display: block;
+    position: relative;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    perspective: none;
+    margin: 0;
+    padding: 30px var(--reader-gutter) 36px;
+    background: #f0e5cc;
+    color: var(--fiche-ink, #2e2113);
+    border-top: 1px solid #2e211347;
+    font-family: 'Space Mono', monospace;
+    text-align: left;
+}
+.article-related::before, .article-related::after { display: none; }
+.article-related h2 {
+    max-width: 600px;
+    margin: 0 auto 14px;
+    font: 700 12px/1.5 'Space Mono', monospace;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #5a4628;
+}
+.article-related ul { max-width: 600px; margin: 0 auto; padding: 0; list-style: none; }
+.article-related li { margin: 0; padding: 0; }
+.article-related li + li { border-top: 1px solid #2e21132b; }
+.article-related a { display: block; padding: 16px 0; color: inherit; text-decoration: none; overflow-wrap: anywhere; }
+.article-related-title { display: block; font-size: 18px; font-weight: 700; line-height: 1.5; text-decoration: underline; text-underline-offset: 4px; }
+.article-related-description { display: block; margin-top: 6px; font-size: 12px; line-height: 1.7; color: #5a4628; }
+.article-related a:hover .article-related-title { color: #874315; }
+.article-related a:focus-visible { outline: 2px solid #874315; outline-offset: 4px; }
+
 .article-reader-body {
     padding: 42px var(--reader-gutter) 56px;
     font-family: 'Space Mono', monospace;

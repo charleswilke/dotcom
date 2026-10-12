@@ -58,7 +58,7 @@ test('direct article is readable without JavaScript at desktop and phone widths'
             await page.screenshot({path:`/tmp/dotcom-article-${width}.png`});
             await page.goto('https://archive.test/writing-archive');
             assert.ok(await page.locator(`a[href="/read/${slug}"]`).count());
-            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length + 7);
+            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length);
             assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
             await page.evaluate(()=>document.fonts.ready);
             await page.screenshot({path:`/tmp/dotcom-writing-archive-${width}.png`});
@@ -78,7 +78,7 @@ test('archive uses shared navigation and responsive printed article cards', asyn
             await page.goto('https://archive.test/writing-archive');
             await page.locator('#siteNav').waitFor();
             await page.evaluate(()=>document.fonts.ready);
-            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length + 7);
+            assert.equal(await page.locator('.archive-grid .feed-item').count(),Object.keys(archive).length);
             const columns = await page.locator('.archive-grid').first().evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
             assert.equal(columns,width===390?1:3);
             if (width === 390) {

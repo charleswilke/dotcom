@@ -36,7 +36,8 @@ The offline build generates:
 - `articles/local.json`: existing repository transcripts and their metadata,
   derived from `LOCAL_ARTICLES` in `main.js` and the transcript HTML files,
   with social images from `lib/local-article-images.json`.
-- `writing-archive.html`: crawlable index of essays and local transcripts.
+- `writing-archive.html`: crawlable index of essays. Conversations are linked
+  within their essays, without separate archive cards or a conversation count.
 - Article and archive entries in `sitemap.xml`, preserving other site entries.
 
 Generated data and index HTML are ignored by Git and regenerated before the

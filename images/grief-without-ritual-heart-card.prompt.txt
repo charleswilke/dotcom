@@ -1,0 +1,7 @@
+Generated with the built-in image_gen tool on 2026-10-12.
+Selected by the user for the GWOR Recently card.
+Source: exec-28f8ae00-4b40-4ba2-925f-00901ad70996.png
+Published asset: grief-without-ritual-heart-card.webp, resized to 1400 x 910, WebP quality 90.
+
+Final prompt:
+Edit this Recently card preview. Keep the exact landscape composition, charcoal textured paper backdrop, cream aged cut-paper typography on the left reading 'GRIEF WITHOUT RITUAL', and the same handmade irregular edges and restrained paper grain. Change only the illustration on the right: remove both hands, wrists and sleeves completely. Arrange the existing brick-red irregular paper fragments into a loosely recognizable HEART silhouette, suspended against charcoal negative space. The heart should be formed entirely by separated fragments with generous uneven black gaps; no enclosing outline, backing shape or connected solid heart. Use about 12 to 16 irregular angular red scraps, with two rounded-ish clusters at top and a taper toward a bottom point. Some pieces slightly displaced from the implied contour, suggesting something broken that still loosely holds its shape. Overall silhouette legible at thumbnail size, restrained and emotionally unresolved, not a symmetrical polished heart icon, not jigsaw pieces. Keep the heart centered in the right half and well spaced from title and image edges. No hands, chair, arrows, extra text, blood or new colors. Preserve reference lettering and texture.

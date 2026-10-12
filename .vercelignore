@@ -8,8 +8,7 @@ OMAxAI/*
 # Dependencies & dev tooling. Minification now runs on Vercel, so tools/ is excluded by its
 # *contents* rather than outright: a path under a flatly-excluded directory
 # cannot be re-included, the same trap the OMAxAI/* and bt-assets/* rules below
-# are shaped around. Everything in tools/ still stays out except the two files
-# the build actually executes.
+# are shaped around. Only the tools used by the deployment build are included.
 node_modules
 **/node_modules
 tools/*
@@ -84,6 +83,7 @@ bt-assets/The Sisters Hayes - short/nicks-notes-on-the-sisters-hayes.rtf
 
 # Security build preparation and local-only regression tests
 !tools/prepare-security-assets.js
+!tools/build-article-archive.js
 tests/
 
 # Public, reviewed downloads linked from the God shuffled his feet transcript.

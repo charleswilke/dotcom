@@ -1661,16 +1661,6 @@ document.querySelectorAll('section').forEach(section => sectionObserver.observe(
 let currentItems = 0;
 let allItems = [];
 let isLoading = false;
-// Phones page the grid in twelves; at two columns and up the whole feed lands
-// at once (18 cards, three rows past the old first page) so the button below
-// the grid is the archive link from first paint instead of one click later.
-// Same 767px breakpoint the grid collapses to a single column at.
-const ITEMS_PER_PAGE = 12;
-const PHONE_FEED_QUERY = '(max-width: 767px)';
-function getFeedPageSize() {
-    const isPhone = window.matchMedia && window.matchMedia(PHONE_FEED_QUERY).matches;
-    return isPhone ? ITEMS_PER_PAGE : Math.max(ITEMS_PER_PAGE, allItems.length);
-}
 let isArchiveMode = false;
 const RSS_CACHE_KEY = 'charleswilke:rss-feed:v4';
 const RSS_CACHE_TTL_MS = 30 * 60 * 1000;
@@ -1765,7 +1755,7 @@ function renderFeedItems(items, feedContent) {
     }
 
     populateLatestArticleSpotlight();
-    displayItems(getFeedPageSize());
+    displayItems(allItems.length);
     maybeOpenReaderFromLocation();
 }
 
@@ -2001,8 +1991,8 @@ function displayItems(count) {
 // Function to update the dynamic button state
 // While the grid still has cards to deal, the key under it loads them. Once it is
 // fully dealt the key steps aside for the archive tray (#archiveTray in index.html),
-// a plain link styled as the grid's last row. At two columns and up that is the
-// state from first paint, since getFeedPageSize lands the whole feed at once.
+// a plain link styled as the grid's last row. Every screen size loads the whole
+// feed at once, so the archive tray appears as soon as the feed is rendered.
 function updateDynamicButton() {
     const dynamicBtn = document.getElementById('dynamicButton');
     if (!dynamicBtn) return;
@@ -2015,7 +2005,7 @@ function updateDynamicButton() {
     if (container) container.classList.toggle('is-archive', archiveMode);
 
     if (!archiveMode) {
-        dynamicBtn.onclick = () => displayItems(getFeedPageSize());
+        dynamicBtn.onclick = () => displayItems(allItems.length);
     }
 }
 

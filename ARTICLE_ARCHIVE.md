@@ -21,7 +21,10 @@ posts. It only imports individual historical posts whose audience is `everyone`.
 It uses bounded requests, throttling, retries, and atomic checkpoints after each
 batch. Failed imports exit unsuccessfully; existing saved records survive.
 Rerunning resumes by skipping already saved posts. Older saved posts are not
-refreshed during backfill; posts still in RSS are refreshed on every sync.
+refreshed during backfill; posts still in RSS are refreshed on every sync. Online
+syncs also retain missing video poster metadata so archived players can display
+previews without a live metadata lookup; failed lookups leave videos playable
+and retry on a later sync. Feed-file imports remain offline.
 
 For an offline RSS import:
 

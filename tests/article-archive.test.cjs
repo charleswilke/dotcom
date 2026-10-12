@@ -79,3 +79,26 @@ test('bundled sanitizer runs when CommonJS loading of ES modules is disabled', (
     const output = execFileSync(process.execPath,['--no-experimental-require-module','-e',"process.stdout.write(require('./lib/article-archive').sanitizeContent('<p>Safe <strong>article</strong></p>'))"],{cwd:path.join(__dirname,'..'),encoding:'utf8'});
     assert.equal(output,'<p>Safe <strong>article</strong></p>');
 });
+
+test('video posters survive RSS refreshes and failed metadata lookups remain retryable', async () => {
+    const {enrichVideoEmbeds} = require('../lib/substack-utils');
+    const embed = (id, poster) => `<div class="native-video-embed" data-attrs="${JSON.stringify({mediaUploadId:id,...(poster ? {thumbnailUrl:poster} : {})}).replace(/"/g,'&quot;')}"></div>`;
+    const saved = [{content:embed('saved','https://example.com/saved.jpg')}];
+    const items = [{content:embed('saved')},{content:embed('new')},{content:embed('retry')}];
+    const originalFetch = global.fetch;
+    const requests = [];
+    try {
+        global.fetch = async url => {
+            requests.push(url);
+            if (url.endsWith('/retry')) throw new Error('offline');
+            return {ok:true,json:async()=>({thumbnail_url:'https://example.com/new.jpg'})};
+        };
+        await enrichVideoEmbeds(items,saved);
+        assert.ok(items[0].content.includes('https://example.com/saved.jpg'));
+        assert.ok(items[1].content.includes('https://example.com/new.jpg'));
+        assert.equal(items[2].content,embed('retry'));
+        assert.equal(requests.length,2);
+        assert.ok(requests.every(url=>!url.endsWith('/saved')));
+        assert.ok(sanitizeContent(items[0].content).includes('https://example.com/saved.jpg'));
+    } finally { global.fetch = originalFetch; }
+});

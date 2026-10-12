@@ -68,6 +68,7 @@
 .article-page .byline a { color: var(--fiche-paper-bright); }
 .article-page .article-reader-body { overflow-wrap: anywhere; }
 .article-page .article-reader-body img, .article-page .article-reader-body video { max-width: 100%; height: auto; }
+.article-page .article-reader-body .article-reader-video { max-width: 600px; }
 .article-page .article-reader-body iframe { width: 100%; aspect-ratio: 16/9; border: 0; }
 .article-page .article-reader-body audio { width: 100%; }
 .article-page .article-reader-body pre { overflow: auto; }

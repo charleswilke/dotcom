@@ -210,3 +210,23 @@ test('homepage date stamps tuck beside subtitles without text collisions', async
         }
     } finally {await browser.close();}
 });
+
+test('archived video uses its saved poster and the shared responsive player styling', async () => {
+    const browser = await chromium.launch({headless:true});
+    try {
+        for (const width of [1200,390]) {
+            const page = await browser.newPage({viewport:{width,height:900}});
+            await routeLocal(page);
+            await page.goto(`https://archive.test/read/${slug}`);
+            const video = page.locator('video.article-reader-video');
+            await video.waitFor();
+            assert.match(await video.getAttribute('poster'), /^https:\/\//);
+            assert.equal(await video.getAttribute('preload'),'metadata');
+            const box = await video.boundingBox();
+            const body = await page.locator('.article-body').boundingBox();
+            assert.ok(box.width>250 && box.width<=600);
+            assert.ok(box.x>=body.x && box.x+box.width<=body.x+body.width+1);
+            await page.close();
+        }
+    } finally { await browser.close(); }
+});

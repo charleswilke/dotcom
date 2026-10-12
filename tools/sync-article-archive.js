@@ -1,13 +1,14 @@
 // Append/update public posts; an upstream omission never deletes a saved article.
 const fs = require('node:fs');
 const path = require('node:path');
-const { parseRssItems, slugifyArticle } = require('../lib/substack-utils');
+const { parseRssItems, slugifyArticle, enrichVideoEmbeds } = require('../lib/substack-utils');
 const { validSlug } = require('../lib/article-archive');
 const root = path.join(__dirname, '..');
 const file = path.join(root, 'articles/archive.json');
 const base = 'https://charleswilke.substack.com';
 const args = process.argv.slice(2);
 const archive = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
+const retainedVideoItems = Object.values(archive);
 const headers = {'User-Agent':'CharlesWilkeArchive/1.0 (+https://charleswilke.com)'};
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function request(url, json = true) {
@@ -46,6 +47,7 @@ async function main() {
     const items = parseRssItems(xml, 200);
     if (!items.length) throw new Error('Empty RSS feed; archive left untouched');
     for (const item of items) save(item);
+    if (feedArg < 0) await enrichVideoEmbeds(Object.values(archive), retainedVideoItems);
     checkpoint();
     if (args.includes('--backfill')) {
         for (let offset = 0; ; offset += 20) {
@@ -64,6 +66,9 @@ async function main() {
             if (posts.length < 20) break;
         }
     }
+    // Preserve poster metadata in retained HTML so readers need no live lookup.
+    // A feed-file import stays fully offline; failed lookups retain playable embeds.
+    if (feedArg < 0 && args.includes('--backfill')) await enrichVideoEmbeds(Object.values(archive), retainedVideoItems);
     checkpoint();
     // Keep the offline homepage fallback current, without replacing the archive.
     fs.writeFileSync(path.join(root, 'cache_substack_feed.json'), JSON.stringify({status:'ok', items:items.slice(0,19)}, null, 2) + '\n');

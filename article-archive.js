@@ -7,8 +7,9 @@ document.querySelectorAll('.native-audio-embed,.native-video-embed').forEach(el 
         const media = document.createElement(kind);
         media.src = `https://charleswilke.substack.com/api/v1/${kind}/upload/${encodeURIComponent(attrs.mediaUploadId)}/src`;
         media.controls = true;
-        media.preload = 'none';
+        media.preload = kind === 'video' ? 'metadata' : 'none';
         if (kind === 'video') {
+            media.className = 'article-reader-video';
             media.setAttribute('playsinline', '');
             if (typeof attrs.thumbnailUrl === 'string' && attrs.thumbnailUrl.startsWith('https://')) media.poster = attrs.thumbnailUrl;
         }

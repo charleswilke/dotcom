@@ -53,7 +53,8 @@ Saved posts and local transcripts load without contacting Substack. Newly
 published posts not yet imported can temporarily fall back to RSS.
 
 The archive uses the shared site navigation, fonts, publication header and texture,
-with compact chronological rows grouped by year. Search matches title and description
+with illustrated cards grouped chronologically by year. The publication dial
+uses the same shared `laibor-rails.js` spark and electrical effects as the homepage. Search matches title, description and saved article body
 words and combines with year filters. Without JavaScript, all essays remain visible
 and year links jump to their sections. Standalone articles reuse the microfiche reader styling.
 

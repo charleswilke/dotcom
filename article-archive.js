@@ -23,6 +23,7 @@ document.addEventListener('play', event => {
 // Progressive enhancement: every essay remains readable and linked without JS.
 const archiveSearch = document.querySelector('#archive-search');
 if (archiveSearch) {
+    initLaiborRails(document.querySelector('.archive-surface'));
     const normalize = text => text.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const sections = [...document.querySelectorAll('.archive-year')];
     const entries = sections.flatMap(section => [...section.querySelectorAll('.archive-entry')].map(el => ({

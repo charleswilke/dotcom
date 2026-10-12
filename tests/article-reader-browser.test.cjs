@@ -67,7 +67,7 @@ test('direct article is readable without JavaScript at desktop and phone widths'
     } finally {await browser.close();}
 });
 
-test('compact archive filters essays by search and year with results above the fold', async () => {
+test('illustrated archive filters full article text and shares live dial effects', async () => {
     const browser = await chromium.launch({headless:true});
     try {
         for (const width of [1200,390]) {
@@ -80,7 +80,21 @@ test('compact archive filters essays by search and year with results above the f
             await page.evaluate(()=>document.fonts.ready);
             assert.equal(await page.locator('.archive-list .archive-entry').count(),Object.keys(archive).length);
             const first = await page.locator('.archive-entry').first().boundingBox();
-            assert.ok(first.y + first.height < 800, `First essay should be visible above the fold: ${JSON.stringify(first)}`);
+            assert.ok(first.y < 600, `First essay should begin above the fold: ${JSON.stringify(first)}`);
+            assert.equal(await page.locator('.archive-entry.feed-item .feed-item-body').count(),Object.keys(archive).length);
+            assert.equal(await page.locator('.rss-title-sparks').count(),1);
+            if (width === 1200) {
+                const rail = page.locator('.rss-title-rail-left');
+                const rect = await rail.boundingBox();
+                await page.mouse.move(rect.x + rect.width * .7,rect.y + rect.height/2);
+                await page.locator('.rss-title-rail-left.is-live').waitFor();
+                assert.ok(Number(await rail.evaluate(el=>el.style.getPropertyValue('--hot'))) > 0);
+                await page.mouse.move(0,0);
+            }
+            const searchBox = await page.locator('#archive-search').boundingBox();
+            const yearBox = await page.locator('.archive-year-nav').boundingBox();
+            if (width === 1200) assert.ok(Math.abs((searchBox.y+searchBox.height/2)-(yearBox.y+yearBox.height/2))<3, 'Search and years share a desktop row');
+            else assert.ok(searchBox.y >= yearBox.y+yearBox.height, 'Mobile controls stack');
             await page.locator('.archive-year-nav [data-year="2023"]').click();
             const count2023 = Object.values(archive).filter(item=>new Date(item.pubDate).getUTCFullYear()===2023).length;
             assert.equal(await page.locator('.archive-entry:visible').count(),count2023);
@@ -91,6 +105,10 @@ test('compact archive filters essays by search and year with results above the f
             await page.locator('#archive-reset').click();
             assert.equal(await page.locator('.archive-entry:visible').count(),Object.keys(archive).length);
             await page.locator('#archive-search').fill('Waiting for Something');
+            assert.ok(await page.locator(`.archive-entry[href="/read/${slug}"]`).isVisible());
+            // These words occur only in the saved body, not its title or description.
+            assert.doesNotMatch(item.title + item.description, /GLP-1/i);
+            await page.locator('#archive-search').fill('Gripping headlines GLP-1');
             assert.equal(await page.locator('.archive-entry:visible').count(),1);
             assert.equal(await page.locator('.archive-entry:visible').getAttribute('href'),`/read/${slug}`);
             const selectedYear = new Date(item.pubDate).getUTCFullYear();

@@ -70,3 +70,6 @@
 }
 
 @media (max-width: 767px) { .about-page .biography-footer { padding: 32px 24px; } }
+
+/* Keep the shared tick rail at the page edge, outside the prose column. */
+.biography > .tuner-segment { position: absolute; max-width: none; margin: 0; z-index: 5; }

@@ -74,3 +74,8 @@ test('sync preserves articles that disappear from RSS and fails safely on an emp
         assert.equal(fs.readFileSync(path.join(temp,'articles/archive.json'),'utf8'),saved);
     } finally {fs.rmSync(temp,{recursive:true,force:true});}
 });
+
+test('bundled sanitizer runs when CommonJS loading of ES modules is disabled', () => {
+    const output = execFileSync(process.execPath,['--no-experimental-require-module','-e',"process.stdout.write(require('./lib/article-archive').sanitizeContent('<p>Safe <strong>article</strong></p>'))"],{cwd:path.join(__dirname,'..'),encoding:'utf8'});
+    assert.equal(output,'<p>Safe <strong>article</strong></p>');
+});

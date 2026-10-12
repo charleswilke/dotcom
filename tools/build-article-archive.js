@@ -7,6 +7,11 @@ const localImages = require('../lib/local-article-images.json');
 const { stripHtml } = require('../lib/substack-utils');
 const root = path.join(__dirname, '..');
 function build() {
+    require('esbuild').buildSync({
+        entryPoints:[require.resolve('sanitize-html')], bundle:true, platform:'node',
+        format:'cjs', target:'node22', outfile:path.join(root,'vendor/sanitize-html.cjs'),
+        legalComments:'inline'
+    });
     const archive = JSON.parse(fs.readFileSync(path.join(root, 'articles/archive.json'), 'utf8'));
     const main = fs.readFileSync(path.join(root, 'main.js'), 'utf8');
     const source = main.match(/const LOCAL_ARTICLES = (\[[\s\S]*?\n\]);/);

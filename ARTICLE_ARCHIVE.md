@@ -31,6 +31,7 @@ node tools/sync-article-archive.js --feed-file /absolute/path/feed.xml
 
 The offline build generates:
 
+- `vendor/sanitize-html.cjs`: bundled sanitizer for Vercel runtime compatibility.
 - `articles/items/<slug>.json`: per-article fallback for the homepage reader.
 - `articles/local.json`: existing repository transcripts and their metadata,
   derived from `LOCAL_ARTICLES` in `main.js` and the transcript HTML files,

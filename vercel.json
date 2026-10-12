@@ -1,5 +1,5 @@
 {
-  "buildCommand": "node tools/prepare-security-assets.js && node tools/minify-css.js styles.css subpages.css before-times.css && node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js",
+  "buildCommand": "node tools/build-article-archive.js && node tools/prepare-security-assets.js && node tools/minify-css.js styles.css subpages.css before-times.css && node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js",
   "outputDirectory": ".",
   "functions": {
     "api/*.js": {
@@ -91,6 +91,7 @@
     { "source": "/jersey-boys/", "destination": "/jersey-boys", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/writing-archive(/?)", "destination": "/writing-archive.html" },
     { "source": "/read/:slug", "destination": "/api/article-preview?slug=:slug" },
     { "source": "/read/:slug/", "destination": "/api/article-preview?slug=:slug" },
     { "source": "/s2i(/?)", "destination": "/s2i.html" },

@@ -4,6 +4,7 @@
     "terser": "^5.51.2"
   },
   "dependencies": {
-    "dompurify": "3.4.15"
+    "dompurify": "3.4.15",
+    "sanitize-html": "^2.18.0"
   }
 }

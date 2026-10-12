@@ -1,0 +1,51 @@
+{
+  "what-hope-do-we-have-transcript": {
+    "thumbnail": "/images/transcripts/what-hope-do-we-have/02-empty-stage-header.webp",
+    "image": {
+      "width": 1774,
+      "height": 887
+    }
+  },
+  "situational-awareness-transcript": {
+    "thumbnail": "/images/transcripts/situational-awareness/02-pulp-network-header.webp",
+    "image": {
+      "width": 1774,
+      "height": 887
+    }
+  },
+  "god-shuffled-his-feet-transcript": {
+    "thumbnail": "/images/transcripts/god-shuffled-his-feet/02-header-selected.webp",
+    "image": {
+      "width": 1774,
+      "height": 887
+    }
+  },
+  "surviving-salem-transcript": {
+    "thumbnail": "/images/transcripts/surviving-salem/the-accusation-creates-the-witch.webp",
+    "image": {
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "baby-steps-transcript": {
+    "thumbnail": "/images/transcripts/baby-steps/06-pulp-cast-shadow.webp",
+    "image": {
+      "width": 1774,
+      "height": 887
+    }
+  },
+  "strap-in-transcript": {
+    "thumbnail": "/images/transcripts/strap-in/01-pottery-header.webp",
+    "image": {
+      "width": 1774,
+      "height": 887
+    }
+  },
+  "reckless-intelligence-transcript": {
+    "thumbnail": "/images/transcripts/reckless-intelligence/02-reckless-intelligence-header.webp",
+    "image": {
+      "width": 1774,
+      "height": 887
+    }
+  }
+}

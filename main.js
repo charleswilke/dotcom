@@ -1691,6 +1691,13 @@ async function loadArticleContent(item) {
             // Local static servers have no API route; fall through to the disk cache.
         }
 
+        const archiveResponse = await fetch(`/articles/items/${encodeURIComponent(slug)}.json`);
+        if (archiveResponse.ok) {
+            const archivedItem = await archiveResponse.json();
+            Object.assign(item, archivedItem);
+            return item;
+        }
+
         const cacheResponse = await fetch('/cache_substack_feed.json', { cache: 'no-store' });
         if (!cacheResponse.ok) throw new Error(`Article request failed: HTTP ${cacheResponse.status}`);
         const cached = await cacheResponse.json();
@@ -1733,17 +1740,33 @@ function maybeOpenReaderFromLocation() {
     const local = findLocalArticle(route.slug);
     if (local) {
         openLocalArticle(local, { replaceUrl: route.source === 'hash' });
+        return;
     }
+
+    // Deep links must resolve independently of the homepage's latest 19 cards.
+    loadArticleContent({ slug: route.slug })
+        .then(fullItem => {
+            if (getArticleRouteFromLocation()?.slug === route.slug) {
+                openArticleReader(fullItem, { replaceUrl: route.source === 'hash' });
+            }
+        })
+        .catch(error => {
+            console.warn('[reader] shared article failed to load:', error);
+            if (getArticleRouteFromLocation()?.slug === route.slug) {
+                openArticleReader({
+                    slug: route.slug,
+                    title: 'Article unavailable',
+                    content: '<p>This article could not be loaded. Please try again later or <a href="/writing-archive">browse the writing archive</a>.</p>',
+                    link: ''
+                }, { replaceUrl: true });
+            }
+        });
 }
 
-// Local articles don't depend on the RSS feed (which is skipped on localhost
-// and lazy-loaded in production), so resolve their routes as soon as the DOM
-// is ready instead of waiting for the feed.
+// Shared article routes resolve immediately, independently of the lazy-loaded feed.
 onReady(() => {
     const route = getArticleRouteFromLocation();
-    if (route && findLocalArticle(route.slug)) {
-        openLocalArticle(findLocalArticle(route.slug), { replaceUrl: route.source === 'hash' });
-    }
+    if (route) maybeOpenReaderFromLocation();
 });
 
 window.addEventListener('popstate', () => {

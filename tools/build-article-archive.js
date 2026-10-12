@@ -30,6 +30,10 @@ function build() {
         fs.writeFileSync(path.join(itemsDir, `${slug}.json`), JSON.stringify(item) + '\n');
     }
     const items = Object.values(all).sort((a,b) => Date.parse(b.pubDate)-Date.parse(a.pubDate));
+    // Reuse the homepage's actual publication lettering and radio-scale rails.
+    const homepage = fs.readFileSync(path.join(root,'index.html'),'utf8');
+    const publicationHeader = homepage.match(/<h2 class="section-title section-title-light crt-hover rss-section-title">[\s\S]*?<\/h2>/)?.[0];
+    if (!publicationHeader) throw new Error('Missing Exploring L.ai.bor publication header');
     const years = [...new Set(items.map(item => new Date(item.pubDate).getUTCFullYear()))];
     const sections = years.map(year => {
         const entries = items.filter(item => new Date(item.pubDate).getUTCFullYear() === year);
@@ -45,13 +49,13 @@ function build() {
     fs.writeFileSync(path.join(root, 'writing-archive.html'), `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Writing Archive | Charles Wilke</title><meta name="description" content="Essays on AI, humanity, creativity, and work, plus conversations behind the writing. By Charles Wilke.">
-<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261012-archive"><link rel="stylesheet" href="/article-archive.css?v=2"><link rel="icon" href="/favicon.ico">
+<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261012-archive"><link rel="stylesheet" href="/article-archive.css?v=3"><link rel="icon" href="/favicon.ico">
 <meta property="og:title" content="The Writing Archive | Charles Wilke"><meta property="og:image" content="${SITE_URL}/images/exploring-laibor-publication-fresh-v2.webp"><meta property="og:url" content="${SITE_URL}/writing-archive"><meta property="og:type" content="website">
 <script src="/common.js?v=archive2" defer></script><script src="/article-archive.js?v=2" defer></script></head>
 <body class="archive-page"><script src="/nav.js?v=2f0eb52"></script><noscript><p class="archive-fallback-nav"><a href="/">Charles Wilke</a> / <a href="/#l.ai.bor">Latest writing</a></p></noscript>
-<main class="archive-main"><header class="archive-masthead"><div class="archive-masthead-copy"><a href="/" class="archive-home">Charles Wilke</a><p class="archive-eyebrow">Exploring L.ai.bor / Since 2023</p><h1>The writing<br>archive<span aria-hidden="true">.</span></h1><p class="archive-intro">Essays on capitalism, humanity, and AI.<br>And the conversations behind them.</p><div class="archive-tally"><span>${Object.keys(archive).length} essays</span><span>${Object.keys(local).length} conversations</span></div></div><img class="archive-publication-art" src="/images/exploring-laibor-publication-fresh-v2.webp" alt="Exploring L.ai.bor — Weekly Field Notes" width="1735" height="907" fetchpriority="high"></header>
+<div class="rss-feed archive-surface"><main class="archive-main"><header class="archive-publication-header">${publicationHeader}</header><header class="archive-masthead"><div class="archive-masthead-copy"><a href="/" class="archive-home">Charles Wilke</a><p class="archive-eyebrow">Since 2023</p><h1>The writing archive<span aria-hidden="true">.</span></h1><p class="archive-intro">Essays on capitalism, humanity, and AI.<br>And the conversations behind them.</p><div class="archive-tally"><span>${Object.keys(archive).length} essays</span><span>${Object.keys(local).length} conversations</span></div></div></header>
 <div class="archive-year-nav" aria-label="Browse by year">${years.map(year => `<a href="#year-${year}">${year}</a>`).join('')}<a class="archive-latest" href="/#l.ai.bor">Latest writing ↗</a></div>
-${sections}<footer class="archive-footer"><a href="/">Back to Charles Wilke</a><a href="https://charleswilke.substack.com/subscribe">Subscribe on Substack ↗</a></footer></main></body></html>\n`);
+${sections}<footer class="archive-footer"><a href="/">Back to Charles Wilke</a><a href="https://charleswilke.substack.com/subscribe">Subscribe on Substack ↗</a></footer></main></div></body></html>\n`);
     // Replace only archive entries; preserve unrelated sitemap pages.
     const sitemapPath = path.join(root, 'sitemap.xml');
     let sitemap = fs.readFileSync(sitemapPath, 'utf8').replace(/\s*<url>\s*<loc>https:\/\/charleswilke\.com\/(?:read\/[^<]*|writing-archive)<\/loc>[\s\S]*?<\/url>/g, '');

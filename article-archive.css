@@ -11,7 +11,7 @@
 }
 .archive-main { max-width: 1200px; margin: 0 auto; padding: 44px 28px 0; }
 .archive-masthead {
-    height: auto; min-height: 0; display: grid; grid-template-columns: 1fr 1fr;
+    height: auto; min-height: 0; display: grid; grid-template-columns: 1fr;
     align-items: center; gap: 24px; padding: 40px 0 48px;
     overflow: visible; perspective: none; text-align: left;
 }
@@ -26,8 +26,17 @@
 .archive-tally { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .archive-tally span { color: #ffb93a; border: 1px solid #ffb93a60; padding: 5px 10px;
     font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-.archive-publication-art { width: 100%; height: auto; transform: rotate(-3deg);
-    filter: drop-shadow(0 18px 25px #0008); }
+/* The homepage's section class supplies the exact gradient, scanlines and radar rings. */
+.archive-surface.rss-feed { padding: 0; min-height: calc(100vh - 52px); }
+.archive-surface > .archive-main { position: relative; z-index: 2; }
+.archive-publication-header {
+    display: block; height: auto; min-height: 0; overflow: visible;
+    perspective: none; padding: 16px 0 8px;
+}
+.archive-publication-header::before, .archive-publication-header::after { display: none; }
+.archive-publication-header .rss-section-title { margin-bottom: 0; }
+.archive-masthead { padding-top: 24px; }
+.archive-home { margin-bottom: 22px; }
 .archive-year-nav { display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
     padding: 18px 0; border-top: 1px solid #00f7c240; border-bottom: 1px solid #00f7c240; margin-bottom: 48px; }
 .archive-year-nav a { text-decoration: none; color: var(--light); font-size: 13px; padding: 6px 13px;
@@ -84,7 +93,7 @@
     .archive-masthead { grid-template-columns: 1fr; gap: 22px; padding: 20px 0 32px; }
     .archive-home { font-size: 12px; letter-spacing: 2px; margin-bottom: 25px; }
     .archive-masthead h1 { font-size: clamp(34px,9.5vw,48px); }
-    .archive-publication-art { max-width: 360px; justify-self: center; }
+    .archive-publication-header { padding-top: 12px; }
     .archive-year-nav { gap: 7px; margin-bottom: 32px; }
     .archive-year-nav a { padding: 5px 10px; font-size: 11px; }
     .archive-year-nav .archive-latest { margin-left: 0; }

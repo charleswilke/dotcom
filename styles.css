@@ -4467,6 +4467,13 @@ html {
     transform: rotate(-0.5deg);
 }
 
+@media (min-width: 768px) {
+    .about-content {
+        /* Match the portrait's width so the bio and links fill its height. */
+        max-width: 420px;
+    }
+}
+
 .about-content p {
     margin: 0 0 1.1rem;
 }
@@ -17270,7 +17277,47 @@ body.reader-open {
 .about-link-directory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem 1.1rem; margin-bottom: 0; font-size: .85rem; }
 .about-link-directory .social-group-label { margin-bottom: .15rem; padding-bottom: .1rem; font-size: .6rem; }
 .about-link-directory .social-group-items { gap: .15rem 1rem; }
-.about-link-directory .social-link { padding: .15rem 0; }
+.about-link-directory .social-link { padding: .1rem 0; line-height: 1.35; }
+.about-link-directory .social-group-items li { display: flex; }
+.about-link-directory .social-link-with-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 2rem;
+}
+.about-link-directory [aria-labelledby="elsewhere-label"] .social-group-items {
+    gap: .15rem .1rem;
+}
+.social-link-with-icon span {
+    position: absolute;
+    bottom: calc(100% + .35rem);
+    left: 50%;
+    transform: translate(-50%, .2rem);
+    padding: .25rem .45rem;
+    border: 1px solid #ffb93a;
+    border-radius: 4px;
+    background: #1a1550;
+    color: #ffb93a;
+    font-size: .75rem;
+    line-height: 1.4;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s ease, transform .15s ease;
+    z-index: 3;
+}
+.social-link-with-icon:hover span,
+.social-link-with-icon:focus-visible span {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+.social-icon {
+    width: 1.3rem;
+    height: 1.3rem;
+    flex: 0 0 auto;
+}
 @media (max-width: 767px) {
     .about-link-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

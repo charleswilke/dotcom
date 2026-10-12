@@ -41,8 +41,16 @@ if (document.body.classList.contains('article-page') && window.ArticleReaderUI) 
         set scrollTop(value) { window.scrollTo({top:value, behavior:'instant'}); }
     };
     const update = window.ArticleReaderUI.attachScrollbar(scroll, bar.querySelector('.article-reader-thumb'), bar.querySelector('.article-reader-rail'), {scrollTarget:window, resizeTarget:document.body});
-    document.addEventListener('load', update, true);
-    document.fonts.ready.then(update);
+    // Clip the fixed rail to the paper; the header and hero sit above it.
+    const shell = document.querySelector('.article-reader-shell');
+    const clipToPaper = () => {
+        bar.style.clipPath = `inset(${Math.max(0, shell.getBoundingClientRect().top - bar.getBoundingClientRect().top)}px 0 0)`;
+    };
+    window.addEventListener('scroll', clipToPaper, {passive:true});
+    window.addEventListener('resize', clipToPaper, {passive:true});
+    document.addEventListener('load', () => { update(); clipToPaper(); }, true);
+    document.fonts.ready.then(() => { update(); clipToPaper(); });
+    clipToPaper();
 }
 
 // Progressive enhancement: every essay remains readable and linked without JS.

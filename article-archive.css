@@ -110,7 +110,7 @@
     bottom: 0;
     right: max(0px, calc((100vw - 928px) / 2 + 24px));
     width: 16px;
-    z-index: 20;
+    z-index: 5;
     pointer-events: none;
 }
 @media (max-width: 600px) { .article-page-scrollbar { right: 0; } }

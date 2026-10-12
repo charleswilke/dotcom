@@ -269,15 +269,19 @@ test('archive recap controls play, pause, seek and yield to video; reader thumb 
             await page.waitForFunction(()=>document.querySelector('.scope-player').classList.contains('is-playing'));
             await page.locator('video').evaluate(v=>v.dispatchEvent(new Event('play')));
             assert.equal(await page.locator('.scope-audio').evaluate(a=>a.paused),true);
-            await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
-            await page.waitForFunction(()=>parseFloat(document.querySelector('.article-page-scrollbar .article-reader-thumb').style.top)<1);
+            await page.evaluate(() => {
+                const hero = document.querySelector('.article-reader-body > .captioned-image-container:first-child');
+                window.scrollTo({top:(hero || document.querySelector('.article-reader-header')).getBoundingClientRect().bottom + scrollY,behavior:'instant'});
+            });
+            await page.waitForFunction(()=>parseFloat(document.querySelector('.article-page-scrollbar .article-reader-thumb').style.top)>0);
             const thumb = page.locator('.article-page-scrollbar .article-reader-thumb');
+            const beforeDrag = await page.evaluate(()=>window.scrollY);
             const box = await thumb.boundingBox();
             await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
             await page.mouse.down();
             await page.mouse.move(box.x+box.width/2,box.y+box.height/2+120,{steps:8});
             await page.mouse.up();
-            assert.ok(await page.evaluate(()=>window.scrollY>500));
+            assert.ok(await page.evaluate(()=>window.scrollY)>beforeDrag+500);
             assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
             await page.close();
         }

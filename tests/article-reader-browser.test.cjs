@@ -273,6 +273,12 @@ test('archive recap controls play, pause, seek and yield to video; reader thumb 
                 const hero = document.querySelector('.article-reader-body > .captioned-image-container:first-child');
                 window.scrollTo({top:(hero || document.querySelector('.article-reader-header')).getBoundingClientRect().bottom + scrollY,behavior:'instant'});
             });
+            if (width < 600) {
+                assert.equal(await page.locator('.article-page-scrollbar').isVisible(),false);
+                assert.ok(await page.evaluate(()=>window.scrollY>0));
+                await page.close();
+                continue;
+            }
             await page.waitForFunction(()=>parseFloat(document.querySelector('.article-page-scrollbar .article-reader-thumb').style.top)>0);
             const thumb = page.locator('.article-page-scrollbar .article-reader-thumb');
             const beforeDrag = await page.evaluate(()=>window.scrollY);

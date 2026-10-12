@@ -13,15 +13,13 @@
 .archive-publication-header .rss-title-tagline { font-size: 10px; margin-top: 10px; }
 .archive-publication-header .rss-title-rail { height: 50px; }
 .archive-masthead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px 24px; flex-wrap: wrap; padding: 24px 0 18px; text-align: left; }
-.archive-masthead h1 { font: 400 clamp(25px,3vw,36px)/1.2 'Audiowide',sans-serif; text-transform: uppercase; color: var(--light); margin: 0; }
-.archive-masthead h1 span { color: var(--secondary); }
+.archive-page-title { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .archive-masthead p { font-size: 11px; color: #bfc7dc; margin: 0; }
 .archive-masthead a { color: inherit; text-underline-offset: 3px; }
-.archive-search label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--neon); margin-bottom: 7px; }
 .archive-search input { width: 100%; border: 1px solid #a3b5cb70; border-radius: 4px; background: #0c1036c9; color: var(--light); padding: 12px 15px; font: inherit; font-size: 14px; }
 .archive-search input::placeholder { color: #aeb9d0; }
 .archive-search input:focus-visible { outline: 2px solid var(--neon); outline-offset: 3px; }
-.archive-year-nav { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 0; border-bottom: 1px solid #00f7c240; }
+.archive-year-nav { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 0; }
 .archive-year-nav a { text-decoration: none; color: var(--light); font-size: 12px; padding: 9px 12px; border: 1px solid #c8cee540; border-radius: 3px; }
 .archive-year-nav a:hover, .archive-year-nav a:focus-visible { color: var(--neon); border-color: var(--neon); }
 .archive-year-nav a[aria-current="true"] { background: var(--neon); color: #1a1550; border-color: var(--neon); }
@@ -75,7 +73,6 @@
     .archive-publication-header .rss-title-main { font-size: 1.3em; }
     .archive-publication-header .rss-title-tagline { font-size: clamp(7px,2.3vw,10px); letter-spacing: .02em; }
     .archive-masthead { padding: 18px 0 16px; gap: 8px; }
-    .archive-masthead h1 { font-size: 25px; }
     .archive-masthead p { font-size: 10px; }
     .archive-search input { font-size: 16px; }
     .archive-year-nav { gap: 6px; }

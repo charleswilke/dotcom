@@ -35,9 +35,10 @@ function initStickyNav() {
 
     if (!nav) return;
 
-    // --- Show nav logo only after header scrolls out of view ---
+    // Keep the archive home link available above its publication masthead.
+    // Other pages with a header reveal the logo after it scrolls out of view.
     const siteHeader = document.querySelector('header');
-    if (navLogo && siteHeader) {
+    if (navLogo && siteHeader && !document.body.classList.contains('archive-page')) {
         navLogo.inert = true;
         navLogo.setAttribute('aria-hidden', 'true');
         const headerObserver = new IntersectionObserver(
@@ -49,6 +50,10 @@ function initStickyNav() {
             { threshold: 0 }
         );
         headerObserver.observe(siteHeader);
+    } else if (navLogo) {
+        navLogo.classList.add('visible');
+        navLogo.inert = false;
+        navLogo.setAttribute('aria-hidden', 'false');
     }
 
     // --- Hide/show on scroll ---

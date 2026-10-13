@@ -4884,7 +4884,7 @@ html {
 .feed-item {
     align-self: start;
     background: rgba(255, 255, 255, 0.95);
-    padding: 1rem;
+    padding: calc(2rem / 3);
     border-radius: 8px;
     border: 1px solid var(--primary);
     box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 0 10px rgba(255, 185, 58, 0.3);
@@ -10074,7 +10074,6 @@ html {
     }
     
     .feed-item {
-        padding: 1rem;
         margin: 0;
         width: 100%;
     }
@@ -10107,10 +10106,6 @@ html {
 }
 
 @media (max-width: 480px) {
-    .feed-item {
-        padding: 1rem;
-    }
-
     .feed-item img {
         height: auto;
     }
@@ -15248,7 +15243,8 @@ section.production-header.alice p {
     filter: drop-shadow(0 0 4px rgba(255, 185, 100, 0.18));
 }
 
-.nav-logo.visible {
+.nav-logo.visible,
+.archive-page .nav-logo {
     opacity: 1;
     pointer-events: auto;
 }

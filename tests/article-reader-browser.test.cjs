@@ -248,7 +248,7 @@ test('masonry cards stay compact and height-only viewport changes preserve scrol
     } finally {await browser.close();}
 });
 
-test('homepage date stamps tuck beside subtitles without text collisions', async () => {
+test('homepage folder date tabs sit at the image seam without text collisions', async () => {
     const browser = await chromium.launch({headless:true});
     try {
         for (const width of [1200,900,390]) {
@@ -262,12 +262,15 @@ test('homepage date stamps tuck beside subtitles without text collisions', async
                 const p=card.querySelector('.feed-item-body p');
                 const range=document.createRange(); range.selectNodeContents(p);
                 const collisions=[...range.getClientRects()].filter(line=>line.left<stamp.right && line.right>stamp.left && line.top<stamp.bottom && line.bottom>stamp.top).length;
-                const box=p.getBoundingClientRect();
-                return {collisions,delta:stamp.top-box.top};
+                const tab=card.querySelector('.feed-item-meta').getBoundingClientRect();
+                const panel=card.querySelector('.feed-item-body').getBoundingClientRect();
+                return {collisions, seamOverlap:tab.bottom-panel.top, padding:getComputedStyle(card).paddingTop, transform:getComputedStyle(card.querySelector('.date')).transform, date:card.querySelector('.date').textContent};
             }));
             assert.ok(results.length>0);
             assert.ok(results.every(result=>result.collisions===0),`Every subtitle wraps clear of its date stamp at ${width}px: ${JSON.stringify(results.filter(result=>result.collisions))}`);
-            assert.ok(results.every(result=>Math.abs(result.delta)<12),'Stamps tuck alongside the subtitle');
+            assert.ok(results.every(result=>Math.abs(result.seamOverlap-2)<1),'Folder tabs join the panel divider');
+            assert.ok(results.every(result=>result.padding==='8px' && result.transform==='none'),'Cards have slim frames and upright dates');
+            assert.ok(results.every(result=>/^[A-Z][a-z]{2} \d{1,2}$/.test(result.date)),'Dates match the archive format');
             assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
             await page.locator('#feed-content').scrollIntoViewIfNeeded();
             await page.screenshot({path:`/tmp/dotcom-home-stamps-${width}.png`});

@@ -38,8 +38,6 @@
 .archive-list .feed-item-body { display: flow-root; padding: 14px 16px 12px; flex-grow: 0; }
 .archive-list .feed-item-body h3 { font-size: 17px; line-height: 1.35; margin-bottom: 10px; }
 .archive-list .feed-item-body p { padding-right: 0; font-size: 12px; line-height: 1.7; flex-grow: 0; }
-.archive-list .feed-item-meta { position: static; float: right; margin: 4px 0 4px 14px; }
-.archive-list .date { font-size: 12px; }
 .archive-list .archive-entry:focus-visible { outline: 2px solid var(--neon); outline-offset: 3px; }
 @media (max-width: 1000px) { .archive-list { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 .archive-empty { padding: 35px 0; font-size: 14px; line-height: 1.8; }

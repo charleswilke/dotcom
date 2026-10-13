@@ -54,7 +54,7 @@ function build() {
             const stamp = date.toLocaleDateString('en-US', {month:'short',day:'numeric',timeZone:'UTC'});
             const image = resizeSubstackImage(item.thumbnail || '/images/exploring-laibor-publication-fresh-v2.webp',848);
             const description = stripHtml(item.description || '');
-            return `<a class="feed-item archive-entry" data-slug="${escapeHtml(item.slug)}" data-search="${escapeHtml(stripHtml(item.title) + ' ' + description)}" href="/read/${escapeHtml(item.slug)}"><img src="${escapeHtml(image)}" alt="" width="848" height="477" loading="lazy" decoding="async"><div class="feed-item-body"><h3>${escapeHtml(stripHtml(item.title))}</h3><div class="feed-item-meta"><time class="date" datetime="${date.toISOString()}">${stamp}</time></div><p>${escapeHtml(description.slice(0,180))}${description.length > 180 ? '…' : ''}</p></div></a>`;
+            return `<a class="feed-item archive-entry" data-slug="${escapeHtml(item.slug)}" data-search="${escapeHtml(stripHtml(item.title) + ' ' + description)}" href="/read/${escapeHtml(item.slug)}"><div class="feed-card-image"><img src="${escapeHtml(image)}" alt="" width="848" height="477" loading="lazy" decoding="async"></div><div class="feed-card-panel"><div class="feed-item-meta"><time class="date" datetime="${date.toISOString()}">${stamp}</time></div><div class="feed-item-body"><h3>${escapeHtml(stripHtml(item.title))}</h3><p>${escapeHtml(description.slice(0,180))}${description.length > 180 ? '…' : ''}</p></div></div></a>`;
         }).join('\n');
         return `<section class="archive-year" data-year="${year}" aria-labelledby="year-${year}"><div class="archive-year-heading"><h2 id="year-${year}">${year}</h2><span>${entries.length} essays</span></div><div class="feed-grid archive-list">${cards}</div></section>`;
     }).join('\n');
@@ -62,7 +62,7 @@ function build() {
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <script src="/page-entry.js?v=1"></script>
 <title>Writing Archive | Charles Wilke</title><meta name="description" content="Essays on AI, humanity, creativity, and work, plus conversations behind the writing. By Charles Wilke.">
-<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261012-2"><link rel="stylesheet" href="/article-archive.css?v=14"><link rel="icon" href="/favicon.ico">
+<link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261013-4"><link rel="stylesheet" href="/article-archive.css?v=23"><link rel="icon" href="/favicon.ico">
 <meta property="og:title" content="The Writing Archive | Charles Wilke"><meta property="og:image" content="${SITE_URL}/images/exploring-laibor-publication-fresh-v2.webp"><meta property="og:url" content="${SITE_URL}/writing-archive"><meta property="og:type" content="website">
 <script src="/common.js?v=20261012-nav-logo" defer></script><script src="/laibor-rails.js?v=1" defer></script><script src="/article-archive.js?v=9" defer></script></head>
 <body class="archive-page"><script src="/nav.js?v=archive-cw1"></script><noscript><p class="archive-fallback-nav"><a href="/">Charles Wilke</a> / <a href="/#l.ai.bor">Latest writing</a></p></noscript>

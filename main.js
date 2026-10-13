@@ -1945,9 +1945,8 @@ function displayItems(count) {
         const link = getArticleSharePath(item);
         const feedImage = getResponsiveFeedImage(item);
         const pubDate = new Date(item.pubDate);
-        // Freshness-stamp date for the printed panel, e.g. "06-06-26" (MM-DD-YY).
-        const pad = (n) => String(n).padStart(2, '0');
-        const stampDate = `${pad(pubDate.getMonth() + 1)}-${pad(pubDate.getDate())}-${pad(pubDate.getFullYear() % 100)}`;
+        // Use the same short folder-tab date as the writing archive.
+        const stampDate = pubDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric', timeZone: 'UTC'});
 
         const feedItem = document.createElement('a');
         feedItem.className = 'feed-item';
@@ -1955,16 +1954,18 @@ function displayItems(count) {
         feedItem.target = '_blank';
         feedItem.rel = 'noopener noreferrer';
         feedItem.innerHTML = `
-            <img src="${escapeHtmlAttribute(feedImage.src)}"
+            <div class="feed-card-image"><img src="${escapeHtmlAttribute(feedImage.src)}"
                  ${feedImage.srcset ? `srcset="${escapeHtmlAttribute(feedImage.srcset)}" sizes="(max-width: 767px) calc(100vw - 98px), (max-width: 1024px) 45vw, 548px"` : ''}
                  alt="${escapeHtmlAttribute(title)}" width="${feedImage.width}" height="${feedImage.height}"
-                 loading="lazy" decoding="async">
-            <div class="feed-item-body">
-                <h3>${escapeHtmlAttribute(title)}</h3>
+                 loading="lazy" decoding="async"></div>
+            <div class="feed-card-panel">
                 <div class="feed-item-meta">
-                    <span class="date">${stampDate}</span>
+                    <time class="date" datetime="${pubDate.toISOString()}">${stampDate}</time>
                 </div>
-                <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
+                <div class="feed-item-body">
+                    <h3>${escapeHtmlAttribute(title)}</h3>
+                    <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
+                </div>
             </div>
         `;
         const imageEl = feedItem.querySelector('img');

@@ -5042,17 +5042,19 @@ html {
     opacity: 0.95;
 }
 
-/* A steeper, narrower stamp leaves the homepage subtitles more breathing room. */
-#feed-content .feed-item-meta {
-    margin: 12px -8px 18px 14px;
-}
-
-#feed-content .feed-item .date {
-    padding-inline: 0.32rem;
-    font-size: 0.84rem;
-    letter-spacing: 1px;
-    transform: rotate(-18deg);
-}
+/* The date is a folder tab rising from the panel; its fill covers the divider
+   underneath so the cream rule follows the tab's slanted sides and top. */
+.feed-card-image { position: relative; overflow: hidden; border-radius: 4px 4px 0 0; }
+.feed-card-image img { display: block; }
+.feed-card-panel { position: relative; }
+.feed-card-panel > .feed-item-meta { position: absolute; top: -13px; right: 8px; width: 76px; height: 15px; float: none; margin: 0; z-index: 2; overflow: visible; }
+.feed-card-panel > .feed-item-meta::after { content: ''; position: absolute; inset: 0; z-index: 0; background: var(--light); clip-path: polygon(0 100%, 6px 0, calc(100% - 6px) 0, 100% 100%); pointer-events: none; }
+/* Overlap the panel divider so hover transforms cannot expose a hairline seam. */
+.feed-card-panel > .feed-item-meta::before { content: ''; position: absolute; inset: 2px 2px -2px; z-index: 1; background-color: var(--primary); background-image: radial-gradient(circle, rgba(150,165,255,.1) 2.6px, transparent 2.6px); background-size: 8.5px 8.5px; clip-path: polygon(0 100%, 5px 0, calc(100% - 5px) 0, 100% 100%); pointer-events: none; }
+.feed-card-panel .date { position: relative; z-index: 2; top: 5px; display: block; text-transform: uppercase; font-size: 11px; line-height: 12px; letter-spacing: 1px; padding: 0; text-align: center; background: transparent; border: 0; border-radius: 0; opacity: 1; box-shadow: none; transform: none; }
+/* Slim paper frame with the archive's compact panel inset. */
+#feed-content > a.feed-item { padding: 8px; }
+#feed-content .feed-item-body { padding: 14px 16px 12px; }
 
 /* Loading and Error States for RSS Feed */
 .feed-item.loading-placeholder {

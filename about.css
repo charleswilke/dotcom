@@ -40,6 +40,15 @@
 .biography-footer-inner { position: relative; z-index: 2; max-width: 1000px; margin: 0 auto; }
 .biography-footer h2 { font: 400 26px 'Audiowide',sans-serif; margin: 0 0 24px; }
 .biography-footer .social-links { gap: 20px 40px; }
+.biography-footer [aria-labelledby="about-elsewhere"] .social-group-items { gap: .15rem .1rem; }
+.biography-footer [aria-labelledby="about-elsewhere"] li { display: flex; }
+.biography-footer .social-link-with-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 2rem;
+}
 .biography-footer-inner > a { display: inline-block; font-size: 13px; }
 .biography-hero::before, .biography-hero::after { content: none; }
 @media(max-width:767px) { .about.biography { padding: 28px 24px 40px; } .biography-hero { display: flex; flex-direction: column; padding: 0 0 32px; } .biography-portrait { float: none; width: min(100%,320px); margin: 0 auto 32px; } .biography-section { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; } }

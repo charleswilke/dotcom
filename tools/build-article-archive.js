@@ -60,6 +60,7 @@ function build() {
     }).join('\n');
     fs.writeFileSync(path.join(root, 'writing-archive.html'), `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="/page-entry.js?v=1"></script>
 <title>Writing Archive | Charles Wilke</title><meta name="description" content="Essays on AI, humanity, creativity, and work, plus conversations behind the writing. By Charles Wilke.">
 <link rel="canonical" href="${SITE_URL}/writing-archive"><link rel="stylesheet" href="/styles.css?v=20261012-2"><link rel="stylesheet" href="/article-archive.css?v=14"><link rel="icon" href="/favicon.ico">
 <meta property="og:title" content="The Writing Archive | Charles Wilke"><meta property="og:image" content="${SITE_URL}/images/exploring-laibor-publication-fresh-v2.webp"><meta property="og:url" content="${SITE_URL}/writing-archive"><meta property="og:type" content="website">

@@ -8027,7 +8027,7 @@ html {
     /* Cream paper frame — same printed-clipping border + gutter as the grid
        cards, so the hero is the broadsheet in the same deck. */
     background: rgba(255, 255, 255, 0.95);
-    padding: 12px;
+    padding: 8px;
     border: 1px solid var(--primary);
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.14), 0 0 16px rgba(255, 185, 58, 0.35);
@@ -8097,8 +8097,8 @@ html {
 .spotlight-featured-image {
     position: relative;
     z-index: 1;
-    border: 2px solid #bbb;
-    box-shadow: 0 0 10px rgba(255, 185, 58, 0.3);
+    border: 0;
+    box-shadow: none;
 }
 
 .spotlight-content {

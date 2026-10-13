@@ -26,6 +26,18 @@ syncs also retain missing video poster metadata so archived players can display
 previews without a live metadata lookup; failed lookups leave videos playable
 and retry on a later sync. Feed-file imports remain offline.
 
+The RSS refresh and homepage fallback are saved before optional `--backfill`
+work. A later backfill error exits unsuccessfully while retaining that valid
+refresh. The weekly workflow does not request backfill; run it explicitly when
+needed. HTTP 401/403 and other permanent failures stop after one request.
+Network/timeouts, 408, 429, and selected transient 5xx responses get up to three
+attempts. Retry-After seconds and HTTP dates are respected; waits longer than
+60 seconds fail for a later run instead of retrying early. Diagnostics omit
+response bodies and request queries. Failed or malformed feeds leave both saved
+files untouched and never claim a fresh fetch. Successful snapshots identify
+`live-rss` or `offline-rss` and their import time; offline import is not evidence
+of restored live access.
+
 For an offline RSS import:
 
 ```sh
@@ -110,8 +122,9 @@ setup, sitemap submission, and Google URL inspection are separate next steps.
 
 ## Automatic retention
 
-`.github/workflows/archive-articles.yml` runs daily at 11:23 UTC and can also be
-run manually. It imports public posts, builds and tests the archive, then commits
+`.github/workflows/archive-articles.yml` runs weekly on Mondays at 11:23 UTC
+and can also be run manually. It refreshes RSS without historical backfill, builds
+and tests the archive, then commits
 changed archive, fallback, and sitemap files to `main`. Those commits use the
 existing Vercel deployment integration. It needs GitHub Actions enabled and
 permission to push to `main`; branch protection may require a different commit
@@ -124,14 +137,18 @@ Article HTML and metadata are retained locally. Images, audio, video, and extern
 embeds still reference their original hosts; this is not a complete media backup.
 Subscriber-only content and drafts are not backfilled. The public Substack archive
 API is not a guaranteed service contract; a Substack export is an alternative
-source if that API becomes unavailable. Intentionally removing a retained article
-requires an explicit deletion from the source archive and sitemap regeneration.
+source if that API becomes unavailable. The importer currently accepts RSS XML
+through `--feed-file`, not a Substack export ZIP/CSV/HTML bundle. An owner-supplied
+RSS file can be imported without network access; an owner export can be kept as
+a separate backup or converted to validated RSS before import. Do not substitute
+cached feed data as proof of a successful live fetch. Intentionally removing a
+retained article requires an explicit deletion from the source archive and sitemap regeneration.
 
 ## Verification
 
 ```sh
 node tools/build-article-archive.js
-node --test tests/article-archive.test.cjs tests/related-articles.test.cjs tests/article-reader-browser.test.cjs tests/security.test.js
+node --test tests/article-archive.test.cjs tests/article-archive-sync.test.cjs tests/related-articles.test.cjs tests/article-reader-browser.test.cjs tests/security.test.js
 ```
 
 These checks cover rollover retention, invalid and missing slugs, offline archive

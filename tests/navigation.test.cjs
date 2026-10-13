@@ -93,7 +93,7 @@ test('section links update history and Back/Forward restore alignment', async ()
     await page.locator('#navExploreBtn').click();
     await page.locator('#navDropdown a[href="/about"]').click();
     await page.waitForURL(`${origin}/about`);
-    assert.equal(await page.locator('h1').textContent(), 'Charles Wilke.');
+    assert.equal(await page.getByRole('heading', { level: 1, name: 'Behind the work.' }).count(), 1);
     assert.equal(await page.locator('#navLogo img').getAttribute('src'), '/images/cw-nav-monogram-v7.svg');
 }));
 

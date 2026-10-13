@@ -1,5 +1,6 @@
 /* Reuse the homepage About surface, portrait card and grouped links. */
 .about-page { background: #1a1550; color: var(--light); }
+.about-page .nav-logo { opacity: 1; pointer-events: auto; }
 .about.biography { padding: 40px 32px 56px; min-height: calc(100vh - 52px); }
 .biography > * { position: relative; z-index: 2; max-width: 1000px; margin-left: auto; margin-right: auto; }
 .biography a, .biography-footer a { color: #ffb93a; text-underline-offset: 4px; }
@@ -51,7 +52,7 @@
 /* Reuse Recently's dark dot texture between the two screen grids. */
 .about-page .biography-banner { padding: 28px 32px; border-block: 1px solid #ffb93a40; }
 .biography-banner-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
-.biography-banner h2 { margin: 0 auto; width: min(100%, 720px); line-height: 0; }
+.biography-banner h1 { margin: 0 auto; width: min(100%, 720px); line-height: 0; }
 .biography-banner img { display: block; width: 100%; height: auto; }
 @media (max-width: 767px) {
     .about-page .biography-banner { padding: 30px 24px; }

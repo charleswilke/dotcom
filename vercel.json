@@ -61,6 +61,11 @@
     }
   ],
   "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/about.html", "destination": "/about", "permanent": true },
+    { "source": "/about/", "destination": "/about", "permanent": true },
+    { "source": "/writing-archive.html", "destination": "/writing-archive", "permanent": true },
+    { "source": "/writing-archive/", "destination": "/writing-archive", "permanent": true },
     {"source": "/audio/grief-without-ritual/from-the-beginning.mp3", "destination": "/audio/exploring-laibor-mixtape/from-the-beginning.mp3", "permanent": true},
     {"source": "/audio/grief-without-ritual/from-the-beginning.scope.bin", "destination": "/audio/exploring-laibor-mixtape/from-the-beginning.scope.bin", "permanent": true},
     {"source": "/lyrics/grief-without-ritual/from-the-beginning.json", "destination": "/lyrics/exploring-laibor-mixtape/from-the-beginning.json", "permanent": true},

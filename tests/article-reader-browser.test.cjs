@@ -79,7 +79,9 @@ test('illustrated archive filters full article text and shares live dial effects
         for (const width of [1200,390]) {
             const page = await browser.newPage({viewport:{width,height:1000}});
             const errors = [];
+            const searchRequests = [];
             page.on('pageerror',error=>errors.push(error.message));
+            page.on('request',request => { if (new URL(request.url()).pathname === '/articles/search.json') searchRequests.push(request.url()); });
             await routeLocal(page);
             await page.goto('https://archive.test/writing-archive');
             await page.locator('#siteNav').waitFor();
@@ -105,10 +107,14 @@ test('illustrated archive filters full article text and shares live dial effects
             const count2023 = Object.values(archive).filter(item=>new Date(item.pubDate).getUTCFullYear()===2023).length;
             assert.equal(await page.locator('.archive-entry:visible').count(),count2023);
             assert.equal(await page.locator('.archive-year:visible').count(),1);
+            assert.equal(searchRequests.length,0,'Browsing and year filtering do not download full essay text');
             await page.locator('#archive-search').fill('zzzz-no-matching-essay');
+            await page.waitForFunction(() => document.querySelector('.archive-result-count').getAttribute('aria-busy') === 'false');
+            assert.equal(searchRequests.length,1,'The first query loads the full-text index once');
             assert.equal(await page.locator('.archive-entry:visible').count(),0);
             assert.equal(await page.locator('.archive-empty').isVisible(),true);
             await page.locator('#archive-reset').click();
+            assert.equal(searchRequests.length,1,'Further queries reuse the index');
             assert.equal(await page.locator('.archive-entry:visible').count(),Object.keys(archive).length);
             await page.locator('#archive-search').fill('Waiting for Something');
             assert.ok(await page.locator(`.archive-entry[href="/read/${slug}"]`).isVisible());
@@ -133,6 +139,65 @@ test('illustrated archive filters full article text and shares live dial effects
             await page.close();
         }
     } finally {await browser.close();}
+});
+
+test('a delayed full-text download respects edits and clearing the search', async () => {
+    const browser = await chromium.launch({headless:true});
+    let release;
+    try {
+        const page = await browser.newPage();
+        await routeLocal(page);
+        const gate = new Promise(resolve => { release = resolve; });
+        await page.route('**/articles/search.json?*', async route => {
+            await gate;
+            await route.fulfill({path:path.join(root,'articles/search.json'),contentType:'application/json'});
+        });
+        await page.goto('https://archive.test/writing-archive');
+        await page.locator('#archive-search').fill('Gripping headlines GLP-1');
+        assert.equal(await page.locator('.archive-result-count').getAttribute('aria-busy'),'true');
+        assert.equal(await page.locator('.archive-empty').isVisible(),false,'Do not announce no matches while body text is still loading');
+        await page.locator('#archive-search').fill('What Hope Do We Have');
+        await page.locator('.archive-year-nav [data-year="2023"]').click();
+        await page.locator('#archive-search').fill('');
+        const response = page.waitForResponse(response => new URL(response.url()).pathname === '/articles/search.json');
+        release();
+        await (await response).finished();
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        const count2023 = Object.values(archive).filter(item=>new Date(item.pubDate).getUTCFullYear()===2023).length;
+        assert.equal(await page.locator('#archive-search').inputValue(),'');
+        assert.equal(await page.locator('.archive-entry:visible').count(),count2023);
+        assert.equal(await page.locator('.archive-year-nav [aria-current="true"]').getAttribute('data-year'),'2023');
+        await page.locator('.archive-year-nav [data-year="all"]').click();
+        await page.locator('#archive-search').fill('Gripping headlines GLP-1');
+        await page.waitForFunction(() => document.querySelectorAll('.archive-entry:not([hidden])').length === 1);
+        assert.equal(await page.locator('.archive-entry:visible').getAttribute('href'),`/read/${slug}`);
+    } finally { release?.(); await browser.close(); }
+});
+
+test('failed full-text downloads preserve metadata search and retry on the next query', async () => {
+    const browser = await chromium.launch({headless:true});
+    try {
+        for (const failure of ['http','invalid']) {
+            const page = await browser.newPage();
+            await routeLocal(page);
+            let attempts = 0;
+            await page.route('**/articles/search.json?*', route => {
+                attempts++;
+                if (attempts === 1) return route.fulfill(failure === 'http' ? {status:503,body:''} : {json:{}});
+                return route.fulfill({path:path.join(root,'articles/search.json'),contentType:'application/json'});
+            });
+            await page.goto('https://archive.test/writing-archive');
+            await page.locator('#archive-search').fill('Waiting for Something');
+            await page.getByText(/Full-text search unavailable/).waitFor();
+            assert.ok(await page.locator(`.archive-entry[href="/read/${slug}"]`).isVisible());
+            await page.locator('#archive-search').fill('Gripping headlines GLP-1');
+            await page.waitForFunction(() => document.querySelector('.archive-result-count').getAttribute('aria-busy') === 'false');
+            assert.equal(await page.locator('.archive-entry:visible').count(),1);
+            assert.equal(await page.locator('.archive-entry:visible').getAttribute('href'),`/read/${slug}`);
+            assert.equal(attempts,2);
+            await page.close();
+        }
+    } finally { await browser.close(); }
 });
 
 test('masonry cards stay compact and height-only viewport changes preserve scroll', async () => {

@@ -60,7 +60,7 @@ if (archiveSearch) {
     const normalize = text => text.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const sections = [...document.querySelectorAll('.archive-year')];
     const entries = sections.flatMap(section => [...section.querySelectorAll('.archive-entry')].map(el => ({
-        el, year: section.dataset.year, text: normalize(el.dataset.search)
+        el, slug: el.dataset.slug, year: section.dataset.year, text: normalize(el.dataset.search || el.textContent)
     })));
     const grids = [...document.querySelectorAll('.archive-list')];
     function layoutArchiveCards() {
@@ -108,8 +108,32 @@ if (archiveSearch) {
     const filters = [...document.querySelectorAll('.archive-year-nav [data-year]')];
     const status = document.querySelector('.archive-result-count');
     let year = 'all';
+    let searchState = 'idle';
+    async function loadSearchIndex() {
+        if (searchState === 'loading' || searchState === 'ready') return;
+        searchState = 'loading';
+        filterArchive();
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 10000);
+        try {
+            const response = await fetch(archiveSearch.dataset.searchIndex, {signal:controller.signal});
+            if (!response.ok) throw new Error('Search index unavailable');
+            const index = await response.json();
+            if (!index || entries.some(entry => typeof index[entry.slug] !== 'string')) throw new Error('Incomplete search index');
+            entries.forEach(entry => { entry.text += ' ' + normalize(index[entry.slug]); });
+            searchState = 'ready';
+        } catch (error) {
+            // Metadata search stays usable offline. The next query retries.
+            searchState = 'failed';
+        } finally {
+            clearTimeout(timeout);
+            // Apply the current query/year, including a reset made during loading.
+            filterArchive();
+        }
+    }
     function filterArchive() {
         const terms = normalize(archiveSearch.value.trim()).split(/\s+/).filter(Boolean);
+        const loading = terms.length > 0 && searchState === 'loading';
         let count = 0;
         entries.forEach(entry => {
             entry.el.hidden = !((year === 'all' || entry.year === year) && terms.every(term => entry.text.includes(term)));
@@ -125,12 +149,18 @@ if (archiveSearch) {
             else link.removeAttribute('aria-current');
         });
         status.textContent = `${count} of ${entries.length} essays${year === 'all' ? '' : ` · ${year}`}`;
-        document.querySelector('.archive-empty').hidden = count !== 0;
+        if (loading) status.textContent += ' · Searching full essays…';
+        else if (terms.length && searchState === 'failed') status.textContent += ' · Full-text search unavailable. Showing title and summary matches; edit your search to retry.';
+        status.setAttribute('aria-busy', String(loading));
+        document.querySelector('.archive-empty').hidden = count !== 0 || loading;
         layoutArchiveCards();
     }
     document.querySelector('.archive-search').hidden = false;
     status.hidden = false;
-    archiveSearch.addEventListener('input', filterArchive);
+    archiveSearch.addEventListener('input', () => {
+        if (archiveSearch.value.trim() && (searchState === 'idle' || searchState === 'failed')) loadSearchIndex();
+        else filterArchive();
+    });
     filters.forEach(link => link.addEventListener('click', event => {
         event.preventDefault();
         year = link.dataset.year;

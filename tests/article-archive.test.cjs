@@ -8,6 +8,43 @@ const {sanitizeContent, renderArticle} = require('../lib/article-archive');
 const archive = require('../articles/archive.json');
 function response() { return {headers:{},setHeader(k,v){this.headers[k]=v;},status(code){this.code=code;return this;},send(body){this.body=body;return this;}}; }
 
+test('archive keeps crawlable cards small and ships complete search text separately', () => {
+    const html = fs.readFileSync(path.join(__dirname,'../writing-archive.html'),'utf8');
+    const search = require('../articles/search.json');
+    assert.ok(Buffer.byteLength(html) < 120000,'Initial archive HTML must not embed the full essays');
+    for (const slug of Object.keys(archive)) {
+        assert.ok(html.includes(`href="/read/${slug}"`),`Missing crawlable essay: ${slug}`);
+        assert.equal(typeof search[slug],'string');
+    }
+    assert.match(search['waiting-for-something'],/GLP-1/);
+    assert.doesNotMatch(html,/GLP-1/);
+    const hash = require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(__dirname,'../articles/search.json'))).digest('hex').slice(0,16);
+    assert.ok(html.includes(`/articles/search.json?v=${hash}`),'Search data URL changes when its content changes');
+});
+
+test('sitemap excludes redirect stubs and prefers canonical URLs', () => {
+    const root = path.join(__dirname,'..');
+    const config = require('../vercel.json');
+    const xml = fs.readFileSync(path.join(root,'sitemap.xml'),'utf8');
+    const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+    assert.equal(new Set(urls).size,urls.length);
+    for (const url of urls) {
+        const pathname = new URL(url).pathname;
+        if (pathname.startsWith('/read/')) continue;
+        const redirect = config.redirects.find(rule => !rule.source.includes(':') && new RegExp(`^${rule.source.replace(/\./g,'\\.')}$`).test(pathname));
+        assert.equal(redirect,undefined,`Sitemap URL redirects: ${url}`);
+        const rewrite = config.rewrites.find(rule => !rule.source.includes(':') && new RegExp(`^${rule.source.replace(/\./g,'\\.')}$`).test(pathname));
+        const file = pathname === '/' ? '/index.html' : rewrite?.destination || pathname;
+        const html = fs.readFileSync(path.join(root,file),'utf8');
+        assert.doesNotMatch(html,/window\.location\.replace|http-equiv="refresh"/i,`Sitemap contains a client redirect: ${url}`);
+        const canonical = html.match(/rel="canonical" href="([^"]+)"/);
+        if (canonical) assert.equal(canonical[1],url);
+    }
+    for (const [source,destination] of [['/index.html','/'],['/about.html','/about'],['/about/','/about'],['/writing-archive.html','/writing-archive'],['/writing-archive/','/writing-archive']]) {
+        assert.ok(config.redirects.some(rule => rule.source === source && rule.destination === destination && rule.permanent));
+    }
+});
+
 test('archived links and local transcripts return full canonical HTML without Substack', async () => {
     const fetch = global.fetch;
     global.fetch = async () => { throw new Error('Substack is offline'); };

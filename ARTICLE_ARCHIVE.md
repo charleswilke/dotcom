@@ -50,6 +50,8 @@ The offline build generates:
 - `articles/items/<slug>.json`: per-article fallback for the homepage reader.
 - `articles/related.json`: three related essays for each essay and its conversation,
   used by the standalone pages and homepage reader.
+- `articles/search.json`: full essay text fetched only when an archive search begins.
+  Its content hash versions the URL embedded in the archive search field.
 - `articles/local.json`: existing repository transcripts and their metadata,
   derived from `LOCAL_ARTICLES` in `main.js` and the transcript HTML files,
   with social images from `lib/local-article-images.json`.
@@ -75,7 +77,11 @@ a masonry grid with natural content heights; mobile uses normal single-column
 flow. Responsive repacking observes container width only, so browser chrome
 changing viewport height does not reset scroll or rearrange cards. The publication dial
 uses the same shared `laibor-rails.js` spark and electrical effects as the homepage. Search matches title, description and saved article body
-words and combines with year filters. Without JavaScript, all essays remain visible
+words and combines with year filters. The initial HTML contains only card metadata;
+the first nonempty query loads the full-text index once. Results update using the
+current query and year when it arrives. If loading fails or times out, title and
+description search stays available with a notice; editing the query retries.
+Without JavaScript, all essays remain visible
 and year links jump to their sections. Standalone articles reuse the microfiche reader styling. The recap player and
 draggable tick-rail scrollbar come from `article-reader-ui.js`, shared with the
 homepage overlay; standalone pages retain normal document scrolling and their
@@ -119,6 +125,10 @@ missing editorial reasons fail the build.
 The site declares the dot com as the preferred version. Google ultimately chooses
 its canonical; this does not change canonical tags on Substack. Search Console
 setup, sitemap submission, and Google URL inspection are separate next steps.
+The sitemap lists content pages, excluding album/song share stubs that redirect
+into homepage players. Those share URLs and players still work. Use the final
+canonical URL when adding entries. Only include `lastmod` when the date of a
+significant content update is known; the archive build does not invent new dates.
 
 ## Automatic retention
 

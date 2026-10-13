@@ -98,5 +98,6 @@ images/wordmark-wilke-header-preview.png
 articles/items/
 articles/local.json
 articles/related.json
+articles/search.json
 writing-archive.html
 vendor/sanitize-html.cjs

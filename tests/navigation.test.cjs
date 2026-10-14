@@ -121,6 +121,43 @@ test('closed Explore menu is skipped by Tab; Escape restores its button', async 
     assert.equal(await page.locator('#navExploreBtn').getAttribute('aria-expanded'), 'false');
 }));
 
+for (const path of ['faq.html', 'alice-in-wonderland.html', 'jersey-boys.html', 'about.html', 'writing-archive.html']) {
+    for (const width of [390, 1440]) {
+        test(`${path} Explore menu opens, dismisses, and follows links at ${width}px`, async () => withPage(width, async page => {
+            await page.goto(`${origin}/${path}`);
+            const hamburger = page.locator('#navHamburger');
+            const explore = page.locator('#navExploreBtn');
+            const dropdown = page.locator('#navDropdown');
+            if (await hamburger.isVisible()) {
+                await hamburger.click();
+                assert.equal(await hamburger.getAttribute('aria-expanded'), 'true');
+            }
+            await explore.click();
+            assert.equal(await explore.getAttribute('aria-expanded'), 'true');
+            assert.equal(await dropdown.evaluate(element => element.inert), false);
+            await page.keyboard.press('Tab');
+            assert.equal(await page.evaluate(() => !!document.activeElement.closest('#navDropdown')), true);
+            await page.keyboard.press('Escape');
+            assert.equal(await explore.getAttribute('aria-expanded'), 'false');
+            assert.equal(await dropdown.evaluate(element => element.inert), true);
+            // Escape also closes the mobile menu; reopen it before continuing.
+            if (await hamburger.isVisible()) await hamburger.click();
+            await explore.click();
+            await explore.click();
+            assert.equal(await explore.getAttribute('aria-expanded'), 'false');
+            await explore.click();
+            await page.mouse.click(10, 850);
+            assert.equal(await explore.getAttribute('aria-expanded'), 'false');
+            assert.equal(await hamburger.getAttribute('aria-expanded'), 'false');
+            if (await hamburger.isVisible()) await hamburger.click();
+            await explore.click();
+            await dropdown.locator('a[href="/about"]').click();
+            await page.waitForURL(`${origin}/about`);
+            assert.equal(await page.getByRole('heading', { level: 1, name: 'Behind the work.' }).count(), 1);
+        }));
+    }
+}
+
 test('player traps focus, nested cover stays locked, close returns to opener', async () => withPage(1440, async page => {
     await page.goto(origin);
     await nav(page, 'albums');

@@ -2,7 +2,6 @@
 // Detects homepage vs sub-page to set correct href prefixes and data-section attrs.
 (function () {
     var isHome = window.location.pathname === '/' || window.location.pathname === '/index.html';
-    var useMonogram = isHome || /^\/(?:writing-archive|about)(?:\.html)?\/?$/.test(window.location.pathname) || /^\/read\//.test(window.location.pathname);
     var p = isHome ? '' : '/';
     var ds = isHome
         ? function (s) { return ' data-section="' + s + '"'; }
@@ -10,7 +9,7 @@
 
     var navHtml = '<nav class="site-nav" id="siteNav" aria-label="Main navigation">\n' +
         '    <div class="nav-inner">\n' +
-        '        <a href="/" class="nav-logo" id="navLogo" aria-label="Charles Wilke — Home">' + (useMonogram ? '<img src="/images/cw-nav-monogram-v7.svg" width="84" height="43" alt="">' : 'Charles Wilke') + '</a>\n' +
+        '        <a href="/" class="nav-logo" id="navLogo" aria-label="Charles Wilke — Home"><img src="/images/cw-nav-monogram-v7.svg" width="84" height="43" alt=""></a>\n' +
         '        <div class="nav-links" id="navLinks">\n' +
         '            <a href="' + p + '#l.ai.bor" class="nav-link"' + ds('l.ai.bor') + '>Writing</a>\n' +
         '            <a href="' + p + '#albums" class="nav-link"' + ds('albums') + '>Music</a>\n' +

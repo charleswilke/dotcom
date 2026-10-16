@@ -10,6 +10,11 @@ const { build } = require('../tools/build-share-pages');
 
 const root = path.resolve(__dirname, '..');
 
+test('Vercel build command stays within the production schema limit', () => {
+    const config = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+    assert.ok(config.buildCommand.length <= 256, 'Vercel limits buildCommand to 256 characters');
+});
+
 test('share pages retain custom previews and the complete homepage without redirects', () => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'dotcom-share-pages-'));
     try {

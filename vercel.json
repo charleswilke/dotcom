@@ -1,5 +1,5 @@
 {
-  "buildCommand": "node tools/build-article-archive.js && node tools/build-share-pages.js && node tools/prepare-security-assets.js && node tools/minify-css.js styles.css subpages.css before-times.css && node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js",
+  "buildCommand": "npm run build",
   "outputDirectory": ".",
   "functions": {
     "api/*.js": {

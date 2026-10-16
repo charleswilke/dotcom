@@ -5131,7 +5131,7 @@ html {
 .archive-tray {
     display: block;
     width: 100%;
-    padding: 1rem;
+    padding: 8px;
     border-radius: 8px;
     border: 1px solid var(--primary);
     background: rgba(255, 255, 255, 0.95);

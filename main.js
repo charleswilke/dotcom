@@ -3356,7 +3356,10 @@ function initEpisodeMonitor() {
         else if (video.paused) play();
         else video.pause();
     });
-    tap.addEventListener('click', () => {
+    tap.addEventListener('click', (event) => {
+        // Pointer playback should not leave a focus ring over the picture.
+        // Keyboard activation keeps focus and its visible indicator.
+        if (event.detail > 0) tap.blur();
         if (!isOn()) powerOn();
         else if (video.paused) play();
         else video.pause();

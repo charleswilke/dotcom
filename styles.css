@@ -5274,7 +5274,20 @@ html {
     .archive-tray-copy { grid-column: 1 / -1; }
     .archive-tray-title img { height: 1.4rem; }
     .archive-tray-blurb { font-size: 0.75rem; }
-    .archive-tray-stamp { justify-self: start; }
+    .archive-tray-stamp {
+        position: absolute;
+        top: 1.1rem;
+        right: -0.25rem;
+        transform: rotate(14deg);
+    }
+    .archive-tray-stamp::before {
+        content: '';
+        position: absolute;
+        inset: 8% 3%;
+        z-index: -1;
+        border-radius: 50%;
+        background: rgba(26, 21, 80, 0.94);
+    }
 }
 
 /* Smoky glass button — translucent, softly lit */

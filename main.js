@@ -3576,7 +3576,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '20';
+const SCOPE_DATA_VERSION = '21';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -5669,7 +5669,7 @@ function initJCLightbox() {
         { title: 'Take Your Time', act: 'Intermission', actInline: true, file: '/audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: '/audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp?v=202608132052', noShare: true, noNumber: true },
         { title: 'Everything Must Go', act: 'Act II', file: '/audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: '/audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
         { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales' },
-        { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=202607051245', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
+        { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=857af493a76d', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
         { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
         { title: 'Refuse the Frequency', file: '/audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202609271647', cover: '/audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202609271700', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Fits and Starts', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=202609271705', cover: '/audio/junkyard-cabaret/fits-and-starts-title.webp?v=202609271708', article: 'https://charleswilke.substack.com/p/fits-and-starts' },

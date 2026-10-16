@@ -95,6 +95,7 @@ images/wordmark-w-header-preview.png
 images/wordmark-wilke-header-preview.png
 
 # Rebuilt from permanent article records before deployment.
+/generated/share-pages/
 articles/items/
 articles/local.json
 articles/related.json

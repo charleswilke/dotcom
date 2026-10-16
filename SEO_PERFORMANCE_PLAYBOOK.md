@@ -99,6 +99,25 @@ Add a `<script type="application/ld+json">` block in the `<head>`. Schema type d
 
 One per page. Prevents duplicate content issues. Astro can generate these dynamically from `Astro.url.pathname`.
 
+### Shared Homepage Links
+
+`/junkyard-cabaret` and `/l.ai.bor` serve the complete homepage with custom social
+preview metadata. `tools/build-share-pages.js` combines `index.html` with the
+metadata in the matching root HTML files, writing ignored output under
+`generated/share-pages/`. Vercel runs this before minification and rewrites the
+clean URLs to those generated pages. Run `node tools/build-share-pages.js` after
+changing the homepage or either preview source when testing these routes locally.
+
+An early `history.replaceState` selects the normal homepage hash without another
+page request. Keep the canonical at `https://charleswilke.com/`, since these are
+alternate entries into the same page. Do not restore meta-refresh or JavaScript
+redirects. The custom OG/Twitter URLs and artwork remain specific to each share.
+
+Space Toots uses `https://charleswilke.com/spacetoots/` as its canonical URL;
+its sitemap entry, social URLs, and redirects from alternate game paths agree.
+The old `/snuggles-weight.html` tracker was deleted without a replacement and
+intentionally remains a 404; do not redirect it to unrelated homepage content.
+
 ## Pre-existing Optimizations Worth Maintaining
 
 These were already in place on charleswilke.com and should be standard practice:

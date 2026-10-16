@@ -1,5 +1,5 @@
 {
-  "buildCommand": "node tools/build-article-archive.js && node tools/prepare-security-assets.js && node tools/minify-css.js styles.css subpages.css before-times.css && node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js",
+  "buildCommand": "node tools/build-article-archive.js && node tools/build-share-pages.js && node tools/prepare-security-assets.js && node tools/minify-css.js styles.css subpages.css before-times.css && node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js",
   "outputDirectory": ".",
   "functions": {
     "api/*.js": {
@@ -66,6 +66,10 @@
     { "source": "/about/", "destination": "/about", "permanent": true },
     { "source": "/writing-archive.html", "destination": "/writing-archive", "permanent": true },
     { "source": "/writing-archive/", "destination": "/writing-archive", "permanent": true },
+    { "source": "/junkyard-cabaret.html", "destination": "/junkyard-cabaret", "permanent": true },
+    { "source": "/junkyard-cabaret/", "destination": "/junkyard-cabaret", "permanent": true },
+    { "source": "/l.ai.bor.html", "destination": "/l.ai.bor", "permanent": true },
+    { "source": "/l.ai.bor/", "destination": "/l.ai.bor", "permanent": true },
     {"source": "/audio/grief-without-ritual/from-the-beginning.mp3", "destination": "/audio/exploring-laibor-mixtape/from-the-beginning.mp3", "permanent": true},
     {"source": "/audio/grief-without-ritual/from-the-beginning.scope.bin", "destination": "/audio/exploring-laibor-mixtape/from-the-beginning.scope.bin", "permanent": true},
     {"source": "/lyrics/grief-without-ritual/from-the-beginning.json", "destination": "/lyrics/exploring-laibor-mixtape/from-the-beginning.json", "permanent": true},
@@ -91,6 +95,11 @@
     {"source": "/songs/mixtape-side-two/permission-to-ache(/?)", "destination": "/songs/gwor/permission-to-ache/", "permanent": true},
     { "source": "/tootsjam", "destination": "/tootsjam/", "permanent": true },
     { "source": "/chessblaster", "destination": "/chessblaster/", "permanent": true },
+    { "source": "/spacetoots", "destination": "/spacetoots/", "permanent": true },
+    { "source": "/spacetoots/index.html", "destination": "/spacetoots/", "permanent": true },
+    { "source": "/games/SpaceToots", "destination": "/spacetoots/", "permanent": true },
+    { "source": "/games/SpaceToots/", "destination": "/spacetoots/", "permanent": true },
+    { "source": "/games/SpaceToots/index.html", "destination": "/spacetoots/", "permanent": true },
     { "source": "/before-times/sound-stage(/?)", "destination": "/before-times/screening-room", "permanent": true },
     { "source": "/alice-in-wonderland/", "destination": "/alice-in-wonderland", "permanent": true },
     { "source": "/jersey-boys/", "destination": "/jersey-boys", "permanent": true }
@@ -107,7 +116,7 @@
     { "source": "/before-times/content-factory(/?)", "destination": "/before-times-content-factory.html" },
     { "source": "/before-times/knowledge-maze(/?)", "destination": "/before-times-knowledge-maze.html" },
     { "source": "/before-times(/?)", "destination": "/before-times.html" },
-    { "source": "/l.ai.bor(/?)", "destination": "/l.ai.bor.html" },
+    { "source": "/l.ai.bor", "destination": "/generated/share-pages/l.ai.bor.html" },
     { "source": "/faq(/?)", "destination": "/faq.html" },
     { "source": "/alice-in-wonderland", "destination": "/alice-in-wonderland.html" },
     { "source": "/jersey-boys", "destination": "/jersey-boys.html" },
@@ -116,7 +125,7 @@
     { "source": "/side-two(/?)", "destination": "/side-two.html" },
     { "source": "/mixtape-side-two(/?)", "destination": "/mixtape-side-two.html" },
     { "source": "/gwor(/?)", "destination": "/gwor.html" },
-    { "source": "/junkyard-cabaret(/?)", "destination": "/junkyard-cabaret.html" },
+    { "source": "/junkyard-cabaret", "destination": "/generated/share-pages/junkyard-cabaret.html" },
     { "source": "/grief-without-ritual(/?)", "destination": "/grief-without-ritual.html" },
     { "source": "/tootsjam/:path*", "destination": "/games/TootsJam/:path*" },
     { "source": "/tootsjam/", "destination": "/games/TootsJam/tootsjam.html" },

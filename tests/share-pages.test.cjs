@@ -15,6 +15,15 @@ test('Vercel build command stays within the production schema limit', () => {
     assert.ok(config.buildCommand.length <= 256, 'Vercel limits buildCommand to 256 characters');
 });
 
+test('deployment includes every tool invoked by the build script', () => {
+    const buildCommand = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).scripts.build;
+    const deploymentRules = fs.readFileSync(path.join(root, '.vercelignore'), 'utf8').split(/\r?\n/);
+    assert.ok(deploymentRules.includes('tools/*'), 'Build tools use an explicit deployment allowlist');
+    for (const [, tool] of buildCommand.matchAll(/\bnode (tools\/[\w.-]+)/g)) {
+        assert.ok(deploymentRules.includes(`!${tool}`), `${tool} must be available to the deployment build`);
+    }
+});
+
 test('share pages retain custom previews and the complete homepage without redirects', () => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'dotcom-share-pages-'));
     try {

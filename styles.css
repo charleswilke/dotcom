@@ -5141,16 +5141,16 @@ html {
     text-align: left;
     color: inherit;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .archive-tray::before {
     content: '';
     position: absolute;
-    inset: -20%;
+    inset: 0;
+    border-radius: inherit;
     background-image: radial-gradient(circle, rgba(0, 0, 0, 0.04) 2.5px, transparent 2.5px);
     background-size: 8px 8px;
-    transform: rotate(-13deg);
     pointer-events: none;
 }
 /* The cards lift, scale a hair and roll a degree. A degree on a row this wide
@@ -5192,13 +5192,21 @@ html {
     position: relative;
 }
 .archive-tray-title {
-    color: var(--light);
-    font-family: 'Audiowide', 'Orbitron', sans-serif;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 1.2rem;
-    line-height: 1.25;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.2rem 0.55rem;
+    line-height: 1;
+}
+.archive-tray-title img {
+    display: block;
+    width: auto;
+    height: 1.8rem;
+}
+.archive-tray-last-word {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 .archive-tray-blurb {
     color: rgba(248, 233, 210, 0.82);
@@ -5206,21 +5214,18 @@ html {
     line-height: 1.4;
 }
 .archive-tray-stamp {
-    flex-shrink: 0;
-    padding: 0.2rem 0.6rem;
-    font-family: 'Space Mono', 'Courier New', monospace;
+    position: relative;
+    z-index: 3;
+    padding: 0.95rem 1.7rem;
     font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    color: #ffb347;
-    border: 1.5px solid rgba(255, 179, 71, 0.55);
-    border-radius: 2px;
-    transform: rotate(-7deg);
-    text-shadow: 0 0 5px rgba(255, 179, 71, 0.35);
-    box-shadow: 0 0 8px rgba(255, 179, 71, 0.2), inset 0 0 5px rgba(255, 179, 71, 0.08);
-    opacity: 0.95;
+    background: url('/images/archive-stamp-border.svg?v=3') center / 100% 100% no-repeat;
+    transform: rotate(-4deg);
+    filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.3));
+}
+.archive-tray-stamp img {
+    display: block;
+    width: auto;
+    height: 1.15em;
 }
 .archive-tray-copy {
     display: flex;
@@ -5247,12 +5252,10 @@ html {
     transform: translateY(-50%) rotate(-12deg);
 }
 .archive-tray-arrow {
-    display: inline-block;
-    margin-left: 0.4rem;
-    color: var(--light);
-    font-family: 'Audiowide', 'Orbitron', sans-serif;
-    font-size: 1.2em;
-    line-height: 1;
+    display: block;
+    flex-shrink: 0;
+    width: 1.7rem;
+    height: 1.2rem;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .archive-tray:hover .archive-tray-arrow, .archive-tray:focus-visible .archive-tray-arrow {
@@ -5260,7 +5263,7 @@ html {
 }
 @media (max-width: 900px) {
     .archive-tray-panel { gap: 0.8rem 1rem; }
-    .archive-tray-title { font-size: 1.05rem; }
+    .archive-tray-title img { height: 1.6rem; }
     .archive-tray-blurb { font-size: 0.85rem; }
     .archive-tray-stamp { font-size: 1.05rem; }
 }
@@ -5269,7 +5272,7 @@ html {
     .archive-tray-covers { height: 7rem; margin: -1rem -0.75rem 0; }
     .archive-tray-covers img { width: 32%; height: 17rem; }
     .archive-tray-copy { grid-column: 1 / -1; }
-    .archive-tray-title { font-size: 0.95rem; letter-spacing: 0.8px; }
+    .archive-tray-title img { height: 1.4rem; }
     .archive-tray-blurb { font-size: 0.75rem; }
     .archive-tray-stamp { justify-self: start; }
 }

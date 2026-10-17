@@ -3576,7 +3576,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '21';
+const SCOPE_DATA_VERSION = '22';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -4673,8 +4673,13 @@ function parseMusicHash(hash = window.location.hash) {
         }
     };
 
-    const trackSlug = slugifyTrackSegment(decodeURIComponent(rawTrackSlug));
+    // Preserve shared links from before Refuse the Call was renamed and moved.
+    let trackSlug = slugifyTrackSegment(decodeURIComponent(rawTrackSlug));
+    if (trackSlug === 'refuse-the-frequency' && ['gwor', 'junkyard-cabaret'].includes(routeSegment)) {
+        trackSlug = 'refuse-the-call';
+    }
     const movedTracks = {
+        'gwor/refuse-the-call': 'junkyard-cabaret',
         'gwor/waiting-for-something': 'mixtape-side-two',
         'gwor/from-the-beginning': 'mixtape-side-two',
         'mixtape/slow-the-clock': 'gwor',
@@ -5671,7 +5676,7 @@ function initJCLightbox() {
         { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales' },
         { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=857af493a76d', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
         { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
-        { title: 'Refuse the Frequency', file: '/audio/junkyard-cabaret/refuse-the-frequency.mp3?v=202609271647', cover: '/audio/junkyard-cabaret/refuse-the-frequency-title.webp?v=202609271700', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
+        { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Fits and Starts', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=202609271705', cover: '/audio/junkyard-cabaret/fits-and-starts-title.webp?v=202609271708', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
         { title: 'Misdirected.', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202609271722', cover: '/audio/junkyard-cabaret/misdirected-title.webp?v=202607051217', article: 'https://charleswilke.substack.com/p/misdirected' },
         { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }

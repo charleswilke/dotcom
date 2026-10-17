@@ -1,0 +1,13 @@
+Mode: built-in image_gen
+Source chat: Rewrite Fits and Starts (6ad39a33-e9c8-83e8-87be-685dfb84843a).
+Final lyrics/production source: embedded lyrics-eng metadata in Downloads/Fits and Starts (2).mp3, Suno id 2e1996b4-4610-4f52-b683-4d090c4270cc.
+Reference: audio/junkyard-cabaret/fits-and-starts-title.webp (style only).
+Output: audio/junkyard-cabaret/fits-and-starts-title-v2.webp
+
+Use case: stylized-concept.
+Asset type: finished square 1024x1024 song title artwork for Fits and Starts on Junkyard Cabaret.
+Input image: style reference only, existing Fits and Starts cover. Create an entirely new composition, preserve the album family of distressed cream cut-paper and woodcut illustration on nearly black ink, restrained rusty red, worn print texture and a rough cream edge.
+Primary request: A wry, intimate, ramshackle cabaret poster about a conversational machine returning borrowed affection with small errors and an unaccountable remainder. The revised song is lightly jaunty, low female conversational half-singing over a slightly detuned upright piano, wandering upright bass, brushes, dry metallic taps. Its four-note piano figure repeatedly misses its ending and tries again. A briefly extravagant sentimental bridge is punctured by one bass pluck. It ends casually mid-thought. Humor and uncertainty rather than melodrama or menace.
+Composition: enormous highly readable cream distressed condensed wood-type title in the upper third: "FITS AND STARTS", with AND smaller in muted rusty red. Beneath, a handmade cut-paper upright piano with a slightly crooked exposed keyboard, an empty wooden seat, a coat casually hanging from a peg by a simple door. The piano is the main visual, not a realistic room: spare theatrical black negative space. A small looping four-note musical figure escapes from the piano in cream paper shapes, stumbles at a single red misplaced note, restarts, then ends abruptly at a torn-paper interruption. A restrained curling red flourish suggests a grand sentimental gesture immediately undercut by a single stark bass-string pluck line. Let the human absence and coat suggest the recurring visit; playful mechanical uncertainty, not tragedy. Bold graphic silhouettes with finely scuffed printed texture, restrained details and strong thumbnail readability.
+Small secondary text near the bottom, exact: "WELL, MOSTLY YOURS."
+Constraints: no other words, no artist name, no album name, no extra lyrics, no digital circuitry, robots, theatrical weeping, faces, glossy effects, gradients, photorealism. New title artwork rather than a mockup, full bleed square.

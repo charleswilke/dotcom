@@ -5665,7 +5665,7 @@ function initJCLightbox() {
     const tracks = [
         { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=e1da9d061b62', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
         { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
-        { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/staccato-again' },
+        { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/staccato-again' },
         { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
         { title: 'The New Survivalism', file: '/audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: '/audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
         { title: 'House Lights', file: '/audio/junkyard-cabaret/house-lights.mp3', cover: '/audio/junkyard-cabaret/house-lights-title.webp?v=202608081643', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },

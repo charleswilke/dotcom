@@ -15,3 +15,9 @@ Narrative: The carnival barker from the opening act returns, warm and practiced,
 Composition: Huge readable irregular condensed cream lettering across the upper third reading exactly "MISDIRECTED." on one unbroken line, safely inset. Below, a small crooked cream tabletop holds a simple cup and tiny red coin. An angular cream and black top-hatted barker in a rusty red coat stands behind the table, one long flat gesturing hand directing attention toward the coin. A second smaller top-hatted cream silhouette in the foreground watches the act, with the same distinctive hat shape and posture subtly echoing the performer. Their role reversal should read through this economical composition. One simple crooked curtain edge evokes an intimate tent. Strong black negative space. Quiet joke, jaunty asymmetry, minimal geometric forms with no descriptive faces, fingers or modeled anatomy. Fine rough paper edge.
 Text (verbatim): "MISDIRECTED." M I S D I R E C T E D followed by a period. No other text.
 Avoid: melodrama, grief, horror, tears, distressed poses, smoke effects, glowing sparks, mirrors, robots, glossy 3D, gradients, photorealism, dense detailed carnival scenery, extra slogans, credits, album name. Keep shapes boldly abstract like the references, title legible at thumbnail size.
+
+## Red period revision
+
+Edited with built-in imagegen. Final asset remains `audio/junkyard-cabaret/misdirected-title-v2.webp`; the prior cream-period version is recoverable from git commit 3107dfc.
+
+Prompt: Change only the cream circular period immediately after the final D in MISDIRECTED. to the same rusty vermilion red used in the coat, curtain, and coin. Preserve its size, position, shape, and worn ink texture. Keep all lettering, figures, composition, border, textures, and square format unchanged.

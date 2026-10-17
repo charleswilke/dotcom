@@ -5678,7 +5678,7 @@ function initJCLightbox() {
         { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
         { title: 'Fits and Starts', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=20261017', cover: '/audio/junkyard-cabaret/fits-and-starts-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
-        { title: 'Misdirected.', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202610172140', cover: '/audio/junkyard-cabaret/misdirected-title-v2.webp?v=202610172140', article: 'https://charleswilke.substack.com/p/misdirected' },
+        { title: 'Misdirected.', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202610172140', cover: '/audio/junkyard-cabaret/misdirected-title-v2.webp?v=20261017redperiod', article: 'https://charleswilke.substack.com/p/misdirected' },
         { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }
     ];
 

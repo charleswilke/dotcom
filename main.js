@@ -3584,7 +3584,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '25';
+const SCOPE_DATA_VERSION = '26';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -5681,7 +5681,7 @@ function initJCLightbox() {
         { title: 'How Dare It Rise', file: '/audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: '/audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
         { title: 'Take Your Time', act: 'Intermission', actInline: true, file: '/audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: '/audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp?v=202608132052', noShare: true, noNumber: true },
         { title: 'Everything Must Go', act: 'Act II', file: '/audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: '/audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
-        { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=857af493a76d', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
+        { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=54ef812658ac', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
         { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales' },
         { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3?v=8a1a1c5e5be6', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },

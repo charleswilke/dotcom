@@ -61,6 +61,9 @@
     }
   ],
   "redirects": [
+    { "source": "/songs/junkyard-cabaret/fits-and-starts", "destination": "/songs/junkyard-cabaret/mostly-yours/", "permanent": true },
+    { "source": "/songs/junkyard-cabaret/fits-and-starts/", "destination": "/songs/junkyard-cabaret/mostly-yours/", "permanent": true },
+    { "source": "/songs/junkyard-cabaret/fits-and-starts/index.html", "destination": "/songs/junkyard-cabaret/mostly-yours/", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/about.html", "destination": "/about", "permanent": true },
     { "source": "/about/", "destination": "/about", "permanent": true },

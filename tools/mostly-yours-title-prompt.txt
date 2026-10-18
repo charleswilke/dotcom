@@ -1,0 +1,10 @@
+Mostly Yours cover edit — 2026-10-18
+Mode: built-in image_gen; use case: text-localization.
+Original: audio/junkyard-cabaret/fits-and-starts-title-v2.webp
+Output: audio/junkyard-cabaret/mostly-yours-title.webp
+
+Initial prompt:
+Edit target: attached existing square song cover. Use case: text-localization. Rename the song. Replace the entire large upper title "FITS AND STARTS" with exactly "MOSTLY YOURS" in the same large cream distressed condensed wood-type typography. Fit the two words prominently across the upper title area; remove the old red AND and its lines. Preserve the existing lower illustration, upright piano, stool, coat, open door, floating notes, distressed black/cream/rust red palette, rough cream border and print texture. Preserve the small bottom text "WELL, MOSTLY YOURS." exactly. Change only the main title area; keep all other composition and artwork as close as possible to the original. Square 1024x1024 opaque finished cover.
+
+Final edit prompt (user requested removing the bottom text):
+Use case: text-localization. Edit target: attached Mostly Yours square song cover. Remove only the small bottom caption "WELL, MOSTLY YOURS." and both short red horizontal rules flanking that bottom caption. Fill their former area seamlessly with the matching distressed nearly black ink background. Preserve the rough cream outer border and all other artwork unchanged: large top "MOSTLY YOURS" title, typography, piano, stool, notes, red flourish, coat, door, floor, textures, colors, positions and composition. Do not add anything. Keep the same square aspect ratio and opaque background.

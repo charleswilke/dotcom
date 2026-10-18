@@ -1,4 +1,11 @@
 {
+  "communion-transcript": {
+    "thumbnail": "/images/transcripts/communion/communion-header-v2.webp",
+    "image": {
+      "width": 1942,
+      "height": 809
+    }
+  },
   "what-hope-do-we-have-transcript": {
     "thumbnail": "/images/transcripts/what-hope-do-we-have/02-empty-stage-header.webp",
     "image": {

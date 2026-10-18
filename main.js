@@ -1007,6 +1007,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "communion-transcript",
+        "title": "Communion: The Conversation",
+        "cleanDescription": "The working session behind “Communion” — animal experience, AI consciousness, care before certainty, draft revisions, and underground-comic artwork with Astro, Doc, and Codex.",
+        "pubDate": "2026-10-18T14:46:30.000Z",
+        "contentUrl": "/transcripts/communion-transcript.html",
+        "link": ""
+    },
+    {
         "slug": "what-hope-do-we-have-transcript",
         "title": "What Hope Do We Have? — The Conversation",
         "cleanDescription": "The working session behind “What Hope Do We Have?” — creative uncertainty, AI, a student’s question, draft revisions, and ink-splattered theater artwork with Codex.",

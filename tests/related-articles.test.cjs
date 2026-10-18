@@ -27,7 +27,10 @@ test('every retained essay has three selections pointing to distinct existing es
         }
     }
     for (const slug of Object.keys(local)) {
-        assert.deepEqual(related[slug], related[slug.replace(/-transcript$/, '')]);
+        const essaySlug = slug.replace(/-transcript$/, '');
+        // A conversation can be published before its companion essay.
+        if (Object.hasOwn(archive, essaySlug)) assert.deepEqual(related[slug], related[essaySlug]);
+        else assert.deepEqual(related[slug], [], 'An unpublished essay has no recommendations to inherit');
     }
 });
 

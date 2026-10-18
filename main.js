@@ -3584,7 +3584,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '24';
+const SCOPE_DATA_VERSION = '25';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -5683,7 +5683,7 @@ function initJCLightbox() {
         { title: 'Everything Must Go', act: 'Act II', file: '/audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: '/audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
         { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=857af493a76d', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
         { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales' },
-        { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
+        { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3?v=8a1a1c5e5be6', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
         { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
         { title: 'Fits and Starts', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=20261017', cover: '/audio/junkyard-cabaret/fits-and-starts-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
         { title: 'Misdirected.', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202610172140', cover: '/audio/junkyard-cabaret/misdirected-title-v2.webp?v=20261017redperiod', article: 'https://charleswilke.substack.com/p/misdirected' },

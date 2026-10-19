@@ -5876,7 +5876,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
 
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=e1da9d061b62', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path', songbook: '/songs/junkyard-cabaret/why-this-way/songbook.json?v=20261018-revision-1' },
+        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=e1da9d061b62', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path', songbook: '/songs/junkyard-cabaret/why-this-way/songbook.json?v=20261019-intro-1' },
         { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand', songbook: '/songs/junkyard-cabaret/cathedral-of-junk/songbook.json?v=20261018-revision-1' },
         { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/staccato-again', songbook: '/songs/junkyard-cabaret/pauses-gone/songbook.json?v=20261018-revision-1' },
         { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity', songbook: '/songs/junkyard-cabaret/three-fifteen/songbook.json?v=20261018-revision-1' },

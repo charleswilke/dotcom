@@ -5734,7 +5734,9 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
             lyrics.id = 'jcSongbookLyrics';
             // Keep cues in the same order as the lyric passages they accompany.
             const tags = { heading: 'h4', cue: 'p', lyrics: 'p' };
+            let cueGroup = null;
             song.blocks.forEach((block, position) => {
+                if (block.kind !== 'cue') cueGroup = null;
                 if (!tags[block.kind]) return;
                 const node = element(tags[block.kind], `jc-book-${block.kind}`, block.text);
                 if (block.kind === 'heading') {
@@ -5743,7 +5745,15 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
                     const section = nextHeading < 0 ? remaining : remaining.slice(0, nextHeading);
                     if (!section.some(next => next.kind === 'lyrics')) node.classList.add('jc-book-cue-only');
                 }
-                lyrics.append(node);
+                if (block.kind === 'cue') {
+                    if (!cueGroup) {
+                        cueGroup = element('div', 'jc-book-cue-group');
+                        lyrics.append(cueGroup);
+                    }
+                    cueGroup.append(node);
+                } else {
+                    lyrics.append(node);
+                }
             });
             if (song.blocks.some(block => block.kind === 'cue')) {
                 const cues = element('button', 'jc-book-cues');

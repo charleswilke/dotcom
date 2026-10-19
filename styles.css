@@ -15536,12 +15536,18 @@ section.production-header.alice p {
     line-height: 20px;
     margin: 16px 0 4px;
 }
-#jcLightbox .jc-book-cue {
-    color: #8b422a;
-    font: italic 13px/20px Georgia, 'Times New Roman', serif;
+#jcLightbox .jc-book-cue-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin: 0 0 10px;
     padding-left: 12px;
     border-left: 2px solid #c8a881;
+}
+#jcLightbox .jc-book-cue {
+    color: #8b422a;
+    font: italic 13px/20px Georgia, 'Times New Roman', serif;
+    margin: 0;
 }
 #jcLightbox p.jc-book-lyrics {
     font-family: Baskerville, 'Baskerville Old Face', 'Palatino Linotype', Palatino, serif;
@@ -15551,7 +15557,7 @@ section.production-header.alice p {
     margin: 0 0 12px;
 }
 #jcLightbox #jcSongbookLyrics > .jc-book-heading:first-child { margin-top: 0; }
-#jcLightbox .jc-cues-hidden :is(.jc-book-cue, .jc-book-cue-only) { display: none; }
+#jcLightbox .jc-cues-hidden :is(.jc-book-cue-group, .jc-book-cue-only) { display: none; }
 #jcLightbox .jc-book-notebook {
     margin: 24px 0;
     border: 1px solid #ad8b60;

@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool, editing jc-songbook-paper-v1.webp. WebP export: 768 x 768, quality 84.
+
+Use case: style-transfer
+Asset type: blank paper background texture for a readable website songbook.
+Edit target: the referenced ivory paper texture. Keep the warm pale cream color, flat edge-to-edge square paper surface, and suitability as a background behind dark lyrics.
+Primary request: make this paper more roughed up from being handled, wrinkled and flattened again. Remove almost all the scattered dark speckles and tiny flecks. Replace that speckled grain with visible soft irregular wrinkles, gently compressed paper ridges, shallow creases and broad subtle undulations. Think a well-used cabaret lyric sheet that has been folded loosely, carried in a coat pocket and smoothed back out. Wear comes from physical wrinkling, not dirt or dots. The change should be plainly visible at website-card scale, while still restrained enough for readable small text.
+Composition: a straight-on high-resolution scan of paper filling the full frame, no outer sheet edges, no perspective. Distributed irregular wrinkling without a central focal point or a repetitive grid of folds. Seamlessly tileable on all four sides, no seams or edge borders.
+Lighting: soft diffuse light, delicate highlights and shallow warm shadows reveal the wrinkle relief. Keep all areas pale and low contrast, no hard dark creases.
+Constraints: blank paper only. No text, music notation, ink, ruling, speckles, confetti-like flecks, stains, tears, holes, objects, page silhouette, border, vignette, watermark, book spine, or dramatic grunge. Preserve the warm ivory palette around #efe5cf.

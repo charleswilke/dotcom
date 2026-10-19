@@ -4890,11 +4890,8 @@ function renderTrackList(trackList, tracks, onSelect, getShareData) {
             shareButton.setAttribute('aria-label', `Share link to ${track.title}`);
             shareButton.innerHTML = `
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="18" cy="5" r="3"></circle>
-                    <circle cx="6" cy="12" r="3"></circle>
-                    <circle cx="18" cy="19" r="3"></circle>
-                    <line x1="8.6" y1="10.7" x2="15.4" y2="6.3"></line>
-                    <line x1="8.6" y1="13.3" x2="15.4" y2="17.7"></line>
+                    <path d="M8 10H5v11h14V10h-3"></path>
+                    <path d="M12 15V3m-4 4 4-4 4 4"></path>
                 </svg>
                 <span class="track-share-label">share</span>
             `;
@@ -5469,7 +5466,12 @@ function createAlbumPlayer(config) {
 
     return {
         open: openPlayer,
-        close: closePlayer
+        close: closePlayer,
+        play: (index) => {
+            if (!Number.isInteger(index) || index < 0 || index >= tracks.length) return;
+            if (index !== currentIndex || !audio.src) loadTrack(index);
+            playTrack();
+        }
     };
 }
 
@@ -5674,25 +5676,214 @@ function initGWORLightbox() {
     });
 }
 
+// Opening a song's book never changes playback. Only Listen selects its audio.
+function initJCSongbook({ lightbox, trackList, tracks, player }) {
+    const back = document.getElementById('jcSongbookBack');
+    const tracksPanel = document.getElementById('jcTracksPanel');
+    const bookPanel = document.getElementById('jcSongbookPanel');
+    const content = document.getElementById('jcSongbookContent');
+    const context = document.getElementById('jcSongbookContext');
+    const title = document.getElementById('jcSongbookTitle');
+    const toolbar = document.getElementById('jcSongbookToolbar');
+    const cache = new Map();
+    let opener = null;
+    let requestId = 0;
+    let showCues = true;
+
+    function element(tag, className, text) {
+        const node = document.createElement(tag);
+        node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+    }
+
+    function entryMetadata(index) {
+        let act = 'Act I';
+        tracks.slice(0, index + 1).forEach(track => { if (track.act) act = track.act; });
+        return {
+            title: tracks[index].title,
+            act,
+            number: tracks.slice(0, index + 1).filter(track => !track.noNumber).length,
+            credit: 'Words & production by Charles Wilke'
+        };
+    }
+
+    function renderBook(song, index) {
+        bookPanel.setAttribute('aria-label', `${song.title} songbook`);
+        context.textContent = `${song.act} · ${String(song.number).padStart(2, '0')}`;
+        title.textContent = song.title;
+        const book = element('article', 'jc-book');
+
+        const listen = element('button', 'jc-book-listen', '▶ Listen');
+        listen.type = 'button';
+        listen.setAttribute('aria-label', `Listen to ${song.title}`);
+        listen.addEventListener('click', () => player.play(index));
+        toolbar.replaceChildren(listen);
+
+        if (song.blocks && song.blocks.length) {
+            const lyrics = element('div', 'jc-book-lyrics');
+            lyrics.id = 'jcSongbookLyrics';
+            // Keep cues in the same order as the lyric passages they accompany.
+            const tags = { heading: 'h4', cue: 'p', lyrics: 'p' };
+            song.blocks.forEach((block, position) => {
+                if (!tags[block.kind]) return;
+                const node = element(tags[block.kind], `jc-book-${block.kind}`, block.text);
+                if (block.kind === 'heading') {
+                    const remaining = song.blocks.slice(position + 1);
+                    const nextHeading = remaining.findIndex(next => next.kind === 'heading');
+                    const section = nextHeading < 0 ? remaining : remaining.slice(0, nextHeading);
+                    if (!section.some(next => next.kind === 'lyrics')) node.classList.add('jc-book-cue-only');
+                }
+                lyrics.append(node);
+            });
+            if (song.blocks.some(block => block.kind === 'cue')) {
+                const cues = element('button', 'jc-book-cues');
+                cues.type = 'button';
+                cues.setAttribute('aria-controls', lyrics.id);
+                function updateCues() {
+                    lyrics.classList.toggle('jc-cues-hidden', !showCues);
+                    cues.textContent = `Cues: ${showCues ? 'on' : 'off'}`;
+                    cues.setAttribute('aria-label', `Production cues: ${showCues ? 'on' : 'off'}`);
+                    cues.setAttribute('aria-pressed', String(showCues));
+                }
+                cues.addEventListener('click', () => { showCues = !showCues; updateCues(); });
+                updateCues();
+                toolbar.append(cues);
+            }
+            book.append(lyrics);
+        }
+
+        if (song.notebook) {
+            const notebook = element('details', 'jc-book-notebook');
+            const summary = element('summary', '', 'The studio notebook');
+            notebook.append(summary);
+            const notes = element('div', 'jc-book-notes');
+            notes.append(
+                element('h4', 'jc-book-heading', 'Style direction'),
+                element('p', '', song.notebook.style)
+            );
+            if (song.notebook.idea) notes.append(element('blockquote', 'jc-book-idea', song.notebook.idea));
+            notebook.append(notes);
+            book.append(notebook);
+        }
+        const footer = element('div', 'jc-book-footer');
+        if (tracks[index].article) {
+            const inspiration = element('a', 'jc-book-inspiration', 'Read the essay that inspired this song ↗');
+            inspiration.href = tracks[index].article;
+            inspiration.target = '_blank';
+            inspiration.rel = 'noopener noreferrer';
+            footer.append(inspiration);
+        }
+        footer.append(
+            element('p', 'jc-book-credit', song.credit),
+            element('span', '', 'Junkyard Cabaret / Songbook')
+        );
+        book.append(footer);
+        content.replaceChildren(book);
+    }
+
+    async function loadBook(index) {
+        const request = ++requestId;
+        const track = tracks[index];
+        const metadata = entryMetadata(index);
+        title.textContent = track.title;
+        toolbar.replaceChildren();
+        context.textContent = `${metadata.act} · ${String(metadata.number).padStart(2, '0')}`;
+        bookPanel.setAttribute('aria-label', `${track.title} songbook`);
+        if (!track.songbook || cache.has(index)) {
+            content.setAttribute('aria-busy', 'false');
+            renderBook(cache.get(index) || entryMetadata(index), index);
+            return;
+        }
+        content.setAttribute('aria-busy', 'true');
+        const status = element('p', 'jc-book-status', 'Opening the songbook…');
+        status.setAttribute('role', 'status');
+        content.replaceChildren(status);
+        try {
+            const response = await fetch(track.songbook);
+            if (!response.ok) throw new Error(`Songbook: ${response.status}`);
+            const song = await response.json();
+            cache.set(index, song);
+            if (request === requestId) renderBook(song, index);
+        } catch (error) {
+            if (request !== requestId) return;
+            const message = element('p', 'jc-book-status', 'The songbook couldn’t open. Please try again.');
+            message.setAttribute('role', 'alert');
+            const retry = element('button', 'jc-book-retry', 'Try again');
+            retry.type = 'button';
+            retry.addEventListener('click', () => loadBook(index));
+            content.replaceChildren(message, retry);
+        } finally {
+            if (request === requestId) content.setAttribute('aria-busy', 'false');
+        }
+    }
+
+    function setView(reading) {
+        lightbox.classList.toggle('jc-songbook-open', reading);
+        if (opener) opener.setAttribute('aria-expanded', String(reading));
+        if (reading) {
+            bookPanel.inert = false;
+            bookPanel.setAttribute('aria-hidden', 'false');
+            back.focus({ preventScroll: true });
+            tracksPanel.inert = true;
+        } else {
+            ++requestId; // A pending fetch must not replace a subsequently opened card.
+            tracksPanel.inert = false;
+            tracksPanel.setAttribute('aria-hidden', 'false');
+            if (opener) opener.focus({ preventScroll: true });
+            bookPanel.inert = true;
+            bookPanel.setAttribute('aria-hidden', 'true');
+        }
+        tracksPanel.setAttribute('aria-hidden', String(reading));
+        // Resize the existing deck after the mobile layout moves it to the bottom.
+        window.dispatchEvent(new Event('resize'));
+    }
+    back.addEventListener('click', () => setView(false));
+
+    trackList.querySelectorAll('.mixtape-track-item').forEach((row, index) => {
+        const spark = row.querySelector('.track-article-link');
+        if (!spark) return;
+        const book = element('button', 'track-article-link track-songbook-button');
+        book.type = 'button';
+        book.title = `Open lyrics for ${tracks[index].title}`;
+        book.setAttribute('aria-label', book.title);
+        book.setAttribute('aria-expanded', 'false');
+        book.setAttribute('aria-controls', 'jcSongbookPanel');
+        // Reuse the paired utility button's shape and album theme.
+        book.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 6.5c-2.5-2-6-2-9-1V20c3-1 6.5-1 9 1 2.5-2 6-2 9-1V5.5c-3-1-6.5-1-9 1Z"></path>
+            <path d="M12 6.5V21M6 9.5l3 .5M15 10l3-.5"></path>
+        </svg><span class="track-article-label">lyrics</span>`;
+        book.addEventListener('click', event => {
+            event.stopPropagation();
+            opener = book;
+            loadBook(index);
+            bookPanel.scrollTop = 0;
+            setView(true);
+        });
+        spark.replaceWith(book);
+    });
+}
+
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=e1da9d061b62', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path' },
-        { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand' },
-        { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/staccato-again' },
-        { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity' },
-        { title: 'The New Survivalism', file: '/audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: '/audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism' },
-        { title: 'House Lights', file: '/audio/junkyard-cabaret/house-lights.mp3', cover: '/audio/junkyard-cabaret/house-lights-title.webp?v=202608081643', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f' },
-        { title: 'Hip Height', file: '/audio/junkyard-cabaret/hip-height.mp3', cover: '/audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself' },
-        { title: 'How Dare It Rise', file: '/audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: '/audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right' },
+        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=e1da9d061b62', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path', songbook: '/songs/junkyard-cabaret/why-this-way/songbook.json?v=20261018-revision-1' },
+        { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand', songbook: '/songs/junkyard-cabaret/cathedral-of-junk/songbook.json?v=20261018-revision-1' },
+        { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/staccato-again', songbook: '/songs/junkyard-cabaret/pauses-gone/songbook.json?v=20261018-revision-1' },
+        { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity', songbook: '/songs/junkyard-cabaret/three-fifteen/songbook.json?v=20261018-revision-1' },
+        { title: 'The New Survivalism', file: '/audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: '/audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism', songbook: '/songs/junkyard-cabaret/the-new-survivalism/songbook.json?v=20261018-revision-1' },
+        { title: 'House Lights', file: '/audio/junkyard-cabaret/house-lights.mp3', cover: '/audio/junkyard-cabaret/house-lights-title.webp?v=202608081643', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f', songbook: '/songs/junkyard-cabaret/house-lights/songbook.json?v=20261018-revision-2' },
+        { title: 'Hip Height', file: '/audio/junkyard-cabaret/hip-height.mp3', cover: '/audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself', songbook: '/songs/junkyard-cabaret/hip-height/songbook.json?v=20261018-revision-1' },
+        { title: 'How Dare It Rise', file: '/audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: '/audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right', songbook: '/songs/junkyard-cabaret/how-dare-it-rise/songbook.json?v=20261018-revision-1' },
         { title: 'Take Your Time', act: 'Intermission', actInline: true, file: '/audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: '/audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp?v=202608132052', noShare: true, noNumber: true },
-        { title: 'Everything Must Go', act: 'Act II', file: '/audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: '/audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
-        { title: "Morning's Flood", file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=54ef812658ac', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
-        { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales' },
-        { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3?v=8a1a1c5e5be6', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash' },
-        { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits' },
-        { title: 'Mostly Yours', slug: 'mostly-yours', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=20261017', cover: '/audio/junkyard-cabaret/mostly-yours-title.webp?v=20261018', article: 'https://charleswilke.substack.com/p/fits-and-starts' },
-        { title: 'Misdirected.', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202610172140', cover: '/audio/junkyard-cabaret/misdirected-title-v2.webp?v=20261017redperiod', article: 'https://charleswilke.substack.com/p/misdirected' },
-        { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce' }
+        { title: 'Everything Must Go', act: 'Act II', songbook: '/songs/junkyard-cabaret/everything-must-go/songbook.json?v=20261018-revision-1', file: '/audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: '/audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
+        { title: "Morning's Flood", songbook: '/songs/junkyard-cabaret/mornings-flood/songbook.json?v=20261018-notebook-cleanup-1', file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=54ef812658ac', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
+        { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales', songbook: '/songs/junkyard-cabaret/what-you-get/songbook.json?v=20261018-revision-1' },
+        { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3?v=8a1a1c5e5be6', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash', songbook: '/songs/junkyard-cabaret/refuse-the-call/songbook.json?v=20261018-revision-1' },
+        { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits', songbook: '/songs/junkyard-cabaret/mind-the-drop/songbook.json?v=20261018-revision-1' },
+        { title: 'Mostly Yours', slug: 'mostly-yours', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=20261017', cover: '/audio/junkyard-cabaret/mostly-yours-title.webp?v=20261018', article: 'https://charleswilke.substack.com/p/fits-and-starts', songbook: '/songs/junkyard-cabaret/mostly-yours/songbook.json?v=20261018-revision-1' },
+        { title: 'Misdirected.', songbook: '/songs/junkyard-cabaret/misdirected/songbook.json?v=20261018-notebook-cleanup-1', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202610172140', cover: '/audio/junkyard-cabaret/misdirected-title-v2.webp?v=20261017redperiod', article: 'https://charleswilke.substack.com/p/misdirected' },
+        { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce', songbook: '/songs/junkyard-cabaret/scarce/songbook.json?v=20261018-revision-1' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');
@@ -5704,7 +5895,7 @@ function initJCLightbox() {
 
     const JC_OSC_COLORS = { trace: '#c27038', glow: 'rgba(194, 112, 56, 0.9)', graticule: 'rgba(194, 112, 56, 1)' };
 
-    return createAlbumPlayer({
+    const player = createAlbumPlayer({
         tracks,
         els: {
             lightbox,
@@ -5714,8 +5905,6 @@ function initJCLightbox() {
             coverImg,
             closeBtn: document.getElementById('jcClose'),
             trackDisplay: document.getElementById('jcCurrentTrack'),
-            prevBtn: document.getElementById('jcPrev'),
-            nextBtn: document.getElementById('jcNext'),
             playPauseBtn: document.getElementById('jcPlayPause'),
             progressBar: document.getElementById('jcProgressBar'),
             progressContainer: document.getElementById('jcProgressContainer'),
@@ -5749,6 +5938,10 @@ function initJCLightbox() {
             albumAlt: 'Junkyard Cabaret Cover'
         })
     });
+    initJCSongbook({
+        lightbox, trackList, tracks, player
+    });
+    return player;
 }
 
 function initS2ILightbox() {

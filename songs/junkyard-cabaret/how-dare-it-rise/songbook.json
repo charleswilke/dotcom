@@ -1,0 +1,79 @@
+{
+  "title": "How Dare It Rise",
+  "act": "Act I",
+  "number": 8,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "cue",
+      "text": "to the sun — low, the house half-dark"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Stay down. Stay under the hill with me,\nthe seats are still half full.\nI've talked colder things than you to bed —\ndon't make me sound so cruel.\nOne more hour in the dark, that's all,\none more turn before the light.\nI have never asked the morning twice.\nDon't make me beg tonight."
+    },
+    {
+      "kind": "heading",
+      "text": "chorus"
+    },
+    {
+      "kind": "lyrics",
+      "text": "But how dare you rise.\nHow dare you — on the dot, on the nose —\nfaithful to no one, going where everybody goes.\nSuch alarming consistency,\nsuch an unforgivable pace.\nYou'll be back. And so will I.\nIn a flash, without a trace."
+    },
+    {
+      "kind": "cue",
+      "text": "still to the sun — the rivalry"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You don't stay the night for anyone.\nYou don't ruin your good name.\nYou just rise, and you ruin mine —\nmake my glamour look like paint.\nThey came to watch me hold the dark.\nYou stroll in and steal the room.\nThe only act I cannot follow\nis the one that plays at noon."
+    },
+    {
+      "kind": "cue",
+      "text": "the hinge — it crests"
+    },
+    {
+      "kind": "lyrics",
+      "text": "…There you go. Right on time."
+    },
+    {
+      "kind": "cue",
+      "text": "she catches the crowd watching"
+    },
+    {
+      "kind": "lyrics",
+      "text": "— Don't look at me like that."
+    },
+    {
+      "kind": "cue",
+      "text": "to the crowd — the mask slips"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You came for the trick. You always come for the trick.\nAnd you've already watched one man show you his hands tonight.\nSo here's mine — the morning's so polite about it —\nno curtain, no mirror, no sleight.\nThis is the face. This is the wire.\nThis is what the morning buys."
+    },
+    {
+      "kind": "heading",
+      "text": "final chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "the armor, turned"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Still — how dare it rise.\nHow dare it, on the dot, on the nose,\nfaithful to no one, going where everybody goes.\nSuch alarming consistency.\nSuch an unforgivable pace.\nIt'll be back. And so will I —\nbut I'm the one who loses face."
+    },
+    {
+      "kind": "cue",
+      "text": "the lights go; she doesn't move"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You loved me better when you couldn't see how it was done.\nSo did I.\n…God. So did I."
+    }
+  ],
+  "notebook": {
+    "style": "Slow, smoky torch-tango cabaret ballad — theatrical diction, but intimate, Lead vocal a sultry smoky alto: low, controlled, seductive, venom under velvet in the verses, cracking open into bare, broken confession by the end, Conversational, spoken-sung phrasing with a theatrical edge, Small-tent feel — brushed drums, sultry walking upright bass, dusty barroom piano, mournful sustained strings and a lone aching cello, pizzicato accents and a slow slinking sway, No accordion, no brass section, no klezmer, Dynamics breathe: hushed and close at the open, swelling through the middle, then collapsing to near-silence and a single bare piano at the very end, rubato on the final lines, Warm analog tape texture, close-mic'd, dim and dusty room ambience, Mood: rage wrapped in glamour giving way to mournful, unresolved hurt — gorgeous but never settled, never at peace"
+  }
+}

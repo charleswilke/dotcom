@@ -1,0 +1,147 @@
+{
+  "title": "Mind the Drop",
+  "act": "Act II",
+  "number": 13,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "lone saloon piano out of dead air, voice half-spoken, free time, no drums"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Came up through the quiet,\nwhere the last voice cut to black.\nThey came up here for a verdict—\ngot a mirror, nothing back."
+    },
+    {
+      "kind": "cue",
+      "text": "low, weathered, finding his feet"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Somebody's gotta stand here\nwhen the glass has said its piece.\nSo mind your feet now, darling—\nI'm the one they left to speak."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "piano rolls in, upright bass, brushes; rousing, grit rising"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's a chill comes off the floorboards\nwhere the buried like to crowd.\nYou want a word? They got a thousand—"
+    },
+    {
+      "kind": "cue",
+      "text": "lift, full rasp"
+    },
+    {
+      "kind": "lyrics",
+      "text": "we're all mediums now."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "rousing barrelhouse, piano pounding, stomp + found-metal, ragged belt, lone voice, no harmonies"
+    },
+    {
+      "kind": "lyrics",
+      "text": "'Cause it's a DOOR or it's a DROP, friend—\na handle or a hole!\nOne you choose and one that chooses,\none you cross and one you fall.\nGot a bag here at my boot heel\nand a floor I do not trust—\nMind the drop. Oh, mind the DROP—\nyou can't tell till you must."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "DROP: rhythm out, lone sparse piano, free time, spoken-sung, wrecked"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I had hands once. Meant for something.\nNever could close the ring.\nSo I bought a hundred better fingers,\nlet the better fingers sing.\nAnd the shame—it wears two collars.\nSame cold cut. Same close shave.\nOne was stitched up by the living…\none came folded in the machine."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "piano rolls back, rousing, grit rising"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Every plank's a maybe-hinge now,\nevery step a little vow."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "rousing barrelhouse, piano pounding, lone voice, no harmonies"
+    },
+    {
+      "kind": "lyrics",
+      "text": "'Cause it's a DOOR or it's a DROP, friend—\na handle or a hole!\nOne you choose and one that chooses,\none you cross and one you fall.\nGot a bag here at my boot heel\nand a floor I do not trust—\nMind the drop. Oh, mind the DROP—\nyou can't tell till you must."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "climbs on bravado, piano hammering, biggest grit, then hard break"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's a glow out past the rafters—\ncall it love, call it a lie!\nAnd I have warped clean past my grieving\non a floor that opened wide—\nlanded down there with the chorus,\njust one more voice worn thin…"
+    },
+    {
+      "kind": "cue",
+      "text": "piano + band stab out — silence — lone piano, voice low, shaking"
+    },
+    {
+      "kind": "lyrics",
+      "text": "No. Not tonight. Not tonight, friend—\nI'll go in on my own pins."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "DROP: rowdy band gone, lone saloon piano, sparse, voice bare and close, nearly spoken"
+    },
+    {
+      "kind": "lyrics",
+      "text": "So I'll kneel down on the maybe.\nTest the board beneath the weight.\nPick it up. Take a look…"
+    },
+    {
+      "kind": "cue",
+      "text": "quiet"
+    },
+    {
+      "kind": "lyrics",
+      "text": "might just be something great."
+    },
+    {
+      "kind": "cue",
+      "text": "a single knock from under the floor, room tone"
+    },
+    {
+      "kind": "cue",
+      "text": "final lone piano note dies, silence"
+    }
+  ],
+  "notebook": {
+    "style": "Junkyard saloon-blues cabaret, led by a rollicking, rousing barrelhouse upright piano — pounding, percussive, slightly out-of-tune, beer-hall energy, A lone weathered male voice over it: gravel-and-rasp blue-eyed-soul grit, ragged dynamic swells, smoky blues phrasing, drunk but lucid, The song runs on a fault line: in the lifts the piano hammers a rollicking mid-tempo 4/4, joined by upright bass, stomping foot, found-metal percussion, brushed drums — rowdy, sweating, a drunk holding court at the keys, Then it drops clean OUT of tempo for the confessions: the rhythm section falls away and only a lone, sparse saloon piano remains under a bare, spoken-sung, wrecked voice, Single isolated vocal only: no harmonies, no choir, no gang vocals, no doubling, no sanctified uplift, Belting allowed in the choruses but kept raw, secular and grimy, never polished or pretty; no melisma, no vibrato runs, no clean resolution, Aged, warm, close-mic'd room-tone, the feel of a late-night empty saloon"
+  }
+}

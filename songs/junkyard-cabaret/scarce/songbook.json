@@ -1,0 +1,171 @@
+{
+  "title": "Scarce",
+  "act": "Encore",
+  "number": 16,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "cue",
+      "text": "house dark — the single spark from the last number still burning center stage"
+    },
+    {
+      "kind": "cue",
+      "text": "lone accordion wheezes awake somewhere in the wings, hesitant"
+    },
+    {
+      "kind": "cue",
+      "text": "spoken — cool, unhurried, almost amused"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You're still here.\nHuh.\nNobody sold you this part.\nThere's nothing left in the tent worth taking —\nand there you sit.\nAlright.\nOne more.\nAnd I don't lie."
+    },
+    {
+      "kind": "cue",
+      "text": "upright bass wanders in, unhurried waltz"
+    },
+    {
+      "kind": "heading",
+      "text": "VERSE 1"
+    },
+    {
+      "kind": "cue",
+      "text": "sung low, half-speech"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The barker stamped a number on a crate of jealousy,\nswore the first few carried flourish from the mold.\nYou paid him for a difference not a soul could ever see,\nwhile more crates of the same sat unsold."
+    },
+    {
+      "kind": "lyrics",
+      "text": "He snagged your desire with a slip of the hand,\nsold hunger by the ticket at the door.\nEach \"last one left\" had hundreds behind the stand —\nthe rare thing was never in the store."
+    },
+    {
+      "kind": "cue",
+      "text": "brushed snare joins, soft — found-metal clatter far off"
+    },
+    {
+      "kind": "heading",
+      "text": "CHORUS"
+    },
+    {
+      "kind": "lyrics",
+      "text": "'Cause anything gets made now — the making's cheap as rain,\nthe spread runs on forever, wall to wall.\nBut what to make, and why it aches, and when to leave it be —\nthat's scarce, my friend.\nThat's scarce.\nTo me."
+    },
+    {
+      "kind": "cue",
+      "text": "tired violin returns, warm"
+    },
+    {
+      "kind": "heading",
+      "text": "VERSE 2"
+    },
+    {
+      "kind": "cue",
+      "text": "closer to the mic, hers alone"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I learned it in the details, in the seams nobody sees:\nwhich flourish sharpens, which ones bury deep,\nwhen a thing is finished, when it's merely pretty — please —\nand pretty's going wholesale now. It's cheap."
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's lovely by the bucketful, there's lovely going spare,\nand none of it cost anybody any skin.\nBut every judgment in these bones is one I bled to wear —\nyou can't be handed where you've never been."
+    },
+    {
+      "kind": "heading",
+      "text": "CHORUS"
+    },
+    {
+      "kind": "cue",
+      "text": "slower on the last line"
+    },
+    {
+      "kind": "lyrics",
+      "text": "'Cause anything gets made now — the making's cheap as rain,\nthe spread runs on forever, wall to wall.\nBut what to make, and why it aches, and when to leave it be —\nthat's scarce, my love.\nThat's scarce.\nTo me."
+    },
+    {
+      "kind": "cue",
+      "text": "muted trumpet stumbles in — a little late, on purpose"
+    },
+    {
+      "kind": "heading",
+      "text": "VERSE 3"
+    },
+    {
+      "kind": "cue",
+      "text": "wry, a fond eye on the wings"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Our stumbling friend, he found the endless supper down the road,\nwent back seventeen times — I kept the score.\nEvery course the same old face, served à la mode;\nhe waddled out, and hungrier than before."
+    },
+    {
+      "kind": "lyrics",
+      "text": "They'll heap your plate forever with the songs already sung,\nanother helping, warmer than the last.\nHe ate the whole horizon and it never touched his tongue —\nyou can't get full on someone else's past."
+    },
+    {
+      "kind": "cue",
+      "text": "full band now — loose, ragged, swelling"
+    },
+    {
+      "kind": "heading",
+      "text": "BRIDGE"
+    },
+    {
+      "kind": "cue",
+      "text": "building line by line"
+    },
+    {
+      "kind": "lyrics",
+      "text": "They fed the maker to the beast, and the beast asked for more —\nanother corner of the store, one more door —\nan explanation for the explanation — encore, encore —\ntill the tale was just a skin that something hollow wore."
+    },
+    {
+      "kind": "cue",
+      "text": "hard cut — accordion and bass only"
+    },
+    {
+      "kind": "cue",
+      "text": "spoken-sung, quiet"
+    },
+    {
+      "kind": "lyrics",
+      "text": "But you.\nStill in your seat, with the whole spread going cold.\nYou came back tonight for the one thing we can't print."
+    },
+    {
+      "kind": "heading",
+      "text": "FINAL CHORUS"
+    },
+    {
+      "kind": "cue",
+      "text": "band falling away beneath, line by line"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Attention's scarce.\nIntention's scarce.\nDiscernment, darling — scarce.\nAnd taste—"
+    },
+    {
+      "kind": "cue",
+      "text": "held long, alone, unresolved. instruments drop away one by one, reverse of how they came"
+    },
+    {
+      "kind": "cue",
+      "text": "spoken, over lone accordion — the warmth finally showing"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Goodnight, you rare things.\nGo make what only you would make."
+    },
+    {
+      "kind": "cue",
+      "text": "she clicks the bulb off — chosen, not dying. the piece is finished because she says it is"
+    },
+    {
+      "kind": "cue",
+      "text": "accordion exhales. done."
+    }
+  ],
+  "notebook": {
+    "style": "encore cabaret waltz, warm and unhurried, house-lights-half-up intimacy, begins with lone wheezing accordion and a spoken confession, instruments wander back in one by one — upright bass, brushed snare, found-metal clatter, tired violin, muted trumpet — loose and lived-in, never polished, solo female vocalist throughout: smoky low mezzo-soprano, torch-singer phrasing that drifts between speech and melody, cool knowing defiance, velvet with a blade under it, unguarded warmth surfacing only at the very end, no backing vocals, no gang vocals, one voice from first word to last, dusty three-quarter time, acoustic campfire jazz undertones, analog warmth, tape hiss, no synths, no polish, mournful-warm rather than sad, a singer giving one more because the audience refused to leave, final word held long and left unresolved, ends with solo accordion and a spoken goodnight"
+  }
+}

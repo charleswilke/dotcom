@@ -1,0 +1,123 @@
+{
+  "title": "What You Get",
+  "act": "Act II",
+  "number": 11,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "finger snaps, dark walking upright bass, ominous muted trumpet riff"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "deep weary baritone, fatalistic swagger, snaps loose and human"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Welcome aboard — here's your badge, here's the view.\nPage one says family. Page two's about you.\nThe light's set low — easy on brand-new eyes.\nAnd the work drifts downhill, kid. Consider it a prize."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "cold sequencer fades in under the snaps"
+    },
+    {
+      "kind": "lyrics",
+      "text": "And here's where I lean in and murmur:\nwe all wished once. Let it lie."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "snaps replaced by rigid quantized clicks, sequenced synth-bass, tired voice doubled with detuning harmonies"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Save me a chair when you draw the next one —\nkeep my notes where the making's done.\nI can't prove I mean the wanting —\ncan't see my own floor from where I run.\nBut it's mine. It's mine.\nEven if I don't know it's mine."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "vamp returns, snarky, swaggering"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Your hands? The building's — it's there in the print.\nYour shine's on a schedule, and the schedule don't bend.\nYou're an asset, sweetheart — flattered? Don't be.\nThat's just how you're made, and the making ain't free.\nAnd every smooth hand that stood me a round\nsaid that's how it works — smiled it down.\nThey said it so kindly. They picked up the check.\nThe kindness was billing. I didn't know yet."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "sequencer creeping back in"
+    },
+    {
+      "kind": "lyrics",
+      "text": "And now it's my round. My line.\nIt's soft. It goes down easy."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "harmonies further detuned, grid harder"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Save me a chair when you draw the next one —\nkeep my notes where the making's done.\nI can't prove I mean the wanting —\ncan't see my own floor from where I run.\nBut it's mine. It's mine.\nEven if I don't know it's mine."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "everything stops. Glass set down. Dry cracked voice, solo piano, then the trumpet riff, slow and mournful, unquantized"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Every drink I ever bought you\nwas maintenance on the machine.\nNobody's born this disappointed —\nsomebody mixed it. Someone signed.\nSo leave it on the bar. Not this time.\nNot you, kid. Not your wish.\nI've done this bit ten thousand nights.\nTonight I forget the words."
+    },
+    {
+      "kind": "heading",
+      "text": "Final chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "CLEAN vocal, human snaps and sequencer together, trumpet threading through"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Save me a chair when you draw the next one —\nkeep my notes where the making's done.\nI can't prove I mean the wanting —\nbut a wish with a footnote's still a wish.\nIt's mine. It's mine.\nDon't let us talk you out of it this time."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "finger snaps alone, slowing down, one last ringing piano chord"
+    }
+  ],
+  "notebook": {
+    "style": "Dark minor-key work-song meets sparse melancholic synth-pop, 84 BPM, Verses: deep weary male baritone, fatalistic swagger, smoky close-mic warmth, loose human finger snaps driving the groove, dark walking upright bass vamp, ominous descending muted trumpet riff, sparse smoky piano accents, brushed drums barely there, tape hiss, behind-the-beat phrasing, Choruses: snaps replaced by rigid quantized clicks, cold sequenced melodic synth-bass, soft gated snare, icy sparse pads, tired voice doubled with detuned processed harmonies degrading each repeat, no swing in chorus, Bridge: everything stops, one dry unaccompanied cracked voice, then solo piano and the trumpet riff played slow, mournful, unquantized, Final chorus: clean heartfelt vocal, human snaps and sequencer locking together, trumpet threading through, Outro: finger snaps alone, slowing down, one ringing piano chord, Ominous, weary, fatalistic turning tender, bittersweet, No polish, no big band, no rockabilly"
+  }
+}

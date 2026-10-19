@@ -1,0 +1,119 @@
+{
+  "title": "Three Fifteen",
+  "act": "Act I",
+  "number": 4,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Spoken Word, Single Metronome Click, Getting Faster"
+    },
+    {
+      "kind": "lyrics",
+      "text": "They pulled me out early.\nGifted, they said.\nI was eleven\nand they handed me a test\nI hadn't been taught yet."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Barely Sung, Single Piano Note Repeating, Ticking"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Three-fifteen on a test I couldn't take,\nseven hundred points for writing down my name.\nI was a kid, that's all I was —\nlate for a race I never wanted to run."
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Voice Rising, Piano Doubles Speed"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The speed isn't what breaks you,\nthe speed isn't what breaks you —\nit's believing that the speed is the test."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Tempo Pushing, Sparse Drums Enter"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Grew up, got broke, got broke again,\nthe math got harder but the answer stayed the same.\nWhat can I trade to keep the lights on?\nWhat do I love that I can stand to lose?"
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Drums Accelerating, Voice Tightening"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The speed isn't what breaks you,\nthe speed isn't what breaks you —\nit's believing that the speed is the test."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "Spoken Word, Single Guitar Being Played Then Silence Where It Was"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Cherry SG. Pearl inlays.\nEpiphone, not Gibson —\ncouple hundred, but rent was a couple hundred then.\nI handed it across a counter\nand walked home lighter\nin all the wrong ways."
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain 3"
+    },
+    {
+      "kind": "cue",
+      "text": "Shouting, Tempo Almost Unbearable, Full Band Lurching"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The speed isn't what breaks you,\nthe speed isn't what breaks you —\nit's believing that the speed is the test."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "Everything Cuts Dead Mid-Beat, Solo Voice, Slow"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I scored a three-fifteen and survived.\nSold the guitar and kept going.\nBeen broke and come back\nand broke and come back —"
+    },
+    {
+      "kind": "cue",
+      "text": "Single Piano Note, Slow Now"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The speed was never mine.\nAnd I'm still here."
+    },
+    {
+      "kind": "cue",
+      "text": "Metronome stops. Nothing."
+    }
+  ],
+  "notebook": {
+    "style": "solo male voice raspy high tenor androgynous cracked falsetto raw and angry spoken word intro single piano note ticking metronome mechanical repetition tempo accelerates throughout song starts whisper ends shouting sparse drums enter midway single guitar in bridge then silence junkyard instrumentation mismatched not polished not pretty slightly out of tune aggressive vulnerability worldweary fury punk cabaret minor key avant-garde cabaret folk lofi full band only in final refrain lurching unstable tempo everything cuts dead in outro solo voice exhausted single piano note slow then nothing celebratory rage that collapses into stillness"
+  }
+}

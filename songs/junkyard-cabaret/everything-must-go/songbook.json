@@ -1,0 +1,151 @@
+{
+  "title": "Everything Must Go",
+  "act": "Act II",
+  "number": 9,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "slow brass strut, unhurried"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Welcome back...\nWipe your eyes. Take your seat.\nWe spit-shined the whole joint — while you wept in the street.\nLet the sun shine, folks… we dropped that grief like a brick.\nGot bright new wants on the shelf — and they're going quick."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "strut, still patient"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Step right up… to the Everything Store —\ngot a fix for the ache.\nGot a cure for a hurt you don't have yet?\nI'll name it. …For your sake.\nWe've got want by the plate, by the crate, by the ton —\nand the best part, sweethearts?"
+    },
+    {
+      "kind": "cue",
+      "text": "(beat)"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You're never done."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "slow, leaning in"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The only thing I'm selling here… is more.\nA happy heart just walks… right out the door."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "hammered"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Everything must go! Everything must go!\nThe lights, the lie, the lust, the low —\ntake it home, take it all, take more than you know —\ngo on, go on — everything must go!"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "patter speeds, first cracks"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I sell you the lack, then the fill, then the pride for the pill,\nthen the house where it echoes — and I'm stocking it still.\nHere's the trick, my loves — this want's not yours.\nIt's just what we had in the back of the store."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus 2"
+    },
+    {
+      "kind": "cue",
+      "text": "cut short, curdling"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Everything must go! Everything must go!\nBefore the truth can fully show."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "THE FALL, meter fractures, gears grind up"
+    },
+    {
+      "kind": "cue",
+      "text": "(beat)"
+    },
+    {
+      "kind": "lyrics",
+      "text": "take it home, take it all, take more than mine.\nOh. You felt that?\n...That give under the shine.\nLook down, folks — down through the floor, past the gloss, past the line.\nThose aren't stars down there.\nThose are gears. That's the belt, that's the cog —\nthat's my hand on the crank, friends. That's the whole catalog.\nI built you the itch. I built you the hum. I built you the gnaw in your chest.\nI never sold a thing in my life — you just bought the empty, well-dressed."
+    },
+    {
+      "kind": "heading",
+      "text": "Breakdown"
+    },
+    {
+      "kind": "cue",
+      "text": "jingle-shards colliding, noise floor climbing"
+    },
+    {
+      "kind": "lyrics",
+      "text": "new — free — now — you —\nmore — pure — yours — true —\nbuy — buy — buy —"
+    },
+    {
+      "kind": "heading",
+      "text": "FLOOR-DROP"
+    },
+    {
+      "kind": "cue",
+      "text": "bare, near-silent, no rhyme"
+    },
+    {
+      "kind": "lyrics",
+      "text": "…everything must go.\neverything.\nmust.\ngo."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "music-box winding down, the one clean rhyme returns"
+    },
+    {
+      "kind": "cue",
+      "text": "(soft, almost kind)"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There.\nNow you've seen the floor — and you can't un-see it, friend.\nThat bright little ring in the air? That's plenty. That's the end."
+    },
+    {
+      "kind": "cue",
+      "text": "music-box stops mid-note"
+    }
+  ],
+  "notebook": {
+    "style": "Mid-tempo junkyard-cabaret hard sell with swagger and swing — confident, unhurried, menace in the patience, not the speed, Single male vocal, theatrical spoken-sung barker patter, worn baritone, no backing vocals, no harmonies, no crowd, Opens on a slow brass strut: honky-tonk piano laying back behind the beat, lazy oom-pah, muted brass, brushed snare and woodblock with room to breathe, Through the middle it creeps faster — brass tightening, the sell turning greedy — and the breakdown finally breaks into a manic sprint, jingle-shards and ratchets and clockwork colliding, noise floor climbing, Then a hard drop to near-silence: lone detuned music-box over bare room tone, Outro slow and hollow, Vintage broadcast grit, slightly overdriven, handmade and a little dangerous, Danger that struts, never rushes"
+  }
+}

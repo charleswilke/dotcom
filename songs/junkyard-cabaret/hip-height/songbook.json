@@ -1,0 +1,75 @@
+{
+  "title": "Hip Height",
+  "act": "Act I",
+  "number": 7,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "full junkyard band"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Pull up close, I'll show you how I did it\nWasn't magic, wasn't slick — just a cheap little trick\nHeld a lantern at my hip, told you it was wicked\nMade the wall behind me grow and gave you all a kick"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I held the flashlight at hip height\nMade a giant of the night\nWorked the angle, worked the light\nMade the shadow fit your fright\nNow the lights come up bright\nAnd the giant slipped from sight"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Every year a brand new threat, every year you came\nReds and germs and robots and the panic of the frame\nLantern at my hip, big blank wall, knew the angle, knew the game\nDifferent giant every show — and you bought it all the same"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I held the flashlight at hip height\nMade a giant of the night\nWorked the angle, worked the light\nMade the shadow fit your fright\nNow the lights have come up bright\nAnd the giant's slipped from sight"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "lone piano, single isolated voice, spoken-sung confession, no harmonies"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Look. That was the whole trick.\nA lantern. A wall. A hand at my hip.\nThat's all the giant ever was.\nThat's all I ever was."
+    },
+    {
+      "kind": "heading",
+      "text": "Final"
+    },
+    {
+      "kind": "cue",
+      "text": "slower, chastened, voice cracking, single voice only, no backing vocals"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I held the flashlight at hip height\nMade a giant of the night\nWorked the angle, worked the light\nMade the shadow fit your fright\nNow the lights have come up bright\nAnd the giant's slipped from sight"
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "solo banjo, slow fade"
+    }
+  ],
+  "notebook": {
+    "style": "high-energy ragged street-circus cabaret, MC confessional with vaudeville barker bones, mismatched junkyard instrumentation — tuba oompah, banjo, washboard, suitcase kick, hammered metal, beat-up piano, Single isolated lead vocal throughout, one voice only — no backing vocals, no harmonies, no choir, no vocal doubling, Conversational speak-sing, intimate and rueful, among the audience not above them, Full junk-percussion band on verses and chorus, drops to lone piano for bridge confession, returns chastened for final chorus"
+  }
+}

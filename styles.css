@@ -12984,6 +12984,15 @@ section.production-header.alice p {
     text-shadow: 0 0 10px rgba(194, 112, 56, 0.68);
 }
 
+#jcLightbox .lightbox-close:focus-visible {
+    outline: 2px solid #d8b47b;
+    outline-offset: -3px;
+    border-radius: 4px;
+    background: #c49b5c14;
+    color: #f4dfba;
+    box-shadow: 0 0 9px #c49b5c26;
+}
+
 /* Junkyard Cabaret scrollbar (rust) */
 #jcLightbox .mixtape-playlist,
 #jcLightbox .mixtape-content {
@@ -15191,6 +15200,424 @@ section.production-header.alice p {
     }
 }
 
+
+/* JC songbook: a paper insert slides over the playlist; the deck keeps playing. */
+#jcLightbox .track-songbook-button { appearance: none; -webkit-appearance: none; }
+/* Inline act rows sit outside the act frame; match its inner right inset. */
+#jcLightbox .mixtape-track-item--act-start { padding-right: calc(1.3rem + 1px); }
+/* One brass-edged control with two complementary faces and a single angled seam. */
+#jcLightbox .track-action-group--paired {
+    --jc-action-width: 76px;
+    --jc-action-height: 30px;
+    --jc-action-angle: 15deg;
+    gap: 0;
+    margin-left: .75rem;
+    padding: 0;
+    border: 1px solid #84663f;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #302116;
+    box-shadow: 0 2px 3px #0003, inset 0 1px 0 #efd1a12e;
+}
+#jcLightbox .track-action-group--paired::after {
+    content: '';
+    position: absolute;
+    inset: -1px auto -1px 50%;
+    width: 1px;
+    background: #9b8059;
+    box-shadow: 1px 0 0 #1b110c99;
+    transform: skewX(var(--jc-action-angle));
+    pointer-events: none;
+}
+#jcLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
+    flex-direction: row;
+    width: var(--jc-action-width);
+    min-width: var(--jc-action-width);
+    height: var(--jc-action-height);
+    min-height: var(--jc-action-height);
+    gap: 5px;
+    padding: 4px 8px;
+    border: 0;
+    border-radius: 0;
+    color: #c5ae8c;
+    box-shadow: inset 0 1px 0 #efd1a122, inset 0 -1px 0 #160e09aa;
+    transition: filter 160ms, box-shadow 160ms;
+}
+#jcLightbox .mixtape-track-item .track-action-group--paired .track-article-link {
+    padding-right: 12px;
+    background: linear-gradient(165deg, #503b29, #322419 65%, #2b1e15);
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
+}
+#jcLightbox .mixtape-track-item .track-action-group--paired .track-share-button {
+    margin-left: -8px;
+    padding-left: 12px;
+    background: linear-gradient(165deg, #3b2d21, #261c15 75%, #201811);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%);
+}
+#jcLightbox .track-action-group--paired .track-share-button::before { display: none; }
+#jcLightbox .track-action-group--paired :is(.track-article-label, .track-share-label) {
+    font-size: 9px;
+    font-variant: normal;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #c5ac88;
+}
+#jcLightbox .track-action-group--paired svg { width: 14px; height: 14px; }
+#jcLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):is(:hover, :focus-visible) {
+    filter: brightness(1.12);
+    transform: none;
+    box-shadow: inset 0 1px 0 #ffe6b844, inset 0 -1px 0 #160e09aa;
+}
+#jcLightbox .track-action-group--paired :is(.track-article-link, .track-share-button):focus-visible {
+    outline: 2px solid #ffe5b8;
+    outline-offset: -3px;
+}
+#jcLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):active {
+    filter: brightness(.9);
+    transform: none;
+    box-shadow: inset 0 2px 4px #130c0899;
+}
+#jcLightbox .jc-book-nav,
+#jcLightbox .jc-book-footer {
+    background:
+        linear-gradient(90deg, #160c0a66, #28100d12 35%, #160c0a55),
+        url('/images/textures/jc-songbook-bookcloth-v1.webp') center / 480px 480px repeat,
+        #43241f;
+    text-shadow: 0 1px 1px #160b08;
+}
+#jcLightbox .jc-book-nav {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 10px;
+    min-height: 40px;
+    padding: 3px var(--jc-book-gutter);
+    border-bottom: 1px solid #c49b5c;
+    box-shadow: inset 0 1px 0 #e9c58c55, inset 0 -3px 0 #1e0e0b88, 0 3px 8px #48291c33;
+}
+#jcLightbox .jc-book-nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: inherit;
+    box-shadow: inherit;
+    pointer-events: none;
+}
+#jcLightbox .jc-book-context {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    color: #e2c69b;
+    font: 10px 'Space Mono', monospace;
+    letter-spacing: .035em;
+    white-space: nowrap;
+    border-left: 1px solid #c49b5c66;
+    padding-left: 12px;
+}
+#jcLightbox .jc-book-back {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    margin: 0;
+    padding: 6px 0;
+    border: 0;
+    background: transparent;
+    color: #f4dfba;
+    font: 11px 'Space Mono', monospace;
+    letter-spacing: .035em;
+    min-height: 28px;
+    cursor: pointer;
+}
+#jcLightbox .jc-book-back:hover { color: #fff4da; }
+
+#jcLightbox .jc-songbook-stage {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #1b120c;
+    isolation: isolate;
+}
+
+#jcLightbox #jcTracksPanel {
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    overflow-y: auto;
+    transition: opacity 280ms;
+}
+
+#jcLightbox .jc-songbook-panel {
+    --jc-book-gutter: clamp(20px, 2.4vw, 32px);
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background:
+        radial-gradient(ellipse at 50% 45%, transparent 38%, #8c603b14 70%, #60391740 100%),
+        url('/images/textures/jc-songbook-paper-v2.webp') left top / 640px 640px repeat,
+        #efe5cf;
+    color: #30251e;
+    border: 1px solid #ac8a59;
+    border-radius: 7px 3px 5px 4px;
+    box-shadow: -8px 0 18px #0004, inset 0 0 24px #98723821, inset 0 1px 0 #fff8e666;
+    transform: translateX(105%);
+    visibility: hidden;
+    transition: transform 420ms cubic-bezier(.22,.7,.2,1), visibility 0s 420ms;
+    scrollbar-color: #a88a65 #e9dcc5;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+
+#jcLightbox.jc-songbook-open .jc-songbook-panel {
+    transform: translateX(0);
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+#jcLightbox.jc-songbook-open #jcTracksPanel {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#jcLightbox .jc-book {
+    padding: 8px var(--jc-book-gutter) 0;
+    font: 16px/1.65 Georgia, 'Times New Roman', serif;
+    text-align: left;
+}
+
+#jcLightbox .jc-book-heading,
+#jcLightbox .jc-book-footer,
+#jcLightbox .jc-book-source {
+    font-family: 'Space Mono', monospace;
+}
+
+#jcLightbox .jc-book-title {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    font: 700 clamp(14px, 1.5vw, 17px)/1.2 'Space Mono', 'Courier New', monospace;
+    letter-spacing: -.045em;
+    color: #f4dfba;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#jcLightbox .jc-book-credit { color: #dfc9a8; font: italic 12px/1.6 Georgia, serif; margin: 2px 0 4px; }
+#jcLightbox .jc-book-toolbar {
+    position: absolute;
+    z-index: -2;
+    top: calc(100% - 12px);
+    right: var(--jc-book-gutter);
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    text-shadow: none;
+}
+#jcLightbox .jc-book-toolbar button {
+    position: relative;
+    color: #653322;
+    background:
+        linear-gradient(#bd904d44, #e8c78a22 45%, #c28d3c44),
+        url('/images/textures/jc-songbook-paper-v2.webp') center / 320px 320px;
+    border: 1px solid #a17c43;
+    border-top: 0;
+    border-radius: 0 0 5px 2px;
+    min-height: 30px;
+    padding: 12px 10px 4px;
+    font: 10px/1.4 'Space Mono', monospace;
+    box-shadow: inset 0 2px 4px #57311333, 1px 3px 4px #4c2c1b33;
+    cursor: pointer;
+}
+#jcLightbox .jc-book-listen { transform: rotate(-1.5deg); transform-origin: top center; }
+#jcLightbox .jc-book-cues { width: 77px; flex-shrink: 0; transform: rotate(1deg); transform-origin: top center; }
+#jcLightbox .jc-book-retry {
+    color: #7e3926;
+    background: #e9dcc5;
+    border: 1px solid #b6a083;
+    border-radius: 3px;
+    min-height: 32px;
+    padding: 6px 10px;
+    font: 11px 'Space Mono', monospace;
+    cursor: pointer;
+}
+#jcLightbox .jc-book-toolbar button:hover { filter: brightness(1.06); }
+#jcLightbox .jc-book-inspiration {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    margin: 0;
+    color: #f4dfba;
+    font: 11px/1.6 'Space Mono', monospace;
+    text-decoration-color: #c49b5c;
+    text-underline-offset: 4px;
+}
+#jcLightbox .jc-book-inspiration:hover { color: #fff4da; }
+
+#jcLightbox .jc-book-cues[aria-pressed="false"] { filter: saturate(.35); color: #635447; }
+#jcLightbox .jc-book-heading {
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #8b422a;
+    line-height: 20px;
+    margin: 16px 0 4px;
+}
+#jcLightbox .jc-book-cue {
+    color: #8b422a;
+    font: italic 13px/20px Georgia, 'Times New Roman', serif;
+    margin: 0 0 10px;
+    padding-left: 12px;
+    border-left: 2px solid #c8a881;
+}
+#jcLightbox p.jc-book-lyrics {
+    font-family: Baskerville, 'Baskerville Old Face', 'Palatino Linotype', Palatino, serif;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    line-height: 24px;
+    margin: 0 0 12px;
+}
+#jcLightbox #jcSongbookLyrics > .jc-book-heading:first-child { margin-top: 0; }
+#jcLightbox .jc-cues-hidden :is(.jc-book-cue, .jc-book-cue-only) { display: none; }
+#jcLightbox .jc-book-notebook {
+    margin: 24px 0;
+    border: 1px solid #ad8b60;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #c8a36a1f;
+    box-shadow: inset 0 1px 0 #fff7de99, 0 2px 3px #5b3b2012;
+}
+#jcLightbox .jc-book-notebook summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 0;
+    background: transparent;
+    color: #7e3926;
+    font-size: 21px;
+    line-height: 1.3;
+    list-style: none;
+    cursor: pointer;
+    transition: background 160ms;
+}
+#jcLightbox .jc-book-notebook summary::-webkit-details-marker { display: none; }
+#jcLightbox .jc-book-notebook summary::after {
+    content: '+';
+    display: grid;
+    place-items: center;
+    flex: 0 0 26px;
+    height: 26px;
+    border: 1px solid #ad8b60;
+    border-radius: 50%;
+    background: #fff2ce55;
+    font: 18px/1 'Space Mono', monospace;
+}
+#jcLightbox .jc-book-notebook summary:hover,
+#jcLightbox .jc-book-notebook[open] summary {
+    background: #c8a36a38;
+}
+#jcLightbox .jc-book-notebook[open] { border-color: #8b6340; }
+#jcLightbox .jc-book-notebook[open] summary { border-bottom: 1px solid #b99b73; }
+#jcLightbox .jc-book-notebook[open] summary::after { content: '−'; }
+#jcLightbox .jc-book-notes { padding: 14px 14px 16px; }
+#jcLightbox .jc-book-notes > :first-child { margin-top: 0; }
+#jcLightbox .jc-book-notes p { margin: 0 0 16px; }
+#jcLightbox .jc-book-notes > :last-child { margin-bottom: 0; }
+#jcLightbox .jc-book-idea { margin: 24px 0; padding-left: 16px; border-left: 2px solid #c8a881; font-style: italic; color: #7e3926; }
+#jcLightbox .jc-book-source { color: #746452; font-size: 10px; line-height: 1.7; }
+#jcLightbox .jc-book-footer {
+    color: #d2b88f;
+    font-size: 10px;
+    line-height: 1.7;
+    border-top: 1px solid #c49b5c;
+    margin: 28px calc(-1 * var(--jc-book-gutter)) 0;
+    padding: 8px var(--jc-book-gutter) 10px;
+    box-shadow: inset 0 3px 0 #1e0e0b88, inset 0 4px 0 #e9c58c33, inset 0 -1px 0 #e9c58c44;
+}
+#jcLightbox .jc-book-footer > span { letter-spacing: .08em; text-transform: uppercase; }
+#jcLightbox .jc-book-status { padding: 32px 24px; font: 16px/1.6 Georgia, serif; }
+#jcLightbox .jc-book-retry { margin: 0 24px 24px; }
+
+#jcLightbox :is(.track-songbook-button, .jc-book-back, .jc-book-toolbar button, .jc-book button, .jc-book summary, .jc-book-inspiration):focus-visible {
+    outline: 2px solid #b76b3e;
+    outline-offset: -3px;
+}
+
+@media (max-width: 768px) {
+    #jcLightbox .mixtape-content { height: 100dvh; overflow: hidden; flex-direction: column; gap: 1rem; }
+    #jcLightbox .mixtape-left-section { flex: 0 0 auto; max-width: none; overflow: visible; align-items: center; gap: .5rem; }
+    #jcLightbox .mixtape-player-container { flex: 0 0 auto; }
+    #jcLightbox .mixtape-right-section { flex: 1; min-height: 0; overflow: hidden; contain: none; }
+    #jcLightbox .mixtape-cover-container { min-height: 0; max-width: min(80vw, 300px); max-height: min(34dvh, 300px); }
+    #jcLightbox .mixtape-cover-container img.mixtape-cover { width: auto; max-height: min(34dvh, 300px); }
+    #jcLightbox .modal-oscilloscope-frame { height: 110px; min-height: 110px; max-height: 110px; }
+    #jcLightbox .mixtape-track-item { min-height: 48px; padding-right: .35rem; }
+    #jcLightbox .mixtape-track-item--act-start { padding-right: calc(.75rem + 1px); }
+    #jcLightbox .track-number { flex: 0 0 1rem; width: 1rem; margin-right: 4px; text-align: right; transform: translateX(-3px); }
+    #jcLightbox .track-title-text { font-size: 1rem; line-height: 1.35; }
+    /* Scale the original paired controls together, including their angled seam. */
+    #jcLightbox .track-action-group { zoom: 1.35; }
+    #jcLightbox .track-action-group--paired {
+        --jc-action-width: 32px;
+        --jc-action-height: 23px;
+        --jc-action-angle: 19deg;
+        margin-left: .2rem;
+    }
+    #jcLightbox .track-action-group--paired svg { width: 13px; height: 13px; }
+
+    #jcLightbox.jc-songbook-open .mixtape-content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) auto;
+        gap: 0;
+        padding: 12px 12px max(12px, env(safe-area-inset-bottom));
+    }
+    #jcLightbox.jc-songbook-open .mixtape-left-section,
+    #jcLightbox.jc-songbook-open .mixtape-right-section { display: contents; }
+    #jcLightbox.jc-songbook-open .mixtape-cover-container,
+    #jcLightbox.jc-songbook-open .mixtape-side-toggle-container { display: none; }
+    #jcLightbox.jc-songbook-open .jc-songbook-stage { grid-row: 1; align-self: stretch; }
+    #jcLightbox.jc-songbook-open .mixtape-player-container { grid-row: 2; margin-top: 10px; }
+    #jcLightbox.jc-songbook-open .modal-oscilloscope-frame { height: 78px; min-height: 78px; max-height: 78px; }
+    #jcLightbox.jc-songbook-open .modal-oscilloscope-meta { display: none; }
+    #jcLightbox.jc-songbook-open .lightbox-close { top: 6px; color: #f4dfba; }
+    #jcLightbox .jc-songbook-panel { --jc-book-gutter: 18px; }
+    #jcLightbox .jc-book-nav { gap: 5px; padding-right: 38px; padding-left: 10px; }
+    #jcLightbox .jc-book-title { font-size: 12px; }
+    #jcLightbox .jc-book-back { font-size: 9px; }
+    #jcLightbox .jc-book-context { padding-left: 6px; font-size: 9px; letter-spacing: 0; }
+    #jcLightbox .jc-book-toolbar button { min-height: 34px; }
+}
+
+/* Compact two-column layouts keep the same paired control with icons only. */
+@media (min-width: 769px) and (max-width: 1100px) {
+    #jcLightbox .track-action-group--paired { --jc-action-width: 42px; margin-left: .4rem; }
+    #jcLightbox .track-action-group--paired :is(.track-article-label, .track-share-label) { display: none; }
+    #jcLightbox .track-action-group--paired svg { width: 16px; height: 16px; }
+}
+
+@media (min-width: 769px) and (max-height: 600px) {
+    #jcLightbox .mixtape-left-section { justify-content: flex-start; }
+    #jcLightbox .mixtape-cover-container { min-height: 60px; }
+    #jcLightbox .modal-oscilloscope-frame { height: 100px; min-height: 100px; max-height: 100px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #jcLightbox .jc-songbook-panel,
+    #jcLightbox #jcTracksPanel,
+    #jcLightbox .track-songbook-button { transition: none !important; }
+}
 
 /* ===== STICKY NAV ===== */
 .site-nav {

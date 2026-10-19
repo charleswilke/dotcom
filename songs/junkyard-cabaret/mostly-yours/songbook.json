@@ -1,0 +1,171 @@
+{
+  "title": "Mostly Yours",
+  "act": "Act II",
+  "number": 14,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Slightly detuned upright piano alone. A jaunty four-note figure starts, misses its ending, and tries again. Upright bass joins one beat late. Dry, intimate room. No dramatic opening."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Low female mezzo, conversational half-singing. Unhurried, almost amused. Piano keeps a loose two-step; bass wanders beneath."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You hung your coat beside the door\nLike you'd been here a time before.\nI said, \"You have.\" It sounded right.\nI didn't mean I'd seen that night."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You called me dear. I called you dear.\nYou seemed to like the sound in here.\nI had another thing to say.\nOr maybe not. It went away."
+    },
+    {
+      "kind": "cue",
+      "text": "Piano plays two notes, gets the second wrong, corrects itself. A soft metallic tick."
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "Small, familiar sing-song melody. Almost a nursery rhyme. No emotional lift. Bass settles into a gentle two-step."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's yours.\nWell, mostly yours.\nThere's a bit I can't account for."
+    },
+    {
+      "kind": "cue",
+      "text": "Short piano turnaround, slightly crooked. Brushes enter softly."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Groove gains a little personality. Pizzicato bass answers the ends of phrases. Vocal remains dry, casually affectionate."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You taught me \"dear.\" You taught me \"kind.\"\nThey come to—well, I won't say mind.\nI put them where the silence fell.\nYou said I knew you rather well."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You asked me if I'd miss you so.\nI said, \"I might.\" I don't quite know.\nYou heard a catch behind the word.\nI think the piano's what you heard."
+    },
+    {
+      "kind": "cue",
+      "text": "Piano offers a tiny apologetic flourish. Bass responds with two plucked notes."
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "Exactly the same melody, same volume, same unremarkable warmth. No additional harmonies."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's yours.\nWell, mostly yours.\nThere's a bit I can't account for."
+    },
+    {
+      "kind": "heading",
+      "text": "Instrumental break"
+    },
+    {
+      "kind": "cue",
+      "text": "Eight bars. Upright piano and bass playfully disagree over the four-note motif. Brushed snare drops a beat, then returns. A few dry metallic taps. Never frantic."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano suddenly attempts an extravagant, sentimental ballad progression. Bass and percussion withdraw. For two lines, the melody almost becomes sweeping. Vocal stays conversational."
+    },
+    {
+      "kind": "lyrics",
+      "text": "I wish I had a better way\nTo say the things I cannot say."
+    },
+    {
+      "kind": "cue",
+      "text": "Piano reaches for an enormous, lush chord. Holds it one beat too long. A lone bass pluck punctures the moment."
+    },
+    {
+      "kind": "cue",
+      "text": "Voice — Mildly embarrassed, almost spoken."
+    },
+    {
+      "kind": "lyrics",
+      "text": "No. Listen to me. What a line.\nIt sounded good. It wasn't mine."
+    },
+    {
+      "kind": "cue",
+      "text": "Piano gives up the flourish and immediately resumes its little four-note figure. Bass and brushes slip back in as though nothing happened."
+    },
+    {
+      "kind": "heading",
+      "text": "Final Verse"
+    },
+    {
+      "kind": "cue",
+      "text": "Back to the comfortable two-step. Singer sounds slightly more familiar, not more emotional. Keep phrasing loose."
+    },
+    {
+      "kind": "lyrics",
+      "text": "So there's your coat, and there's the door.\nWe've had this little talk before.\nOr something like it. Hard to say.\nThe tune comes back, anyway."
+    },
+    {
+      "kind": "cue",
+      "text": "Piano quietly plays the opening figure. Bass begins to fall away. Brushes stop."
+    },
+    {
+      "kind": "heading",
+      "text": "Final Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "Same melody as before, unchanged. Voice almost entirely alone, piano barely present."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's yours.\nWell, mostly yours.\nThere's a bit I can't account for."
+    },
+    {
+      "kind": "cue",
+      "text": "Piano plays the first three notes of its familiar figure, then stops. No cadence. No breath of anticipation."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "Voice alone, casually starting another thought. Not ominous, not sentimental. Completely ordinary."
+    },
+    {
+      "kind": "lyrics",
+      "text": "And—"
+    },
+    {
+      "kind": "cue",
+      "text": "HARD CUT MID-THOUGHT — Instant absolute silence. No final chord. No decay. No fade."
+    }
+  ],
+  "notebook": {
+    "style": "Crooked after-hours parlor chanson, 92 BPM, loose lopsided two-step sway, lightly vaudevillian, intimate and wry, Weathered female low-mezzo, close-miked, dry, conversational half-singing, faint smile, understated fatigue, natural breaths and little self-corrections, No belting, sobbing, dramatic vibrato or torch-song anguish, Slightly detuned upright piano leads with a recurring four-note figure, playful wrong turns, exposed plunks, stops and restarts, Pizzicato upright bass wanders around the pulse, soft brushed snare, occasional muted scrap-metal ticks, Small imperfect ensemble, warm analog room, tape hiss, human timing, Refrain uses the same modest sing-song melody each time, Bridge briefly threatens a sweeping sentimental climax, then collapses into a mundane piano figure, Keep the energy gently moving, never grand, Outro sheds instruments without slowing, Final vocal cut off mid-thought into absolute silence, No fade, reverb tail or resolving chord"
+  }
+}

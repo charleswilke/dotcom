@@ -1,0 +1,139 @@
+{
+  "title": "The New Survivalism",
+  "act": "Act I",
+  "number": 5,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "intro"
+    },
+    {
+      "kind": "cue",
+      "text": "sparse, slow, single banjo pluck, tuba sustains, breath between phrases, faint room tone"
+    },
+    {
+      "kind": "heading",
+      "text": "verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Drunkard alone, weathered, confessional, half-spoken, intimate cabaret register"
+    },
+    {
+      "kind": "lyrics",
+      "text": "My folks grew up as the sirens screamed\nSheltered from that haunting dream\nHands clasped tight, hide just in case\nBrace"
+    },
+    {
+      "kind": "cue",
+      "text": "hammered metal struck on \"Brace,\" allowed to ring out into the silence"
+    },
+    {
+      "kind": "lyrics",
+      "text": "But the bracing was the wound\nThe bunker was the bleed\nA muscle held taut for years\nA cramp you can't release"
+    },
+    {
+      "kind": "heading",
+      "text": "chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "quiet foot stomp on the four, accordion swells, instrumentation lifts around the solo voice"
+    },
+    {
+      "kind": "lyrics",
+      "text": "So be careful what you wish for\nSomething is finally listening\nWelcome to the next cataclysm\nWelcome to the new survivalism"
+    },
+    {
+      "kind": "heading",
+      "text": "verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "instrumentation pulls back, banjo alone, voice more isolated"
+    },
+    {
+      "kind": "lyrics",
+      "text": "COVID came and we sheltered too\nDutiful kids, knew what to do\nDrained our savings, dabbled in conspiracy\nBut you totally didn't hear that from me"
+    },
+    {
+      "kind": "lyrics",
+      "text": "We shared a frame\nThat was mostly the same\nAnd even grading on a curve\nWe cracked our final nerve"
+    },
+    {
+      "kind": "heading",
+      "text": "chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "same lift, accordion and suitcase kick around the solo voice"
+    },
+    {
+      "kind": "lyrics",
+      "text": "So be careful what you wish for\nSomething is finally listening\nWelcome to the next cataclysm\nWelcome to the new survivalism"
+    },
+    {
+      "kind": "heading",
+      "text": "verse 3"
+    },
+    {
+      "kind": "cue",
+      "text": "texture corrodes: mechanical clatter enters, slight distortion creeping in around the voice"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I was paid to bring the eyeballs in\nTruth and lies didn't matter to them\nI engineered the surge, watched the discourse spark\nWatched my bosses cash in on the lark"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I made the click, I took the pay\nSat with the emptiness before that went away\nNow you don't need a writer like me\nThe machine is the only thing they came to see"
+    },
+    {
+      "kind": "heading",
+      "text": "bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "percussive, washboard prominent, suitcase kick, voice goes chant-like and rhythmic"
+    },
+    {
+      "kind": "lyrics",
+      "text": "They were cramped from holding on too tight\nBracing for the wrong fight every night\nWe stayed slack soft and small\nThe muscle that mattered, never trained at all"
+    },
+    {
+      "kind": "heading",
+      "text": "outro"
+    },
+    {
+      "kind": "cue",
+      "text": "instrumentation strips back, voice over single sustained tuba tone, radio crackle building underneath"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's a fork in the road ahead\nThere won't be a sign to read\nNo voice from outside will tell you\nLook within for what you need"
+    },
+    {
+      "kind": "cue",
+      "text": "voice gets more intimate, almost confidential"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Look within\nLook within\nLook within"
+    },
+    {
+      "kind": "cue",
+      "text": "final line whispered, almost spoken, no instrumentation"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Stay tuned in"
+    },
+    {
+      "kind": "cue",
+      "text": "fades on radio tone and static"
+    }
+  ],
+  "notebook": {
+    "style": "Cabaret, slow and spacious with a brooding, hollow pulse; folk textures open the track, then corrode into slight distortion, mechanical clatter, radio crackle, static, and modern dread, Deep tuba sustains, plucked banjo, breathy accordion chords, washboard scrapes, decaying hammered metal, suitcase kick, and occasional foot-stomp accents frame a single weathered voice in an Urban European cabaret register, half-spoken, breathy, paused, and intimately confessional; close vocal presence, hushed small-room ambience, deep low end, and a fading radio tone"
+  }
+}

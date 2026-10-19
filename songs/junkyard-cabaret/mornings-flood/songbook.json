@@ -1,0 +1,208 @@
+{
+  "title": "Morning’s Flood",
+  "act": "Act II",
+  "number": 10,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Already playing. A sweet detuned piano figure over a crooked shuffle: upright bass with string buzz, brushed snare, hollow drum thump, tin-can taps and a loose chain tick. Guitar and muted trumpet exchange frayed little replies. Dry room, rattles, no polish."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Low female alto, warm and casually tuneful. She's entertained, not superior. The ensemble limps charmingly under her; one tap lands late and the others catch it."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Used to be you knew a counterfeit\nBy the teeth, by the hands, by the light\nNow it smiles with a dead man's warmth\nAnd it talks like a Saturday night"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You saw the thing and said, \"Well, damn\"\nYou let a little wonder through\nThen someone said, \"A machine made it\"\nAnd now you're mad it moved you"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Siren-sweet, hummable hook above a gloriously rattly groove. Piano trips over an accent; bass pulls it back. Tin and chain answer between lines. Teasing, not contemptuous."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You can hiss\nYou can hack\nYou can curse the flood\nIt ain't going back"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Get your last licks in\nGo on, wear yourself out\nThe flood don't stop for barking\nAnd it's everywhere now"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Take your little swing\nGo on, show your fire\nAin't nobody coming to save\nYour silly little ire"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Guitar slips out and never returns. Trumpet gives a last sour, human-sounding sigh, then disappears. The salvaged percussion stays, quieter. No irony on the mother's voice; let the melody hold."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Don't tell me this is vapor\nDon't tell me none of this is real\nWhen your mother's voice comes through the wire\nBegging God for a deal"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Don't tell me this is progress\nJust because the trick got cheap\nA polished lie still ruins lives\nWhen it gets in deep"
+    },
+    {
+      "kind": "cue",
+      "text": "Nearly spoken, plain and sincere. A creak from the piano bench."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You're right about the lie, friend.\nYou're wrong about the wall."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 3"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano and rattling bass lead; brushes and tiny found-metal taps weave through the holes. Slightly crooked, never gloomy. This is a confession, not a spotlight."
+    },
+    {
+      "kind": "lyrics",
+      "text": "I never made the brush or paper\nNever taught the trees to climb\nEvery tool came through another hand\nEvery craft through borrowed time"
+    },
+    {
+      "kind": "lyrics",
+      "text": "So what was I protecting, really?\nSomething holy? Something mine?\nOr just a tollbooth in my blood\nAt the edge of a changing line"
+    },
+    {
+      "kind": "cue",
+      "text": "Little smile directed at herself."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Don't take the needle personal —\nI sang your verses first\nI'm just a few floods farther down\nAnd past the part that hurts"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Nothing returns. The piano plays harder, the bass walks with a little swagger, tin and brushes keep the lopsided pulse. Same pretty hook, less teasing. More momentum, not volume."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Truth got thin\nStyle got thick\nYou liked it till you knew the trick\nAnd every king with a rented crown\nFeels that cold air coming down"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You can spit\nYou can preach\nYou can pound the table\nIt's still in reach"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Get your last licks in\nGo on, have your say\nKick at the future all you want\nIt's coming anyway"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Take your little swing\nThrow your little sparks\nMorning don't ask permission\nIt just cuts right through the dark"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "A final metal clank rings out; chain, tin and brushes stop forever. Only spare piano and upright bass, still uneven and alive. On \"we\" and \"ours,\" her smile fades; not the warmth."
+    },
+    {
+      "kind": "lyrics",
+      "text": "And here's the part that gets me\nWhile we're swinging at the tide:\nThat little spark was ours to feel\nBefore we took a side"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Right now we still can see the seams —\nThe teeth, the hands, the light —\nWe get to stand here certain, friend\nDon't blink. Don't blink twice."
+    },
+    {
+      "kind": "lyrics",
+      "text": "'Cause the counterfeit gets cleaner\nAnd the labels wash away\nAnd the next time something moves you\nWill you let the feeling stay?"
+    },
+    {
+      "kind": "heading",
+      "text": "Final section"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano's repeating figure loses notes and leaves gaps. Bass keeps a worn, patient pulse. No dramatic slowdown. She's thinking aloud now."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Have your little rage\nGo on, make it plain\nEverybody loves disruption\nTill it hollows out their name"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Sound it out\nNice and slow\nThere's no clean way\nTo watch this go"
+    },
+    {
+      "kind": "cue",
+      "text": "Bass rattles through one last descending run and falls silent. Piano and voice only."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Get your last licks in\nGo on, get it through\nThe wall came down because it could\nAnd I was leaning on it too"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Take your little swing\nGo on, show your fire"
+    },
+    {
+      "kind": "cue",
+      "text": "Close, almost kind. The piano pedal audibly creaks."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Then sit down by the wreck and hold\nThat silly little ire —"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano picks at the hook, missing notes. She corrects herself without raising her voice."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Silly, hell. It's certain.\nLast certain thing entire.\nYou didn't fake the wonder.\nYou didn't fake the bruise.\nSo cherish it while it's burning —\nConfident and true."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano tries the pretty opening phrase, catches on a sour note, then stops. Voice alone, natural and unhurried."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Go on then\nGet it out\nMorning's here —\nThe one thing left\nWithout a doubt"
+    },
+    {
+      "kind": "cue",
+      "text": "Room tone. No final chord."
+    }
+  ],
+  "notebook": {
+    "style": "Junkyard barroom blues, crooked vaudeville shuffle with a siren-sweet, memorable melody. Weathered low female alto, intimate and warmly melodic; amused at first, then quietly implicated. Never sneering or theatrical. A battered, slightly detuned upright piano plays a pretty repeating figure over a rattling walking bass, brushed snare, hollow oil-drum thump, tin-can rim taps, chain jingle and spring squeak. Scratchy electric guitar and a fraying muted trumpet trade crooked replies. Great musicians on salvaged instruments: loose swing, late clanks, buzzing notes, tiny stumbles and clever recoveries. Dry room, mic bleed, pedal creak, tape saturation, no studio sheen. The song stays inviting as instruments quietly drop out for good, leaving their absence audible. Keep the hook tuneful, never shouted. Last piano figure catches on a missing note; unaccompanied final lines, then room tone. No circus comedy, sinister drones, arena drums or grand finale.",
+    "idea": "The song stays inviting as instruments quietly drop out for good, leaving their absence audible."
+  }
+}

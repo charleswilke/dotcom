@@ -1,0 +1,319 @@
+{
+  "title": "Why This Way",
+  "act": "Act I",
+  "number": 1,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Spoken Barker | Nearly Naked"
+    },
+    {
+      "kind": "cue",
+      "text": "Inside a small canvas tent. Close, dry vocal. No reverb wash."
+    },
+    {
+      "kind": "cue",
+      "text": "Two slightly sour honky-tonk piano chords. A chair scrapes. Someone clears their throat."
+    },
+    {
+      "kind": "cue",
+      "text": "No full band yet."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Step right up…\nStep right up."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Spoken-Sung | Piano Only at First"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Step right up, step right up to the little tent\nWhere somebody made something and they knew what they meant"
+    },
+    {
+      "kind": "cue",
+      "text": "Upright bass wanders in, simple and woody."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The big top across the way runs on light and wire\nNo hands on the wheel, no sweat, no fire"
+    },
+    {
+      "kind": "cue",
+      "text": "Brushed snare joins. Loose, dusty waltz begins to take shape."
+    },
+    {
+      "kind": "lyrics",
+      "text": "They used to pack this place, used to line the road\nBack when you had to carry what you wanted to show"
+    },
+    {
+      "kind": "cue",
+      "text": "Accordion wheezes into the edges. Violin answers the ends of phrases."
+    },
+    {
+      "kind": "lyrics",
+      "text": "But taste became the ticket and the crowd learned to clap\nFor the shine on the surface, never asking what's around back"
+    },
+    {
+      "kind": "cue",
+      "text": "Tenor sax barges in with a crooked flourish."
+    },
+    {
+      "kind": "cue",
+      "text": "For the first time, the whole shabby pit orchestra is playing."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Wider, Swaggering | Still Rough"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Why this way, why this way\nThey ask me every morning like I haven't already said\nWhy this way, why this way\nBecause I meant it, and I'll mean it till I'm dead"
+    },
+    {
+      "kind": "cue",
+      "text": "Two-beat instrumental stumble."
+    },
+    {
+      "kind": "cue",
+      "text": "Sax and violin trade mocking little phrases. Piano drags everyone back into time."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Conversational, Amused"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The orbit ate the center and they called it a feast\nFandom swallowed the maker, left the making underneath\nJust a fuser of ingredients, a combiner of parts\nNo calluses, no failures, no accidental art"
+    },
+    {
+      "kind": "cue",
+      "text": "Accordion drops out. Piano, bass, brushes carry the story."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Tuesday I explain it, Wednesday I explain it again\nThursday someone shows me what the machine made by ten"
+    },
+    {
+      "kind": "cue",
+      "text": "Sax gives a dry little answer."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Eighty percent as pretty in a quarter of the time\nAnd I'm still out here barking like this sideshow is mine"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus 2"
+    },
+    {
+      "kind": "cue",
+      "text": "More Bite, Band Pushes Back"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Why this way, why this way\nThey ask me every evening like the morning didn't count\nWhy this way, why this way\nBecause I meant it, every single ounce"
+    },
+    {
+      "kind": "heading",
+      "text": "Instrumental Turn"
+    },
+    {
+      "kind": "cue",
+      "text": "Ramshackle Vaudeville"
+    },
+    {
+      "kind": "cue",
+      "text": "Honky-tonk piano takes four bars."
+    },
+    {
+      "kind": "cue",
+      "text": "Sax interrupts."
+    },
+    {
+      "kind": "cue",
+      "text": "Violin interrupts the sax."
+    },
+    {
+      "kind": "cue",
+      "text": "Accordion tries to hold the waltz together."
+    },
+    {
+      "kind": "cue",
+      "text": "Everything nearly tumbles apart—then stops."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "Exposed | Barker Disappears"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano alone. Vocal suddenly close, tired, human. Almost no theatricality."
+    },
+    {
+      "kind": "lyrics",
+      "text": "But here's the trick they didn't see\nThe trick the machines played on me"
+    },
+    {
+      "kind": "cue",
+      "text": "Upright bass enters softly."
+    },
+    {
+      "kind": "lyrics",
+      "text": "They burned away the noise, the fame\nAnd left me standing in the flame"
+    },
+    {
+      "kind": "cue",
+      "text": "Violin enters low and restrained."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The friction wasn't punishment\nIt was the polish all along"
+    },
+    {
+      "kind": "cue",
+      "text": "Beat. Almost silence."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You can hear the miles behind it—"
+    },
+    {
+      "kind": "cue",
+      "text": "Breath."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The hoarse voice is the song"
+    },
+    {
+      "kind": "cue",
+      "text": "One measure of silence."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 3"
+    },
+    {
+      "kind": "cue",
+      "text": "Rebuilding | Quietly Certain"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano resumes the waltz. Bass joins."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Step right up, step right up, yeah the tent is small\nBut the light catches different on a hand-thrown wall"
+    },
+    {
+      "kind": "cue",
+      "text": "Brushes return."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The path is getting narrower, the crowd is getting true\nEvery face in this audience chose the harder view"
+    },
+    {
+      "kind": "cue",
+      "text": "Accordion returns. Then violin."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The pot pushed back, the sentence fought\nThe chord bent where it wasn't taught"
+    },
+    {
+      "kind": "cue",
+      "text": "Sax finally returns, answering the vocal rather than fighting it."
+    },
+    {
+      "kind": "lyrics",
+      "text": "And every holdout still out here tonight\nIs shining, shining, catching light"
+    },
+    {
+      "kind": "cue",
+      "text": "Band hangs on the final word, then crashes forward."
+    },
+    {
+      "kind": "heading",
+      "text": "Final Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "Full-Throated | Raucous, Not Polished"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Why this way, why this way\nDon't have to ask me, you already know the sound\nWhy this way, why this way"
+    },
+    {
+      "kind": "cue",
+      "text": "Band drops out except stomping piano and bass."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Because the friction is the finish—"
+    },
+    {
+      "kind": "cue",
+      "text": "Full band slams back in."
+    },
+    {
+      "kind": "lyrics",
+      "text": "AND I STILL TAKE THE LONG WAY 'ROUND"
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "The Little Tent Wins"
+    },
+    {
+      "kind": "cue",
+      "text": "Instrumental vaudeville blowout."
+    },
+    {
+      "kind": "cue",
+      "text": "Sax and violin finally play the same crooked melody together."
+    },
+    {
+      "kind": "cue",
+      "text": "Accordion wheezes underneath; piano pounds; brushes become sticks."
+    },
+    {
+      "kind": "cue",
+      "text": "Tempo threatens to run away without actually speeding up."
+    },
+    {
+      "kind": "cue",
+      "text": "One enormous, deliberately messy final hit."
+    }
+  ],
+  "notebook": {
+    "style": "Junkyard vaudeville cabaret: honky-tonk upright piano, wheezing accordion, upright bass, brushed snare, battered tenor saxophone and scratchy violin, individually entering and trading heckling answers; loose human timing, wood, brass, room noise, analog warmth, close dry vocal, no reverb wash; dusty crooked 3/4 waltz; male gravelly whiskey-soaked baritone, theatrical spoken-sung opening gradually becoming ragged full-throated singing, intimate sly verses, swaggering choruses, exposed human bridge, raucous earned finale with sax and violin locking together"
+  }
+}

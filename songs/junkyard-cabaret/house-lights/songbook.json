@@ -1,0 +1,75 @@
+{
+  "title": "House Lights",
+  "act": "Act I",
+  "number": 6,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "cue",
+      "text": "Sparse, intimate opening. Solo female voice, close and low, almost spoken. Single accordion breathing underneath"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The music stopped before you noticed\nAnd the lights came up like a secret told too soon\nLook at you\nHands in your lap like tools between jobs\nStill warm from whatever you were feeling\nBut with nowhere left to put it"
+    },
+    {
+      "kind": "cue",
+      "text": "Tender observation, same intimacy, voice gaining warmth"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The woman to your left was crying\nNow she's studying her ring finger\nThe man behind you cleared his throat\nLike an apology for being human\nAnd the dust keeps floating through the spotlight\nDoesn't know the show is over"
+    },
+    {
+      "kind": "cue",
+      "text": "Bowed upright bass enters, simple accordion figure"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Palms up is a question\nPalms down is a decision\nWhich are yours right now\nWhich are yours"
+    },
+    {
+      "kind": "cue",
+      "text": "Lullaby tempo, maternal, singing to each person individually"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Oh sit with it, darlings\nSit with the sawdust and the silence\nThe duct tape is showing\nAnd so are you\nAnd so are you"
+    },
+    {
+      "kind": "cue",
+      "text": "Tambourine enters tentatively, clarinet holds a single note"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Someone's fingers find a rhythm on their knee\nNot performing, just remembering\nAnd the woman with the ring\nLooks up and catches someone looking back\nAnd neither one looks away\nAnd that's the whole sermon right there"
+    },
+    {
+      "kind": "cue",
+      "text": "Building warmth, hand percussion, ensemble creeping in"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Oh stay with it, darlings\nStay with the stranger and the stillness\nYour hands remember something\nYour hands remember"
+    },
+    {
+      "kind": "cue",
+      "text": "Everything strips back. Just her voice. Space. Tension building through repetition"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You came in alone\nYou sat in the dark alone\nYou felt it alone\nBut the lights\nThe lights\nThe lights"
+    },
+    {
+      "kind": "cue",
+      "text": "Full ensemble crashes in — drums, accordion, bass, clarinet, brass. Tempo lifts. Revelry. She's no longer holding the room, the room is carrying her"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Oh THERE you are, darlings\nThere you are with your dust and your thunder\nThe tent doesn't need a performer\nWhen the audience is the act\nClap those beautiful hands\nClap those beautiful useless holy hands"
+    }
+  ],
+  "notebook": {
+    "style": "Junkyard cabaret ballad, female vocalist with warm maternal alto, intimate torch song building to full ensemble revelry, Opens sparse and close — solo voice nearly spoken over a single breathing accordion, like a woman singing in a tent made of salvage and string lights, Bowed upright bass and simple accordion figure enter gradually, Lullaby tempo through first half, tender and unhurried, the sound of a room held carefully, Tambourine and hand percussion creep in midway, tentative, human, like fingers tapping a knee, Clarinet enters on held notes, Bridge strips everything back to solo voice, tension building through repetition and space, Final section erupts — full ramshackle ensemble with drums, accordion, upright bass, clarinet, violin, brass, Tempo lifts into communal celebration, a crowd finding its own rhythm, The arc is a slingshot: pulled back through stillness and vulnerability, released into joyful noise, Warm analog tone, nothing polished, everything held together with duct tape"
+  }
+}

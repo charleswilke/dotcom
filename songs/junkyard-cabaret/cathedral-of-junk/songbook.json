@@ -1,0 +1,143 @@
+{
+  "title": "Cathedral of Junk",
+  "act": "Act I",
+  "number": 2,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Spoken Word"
+    },
+    {
+      "kind": "cue",
+      "text": "Solo Whisper, No Music | Brief, intimate, impatient"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's a moment before you step out…\nFive hundred coats still warm from the cold.\nAnd somehow — they go quiet."
+    },
+    {
+      "kind": "cue",
+      "text": "A glass hits the floor. An accordion inhales. GO."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Solo Voice, Barely Sung | Brisk crooked 3/4 begins in his footsteps"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I'm drunk, the floor is drunk, we're both\njust trying not to fall.\nI can smell you from the door —\nsweat and smoke and alcohol."
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Accordion joins from a doorway, tentative but moving"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I feel the engine flood and choke,\nI feel the pistons buck and stroke."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Keep Moving | Upright bass walks in, tambourine rattles from a pocket"
+    },
+    {
+      "kind": "lyrics",
+      "text": "My hands still shake — they always will —\nthis ain't a joke, this is the spill.\nNo one waits for you backstage,\njust spit and whatever fills the cage."
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain 2"
+    },
+    {
+      "kind": "cue",
+      "text": "The Alley Gathers | Clarinet from a fire escape, brushed snare on a crate"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Every eye a lantern lit,\nevery second — all of it."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "Faster, More Precarious | Instruments gathering, SOLO VOICE ONLY"
+    },
+    {
+      "kind": "lyrics",
+      "text": "This only happens once tonight,\nthis congregation, cracked and bright.\nWe're all just animals in clothes,\npretending someone here still knows."
+    },
+    {
+      "kind": "heading",
+      "text": "Instrumental Acceleration"
+    },
+    {
+      "kind": "cue",
+      "text": "NO PAUSE | More players pile in without slowing the waltz: banjo, toy piano, tenor sax, battered percussion. Messier, faster, barely holding together."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 3"
+    },
+    {
+      "kind": "cue",
+      "text": "Urgent, Breathless | Brass beginning to arrive"
+    },
+    {
+      "kind": "lyrics",
+      "text": "No algorithm knows this weight,\nthe hush before we levitate.\nStanding small where God got lost —\ncome in, come in, forget the cost."
+    },
+    {
+      "kind": "heading",
+      "text": "Final Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "Full Junkyard Orchestra | ONE SOLO VOICE fighting above it, no backing vocals"
+    },
+    {
+      "kind": "lyrics",
+      "text": "We choose the rust, we choose the flaw,\nwe choose to stand where feeling's raw.\nWe built this church from what was thrown away —\nso welcome in.\nWelcome in.\nYou're going to want to stay."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "Spoken, Panting, Grinning | Orchestra still rattling behind him"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The doors are open.\nThe band is loud.\nThe chairs don't match\nand neither do we."
+    },
+    {
+      "kind": "lyrics",
+      "text": "This is the Cathedral of Junk —"
+    },
+    {
+      "kind": "lyrics",
+      "text": "and every beautiful, broken one of you\nbelongs here tonight."
+    },
+    {
+      "kind": "cue",
+      "text": "One enormous full-band hit. Cymbal crash. DEAD SILENCE."
+    }
+  ],
+  "notebook": {
+    "style": "Vaudeville waltz refracted as punk cabaret: fast crooked 3/4, one raspy high-tenor lead slipping into cracked theatrical falsetto, whispered footsteps opening into dry close-lofi talk-singing; accordion, bass, battered snare and banjo arrive singly, then clarinet, toy piano, sax and accelerating junkyard percussion, blues-jawk-folk-rock grit, brass arriving late, breathless shouting and abrupt silence"
+  }
+}

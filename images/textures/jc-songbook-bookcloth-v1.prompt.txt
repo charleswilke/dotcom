@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool. WebP export: 768 x 768, quality 82.
+
+Use case: photorealistic-natural
+Asset type: seamless tactile book-cover material texture for the top and bottom bands framing an antique cabaret songbook website card.
+Primary request: beautiful well-handled deep oxblood red bookcloth, a salvaged vintage songbook cover. Dense fine linen weave beneath aged matte red-brown coating, irregular rubbed and burnished patches, delicate scuffing from decades of use, soft shallow dents, understated rich material variation. A sophisticated intimate barroom and vaudeville feel. It should feel like an old real object, not a flat digital color.
+Composition: perfectly flat straight-on square scan, material fills the full frame edge to edge, seamlessly tileable in both directions, fine grain visible at narrow UI-band scale, even distribution and no focal point. No actual book or page edges.
+Palette: dark warm oxblood and cordovan around #43241f and #582c25, subdued brick-red highlights and near-espresso shadows. Restrained contrast. Light cream and antique gold text will be placed over this background in CSS.
+Lighting: broad soft flat illumination shows the woven surface and rubbed finish without specular glare.
+Constraints: only the material, no text, letters, symbols, ornaments, foil stamping, logos, border, stitching, large tears, holes, dust speckles, black dots, dramatic grunge, page, binding, objects, perspective, cast shadows, or watermark.

@@ -1763,6 +1763,11 @@ function renderFeedItems(items, feedContent) {
     }
 
     populateLatestArticleSpotlight();
+    if (feedContent && allItems.length) {
+        const latestCard = createFeedCard(allItems[0]);
+        latestCard.classList.add('feed-item-latest');
+        feedContent.appendChild(latestCard);
+    }
     displayItems(allItems.length);
     maybeOpenReaderFromLocation();
 }
@@ -1932,6 +1937,49 @@ function populateLatestArticleSpotlight() {
     spotlight.style.display = 'block';
 }
 
+function createFeedCard(item) {
+    const title = item.title;
+    const link = getArticleSharePath(item);
+    const feedImage = getResponsiveFeedImage(item);
+    const pubDate = new Date(item.pubDate);
+    // Use the same short folder-tab date as the writing archive.
+    const stampDate = pubDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric', timeZone: 'UTC'});
+
+    const feedItem = document.createElement('a');
+    feedItem.className = 'feed-item';
+    feedItem.href = safeArticleUrl(link) || '#';
+    feedItem.target = '_blank';
+    feedItem.rel = 'noopener noreferrer';
+    feedItem.innerHTML = `
+        <div class="feed-card-image"><img src="${escapeHtmlAttribute(feedImage.src)}"
+             ${feedImage.srcset ? `srcset="${escapeHtmlAttribute(feedImage.srcset)}" sizes="(max-width: 767px) calc(100vw - 98px), (max-width: 1024px) 45vw, 548px"` : ''}
+             alt="${escapeHtmlAttribute(title)}" width="${feedImage.width}" height="${feedImage.height}"
+             loading="lazy" decoding="async"></div>
+        <div class="feed-card-panel">
+            <div class="feed-item-meta">
+                <time class="date" datetime="${pubDate.toISOString()}">${stampDate}</time>
+            </div>
+            <div class="feed-item-body">
+                <h3>${escapeHtmlAttribute(title)}</h3>
+                <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
+            </div>
+        </div>
+    `;
+    const imageEl = feedItem.querySelector('img');
+    imageEl.addEventListener('error', () => {
+        imageEl.removeAttribute('srcset');
+        imageEl.removeAttribute('sizes');
+        imageEl.src = FALLBACK_SVG;
+    }, { once: true });
+    feedItem.addEventListener('click', (e) => {
+        if (openFeedArticle(item)) {
+            e.preventDefault();
+        }
+    });
+
+    return feedItem;
+}
+
 function displayItems(count) {
     const feedContent = document.getElementById('feed-content');
     if (!feedContent || !allItems.length) return;
@@ -1946,48 +1994,8 @@ function displayItems(count) {
     }
 
     const fragment = document.createDocumentFragment();
-
     for (let i = startIndex; i < endIndex; i++) {
-        const item = allItems[i];
-        const title = item.title;
-        const link = getArticleSharePath(item);
-        const feedImage = getResponsiveFeedImage(item);
-        const pubDate = new Date(item.pubDate);
-        // Use the same short folder-tab date as the writing archive.
-        const stampDate = pubDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric', timeZone: 'UTC'});
-
-        const feedItem = document.createElement('a');
-        feedItem.className = 'feed-item';
-        feedItem.href = safeArticleUrl(link) || '#';
-        feedItem.target = '_blank';
-        feedItem.rel = 'noopener noreferrer';
-        feedItem.innerHTML = `
-            <div class="feed-card-image"><img src="${escapeHtmlAttribute(feedImage.src)}"
-                 ${feedImage.srcset ? `srcset="${escapeHtmlAttribute(feedImage.srcset)}" sizes="(max-width: 767px) calc(100vw - 98px), (max-width: 1024px) 45vw, 548px"` : ''}
-                 alt="${escapeHtmlAttribute(title)}" width="${feedImage.width}" height="${feedImage.height}"
-                 loading="lazy" decoding="async"></div>
-            <div class="feed-card-panel">
-                <div class="feed-item-meta">
-                    <time class="date" datetime="${pubDate.toISOString()}">${stampDate}</time>
-                </div>
-                <div class="feed-item-body">
-                    <h3>${escapeHtmlAttribute(title)}</h3>
-                    <p>${escapeHtmlAttribute(item.shortDescription || '')}</p>
-                </div>
-            </div>
-        `;
-        const imageEl = feedItem.querySelector('img');
-        imageEl.addEventListener('error', () => {
-            imageEl.removeAttribute('srcset');
-            imageEl.removeAttribute('sizes');
-            imageEl.src = FALLBACK_SVG;
-        }, { once: true });
-        feedItem.addEventListener('click', (e) => {
-            if (openFeedArticle(item)) {
-                e.preventDefault();
-            }
-        });
-
+        const feedItem = createFeedCard(allItems[i]);
         fragment.appendChild(feedItem);
     }
 

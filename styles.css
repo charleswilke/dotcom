@@ -8034,6 +8034,20 @@ html {
     }
 }
 
+/* The latest article joins the regular grid on phones. Media queries also
+   keep the correct presentation when the viewport changes after loading. */
+@media (min-width: 768px) {
+    .feed-item.feed-item-latest {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    #latest-article-spotlight {
+        display: none !important;
+    }
+}
+
 /* Latest Article Spotlight */
 .latest-article-spotlight {
     margin-top: 2rem;

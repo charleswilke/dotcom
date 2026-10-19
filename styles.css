@@ -15372,12 +15372,11 @@ section.production-header.alice p {
     position: absolute;
     inset: 0;
     z-index: 3;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     overscroll-behavior: contain;
-    background:
-        radial-gradient(ellipse at 50% 45%, transparent 38%, #8c603b14 70%, #60391740 100%),
-        url('/images/textures/jc-songbook-paper-v2.webp') left top / 640px 640px repeat,
-        #efe5cf;
+    background: #efe5cf;
     color: #30251e;
     border: 1px solid #ac8a59;
     border-radius: 7px 3px 5px 4px;
@@ -15385,9 +15384,60 @@ section.production-header.alice p {
     transform: translateX(105%);
     visibility: hidden;
     transition: transform 420ms cubic-bezier(.22,.7,.2,1), visibility 0s 420ms;
-    scrollbar-color: #a88a65 #e9dcc5;
+}
+#jcLightbox .jc-book-nav { flex: 0 0 auto; }
+#jcLightbox .jc-songbook-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* The repeating sheet travels with the words beneath the fixed bookcloth. */
+    background:
+        radial-gradient(ellipse at 50% 45%, transparent 38%, #8c603b14 70%, #60391740 100%),
+        url('/images/textures/jc-songbook-paper-v2.webp') left top / 640px 640px repeat,
+        #efe5cf;
+    background-attachment: local;
+    scrollbar-color: #bd9455 #36201a;
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
+}
+
+/* A brass bookmark rides in a bookcloth gutter. Keep native scrolling and dragging. */
+@supports selector(::-webkit-scrollbar) {
+    #jcLightbox .jc-songbook-content {
+        scrollbar-color: auto;
+        scrollbar-width: auto;
+    }
+    #jcLightbox .jc-songbook-content::-webkit-scrollbar { width: 12px; }
+    #jcLightbox .jc-songbook-content::-webkit-scrollbar-track {
+        background: linear-gradient(90deg, #1e100d, #42271e 55%, #291610);
+        border-left: 1px solid #997343;
+        box-shadow: inset 2px 0 3px #0006;
+    }
+    #jcLightbox .jc-songbook-content::-webkit-scrollbar-thumb {
+        min-height: 48px;
+        border: 2px solid transparent;
+        border-radius: 3px;
+        background:
+            repeating-linear-gradient(0deg, #634321 0 1px, transparent 1px 4px) center / 4px 13px no-repeat,
+            linear-gradient(90deg, #8f6636, #e5c58a 45%, #bb8d4c 75%, #8b6031);
+        background-clip: padding-box;
+        box-shadow: inset 0 1px 0 #f6dfab99, inset 0 -1px 0 #57341e99;
+    }
+    #jcLightbox .jc-songbook-content::-webkit-scrollbar-thumb:hover {
+        background:
+            repeating-linear-gradient(0deg, #634321 0 1px, transparent 1px 4px) center / 4px 13px no-repeat,
+            linear-gradient(90deg, #a4773d, #f2d69e 45%, #cca05c 75%, #9c703a);
+        background-clip: padding-box;
+    }
+    #jcLightbox .jc-songbook-content::-webkit-scrollbar-thumb:active {
+        background:
+            repeating-linear-gradient(0deg, #51351c 0 1px, transparent 1px 4px) center / 4px 13px no-repeat,
+            linear-gradient(90deg, #7e572d, #caa66b 45%, #ab7e42 75%, #785128);
+        background-clip: padding-box;
+    }
+    #jcLightbox .jc-songbook-content::-webkit-scrollbar-button { display: none; }
+    #jcLightbox .jc-songbook-content::-webkit-scrollbar-corner { background: #291610; }
 }
 
 #jcLightbox.jc-songbook-open .jc-songbook-panel {
@@ -15402,7 +15452,7 @@ section.production-header.alice p {
 }
 
 #jcLightbox .jc-book {
-    padding: 8px var(--jc-book-gutter) 0;
+    padding: 8px var(--jc-book-gutter) 28px;
     font: 16px/1.65 Georgia, 'Times New Roman', serif;
     text-align: left;
 }
@@ -15555,7 +15605,8 @@ section.production-header.alice p {
     font-size: 10px;
     line-height: 1.7;
     border-top: 1px solid #c49b5c;
-    margin: 28px calc(-1 * var(--jc-book-gutter)) 0;
+    flex: 0 0 auto;
+    margin: 0;
     padding: 8px var(--jc-book-gutter) 10px;
     box-shadow: inset 0 3px 0 #1e0e0b88, inset 0 4px 0 #e9c58c33, inset 0 -1px 0 #e9c58c44;
 }

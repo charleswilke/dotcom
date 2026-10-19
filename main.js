@@ -5690,6 +5690,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
     const tracksPanel = document.getElementById('jcTracksPanel');
     const bookPanel = document.getElementById('jcSongbookPanel');
     const content = document.getElementById('jcSongbookContent');
+    const footer = document.getElementById('jcSongbookFooter');
     const context = document.getElementById('jcSongbookContext');
     const title = document.getElementById('jcSongbookTitle');
     const toolbar = document.getElementById('jcSongbookToolbar');
@@ -5774,7 +5775,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
             notebook.append(notes);
             book.append(notebook);
         }
-        const footer = element('div', 'jc-book-footer');
+        footer.replaceChildren();
         if (tracks[index].article) {
             const inspiration = element('a', 'jc-book-inspiration', 'Read the essay that inspired this song ↗');
             inspiration.href = tracks[index].article;
@@ -5786,7 +5787,6 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
             element('p', 'jc-book-credit', song.credit),
             element('span', '', 'Junkyard Cabaret / Songbook')
         );
-        book.append(footer);
         content.replaceChildren(book);
     }
 
@@ -5795,6 +5795,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
         const track = tracks[index];
         const metadata = entryMetadata(index);
         title.textContent = track.title;
+        footer.replaceChildren();
         toolbar.replaceChildren();
         context.textContent = `${metadata.act} · ${String(metadata.number).padStart(2, '0')}`;
         bookPanel.setAttribute('aria-label', `${track.title} songbook`);
@@ -5866,7 +5867,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
             event.stopPropagation();
             opener = book;
             loadBook(index);
-            bookPanel.scrollTop = 0;
+            content.scrollTop = 0;
             setView(true);
         });
         spark.replaceWith(book);

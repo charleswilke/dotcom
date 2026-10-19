@@ -1,7 +1,5 @@
 name: Preserve Substack articles
 on:
-  schedule:
-    - cron: '23 11 * * 1'
   workflow_dispatch:
 permissions:
   contents: write

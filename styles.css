@@ -13943,7 +13943,7 @@ section.production-header.alice p {
     font-weight: 700;
     pointer-events: none;
     visibility: hidden;
-    animation: osc-play-orbit 28s linear infinite paused;
+    animation: osc-play-orbit 42s linear infinite paused;
 }
 .modal-oscilloscope-frame.awaiting-tap .osc-play-orbit {
     visibility: visible;

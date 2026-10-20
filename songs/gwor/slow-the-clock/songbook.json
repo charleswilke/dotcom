@@ -1,0 +1,251 @@
+{
+  "title": "Slow the Clock",
+  "act": "Track",
+  "number": 7,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Immediate Downbeat | No Fade"
+    },
+    {
+      "kind": "cue",
+      "text": "92 BPM. Dry kick hits immediately with a crisp snare backbeat; rimshot answers. Tight closed hi-hat ticks evenly. A short vinyl drag strains against the beat, then releases. Warm plucked bass enters after two bars. No melodic intro."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Yeah.\nHold up."
+    },
+    {
+      "kind": "cue",
+      "text": "Brief drop: hi-hat alone."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Slow the clock."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Close-Miked Talk-Rap | Slightly Behind the Beat"
+    },
+    {
+      "kind": "cue",
+      "text": "Drums stay stubborn and exact. Bass repeats a two-note figure, sometimes anticipating beat one. Dusty electric piano drops one clipped chord between lines. Vocal is conversational, sharp, a little amused; never shouted."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Tap the glass. Don’t wait. Don’t stall.\nImpulse talking loud — guess it makes the call."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Clock leans hard on every second.\nTruth gets sold as repetition."
+    },
+    {
+      "kind": "cue",
+      "text": "Bass and piano cut. Two isolated rim clicks mark the words."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Tick. Tick.\nPush ahead.\nStillness labeled\n“Probably dead.”"
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Dry, Almost Doctrinal"
+    },
+    {
+      "kind": "cue",
+      "text": "Snare becomes rim clicks; bass hangs on one repeated note. Muted trumpet answers with two short descending notes. Leave the vocal completely exposed."
+    },
+    {
+      "kind": "lyrics",
+      "text": "They call it wisdom when it fills these rooms.\nThey call it fate when it sets our tune."
+    },
+    {
+      "kind": "lyrics",
+      "text": "But speed ain’t truth\nJust ’cause it moves."
+    },
+    {
+      "kind": "cue",
+      "text": "DJ cut — a brief dragged and chopped “slow the clock”; groove snaps back on time."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Create Space, Don't Slow Down"
+    },
+    {
+      "kind": "cue",
+      "text": "Drums thin to kick, snare and half-time hat. Bass disappears for the first command. No horns; electric piano offers only isolated answers. Let the gaps between words be audible."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Slow. The clock.\nWhen it turns on us."
+    },
+    {
+      "kind": "cue",
+      "text": "Bass returns only after “us.”"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Hold. The breath.\nBefore the rush."
+    },
+    {
+      "kind": "cue",
+      "text": "One-bar drum-only pocket; no fill."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Slow it down.\nHold the room."
+    },
+    {
+      "kind": "cue",
+      "text": "Two dry piano chords; one low muted-trumpet reply."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Let attention choose the tune."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Deeper Pocket | A Little More Bite"
+    },
+    {
+      "kind": "cue",
+      "text": "Same tempo and volume. Bass develops playful syncopated steps around the rigid kick. Add soft snare ghost notes, never a busy fill. Piano grows more percussive. Muted trumpet punctuates only the ends of selected lines. Vocal sounds wrier, not angrier."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Noise dressed up as meaning.\nBusy people “deeply thinking.”"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Fairness measured edge to edge\nLike the scale ain’t already bent."
+    },
+    {
+      "kind": "lyrics",
+      "text": "With tilted ground\nBefore the race"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Silence helps\nKeep it that way."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Cold Restraint"
+    },
+    {
+      "kind": "cue",
+      "text": "Piano and brass vanish. Bass repeats one note. Kick remains steady; the snare feels stark because everything else has stepped aside."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Strength gets framed\nAs feeling less."
+    },
+    {
+      "kind": "lyrics",
+      "text": "That lie still\nPassed our tests."
+    },
+    {
+      "kind": "cue",
+      "text": "Turntable catches a fraction of the beat, releases it precisely on the downbeat."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus 2"
+    },
+    {
+      "kind": "cue",
+      "text": "More Air, Heavier Meaning"
+    },
+    {
+      "kind": "cue",
+      "text": "Same stripped chorus groove. Bass speaks only in the spaces between lines. One uneasy electric-piano chord on “consume”; one trumpet note after “room.” No extra vocal layers."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Slow. The clock.\nWhen it turns on us."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Hold. The breath.\nBefore the rush."
+    },
+    {
+      "kind": "lyrics",
+      "text": "There’s a space\nThey can't consume"
+    },
+    {
+      "kind": "lyrics",
+      "text": "When attention reads the room."
+    },
+    {
+      "kind": "heading",
+      "text": "Final Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "Exposed, Not Bigger"
+    },
+    {
+      "kind": "cue",
+      "text": "First two lines: bass and rim clicks only, with faint hi-hat counting time. Kick and snare return beneath “If we punish,” then peel away. Let “away” hang almost alone. No crescendo."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Slow. The clock.\nWhen it turns on us."
+    },
+    {
+      "kind": "lyrics",
+      "text": "If we punish naïveté\nWe starve our wonder away."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "Spoken | Dismantle the Groove"
+    },
+    {
+      "kind": "cue",
+      "text": "Kick and bass return quietly. Bass drops out at “hollow.” Snare stops at “voices.” Hi-hat keeps ticking beneath the final words."
+    },
+    {
+      "kind": "lyrics",
+      "text": "When we survive into something hollow—"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Name the voices we chose to follow."
+    },
+    {
+      "kind": "cue",
+      "text": "One short record-stop scrape. Hard cut. No reverb tail."
+    }
+  ],
+  "notebook": {
+    "style": "92 BPM boom-bap: old-school rhythmic DNA, lean modern mix, late-night jazz-rap color, Drums dry and unwavering: punchy kick, crisp snare, spare rimshots, tight eighth-note hat, quiet ghost notes, slight swing, no tempo shifts, Round plucked bass repeats a stubborn two-note motif, then grows slyly syncopated in verse 2, Dusty electric piano adds clipped low chord replies, no pads, Muted trumpet offers rare one- or two-note comments, not a horn section, Turntable scratches interrupt deliberately: short drag, cut, release; underlying pulse never flinches, Solo close-miked talk-rap: human grain, dry wit, clear consonants, slightly behind the beat, restrained authority; never shouted or belted, Chorus arrangements subtract bass, keys, and hats to create audible air; pauses carry the hook, Final chorus should feel exposed, not bigger, Outro dismantles groove one instrument at a time and stops hard, No synth washes, risers, glossy layers, backing vocals or dramatic climax"
+  }
+}

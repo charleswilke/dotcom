@@ -13850,33 +13850,32 @@ section.production-header.alice p {
     width: auto;
 }
 
-/* Play/pause is a simple glowing glyph in the top-left of the scope — no chrome,
-   just light. Simplified presentation:
-     • Paused (.awaiting-tap): play glyph + "tap to play" hint, visible at rest,
-       pulsing/glowing on hover.
-     • Playing: no glyph at rest; on hover the scope reveals a glowing, pulsing
-       pause glyph. */
+/* A centered play glyph with a slowly orbiting invitation while paused.
+   Playback hides the ring and reveals pause on hover or keyboard focus. */
 .modal-oscilloscope-frame .osc-play-btn {
     position: absolute;
-    top: 9px;
-    left: 11px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 7;
+    height: min(92px, calc(100% - 12px));
     width: auto;
-    height: auto;
-    min-width: 0;
-    min-height: 0;
-    padding: 1px 3px;
+    aspect-ratio: 1;
+    min-width: 44px;
+    min-height: 44px;
+    display: grid;
+    place-items: center;
+    padding: 0;
     margin: 0;
-    background: none;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.64), transparent 72%);
     border: none;
-    border-radius: 0;
+    border-radius: 50%;
     box-shadow: none;
     color: rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.85);
     cursor: pointer;
     line-height: 1;
-    /* Hidden by default — only the paused state or a scope hover reveals it. */
     opacity: 0;
-    transition: color 0.18s ease, text-shadow 0.18s ease, transform 0.12s ease, opacity 0.18s ease;
+    transition: color 0.18s ease, text-shadow 0.18s ease, opacity 0.18s ease;
     text-shadow:
         0 0 7px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.85),
         0 0 14px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.4);
@@ -13884,32 +13883,55 @@ section.production-header.alice p {
 .modal-oscilloscope-frame .osc-play-btn .audio-icon {
     display: block;
     font-size: 1.2rem;
-    /* Pulse from the top edge so the glyph settles downward into the screen
-       rather than drifting up toward the glass. */
-    transform-origin: center top;
+    transform-origin: center;
 }
-/* Reveal the glyph while paused (the play glyph) or while hovering (the pause
-   glyph during playback). */
 .modal-oscilloscope-frame.awaiting-tap .osc-play-btn,
-.modal-oscilloscope-frame:hover .osc-play-btn {
+.modal-oscilloscope-frame:hover .osc-play-btn,
+.modal-oscilloscope-frame .osc-play-btn:focus-visible {
     opacity: 1;
 }
-.modal-oscilloscope-frame .osc-play-btn:active {
-    transform: scale(0.92);
+.modal-oscilloscope-frame .osc-play-btn:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 3px;
 }
-/* Touch displays can't hover. Without this the pause glyph stays at opacity 0
-   while playing, so the first tap only synthesizes a hover (revealing the glyph)
-   and the click is swallowed — it takes a second tap to pause. Keeping the glyph
-   visible at rest removes the visibility change, so the first tap toggles play. */
-@media (hover: none) {
-    .modal-oscilloscope-frame .osc-play-btn {
-        opacity: 1;
+.modal-oscilloscope-frame .osc-play-btn:active .audio-icon {
+    scale: 0.92;
+}
+.osc-play-orbit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    pointer-events: none;
+    visibility: hidden;
+    animation: osc-play-orbit 28s linear infinite paused;
+}
+.modal-oscilloscope-frame.awaiting-tap .osc-play-orbit {
+    visibility: visible;
+}
+.lightbox.active .modal-oscilloscope-frame.awaiting-tap .osc-play-orbit {
+    animation-play-state: running;
+}
+@keyframes osc-play-orbit {
+    to { transform: rotate(360deg); }
+}
+/* The compact songbook already names the song in its cover bar. Give the
+   orbit the short scope's full height until playback starts. */
+@media (max-width: 768px) {
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .awaiting-tap :is(.modal-oscilloscope-title, .modal-oscilloscope-meta) {
+        visibility: hidden;
     }
 }
+/* Keep pause visible on touch screens so a single tap toggles playback. */
+@media (hover: none) {
+    .modal-oscilloscope-frame .osc-play-btn { opacity: 1; }
+}
 
-/* Warm-tube pulse: an uneven swell with a glow flutter rather than a clean sine,
-   so it breathes like an analog lamp settling behind glass. brightness() also
-   modulates the inherited text-shadow, so the halo flickers with the swell. */
+/* Warm-tube pulse brightens the upright glyph without moving its center. */
 @keyframes osc-tap-pulse {
     0%   { transform: scale(1);     filter: brightness(0.92); }
     16%  { transform: scale(1.085); filter: brightness(1.32); }
@@ -13919,7 +13941,6 @@ section.production-header.alice p {
     80%  { transform: scale(1.055); filter: brightness(1.18); }
     100% { transform: scale(1);     filter: brightness(0.92); }
 }
-/* Hover anywhere on the scope brightens + pulses whichever glyph is showing. */
 .modal-oscilloscope-frame:hover .osc-play-btn {
     color: rgba(255, 250, 240, 0.98);
     text-shadow:
@@ -13929,24 +13950,8 @@ section.production-header.alice p {
 .modal-oscilloscope-frame:hover .osc-play-btn .audio-icon {
     animation: osc-tap-pulse 1.55s ease-in-out infinite;
 }
-.modal-oscilloscope-frame.awaiting-tap .osc-play-btn::after {
-    content: 'tap to play';
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: 9px;
-    white-space: nowrap;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.5rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.85);
-    text-shadow: 0 0 6px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), 0.5);
-    pointer-events: none;
-}
 @media (prefers-reduced-motion: reduce) {
+    .osc-play-orbit,
     .modal-oscilloscope-frame:hover .osc-play-btn .audio-icon { animation: none; }
 }
 
@@ -15215,12 +15220,12 @@ section.production-header.alice p {
 }
 
 
-/* JC songbook: a paper insert slides over the playlist; the deck keeps playing. */
-#jcLightbox .track-songbook-button { appearance: none; -webkit-appearance: none; }
+/* Album songbooks: a paper insert slides over the playlist; the deck keeps playing. */
+:is(#jcLightbox, #gworLightbox) .track-songbook-button { appearance: none; -webkit-appearance: none; }
 /* Inline act rows sit outside the act frame; match its inner right inset. */
-#jcLightbox .mixtape-track-item--act-start { padding-right: calc(1.3rem + 1px); }
+:is(#jcLightbox, #gworLightbox) .mixtape-track-item--act-start { padding-right: calc(1.3rem + 1px); }
 /* Recessed brass-edged controls sit beneath the listening surface. */
-#jcLightbox .track-action-group--paired {
+:is(#jcLightbox, #gworLightbox) .track-action-group--paired {
     --jc-action-width: 76px;
     --jc-action-height: 30px;
     --jc-action-angle: 15deg;
@@ -15233,7 +15238,7 @@ section.production-header.alice p {
     background: #100b08;
     box-shadow: inset 0 2px 4px #0008, 0 1px 0 #efd1a112;
 }
-#jcLightbox .track-action-group--paired::after {
+:is(#jcLightbox, #gworLightbox) .track-action-group--paired::after {
     content: '';
     position: absolute;
     inset: -1px auto -1px 50%;
@@ -15243,7 +15248,7 @@ section.production-header.alice p {
     transform: skewX(var(--jc-action-angle));
     pointer-events: none;
 }
-#jcLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
+:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
     flex-direction: row;
     width: var(--jc-action-width);
     min-width: var(--jc-action-width);
@@ -15257,49 +15262,49 @@ section.production-header.alice p {
     box-shadow: inset 0 2px 3px #0006, inset 0 -1px 0 #efd1a10c;
     transition: filter 160ms, box-shadow 160ms;
 }
-#jcLightbox .mixtape-track-item .track-action-group--paired .track-article-link {
+:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired .track-article-link {
     padding-right: 12px;
     background: linear-gradient(165deg, #18110c, #100b08 65%, #0c0806);
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
 }
-#jcLightbox .mixtape-track-item .track-action-group--paired .track-share-button {
+:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired .track-share-button {
     margin-left: -8px;
     padding-left: 12px;
     background: linear-gradient(165deg, #15100b, #0d0907 75%, #090604);
     clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%);
 }
-#jcLightbox .track-action-group--paired .track-share-button::before { display: none; }
-#jcLightbox .track-action-group--paired :is(.track-article-label, .track-share-label) {
+:is(#jcLightbox, #gworLightbox) .track-action-group--paired .track-share-button::before { display: none; }
+:is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) {
     font-size: 9px;
     font-variant: normal;
     letter-spacing: .05em;
     text-transform: uppercase;
     color: #c5ac88;
 }
-#jcLightbox .track-action-group--paired svg { width: 14px; height: 14px; }
-#jcLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):is(:hover, :focus-visible) {
+:is(#jcLightbox, #gworLightbox) .track-action-group--paired svg { width: 14px; height: 14px; }
+:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):is(:hover, :focus-visible) {
     filter: brightness(1.12);
     transform: none;
     box-shadow: inset 0 1px 3px #0006, inset 0 -1px 0 #ffe6b822;
 }
-#jcLightbox .track-action-group--paired :is(.track-article-link, .track-share-button):focus-visible {
+:is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-link, .track-share-button):focus-visible {
     outline: 2px solid #ffe5b8;
     outline-offset: -3px;
 }
-#jcLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):active {
+:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):active {
     filter: brightness(.9);
     transform: none;
     box-shadow: inset 0 2px 4px #130c0899;
 }
-#jcLightbox .jc-book-nav,
-#jcLightbox .jc-book-footer {
+:is(#jcLightbox, #gworLightbox) .jc-book-nav,
+:is(#jcLightbox, #gworLightbox) .jc-book-footer {
     background:
         linear-gradient(90deg, #160c0a66, #28100d12 35%, #160c0a55),
         url('/images/textures/jc-songbook-bookcloth-v1.webp') center / 480px 480px repeat,
         #43241f;
     text-shadow: 0 1px 1px #160b08;
 }
-#jcLightbox .jc-book-nav {
+:is(#jcLightbox, #gworLightbox) .jc-book-nav {
     position: sticky;
     top: 0;
     z-index: 4;
@@ -15313,7 +15318,7 @@ section.production-header.alice p {
     border-bottom: 1px solid #c49b5c;
     box-shadow: inset 0 1px 0 #e9c58c55, inset 0 -3px 0 #1e0e0b88, 0 3px 8px #48291c33;
 }
-#jcLightbox .jc-book-nav::before {
+:is(#jcLightbox, #gworLightbox) .jc-book-nav::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -15322,7 +15327,7 @@ section.production-header.alice p {
     box-shadow: inherit;
     pointer-events: none;
 }
-#jcLightbox .jc-book-context {
+:is(#jcLightbox, #gworLightbox) .jc-book-context {
     grid-column: 3;
     grid-row: 1;
     justify-self: end;
@@ -15333,7 +15338,7 @@ section.production-header.alice p {
     border-left: 1px solid #c49b5c66;
     padding-left: 12px;
 }
-#jcLightbox .jc-book-back {
+:is(#jcLightbox, #gworLightbox) .jc-book-back {
     grid-column: 1;
     grid-row: 1;
     justify-self: start;
@@ -15347,9 +15352,9 @@ section.production-header.alice p {
     min-height: 28px;
     cursor: pointer;
 }
-#jcLightbox .jc-book-back:hover { color: #fff4da; }
+:is(#jcLightbox, #gworLightbox) .jc-book-back:hover { color: #fff4da; }
 
-#jcLightbox .jc-songbook-stage {
+:is(#jcLightbox, #gworLightbox) .jc-songbook-stage {
     position: relative;
     flex: 1;
     min-height: 0;
@@ -15359,7 +15364,7 @@ section.production-header.alice p {
     isolation: isolate;
 }
 
-#jcLightbox #jcTracksPanel {
+:is(#jcLightbox, #gworLightbox) :is(#jcTracksPanel, #gworTracksPanel) {
     height: 100%;
     max-height: none;
     margin: 0;
@@ -15367,7 +15372,7 @@ section.production-header.alice p {
     transition: opacity 280ms;
 }
 
-#jcLightbox .jc-songbook-panel {
+:is(#jcLightbox, #gworLightbox) .jc-songbook-panel {
     --jc-book-gutter: clamp(20px, 2.4vw, 32px);
     position: absolute;
     inset: 0;
@@ -15385,8 +15390,8 @@ section.production-header.alice p {
     visibility: hidden;
     transition: transform 420ms cubic-bezier(.22,.7,.2,1), visibility 0s 420ms;
 }
-#jcLightbox .jc-book-nav { flex: 0 0 auto; }
-#jcLightbox .jc-songbook-content {
+:is(#jcLightbox, #gworLightbox) .jc-book-nav { flex: 0 0 auto; }
+:is(#jcLightbox, #gworLightbox) .jc-songbook-content {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
@@ -15404,17 +15409,17 @@ section.production-header.alice p {
 
 /* A brass bookmark rides in a bookcloth gutter. Keep native scrolling and dragging. */
 @supports selector(::-webkit-scrollbar) {
-    #jcLightbox .jc-songbook-content {
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content {
         scrollbar-color: auto;
         scrollbar-width: auto;
     }
-    #jcLightbox .jc-songbook-content::-webkit-scrollbar { width: 12px; }
-    #jcLightbox .jc-songbook-content::-webkit-scrollbar-track {
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content::-webkit-scrollbar { width: 12px; }
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content::-webkit-scrollbar-track {
         background: linear-gradient(90deg, #1e100d, #42271e 55%, #291610);
         border-left: 1px solid #997343;
         box-shadow: inset 2px 0 3px #0006;
     }
-    #jcLightbox .jc-songbook-content::-webkit-scrollbar-thumb {
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content::-webkit-scrollbar-thumb {
         min-height: 48px;
         border: 2px solid transparent;
         border-radius: 3px;
@@ -15424,46 +15429,46 @@ section.production-header.alice p {
         background-clip: padding-box;
         box-shadow: inset 0 1px 0 #f6dfab99, inset 0 -1px 0 #57341e99;
     }
-    #jcLightbox .jc-songbook-content::-webkit-scrollbar-thumb:hover {
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content::-webkit-scrollbar-thumb:hover {
         background:
             repeating-linear-gradient(0deg, #634321 0 1px, transparent 1px 4px) center / 4px 13px no-repeat,
             linear-gradient(90deg, #a4773d, #f2d69e 45%, #cca05c 75%, #9c703a);
         background-clip: padding-box;
     }
-    #jcLightbox .jc-songbook-content::-webkit-scrollbar-thumb:active {
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content::-webkit-scrollbar-thumb:active {
         background:
             repeating-linear-gradient(0deg, #51351c 0 1px, transparent 1px 4px) center / 4px 13px no-repeat,
             linear-gradient(90deg, #7e572d, #caa66b 45%, #ab7e42 75%, #785128);
         background-clip: padding-box;
     }
-    #jcLightbox .jc-songbook-content::-webkit-scrollbar-button { display: none; }
-    #jcLightbox .jc-songbook-content::-webkit-scrollbar-corner { background: #291610; }
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content::-webkit-scrollbar-button { display: none; }
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-content::-webkit-scrollbar-corner { background: #291610; }
 }
 
-#jcLightbox.jc-songbook-open .jc-songbook-panel {
+:is(#jcLightbox, #gworLightbox).jc-songbook-open .jc-songbook-panel {
     transform: translateX(0);
     visibility: visible;
     transition-delay: 0s;
 }
 
-#jcLightbox.jc-songbook-open #jcTracksPanel {
+:is(#jcLightbox, #gworLightbox).jc-songbook-open :is(#jcTracksPanel, #gworTracksPanel) {
     opacity: 0;
     pointer-events: none;
 }
 
-#jcLightbox .jc-book {
+:is(#jcLightbox, #gworLightbox) .jc-book {
     padding: 8px var(--jc-book-gutter) 28px;
     font: 16px/1.65 Georgia, 'Times New Roman', serif;
     text-align: left;
 }
 
-#jcLightbox .jc-book-heading,
-#jcLightbox .jc-book-footer,
-#jcLightbox .jc-book-source {
+:is(#jcLightbox, #gworLightbox) .jc-book-heading,
+:is(#jcLightbox, #gworLightbox) .jc-book-footer,
+:is(#jcLightbox, #gworLightbox) .jc-book-source {
     font-family: 'Space Mono', monospace;
 }
 
-#jcLightbox .jc-book-title {
+:is(#jcLightbox, #gworLightbox) .jc-book-title {
     grid-column: 2;
     grid-row: 1;
     min-width: 0;
@@ -15476,8 +15481,8 @@ section.production-header.alice p {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#jcLightbox .jc-book-credit { color: #dfc9a8; font: italic 12px/1.6 Georgia, serif; margin: 2px 0 4px; }
-#jcLightbox .jc-book-toolbar {
+:is(#jcLightbox, #gworLightbox) .jc-book-credit { color: #dfc9a8; font: italic 12px/1.6 Georgia, serif; margin: 2px 0 4px; }
+:is(#jcLightbox, #gworLightbox) .jc-book-toolbar {
     position: absolute;
     z-index: -2;
     top: calc(100% - 12px);
@@ -15487,7 +15492,7 @@ section.production-header.alice p {
     gap: 7px;
     text-shadow: none;
 }
-#jcLightbox .jc-book-toolbar button {
+:is(#jcLightbox, #gworLightbox) .jc-book-toolbar button {
     position: relative;
     color: #653322;
     background:
@@ -15502,9 +15507,9 @@ section.production-header.alice p {
     box-shadow: inset 0 2px 4px #57311333, 1px 3px 4px #4c2c1b33;
     cursor: pointer;
 }
-#jcLightbox .jc-book-listen { transform: rotate(-1.5deg); transform-origin: top center; }
-#jcLightbox .jc-book-cues { width: 77px; flex-shrink: 0; transform: rotate(1deg); transform-origin: top center; }
-#jcLightbox .jc-book-retry {
+:is(#jcLightbox, #gworLightbox) .jc-book-listen { transform: rotate(-1.5deg); transform-origin: top center; }
+:is(#jcLightbox, #gworLightbox) .jc-book-cues { width: 77px; flex-shrink: 0; transform: rotate(1deg); transform-origin: top center; }
+:is(#jcLightbox, #gworLightbox) .jc-book-retry {
     color: #7e3926;
     background: #e9dcc5;
     border: 1px solid #b6a083;
@@ -15514,8 +15519,8 @@ section.production-header.alice p {
     font: 11px 'Space Mono', monospace;
     cursor: pointer;
 }
-#jcLightbox .jc-book-toolbar button:hover { filter: brightness(1.06); }
-#jcLightbox .jc-book-inspiration {
+:is(#jcLightbox, #gworLightbox) .jc-book-toolbar button:hover { filter: brightness(1.06); }
+:is(#jcLightbox, #gworLightbox) .jc-book-inspiration {
     display: inline-flex;
     align-items: center;
     min-height: 30px;
@@ -15525,10 +15530,10 @@ section.production-header.alice p {
     text-decoration-color: #c49b5c;
     text-underline-offset: 4px;
 }
-#jcLightbox .jc-book-inspiration:hover { color: #fff4da; }
+:is(#jcLightbox, #gworLightbox) .jc-book-inspiration:hover { color: #fff4da; }
 
-#jcLightbox .jc-book-cues[aria-pressed="false"] { filter: saturate(.35); color: #635447; }
-#jcLightbox .jc-book-heading {
+:is(#jcLightbox, #gworLightbox) .jc-book-cues[aria-pressed="false"] { filter: saturate(.35); color: #635447; }
+:is(#jcLightbox, #gworLightbox) .jc-book-heading {
     font-size: 11px;
     letter-spacing: .1em;
     text-transform: uppercase;
@@ -15536,7 +15541,7 @@ section.production-header.alice p {
     line-height: 20px;
     margin: 16px 0 4px;
 }
-#jcLightbox .jc-book-cue-group {
+:is(#jcLightbox, #gworLightbox) .jc-book-cue-group {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -15544,21 +15549,22 @@ section.production-header.alice p {
     padding-left: 12px;
     border-left: 2px solid #c8a881;
 }
-#jcLightbox .jc-book-cue {
+:is(#jcLightbox, #gworLightbox) .jc-book-cue {
     color: #8b422a;
     font: italic 13px/20px Georgia, 'Times New Roman', serif;
     margin: 0;
 }
-#jcLightbox p.jc-book-lyrics {
+:is(#jcLightbox, #gworLightbox) p.jc-book-lyrics {
     font-family: Baskerville, 'Baskerville Old Face', 'Palatino Linotype', Palatino, serif;
     white-space: pre-line;
     overflow-wrap: anywhere;
     line-height: 24px;
     margin: 0 0 12px;
 }
-#jcLightbox #jcSongbookLyrics > .jc-book-heading:first-child { margin-top: 0; }
-#jcLightbox .jc-cues-hidden :is(.jc-book-cue-group, .jc-book-cue-only) { display: none; }
-#jcLightbox .jc-book-notebook {
+:is(#jcLightbox, #gworLightbox) :is(#jcSongbookLyrics, #gworSongbookLyrics) > .jc-book-heading:first-child { margin-top: 0; }
+:is(#jcLightbox, #gworLightbox) .jc-cues-hidden :is(.jc-book-cue-group, .jc-book-cue-only) { display: none; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook {
+    font-family: Baskerville, 'Baskerville Old Face', 'Palatino Linotype', Palatino, serif;
     margin: 24px 0;
     border: 1px solid #ad8b60;
     border-radius: 4px;
@@ -15566,7 +15572,7 @@ section.production-header.alice p {
     background: #c8a36a1f;
     box-shadow: inset 0 1px 0 #fff7de99, 0 2px 3px #5b3b2012;
 }
-#jcLightbox .jc-book-notebook summary {
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -15581,8 +15587,8 @@ section.production-header.alice p {
     cursor: pointer;
     transition: background 160ms;
 }
-#jcLightbox .jc-book-notebook summary::-webkit-details-marker { display: none; }
-#jcLightbox .jc-book-notebook summary::after {
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook summary::-webkit-details-marker { display: none; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook summary::after {
     content: '+';
     display: grid;
     place-items: center;
@@ -15593,20 +15599,20 @@ section.production-header.alice p {
     background: #fff2ce55;
     font: 18px/1 'Space Mono', monospace;
 }
-#jcLightbox .jc-book-notebook summary:hover,
-#jcLightbox .jc-book-notebook[open] summary {
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook summary:hover,
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook[open] summary {
     background: #c8a36a38;
 }
-#jcLightbox .jc-book-notebook[open] { border-color: #8b6340; }
-#jcLightbox .jc-book-notebook[open] summary { border-bottom: 1px solid #b99b73; }
-#jcLightbox .jc-book-notebook[open] summary::after { content: '−'; }
-#jcLightbox .jc-book-notes { padding: 14px 14px 16px; }
-#jcLightbox .jc-book-notes > :first-child { margin-top: 0; }
-#jcLightbox .jc-book-notes p { margin: 0 0 16px; }
-#jcLightbox .jc-book-notes > :last-child { margin-bottom: 0; }
-#jcLightbox .jc-book-idea { margin: 24px 0; padding-left: 16px; border-left: 2px solid #c8a881; font-style: italic; color: #7e3926; }
-#jcLightbox .jc-book-source { color: #746452; font-size: 10px; line-height: 1.7; }
-#jcLightbox .jc-book-footer {
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook[open] { border-color: #8b6340; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook[open] summary { border-bottom: 1px solid #b99b73; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notebook[open] summary::after { content: '−'; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notes { padding: 14px 14px 16px; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notes > :first-child { margin-top: 0; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notes p { margin: 0 0 16px; }
+:is(#jcLightbox, #gworLightbox) .jc-book-notes > :last-child { margin-bottom: 0; }
+:is(#jcLightbox, #gworLightbox) .jc-book-idea { margin: 24px 0; padding-left: 16px; border-left: 2px solid #c8a881; font-style: italic; color: #7e3926; }
+:is(#jcLightbox, #gworLightbox) .jc-book-source { color: #746452; font-size: 10px; line-height: 1.7; }
+:is(#jcLightbox, #gworLightbox) .jc-book-footer {
     color: #d2b88f;
     font-size: 10px;
     line-height: 1.7;
@@ -15616,94 +15622,259 @@ section.production-header.alice p {
     padding: 8px var(--jc-book-gutter) 10px;
     box-shadow: inset 0 3px 0 #1e0e0b88, inset 0 4px 0 #e9c58c33, inset 0 -1px 0 #e9c58c44;
 }
-#jcLightbox .jc-book-footer > span { letter-spacing: .08em; text-transform: uppercase; }
-#jcLightbox .jc-book-status { padding: 32px 24px; font: 16px/1.6 Georgia, serif; }
-#jcLightbox .jc-book-retry { margin: 0 24px 24px; }
+:is(#jcLightbox, #gworLightbox) .jc-book-footer > span { letter-spacing: .08em; text-transform: uppercase; }
+:is(#jcLightbox, #gworLightbox) .jc-book-status { padding: 32px 24px; font: 16px/1.6 Georgia, serif; }
+:is(#jcLightbox, #gworLightbox) .jc-book-retry { margin: 0 24px 24px; }
 
-#jcLightbox :is(.track-songbook-button, .jc-book-back, .jc-book-toolbar button, .jc-book button, .jc-book summary, .jc-book-inspiration):focus-visible {
+:is(#jcLightbox, #gworLightbox) :is(.track-songbook-button, .jc-book-back, .jc-book-toolbar button, .jc-book button, .jc-book summary, .jc-book-inspiration):focus-visible {
     outline: 2px solid #b76b3e;
     outline-offset: -3px;
 }
 
 @media (max-width: 768px) {
-    #jcLightbox .mixtape-content { height: 100dvh; overflow: hidden; flex-direction: column; gap: 1rem; }
-    #jcLightbox .mixtape-left-section { flex: 0 0 auto; max-width: none; overflow: visible; align-items: center; gap: .5rem; }
-    #jcLightbox .mixtape-player-container { flex: 0 0 auto; }
-    #jcLightbox .mixtape-right-section { flex: 1; min-height: 0; overflow: hidden; contain: none; }
-    #jcLightbox .mixtape-cover-container { min-height: 0; max-width: min(80vw, 300px); max-height: min(34dvh, 300px); }
-    #jcLightbox .mixtape-cover-container img.mixtape-cover { width: auto; max-height: min(34dvh, 300px); }
-    #jcLightbox .modal-oscilloscope-frame { height: 110px; min-height: 110px; max-height: 110px; }
-    #jcLightbox .mixtape-track-item { min-height: 48px; padding-right: .35rem; }
-    #jcLightbox .mixtape-track-item--act-start { padding-right: calc(.75rem + 1px); }
-    #jcLightbox .track-number { flex: 0 0 1rem; width: 1rem; margin-right: 4px; text-align: right; transform: translateX(-3px); }
-    #jcLightbox .track-title-text { font-size: 1rem; line-height: 1.35; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-content { height: 100dvh; overflow: hidden; flex-direction: column; gap: 1rem; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-left-section { flex: 0 0 auto; max-width: none; overflow: visible; align-items: center; gap: .5rem; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-player-container { flex: 0 0 auto; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-right-section { flex: 1; min-height: 0; overflow: hidden; contain: none; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-cover-container { min-height: 0; max-width: min(80vw, 300px); max-height: min(34dvh, 300px); }
+    :is(#jcLightbox, #gworLightbox) .mixtape-cover-container img.mixtape-cover { width: auto; max-height: min(34dvh, 300px); }
+    :is(#jcLightbox, #gworLightbox) .modal-oscilloscope-frame { height: 110px; min-height: 110px; max-height: 110px; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-track-item { min-height: 48px; padding-right: .35rem; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-track-item--act-start { padding-right: calc(.75rem + 1px); }
+    :is(#jcLightbox, #gworLightbox) .track-number { flex: 0 0 1rem; width: 1rem; margin-right: 4px; text-align: right; transform: translateX(-3px); }
+    :is(#jcLightbox, #gworLightbox) .track-title-text { font-size: 1rem; line-height: 1.35; }
     /* Scale the original paired controls together, including their angled seam. */
-    #jcLightbox .track-action-group { zoom: 1.35; }
-    #jcLightbox .track-action-group--paired {
+    :is(#jcLightbox, #gworLightbox) .track-action-group { zoom: 1.35; }
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired {
         --jc-action-width: 32px;
         --jc-action-height: 23px;
         --jc-action-angle: 19deg;
         margin-left: .2rem;
     }
-    #jcLightbox .track-action-group--paired svg { width: 13px; height: 13px; }
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired svg { width: 13px; height: 13px; }
 
-    #jcLightbox.jc-songbook-open .mixtape-content {
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .mixtape-content {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
         grid-template-rows: minmax(0, 1fr) auto;
         gap: 0;
         padding: 12px 12px max(12px, env(safe-area-inset-bottom));
     }
-    #jcLightbox.jc-songbook-open .mixtape-left-section,
-    #jcLightbox.jc-songbook-open .mixtape-right-section { display: contents; }
-    #jcLightbox.jc-songbook-open .mixtape-cover-container,
-    #jcLightbox.jc-songbook-open .mixtape-side-toggle-container { display: none; }
-    #jcLightbox.jc-songbook-open .jc-songbook-stage { grid-row: 1; align-self: stretch; }
-    #jcLightbox.jc-songbook-open .mixtape-player-container { grid-row: 2; margin-top: 10px; }
-    #jcLightbox.jc-songbook-open .modal-oscilloscope-frame { height: 78px; min-height: 78px; max-height: 78px; }
-    #jcLightbox.jc-songbook-open .modal-oscilloscope-meta { display: none; }
-    #jcLightbox.jc-songbook-open .lightbox-close { top: 6px; color: #f4dfba; }
-    #jcLightbox .jc-songbook-panel { --jc-book-gutter: 18px; }
-    #jcLightbox .jc-book-nav { gap: 5px; padding-right: 38px; padding-left: 10px; }
-    #jcLightbox .jc-book-title { font-size: 12px; }
-    #jcLightbox .jc-book-back { font-size: 9px; }
-    #jcLightbox .jc-book-context { padding-left: 6px; font-size: 9px; letter-spacing: 0; }
-    #jcLightbox .jc-book-toolbar button { min-height: 34px; }
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .mixtape-left-section,
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .mixtape-right-section { display: contents; }
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .mixtape-cover-container,
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .mixtape-side-toggle-container { display: none; }
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .jc-songbook-stage { grid-row: 1; align-self: stretch; }
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .mixtape-player-container { grid-row: 2; margin-top: 10px; }
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .modal-oscilloscope-frame { height: 78px; min-height: 78px; max-height: 78px; }
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .modal-oscilloscope-meta { display: none; }
+    :is(#jcLightbox, #gworLightbox).jc-songbook-open .lightbox-close { top: 6px; color: #f4dfba; }
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-panel { --jc-book-gutter: 18px; }
+    :is(#jcLightbox, #gworLightbox) .jc-book-nav { gap: 5px; padding-right: 38px; padding-left: 10px; }
+    :is(#jcLightbox, #gworLightbox) .jc-book-title { font-size: 12px; }
+    :is(#jcLightbox, #gworLightbox) .jc-book-back { font-size: 9px; }
+    :is(#jcLightbox, #gworLightbox) .jc-book-context { padding-left: 6px; font-size: 9px; letter-spacing: 0; }
+    :is(#jcLightbox, #gworLightbox) .jc-book-toolbar button { min-height: 34px; }
 }
 
 /* Desktop utilities stay subordinate to the song title and listening controls. */
 @media (min-width: 769px) {
-    #jcLightbox .track-action-group--paired {
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired {
         --jc-action-width: 66px;
         --jc-action-height: 26px;
         margin-left: .6rem;
     }
-    #jcLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
+    :is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
         gap: 4px;
         padding-top: 3px;
         padding-bottom: 3px;
     }
-    #jcLightbox .track-action-group--paired :is(.track-article-label, .track-share-label) { font-size: 8px; }
-    #jcLightbox .track-action-group--paired svg { width: 12px; height: 12px; }
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) { font-size: 8px; }
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired svg { width: 12px; height: 12px; }
 }
 
 /* Compact two-column layouts keep the same paired control with icons only. */
 @media (min-width: 769px) and (max-width: 1100px) {
-    #jcLightbox .track-action-group--paired { --jc-action-width: 42px; margin-left: .4rem; }
-    #jcLightbox .track-action-group--paired :is(.track-article-label, .track-share-label) { display: none; }
-    #jcLightbox .track-action-group--paired svg { width: 16px; height: 16px; }
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired { --jc-action-width: 42px; margin-left: .4rem; }
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) { display: none; }
+    :is(#jcLightbox, #gworLightbox) .track-action-group--paired svg { width: 16px; height: 16px; }
 }
 
 @media (min-width: 769px) and (max-height: 600px) {
-    #jcLightbox .mixtape-left-section { justify-content: flex-start; }
-    #jcLightbox .mixtape-cover-container { min-height: 60px; }
-    #jcLightbox .modal-oscilloscope-frame { height: 100px; min-height: 100px; max-height: 100px; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-left-section { justify-content: flex-start; }
+    :is(#jcLightbox, #gworLightbox) .mixtape-cover-container { min-height: 60px; }
+    :is(#jcLightbox, #gworLightbox) .modal-oscilloscope-frame { height: 100px; min-height: 100px; max-height: 100px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #jcLightbox .jc-songbook-panel,
-    #jcLightbox #jcTracksPanel,
-    #jcLightbox .track-songbook-button { transition: none !important; }
+    :is(#jcLightbox, #gworLightbox) .jc-songbook-panel,
+    :is(#jcLightbox, #gworLightbox) :is(#jcTracksPanel, #gworTracksPanel),
+    :is(#jcLightbox, #gworLightbox) .track-songbook-button { transition: none !important; }
+}
+
+/* GWOR: a college ruled writing notebook, with blue ink and a red margin. */
+#gworLightbox .track-action-group--paired {
+    border-color: #4c6260;
+    background: #101819;
+}
+#gworLightbox .track-action-group--paired::after { background: #617d78; }
+#gworLightbox .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
+    color: #b9ceca;
+    background: linear-gradient(165deg, #23302f, #121c1b);
+}
+#gworLightbox .track-action-group--paired :is(.track-article-label, .track-share-label) { color: #b9ceca; }
+#gworLightbox .jc-songbook-stage { background: #191e22; }
+#gworLightbox .jc-songbook-panel {
+    --jc-book-gutter: 22px;
+    --notebook-margin: 32px;
+    --notebook-text-inset: 14px;
+    --notebook-line: 26px;
+    background: #faf9f3;
+    color: #283f5d;
+    border: 1px solid #959e9d;
+    border-radius: 3px 6px 4px 2px;
+    box-shadow: -8px 0 18px #0005, inset 2px 0 3px #0002;
+}
+/* Different edges of one ImageGen paperboard scan frame the ruled sheet. */
+#gworLightbox .jc-book-nav,
+#gworLightbox .jc-book-footer {
+    background:
+        linear-gradient(#080b0d80, #080b0d80),
+        url('/images/textures/gwor-songbook-cover-v1.webp') center top / 100% auto no-repeat,
+        #282b2c;
+    color: #c5c5b9;
+    text-shadow: 0 1px 2px #080b0d;
+}
+#gworLightbox .jc-book-nav {
+    border-bottom: 1px solid #77796f;
+    box-shadow: inset 0 1px 0 #e5d8bc38, inset 0 -2px 0 #0b0e1099, 0 2px 4px #29394730;
+}
+#gworLightbox .jc-book-title { color: #f0e6ce; }
+#gworLightbox .jc-book-context { color: #c5c5b9; border-color: #c5c5b94d; }
+#gworLightbox .jc-book-back { color: #ead9b7; }
+#gworLightbox .jc-book-back:hover { color: #fff5dc; }
+#gworLightbox .jc-book-toolbar button {
+    color: #364f67;
+    background: linear-gradient(100deg, #eee9d7, #faf6e8 55%, #eee9d7);
+    border-color: #b0afa0;
+    box-shadow: inset 0 2px 4px #303a3a15, 1px 3px 4px #303a3a24;
+}
+#gworLightbox .jc-book-cues { width: 88px; white-space: nowrap; }
+#gworLightbox .jc-book-cues[aria-pressed="false"] { color: #69747c; }
+#gworLightbox .jc-songbook-content {
+    background:
+        linear-gradient(90deg, transparent calc(var(--notebook-margin) - 1px), #c86b737d calc(var(--notebook-margin) - 1px), #c86b737d var(--notebook-margin), transparent var(--notebook-margin)),
+        repeating-linear-gradient(180deg, transparent 0 21px, #9dbbd052 21px 22px, transparent 22px 26px),
+        linear-gradient(90deg, #6e76641c, transparent 36px, transparent 75%, #8f8c7510),
+        url('/images/textures/gwor-songbook-paper-v1.webp') left top / 512px 512px repeat,
+        #f6f4e9;
+    background-attachment: local;
+    scrollbar-color: #171717 transparent;
+    scrollbar-width: thin;
+}
+#gworLightbox .jc-songbook-content:focus-visible {
+    outline: 2px solid #283f5d;
+    outline-offset: -2px;
+}
+/* The native ink thumb travels over the ruled paper, with no visible track. */
+@supports selector(::-webkit-scrollbar) {
+    #gworLightbox .jc-songbook-content {
+        scrollbar-color: auto;
+        scrollbar-width: auto;
+    }
+}
+#gworLightbox .jc-songbook-content::-webkit-scrollbar { width: 12px; background: transparent; }
+#gworLightbox .jc-songbook-content::-webkit-scrollbar-track {
+    background:
+        linear-gradient(#8f8c7510, #8f8c7510),
+        repeating-linear-gradient(180deg, transparent 0 21px, #9dbbd052 21px 22px, transparent 22px 26px)
+            0 var(--paper-track-y, 0px) / 100% 26px repeat-y,
+        url('/images/textures/gwor-songbook-paper-v1.webp')
+            var(--paper-track-x, 0px) var(--paper-track-y, 0px) / 512px 512px repeat,
+        #f6f4e9;
+    border: 0;
+    box-shadow: none;
+}
+#gworLightbox .jc-songbook-content::-webkit-scrollbar-thumb,
+#gworLightbox .jc-songbook-content::-webkit-scrollbar-thumb:hover,
+#gworLightbox .jc-songbook-content::-webkit-scrollbar-thumb:active {
+    min-height: 56px;
+    background: url('/images/textures/gwor-songbook-ink-boil-v3.webp')
+        calc(50% + var(--ink-scroll-frame-x, 35.437px)) top / 90px 100% no-repeat;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+    border-radius: 0;
+    box-shadow: none;
+}
+#gworLightbox .jc-songbook-content::-webkit-scrollbar-corner { background: transparent; }
+#gworLightbox .jc-book {
+    position: relative;
+    min-height: 100%;
+    padding: 26px var(--jc-book-gutter) 78px calc(var(--notebook-margin) + var(--notebook-text-inset));
+    font: 17px/var(--notebook-line) Georgia, 'Times New Roman', serif;
+    background: none;
+}
+#gworLightbox .jc-book-heading {
+    color: #984954;
+    font: 11px/var(--notebook-line) 'Space Mono', monospace;
+    margin: 26px 0 0;
+}
+#gworLightbox :is(#gworSongbookLyrics, .songbook-blank-page) > .jc-book-heading:first-child { margin-top: 0; }
+#gworLightbox .songbook-pending {
+    color: #637281;
+    font-style: italic;
+    margin: 0;
+    line-height: var(--notebook-line);
+}
+#gworLightbox p.jc-book-lyrics {
+    color: #283f5d;
+    line-height: var(--notebook-line);
+    margin: 0 0 26px;
+}
+/* Keep cue borders near the paper margin with a modest text indent. */
+#gworLightbox .jc-book-cue-group {
+    border-left-color: #c88e96;
+    gap: 0;
+    margin: 0 0 26px calc((-1px - var(--notebook-text-inset)) / 2);
+    padding-left: calc((var(--notebook-text-inset) + 11px) / 2);
+}
+#gworLightbox .jc-book-cue-group:has(+ p.jc-book-lyrics) { margin-bottom: 0; }
+#gworLightbox .jc-book-cue { color: #83535e; line-height: var(--notebook-line); }
+#gworLightbox .jc-book-notebook {
+    margin: 26px 0;
+    border-color: #adbbc3;
+    background: #f3f4eef5;
+    box-shadow: 0 2px 3px #29394712;
+}
+#gworLightbox .jc-book-notebook summary {
+    color: #364f67;
+    font-size: 20px;
+    line-height: 26px;
+    padding: 12px;
+}
+#gworLightbox .jc-book-notebook summary::after { border-color: #adbbc3; background: #e3e8e566; }
+#gworLightbox .jc-book-notebook summary:hover,
+#gworLightbox .jc-book-notebook[open] summary { background: #e3e8e599; }
+#gworLightbox .jc-book-notebook[open] { border-color: #8399a8; }
+#gworLightbox .jc-book-notebook[open] summary { border-bottom-color: #adbbc3; }
+#gworLightbox .jc-book-idea { color: #83535e; border-color: #c88e96; }
+#gworLightbox .jc-book-footer {
+    background-position: center bottom;
+    border-top: 1px solid #77796f;
+    box-shadow: inset 0 2px 0 #0b0e1099, inset 0 -1px 0 #e5d8bc38;
+}
+#gworLightbox .jc-book-credit { color: #d3cfbc; }
+#gworLightbox .jc-book-inspiration { color: #ead9b7; text-decoration-color: #baab91; }
+#gworLightbox .jc-book-inspiration:hover { color: #fff5dc; }
+#gworLightbox .jc-book-retry { background: #f3f4ee; color: #853f48; border-color: #adbbc3; }
+#gworLightbox :is(.track-songbook-button, .jc-book-back, .jc-book-toolbar button, .jc-book button, .jc-book summary, .jc-book-inspiration):focus-visible {
+    outline-color: #984954;
+}
+#gworLightbox :is(.jc-book-back, .jc-book-inspiration):focus-visible { outline-color: #efdaae; }
+@media (max-width: 768px) {
+    #gworLightbox .jc-songbook-panel { --jc-book-gutter: 16px; --notebook-margin: 22px; --notebook-text-inset: 10px; }
+    #gworLightbox .jc-book { font-size: 16px; }
+    #gworLightbox.jc-songbook-open .lightbox-close { color: #f0e6ce; }
 }
 
 /* ===== STICKY NAV ===== */

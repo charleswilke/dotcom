@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool. WebP export: 768 × 768, quality 84. Applied as a 512px repeating CSS tile beneath the blue rules and red margin.
+
+Use case: photorealistic-natural
+Asset type: seamless repeating raster texture for college ruled notebook paper behind readable lyrics on a website.
+Primary request: tactile well-handled school notebook paper, warm off-white mass-produced wood-pulp paper. A close, perfectly flat scanner view of the material only. Visible fine paper tooth, tiny softly interwoven pulp fibers, delicate compressed grain, a few very shallow irregular wrinkles and lightly burnished areas from hands smoothing the paper. It should feel like a real notebook page under fingertips, with just enough visible relief and soft undulation to be appreciable at a 512-pixel tile scale.
+Composition/framing: square texture tile, paper fills every pixel edge to edge. Seamlessly tileable in BOTH horizontal and vertical directions, with matching opposite edges and consistent illumination. Evenly distributed non-directional texture without any central feature, no obvious repeating object or fold. No outer paper edges.
+Palette: warm off-white and pale natural paper around #f6f4e9, soft ivory highlights, very light warm gray fiber shadows. Modern notebook paper, not yellow antique parchment. Enough delicate local contrast to reveal the grain behind navy text, all areas remain light.
+Lighting: completely even diffuse scanner illumination; very soft micro-relief only. No vignette, corner shadow or large brightness gradient.
+Constraints: blank paper material only. Blue rules and a red margin will be added separately in CSS, so DO NOT render lines or margins. No text, handwriting, notation, ink, dots, dirt speckles, stains, holes, tears, page silhouettes, borders, desk, objects, book binding, canvas weave, leather, embossed patterns, watermark, perspective, strong fold lines or dramatic crumpling. Opaque background.

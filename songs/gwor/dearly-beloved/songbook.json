@@ -1,0 +1,147 @@
+{
+  "title": "Dearly Beloved",
+  "act": "Track",
+  "number": 8,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Wurlitzer tremolo, warm and close, light room ambience"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Wurlitzer rhythmic chords, soft kick + brushed snare"
+    },
+    {
+      "kind": "lyrics",
+      "text": "We gather in a season of mourning\nThe kind that hurts as it heals\nA quiet acknowledgment\nOf a world that no longer feels"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Step forward on shaky ground\nEyes on a thinning sun\nSome will come with us\nSome will refuse the run"
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "harmony voices enter, rhythm steadies"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The rails are set\nBut not every car will stay\nSteel screams loud\nWhen the couplings give way"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "gospel lift, but restrained and solemn"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Dearly beloved\nWe rise and begin\nThe shining city\nIs the light we carry within"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Dearly beloved\nThe signal is clear\nRadiate forward\nThe future starts here"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "groove deeper, upright bass enters"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Some drag the chain behind them\nSome swear their focus is true\nBut forward only belongs\nTo the ones who choose"
+    },
+    {
+      "kind": "lyrics",
+      "text": "No gatekeepers left now\nNo towers to defend\nJust signal carried farther\nThan any single friend"
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "choir thicker, organ enters"
+    },
+    {
+      "kind": "lyrics",
+      "text": "No magic waiting\nNo promised land\nJust new foundations\nBuilt by human hands"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "fuller choir, drums stronger"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Dearly beloved\nWe rise and begin\nThe shining city\nIs the light we carry within"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Dearly beloved\nThe signal is clear\nRadiate forward\nThe future starts here"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "instrumentation drops, spoken sermon tone"
+    },
+    {
+      "kind": "lyrics",
+      "text": "What do we become\nWhen the dust finally clears?"
+    },
+    {
+      "kind": "lyrics",
+      "text": "What kind of world\nDo we build from here?"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Love in the music\nFire in the art\nRespect in the words\nAnd courage in the heart"
+    },
+    {
+      "kind": "heading",
+      "text": "Final Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "choir dominant, slow and powerful"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Dearly beloved\nWe rise and begin\nThe shining city\nIs the light we carry within"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Dearly beloved\nThe call rings true\nRadiate outward"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The future is you"
+    }
+  ],
+  "notebook": {
+    "style": "Mid-tempo soul-folk (~96 BPM), Wurlitzer electric piano provides the main rhythmic texture with warm tremolo chords, Drums play a restrained groove with kick and brushed snare, gradually opening into a fuller kit in later sections, Electric bass supports with simple melodic movement that reinforces the steady forward pulse, Subtle Hammond organ pad or light tremolo electric guitar widens the pre-chorus and chorus sections without dominating the mix, No choir or group vocals, Lead vocal delivery should feel grounded, reflective, and conversational, gradually building conviction rather than theatrical intensity, Production should feel analog and human—warm room ambience, slight grit, and the sense of a small band playing together in one space"
+  }
+}

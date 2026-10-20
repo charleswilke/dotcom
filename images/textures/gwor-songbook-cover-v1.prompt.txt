@@ -1,0 +1,10 @@
+Generated with the built-in image_gen tool. WebP export: original 2172 × 724, quality 84.
+
+Use case: photorealistic-natural
+Asset type: production material texture for narrow top and bottom notebook-cover bands in a college ruled songbook website.
+Primary request: an extremely worn cheap school notebook cover, charcoal black printed paper over compressed cardboard, carried around for years. This is a FLAT MATERIAL SCAN, not a photograph of a whole notebook.
+Materials/textures: matte charcoal ink rubbed away to smoky gray, fine pale fibers, irregular scratches, scraped patches and thin creases, frayed abraded surface, deep scuffs and thumb-polished wear. A few muted oxblood-red traces in the distressed print. Along the outer edges the black printed facing is chipped and rubbed through to warm dirty gray-tan cardboard fibers, especially at corners. Physical, inexpensive, intimate and heavily used. Coarse distressed paperboard, NOT leather, NOT woven bookcloth.
+Composition/framing: wide horizontal texture swatch, approximately 3:1 aspect ratio, flat straight-on orthographic scan, material completely fills frame edge to edge. Substantial tactile detail also across the interior so it survives cropping into 40px and 90px high UI bars. Mostly dark middle with lighter wear concentrated at the outer perimeter; no central focal point.
+Lighting: even diffuse scanner light with subtle relief, no glossy glare or dramatic shadows.
+Palette: very dark charcoal #282b2c, worn graphite gray, faded dusty oxblood, warm gray-tan exposed fibers. Keep the central surface dark enough for small cream text overlaid later in real HTML.
+Constraints: no text, letters, handwriting, label, logos, typography, border frame, spiral, rings, holes, pages, actual notebook silhouette, tabletop, objects, perspective, vignette, or watermark. This must be a reusable raster background texture, not a UI mockup. Opaque background.

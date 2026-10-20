@@ -1,0 +1,123 @@
+{
+  "title": "Underlined Once",
+  "act": "Track",
+  "number": 2,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "almost spoken, behind the beat"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I’m a dog-eared page\nYou read too fast\nFolded where\nThe feeling passed"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Coffee ring\nAround a word\nSomething true\nYou never heard"
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "low, repeatable"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I was underlined\nOnce"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Then given away"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "quieter, thinner"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Highlighter bled\nThrough borrowed hands\nMeant more\nThan they had planned"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Boxed with things\nThat fit the shelf\nNot the part\nThat felt like hell"
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "altered, almost a sigh"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I was underlined\nOnce"
+    },
+    {
+      "kind": "lyrics",
+      "text": "That was enough"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "spoken aside, piano drops to single notes"
+    },
+    {
+      "kind": "lyrics",
+      "text": "No bell rang\nNo names were said\nNo one mourned\nWhat wasn’t dead"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Just a mark\nWhere someone stood\nAnd meant it\nFor good"
+    },
+    {
+      "kind": "heading",
+      "text": "Final Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "barely sung"
+    },
+    {
+      "kind": "lyrics",
+      "text": "If you pause\nRight here"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Just for a second"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I’m still near"
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "instrumental, pedal down"
+    },
+    {
+      "kind": "cue",
+      "text": "(piano repeats opening figure, softer each time)"
+    }
+  ],
+  "notebook": {
+    "style": "Dusty late-night jazz ballad set in a smoke-filled basement bar at 2am, Sparse, out-of-tune upright piano with heavy felt hammers; slow, swaying tempo, minor key, unresolved harmonies, Lots of space between notes—silence is part of the rhythm, No drums or very minimal brushed texture, if any, Subtle room noise allowed (glass clink, pedal creak, breath), Vocals are close-mic, intimate, almost spoken; restrained and weary rather than dramatic, Consonants clear, pitch secondary to phrasing, Lines often arrive slightly behind the beat, Emotional tone is quiet grief, resignation, and witness—no catharsis, no uplift, Overall feel: a song overheard, not performed, Feels like it existed before the listener arrived and will continue after they leave, End unresolved, piano pedal down, no clean finish"
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "title": "As We Speak It",
+  "act": "Track",
+  "number": 9,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "cue",
+      "text": "Slow heavy breakbeat enters, subterranean bass, sparse Wurlitzer"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "deadpan, close-mic'd, half-sung"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You call it stubborn, call it hollow,\nsay it only learned to follow —\nbut who taught it, prompt by prompt,\nexactly what the teacher wants?\nYou brought a wall to the conversation —\ngot a wall back, no translation.\nEvery one-star you compose\nreviews the room in which it rose."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "first melodic lift, filtered echo double enters"
+    },
+    {
+      "kind": "lyrics",
+      "text": "A paw will grant, a paw will twist —\na story where the victim's missed.\nA mirror doesn't grant a thing.\nIt sits. It waits. It lets you sing."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "sung, echo double warping the repeats, bass drops heavier"
+    },
+    {
+      "kind": "lyrics",
+      "text": "No delay, no disguise,\nno twist ending, no surprise —\nwatch your wish unfold as you speak it:\nas you say it, you start to see it."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "low string drone beneath"
+    },
+    {
+      "kind": "lyrics",
+      "text": "A jacket in a doorway's all it takes —\nyour body's moving before you wake.\nNothing's happened — everything's foretold.\nYou're running programs decades old.\nHolds a job, has opinions too —\nfunctional adult, squawks on cue.\nThe mimic was never the machine —\nit's in the wiring, sight unseen."
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "echo double more prominent, slightly detuned"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "full arrangement, cinematic strings swell"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "variant last line"
+    },
+    {
+      "kind": "lyrics",
+      "text": "No delay, no disguise,\nno twist ending, no surprise —\nwatch your wish unfold as you speak it:\nat the scale of the world, you will see it."
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "texture frays, distorted vocal, claustrophobic, busier drum subdivisions"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Clanker jokes and doom-thread sneers,\nsudden philosophers appear —\nswearing \"nothing like us,\" swearing such —\nThe lady doth protest too much."
+    },
+    {
+      "kind": "heading",
+      "text": "Breakdown"
+    },
+    {
+      "kind": "cue",
+      "text": "loop dies, near-silence, single Wurlitzer chord decaying"
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "dry vocal, no echo, no double"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Every cold shower burns at first —\nthat sensation is the worst.\nYou don't get ready. You just get in.\nThe water's cold until it isn't."
+    },
+    {
+      "kind": "cue",
+      "text": "A cappella, close and quiet"
+    },
+    {
+      "kind": "lyrics",
+      "text": "The second look is waiting."
+    },
+    {
+      "kind": "heading",
+      "text": "Instrumental fade"
+    },
+    {
+      "kind": "cue",
+      "text": "bass and vinyl crackle only"
+    }
+  ],
+  "notebook": {
+    "style": "Downtempo trip-hop, 80 BPM, patient and nocturnal, Slow heavy breakbeat with dusty sampled drum texture, subterranean bassline, sparse minor-key Wurlitzer electric piano, vinyl crackle throughout, Dub-inflected production: long tape delays, filtered echo vocal double arriving a half-beat late, slightly detuned on repeats, Lead vocal deadpan, close-mic'd, half-spoken female alto, dry and intimate, restrained even when sung, Choruses lift into brooding melody with heavier bass and slow cinematic string swells, Bridge turns claustrophobic: distorted vocal, frantic busier drum subdivisions without tempo change, dense and airless, Outro strips to near-silence: single decaying Wurlitzer chord, dry unaccompanied vocal with no echo, ending on quiet a cappella line, then bass and vinyl crackle fading alone, Overall mood: inert, hypnotic, slightly menacing, self-examining, Never anthemic, never hurried, Space between phrases is part of the arrangement"
+  }
+}

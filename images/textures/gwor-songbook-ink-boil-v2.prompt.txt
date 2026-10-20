@@ -1,0 +1,11 @@
+Generated with the built-in image_gen tool, editing gwor-songbook-ink-boil-v1.webp with transparent_background=true. WebP export: 640px wide, five equal-width cells, quality 88, alpha quality 100. Ink is neutral black. Per-frame alpha centroids are measured and compensated in CSS positioning to stabilize the animation.
+
+Use case: style-transfer
+Asset type: transparent five-frame ink scrollbar sprite sheet.
+Edit target: the attached five-cell navy ink scribble sprite sheet.
+Primary request: recolor ALL ink to neutral BLACK ballpoint ink, and make the five frames feel tightly registered. Keep the existing five-column, one-row layout, the same general long vertical scribble, ink grain, tapered ends, and genuinely transparent background.
+Animation adjustment: the centerline, top and bottom endpoints, core dark mass, and overall silhouette must be locked in precisely the same position and size in all five equal cells. Retain only very subtle local hand-redrawn differences in the tiny edge strokes and ink texture. No side-to-side drift, no rotation, no scaling, no large changes to the contour. The animation should be a quiet line boil, not the whole mark knocking left and right.
+Color: neutral near-black ink around #171717 with charcoal tonal grain. Absolutely no blue, navy, purple, brown, or colored tint.
+Layout: exactly five identical-width cells in one horizontal row, approximately 5:3 landscape canvas. Each mark centered in its cell with equal small transparent padding. No marks cross cell boundaries. No visible grid.
+Transparency: preserve real alpha around the marks and in all gaps between strokes, including fine semitransparent antialiasing.
+Constraints: change ink color and tighten registration only. Do not add paper, background color, checkerboard pattern, text, labels, cell borders, dividers, objects, shadows, glow, or watermark.

@@ -75,6 +75,36 @@ When the Substack post goes live, update the `article` value in the `tracks` arr
 
 ---
 
+## Songbook lyrics and studio notes
+
+Every GWOR track has a notebook page. Until content is supplied, it shows a ruled
+blank page with a short “Lyrics & studio notes to come” note.
+
+To populate a page, create `songs/gwor/[slug]/songbook.json` and add
+`songbook: '/songs/gwor/[slug]/songbook.json?v=1'` to its track in `initGWORLightbox()`.
+Bump that query version when updating published content.
+
+Use the same content structure as JC (see `songs/junkyard-cabaret/why-this-way/songbook.json`):
+
+```json
+{
+  "blocks": [
+    { "kind": "heading", "text": "Verse 1" },
+    { "kind": "cue", "text": "Production or vocal direction." },
+    { "kind": "lyrics", "text": "First line\nSecond line" }
+  ],
+  "notebook": {
+    "style": "Overall sound and production direction.",
+    "idea": "Optional note about the central idea."
+  }
+}
+```
+
+Title, track number, and credit default to the track metadata. The songbook keeps
+playing audio while reading; only **Listen** selects the song. Production cues
+can be toggled, studio notes expand below the lyrics, and the inspiration link
+uses the track’s existing `article` URL.
+
 ## Quick checklist
 
 - [ ] `audio/grief-without-ritual/[slug].mp3` present

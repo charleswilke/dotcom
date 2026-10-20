@@ -1,0 +1,95 @@
+{
+  "title": "Clear as Day",
+  "act": "Track",
+  "number": 1,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "hushed but explicit"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I was built for runoff, cigarette ash\nFor winters breaking glass in the street\nI’ve taken oil, I’ve taken trash\nNever learned the taste of blood in my teeth"
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "lyrics",
+      "text": "They said it clears, they said it flows\nEverything goes where it’s told\nBut this runs thicker, this runs slow\nWarm and red in the midday cold"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "hook, no fog"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There’s something happening here\nNo rumor left to save\nBroad daylight on the pavement\nI’m choking on the blood you made"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Boots step over what won’t move\nRadios hum their steady tune\nOrders land, a finger pulls\nSomeone drops, the street goes cold"
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus 2"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I was made to hide the proof\nKeep the surface clean\nBut you can’t rinse away a life\nOnce you’ve watched it leave"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "repeat"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There’s something happening here\nNot a question anymore\nIf the street can taste the truth\nWhat are we waiting for?"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "bare, accusatory"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I don’t get a vote\nI don’t draw the line\nBut I carry the proof\nEvery goddamn time"
+    },
+    {
+      "kind": "heading",
+      "text": "Final Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "lands the charge"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There’s something happening here\nClear as sirens, clear as day\nIf even the drain is gagging now\nWhat do we think we washed away?"
+    }
+  ],
+  "notebook": {
+    "style": "Angry, ritual-driven alternative rock with a powerful percussive build, Mid-tempo in a minor mode, Drums are primal and physical: heavy toms, stomps, claps, Bass pulses underneath like a heartbeat, Guitar is sparse and textural, Song begins restrained and tense, then builds into fury and release through repetition and massed voices, Verse 1: minimal percussion, low drone, close vocal — controlled, watchful, Pre-Chorus: drums enter lightly, tension tightens, Chorus: full percussion hits; vocal expands into a commanding chant, Verse 2: drums heavier, claps join, delivery sharper and angrier, Bridge: strip to drums and voice only; raw, confrontational, Final Chorus: full return with layered voices chanting in unison; cathartic but unresolved, Outro: abrupt stop, No fade, No polish, No safety, Physical, communal anger"
+  }
+}

@@ -5154,10 +5154,12 @@ function createAlbumPlayer(config) {
 
     // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
     // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
-    // play glyph + "tap to play" hint, pulsing/glowing on hover. No hover JS needed.
+    // centered play glyph + orbiting "tap to play" hint. No hover JS needed.
     function refreshPlayGlyph() {
-        if (playPauseIcon) playPauseIcon.textContent = (!audio || audio.paused) ? PLAY_ICON : PAUSE_ICON;
-        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', !audio || audio.paused);
+        const paused = !audio || audio.paused;
+        if (playPauseIcon) playPauseIcon.textContent = paused ? PLAY_ICON : PAUSE_ICON;
+        if (playPauseBtn) playPauseBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+        if (oscFrame) oscFrame.classList.toggle('awaiting-tap', paused);
     }
     function armTapToPlay() {
         if (oscFrame) oscFrame.classList.add('awaiting-tap');
@@ -5616,17 +5618,17 @@ function initMixtapeLightbox() {
 
 function initGWORLightbox() {
     const tracks = [
-        { title: 'Clear as Day', file: '/audio/grief-without-ritual/clear-as-day.mp3', cover: '/audio/grief-without-ritual/clear-as-day-title.webp', article: 'https://www.theguardian.com/us-news/2026/jan/24/alex-pretti-minneapolis-minnesota-shooting' },
-        { title: 'Underlined Once', file: '/audio/grief-without-ritual/underlined-once.mp3', cover: '/audio/grief-without-ritual/underlined-once-title.webp', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
-        { title: 'Letter to the Editor', file: '/audio/grief-without-ritual/letter-to-the-editor.mp3', cover: '/audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
-        { title: 'Love at Machine Speed', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
-        { title: 'Permission to Ache', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
-        { title: 'Respect the Exhale', file: '/audio/grief-without-ritual/respect-the-exhale.mp3', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
-        { title: 'Slow the Clock', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-v2.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
-        { title: 'Dearly Beloved', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'As We Speak It', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
-        { title: 'When Doctrine Slips', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: "Haven't Heard From You Yet", file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title.webp?v=20261015-incoming-waves', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
+        { title: 'Clear as Day', articleType: 'news story', songbook: '/songs/gwor/clear-as-day/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/clear-as-day.mp3', cover: '/audio/grief-without-ritual/clear-as-day-title.webp', article: 'https://www.theguardian.com/us-news/2026/jan/24/alex-pretti-minneapolis-minnesota-shooting' },
+        { title: 'Underlined Once', songbook: '/songs/gwor/underlined-once/songbook.json?v=20261019-lyrics-2', file: '/audio/grief-without-ritual/underlined-once.mp3', cover: '/audio/grief-without-ritual/underlined-once-title.webp', article: 'https://en.wikipedia.org/wiki/Operation_Metro_Surge' },
+        { title: 'Letter to the Editor', songbook: '/songs/gwor/letter-to-the-editor/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/letter-to-the-editor.mp3', cover: '/audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
+        { title: 'Love at Machine Speed', songbook: '/songs/gwor/love-at-machine-speed/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
+        { title: 'Permission to Ache', songbook: '/songs/gwor/permission-to-ache/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
+        { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        { title: 'Slow the Clock', songbook: '/songs/gwor/slow-the-clock/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-v2.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'Dearly Beloved', songbook: '/songs/gwor/dearly-beloved/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
+        { title: 'As We Speak It', songbook: '/songs/gwor/as-we-speak-it/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
+        { title: 'When Doctrine Slips', songbook: '/songs/gwor/when-doctrine-slips/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        { title: "Haven't Heard From You Yet", songbook: '/songs/gwor/havent-heard-from-you-yet/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title.webp?v=20261015-incoming-waves', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');
@@ -5637,7 +5639,7 @@ function initGWORLightbox() {
 
     const GWOR_OSC_COLORS = { trace: '#c54a4a', glow: 'rgba(197, 74, 74, 0.9)', graticule: 'rgba(197, 74, 74, 1)' };
 
-    return createAlbumPlayer({
+    const player = createAlbumPlayer({
         tracks,
         els: {
             lightbox,
@@ -5682,18 +5684,69 @@ function initGWORLightbox() {
             albumAlt: 'Grief without Ritual Cover'
         })
     });
+    initAlbumSongbook({
+        lightbox, trackList, tracks, player, prefix: 'gwor',
+        collectionTitle: 'Grief without Ritual', defaultAct: 'Track', showBlankPage: true
+    });
+    initSongbookInkMotion(document.getElementById('gworSongbookContent'));
+    return player;
+}
+
+// Five hand-redrawn ink frames boil at 8fps only during active scrolling.
+function initSongbookInkMotion(content) {
+    if (!content || !CSS.supports('selector(::-webkit-scrollbar)')) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Compensate each drawing's ink centroid so its centerline stays fixed.
+    const inkOffsets = [35.437, 17.305, -.205, -18.283, -36.356];
+    let timer = 0;
+    let inkFrame = 0;
+    let lastScroll = -Infinity;
+
+    // Native scrollbars reserve space; match that strip to the moving sheet.
+    function syncPaper() {
+        content.parentElement.style.setProperty('--paper-track-x', `${-content.clientWidth}px`);
+        content.parentElement.style.setProperty('--paper-track-y', `${-content.scrollTop}px`);
+    }
+    syncPaper();
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(syncPaper).observe(content);
+
+    function draw() {
+        timer = 0;
+        if (reducedMotion.matches || document.hidden || performance.now() - lastScroll > 180) return;
+        inkFrame = (inkFrame + 1) % inkOffsets.length;
+        content.style.setProperty('--ink-scroll-frame-x', `${inkOffsets[inkFrame]}px`);
+        timer = setTimeout(draw, 125);
+    }
+
+    function stop() {
+        if (timer) clearTimeout(timer);
+        timer = 0;
+        lastScroll = -Infinity;
+        inkFrame = 0;
+        content.style.removeProperty('--ink-scroll-frame-x');
+    }
+
+    content.addEventListener('scroll', () => {
+        syncPaper();
+        if (reducedMotion.matches || document.hidden) return;
+        lastScroll = performance.now();
+        if (!timer) draw();
+    }, { passive: true });
+    reducedMotion.addEventListener('change', stop);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
 }
 
 // Opening a song's book never changes playback. Only Listen selects its audio.
-function initJCSongbook({ lightbox, trackList, tracks, player }) {
-    const back = document.getElementById('jcSongbookBack');
-    const tracksPanel = document.getElementById('jcTracksPanel');
-    const bookPanel = document.getElementById('jcSongbookPanel');
-    const content = document.getElementById('jcSongbookContent');
-    const footer = document.getElementById('jcSongbookFooter');
-    const context = document.getElementById('jcSongbookContext');
-    const title = document.getElementById('jcSongbookTitle');
-    const toolbar = document.getElementById('jcSongbookToolbar');
+function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
+    collectionTitle = 'Junkyard Cabaret', defaultAct = 'Act I', showBlankPage = false }) {
+    const back = document.getElementById(`${prefix}SongbookBack`);
+    const tracksPanel = document.getElementById(`${prefix}TracksPanel`);
+    const bookPanel = document.getElementById(`${prefix}SongbookPanel`);
+    const content = document.getElementById(`${prefix}SongbookContent`);
+    const footer = document.getElementById(`${prefix}SongbookFooter`);
+    const context = document.getElementById(`${prefix}SongbookContext`);
+    const title = document.getElementById(`${prefix}SongbookTitle`);
+    const toolbar = document.getElementById(`${prefix}SongbookToolbar`);
     const cache = new Map();
     let opener = null;
     let requestId = 0;
@@ -5707,7 +5760,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
     }
 
     function entryMetadata(index) {
-        let act = 'Act I';
+        let act = defaultAct;
         tracks.slice(0, index + 1).forEach(track => { if (track.act) act = track.act; });
         return {
             title: tracks[index].title,
@@ -5731,7 +5784,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
 
         if (song.blocks && song.blocks.length) {
             const lyrics = element('div', 'jc-book-lyrics');
-            lyrics.id = 'jcSongbookLyrics';
+            lyrics.id = `${prefix}SongbookLyrics`;
             // Keep cues in the same order as the lyric passages they accompany.
             const tags = { heading: 'h4', cue: 'p', lyrics: 'p' };
             let cueGroup = null;
@@ -5770,6 +5823,13 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
                 toolbar.append(cues);
             }
             book.append(lyrics);
+        } else if (showBlankPage) {
+            const blank = element('div', 'songbook-blank-page');
+            blank.append(
+                element('p', 'jc-book-heading', 'Lyrics'),
+                element('p', 'songbook-pending', 'Lyrics & studio notes to come.')
+            );
+            book.append(blank);
         }
 
         if (song.notebook) {
@@ -5777,7 +5837,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
             const summary = element('summary', '', 'The studio notebook');
             notebook.append(summary);
             const notes = element('div', 'jc-book-notes');
-            notes.append(
+            if (song.notebook.style) notes.append(
                 element('h4', 'jc-book-heading', 'Style direction'),
                 element('p', '', song.notebook.style)
             );
@@ -5787,7 +5847,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
         }
         footer.replaceChildren();
         if (tracks[index].article) {
-            const inspiration = element('a', 'jc-book-inspiration', 'Read the essay that inspired this song ↗');
+            const inspiration = element('a', 'jc-book-inspiration', `Read the ${tracks[index].articleType || 'essay'} that inspired this song ↗`);
             inspiration.href = tracks[index].article;
             inspiration.target = '_blank';
             inspiration.rel = 'noopener noreferrer';
@@ -5795,7 +5855,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
         }
         footer.append(
             element('p', 'jc-book-credit', song.credit),
-            element('span', '', 'Junkyard Cabaret / Songbook')
+            element('span', '', `${collectionTitle} / Songbook`)
         );
         content.replaceChildren(book);
     }
@@ -5821,7 +5881,7 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
         try {
             const response = await fetch(track.songbook);
             if (!response.ok) throw new Error(`Songbook: ${response.status}`);
-            const song = await response.json();
+            const song = { ...metadata, ...await response.json() };
             cache.set(index, song);
             if (request === requestId) renderBook(song, index);
         } catch (error) {
@@ -5861,13 +5921,13 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
 
     trackList.querySelectorAll('.mixtape-track-item').forEach((row, index) => {
         const spark = row.querySelector('.track-article-link');
-        if (!spark) return;
+        if (!spark && !showBlankPage && !tracks[index].songbook) return;
         const book = element('button', 'track-article-link track-songbook-button');
         book.type = 'button';
         book.title = `Open lyrics for ${tracks[index].title}`;
         book.setAttribute('aria-label', book.title);
         book.setAttribute('aria-expanded', 'false');
-        book.setAttribute('aria-controls', 'jcSongbookPanel');
+        book.setAttribute('aria-controls', bookPanel.id);
         // Reuse the paired utility button's shape and album theme.
         book.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 6.5c-2.5-2-6-2-9-1V20c3-1 6.5-1 9 1 2.5-2 6-2 9-1V5.5c-3-1-6.5-1-9 1Z"></path>
@@ -5880,7 +5940,12 @@ function initJCSongbook({ lightbox, trackList, tracks, player }) {
             content.scrollTop = 0;
             setView(true);
         });
-        spark.replaceWith(book);
+        if (spark) spark.replaceWith(book);
+        else {
+            const actions = row.querySelector('.track-action-group');
+            actions.classList.add('track-action-group--paired');
+            actions.prepend(book);
+        }
     });
 }
 
@@ -5957,7 +6022,7 @@ function initJCLightbox() {
             albumAlt: 'Junkyard Cabaret Cover'
         })
     });
-    initJCSongbook({
+    initAlbumSongbook({
         lightbox, trackList, tracks, player
     });
     return player;

@@ -1,0 +1,339 @@
+{
+  "title": "When Doctrine Slips",
+  "act": "Track",
+  "number": 10,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Dirty, Off-Kilter Dance-Punk"
+    },
+    {
+      "kind": "cue",
+      "text": "Dry kick, then dribbling low toms: accelerate, stumble, recover. Overdriven bass holds a stubborn groove; late snare, scratchy guitar chops, one sour piano chord."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Low, Close Female Vocal"
+    },
+    {
+      "kind": "cue",
+      "text": "Full-bodied, smoky, conversational; restrained power. Bass and kick carry the pulse."
+    },
+    {
+      "kind": "lyrics",
+      "text": "We built tall walls from tape\nHung law in a gold frame\nStamped “process” on thin gates\nCalled stall by a new name"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Growing Bite"
+    },
+    {
+      "kind": "cue",
+      "text": "Snare sharpens; toms trip between phrases. Guitar answers in dirty scratches."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Soft and slow\nRooms hum low\nLights snap on\nIt’s all for show"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 3"
+    },
+    {
+      "kind": "cue",
+      "text": "Defiant"
+    },
+    {
+      "kind": "cue",
+      "text": "Bass thickens, guitar chops harder. Vocal rises into chest voice; let “drown” fray."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Speed dressed up as law\nGave fear a crown\nQuick hands rule\nSlow truths drown"
+    },
+    {
+      "kind": "heading",
+      "text": "Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "Strip to Bass and Kick"
+    },
+    {
+      "kind": "cue",
+      "text": "Voice exposed and unwavering; leave space between couplets."
+    },
+    {
+      "kind": "lyrics",
+      "text": "When doctrine slips\nAnd motives show"
+    },
+    {
+      "kind": "cue",
+      "text": "Descending tom tumble. Full stop."
+    },
+    {
+      "kind": "lyrics",
+      "text": "What holds the weight?\nWe don’t know"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 4"
+    },
+    {
+      "kind": "cue",
+      "text": "Full Band Returns"
+    },
+    {
+      "kind": "cue",
+      "text": "Raw garage-soul groove, drums slipping around a steady bass. Open up the vocal on “clarity.”"
+    },
+    {
+      "kind": "lyrics",
+      "text": "If mercy swings\nThat wrecking ball\nIt’s not the end\nJust stresses the walls"
+    },
+    {
+      "kind": "cue",
+      "text": "Brief guitar scrape."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The beams all shake\nSo do we\nThat’s not doom\nThat’s clarity"
+    },
+    {
+      "kind": "heading",
+      "text": "Instrumental"
+    },
+    {
+      "kind": "cue",
+      "text": "4 Bars"
+    },
+    {
+      "kind": "cue",
+      "text": "Bass stays steady; low toms bounce faster, lose the downbeat, then recover. Snare snaps back; rough guitar chord. No solo."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 5"
+    },
+    {
+      "kind": "cue",
+      "text": "Driving Dance-Punk"
+    },
+    {
+      "kind": "cue",
+      "text": "Dirty bass and clipped guitar. Vocal punches each phrase, alternating near-speech with bursts of melody."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Work lost heat\nCash left town\nGoods float free\nNo roots in ground"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Charts glow blue\nLines climb fast\nJobs drop out\nBut “growth” holds fast"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 6"
+    },
+    {
+      "kind": "cue",
+      "text": "Pull Back"
+    },
+    {
+      "kind": "cue",
+      "text": "Muted guitar, bare bass, displaced snare, one sour piano strike. Vocal low and accusatory."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Work’s a ghost\nA judge we’d host\nNow judgment’s wide\nWe stand exposed"
+    },
+    {
+      "kind": "heading",
+      "text": "Breakdown"
+    },
+    {
+      "kind": "cue",
+      "text": "Bare, Intimate"
+    },
+    {
+      "kind": "cue",
+      "text": "Isolated bass notes and soft kick; close-miked voice with audible breath. No melodrama."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Plenty’s not kind\nIt strips things bare\nWhen lack is gone\nYou see what’s there"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "Rhythmic Collapse"
+    },
+    {
+      "kind": "cue",
+      "text": "Toms tumble into gaps; snare lands early, late, or not at all. Bass holds firm. Vocal plants every word against the shifting beat."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Quakes don’t make\nThey break release"
+    },
+    {
+      "kind": "cue",
+      "text": "Snare flam. Silence."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Fires don’t start\nThey free the heat"
+    },
+    {
+      "kind": "cue",
+      "text": "Brief guitar feedback, cut dead."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Sun hits hard\nIt burns"
+    },
+    {
+      "kind": "cue",
+      "text": "Raw sustained belt on “burns.” Full-band stop."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Not chaos\nA turn"
+    },
+    {
+      "kind": "cue",
+      "text": "Low, nearly spoken."
+    },
+    {
+      "kind": "heading",
+      "text": "Rebuild"
+    },
+    {
+      "kind": "cue",
+      "text": "4 Bars"
+    },
+    {
+      "kind": "cue",
+      "text": "Bass returns alone; dribbling toms stagger and lock in. Jagged guitar joins. Bigger, never cleaner."
+    },
+    {
+      "kind": "heading",
+      "text": "Final Refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "Full Force"
+    },
+    {
+      "kind": "cue",
+      "text": "Hardest groove. Huge, gritty, soulful female vocal; conviction over polish. Ragged guitar chords and tumbling drums."
+    },
+    {
+      "kind": "lyrics",
+      "text": "When doctrine slips\nAnd speed takes throne\nWe feel the crack\nDown to bone"
+    },
+    {
+      "kind": "cue",
+      "text": "Guitar drops for one beat."
+    },
+    {
+      "kind": "lyrics",
+      "text": "If sure things fall\nLet them fall\nMercy might\nBreak us all"
+    },
+    {
+      "kind": "cue",
+      "text": "“Break us all” opens into an aching, unpolished belt."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The beams all shake\nSo do we\nThat’s not weak\nThat’s clarity"
+    },
+    {
+      "kind": "cue",
+      "text": "Hold “clarity” until the note frays; abruptly release."
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "One Instrument at a Time"
+    },
+    {
+      "kind": "cue",
+      "text": "Guitar, then bass disappear. Drums turn unnaturally precise. One dry piano note. Vocal nearly spoken."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Time to choose\nWhat we become"
+    },
+    {
+      "kind": "cue",
+      "text": "Full stop. Silence."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The reckoning’s not near."
+    },
+    {
+      "kind": "cue",
+      "text": "Dry spoken vocal, alone."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It’s done."
+    },
+    {
+      "kind": "cue",
+      "text": "Single snare hit."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's done."
+    },
+    {
+      "kind": "cue",
+      "text": "Two uneven low-tom bounces."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's done."
+    },
+    {
+      "kind": "cue",
+      "text": "Nearly whispered; no accompaniment."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's done."
+    },
+    {
+      "kind": "heading",
+      "text": "End"
+    },
+    {
+      "kind": "cue",
+      "text": "Silence. No chord, no fade."
+    }
+  ],
+  "notebook": {
+    "style": "Raw, sweaty dance-punk and garage-soul with an elastic funk pulse, Midtempo, live, imperfect, confrontational, Dry, heavy kick and snare; low toms dribble, accelerate, miss a step, and recover while bass holds the floor, Thick, overdriven electric bass plays a stubborn, danceable riff, Scratchy distorted guitar chops against the beat, opening into ragged power chords at peaks, Occasional sour piano strikes, never jaunty; no horns, Commanding female lead: huge chest resonance, smoky grain, sharp diction, soulful bends, and fierce conviction behind every word, Lower, intimate verses rise into raw, full-throated belts on pivotal lines, never polished pop runs or constant shouting, Rhythmic gaps and sudden band dropouts create tension, not a cinematic crescendo, Final refrain hits hardest; outro strips to exposed speech and silence, Gritty room ambience, little reverb, audible human edges, No choir, synth gloss, theatrical delivery, or cabaret swing"
+  }
+}

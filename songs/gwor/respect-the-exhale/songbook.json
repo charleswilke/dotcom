@@ -1,0 +1,243 @@
+{
+  "title": "Respect the Exhale",
+  "act": "Track",
+  "number": 6,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "Restless Swamp Shuffle | 98 BPM"
+    },
+    {
+      "kind": "cue",
+      "text": "Round bass starts immediately with a repeating, slightly impatient figure. Tight kick, dry brushed snare and ticking hi-hat establish a restless shuffle. Clipped tube-amp guitar adds short rhythmic stabs. Slide guitar makes one crooked little observation. No dramatic entrance. The band sounds like it has somewhere to be."
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "Seasoned Female Lead | Close, Tired, Conversational"
+    },
+    {
+      "kind": "cue",
+      "text": "Low-mid register, warm and slightly frayed. Phrasing pushes just ahead of the beat, as though her thoughts are arriving faster than she can comfortably speak. Natural breaths, occasional rough edges. Bass stays insistent."
+    },
+    {
+      "kind": "lyrics",
+      "text": "That feed pulls tight\nLike a finger on the wire\nEvery little scroll\nKeeps stoking that fire"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Call it connection\nCall it what you will\nBut I lost my breath\nSomewhere in the spill"
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "Rhythmic Pressure | No Volume Increase"
+    },
+    {
+      "kind": "cue",
+      "text": "Hi-hat becomes more insistent. Guitar clips shorter. Bass keeps moving. Vocal phrases crowd together slightly, with a quick breath between lines. She sounds irritated by her own momentum."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's all sharp inhales\nHit after hit\nBut I'm takin' back my pulse\nBit by bit"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "Fighting for Space | Same Tempo"
+    },
+    {
+      "kind": "cue",
+      "text": "The groove continues unchanged. Vocal deliberately falls behind the beat for the first time. Leave space after each \"exhale.\" Guitar sustains warmer chords rather than getting louder. No belting or emotional lift."
+    },
+    {
+      "kind": "lyrics",
+      "text": "So I exhale\nLet the thunder pass\nLet the quiet talk\nWhile the moments last"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I exhale\nLet the noise roll back\nGive the moment room\nFor what I lack"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "Groove Tightens | Wry, Slightly Playful"
+    },
+    {
+      "kind": "cue",
+      "text": "Clipped guitar resumes. Bass becomes more conversational but never settles. Small slide guitar responses between phrases. Vocal moves ahead of the beat again, with dry humor and a little impatience."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Pop hits flash\nThen break in two\nSweet on the tongue\nGone before it's through"
+    },
+    {
+      "kind": "lyrics",
+      "text": "But jazz keeps changin'\nEvery time you hear\nLike a truth that shifts\nWhen the sky turns clear"
+    },
+    {
+      "kind": "heading",
+      "text": "Pre-Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "The Clock Keeps Ticking"
+    },
+    {
+      "kind": "cue",
+      "text": "Guitar drops to short muted strokes. Hi-hat and bass carry the pressure. Vocal is slightly breathless, catching herself between thoughts. Do not build volume."
+    },
+    {
+      "kind": "lyrics",
+      "text": "It's all sharp inhales\nPullin' at my seam\nI loosen up my grip\nOn what I thought I'd need"
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "A Little More Room | Still Restless"
+    },
+    {
+      "kind": "cue",
+      "text": "Same tempo and groove. Singer leans further behind the beat, refusing to chase the instruments. Slide guitar offers brief, sympathetic replies. Short instrumental gaps after each \"I exhale.\""
+    },
+    {
+      "kind": "lyrics",
+      "text": "So I exhale\nLet the storm unwind\nLet the room get still\nGive the soul some time"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I exhale\nLet the pressure slide\nTake the rhythm slow\nLet the breath decide"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "The Band Won't Let Go | Subtractive Tension"
+    },
+    {
+      "kind": "cue",
+      "text": "Drums begin dropping individual beats. Electric guitar withdraws. Slide guitar bends once, then disappears. Bass continues its original impatient figure, exposed and repetitive. The singer stops pushing her phrases. Each line becomes slower in delivery, but the underlying pulse does not change."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Slide guitar bends\nThen it backs away\nDrums leave a space\nAnd I let it stay"
+    },
+    {
+      "kind": "cue",
+      "text": "Only bass remains, still repeating its restless figure. Vocal nearly spoken, quiet and certain."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Nothing here to conquer\nNothing left to prove"
+    },
+    {
+      "kind": "cue",
+      "text": "The bass continues. A little more space before each line."
+    },
+    {
+      "kind": "lyrics",
+      "text": "The world can keep on turning\nI don't have to move"
+    },
+    {
+      "kind": "cue",
+      "text": "The bass stops completely."
+    },
+    {
+      "kind": "cue",
+      "text": "One full breath in actual silence. No reverb swell, no cymbal, no dramatic accent."
+    },
+    {
+      "kind": "heading",
+      "text": "Instrumental Return"
+    },
+    {
+      "kind": "cue",
+      "text": "Four Bars | Gentle Reentry"
+    },
+    {
+      "kind": "cue",
+      "text": "One soft rim click. Bass resumes its familiar figure, but slightly looser, with more space between notes. Guitar answers with a short, imperfect phrase. The groove remains at 98 BPM. No crescendo."
+    },
+    {
+      "kind": "heading",
+      "text": "Final Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "Acceptance Without Triumph"
+    },
+    {
+      "kind": "cue",
+      "text": "Her voice is lower, a little more worn, almost smiling at the absurdity of it all. She sits comfortably behind the moving groove. No harmonies, no belting, no big finish. The band finally sounds willing to listen."
+    },
+    {
+      "kind": "lyrics",
+      "text": "So I exhale\nLet the night roll in\nLet the quiet land\nOn my tired skin"
+    },
+    {
+      "kind": "lyrics",
+      "text": "I exhale\nLet the old ache clear\nDon't need to name it\nJust to know it's here"
+    },
+    {
+      "kind": "heading",
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "Gradual Release | Groove Comes Apart Naturally"
+    },
+    {
+      "kind": "cue",
+      "text": "Electric guitar leaves first. Hi-hat stops ticking. Snare fades to occasional rim clicks. Bass continues alone beneath the voice. Her phrasing is unhurried, almost spoken. Audible breaths are welcome."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Trust the tide\nLet the ache unwind\nWe were never made\nFor the nonstop grind"
+    },
+    {
+      "kind": "cue",
+      "text": "Drums disappear entirely. One last bass figure."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Leave a little silence\nAt the end of the day"
+    },
+    {
+      "kind": "cue",
+      "text": "Quiet, nearly spoken. No final vocal flourish."
+    },
+    {
+      "kind": "lyrics",
+      "text": "Respect the exhale\nLet the stillness stay"
+    },
+    {
+      "kind": "cue",
+      "text": "Bass plays one final, slightly imperfect note. Natural room decay. End."
+    }
+  ],
+  "notebook": {
+    "style": "Restless blues rock, understated Americana, 98 BPM, dry swamp shuffle with forward motion, Round bass keeps an insistent figure; tight kick, brushed snare, ticking hi-hat, clipped tube-amp guitar and brief slide replies, Small band, no thunder, Seasoned female low-mid voice: warm, husky, age-worn, a little tired, conversational and wry, She has power but refuses to belt, Verses push against the beat; breaths come short, phrases hurry and catch, In each chorus she deliberately eases behind the beat, making room for “I exhale” while bass and drums keep moving underneath, Tension comes from resisting the groove, not from volume, Pre-choruses tighten rhythmically; bridge drops instruments out in uneven stages, leaving one exposed breath before the pulse returns, No soaring slide, gospel lift, big fills, theatrical anguish or triumphant ending, Dry analog room, imperfect timing, Final chorus finds a little more space; outro gradually loosens and lets go"
+  }
+}

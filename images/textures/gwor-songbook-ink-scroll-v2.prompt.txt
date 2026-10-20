@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool with transparent_background=true. WebP export: 128px wide, original aspect ratio, quality 88, alpha quality 100. Alpha transparency preserved, including gaps between ink strokes.
+
+Use case: photorealistic-natural
+Asset type: transparent raster ink mark for a narrow notebook scrollbar thumb.
+Primary request: ONE vertical scribble made with a real dark navy-blue ballpoint pen: an absent-minded, rapid back-and-forth test of the pen in the margin of a notebook. Dense irregular overlapping diagonal strokes and a few tiny crossovers, slightly uneven ink pressure and subtle ballpoint grain. A convincing handmade ink mark with a narrow, ragged silhouette and tapered ends, not a tidy coil or repeated spiral. Dark enough to remain readable when reduced to only 8 pixels wide.
+Composition: tall narrow portrait canvas, approximately 1:3 aspect ratio. A single elongated vertical ink scribble fills most of the canvas height and width with small transparent padding. Compact dense central ink, loose tiny stray strokes at the edges. No other objects or marks. Keep the scribble connected so it reads as one small draggable mark.
+Color: deep blue-black ballpoint ink around #283f5d and #24476c, no other colors.
+Background: genuinely transparent alpha everywhere outside the ink, including gaps between strokes. The paper will be supplied by the website. Preserve fine antialiased semitransparent ink edges.
+Constraints: ink alone. No paper, white background, gray background, checkerboard drawn into the image, shadow, glow, pen or pencil, fingers, frame, border, text, letters, symbols, repeated regular loops, UI mockup, or watermark. No square or rectangular filled backing.

@@ -50,7 +50,7 @@
     <meta name="twitter:description" content="Charles Wilke is a writer and product designer in Omaha, exploring AI through product design, essays, music, games, and theatrical projections.">
     <meta name="twitter:image" content="https://charleswilke.com/images/og-image.jpg?v=202607032147">
     <meta name="twitter:image:alt" content="Charles Wilke - Professional Portrait">
-    <link rel="stylesheet" href="/styles.css?v=20261019-jc-cue-groups-1">
+    <link rel="stylesheet" href="/styles.css?v=20261019-osc-play-orbit-1">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -897,7 +897,13 @@
                     <!-- Modal Oscilloscope -->
                     <div class="modal-oscilloscope-frame" id="mixtapeOscilloscopeFrame">
                         <canvas class="modal-oscilloscope" id="mixtapeOscilloscope"></canvas>
-                        <button id="mixtapePlayPause" class="audio-btn osc-play-btn" aria-label="Play/Pause"><span class="audio-icon">▶</span></button>
+                        <button id="mixtapePlayPause" class="audio-btn osc-play-btn" aria-label="Play">
+                            <span class="audio-icon" aria-hidden="true">&#9654;</span>
+                            <svg class="osc-play-orbit" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                                <defs><path id="mixtapePlayOrbit" d="M 50,50 m 0,-29 a 29,29 0 1,1 0,58 a 29,29 0 1,1 0,-58"/></defs>
+                                <text><textPath href="#mixtapePlayOrbit" textLength="182.21" lengthAdjust="spacing">TAP TO PLAY · TAP TO PLAY · </textPath></text>
+                            </svg>
+                        </button>
                         <span class="modal-oscilloscope-title" id="mixtapeOscilloscopeTitle" aria-live="polite">Select a track...</span>
                         <span class="modal-oscilloscope-meta" id="mixtapeOscilloscopeMeta">Exploring L.ai.bor Mixtape</span>
                         <div class="time-vial" id="mixtapeVial" role="progressbar" aria-label="Playback progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -943,7 +949,13 @@
                     <!-- Modal Oscilloscope -->
                     <div class="modal-oscilloscope-frame" id="jcOscilloscopeFrame">
                         <canvas class="modal-oscilloscope" id="jcOscilloscope"></canvas>
-                        <button id="jcPlayPause" class="audio-btn osc-play-btn" aria-label="Play/Pause"><span class="audio-icon">&#9654;</span></button>
+                        <button id="jcPlayPause" class="audio-btn osc-play-btn" aria-label="Play">
+                            <span class="audio-icon" aria-hidden="true">&#9654;</span>
+                            <svg class="osc-play-orbit" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                                <defs><path id="jcPlayOrbit" d="M 50,50 m 0,-29 a 29,29 0 1,1 0,58 a 29,29 0 1,1 0,-58"/></defs>
+                                <text><textPath href="#jcPlayOrbit" textLength="182.21" lengthAdjust="spacing">TAP TO PLAY · TAP TO PLAY · </textPath></text>
+                            </svg>
+                        </button>
                         <span class="modal-oscilloscope-title" id="jcOscilloscopeTitle" aria-live="polite">Select a track...</span>
                         <span class="modal-oscilloscope-meta">Junkyard Cabaret</span>
                         <div class="time-vial" id="jcVial" role="progressbar" aria-label="Playback progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -1001,7 +1013,13 @@
                     <!-- Modal Oscilloscope -->
                     <div class="modal-oscilloscope-frame" id="gworOscilloscopeFrame">
                         <canvas class="modal-oscilloscope" id="gworOscilloscope"></canvas>
-                        <button id="gworPlayPause" class="audio-btn osc-play-btn" aria-label="Play/Pause"><span class="audio-icon">&#9654;</span></button>
+                        <button id="gworPlayPause" class="audio-btn osc-play-btn" aria-label="Play">
+                            <span class="audio-icon" aria-hidden="true">&#9654;</span>
+                            <svg class="osc-play-orbit" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                                <defs><path id="gworPlayOrbit" d="M 50,50 m 0,-29 a 29,29 0 1,1 0,58 a 29,29 0 1,1 0,-58"/></defs>
+                                <text><textPath href="#gworPlayOrbit" textLength="182.21" lengthAdjust="spacing">TAP TO PLAY · TAP TO PLAY · </textPath></text>
+                            </svg>
+                        </button>
                         <span class="modal-oscilloscope-title" id="gworOscilloscopeTitle" aria-live="polite">Select a track...</span>
                         <span class="modal-oscilloscope-meta">Grief without Ritual</span>
                         <div class="time-vial" id="gworVial" role="progressbar" aria-label="Playback progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -1014,10 +1032,22 @@
 
             <div class="mixtape-right-section">
                 <h2 class="mixtape-title">Grief without Ritual <span class="mixtape-subtitle">Album</span></h2>
-                <div class="mixtape-playlist">
-                    <ul id="gworTrackList">
-                        <!-- Tracks will be populated by JS -->
-                    </ul>
+                <div class="jc-songbook-stage">
+                    <div class="mixtape-playlist" id="gworTracksPanel" role="region" aria-label="Album tracks">
+                        <ul id="gworTrackList">
+                            <!-- Tracks will be populated by JS -->
+                        </ul>
+                    </div>
+                    <section class="jc-songbook-panel" id="gworSongbookPanel" role="region" aria-label="Grief without Ritual songbook" aria-hidden="true" inert>
+                        <div class="jc-book-nav">
+                            <button type="button" class="jc-book-back" id="gworSongbookBack" aria-label="Back to tracklist">← Tracks</button>
+                            <span class="jc-book-context" id="gworSongbookContext"></span>
+                            <h3 class="jc-book-title" id="gworSongbookTitle"></h3>
+                            <div class="jc-book-toolbar" id="gworSongbookToolbar"></div>
+                        </div>
+                        <div class="jc-songbook-content" id="gworSongbookContent" aria-busy="false" tabindex="0"></div>
+                        <div class="jc-book-footer" id="gworSongbookFooter"></div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -1074,6 +1104,6 @@
 <script src="/vendor/dompurify.min.js?v=3.4.15" defer></script>
 <script src="/laibor-rails.js?v=1" defer></script>
 <script src="/article-reader-ui.js?v=1" defer></script>
-<script src="/main.js?v=20261019-jc-cue-groups-1" defer></script>
+<script src="/main.js?v=20261019-osc-play-orbit-1" defer></script>
 </body>
 </html>

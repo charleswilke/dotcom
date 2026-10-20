@@ -15541,14 +15541,22 @@ section.production-header.alice p {
     line-height: 20px;
     margin: 16px 0 4px;
 }
+/* Keep the opening text clear of the hanging Listen/Cues tags, then let
+   subsequent lines use the full page width. Cue groups stay in normal flow
+   so their text can wrap around this float too. */
+:is(#jcLightbox, #gworLightbox) :is(#jcSongbookLyrics, #gworSongbookLyrics)::before {
+    content: '';
+    float: right;
+    width: 174px;
+    height: 28px;
+    margin-left: 10px;
+}
 :is(#jcLightbox, #gworLightbox) .jc-book-cue-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     margin: 0 0 10px;
     padding-left: 12px;
     border-left: 2px solid #c8a881;
 }
+:is(#jcLightbox, #gworLightbox) .jc-book-cue + .jc-book-cue { margin-top: 10px; }
 :is(#jcLightbox, #gworLightbox) .jc-book-cue {
     color: #8b422a;
     font: italic 13px/20px Georgia, 'Times New Roman', serif;

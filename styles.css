@@ -9111,38 +9111,25 @@ html {
         0 -1px 0 rgba(18, 16, 24, 0.28) inset;
 }
 
+/* Molded horizontal ribs across the colored cartridge cap. */
 .cartridge-label-band {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.7rem;
     position: relative;
     min-height: clamp(42px, 5vw, 48px);
-    padding: 0.48rem clamp(0.9rem, 2vw, 1.1rem);
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(0.5rem, 1vw, 0.64rem);
-    font-weight: 700;
-    line-height: 1.1;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #fff;
     background-image:
+        repeating-linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.32) 0 0.75px,
+            rgba(255, 255, 255, 0.08) 0.75px 2px,
+            rgba(0, 0, 0, 0.08) 2px 3.25px,
+            rgba(0, 0, 0, 0.3) 3.25px 4px
+        ),
         linear-gradient(90deg, var(--cart-band) 0%, var(--cart-accent) 100%);
-    border: 0;
     border-bottom: 2px solid rgba(18, 16, 24, 0.72);
     border-radius: 14px 14px 0 0;
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.2) inset,
         0 4px 10px rgba(0, 0, 0, 0.18);
     z-index: 2;
-}
-
-.cartridge-label-band span:last-child {
-    flex: 0 0 auto;
-    padding: 0.12rem 0.32rem;
-    color: var(--cart-ink);
-    background: rgba(248, 233, 210, 0.88);
-    border: 1px solid rgba(18, 16, 24, 0.72);
 }
 
 .cartridge-label-art {
@@ -9982,7 +9969,6 @@ html {
 
     .cartridge-label-band {
         min-height: 40px;
-        padding: 0.48rem 0.72rem;
     }
 
     .cartridge-contacts {

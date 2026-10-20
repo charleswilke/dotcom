@@ -9695,22 +9695,29 @@ html {
         box-shadow 0.45s ease;
 }
 
-/* The molded hinge spine — its own full-height column, solid black so the pale
-   case body never bleeds through. Fine vertical ribs combed along its length. */
+/* Molded black plastic ribs: light catches each crest from the left,
+   falls across its sloped face, then drops into a narrow recessed groove. */
 .jewel-hinge {
     position: relative;
     z-index: 3;
     background:
+        linear-gradient(180deg,
+            #ffffff21 0, transparent 3px,
+            transparent calc(100% - 4px), #0008 100%),
         linear-gradient(90deg,
-            rgba(255, 255, 255, 0.22) 0%,
-            rgba(255, 255, 255, 0.04) 30%,
-            rgba(0, 0, 0, 0.32) 60%,
-            rgba(0, 0, 0, 0.12) 100%),
+            #ffffff12 0%, transparent 28%,
+            #0003 75%, #0005 100%),
         repeating-linear-gradient(90deg,
-            rgba(255, 255, 255, 0.14) 0 0.5px,
-            rgba(0, 0, 0, 0.4) 0.5px 2px),
-        linear-gradient(#0e0e13, #0e0e13);
-    border-right: 1px solid rgba(0, 0, 0, 0.4);
+            #08090c 0,
+            #24272c .375px,
+            #71767d .75px,
+            #3c4148 1.125px,
+            #20242a 1.725px,
+            #0e1116 2.25px,
+            #030407 2.625px,
+            #08090c 3px);
+    border-right: 1px solid #030407;
+    box-shadow: inset 1px 0 0 #ffffff1a, inset -2px 0 2px #0008;
     pointer-events: none;
 }
 

@@ -13885,6 +13885,31 @@ section.production-header.alice p {
     font-size: 1.2rem;
     transform-origin: center;
 }
+/* Each album keeps its scope color and hover glow with its own SVG silhouette. */
+#mixtapePlayPause {
+    --transport-play: url('/images/player-controls/laibor-play.svg?v=2');
+    --transport-pause: url('/images/player-controls/laibor-pause.svg?v=2');
+}
+#jcPlayPause {
+    --transport-play: url('/images/player-controls/junkyard-play.svg?v=3');
+    --transport-pause: url('/images/player-controls/junkyard-pause.svg?v=3');
+}
+#gworPlayPause {
+    --transport-play: url('/images/player-controls/gwor-play.svg');
+    --transport-pause: url('/images/player-controls/gwor-pause.svg');
+}
+.modal-oscilloscope-frame .osc-play-btn .album-transport-icon {
+    width: 23px;
+    height: 23px;
+    background: currentColor;
+    -webkit-mask: var(--transport-play) center / contain no-repeat;
+    mask: var(--transport-play) center / contain no-repeat;
+    filter: drop-shadow(0 0 4px rgba(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194), .6));
+}
+.modal-oscilloscope-frame .osc-play-btn[data-playback="playing"] .album-transport-icon {
+    -webkit-mask-image: var(--transport-pause);
+    mask-image: var(--transport-pause);
+}
 .modal-oscilloscope-frame.awaiting-tap .osc-play-btn,
 .modal-oscilloscope-frame:hover .osc-play-btn,
 .modal-oscilloscope-frame .osc-play-btn:focus-visible {

@@ -5152,13 +5152,18 @@ function createAlbumPlayer(config) {
     const PLAY_ICON = '▶';
     const PAUSE_ICON = '❚❚';
 
-    // Glyph reflects playback state. Playing → pause glyph (hidden at rest,
+    // Icon reflects playback state. Playing → pause icon (hidden at rest,
     // revealed + pulsing on hover, all in CSS). Paused → 'awaiting-tap' shows the
     // centered play glyph + orbiting "tap to play" hint. No hover JS needed.
     function refreshPlayGlyph() {
         const paused = !audio || audio.paused;
-        if (playPauseIcon) playPauseIcon.textContent = paused ? PLAY_ICON : PAUSE_ICON;
-        if (playPauseBtn) playPauseBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+        if (playPauseIcon && !playPauseIcon.classList.contains('album-transport-icon')) {
+            playPauseIcon.textContent = paused ? PLAY_ICON : PAUSE_ICON;
+        }
+        if (playPauseBtn) {
+            playPauseBtn.dataset.playback = paused ? 'paused' : 'playing';
+            playPauseBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+        }
         if (oscFrame) oscFrame.classList.toggle('awaiting-tap', paused);
     }
     function armTapToPlay() {

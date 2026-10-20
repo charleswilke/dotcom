@@ -15342,27 +15342,72 @@ section.production-header.alice p {
     grid-column: 1;
     grid-row: 1;
     justify-self: start;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin: 0;
-    padding: 6px 0;
-    border: 0;
-    background: transparent;
-    color: #f4dfba;
-    font: 11px 'Space Mono', monospace;
-    letter-spacing: .035em;
-    min-height: 28px;
+    padding: 2px 8px 2px 5px;
+    min-height: 24px;
+    border: 1px solid #ac8042;
+    border-radius: 2px 0 2px 1px;
+    background:
+        linear-gradient(100deg, #31161255, #6c2c1d33),
+        url('/images/textures/jc-songbook-bookcloth-v1.webp') center / 180px 180px,
+        #53241b;
+    color: #f1cf85;
+    font: 700 10px/1.2 'Space Mono', monospace;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-shadow: 0 1px 1px #210d08;
+    box-shadow: inset 0 0 0 1px #e9c58c26, 0 2px 0 #28120c, 1px 3px 3px #0005;
+    transform: rotate(-1deg);
     cursor: pointer;
+    transition: transform 180ms, box-shadow 180ms;
 }
-:is(#jcLightbox, #gworLightbox) .jc-book-back:hover { color: #fff4da; }
+:is(#jcLightbox, #gworLightbox) .jc-book-back-arrow {
+    width: 29px;
+    height: 18px;
+    flex: 0 0 auto;
+}
+#jcLightbox .jc-book-back-arrow > path { opacity: .4; }
+#jcLightbox .jc-return-bulb {
+    fill: #ba813f;
+    stroke: #382013;
+    stroke-width: .5;
+}
+#jcLightbox .jc-book-back:is(:hover, :focus-visible) { color: #ffe5a5; transform: rotate(0); }
+#jcLightbox .jc-book-back:is(:hover, :focus-visible) .jc-return-bulb {
+    animation: jc-return-chase 1.15s linear infinite;
+    animation-delay: calc(var(--bulb-step) * 65ms);
+}
+@keyframes jc-return-chase {
+    0%, 52%, 100% { fill: #ba813f; filter: none; }
+    12%, 30% { fill: #fff2b0; filter: drop-shadow(0 0 2px #ffd36d) drop-shadow(0 0 3px #ff9d35); }
+}
+:is(#jcLightbox, #gworLightbox) .jc-book-back:active {
+    transform: translateY(1px) rotate(-1deg);
+    box-shadow: inset 0 1px 2px #0004, 0 1px 0 #28120c;
+}
+@media (prefers-reduced-motion: reduce) {
+    :is(#jcLightbox, #gworLightbox) .jc-book-back { transition: none; }
+    #jcLightbox .jc-book-back:is(:hover, :focus-visible) .jc-return-bulb {
+        animation: none;
+        fill: #fff2b0;
+    }
+}
 
 :is(#jcLightbox, #gworLightbox) .jc-songbook-stage {
     position: relative;
     flex: 1;
     min-height: 0;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 3px;
     background: #1b120c;
     isolation: isolate;
 }
+
+:is(#jcLightbox, #gworLightbox).jc-songbook-open .jc-songbook-stage { border-radius: 0; }
 
 :is(#jcLightbox, #gworLightbox) :is(#jcTracksPanel, #gworTracksPanel) {
     height: 100%;
@@ -15383,9 +15428,9 @@ section.production-header.alice p {
     overscroll-behavior: contain;
     background: #efe5cf;
     color: #30251e;
-    border: 1px solid #ac8a59;
-    border-radius: 7px 3px 5px 4px;
-    box-shadow: -8px 0 18px #0004, inset 0 0 24px #98723821, inset 0 1px 0 #fff8e666;
+    border: 0;
+    border-radius: 0;
+    box-shadow: -3px 0 8px #0003;
     transform: translateX(105%);
     visibility: hidden;
     transition: transform 420ms cubic-bezier(.22,.7,.2,1), visibility 0s 420ms;
@@ -15739,9 +15784,9 @@ section.production-header.alice p {
     --notebook-line: 26px;
     background: #faf9f3;
     color: #283f5d;
-    border: 1px solid #959e9d;
-    border-radius: 3px 6px 4px 2px;
-    box-shadow: -8px 0 18px #0005, inset 2px 0 3px #0002;
+    border: 0;
+    border-radius: 0;
+    box-shadow: -3px 0 8px #0003;
 }
 /* Different edges of one ImageGen paperboard scan frame the ruled sheet. */
 #gworLightbox .jc-book-nav,
@@ -15759,8 +15804,57 @@ section.production-header.alice p {
 }
 #gworLightbox .jc-book-title { color: #f0e6ce; }
 #gworLightbox .jc-book-context { color: #c5c5b9; border-color: #c5c5b94d; }
-#gworLightbox .jc-book-back { color: #ead9b7; }
-#gworLightbox .jc-book-back:hover { color: #fff5dc; }
+/* A hastily inked card swinging from one point near its top center. */
+#gworLightbox .jc-book-back {
+    color: #71323e;
+    border: 1px solid #b8af98;
+    border-radius: 0;
+    padding: 1px 6px 1px 4px;
+    gap: 4px;
+    min-height: 20px;
+    background:
+        linear-gradient(8deg, #c1ad8533, #fffbed44 65%),
+        url('/images/textures/gwor-songbook-paper-v1.webp') center / 256px 256px,
+        #f6f0dd;
+    font: 10px/1.6 'Rock Salt', cursive;
+    letter-spacing: -.04em;
+    text-transform: none;
+    text-shadow: none;
+    transform: rotate(-2deg);
+    transform-origin: 50% 8%;
+    box-shadow: 1px 2px 0 #28232166, 2px 3px 4px #0006;
+}
+#gworLightbox .gwor-back-ink {
+    display: block;
+    width: 35px;
+    height: 18px;
+    object-fit: contain;
+    transform: rotate(-3deg);
+}
+#gworLightbox .jc-book-back-arrow { color: #151515; stroke-width: 2.5; }
+#gworLightbox .jc-book-back-arrow { width: 20px; height: 14px; }
+#gworLightbox .jc-book-back:is(:hover, :focus-visible) {
+    color: #55202d;
+    animation: gwor-index-teeter 400ms ease-out both;
+    box-shadow: 2px 5px 5px #0007;
+}
+@keyframes gwor-index-teeter {
+    0% { transform: rotate(-2deg); }
+    35% { transform: rotate(3deg); }
+    65% { transform: rotate(-2deg); }
+    100% { transform: rotate(1deg); }
+}
+#gworLightbox .jc-book-back:active {
+    animation: none;
+    transform: rotate(1deg);
+    box-shadow: 0 1px 1px #0005;
+}
+@media (prefers-reduced-motion: reduce) {
+    #gworLightbox .jc-book-back:is(:hover, :focus-visible) {
+        animation: none;
+        transform: rotate(-2deg);
+    }
+}
 #gworLightbox .jc-book-toolbar button {
     color: #364f67;
     background: linear-gradient(100deg, #eee9d7, #faf6e8 55%, #eee9d7);

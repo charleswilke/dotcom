@@ -15547,9 +15547,9 @@ section.production-header.alice p {
 :is(#jcLightbox, #gworLightbox) :is(#jcSongbookLyrics, #gworSongbookLyrics)::before {
     content: '';
     float: right;
-    width: 174px;
-    height: 28px;
-    margin-left: 10px;
+    width: 158px;
+    height: 16px;
+    margin-left: 6px;
 }
 :is(#jcLightbox, #gworLightbox) .jc-book-cue-group {
     margin: 0 0 10px;

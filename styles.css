@@ -13886,15 +13886,18 @@ section.production-header.alice p {
     transform-origin: center;
 }
 /* Each album keeps its scope color and hover glow with its own SVG silhouette. */
-#mixtapePlayPause {
+#mixtapePlayPause,
+.mini-player:is([data-theme="mixtape-a"], [data-theme="mixtape-b"]) {
     --transport-play: url('/images/player-controls/laibor-play.svg?v=2');
     --transport-pause: url('/images/player-controls/laibor-pause.svg?v=2');
 }
-#jcPlayPause {
+#jcPlayPause,
+.mini-player[data-theme="jc"] {
     --transport-play: url('/images/player-controls/junkyard-play.svg?v=3');
     --transport-pause: url('/images/player-controls/junkyard-pause.svg?v=3');
 }
-#gworPlayPause {
+#gworPlayPause,
+.mini-player[data-theme="gwor"] {
     --transport-play: url('/images/player-controls/gwor-play.svg');
     --transport-pause: url('/images/player-controls/gwor-pause.svg');
 }
@@ -14742,8 +14745,17 @@ section.production-header.alice p {
 }
 
 .mini-player-cover-icon {
-    font-size: 0.95rem;
-    line-height: 1;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: currentColor;
+    -webkit-mask: var(--transport-pause) center / contain no-repeat;
+    mask: var(--transport-pause) center / contain no-repeat;
+    filter: drop-shadow(0 0 4px rgba(var(--mini-osc-r, 0), var(--mini-osc-g, 247), var(--mini-osc-b, 194), .6));
+}
+.mini-player.is-paused .mini-player-cover-icon {
+    -webkit-mask-image: var(--transport-play);
+    mask-image: var(--transport-play);
 }
 
 .mini-player-cover:hover .mini-player-cover-overlay,

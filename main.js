@@ -4387,15 +4387,11 @@ function createMiniPlayer() {
 
     const coverBtn = document.getElementById('miniPlayerCover');
     const coverImg = document.getElementById('miniPlayerCoverImg');
-    const coverIcon = document.getElementById('miniPlayerCoverIcon');
     const albumEl = document.getElementById('miniPlayerAlbum');
     const titleEl = document.getElementById('miniPlayerTitle');
     const oscFrame = document.getElementById('miniPlayerOscFrame');
     const closeBtn = document.getElementById('miniPlayerClose');
     const oscCanvas = document.getElementById('miniPlayerOscilloscope');
-
-    const PLAY_ICON = '\u25B6';
-    const PAUSE_ICON = '\u275A\u275A';
 
     let current = null; // { audio, onExpand, onClose, refreshTitle, listeners, oscilloscope }
 
@@ -4423,7 +4419,7 @@ function createMiniPlayer() {
     function syncPlayIcon() {
         if (!current) return;
         const paused = current.audio.paused;
-        if (coverIcon) coverIcon.textContent = paused ? PLAY_ICON : PAUSE_ICON;
+        if (coverBtn) coverBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
         root.classList.toggle('is-paused', paused);
     }
 

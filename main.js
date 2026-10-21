@@ -5771,6 +5771,21 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
         };
     }
 
+    function renderFooter(song, index) {
+        footer.replaceChildren();
+        if (tracks[index].article) {
+            const inspiration = element('a', 'jc-book-inspiration', `Read the ${tracks[index].articleType || 'essay'} that inspired this song ↗`);
+            inspiration.href = tracks[index].article;
+            inspiration.target = '_blank';
+            inspiration.rel = 'noopener noreferrer';
+            footer.append(inspiration);
+        }
+        footer.append(
+            element('p', 'jc-book-credit', song.credit),
+            element('span', '', `${collectionTitle} / Songbook`)
+        );
+    }
+
     function renderBook(song, index) {
         bookPanel.setAttribute('aria-label', `${song.title} songbook`);
         context.textContent = `${song.act} · ${String(song.number).padStart(2, '0')}`;
@@ -5846,18 +5861,7 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
             notebook.append(notes);
             book.append(notebook);
         }
-        footer.replaceChildren();
-        if (tracks[index].article) {
-            const inspiration = element('a', 'jc-book-inspiration', `Read the ${tracks[index].articleType || 'essay'} that inspired this song ↗`);
-            inspiration.href = tracks[index].article;
-            inspiration.target = '_blank';
-            inspiration.rel = 'noopener noreferrer';
-            footer.append(inspiration);
-        }
-        footer.append(
-            element('p', 'jc-book-credit', song.credit),
-            element('span', '', `${collectionTitle} / Songbook`)
-        );
+        renderFooter(song, index);
         content.replaceChildren(book);
     }
 
@@ -5866,7 +5870,8 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
         const track = tracks[index];
         const metadata = entryMetadata(index);
         title.textContent = track.title;
-        footer.replaceChildren();
+        // The fixed footer must have its full height before the panel slides in.
+        renderFooter(metadata, index);
         toolbar.replaceChildren();
         context.textContent = `${metadata.act} · ${String(metadata.number).padStart(2, '0')}`;
         bookPanel.setAttribute('aria-label', `${track.title} songbook`);

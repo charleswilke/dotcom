@@ -8228,6 +8228,41 @@ html {
     }
 }
 
+/* Small tablets need more room for the headline than the one-third panel.
+   Keep the stamp inside the text area as the artwork fades behind it. */
+@media (min-width: 768px) and (max-width: 991px) {
+    section.production-header.spotlight-production {
+        min-height: 320px;
+        max-height: 320px;
+    }
+
+    section.production-header.spotlight-production .content {
+        width: 48%;
+        padding: 1.5rem;
+    }
+
+    section.production-header.spotlight-production .featured-image {
+        width: 64%;
+        mask-image: linear-gradient(to right, black 56%, transparent 90%);
+        -webkit-mask-image: linear-gradient(to right, black 56%, transparent 90%);
+    }
+
+    section.production-header.spotlight-production .spotlight-title {
+        font-size: clamp(1.75rem, 3.3vw, 2.05rem);
+        text-wrap: balance;
+    }
+
+    .spotlight-production .production-details {
+        margin-top: .5rem;
+        text-align: right;
+    }
+
+    .spotlight-metadata:not(.spotlight-tags-container) {
+        margin: .75rem 0 0;
+        transform-origin: right center;
+    }
+}
+
 @keyframes stamp-pulse {
     0%, 100% {
         box-shadow: 0 0 0 rgba(255, 179, 71, 0);

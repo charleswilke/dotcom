@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <defs>
+    <pattern id="herringbone" width="24" height="12" patternUnits="userSpaceOnUse">
+      <path fill="#262c31" d="M0 0h24v12H0z"/>
+      <path d="M0-10 12 2 24-10M0-6 12 6 24-6M0-2 12 10 24-2M0 2l12 12L24 2M0 6l12 12L24 6M0 10l12 12 12-12" fill="none" stroke="#687985" stroke-opacity=".44" stroke-width="1.3"/>
+      <path d="M0-8 12 4 24-8M0-4 12 8 24-4M0 0l12 12L24 0M0 4l12 12L24 4M0 8l12 12L24 8" fill="none" stroke="#10181e" stroke-opacity=".6" stroke-width="1.1"/>
+      <path d="M.5 0v12M12.5 0v12" stroke="#131b20" stroke-opacity=".35"/>
+    </pattern>
+    <pattern id="fibers" width="96" height="96" patternUnits="userSpaceOnUse">
+      <path d="m7 9 5 5m40 8 5-5m21 34 5-5M27 70l5 5m23 10 4-4" stroke="#895d64" stroke-opacity=".44" stroke-width=".8"/>
+      <path d="m18 40 4-4m16-28 4 4m22 47 5 5M8 89l4-4m77-58 4 4" stroke="#a0a7aa" stroke-opacity=".21" stroke-width=".6"/>
+    </pattern>
+    <filter id="wool" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" seed="31" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope=".23"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" mode="soft-light"/>
+    </filter>
+  </defs>
+  <g filter="url(#wool)">
+    <path fill="url(#herringbone)" d="M0 0h96v96H0z"/>
+    <path fill="url(#fibers)" d="M0 0h96v96H0z"/>
+  </g>
+</svg>

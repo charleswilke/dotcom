@@ -15482,6 +15482,25 @@ section.production-header.alice p {
     -webkit-overflow-scrolling: touch;
 }
 
+/* JC's paper moves with native elastic scrolling, revealing the case lining.
+   Keep the lining on the scrollport and the opaque paper on its moving child. */
+#jcLightbox .jc-songbook-content {
+    background:
+        radial-gradient(ellipse at center, transparent 35%, #180d0933 74%, #180d098c 100%),
+        url('/images/textures/jc-songbook-plaid-v1.svg') left -48px / 144px 144px repeat,
+        #58302f;
+}
+#jcLightbox .jc-book {
+    min-height: 100%;
+}
+#jcLightbox .jc-book,
+#jcLightbox .jc-songbook-content:has(> .jc-book-status) {
+    background:
+        radial-gradient(ellipse at 50% 45%, transparent 38%, #8c603b14 70%, #60391740 100%),
+        url('/images/textures/jc-songbook-paper-v2.webp') left top / 640px 640px repeat,
+        #efe5cf;
+}
+
 /* A brass bookmark rides in a bookcloth gutter. Keep native scrolling and dragging. */
 @supports selector(::-webkit-scrollbar) {
     :is(#jcLightbox, #gworLightbox) .jc-songbook-content {
@@ -15895,14 +15914,21 @@ section.production-header.alice p {
 #gworLightbox .jc-book-cues[aria-pressed="false"] { color: #69747c; }
 #gworLightbox .jc-songbook-content {
     background:
+        radial-gradient(ellipse at center, transparent 24%, #080d144d 70%, #080d14b3 100%),
+        url('/images/textures/gwor-songbook-herringbone-v1.svg') left top / 160px 160px repeat,
+        #262c31;
+    scrollbar-color: #171717 transparent;
+    scrollbar-width: thin;
+}
+/* The ruled sheet moves over a worn wool lining during native overscroll. */
+#gworLightbox .jc-book,
+#gworLightbox .jc-songbook-content:has(> .jc-book-status) {
+    background:
         linear-gradient(90deg, transparent calc(var(--notebook-margin) - 1px), #c86b737d calc(var(--notebook-margin) - 1px), #c86b737d var(--notebook-margin), transparent var(--notebook-margin)),
         repeating-linear-gradient(180deg, transparent 0 21px, #9dbbd052 21px 22px, transparent 22px 26px),
         linear-gradient(90deg, #6e76641c, transparent 36px, transparent 75%, #8f8c7510),
         url('/images/textures/gwor-songbook-paper-v1.webp') left top / 512px 512px repeat,
         #f6f4e9;
-    background-attachment: local;
-    scrollbar-color: #171717 transparent;
-    scrollbar-width: thin;
 }
 #gworLightbox .jc-songbook-content:focus-visible {
     outline: 2px solid #283f5d;
@@ -15944,7 +15970,6 @@ section.production-header.alice p {
     min-height: 100%;
     padding: 26px var(--jc-book-gutter) 78px calc(var(--notebook-margin) + var(--notebook-text-inset));
     font: 17px/var(--notebook-line) Georgia, 'Times New Roman', serif;
-    background: none;
 }
 #gworLightbox .jc-book-heading {
     color: #984954;

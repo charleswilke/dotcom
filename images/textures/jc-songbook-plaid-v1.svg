@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 144 144">
+  <defs>
+    <pattern id="weave" width="4" height="4" patternUnits="userSpaceOnUse">
+      <path d="M0 0h2v2H0zM2 2h2v2H2z" fill="#f1d5a4" opacity=".1"/>
+      <path d="M2 0h2v2H2zM0 2h2v2H0z" fill="#190e0b" opacity=".18"/>
+      <path d="M0 .5h4M.5 0v4" stroke="#f1d5a4" stroke-opacity=".07" stroke-width=".5"/>
+    </pattern>
+    <filter id="grain" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="3" seed="23" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope=".16"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" mode="soft-light"/>
+    </filter>
+  </defs>
+  <g filter="url(#grain)">
+    <path fill="#58302f" d="M0 0h144v144H0z"/>
+    <path d="M0 0h40v144H0zM0 0h144v40H0z" fill="#a07849" opacity=".34"/>
+    <path d="M52 0h28v144H52zM0 52h144v28H0z" fill="#241915" opacity=".65"/>
+    <path d="M91 0h6v144h-6zM0 91h144v6H0z" fill="#a07849" opacity=".46"/>
+    <path d="M116 0h16v144h-16zM0 116h144v16H0z" fill="#321b18" opacity=".52"/>
+    <path d="M15 0v144M23 0v144M0 15h144M0 23h144" stroke="#c19a5c" stroke-opacity=".67" stroke-width="2"/>
+    <path d="M65 0v144M0 65h144" stroke="#dfc9a8" stroke-opacity=".62"/>
+    <path d="M61 0v144M69 0v144M0 61h144M0 69h144" stroke="#b98b51" stroke-opacity=".5"/>
+    <path fill="url(#weave)" d="M0 0h144v144H0z"/>
+  </g>
+</svg>

@@ -8051,7 +8051,8 @@ html {
 /* Latest Article Spotlight */
 .latest-article-spotlight {
     margin-top: 2rem;
-    margin-bottom: 1.5rem;
+    /* The following feed grid supplies the matching 2rem gap below. */
+    margin-bottom: 0;
     position: relative;
     z-index: 2;
     /* Cream paper frame — same printed-clipping border + gutter as the grid

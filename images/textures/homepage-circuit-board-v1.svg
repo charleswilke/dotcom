@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320" viewBox="0 0 640 320">
+  <defs>
+    <pattern id="substrate" width="8" height="8" patternUnits="userSpaceOnUse">
+      <path d="M0 1h8M1 0v8" stroke="#b2a5c1" stroke-opacity=".035" stroke-width=".5"/>
+      <circle cx="5" cy="5" r=".6" fill="#050710" fill-opacity=".3"/>
+    </pattern>
+    <linearGradient id="brass" x2=".7" y2="1">
+      <stop stop-color="#b18c52"/>
+      <stop offset=".45" stop-color="#d1ac70"/>
+      <stop offset="1" stop-color="#967043"/>
+    </linearGradient>
+    <g id="via">
+      <circle r="4.2" fill="#17172f" stroke="#c29c62" stroke-width="1.8"/>
+      <circle r="1.25" fill="#070c1b"/>
+    </g>
+    <g id="solder">
+      <ellipse rx="4" ry="3" fill="#ac936c"/>
+      <path d="M-2-1h3" stroke="#e5cba0" stroke-opacity=".65" stroke-width=".8"/>
+    </g>
+    <g id="resistor">
+      <path d="M-23 0h46" stroke="#b08a56" stroke-width="1.7"/>
+      <rect x="-12" y="-4" width="24" height="8" rx="3" fill="#b69b74"/>
+      <path d="M-6-4v8M0-4v8M7-4v8" stroke="#493c34" stroke-width="2"/>
+      <path d="M-8-2h16" stroke="#ead4ad" stroke-opacity=".35"/>
+    </g>
+  </defs>
+
+  <!-- A matte phenolic board beneath the homepage's illuminated faceplate. -->
+  <path fill="#15162e" d="M0 0h640v320H0z"/>
+  <path fill="url(#substrate)" d="M0 0h640v320H0z"/>
+
+  <!-- Edge crossings match so the board tiles in both directions. -->
+  <g fill="none" stroke="url(#brass)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M0 32h40l24 24h80l24-24h72M640 32h-36l-28 28h-48l-28-28h-36"/>
+    <path d="M0 96h24l24 24h64l24-24h56M640 96h-24l-24 24h-88l-24-24h-48"/>
+    <path d="M0 208h32l32-32h72l32 32h48M640 208h-48l-24-24h-48l-24 24h-64"/>
+    <path d="M0 288h112l32-32h72M640 288h-72l-32-32h-80"/>
+    <path d="M72 0v16l24 24h48M72 320v-16l24-24h24"/>
+    <path d="M560 0v16l-24 24h-16M560 320v-16l-24-24h-40"/>
+    <path d="M192 96h32l24-24h48v32M216 208h32l32-32h16v-24"/>
+    <path d="M240 32h40l32 32h64l24-24h40v40"/>
+    <path d="M432 96h-32l-24 24h-32M432 208h-48l-32-32h-8v-24"/>
+    <path d="M216 256h32l24-24h88l24 24h72"/>
+    <path d="M144 144h48l16 16v16M464 144h-48l-16 16v16"/>
+    <path d="M176 288h64l16-16h112l16 16h64"/>
+  </g>
+
+  <!-- Fainter parallel runs and the silkscreen keep the board from glowing. -->
+  <g fill="none" stroke="#886b49" stroke-width="1" opacity=".55">
+    <path d="M0 42h36l24 24h88l24-24h56M640 42h-32l-28 28h-56l-28-28h-32"/>
+    <path d="M0 218h36l32-32h64l32 32h64M640 218h-52l-24-24h-40l-24 24h-68"/>
+    <path d="M184 0v16l24 24v32M184 320v-16l-24-24v-40"/>
+    <path d="M608 0v16l-16 16M608 320v-48l-24-24v-88"/>
+    <path d="M256 112h-16l-16 16v48M384 112h16l16 16v48"/>
+  </g>
+  <g stroke="#b3a38c" stroke-opacity=".3" fill="none" stroke-width=".8">
+    <rect x="278" y="80" width="84" height="96" rx="4"/>
+    <path d="M282 84h10M282 84v10M358 172h-10M358 172v-10"/>
+    <circle cx="88" cy="248" r="13"/>
+    <path d="M69 248h8M99 248h8M88 229v8M88 259v8"/>
+    <path d="M470 72h28v16h-28zM468 230h28v12h-28"/>
+  </g>
+
+  <!-- Through-hole package, aged solder, and a handful of discrete parts. -->
+  <g stroke="#a89371" stroke-width="3">
+    <path d="M288 104h12M288 116h12M288 128h12M288 140h12M288 152h12
+             M340 104h12M340 116h12M340 128h12M340 140h12M340 152h12"/>
+  </g>
+  <rect x="300" y="90" width="40" height="76" rx="3" fill="#0b1020" stroke="#424049" stroke-width="1"/>
+  <path d="M314 90a6 6 0 0 0 12 0" fill="#15162e" stroke="#424049"/>
+  <circle cx="307" cy="101" r="1.5" fill="#b3a38c" fill-opacity=".5"/>
+  <g font-family="monospace" font-size="6" fill="#c3b196" fill-opacity=".5" letter-spacing="1">
+    <text x="307" y="124">CW-01</text>
+    <text x="307" y="136">741</text>
+    <text x="184" y="88">R12</text>
+    <text x="464" y="93">C04</text>
+    <text x="388" y="272">SIGNAL</text>
+    <text x="24" y="156">HUMAN INPUT</text>
+    <text x="468" y="162">ANALOG / DIGITAL</text>
+  </g>
+  <use href="#resistor" x="192" y="96"/>
+  <use href="#resistor" x="432" y="208"/>
+  <use href="#resistor" x="464" y="32"/>
+  <g fill="#776345" stroke="#c0a16b" stroke-width="1">
+    <rect x="476" y="75" width="16" height="10" rx="2"/>
+    <rect x="474" y="232" width="16" height="8" rx="2"/>
+  </g>
+  <g>
+    <use href="#via" x="144" y="40"/><use href="#via" x="144" y="144"/>
+    <use href="#via" x="208" y="176"/><use href="#via" x="240" y="32"/>
+    <use href="#via" x="120" y="280"/><use href="#via" x="176" y="288"/>
+    <use href="#via" x="448" y="288"/><use href="#via" x="496" y="280"/>
+    <use href="#via" x="520" y="40"/><use href="#via" x="464" y="144"/>
+    <use href="#via" x="400" y="176"/><use href="#via" x="440" y="80"/>
+    <use href="#solder" x="216" y="256"/><use href="#solder" x="456" y="256"/>
+    <use href="#solder" x="88" y="248"/><use href="#solder" x="432" y="96"/>
+  </g>
+</svg>

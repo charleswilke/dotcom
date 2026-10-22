@@ -199,6 +199,25 @@ html {
     background-size: 40px 40px;
 }
 
+/* The homepage's scrolling surface sits above a stationary circuit lining. */
+html.homepage {
+    background-color: #15162e;
+    background-image: url('/images/textures/homepage-circuit-board-v1.svg');
+    background-size: 640px 320px;
+    background-repeat: repeat;
+}
+
+/* Use an actual painted layer behind the scrolling surface, rather than
+   relying on the browser's solid-color viewport overscroll fallback. */
+html.homepage::after {
+    content: '';
+    position: fixed;
+    inset: -100vh 0;
+    z-index: -1;
+    pointer-events: none;
+    background: #15162e url('/images/textures/homepage-circuit-board-v1.svg') 0 0 / 640px 320px repeat;
+}
+
 /* Door 05 in Before Times ends on this same dark portal wash. The wash then
    fades away over the present-day page, turning navigation into one continuous
    handoff instead of briefly exposing the archive lobby again. */
@@ -470,6 +489,12 @@ body {
     font-family: 'Space Mono', monospace;
     line-height: 1.6;
     color: var(--text);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body,
+html.homepage body::before {
     background-color: var(--light);
     background-image: 
         radial-gradient(circle at 25% 25%, var(--groovy-gradient1) 0%, transparent 50%),
@@ -478,8 +503,24 @@ body {
         linear-gradient(90deg, var(--grid) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
     background-blend-mode: soft-light;
-    overflow-x: hidden;
-    position: relative;
+}
+
+/* The body fill otherwise covers the backing during Chrome's viewport bounce.
+   This opaque pseudo-element travels with the page like the songbook's paper.
+   Isolation keeps it behind content without changing fixed-position controls. */
+html.homepage body {
+    background: transparent;
+    isolation: isolate;
+}
+
+html.homepage body::before {
+    content: '';
+    position: absolute;
+    /* Leave the fixed nav's 52px spacer clear: the header and this surface
+       must lift from the same edge, revealing circuitry on the first pull. */
+    inset: 52px 0 0;
+    z-index: -1;
+    pointer-events: none;
 }
 
 body::after {

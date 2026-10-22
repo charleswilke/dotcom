@@ -248,6 +248,64 @@ explain property versus page aggregation. Google's [crawling troubleshooting gui
 recommends retaining 404/410 for removed content without a similar replacement,
 and redirecting when a clear replacement exists.
 
+### October 21, 2026 Check
+
+Live browser review of all three properties. Performance reports were last
+updated 6 hours before the check and cover October 11–19. The October 16 check
+covered October 11–14; these are expanding cumulative windows, not equal-length
+period comparisons. Fellow Vector was explicitly filtered to October 11–19.
+
+| Site | Clicks (prior → current) | Impressions (prior → current) | Average position (prior → current) |
+|---|---:|---:|---:|
+| Charles Wilke | 0 → 0 | 12 → 29 | 17.8 → 23.9 |
+| Haus of Toots | 36 → 79 | 126 → 301 | 6.5 → 6.9 |
+| Fellow Vector | 0 → 0 | 1 → 3 | 1.0 → 3.7 |
+
+- Charles Wilke: `charles wilke` has 3 impressions, 0 clicks, position 13.7.
+  Daily impressions occurred October 11 (position 21), October 14 (10), and
+  October 18 (10). This remains too small a sample to establish a stable rank.
+  Landing pages include `/faq.html` (8 impressions, position 24.6), homepage
+  (7, 12.3), `/read/the-social-siege-of-atomization` (5, 35.6), and
+  `/before-times.html` (4, 6.5). Several more essays now have impressions.
+  The overall position change does not establish a decline for the name query.
+- Charles Wilke coverage remains dated October 11: 10 indexed, 95 excluded,
+  with the same six reasons and counts. URL Inspection of
+  `/read/the-social-siege-of-atomization` confirms "URL is on Google" and
+  "Page is indexed", successful fetch, indexing allowed, and the inspected
+  dotcom URL as Google's selected canonical; last crawl October 13.
+  Redirect validation remains started October 15, 2 pending/0 failed;
+  canonical validation remains started October 15, 1 pending/0 failed.
+- Charles Wilke sitemap: success, 113 discovered (previously 112), last read
+  October 20. HTTPS: 9 URLs (previously 8), 0 non-HTTPS, no critical issues,
+  report dated October 20.
+- Haus: 43 additional clicks and 175 additional impressions in October 15–19.
+  `haus of toots` has 23 clicks/27 impressions, `house of toots` 7/9, and
+  `hausoftoots` 4/4, all at position 1. `joann needlepoint canvas` has 4/4
+  (position 1.8), `sephora needlepoint canvas` 2/7 (1.3), and `ndlpt` 0/47
+  (9.3). Homepage has 55 clicks/201 impressions, `/village` 14/131,
+  `/just-landed` 10/92, and its www variant 1/12. Page-level totals use
+  different aggregation and should not be summed to reproduce property totals.
+  Cumulative `/just-landed` results do not establish its current indexing state.
+- Haus coverage remains dated October 11: 6 indexed, 19 excluded (12 redirects,
+  5 proper canonical alternates, 2 discovered/currently not indexed). Sitemap:
+  success, 7 discovered (previously 8), last read October 19; the discovery
+  decrease alone does not establish an indexing loss. HTTPS: 6 URLs,
+  0 non-HTTPS, no critical issues, dated October 20.
+- Fellow Vector: all 3 recent impressions belong to the homepage; query table
+  shows no data. Its default July 20–October 19 report has 1 click,
+  73 impressions, CTR 1.4%, position 9.2; this includes historical traffic and
+  is a different window from the previous July 15–October 14 report.
+  Coverage remains dated October 11: 3 indexed, 3 excluded (2 404s and 1
+  proper canonical alternate); crawled/currently not indexed shows 0.
+  Sitemap index: success, 5 discovered, last read October 20. The older
+  `/sitemap.website.xml` remains listed with 11 discovered and April 26, 2025
+  last read. HTTPS: 3 URLs, 0 non-HTTPS, no critical issues, dated October 20.
+
+Continue watching fresh coverage dates, the pending validations, name-query
+impressions, and Fellow Vector visibility. The stale coverage counts alone do
+not justify a new code fix. No indexing requests, sitemap resubmissions,
+validation restarts, deployments, or schedule changes were made.
+
 ## Pre-existing Optimizations Worth Maintaining
 
 These were already in place on charleswilke.com and should be standard practice:

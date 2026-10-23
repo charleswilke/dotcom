@@ -306,6 +306,70 @@ impressions, and Fellow Vector visibility. The stale coverage counts alone do
 not justify a new code fix. No indexing requests, sitemap resubmissions,
 validation restarts, deployments, or schedule changes were made.
 
+### October 22, 2026 Check
+
+Live browser review of all three verified properties. Performance reports were
+last updated 4 hours before the check and cover October 11–20. The October 21
+check covered October 11–19, so the changes below add one day to cumulative
+windows rather than comparing equal-length periods. Fellow Vector was explicitly
+filtered to October 11–20.
+
+| Site | Clicks (prior → current) | Impressions (prior → current) | Average position (prior → current) |
+|---|---:|---:|---:|
+| Charles Wilke | 0 → 0 | 29 → 32 | 23.9 → 22.7 |
+| Haus of Toots | 79 → 89 | 301 → 330 | 6.9 → 6.8 |
+| Fellow Vector | 0 → 0 | 3 → 3 | 3.7 → 3.7 |
+
+- Charles Wilke coverage has advanced to October 15: **72 indexed** (previously
+  10), 55 excluded (previously 95). Crawled/currently not indexed fell from 61
+  to 0; discovered/currently not indexed rose from 15 to 37. Other exclusions:
+  14 redirects (previously 15), 1 intentional 404, 2 redirect errors, and 1
+  duplicate without selected canonical. The report's known-URL population has
+  also grown, so do not treat changes in the reason counts as a one-for-one
+  movement of the same URLs. This is a substantial indexing improvement; it
+  does not yet demonstrate a corresponding traffic increase.
+- Charles Wilke query `charles wilke` remains at 3 impressions, 0 clicks,
+  position 13.7. Landing pages: `/faq.html` 9 impressions (position 23.7),
+  homepage 7 (12.3), `/read/the-social-siege-of-atomization` 6 (31.5), and
+  `/before-times.html` 4 (6.5). The name-query sample is still too small to
+  establish a stable rank.
+- Charles Wilke redirect validation remains started October 15, with 2
+  pending and 0 failed. `/junkyard-cabaret` and `/l.ai.bor` still show October
+  11 last crawls. Canonical validation also remains started October 15, with
+  1 pending and 0 failed; `/spacetoots/` still shows an October 1 last crawl.
+  These validation examples do not represent a fresh post-fix failure.
+  Sitemap: success, 113 discovered, last read October 22 (previously October
+  20). HTTPS: 9 URLs, 0 non-HTTPS, no critical issues, dated October 21.
+- Haus gained 10 clicks and 29 impressions in the newly included October 20
+  data. `haus of toots` has 29 clicks/33 impressions, `house of toots` 8/10,
+  and `hausoftoots` 4/4, all at position 1. `joann needlepoint canvas` remains
+  4/4 (position 1.8), `sephora needlepoint canvas` 2/7 (1.3), and `ndlpt`
+  has 0/49 (9.2). Homepage has 63 clicks/220 impressions, `/village` 15/147,
+  `/just-landed` 11/107, and its www variant 1/12. Page rows use different
+  aggregation from property totals and should not be summed to reproduce them.
+  These cumulative results precede the October 21 redirect change and do not
+  establish the current state of `/just-landed`.
+- Haus coverage is now dated October 15, with counts unchanged: 6 indexed,
+  19 excluded (12 redirects, 5 proper canonical alternates, 2 discovered/
+  currently not indexed). Sitemap: success, 7 discovered, last read October
+  19. HTTPS: 6 URLs, 0 non-HTTPS, no critical issues, dated October 21.
+- Fellow Vector coverage has advanced to October 15: 4 indexed (previously
+  3), 2 excluded (previously 3). Exclusions are 1 404 (previously 2) and 1
+  proper canonical alternate; crawled/currently not indexed remains 0.
+  All 3 recent impressions still belong to the homepage; the query table
+  shows no data. Its default July 21–October 20 report has 1 click, 72
+  impressions, CTR 1.4%, position 9.3; this rolling historical window is
+  separate from the comparable October 11–20 totals above. Sitemap index:
+  success, 5 discovered, last read October 20. The older
+  `/sitemap.website.xml` remains listed with 11 discovered and April 26, 2025
+  last read. HTTPS: 3 URLs, 0 non-HTTPS, no critical issues, dated October 21.
+
+Continue watching the remaining discovered URLs, pending validations, and
+whether the larger indexed essay archive begins to generate more impressions.
+No new site fix is indicated by tonight's reports. No indexing requests,
+sitemap resubmissions, validation restarts, deployments, or schedule changes
+were made.
+
 ## Pre-existing Optimizations Worth Maintaining
 
 These were already in place on charleswilke.com and should be standard practice:

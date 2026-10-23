@@ -15332,7 +15332,7 @@ section.production-header.alice p {
 /* Inline act rows sit outside the act frame; match its inner right inset. */
 :is(#jcLightbox, #gworLightbox) .mixtape-track-item--act-start { padding-right: calc(1.3rem + 1px); }
 /* Recessed brass-edged controls sit beneath the listening surface. */
-:is(#jcLightbox, #gworLightbox) .track-action-group--paired {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired {
     --jc-action-width: 76px;
     --jc-action-height: 30px;
     --jc-action-angle: 15deg;
@@ -15345,7 +15345,7 @@ section.production-header.alice p {
     background: #100b08;
     box-shadow: inset 0 2px 4px #0008, 0 1px 0 #efd1a112;
 }
-:is(#jcLightbox, #gworLightbox) .track-action-group--paired::after {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired::after {
     content: '';
     position: absolute;
     inset: -1px auto -1px 50%;
@@ -15355,7 +15355,7 @@ section.production-header.alice p {
     transform: skewX(var(--jc-action-angle));
     pointer-events: none;
 }
-:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
     flex-direction: row;
     width: var(--jc-action-width);
     min-width: var(--jc-action-width);
@@ -15369,36 +15369,36 @@ section.production-header.alice p {
     box-shadow: inset 0 2px 3px #0006, inset 0 -1px 0 #efd1a10c;
     transition: filter 160ms, box-shadow 160ms;
 }
-:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired .track-article-link {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired .track-article-link {
     padding-right: 12px;
     background: linear-gradient(165deg, #18110c, #100b08 65%, #0c0806);
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
 }
-:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired .track-share-button {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired .track-share-button {
     margin-left: -8px;
     padding-left: 12px;
     background: linear-gradient(165deg, #15100b, #0d0907 75%, #090604);
     clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%);
 }
-:is(#jcLightbox, #gworLightbox) .track-action-group--paired .track-share-button::before { display: none; }
-:is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired .track-share-button::before { display: none; }
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) {
     font-size: 9px;
     font-variant: normal;
     letter-spacing: .05em;
     text-transform: uppercase;
     color: #c5ac88;
 }
-:is(#jcLightbox, #gworLightbox) .track-action-group--paired svg { width: 14px; height: 14px; }
-:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):is(:hover, :focus-visible) {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired svg { width: 14px; height: 14px; }
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):is(:hover, :focus-visible) {
     filter: brightness(1.12);
     transform: none;
     box-shadow: inset 0 1px 3px #0006, inset 0 -1px 0 #ffe6b822;
 }
-:is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-link, .track-share-button):focus-visible {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-link, .track-share-button):focus-visible {
     outline: 2px solid #ffe5b8;
     outline-offset: -3px;
 }
-:is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):active {
+:is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button):active {
     filter: brightness(.9);
     transform: none;
     box-shadow: inset 0 2px 4px #130c0899;
@@ -15858,25 +15858,25 @@ section.production-header.alice p {
 
 /* Desktop utilities stay subordinate to the song title and listening controls. */
 @media (min-width: 769px) {
-    :is(#jcLightbox, #gworLightbox) .track-action-group--paired {
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired {
         --jc-action-width: 66px;
         --jc-action-height: 26px;
         margin-left: .6rem;
     }
-    :is(#jcLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .mixtape-track-item .track-action-group--paired :is(.track-article-link, .track-share-button) {
         gap: 4px;
         padding-top: 3px;
         padding-bottom: 3px;
     }
-    :is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) { font-size: 8px; }
-    :is(#jcLightbox, #gworLightbox) .track-action-group--paired svg { width: 12px; height: 12px; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) { font-size: 8px; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired svg { width: 12px; height: 12px; }
 }
 
 /* Compact two-column layouts keep the same paired control with icons only. */
 @media (min-width: 769px) and (max-width: 1100px) {
-    :is(#jcLightbox, #gworLightbox) .track-action-group--paired { --jc-action-width: 42px; margin-left: .4rem; }
-    :is(#jcLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) { display: none; }
-    :is(#jcLightbox, #gworLightbox) .track-action-group--paired svg { width: 16px; height: 16px; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired { --jc-action-width: 42px; margin-left: .4rem; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired :is(.track-article-label, .track-share-label) { display: none; }
+    :is(#jcLightbox, #mixtapeLightbox, #gworLightbox) .track-action-group--paired svg { width: 16px; height: 16px; }
 }
 
 @media (min-width: 769px) and (max-height: 600px) {

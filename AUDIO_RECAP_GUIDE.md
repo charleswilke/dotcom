@@ -29,10 +29,18 @@ It lives in the **Writing** section of the main site
   older recaps. It opens at the newest station with spacious markers. Browsing
   does not change playback, and vertical gestures still scroll the page. The
   needle travels with the timeline; selecting a station brings it into view.
+- **Seek by keyboard:** focus the progress control and use the arrow keys for
+  5-second steps, Shift + arrow for 30-second steps, and Home/End for the start
+  or end. Seeking preserves whether audio was playing or paused. Album players
+  provide the same controls on their vertical liquid vials.
 - On change, the dates fade-update, the audio source swaps, and playback resumes
   if it was already playing.
 
 ### Visual feedback
+
+- Loading and buffering appear beside the transport. Playback failures include
+  a prompt to press Play to retry; the same control reloads a failed source.
+  These messages are also announced to screen readers.
 - **Active station is spotlighted:** bright near-white amber (`#fff3d4`), scaled
   up ~18%. **Inactive stations are dimmed** (~42% opacity, low glow blur) so they
   recede but stay legible.
@@ -171,4 +179,4 @@ so you don't have to hand-edit the right-side date or the oscilloscope meta date
 
 ---
 
-Last updated: 2026-10-02
+Last updated: 2026-10-23

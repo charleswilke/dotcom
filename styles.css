@@ -18319,3 +18319,103 @@ body.reader-open {
 @media (max-width: 359px) {
     .about-link-directory { grid-template-columns: 1fr; }
 }
+
+/* Comfortable audio hit areas retain the compact transport artwork. */
+.custom-audio-player .audio-btn {
+    position: relative;
+}
+.custom-audio-player .audio-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+}
+.mini-player-close {
+    /* Keep the glyph at its old coordinates; padding adds a 44px target. */
+    top: -12px;
+    right: -10px;
+    width: 44px;
+    height: 44px;
+    padding: 14px;
+    border-radius: 0;
+}
+.time-vial {
+    overflow: visible;
+}
+.time-vial::after {
+    content: '';
+    position: absolute;
+    inset: 0 -14px;
+}
+.audio-progress-container {
+    position: relative;
+}
+.audio-progress-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: max(100%, 44px);
+    transform: translateY(-50%);
+}
+/* The recap's recessed slot clips its contents, so extend its hit area on the
+   slot itself while keeping the glass and liquid at their existing 34px size. */
+.audio-summary-player .audio-progress-container {
+    overflow: visible;
+}
+.audio-summary-player .audio-progress-bar {
+    overflow: hidden;
+}
+:is(.audio-btn, .mini-player-close, .audio-progress-container, .time-vial):focus-visible {
+    outline: 2px solid #fff3d4;
+    outline-offset: 3px;
+}
+.mini-player-close:focus-visible {
+    outline-offset: -8px;
+}
+.time-vial:focus-visible {
+    outline-color: rgb(var(--osc-r, 0), var(--osc-g, 247), var(--osc-b, 194));
+}
+
+/* Passive playback feedback uses the existing instrument colors and never
+   changes the size of a player when a request starts or finishes. */
+.custom-audio-player.audio-feedback-host {
+    position: relative;
+}
+.audio-playback-status {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 8;
+    color: #fff3d4;
+    font: 0.72rem/1.4 'Space Mono', monospace;
+    text-shadow: 0 1px 2px #000;
+    pointer-events: none;
+}
+.audio-playback-status:empty {
+    /* Keep the live region mounted so screen readers announce later changes. */
+    padding: 0;
+}
+.modal-oscilloscope-frame > .audio-playback-status,
+.mini-player > .audio-playback-status {
+    top: auto;
+    bottom: 6px;
+    left: 10px;
+    right: 36px;
+    color: #f8e9d2;
+    background: #08090c;
+}
+.modal-oscilloscope-frame.has-playback-feedback .modal-oscilloscope-meta,
+.mini-player.has-playback-feedback .mini-player-title {
+    visibility: hidden;
+}
+.mini-player > .audio-playback-status {
+    left: 88px;
+    right: 20px;
+    font-size: 0.68rem;
+}

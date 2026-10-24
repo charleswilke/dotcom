@@ -816,67 +816,160 @@ function seekAudioToClientX(audio, rect, clientX) {
     return true;
 }
 
+// A single playback state follows an audio element into the floating player.
+const audioPlaybackFeedback = new WeakMap();
+function getAudioPlaybackFeedback(audio) {
+    if (audioPlaybackFeedback.has(audio)) return audioPlaybackFeedback.get(audio);
+    const views = new Set();
+    let message = '';
+    let state = '';
+    let requestId = 0;
+    function update(nextState, nextMessage = '') {
+        if (state === nextState && message === nextMessage) return;
+        state = nextState;
+        message = nextMessage;
+        views.forEach(render => render(state, message));
+    }
+    const controller = {
+        mount(host) {
+            const status = document.createElement('span');
+            status.className = 'audio-playback-status';
+            status.setAttribute('role', 'status');
+            status.setAttribute('aria-live', 'polite');
+            status.setAttribute('aria-atomic', 'true');
+            host.classList.add('audio-feedback-host');
+            host.append(status);
+            const render = (state, message) => {
+                status.textContent = message;
+                host.dataset.playbackFeedback = state;
+                host.classList.toggle('has-playback-feedback', !!message);
+            };
+            views.add(render);
+            render(state, message);
+            return () => {
+                views.delete(render);
+                status.remove();
+                host.classList.remove('has-playback-feedback');
+                delete host.dataset.playbackFeedback;
+            };
+        },
+        async play() {
+            // Reload a failed source so the same Play control doubles as Retry.
+            if (audio.error) audio.load();
+            const id = ++requestId;
+            const source = audio.src;
+            update('loading', 'Loading audio…');
+            try {
+                await audio.play();
+                if (id === requestId && source === audio.src) update('');
+                return true;
+            } catch (error) {
+                if (id !== requestId || source !== audio.src) return false;
+                // Changing tracks or pausing can deliberately interrupt play().
+                if (error.name === 'AbortError') {
+                    if (state === 'loading') update('');
+                } else {
+                    update('error', error.name === 'NotAllowedError'
+                        ? 'Tap Play to start audio.'
+                        : 'Couldn’t play audio. Press Play to retry.');
+                }
+                return false;
+            }
+        }
+    };
+    audio.addEventListener('playing', () => update(''));
+    audio.addEventListener('waiting', () => {
+        if (!audio.paused) update('loading', 'Buffering audio…');
+    });
+    audio.addEventListener('stalled', () => {
+        if (!audio.paused && audio.readyState < 3) update('loading', 'Buffering audio…');
+    });
+    audio.addEventListener('pause', () => {
+        ++requestId;
+        if (state === 'loading') update('');
+    });
+    audio.addEventListener('ended', () => update(''));
+    audio.addEventListener('emptied', () => { if (state !== 'loading') update(''); });
+    audio.addEventListener('error', () => update('error', 'Couldn’t load audio. Press Play to retry.'));
+    audioPlaybackFeedback.set(audio, controller);
+    return controller;
+}
+
+function requestAudioPlayback(audio) {
+    return getAudioPlaybackFeedback(audio).play();
+}
+
+// Use seconds for both horizontal recap controls and the vertical album vial.
+function setupSeekSlider(control, audio, orientation = 'horizontal') {
+    control.setAttribute('role', 'slider');
+    control.tabIndex = 0;
+    control.setAttribute('aria-label', 'Playback position');
+    control.setAttribute('aria-orientation', orientation);
+    control.setAttribute('aria-keyshortcuts', 'ArrowRight ArrowLeft ArrowUp ArrowDown Home End');
+    const sync = () => {
+        const duration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 0;
+        const position = Math.max(0, Math.min(duration, audio.currentTime || 0));
+        control.setAttribute('aria-valuemin', '0');
+        control.setAttribute('aria-valuemax', String(duration));
+        control.setAttribute('aria-valuenow', String(position));
+        control.setAttribute('aria-valuetext', duration
+            ? `${formatAudioTime(position)} of ${formatAudioTime(duration)}`
+            : 'Duration unavailable');
+        control.setAttribute('aria-disabled', String(!duration));
+    };
+    const onKey = event => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        const step = event.shiftKey ? 30 : 5;
+        let next;
+        if (event.key === 'ArrowRight' || event.key === 'ArrowUp') next = audio.currentTime + step;
+        else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') next = audio.currentTime - step;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = audio.duration;
+        else return;
+        event.preventDefault();
+        event.stopPropagation();
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        audio.currentTime = Math.max(0, Math.min(audio.duration, next));
+        sync();
+    };
+    const events = ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked', 'emptied'];
+    events.forEach(event => audio.addEventListener(event, sync));
+    control.addEventListener('keydown', onKey);
+    sync();
+    return () => {
+        events.forEach(event => audio.removeEventListener(event, sync));
+        control.removeEventListener('keydown', onKey);
+    };
+}
+
 function setupProgressScrubbing(progressContainer, audio) {
     if (!progressContainer || !audio) return;
+    // The episode monitor already supplies its own keyboard/ARIA behavior.
+    if (audio.tagName === 'AUDIO') setupSeekSlider(progressContainer, audio);
 
-    progressContainer.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const rect = progressContainer.getBoundingClientRect();
-        if (!audio.duration) return;
-
-        const wasPlaying = !audio.paused;
-        if (wasPlaying) {
-            audio.pause();
-        }
-
-        if (seekAudioToClientX(audio, rect, e.clientX) && wasPlaying) {
-            setTimeout(() => {
-                audio.play().catch(err => console.error('Failed to resume playback:', err));
-            }, 50);
-        }
-    });
-
-    progressContainer.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-
+    // Pointer capture supports mouse, pen, and touch without a second click seek.
+    progressContainer.style.touchAction = 'pan-y';
+    progressContainer.addEventListener('pointerdown', function(event) {
+        if (!event.isPrimary || event.button !== 0) return;
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        event.preventDefault();
+        progressContainer.focus({ preventScroll: true });
+        progressContainer.setPointerCapture(event.pointerId);
         const rect = progressContainer.getBoundingClientRect();
         const wasPlaying = !audio.paused;
-        let isDragging = true;
-
-        if (wasPlaying) {
-            audio.pause();
-        }
-
-        const scrub = function(event) {
-            if (audio.duration) {
-                seekAudioToClientX(audio, rect, event.clientX);
-            }
-        };
-
-        scrub(e);
-
-        const handleMouseMove = function(event) {
-            if (isDragging) {
-                scrub(event);
-            }
-        };
-
-        const handleMouseUp = function() {
-            isDragging = false;
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-
+        if (wasPlaying) audio.pause();
+        const scrub = event => seekAudioToClientX(audio, rect, event.clientX);
+        scrub(event);
+        const finish = () => {
+            progressContainer.removeEventListener('pointermove', scrub);
+            progressContainer.removeEventListener('lostpointercapture', finish);
             if (wasPlaying) {
-                setTimeout(() => {
-                    audio.play().catch(err => console.error('Failed to resume playback after drag:', err));
-                }, 50);
+                if (audio.tagName === 'AUDIO') requestAudioPlayback(audio);
+                else audio.play().catch(() => {});
             }
         };
-
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
+        progressContainer.addEventListener('pointermove', scrub);
+        progressContainer.addEventListener('lostpointercapture', finish);
     });
 }
 
@@ -2293,7 +2386,7 @@ function initTimeDial() {
             // If it was playing, resume after a brief moment
             if (wasPlaying) {
                 setTimeout(() => {
-                    recapAudio.play().catch(e => console.log('Autoplay prevented'));
+                    requestAudioPlayback(recapAudio);
                 }, 200);
             }
         }
@@ -2632,7 +2725,7 @@ function initTimeDial() {
             } catch (e) { /* mid-seek range error; next event fixes it */ }
         };
         const handlers = {
-            play: () => { recapAudio.play().catch(() => {}); },
+            play: () => { requestAudioPlayback(recapAudio); },
             pause: () => recapAudio.pause(),
             previoustrack: () => { if (currentStation > 0) updateStation(currentStation - 1); },
             nexttrack: () => { if (currentStation < recapStations.length - 1) updateStation(currentStation + 1); },
@@ -3515,20 +3608,22 @@ function initCustomAudioPlayers() {
     const progressContainer = player.querySelector('.audio-progress-container') || player.querySelector('.audio-progress-bar');
     const currentTimeEl = player.querySelector('.audioCurrent') || player.querySelector('#audioCurrent');
 
-    audio.addEventListener('timeupdate', function() {
-      progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    function syncProgress() {
+      const duration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 0;
+      progressBar.style.width = (duration ? audio.currentTime / duration * 100 : 0) + '%';
       currentTimeEl.textContent = formatTime(audio.currentTime);
-    });
+    }
+    ['timeupdate', 'loadedmetadata', 'emptied'].forEach(event => audio.addEventListener(event, syncProgress));
     setupProgressScrubbing(progressContainer, audio);
+    getAudioPlaybackFeedback(audio).mount(player);
+    updateTransportIcon(!audio.paused);
 
     playPauseBtn.addEventListener('click', function() {
       pauseManagedAudioExcept(audio);
       if (audio.paused) {
-        audio.play();
-        updateTransportIcon(true);
+        requestAudioPlayback(audio);
       } else {
         audio.pause();
-        updateTransportIcon(false);
       }
     });
 
@@ -3856,7 +3951,7 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options =
     // an "expand" button, and a toggle here would pause the song mid-expand.
     function onCanvasClick() {
         pauseManagedAudioExcept(audioEl);
-        if (audioEl.paused) audioEl.play().catch(function () {});
+        if (audioEl.paused) requestAudioPlayback(audioEl);
         else audioEl.pause();
     }
     if (options.clickToToggle !== false) {
@@ -3865,6 +3960,7 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options =
 
     // The vial IS the scrubber: drag it vertically (bottom = start, top = end),
     // mirroring the filling metaphor.
+    const disposeSeekSlider = vial ? setupSeekSlider(vial, audioEl, 'vertical') : null;
     if (vial) {
         const seekVial = function (clientY) {
             const rect = vial.getBoundingClientRect();
@@ -3873,7 +3969,9 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options =
             audioEl.currentTime = pct * audioEl.duration;
         };
         vial.addEventListener('pointerdown', function (e) {
+            if (!e.isPrimary || e.button !== 0) return;
             e.preventDefault();
+            vial.focus({ preventScroll: true });
             try { vial.setPointerCapture(e.pointerId); } catch (err) {}
             const wasPlaying = !audioEl.paused;
             if (wasPlaying) {
@@ -3892,7 +3990,7 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options =
                 vial.removeEventListener('pointercancel', up);
                 if (wasPlaying) setTimeout(function () {
                     const clear = function () { audioEl.isScrubbing = false; };
-                    const resumed = audioEl.play();
+                    const resumed = requestAudioPlayback(audioEl);
                     if (resumed && resumed.then) resumed.then(clear, clear);
                     else clear();
                 }, 50);
@@ -4373,6 +4471,7 @@ function createModalOscilloscope(canvas, audioEl, getAnalyser, colors, options =
     function destroy() {
         stop();
         canvas.removeEventListener('click', onCanvasClick);
+        if (disposeSeekSlider) disposeSeekSlider();
         audioEl.removeEventListener('seeked', renderIfIdle);
         audioEl.removeEventListener('timeupdate', renderIfIdle);
         window.removeEventListener('resize', onWindowResize);
@@ -4407,6 +4506,7 @@ function createMiniPlayer() {
         if (current.oscilloscope) current.oscilloscope.destroy();
         if (stopAudio && current.audio) current.audio.pause();
         detachListeners();
+        current.disposeFeedback();
         setTucked(false);
         root.classList.remove('active');
         root.setAttribute('aria-hidden', 'true');
@@ -4470,7 +4570,8 @@ function createMiniPlayer() {
         add('loadedmetadata', updateTitle);
         add('play', updateTitle);
 
-        current = { audio, onExpand, onClose, listeners, oscilloscope, updateTitle };
+        current = { audio, onExpand, onClose, listeners, oscilloscope, updateTitle,
+            disposeFeedback: getAudioPlaybackFeedback(audio).mount(root) };
 
         root.hidden = false;
         setTucked(false);
@@ -4494,7 +4595,7 @@ function createMiniPlayer() {
                 pauseManagedAudioExcept(current.audio);
             }
             if (current.audio.paused) {
-                current.audio.play().catch(() => {});
+                requestAudioPlayback(current.audio);
             } else {
                 current.audio.pause();
             }
@@ -4621,13 +4722,13 @@ function setAudioTimeReadout(el, audio) {
     const dur = audio.duration;
     const pct = (dur && isFinite(dur)) ? Math.max(0, Math.min(1, audio.currentTime / dur)) : 0;
     const vial = el.closest('.time-vial');
-    if (vial) vial.setAttribute('aria-valuenow', Math.round(pct * 100));
+    if (vial && vial.getAttribute('role') !== 'slider') vial.setAttribute('aria-valuenow', Math.round(pct * 100));
 }
 
 function resetAudioTimeReadout(el) {
     if (!el) return;
     const vial = el.closest('.time-vial');
-    if (vial) vial.setAttribute('aria-valuenow', 0);
+    if (vial && vial.getAttribute('role') !== 'slider') vial.setAttribute('aria-valuenow', 0);
 }
 
 function slugifyTrackSegment(value) {
@@ -5166,9 +5267,11 @@ function createAlbumPlayer(config) {
         if (oscFrame) oscFrame.classList.add('awaiting-tap');
     }
     refreshPlayGlyph();
+    if (audio && oscFrame) getAudioPlaybackFeedback(audio).mount(oscFrame);
 
     const audioEl = registerManagedAudio(audio);
     let currentIndex = 0;
+    let advanceOnEnd = false;
     let trackItems = [];
 
     function resolveTrackIndex(trackSlug) {
@@ -5240,7 +5343,7 @@ function createAlbumPlayer(config) {
     function playTrack() {
         pauseManagedAudioExcept(audio);
         if (audio) {
-            audio.play().catch(e => console.error('Play error:', e));
+            requestAudioPlayback(audio);
         }
     }
 
@@ -5409,6 +5512,7 @@ function createAlbumPlayer(config) {
         });
 
         audio.addEventListener('play', () => {
+            advanceOnEnd = true;
             refreshPlayGlyph();
             visualizer.start();
             claimMediaSession();
@@ -5417,6 +5521,7 @@ function createAlbumPlayer(config) {
         });
 
         audio.addEventListener('pause', () => {
+            if (!audio.ended) advanceOnEnd = false;
             refreshPlayGlyph();
             visualizer.stop();
             if (mediaSession) mediaSession.playbackState = 'paused';
@@ -5428,8 +5533,11 @@ function createAlbumPlayer(config) {
         audio.addEventListener('ratechange', updateMediaPosition);
 
         audio.addEventListener('ended', () => {
+            // Seeking a paused track to its end must not start the next song.
+            const shouldAdvance = advanceOnEnd;
+            advanceOnEnd = false;
             // Only advance to the next track if not at the end; never loop back.
-            if (currentIndex < tracks.length - 1) {
+            if (shouldAdvance && currentIndex < tracks.length - 1) {
                 loadTrack(currentIndex + 1, { autoAdvance: true });
                 playTrack();
             } else if (hooks.onEndedAtEnd) {
@@ -5443,7 +5551,7 @@ function createAlbumPlayer(config) {
             pauseManagedAudioExcept(audio);
 
             if (audio.paused) {
-                audio.play().catch(e => console.error('Play error:', e));
+                requestAudioPlayback(audio);
             } else {
                 audio.pause();
             }
@@ -5458,7 +5566,7 @@ function createAlbumPlayer(config) {
             openPlayer(initialRoute.trackSlug, 'replaceState', { openBSide: initialRoute.isBSide });
             if (initialRoute.trackSlug && audio) { // direct song link → play on load
                 pauseManagedAudioExcept(audio);
-                audio.play().catch(armTapToPlay); // autoplay blocked → show tap-to-play affordance
+                requestAudioPlayback(audio).then(playing => { if (!playing) armTapToPlay(); });
             }
         }, 100);
     }

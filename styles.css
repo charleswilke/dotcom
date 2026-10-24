@@ -14863,9 +14863,45 @@ section.production-header.alice p {
 }
 
 .mini-player .modal-oscilloscope {
+    position: relative;
+    z-index: 1;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
+}
+
+/* A reversed, diffuse impression of the current cover lives beneath the trace.
+   The existing glass, labels, controls, and waveform stay on their own layers. */
+.mini-player-artwork-reflection {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+.mini-player-artwork-reflection::before,
+.mini-player-artwork-reflection::after {
+    content: '';
+    position: absolute;
+    inset: -36px -40px;
+    background-image: var(--mini-cover-art, none);
+    background-size: 100% 100%;
+    background-position: center;
+    transform: scaleX(-1) rotate(-7deg) scale(1.05);
+    pointer-events: none;
+}
+.mini-player-artwork-reflection::before {
+    filter: blur(12px) saturate(.85);
+    opacity: .5;
+    mask-image: linear-gradient(125deg, #000, #000a 36%, #0003 72%, transparent);
+}
+.mini-player-artwork-reflection::after {
+    filter: blur(3.5px) saturate(.55);
+    opacity: .3;
+    mask-image: linear-gradient(155deg, #0009, transparent 67%);
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
+    .mini-player-artwork-reflection { display: none; }
 }
 
 .mini-player-album { padding: 0 22px; }

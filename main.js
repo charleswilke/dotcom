@@ -4506,6 +4506,7 @@ function createMiniPlayer() {
         if (current.oscilloscope) current.oscilloscope.destroy();
         if (stopAudio && current.audio) current.audio.pause();
         detachListeners();
+        current.coverObserver?.disconnect();
         current.disposeFeedback();
         setTucked(false);
         root.classList.remove('active');
@@ -4529,6 +4530,7 @@ function createMiniPlayer() {
         const {
             audio,
             coverSrc,
+            coverSource,
             albumTitle,
             theme,
             oscColors,
@@ -4541,10 +4543,20 @@ function createMiniPlayer() {
         if (!audio) return;
 
         root.dataset.theme = theme || 'mixtape-a';
-        if (coverSrc && coverImg) {
-            coverImg.src = coverSrc;
-            coverImg.alt = albumTitle ? `${albumTitle} cover` : '';
-        }
+        const syncCover = () => {
+            const src = coverSource?.src || coverSrc || '';
+            if (coverImg) {
+                if (src && coverImg.src !== src) coverImg.src = src;
+                if (!src) coverImg.removeAttribute('src');
+                coverImg.alt = albumTitle ? albumTitle + ' cover' : '';
+            }
+            root.style.setProperty('--mini-cover-art', src ? 'url(' + JSON.stringify(src) + ')' : 'none');
+        };
+        syncCover();
+        // Title cards can change after a track starts, including auto-advance
+        // while the full player is closed. Reflect the same art as the thumbnail.
+        const coverObserver = coverSource ? new MutationObserver(syncCover) : null;
+        coverObserver?.observe(coverSource, { attributes: true, attributeFilter: ['src'] });
         if (albumEl) albumEl.textContent = albumTitle || '';
         const updateTitle = () => {
             if (!titleEl) return;
@@ -4570,7 +4582,7 @@ function createMiniPlayer() {
         add('loadedmetadata', updateTitle);
         add('play', updateTitle);
 
-        current = { audio, onExpand, onClose, listeners, oscilloscope, updateTitle,
+        current = { audio, onExpand, onClose, listeners, oscilloscope, updateTitle, coverObserver,
             disposeFeedback: getAudioPlaybackFeedback(audio).mount(root) };
 
         root.hidden = false;
@@ -5606,6 +5618,7 @@ function createAlbumPlayer(config) {
                 mini.attach({
                     audio,
                     coverSrc: coverImg ? coverImg.src : '',
+                    coverSource: coverImg,
                     albumTitle,
                     theme: getMiniTheme(currentIndex),
                     oscColors: getOscColors(currentIndex),

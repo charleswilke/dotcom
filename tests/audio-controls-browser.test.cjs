@@ -172,6 +172,63 @@ for (const width of [390, 1440]) {
         } finally { releaseMedia(); await page.close(); }
     });
 
+    test('mini player artwork reflection stays synchronized and behind controls at ' + width + 'px', async () => {
+        const { page, errors } = await localPage(width);
+        try {
+            for (const [prefix, tile] of [['jc', '#jcTile'], ['gwor', '#gworTile'], ['mixtape', '.album-case-mixtape']]) {
+                await page.locator(tile).click();
+                await page.locator('#' + prefix + 'PlayPause').click();
+                await page.waitForFunction(id => !document.getElementById(id).paused, prefix + 'Audio');
+                await page.locator('#' + prefix + 'Close').click();
+                const mini = page.locator('#miniPlayer');
+                await mini.waitFor({ state: 'visible' });
+                await mini.evaluate(el => Promise.all(el.getAnimations().map(animation => animation.finished.catch(() => {}))));
+                await page.locator('#miniPlayerCoverImg').evaluate(img => img.decode());
+                const initial = await mini.evaluate((root, prefix) => {
+                    const reflection = root.querySelector('.mini-player-artwork-reflection');
+                    const canvas = root.querySelector('.modal-oscilloscope');
+                    const box = canvas.getBoundingClientRect();
+                    return {
+                        source: document.getElementById(prefix + 'CoverImg').src,
+                        thumbnail: root.querySelector('#miniPlayerCoverImg').src,
+                        reflection: getComputedStyle(reflection, '::before').backgroundImage,
+                        hidden: reflection.getAttribute('aria-hidden'),
+                        pointerEvents: getComputedStyle(reflection).pointerEvents,
+                        canvasLayer: getComputedStyle(canvas).zIndex,
+                        reflectionLayer: getComputedStyle(reflection).zIndex,
+                        hit: document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest('button')?.id,
+                        height: root.getBoundingClientRect().height
+                    };
+                }, prefix);
+                assert.equal(initial.thumbnail, initial.source);
+                assert.ok(initial.reflection.includes(initial.source));
+                assert.equal(initial.hidden, 'true');
+                assert.equal(initial.pointerEvents, 'none');
+                assert.ok(Number(initial.canvasLayer) > Number(initial.reflectionLayer));
+                assert.equal(initial.hit, 'miniPlayerOscFrame');
+                assert.equal(initial.height, 80, 'The existing player dimensions are preserved');
+                await page.locator('#miniPlayerCover').click();
+                await page.waitForFunction(({ prefix, previous }) => {
+                    const src = document.getElementById(prefix + 'CoverImg').src;
+                    return (prefix === 'mixtape' || src !== previous) &&
+                        document.getElementById('miniPlayerCoverImg').src === src &&
+                        document.getElementById('miniPlayer').style.getPropertyValue('--mini-cover-art').includes(src);
+                }, { prefix, previous: initial.thumbnail });
+                if (prefix !== 'mixtape') {
+                    assert.notEqual(await page.locator('#miniPlayerCoverImg').getAttribute('src'), initial.thumbnail,
+                        'Pausing returns the thumbnail and reflection to album artwork');
+                }
+                await page.emulateMedia({ contrast: 'more' });
+                assert.equal(await mini.locator('.mini-player-artwork-reflection').evaluate(el => getComputedStyle(el).display), 'none');
+                await page.emulateMedia({ contrast: 'no-preference' });
+                await page.locator('#miniPlayerClose').click();
+                await page.waitForFunction(() => document.getElementById('miniPlayer').hidden);
+            }
+            assert.equal(await page.locator('.mini-player-artwork-reflection').count(), 1);
+            assert.deepEqual(errors, []);
+        } finally { await page.close(); }
+    });
+
     test(`mini player retains its fixed layout, feedback, and expanded close target at ${width}px`, async () => {
         const { page, errors } = await localPage(width);
         try {
@@ -211,11 +268,19 @@ test('album advances after playing reaches the end, and seeking keeps playback a
         const first = await page.evaluate(() => document.getElementById('jcAudio').src);
         await page.locator('#jcVial').press('ArrowUp');
         assert.equal(await page.evaluate(() => document.getElementById('jcAudio').paused), false);
+        await page.locator('#jcClose').click();
+        const firstArt = await page.locator('#miniPlayerCoverImg').getAttribute('src');
         await page.evaluate(() => { document.getElementById('jcAudio').currentTime = 119.8; });
         await page.waitForFunction(first => {
             const audio = document.getElementById('jcAudio');
             return audio.src !== first && !audio.paused;
         }, first);
+        await page.waitForFunction(firstArt => {
+            const img = document.getElementById('miniPlayerCoverImg');
+            const src = document.getElementById('jcCoverImg').src;
+            return img.src !== firstArt && img.src === src &&
+                document.getElementById('miniPlayer').style.getPropertyValue('--mini-cover-art').includes(src);
+        }, firstArt);
         assert.deepEqual(errors, []);
     } finally { await page.close(); }
 });

@@ -370,6 +370,67 @@ No new site fix is indicated by tonight's reports. No indexing requests,
 sitemap resubmissions, validation restarts, deployments, or schedule changes
 were made.
 
+### October 23, 2026 Check
+
+Live browser review of all three verified properties. Performance reports were
+last updated 5.5 hours before the check and cover October 11–21. The October 22
+check covered October 11–20, so these are expanding cumulative windows with one
+additional day, not equal-length period comparisons. Fellow Vector was explicitly
+filtered to October 11–21.
+
+| Site | Clicks (prior → current) | Impressions (prior → current) | Average position (prior → current) |
+|---|---:|---:|---:|
+| Charles Wilke | 0 → 0 | 32 → 32 | 22.7 → 22.7 |
+| Haus of Toots | 89 → 97 | 330 → 357 | 6.8 → 6.9 |
+| Fellow Vector | 0 → 0 | 3 → 3 | 3.7 → 3.7 |
+
+- Charles Wilke: no additional impressions or clicks in the newly reported
+  October 21 data. `charles wilke` remains at 3 impressions, 0 clicks,
+  position 13.7. Leading landing pages are unchanged: `/faq.html` 9 impressions
+  (position 23.7), homepage 7 (12.3), `/read/the-social-siege-of-atomization`
+  6 (31.5), and `/before-times.html` 4 (6.5). The query sample remains too
+  small to establish a stable ranking.
+- Charles Wilke coverage remains dated October 15: 72 indexed, 55 excluded
+  (37 discovered/currently not indexed, 14 redirects, 1 intentional 404,
+  2 redirect errors, 1 duplicate without selected canonical). Crawled/currently
+  not indexed remains 0. Redirect validation, started October 15, still shows
+  2 pending and 0 failed; `/junkyard-cabaret` and `/l.ai.bor` retain October 11
+  last crawls. Canonical validation, also started October 15, remains at
+  1 pending and 0 failed, with `/spacetoots/` last crawled October 1. These
+  unchanged examples do not establish a post-fix failure. Sitemap: success,
+  113 discovered, last read October 22. HTTPS: 9 URLs, 0 non-HTTPS, no critical
+  issues, report advanced to October 22.
+- Haus gained 8 clicks and 27 impressions in the newly included October 21
+  data; cumulative CTR is 27.2%. `haus of toots` has 29 clicks/33 impressions,
+  `house of toots` 10/12, and `hausoftoots` 4/4, all at position 1.
+  `joann needlepoint canvas` has 5/5 (position 1.6), `sephora needlepoint
+  canvas` 2/9 (1.4), and `ndlpt` 0/54 (9.1). Homepage has 69 clicks/241
+  impressions, `/village` 15/156, `/just-landed` 13/118, and its www variant
+  1/12. Page rows use different aggregation from property totals and should
+  not be summed to reproduce them. Cumulative `/just-landed` traffic through
+  the redirect-change date does not establish its current indexing state.
+- Haus coverage remains dated October 15: 6 indexed, 19 excluded (12
+  redirects, 5 proper canonical alternates, 2 discovered/currently not
+  indexed). Sitemap: success, 7 discovered, last read advanced from October
+  19 to October 23. HTTPS: 6 URLs, 0 non-HTTPS, no critical issues, dated
+  October 22.
+- Fellow Vector coverage remains dated October 15: 4 indexed, 2 excluded
+  (1 404 and 1 proper canonical alternate), with crawled/currently not indexed
+  at 0. All 3 recent impressions belong to the homepage; the recent query
+  table still shows no data. The default July 22–October
+  21 report has 1 click, 72 impressions, CTR 1.4%, position 9.3; this rolling
+  historical window is separate from the comparable October 11–21 totals.
+  Sitemap index: success, 5 discovered, last read October 20. The older
+  `/sitemap.website.xml` remains successful with 11 discovered and April 26,
+  2025 last read. HTTPS: 3 URLs, 0 non-HTTPS, no critical issues, dated
+  October 22.
+
+Continue watching fresh coverage dates, remaining discovered URLs, the two
+pending validations, and whether the indexed essay archive earns more search
+impressions. No new site fix is indicated tonight. No indexing requests,
+sitemap resubmissions, validation restarts, deployments, or schedule changes
+were made.
+
 ## Pre-existing Optimizations Worth Maintaining
 
 These were already in place on charleswilke.com and should be standard practice:

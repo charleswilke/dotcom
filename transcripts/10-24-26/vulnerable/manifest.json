@@ -2,8 +2,8 @@
   "title": "Vulnerable: The Conversation",
   "date": "2026-10-24",
   "url": "https://charleswilke.com/read/vulnerable-transcript",
-  "conversation_turns": 30,
-  "pasted_drafts": 2,
+  "conversation_turns": 34,
+  "pasted_drafts": 4,
   "generated_artworks": 4,
   "images": [
     {
@@ -34,5 +34,6 @@
       "height": 887,
       "sha256": "082450e129c0425466766f6c4f4ddf8ed2c4b51388bc93f4630a51170993e517"
     }
-  ]
+  ],
+  "includes_preflight_review": true
 }

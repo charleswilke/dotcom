@@ -2,7 +2,7 @@
 
 *Posturing while exposed · October 24, 2026 · Charles Wilke and Codex*
 
-A working session from October 24, 2026 between Charles Wilke and Codex behind “Vulnerable: Posturing while exposed.” This transcript preserves 30 conversation turns, the original draft, two pasted revisions, the author’s note, all four generated artworks, their exact prompts, and two user-supplied reference screenshots. It ends before the request to package and publish the conversation. Internal instructions, private reasoning, routine progress updates, and raw tool output are omitted. Writing-block wrappers are removed, draft paragraph spacing is normalized, and local file links point to hosted copies. External poster images are linked rather than reproduced; the selected reference screenshot is included as supplied. Chapter headings, artwork captions, and reference descriptions are editorial additions. The discussion is preserved as it happened, including claims and suggestions later revised; it is a record of the creative process, not a separately fact-checked article.
+A working session from October 24, 2026 between Charles Wilke and Codex behind “Vulnerable: Posturing while exposed.” Updated to include the Substack preflight revisions and editorial review. This transcript preserves 34 conversation turns, the original draft, four pasted revisions, the author’s note, all four generated artworks, their exact prompts, and two user-supplied reference screenshots. Requests and discussion about packaging and publishing the transcript are omitted, along with internal instructions, private reasoning, routine progress updates, and raw tool output. Writing-block wrappers are removed, draft paragraph spacing is normalized, and local file links point to hosted copies. External poster images are linked rather than reproduced; the selected reference screenshot is included as supplied. Chapter headings, artwork captions, and reference descriptions are editorial additions. The discussion is preserved as it happened, including claims and suggestions later revised; it is a record of the creative process, not a separately fact-checked article.
 
 # A Saturday morning draft
 
@@ -614,3 +614,253 @@ Fantastic! Ok I'll need the author's note at the end that describes our process 
 **Author’s note:** This started as my own draft, followed by some Saturday-morning intellectual patty cake with OpenAI’s Codex. Talking it through brought the *French Kitty* story into the piece and helped me connect that experience to what I’m hoping AI makes possible. Codex drafted an expanded version, checked the source for the Switch 2 example, and offered editorial feedback. I revised the draft through several rounds as we kept talking.
 
 The artwork was generated with ImageGen from ideas we developed together, drawing on French New Wave poster references. We worked from photographic collage toward the rough ink figures you see here. The conversation, writing, and images became a small experiment in the creative process the essay is wondering about.
+
+# Preflight edits in Substack
+
+## Charles
+
+fantastic thank you! ok I did some preflight edits in substack before publishing, I want your eyes on it:
+
+**Attached preflight draft (reproduced in full)**
+
+As a person raised on the boy-to-man pipeline, I can tell you that vulnerability is frequently discussed. Generally in ways we’re taught to protect ourselves. Guard, shield, block.
+
+The state of being vulnerable growing up was synonymous with weakness. “You left yourself vulnerable!”
+
+And, I’ll just give a blanket caveat to all of this: My experience, for all its twists and turns, ups and downs, insides, outsides, and dimensional flips, is a unique experience to me. So when I use the term we, or us, just know that I’m allowing you to include yourself, but I’m not doing it out of expectation or assumption.
+
+Ok, let me be vulnerable here.
+
+I don’t believe our interconnected world will remain as we know it much longer. And I don’t believe it will take an attack to pull it apart. I think we may do some of that ourselves, trying to protect it.
+
+We live in the land of abundance, so caution is something we also demonstrate with abundance. Especially if our monied interests land anywhere near a state of vulnerability.
+
+The past week has been an incredible thing to witness. PHP exposed. The new foldable iPhone jailbroken, not to mention the Switch 2. Small groups with these tools just keep finding ways through these carefully constructed walls.
+
+And I keep thinking about the people responsible for maintaining that wall.
+
+These newfound (AI-found?) vulnerabilities are a moving target, pushed along by the increasing capabilities of these models. That means the race to maintain that wall must continue. There is no finish line. No deliverable. No Q4 push where everyone gets to exhale afterward.
+
+It’s your job now. Get moving. Good luck.
+
+So yes, I can picture us mailing checks to our utility companies because somebody decided keeping the online system open was too much of a liability.
+
+I can imagine our relationship with our doctors becoming more strained as we gain more tools to investigate our own health. More capability on one side, more defensiveness on the other.
+
+And lo, I think that’s the real vulnerability.
+
+Institutions may become less reliable while the individual becomes more capable.
+
+I have a much smaller, much more personal experience of what it feels like to depend on an institution while trying to make something of your own.
+
+Years ago, Chloe Fineman and I wrote a short film called French Kitty. We wrote it about a year before we actually shot it. Part of the delay was because the shrubs we wanted in the background of one scene got trimmed way too far back and looked like ass.
+
+Sometimes your creative vision has to wait for a shrub to grow.
+
+Then, about a year later, I got laid off from my day job. And I remember thinking, fuck it, let’s make French Kitty.
+
+I got the gang back together. We shot it over two days.
+
+I loved making it.
+
+Getting it released was a whole other experience.
+
+It took something like six months to get the paperwork figured out for Troma’s release. By the time the thing came out, it had been nearly a year since we shot it.
+
+And there was a lot to love about Troma. I got to talk to them. They helped develop the poster. I got to visit them in New York. I got to meet Michael Herz! I wanted that association, and getting to participate in that world meant everything to me.
+
+But the contracts dragged. And I can’t just show folks the film now.
+
+Which sucks.
+
+There’s this thing you made with your friends, and you want to say, hey, wanna watch it? And somehow that becomes complicated.
+
+Today it’s on their Troma NOW streaming platform, which very few folks know about, much less use.
+
+I got closer to a world I wanted to be part of, while at the same time, the simple act of sharing the actual thing I’d made became harder.
+
+I still value what I got from that relationship. I also remember the frustration. Both belong to that experience.
+
+So when the conversation about AI turns to compensating artists, I think about French Kitty. I made my compensation and sold my ownership stake. I hear “pay the artist,” and I wonder who would actually get the check.
+
+Ownership, compensation, and the experience of making something can end up a long way from one another.
+
+I have questions about what this new world will take from artists. I also want room to talk about what it might give us.
+
+I want to find out what creativity means when more people have more ways to act on an idea.
+
+So, when you get shoved to the ground, like I did by getting laid off, I hope we can more frequently decide to make the fucking film.
+
+I was exposed. My livelihood fell away. And I got people together and made something I cared about.
+
+Making it also involved its own vulnerability. Our taste, our choices, our effort, all there for somebody else to see, to judge whether it deserves to exist.
+
+And my hope is that AI allows us the courage to use our vulnerability as the texture of what we create. Not a financial gap that needs mending, a new creative substrate.
+
+AI gives us more ways to keep going with the resources we already have. More chances to try an idea while we still have the energy for it. More room to decide which opportunities are worth the terms.
+
+I still want to get the gang together. I still want the relationships, the conversations, the adventures that happen around making something. I’d like more chances to have those experiences, and more freedom to let the work keep meeting people afterward.
+
+Maybe having more capability gives us a little more room to be vulnerable.
+
+To put something out there before we feel entirely ready for the feedback.
+
+To risk caring about it.
+
+To discover what happens when someone else encounters it.
+
+And maybe we can allow ourselves some vulnerability to engage our curiosity. What could I make with it?
+
+Instead of raging at the dying of the light, maybe we can dance in this new moonlight for just a moment.
+
+Artists will keep making art, because that’s how we navigate and make sense of this world. AI will keep knocking on the walls, searching for a gap. And companies will have plenty to keep them occupied with self-preservation.
+
+The least we can do individually is shift to self-expression.
+
+Author’s note:
+
+This started as my own draft, followed by some Saturday-morning intellectual patty cake with OpenAI’s Codex. Talking it through brought the French Kitty story into the piece and helped me connect that experience to what I’m hoping AI makes possible. Codex drafted an expanded version, checked the source for the Switch 2 example, and offered editorial feedback. I revised the draft through several rounds as we kept talking.
+
+The artwork was generated with ImageGen from ideas we developed together, drawing on French New Wave poster references. We worked from photographic collage toward the rough ink figures you see here. The conversation, writing, and images became a small experiment in the creative process the essay is wondering about.
+
+Explore the conversation behind Vulnerable
+
+## Codex
+
+The Troma section feels more candid now. “Meant everything to me,” followed by “Which sucks,” lets the affection and frustration sit together. And breaking up the final passage gives the invitation to be vulnerable some breathing room.
+
+I’d address two things before publishing:
+
+- **“Not a financial gap that needs mending” changes your meaning.** You’ve just said your livelihood fell away, so this can sound like financial insecurity should become artistic material instead of being addressed. I’d drop **“financial”** and separate the last phrases: “Not a gap that needs mending. A new creative substrate.” That keeps the connection to your opening about vulnerability being treated as weakness.
+
+- **Give the expanded tech paragraph its source links.** The PHP addition has support: [Wiz’s researchers describe AI helping them find and exploit the vulnerabilities](https://www.wiz.io/blog/php2shell-php-rce). For the foldable iPhone, I’d use “researchers demonstrated a jailbreak” and link the demonstration. That wording distinguishes the research achievement from a publicly available jailbreak tool.
+
+Three small copy edits:
+
+- **“AI allows us the courage” → “AI gives us more room.”** That connects capability to your own decision to take the creative risk.
+- **“I made my compensation” → “I got paid.”** Plainer and more natural alongside the rest of the story.
+- You now introduce **“walls”** in the tech paragraph; carry that plural through “maintaining those walls” and “the race to maintain those walls.”
+
+I’d keep **“to judge whether it deserves to exist.”** Your conviction about existence is part of what makes the creative risk matter here.
+
+## Charles
+
+ok cool, here's my interpretation of your notes:
+
+**Attached preflight draft (reproduced in full)**
+
+As a person raised on the boy-to-man pipeline, I can tell you that vulnerability is frequently discussed. Generally in ways we’re taught to protect ourselves. Guard, shield, block.
+
+The state of being vulnerable growing up was synonymous with weakness. “You left yourself vulnerable!”
+
+And, I’ll just give a blanket caveat to all of this: My experience, for all its twists and turns, ups and downs, insides, outsides, and dimensional flips, is a unique experience to me. So when I use the term we, or us, just know that I’m allowing you to include yourself, but I’m not doing it out of expectation or assumption.
+
+Ok, let me be vulnerable here.
+
+I don’t believe our interconnected world will remain as we know it much longer. And I don’t believe it will take an attack to pull it apart. I think we may do some of that ourselves, trying to protect it.
+
+We live in the land of abundance, so caution is something we also demonstrate with abundance. Especially if our monied interests land anywhere near a state of vulnerability.
+
+The past week has been an incredible thing to witness. PHP exposed. Researchers presented jailbreaks aplenty, the new foldable iPhone, PS5, not to mention the Switch 2. Small groups with these tools just keep finding ways through these carefully constructed walls.
+
+And I keep thinking about the people responsible for maintaining those walls.
+
+These newfound (AI-found?) vulnerabilities are a moving target, pushed along by the increasing capabilities of these models. That means the race to maintain those walls must continue. There is no finish line. No deliverable. No Q4 push where everyone gets to exhale afterward.
+
+It’s your job now. Get moving. Good luck.
+
+So yes, I can picture us mailing checks to our utility companies because somebody decided keeping the online system open was too much of a liability.
+
+I can imagine our relationship with our doctors becoming more strained as we gain more tools to investigate our own health. More capability on one side, more defensiveness on the other.
+
+And lo, I think that’s the real vulnerability.
+
+Institutions may become less reliable while the individual becomes more capable.
+
+I have a much smaller, much more personal experience of what it feels like to depend on an institution while trying to make something of your own.
+
+Years ago, Chloe Fineman and I wrote a short film called French Kitty. We wrote it about a year before we actually shot it. Part of the delay was because the shrubs we wanted in the background of one scene got trimmed way too far back and looked like ass.
+
+Sometimes your creative vision has to wait for a shrub to grow.
+
+Then, about a year later, I got laid off from my day job. And I remember thinking, fuck it, let’s make French Kitty.
+
+I got the gang back together. We shot it over two days.
+
+I loved making it.
+
+Getting it released was a whole other experience.
+
+It took something like six months to get the paperwork figured out for Troma’s release. By the time the thing came out, it had been nearly a year since we shot it.
+
+And there was a lot to love about Troma. I got to talk to them. They helped develop the poster. I got to visit them in New York. I got to meet Michael Herz! I wanted that association, and getting to participate in that world meant everything to me.
+
+But the contracts dragged. And I can’t just show folks the film now.
+
+Which sucks.
+
+There’s this thing you made with your friends, and you want to say, hey, wanna watch it? And somehow that becomes complicated.
+
+Today it’s on their Troma NOW streaming platform, which very few folks know about, much less use.
+
+I got closer to a world I wanted to be part of, while at the same time, the simple act of sharing the actual thing I’d made became harder.
+
+I still value what I got from that relationship. I also remember the frustration. Both belong to that experience.
+
+So when the conversation about AI turns to compensating artists, I think about French Kitty. I sold my ownership stake for reach. I hear “pay the artist,” and I wonder who would actually get the check.
+
+Ownership, compensation, and the experience of making something can end up a long way from one another.
+
+I have questions about what this new world will take from artists. I also want room to talk about what it might give us.
+
+I want to find out what creativity means when more people have more ways to act on an idea.
+
+So, when you get shoved to the ground, like I did by getting laid off, I hope we can more frequently decide to make the fucking film.
+
+I was exposed. My livelihood fell away. And I got people together and made something I cared about.
+
+Making it also involved its own vulnerability. Our taste, our choices, our effort, all there for somebody else to see, to judge whether it deserves to exist.
+
+And my hope is that AI gives us more room to use our vulnerability as the texture of what we create. Even if it is classified a new creative substrate.
+
+AI gives us more ways to keep going with the resources we already have. More chances to try an idea while we still have the energy for it. More room to decide which opportunities are worth the terms.
+
+I still want to get the gang together. I still want the relationships, the conversations, the adventures that happen around making something. I’d like more chances to have those experiences, and more freedom to let the work keep meeting people afterward.
+
+Maybe having more capability gives us a little more room to be vulnerable.
+
+To put something out there before we feel entirely ready for the feedback.
+
+To risk caring about it.
+
+To discover what happens when someone else encounters it.
+
+And maybe we can allow ourselves some vulnerability to engage our curiosity. What could I make with it?
+
+Instead of raging at the dying of the light, maybe we can dance in this new moonlight for just a moment.
+
+Artists will keep making art, because that’s how we navigate and make sense of this world. AI will keep knocking on the walls, searching for a gap. And companies will have plenty to keep them occupied with self-preservation.
+
+The least we can do individually is shift to self-expression.
+
+Author’s note:
+
+This started as my own draft, followed by some Saturday-morning intellectual patty cake with OpenAI’s Codex. Talking it through brought the French Kitty story into the piece and helped me connect that experience to what I’m hoping AI makes possible. Codex drafted an expanded version, checked the source for the Switch 2 example, and offered editorial feedback. I revised the draft through several rounds as we kept talking.
+
+The artwork was generated with ImageGen from ideas we developed together, drawing on French New Wave poster references. We worked from photographic collage toward the rough ink figures you see here. The conversation, writing, and images became a small experiment in the creative process the essay is wondering about.
+
+Explore the conversation behind Vulnerable
+
+## Codex
+
+“I sold my ownership stake for reach” makes the tradeoff clearer—and gives the later frustration about sharing the film more weight.
+
+Two catches remain:
+
+- **“Even if it is classified a new creative substrate.”** I lose the thread here: does “it” mean AI or vulnerability, and who is classifying it? “Even if” also introduces an objection you haven’t established. I’d cut this sentence. The preceding sentence now expresses your hope clearly on its own.
+
+- **The PS5 example needs care with AI attribution.** “With these tools” and “AI-found?” imply AI involvement across the whole list. The [Relapse developer’s README](https://github.com/ntfargo/Relapse-Exploit) documents the exploit but doesn’t establish that connection. I’d leave PS5 out unless you have a source tying the particular demonstration to AI.
+
+One punctuation fix: use a **colon after “jailbreaks aplenty”** to introduce the examples.
+
+The change to “AI gives us more room” works. It leaves the courage with the person choosing to make something, while giving the tools a concrete role in making that choice possible.

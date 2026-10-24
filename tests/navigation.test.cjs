@@ -52,6 +52,12 @@ async function aligned(page, id) {
     assert.ok(error < 2, `${id} alignment error: ${error}px`);
 }
 
+async function returnedToShelf(page, scroll) {
+    await page.waitForFunction(scroll => Math.abs(scrollY - scroll) < 2, scroll);
+    await page.waitForTimeout(400);
+    assert.ok(Math.abs(await page.evaluate(() => scrollY) - scroll) < 2, 'Closing keeps the clicked object in place');
+}
+
 async function nav(page, id) {
     const hamburger = page.locator('#navHamburger');
     if (await hamburger.isVisible()) await hamburger.click();
@@ -208,12 +214,15 @@ test('Back/Forward toggles player and direct player close stays on the site', as
     await nav(page, 'albums');
     await page.locator('.album-case-jc').click();
     await page.waitForFunction(() => document.getElementById('jcLightbox').classList.contains('active'));
+    const launchScroll = await page.evaluate(() => scrollY);
     await page.goBack();
-    await aligned(page, 'albums');
+    await returnedToShelf(page, launchScroll);
     assert.equal(await page.locator('.lightbox.active').count(), 0);
     await page.goForward();
     await page.waitForFunction(() => document.getElementById('jcLightbox').classList.contains('active'));
     assert.equal(await page.evaluate(() => document.body.style.overflow), 'hidden');
+    // Model arrival through an externally shared URL with a fresh document.
+    await page.goto('about:blank');
     await page.goto(`${origin}/#mixtape/hum-of-humanity`);
     await page.locator('#mixtapeClose').click();
     await page.waitForURL(`${origin}/#albums`);
@@ -255,7 +264,7 @@ for (const width of [390, 1440]) {
         });
         await page.goto(origin);
         await nav(page, 'albums');
-        const startScroll = await page.evaluate(() => scrollY);
+        let launchScroll = await page.evaluate(() => scrollY);
         for (const [card, dialog, close] of [
             ['.album-case-mixtape', '#mixtapeLightbox', '#mixtapeClose'],
             ['.album-case-jc', '#jcLightbox', '#jcClose'],
@@ -264,14 +273,15 @@ for (const width of [390, 1440]) {
             for (let opening = 0; opening < 2; opening++) {
                 await page.locator(card).click();
                 await page.waitForFunction(selector => document.querySelector(selector).classList.contains('active'), dialog);
+                launchScroll = await page.evaluate(() => scrollY);
                 await page.locator(close).click();
                 await page.waitForURL(`${origin}/#albums`);
-                await aligned(page, 'albums');
+                await returnedToShelf(page, launchScroll);
                 assert.equal(await page.locator('.lightbox.active').count(), 0);
             }
         }
         assert.deepEqual(documents, [`${origin}/`], 'Only the initial page load may navigate a document');
-        assert.ok(Math.abs(await page.evaluate(() => scrollY) - startScroll) < 2);
+        assert.ok(Math.abs(await page.evaluate(() => scrollY) - launchScroll) < 2);
     }));
 }
 

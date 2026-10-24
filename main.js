@@ -5208,6 +5208,163 @@ function createCoverChoreographer({ coverImg, tracks, audio, albumAlt, lingerMs 
     };
 }
 
+// Decorative object motion never owns modal, history, focus, or media state.
+// Logical opening/closing stays immediate, including Escape during a flight.
+let cancelPhysicalMediaMotion = null;
+const physicalMediaReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+physicalMediaReducedMotion.addEventListener('change', () => {
+    if (physicalMediaReducedMotion.matches && cancelPhysicalMediaMotion) cancelPhysicalMediaMotion();
+});
+window.addEventListener('resize', () => { if (cancelPhysicalMediaMotion) cancelPhysicalMediaMotion(); });
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && cancelPhysicalMediaMotion) cancelPhysicalMediaMotion();
+});
+
+function createPhysicalMediaTransition(lightbox, kind) {
+    const isAlbum = kind === 'album';
+    const panel = lightbox?.querySelector(isAlbum ? '.mixtape-content' : '.game-lightbox-content');
+    let origin = null;
+    let running = null;
+
+    function cancel() {
+        if (!running) return;
+        const previous = running;
+        running = null;
+        previous.animations.forEach(animation => animation.cancel());
+        previous.nodes.forEach(node => node.remove());
+        if (previous.visual) previous.visual.classList.remove('media-object-in-flight');
+        delete lightbox.dataset.objectMotion;
+        if (cancelPhysicalMediaMotion === cancel) cancelPhysicalMediaMotion = null;
+    }
+
+    function visibleRect(element) {
+        if (!element?.isConnected) return null;
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < innerHeight &&
+            rect.right > 0 && rect.left < innerWidth ? rect : null;
+    }
+
+    function destinationRect(sourceRect) {
+        const rect = visibleRect(isAlbum ? lightbox.querySelector('.mixtape-cover-container') : panel);
+        if (!rect || isAlbum) return rect;
+        // Keep the cartridge's proportions as it seats in the cabinet, instead
+        // of stretching the label into the wide game screen.
+        const width = Math.min(160, rect.width * .28);
+        const height = width * sourceRect.height / sourceRect.width;
+        return { left: rect.left + (rect.width - width) / 2,
+            top: rect.top + (rect.height - height) / 2, width, height };
+    }
+
+    function flight(run, from, to, opening) {
+        const ghost = document.createElement('div');
+        ghost.className = 'media-object-flight';
+        const originStyle = getComputedStyle(origin);
+        for (const property of originStyle) {
+            if (property.startsWith('--')) ghost.style.setProperty(property, originStyle.getPropertyValue(property));
+        }
+        ghost.dataset.objectKind = kind;
+        ghost.setAttribute('aria-hidden', 'true');
+        ghost.inert = true;
+        const copy = run.visual.cloneNode(true);
+        copy.classList.remove('media-object-in-flight');
+        [copy, ...copy.querySelectorAll('[id]')].forEach(node => node.removeAttribute('id'));
+        const images = run.visual.querySelectorAll('img');
+        copy.querySelectorAll('img').forEach((img, index) => {
+            img.loading = 'eager';
+            img.alt = '';
+            img.style.objectPosition = getComputedStyle(images[index]).objectPosition;
+        });
+        // cloneNode doesn't copy canvas pixels (the cartridge's preview signal).
+        const canvases = run.visual.querySelectorAll('canvas');
+        copy.querySelectorAll('canvas').forEach((canvas, index) => {
+            if (canvases[index]?.width && canvases[index]?.height) {
+                canvas.getContext('2d')?.drawImage(canvases[index], 0, 0);
+            }
+        });
+        ghost.append(copy);
+        const base = run.sourceRect;
+        Object.assign(ghost.style, { width: `${base.width}px`, height: `${base.height}px` });
+        document.body.append(ghost);
+        run.nodes.push(ghost);
+        run.ghost = ghost;
+        run.visual.classList.add('media-object-in-flight');
+        const transform = (rect, tilt = '') => `translate3d(${rect.left}px, ${rect.top}px, 0) ` +
+            `scale(${rect.width / base.width}, ${rect.height / base.height}) ${tilt}`;
+        const middle = {
+            left: from.left + (to.left - from.left) * .45,
+            top: from.top + (to.top - from.top) * .45 - (isAlbum ? 22 : 32),
+            width: from.width + (to.width - from.width) * .45,
+            height: from.height + (to.height - from.height) * .45
+        };
+        run.animations.push(ghost.animate([
+            { transform: transform(from), opacity: opening ? 1 : 0 },
+            { transform: transform(middle, isAlbum ? 'perspective(900px) rotateY(-12deg)' : 'perspective(900px) rotateX(12deg)'),
+                opacity: 1, offset: .4 },
+            { transform: transform(to), opacity: opening ? 0 : 1 }
+        ], { duration: opening ? 420 : 320, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'both' }));
+    }
+
+    function start(opening, mutate, opener) {
+        const alreadyOpen = lightbox?.classList.contains('active');
+        if (opening && opener !== undefined) {
+            origin = opener?.matches(isAlbum ? '.album-case' : '.game-cartridge') ? opener : null;
+        }
+        if (opening && alreadyOpen) { mutate(); return; }
+        if (opening && opener !== undefined) {
+            // The hash can still name an earlier section after manual scrolling.
+            // Preserve the launch position, including a later mini-player reopen.
+            history.replaceState({ ...history.state, mediaOriginScroll: { x: scrollX, y: scrollY } }, '');
+        }
+        const interruptedRect = running?.ghost?.getBoundingClientRect();
+        if (cancelPhysicalMediaMotion) cancelPhysicalMediaMotion();
+        if (!panel || physicalMediaReducedMotion.matches || typeof panel.animate !== 'function') {
+            mutate();
+            return;
+        }
+        const visual = origin?.querySelector(isAlbum ? '.jewel-shell' : '.cartridge-shell');
+        const sourceRect = visibleRect(visual);
+        // Direct links and offscreen origins open normally; never invent a
+        // source or move the visitor's scroll position to manufacture a flight.
+        if (!sourceRect) { mutate(); return; }
+        let destination = !opening ? (interruptedRect || destinationRect(sourceRect)) : null;
+        const backdropColor = getComputedStyle(lightbox).backgroundColor;
+        mutate();
+        if (opening) destination = destinationRect(sourceRect);
+        if (!destination) return;
+        const run = { animations: [], nodes: [], visual, sourceRect, ghost: null };
+        running = run;
+        cancelPhysicalMediaMotion = cancel;
+        lightbox.dataset.objectMotion = opening ? 'opening' : 'closing';
+        if (opening) {
+            run.animations.push(lightbox.animate([
+                { backgroundColor: 'rgba(0, 0, 0, 0)' }, { backgroundColor: backdropColor }
+            ], { duration: 300, fill: 'both' }));
+            run.animations.push(panel.animate([
+                { opacity: 0, transform: isAlbum ? 'translateY(12px) scale(.97)' : 'perspective(1200px) translateY(22px) rotateX(4deg) scale(.92)' },
+                { opacity: 1, transform: 'none' }
+            ], { duration: 420, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'both' }));
+        } else {
+            // A noninteractive backdrop can fade after the real dialog has
+            // closed, while focus, page scrolling, and game teardown finish now.
+            const backdrop = document.createElement('div');
+            backdrop.className = 'media-object-backdrop';
+            backdrop.setAttribute('aria-hidden', 'true');
+            backdrop.inert = true;
+            backdrop.style.backgroundColor = backdropColor;
+            document.body.append(backdrop);
+            run.nodes.push(backdrop);
+            run.animations.push(backdrop.animate([{ opacity: 1 }, { opacity: 0 }],
+                { duration: 220, fill: 'both' }));
+        }
+        flight(run, opening ? sourceRect : destination, opening ? destination : sourceRect, opening);
+        Promise.all(run.animations.map(animation => animation.finished.catch(() => {})))
+            .then(() => { if (running === run) cancel(); });
+    }
+
+    return { open: (opener, reveal) => start(true, reveal, opener),
+        close: hide => start(false, hide) };
+}
+
 // Mixtape Lightbox Logic
 // ── Album player factory ────────────────────────────────────────────────────
 // The three album lightboxes (Mixtape, GWOR, Junkyard Cabaret) are one shared
@@ -5244,6 +5401,7 @@ function createAlbumPlayer(config) {
         oscilloscopeTitle, oscilloscopeMeta, coverImg
     } = els;
     const mobileNowPlaying = lightbox ? lightbox.querySelector('.mixtape-now-playing') : null;
+    const physicalTransition = createPhysicalMediaTransition(lightbox, 'album');
 
     const playPauseIcon = playPauseBtn ? playPauseBtn.querySelector('.audio-icon') : null;
     const PLAY_ICON = '▶';
@@ -5405,57 +5563,61 @@ function createAlbumPlayer(config) {
 
     function openPlayer(requestedTrackSlug = '', historyMethod = 'pushState', extra = {}) {
         if (!lightbox) return;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
+        physicalTransition.open(extra.opener, () => {
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
 
-        // Resolve which track to open. An explicit slug wins; otherwise the
-        // per-player getOpenIndex decides (mixtape's B-side jump), falling back
-        // to track 0 on a fresh open. -1 leaves the current track alone.
-        if (requestedTrackSlug) {
-            loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
-        } else {
-            const idx = getOpenIndex
-                ? getOpenIndex(extra, currentIndex)
-                : ((audio && !audio.src) ? 0 : -1);
-            if (idx !== -1 && idx != null) loadTrack(idx, { syncHash: false });
-        }
-        setTimeout(resizeCanvas, 50);
-        if (oscilloscope) setTimeout(() => oscilloscope.start(), 50);
-        syncPlayerHash(historyMethod);
+            // Resolve which track to open. An explicit slug wins; otherwise the
+            // per-player getOpenIndex decides (mixtape's B-side jump), falling back
+            // to track 0 on a fresh open. -1 leaves the current track alone.
+            if (requestedTrackSlug) {
+                loadTrack(resolveTrackIndex(requestedTrackSlug), { syncHash: false });
+            } else {
+                const idx = getOpenIndex
+                    ? getOpenIndex(extra, currentIndex)
+                    : ((audio && !audio.src) ? 0 : -1);
+                if (idx !== -1 && idx != null) loadTrack(idx, { syncHash: false });
+            }
+            setTimeout(resizeCanvas, 50);
+            if (oscilloscope) setTimeout(() => oscilloscope.start(), 50);
+            syncPlayerHash(historyMethod);
 
-        // If the mini-player is holding our audio, dismiss it — full player takes over
-        const mini = getMiniPlayer();
-        if (mini && mini.isActive() && mini.getAudio() === audio) {
-            mini.detach(false);
-        }
+            // If the mini-player is holding our audio, dismiss it — full player takes over
+            const mini = getMiniPlayer();
+            if (mini && mini.isActive() && mini.getAudio() === audio) {
+                mini.detach(false);
+            }
+        });
     }
 
     function closePlayer() {
         if (!lightbox) return;
-        lightbox.classList.remove('active');
-        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-        if (oscilloscope) oscilloscope.stop();
-        const currentRoute = parseMusicHash();
-        if (currentRoute && currentRoute.player === playerKey) {
-            closeDialogRoute('#albums');
-        }
+        physicalTransition.close(() => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+            if (oscilloscope) oscilloscope.stop();
+            const currentRoute = parseMusicHash();
+            if (currentRoute && currentRoute.player === playerKey) {
+                closeDialogRoute('#albums');
+            }
 
-        const mini = getMiniPlayer();
-        if (audio && !audio.paused && mini) {
-            mini.attach({
-                audio,
-                coverSrc: coverImg ? coverImg.src : '',
-                albumTitle,
-                theme: getMiniTheme(currentIndex),
-                oscColors: getOscColors(currentIndex),
-                getAnalyser: () => visualizer.getAnalyser(),
-                getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
-                onExpand: () => openPlayer('', 'pushState', getExpandExtra ? getExpandExtra(currentIndex) : {}),
-                onClose: () => {}
-            });
-        } else if (audio) {
-            audio.pause();
-        }
+            const mini = getMiniPlayer();
+            if (audio && !audio.paused && mini) {
+                mini.attach({
+                    audio,
+                    coverSrc: coverImg ? coverImg.src : '',
+                    albumTitle,
+                    theme: getMiniTheme(currentIndex),
+                    oscColors: getOscColors(currentIndex),
+                    getAnalyser: () => visualizer.getAnalyser(),
+                    getTitle: () => (tracks[currentIndex] ? tracks[currentIndex].title : ''),
+                    onExpand: () => openPlayer('', 'pushState', { ...(getExpandExtra ? getExpandExtra(currentIndex) : {}), opener: null }),
+                    onClose: () => {}
+                });
+            } else if (audio) {
+                audio.pause();
+            }
+        });
     }
 
     populatePlaylist();
@@ -5463,7 +5625,7 @@ function createAlbumPlayer(config) {
     if (tile) {
         tile.addEventListener('click', (e) => {
             e.preventDefault();
-            openPlayer();
+            openPlayer('', 'pushState', { opener: tile });
         });
     }
 
@@ -5577,9 +5739,11 @@ function createAlbumPlayer(config) {
         if (route && route.player === playerKey) {
             openPlayer(route.trackSlug, 'replaceState', { openBSide: route.isBSide });
         } else if (lightbox && lightbox.classList.contains('active')) {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-            if (audio) audio.pause();
+            physicalTransition.close(() => {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+                if (audio) audio.pause();
+            });
         }
     });
 
@@ -5719,8 +5883,8 @@ function initMixtapeLightbox() {
     });
 
     return {
-        open: (openBSide = false, requestedTrackSlug = '', historyMethod = 'pushState') =>
-            player.open(requestedTrackSlug, historyMethod, { openBSide }),
+        open: (openBSide = false, requestedTrackSlug = '', historyMethod = 'pushState', opener) =>
+            player.open(requestedTrackSlug, historyMethod, { openBSide, opener }),
         close: player.close
     };
 }
@@ -6277,7 +6441,7 @@ function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
         if (instance && typeof openCallback === 'function') {
             event.preventDefault();
             event.stopImmediatePropagation();
-            openCallback(instance);
+            openCallback(instance, element);
         }
     }, { capture: true });
 }
@@ -6285,11 +6449,11 @@ function bindLazyMediaTrigger(element, ensureInitialized, openCallback) {
 // Game Lightbox: the browser-game cartridges open the game in an overlay
 // iframe instead of navigating away, mirroring the album lightboxes. The
 // cartridge hrefs stay as no-JS/SEO fallbacks and feed the "Full Page" link.
-// The iframe src is set on open and blanked on close so the game loop and
+// The iframe is navigated on open and blanked on close so the game loop and
 // its audio fully stop; reopening restarts the game fresh.
 function initGameLightbox() {
     const lightbox = document.getElementById('gameLightbox');
-    const frame = document.getElementById('gameLightboxFrame');
+    let frame = document.getElementById('gameLightboxFrame');
     const titleEl = document.getElementById('gameLightboxTitle');
     const newTabLink = document.getElementById('gameLightboxNewTab');
     const closeBtn = document.getElementById('gameLightboxClose');
@@ -6318,28 +6482,44 @@ function initGameLightbox() {
     };
 
     let activeKey = null;
+    const physicalTransition = createPhysicalMediaTransition(lightbox, 'game');
 
-    function hideLightbox() {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
-        frame.src = 'about:blank';
-        activeKey = null;
+    function replaceGameFrame(src) {
+        // A fresh browsing context has no child history to trap the parent's
+        // Back button. Removing the previous frame also stops its game/audio now.
+        const next = frame.cloneNode(false);
+        next.removeAttribute('src');
+        frame.replaceWith(next);
+        frame = next;
+        frame.addEventListener('load', onGameFrameLoad);
+        if (src) frame.src = src;
     }
 
-    function openGame(key, historyMethod = 'pushState') {
+    function hideLightbox() {
+        physicalTransition.close(() => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; document.documentElement.style.overflow = '';
+            replaceGameFrame();
+            activeKey = null;
+        });
+    }
+
+    function openGame(key, historyMethod = 'pushState', opener) {
         const game = games[key];
         if (!game) return;
-        pauseManagedAudioExcept(null); // site audio yields to the game's own sound
-        activeKey = key;
-        const content = lightbox.querySelector('.game-lightbox-content');
-        if (content) content.dataset.game = key; // per-game cabinet sizing
-        if (titleEl) titleEl.textContent = game.title;
-        if (newTabLink) newTabLink.href = game.page;
-        frame.title = game.title;
-        frame.src = game.src;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
-        updateHistoryHash(`#${key}`, historyMethod);
+        physicalTransition.open(opener, () => {
+            pauseManagedAudioExcept(null); // site audio yields to the game's own sound
+            activeKey = key;
+            const content = lightbox.querySelector('.game-lightbox-content');
+            if (content) content.dataset.game = key; // per-game cabinet sizing
+            if (titleEl) titleEl.textContent = game.title;
+            if (newTabLink) newTabLink.href = game.page;
+            frame.title = game.title;
+            replaceGameFrame(game.src);
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
+            updateHistoryHash(`#${key}`, historyMethod);
+        });
     }
 
     function closeGame() {
@@ -6355,7 +6535,7 @@ function initGameLightbox() {
         games[key].tiles.forEach((tile) => {
             tile.addEventListener('click', (e) => {
                 e.preventDefault();
-                openGame(key);
+                openGame(key, 'pushState', tile);
             });
         });
     });
@@ -6371,8 +6551,8 @@ function initGameLightbox() {
     // Keyboard controls should work the moment the game appears, and Escape
     // should still close the overlay while the game holds focus (same-origin,
     // so we can listen inside the frame).
-    frame.addEventListener('load', () => {
-        if (!lightbox.classList.contains('active')) return;
+    function onGameFrameLoad(event) {
+        if (event.currentTarget !== frame || !lightbox.classList.contains('active')) return;
         try {
             // The ?embed=1 inline script normally sets this, but some static
             // servers (npx serve's cleanUrls redirect) drop the query string
@@ -6385,7 +6565,8 @@ function initGameLightbox() {
                 if (e.key === 'Escape') closeGame();
             });
         } catch (err) { /* cross-origin or detached frame — close button still works */ }
-    });
+    }
+    frame.addEventListener('load', onGameFrameLoad);
 
     window.addEventListener('popstate', () => {
         const key = window.location.hash.replace(/^#/, '');
@@ -6415,35 +6596,35 @@ function initDeferredHomepageMedia() {
     const s2iTile = document.getElementById('s2iTile');
     const initialRoute = parseMusicHash();
 
-    bindLazyMediaTrigger(mixtapeTile, ensureMixtapeLightbox, (instance) => {
-        instance.open(false);
+    bindLazyMediaTrigger(mixtapeTile, ensureMixtapeLightbox, (instance, opener) => {
+        instance.open(false, '', 'pushState', opener);
     });
 
     bindLazyMediaTrigger(s2iTile, ensureS2ILightbox, (instance) => {
         instance.open(0);
     });
 
-    bindLazyMediaTrigger(gworTile, ensureGWORLightbox, (instance) => {
-        instance.open();
+    bindLazyMediaTrigger(gworTile, ensureGWORLightbox, (instance, opener) => {
+        instance.open('', 'pushState', { opener });
     });
 
-    bindLazyMediaTrigger(jcTile, ensureJCLightbox, (instance) => {
-        instance.open();
+    bindLazyMediaTrigger(jcTile, ensureJCLightbox, (instance, opener) => {
+        instance.open('', 'pushState', { opener });
     });
 
     // Original Albums CD-rack cards: open the player in place instead of
     // navigating to the standalone page and reloading at the top. The href
     // stays as a fallback for no-JS, SEO, and direct/shared links.
-    bindLazyMediaTrigger(document.querySelector('.album-case-mixtape'), ensureMixtapeLightbox, (instance) => {
-        instance.open(false);
+    bindLazyMediaTrigger(document.querySelector('.album-case-mixtape'), ensureMixtapeLightbox, (instance, opener) => {
+        instance.open(false, '', 'pushState', opener);
     });
 
-    bindLazyMediaTrigger(document.querySelector('.album-case-gwor'), ensureGWORLightbox, (instance) => {
-        instance.open();
+    bindLazyMediaTrigger(document.querySelector('.album-case-gwor'), ensureGWORLightbox, (instance, opener) => {
+        instance.open('', 'pushState', { opener });
     });
 
-    bindLazyMediaTrigger(document.querySelector('.album-case-jc'), ensureJCLightbox, (instance) => {
-        instance.open();
+    bindLazyMediaTrigger(document.querySelector('.album-case-jc'), ensureJCLightbox, (instance, opener) => {
+        instance.open('', 'pushState', { opener });
     });
 
     if (initialRoute && initialRoute.player === 'mixtape') {
@@ -6483,6 +6664,7 @@ function initCoverZoom() {
     let closeTimer = 0;
 
     const open = (src, alt) => {
+        if (cancelPhysicalMediaMotion) cancelPhysicalMediaMotion();
         clearTimeout(closeTimer);
         cancelAnimationFrame(openFrame);
         zoomImg.src = src;

@@ -163,8 +163,18 @@ function initStickyNav() {
         window.scrollTo({ top: navigationTop, behavior: reducedMotion ? 'instant' : behavior });
     }
 
-    function navigateFromLocation() {
+    function navigateFromLocation(event) {
         releaseNavigationTarget();
+        const originScroll = event && history.state?.mediaOriginScroll;
+        if (originScroll && Number.isFinite(originScroll.x) && Number.isFinite(originScroll.y)) {
+            // A physical media object returns to its shelf, even when the
+            // visitor reached it by scrolling from a different section hash.
+            const restore = () => window.scrollTo({ left: originScroll.x, top: originScroll.y, behavior: 'instant' });
+            const returnUrl = location.href;
+            restore();
+            requestAnimationFrame(() => { if (location.href === returnUrl) restore(); });
+            return;
+        }
         const id = window.location.hash.slice(1);
         // Only section routes belong to the nav; media/article hashes are
         // handled by their own players and must not scroll the background.

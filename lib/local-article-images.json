@@ -1,4 +1,11 @@
 {
+  "vulnerable-transcript": {
+    "thumbnail": "/images/transcripts/vulnerable/02-backyard-ink-selected.webp",
+    "image": {
+      "width": 1774,
+      "height": 887
+    }
+  },
   "communion-transcript": {
     "thumbnail": "/images/transcripts/communion/communion-header-v2.webp",
     "image": {

@@ -1100,6 +1100,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "vulnerable-transcript",
+        "title": "Vulnerable: The Conversation",
+        "cleanDescription": "The working session behind “Vulnerable” — French Kitty, creative agency, vulnerability, draft revisions, and French New Wave collage artwork with Codex.",
+        "pubDate": "2026-10-24T15:59:33.957Z",
+        "contentUrl": "/transcripts/vulnerable-transcript.html",
+        "link": ""
+    },
+    {
         "slug": "communion-transcript",
         "title": "Communion: The Conversation",
         "cleanDescription": "The working session behind “Communion” — animal experience, AI consciousness, care before certainty, draft revisions, and underground-comic artwork with Astro, Doc, and Codex.",

@@ -87,6 +87,9 @@ test('server HTML strips executable markup and preserves text, media and interna
     assert.match(html,/data-attrs=/);
     assert.match(html,/href="\/read\/old-essay"/);
     assert.match(html,/www.youtube.com\/embed\/123/);
+    const attachment = sanitizeContent('<details class="transcript-attachment" ontoggle="alert(1)"><summary onclick="alert(1)">Image-generation prompt</summary><pre>Draw an original collage.</pre></details>');
+    assert.match(attachment, /<details class="transcript-attachment"><summary>Image-generation prompt<\/summary><pre>Draw an original collage\.<\/pre><\/details>/);
+    assert.doesNotMatch(attachment, /ontoggle|onclick|alert\(/);
     const page = renderArticle({title:'</script><script>alert(1)</script>',description:'<img onerror="alert(1)">',content:'<p>Safe</p>'},'safe');
     assert.doesNotMatch(page,/<script>alert/);
 });

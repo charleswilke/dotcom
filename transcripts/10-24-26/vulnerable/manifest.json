@@ -1,0 +1,38 @@
+{
+  "title": "Vulnerable: The Conversation",
+  "date": "2026-10-24",
+  "url": "https://charleswilke.com/read/vulnerable-transcript",
+  "conversation_turns": 30,
+  "pasted_drafts": 2,
+  "generated_artworks": 4,
+  "images": [
+    {
+      "name": "01-backyard-first-pass",
+      "caption": "First header: photographic cutouts of a dancing friend and a small film crew in a moonlit backyard.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "28a752759daf12628010a25c9dfd47952436a606c371547a937bba4692cbf616"
+    },
+    {
+      "name": "02-backyard-ink-selected",
+      "caption": "Selected header: the same backyard film shoot with expressive ink-drawn people over torn-paper collage.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "27f487f8f851b41eb901ac7386a09da760ee0f6cb53c0a763b6e0cfe72d79e8e"
+    },
+    {
+      "name": "03-cw-monogram",
+      "caption": "Square CW monogram in rough black brush lettering on cream, navy, and orange torn paper.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8fb97edc06f961be8346cce88aab6ef183e8aaeea6e293d6210d429523613199"
+    },
+    {
+      "name": "04-making-something",
+      "caption": "Interior illustration: ink-drawn hands bring an unfinished dancing figure to life on torn paper.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "082450e129c0425466766f6c4f4ddf8ed2c4b51388bc93f4630a51170993e517"
+    }
+  ]
+}

@@ -12,3 +12,6 @@ Constraints: square image, exact main title, all artwork inside border with adeq
 
 Edit 2026-10-15, built-in image_gen tool:
 Horizontally mirror only the three orange sound-wave arcs between the chair arrow and horn, changing ((( to ))), with smallest arc at left and largest at right. Preserve all lettering, illustration, colors, layout, and paper texture.
+
+Edit 2026-10-24, built-in image_gen tool:
+Change only FIG. 11 to FIG. 12 and GWOR / 011 to GWOR / 012, matching the original typeface, ink, placement and paper texture. Preserve title, diagram, all labels, orange sound-wave orientation, composition and colors. Exported as 1024x1024 WebP.

@@ -1100,6 +1100,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "from-this-side-of-the-door-transcript",
+        "title": "From This Side of the Door: The Conversation",
+        "cleanDescription": "The songwriting session behind “From This Side of the Door” — Communion, Vulnerable, lyric drafts, singability, and the shift from heartland rock to dark chamber folk with Codex.",
+        "pubDate": "2026-10-24T19:34:39.000Z",
+        "contentUrl": "/transcripts/from-this-side-of-the-door-transcript.html",
+        "link": ""
+    },
+    {
         "slug": "vulnerable-transcript",
         "title": "Vulnerable: The Conversation",
         "cleanDescription": "The working session behind “Vulnerable” — French Kitty, creative agency, vulnerability, draft revisions, and French New Wave collage artwork with Codex.",
@@ -5883,7 +5891,8 @@ function initGWORLightbox() {
         { title: 'Dearly Beloved', songbook: '/songs/gwor/dearly-beloved/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'As We Speak It', songbook: '/songs/gwor/as-we-speak-it/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
         { title: 'When Doctrine Slips', songbook: '/songs/gwor/when-doctrine-slips/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: "Haven't Heard From You Yet", songbook: '/songs/gwor/havent-heard-from-you-yet/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title.webp?v=20261015-incoming-waves', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
+        { title: 'From This Side of the Door', songbook: '/songs/gwor/from-this-side-of-the-door/songbook.json?v=20261024-1', file: '/audio/grief-without-ritual/from-this-side-of-the-door.mp3', cover: '/audio/grief-without-ritual/from-this-side-of-the-door-title.webp', articleType: 'songwriting conversation', article: '/read/from-this-side-of-the-door-transcript' },
+        { title: "Haven't Heard From You Yet", songbook: '/songs/gwor/havent-heard-from-you-yet/songbook.json?v=20261024-track-12', file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title.webp?v=20261024-track-12', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');

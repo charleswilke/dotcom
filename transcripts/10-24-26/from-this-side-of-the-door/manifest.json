@@ -1,0 +1,33 @@
+{
+  "title": "From This Side of the Door: The Conversation",
+  "date": "2026-10-24",
+  "url": "https://charleswilke.com/read/from-this-side-of-the-door-transcript",
+  "conversation_turns": 16,
+  "final_lyric_turn": 16,
+  "source_essays": [
+    "https://charleswilke.com/read/communion",
+    "https://charleswilke.com/read/vulnerable"
+  ],
+  "assets": [
+    {
+      "name": "charles-edited-lyrics.txt",
+      "characters": 2551,
+      "sha256": "6c7702819b24dd3d9cc5e6b9ac345a12201657c273dcee2361da086c965ab884"
+    },
+    {
+      "name": "final-lyrics-with-production-cues.txt",
+      "characters": 3103,
+      "sha256": "0846ade30a546db7e4f771fa30dcadf700e69de7260dd6d383cad4b24cc40d80"
+    },
+    {
+      "name": "style-chamber-folk.txt",
+      "characters": 1000,
+      "sha256": "001d8811a479a9dd8a4031de704c0adb64d4d49bc4127743e556e4488c53ece7"
+    },
+    {
+      "name": "style-heartland-rock.txt",
+      "characters": 1000,
+      "sha256": "078eb53b086b429fb5cc1255f13e49341e8f5b804ef8bece374880c26847b046"
+    }
+  ]
+}

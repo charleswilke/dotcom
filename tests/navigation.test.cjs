@@ -97,16 +97,34 @@ test('section links update history and Back/Forward restore alignment', async ()
     assert.equal(await page.locator('#navLogo img').getAttribute('src'), '/images/cw-nav-monogram-v7.svg');
 }));
 
-test('late layout changes yield to user scrolling', async () => withPage(390, async page => {
-    await page.goto(`${origin}/#albums`);
-    await aligned(page, 'albums');
-    await page.mouse.wheel(0, 300);
-    await page.waitForTimeout(400);
-    await page.evaluate(() => document.getElementById('feed-content').style.paddingBottom = '400px');
-    await page.waitForTimeout(400);
-    const top = await page.locator('#albums').evaluate(element => element.getBoundingClientRect().top);
-    assert.ok(Math.abs(top - 61) > 100, 'Late content must not pull the visitor back');
-}));
+for (const width of [390, 1440]) {
+    for (const input of ['wheel', 'keyboard']) {
+        test(`late layout changes yield to ${input} scrolling at ${width}px`, async () => withPage(width, async page => {
+            await page.goto(`${origin}/#albums`);
+            await aligned(page, 'albums');
+            const initialScroll = await page.evaluate(() => {
+                window.forcedNavigationScrolls = [];
+                const scrollTo = window.scrollTo.bind(window);
+                window.scrollTo = (...args) => {
+                    window.forcedNavigationScrolls.push(args);
+                    return scrollTo(...args);
+                };
+                return window.scrollY;
+            });
+            if (input === 'wheel') await page.mouse.wheel(0, 300);
+            else await page.keyboard.press('PageDown');
+            await page.waitForFunction(initial => window.scrollY > initial + 100, initialScroll);
+            await page.waitForTimeout(400);
+            await page.evaluate(() => document.getElementById('feed-content').style.paddingBottom = '400px');
+            await page.waitForTimeout(400);
+            // Inserting content above the section changes its viewport position
+            // even when navigation correctly yields. Check the corrective scroll
+            // calls themselves; native browser anchoring is free to preserve position.
+            assert.deepEqual(await page.evaluate(() => window.forcedNavigationScrolls), [],
+                'Navigation must not force scrolling after the visitor takes control');
+        }));
+    }
+}
 
 test('closed Explore menu is skipped by Tab; Escape restores its button', async () => withPage(1440, async page => {
     await page.goto(origin);

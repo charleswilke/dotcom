@@ -28,7 +28,7 @@ and retry on a later sync. Feed-file imports remain offline.
 
 The RSS refresh and homepage fallback are saved before optional `--backfill`
 work. A later backfill error exits unsuccessfully while retaining that valid
-refresh. The weekly workflow does not request backfill; run it explicitly when
+refresh. The manually dispatched workflow does not request backfill; run it explicitly when
 needed. HTTP 401/403 and other permanent failures stop after one request.
 Network/timeouts, 408, 429, and selected transient 5xx responses get up to three
 attempts. Retry-After seconds and HTTP dates are respected; waits longer than
@@ -47,6 +47,8 @@ node tools/sync-article-archive.js --feed-file /absolute/path/feed.xml
 The offline build generates:
 
 - `vendor/sanitize-html.cjs`: bundled sanitizer for Vercel runtime compatibility.
+- `reader-base.css`: shared navigation and article styles derived from styles.css.
+- `lib/asset-versions.json`: versions of minified static assets used in runtime HTML.
 - `articles/items/<slug>.json`: per-article fallback for the homepage reader.
 - `articles/related.json`: three related essays for each essay and its conversation,
   used by the standalone pages and homepage reader.

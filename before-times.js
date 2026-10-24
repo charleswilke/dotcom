@@ -5291,6 +5291,12 @@
     }
 
     function prepareRoomArt(art) {
+        const room = art?.closest('.bt-lobby-scroll');
+        room?.querySelectorAll('img[loading="lazy"]').forEach(image => { image.loading = 'eager'; });
+        room?.querySelectorAll('[data-room-src]').forEach(image => {
+            image.setAttribute('href', image.dataset.roomSrc);
+            image.removeAttribute('data-room-src');
+        });
         if (!art || (art.complete && art.naturalWidth)) return Promise.resolve();
         if (art.loading === 'lazy') art.loading = 'eager';
         art.fetchPriority = 'high';
@@ -5305,8 +5311,8 @@
         alchemyRoomOpening = true;
         if (!alchemyArt.complete || !alchemyArt.naturalWidth) {
             showStatus('Unlocking the production room…', 3200);
-            await prepareRoomArt(alchemyArt);
         }
+        await prepareRoomArt(alchemyArt);
         alchemyRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
@@ -5373,8 +5379,8 @@
         gameRoomOpening = true;
         if (!gameArt.complete || !gameArt.naturalWidth) {
             showStatus('Booting the development room…', 3200);
-            await prepareRoomArt(gameArt);
         }
+        await prepareRoomArt(gameArt);
         gameRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
@@ -5437,8 +5443,8 @@
         contentRoomOpening = true;
         if (!contentArt.complete || !contentArt.naturalWidth) {
             showStatus('Starting the conveyor line…', 3200);
-            await prepareRoomArt(contentArt);
         }
+        await prepareRoomArt(contentArt);
         contentRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
@@ -5491,8 +5497,8 @@
         knowledgeRoomOpening = true;
         if (!knowledgeArt.complete || !knowledgeArt.naturalWidth) {
             showStatus('Mapping the documentation labyrinth…', 3200);
-            await prepareRoomArt(knowledgeArt);
         }
+        await prepareRoomArt(knowledgeArt);
         knowledgeRoomOpening = false;
         if (infoDialog.open) closeDialog(infoDialog);
         radioAudio.pause();
@@ -6852,54 +6858,8 @@
         }
     });
 
-    /* Room art is deferred — the room images carry loading="lazy" and are no longer
-       preloaded, so the lobby paints on its own budget instead of queueing behind
-       ~4MB of art for doors the visitor may never open. Once the lobby has finished
-       loading and the main thread goes idle, we quietly warm those same URLs at low
-       priority so opening a door still feels instant. The list is read from the DOM
-       rather than hard-coded, so it stays correct as rooms gain or lose art. */
-    function warmRoomArt() {
-        const connection = navigator.connection;
-        if (connection && (connection.saveData
-            || /(^|-)(slow-)?2g$/.test(connection.effectiveType || ''))) {
-            return;
-        }
-
-        const sources = Array.from(
-            document.querySelectorAll('.bt-lobby-scroll[hidden] img[src]')
-        ).map((img) => img.getAttribute('src'));
-        const queue = Array.from(new Set(sources));
-        if (!queue.length) return;
-
-        const BATCH = 3;
-        let index = 0;
-
-        function warmBatch() {
-            for (let i = 0; i < BATCH && index < queue.length; i += 1) {
-                const img = new Image();
-                img.decoding = 'async';
-                img.fetchPriority = 'low';
-                img.src = queue[index];
-                index += 1;
-            }
-            if (index < queue.length) schedule();
-        }
-
-        function schedule() {
-            if (typeof window.requestIdleCallback === 'function') {
-                window.requestIdleCallback(warmBatch, { timeout: 2500 });
-            } else {
-                window.setTimeout(warmBatch, 250);
-            }
-        }
-
-        if (document.readyState === 'complete') {
-            schedule();
-        } else {
-            window.addEventListener('load', schedule, { once: true });
-        }
-    }
-
+    // Warm only the intended room via the existing door hover/focus handlers.
+    // The threshold transition still waits for its backdrop before revealing it.
     window.addEventListener('popstate', syncRoomFromLocation);
     window.addEventListener('pageshow', () => {
         if (!thresholdTransitionBusy) return;
@@ -6937,6 +6897,5 @@
     initializeDocumentCalibration();
     initializeProductionCalibration();
     syncRoomFromLocation();
-    warmRoomArt();
     releaseDoorArrival();
 }());

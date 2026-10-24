@@ -255,9 +255,10 @@ test('homepage folder date tabs sit at the image seam without text collisions', 
             const page = await browser.newPage({viewport:{width,height:900}});
             await routeLocal(page, 'http://localhost:8080');
             await page.goto('http://localhost:8080/#l.ai.bor');
-            await page.locator('#feed-content .feed-item .feed-item-meta').first().waitFor();
+            // Desktop hides the duplicate latest card in favor of its spotlight.
+            await page.locator('#feed-content .feed-item:visible .feed-item-meta').first().waitFor();
             await page.evaluate(()=>document.fonts.ready);
-            const results = await page.locator('#feed-content .feed-item').evaluateAll(cards => cards.map(card => {
+            const results = await page.locator('#feed-content .feed-item:visible').evaluateAll(cards => cards.map(card => {
                 const stamp=card.querySelector('.date').getBoundingClientRect();
                 const p=card.querySelector('.feed-item-body p');
                 const range=document.createRange(); range.selectNodeContents(p);

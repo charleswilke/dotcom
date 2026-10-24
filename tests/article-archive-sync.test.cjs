@@ -142,9 +142,10 @@ test('regular refresh only requests RSS; offline import performs no upstream wor
 test('RSS envelope validation allows XML declaration, comments, escaped text and CDATA', () => {
     validateFeed('<?xml version="1.0"?>\n<!-- comment -->' + feed.replace('New essay','New &amp; essay'));
 });
-test('workflow runs Mondays at 11:23 UTC without historical backfill', () => {
+test('manual archive workflow refreshes RSS without historical backfill', () => {
     const workflow = fs.readFileSync(path.join(__dirname,'../.github/workflows/archive-articles.yml'),'utf8');
-    assert.match(workflow, /cron: '23 11 \* \* 1'/);
+    assert.match(workflow, /workflow_dispatch:/);
+    assert.doesNotMatch(workflow, /\bschedule:|\bcron:/);
     assert.match(workflow, /run: node tools\/sync-article-archive.js\n/);
     assert.doesNotMatch(workflow, /--backfill/);
 });

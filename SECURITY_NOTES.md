@@ -3,6 +3,17 @@
 Run `node --test tests/security.test.js`, `npm audit`, and (in
 `games/ChessBlaster`) `npm run check && npm run build:web && npm audit`.
 Browser regression tests use the root Playwright dependency and its Chromium browser.
+On a fresh checkout, first run `node tools/build-article-archive.js && node tools/build-reader-css.js`
+to prepare generated article data and reader styles while keeping source CSS/JS readable.
+The complete regression pass is `node --test --test-concurrency=1 tests/*.test.cjs tests/security.test.js`.
+
+The preview server binds to loopback and rejects traversal, external symlinks,
+dotfiles and malformed URL encoding while retaining byte-range media seeking.
+
+The guestbook uses a single Redis EVAL for its three-signatures-per-fifteen-minute
+limit and bounded append. Its REST token must allow EVAL. Storage command errors
+fail closed, calls time out after five seconds, and cross-site/non-JSON writes
+are rejected. Existing entries and administrator token names are preserved.
 
 ## Deployment
 
@@ -12,6 +23,15 @@ from audio filenames before minification. Run it locally when adding audio or
 updating DOMPurify; commit the generated files too. Update the DOMPurify version
 query in index.html when upgrading it. ChessBlaster's published dist files are
 unchanged; the dependency updates protect future builds and development.
+
+The build finishes with `tools/stamp-assets.js`, which content-versions local
+CSS/JS links across static entries, games and generated share pages after
+minification. It also writes `lib/asset-versions.json` for server-rendered article
+links. HTML and unversioned code revalidate; only code with a content hash gets
+immutable caching. `stamp-code.sh` invokes the same stamper for local use.
+Standalone articles use `reader-base.css`, generated conservatively from the
+canonical stylesheet by `tools/build-reader-css.js`; edit styles.css, not the
+generated subset. Both generated files are ignored by Git and rebuilt on deploy.
 
 The Cloudflare leaderboard is a separate deployment: run `wrangler deploy`
 from games/TootsJam/cloudflare-api. This deploys the SCORE_LIMITER binding in

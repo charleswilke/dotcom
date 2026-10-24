@@ -33,16 +33,16 @@
       ]
     },
     {
-      "source": "/:folder(images|audio|games)/:path*",
+      "source": "/:path*\\.(html|js|css)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     },
     {
-      "source": "/:path*\\.(webp|png|jpg|jpeg|gif|ico|mp3|mp4|mov|woff2)",
+      "source": "/:path*\\.(webp|png|jpg|jpeg|gif|ico|svg|mp3|mp4|mov|m4a|wav|ogg|bin|woff2)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -52,6 +52,7 @@
     },
     {
       "source": "/:path*\\.(js|css)",
+      "has": [{ "type": "query", "key": "v", "value": "[a-f0-9]{16}" }],
       "headers": [
         {
           "key": "Cache-Control",

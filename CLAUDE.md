@@ -137,21 +137,26 @@ Defaults to a minute-precision timestamp (`YYYYMMDDHHMM`) so same-day re-stamps 
 
 Cues to run this: "I updated the cover for X", "just replaced the album art", "swapped the cover", "updated the mp3", or any time the user mentions editing a cached asset in place.
 
-### CSS and JS are immutable too — stamp them with [stamp-code.sh](stamp-code.sh)
+### CSS and JS cache versions — [stamp-code.sh](stamp-code.sh)
 
-`.css` and `.js` get the same `immutable, max-age=31536000` as images and audio. They used to be `max-age=0, must-revalidate`, which meant every repeat visit spent a round trip revalidating 86KB of CSS and 57KB of JS that had not changed.
+The deployment build automatically runs `tools/stamp-assets.js` after minification.
+It hashes the deployed bytes and versions local CSS/JS references in root entries,
+games, song pages and generated share pages. It also writes an ignored manifest
+for server-rendered article links, so every entry uses the same version of a file.
+Only code requested with a 16-character content hash gets a one-year immutable
+cache; unversioned code and HTML revalidate. This includes unversioned module
+imports, which must never be pinned for a year.
 
-That is only safe because every reference carries a `?v=`, so **run this before any deploy that touches CSS or JS:**
+For an optional local stamp or read-only check:
 
 ```
 ./stamp-code.sh
+./stamp-code.sh --check
 ```
 
-It hashes each file's contents and rewrites the `?v=` on every reference in `*.html`. Idempotent — no content change produces no diff — so running it every time is free. `./stamp-code.sh --check` exits non-zero if a stamp is stale and changes nothing, which is the CI-friendly form.
-
-**Why a hash and not a timestamp:** the stamps were bumped by hand and drifted. `main.js` sat at `?v=202608052135` while its contents had moved on ten days, which under `immutable` would have pinned returning visitors to a stale script for a year. A content hash makes the URL change exactly when the file does, with no discipline required.
-
-**The hash is over LF-normalized bytes, on purpose.** With `core.autocrlf=true` a Windows checkout has CRLF on disk while git — and therefore Vercel's build container — stores LF, so hashing raw disk bytes stamps a hash of files that never get deployed. This bit once: a Windows run re-stamped all nine css/js files on a clean tree, which would have pointlessly invalidated every returning visitor's cache and flip-flopped on the next non-Windows stamp. If a stamp run ever reports changes to files whose content you didn't touch, suspect the environment before trusting the stamps.
+The hash changes whenever the file changes. Deployment stamps are always
+computed in the build container after minification, so local line endings and
+manual timestamp bumps cannot leave production references stale.
 
 Division of labor: `stamp-code.sh` owns code (`.css`/`.js` referenced from HTML), `bump-cover.sh` owns media (images, audio, video — which are also referenced from JS playlist data and OG tags that `stamp-code.sh` deliberately does not touch).
 

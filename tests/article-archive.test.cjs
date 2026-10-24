@@ -95,7 +95,7 @@ test('sync preserves articles that disappear from RSS and fails safely on an emp
     const temp = fs.mkdtempSync(path.join(os.tmpdir(),'dotcom-archive-'));
     try {
         for (const dir of ['tools','lib','articles']) fs.mkdirSync(path.join(temp,dir));
-        for (const file of ['tools/sync-article-archive.js','lib/substack-utils.js','lib/article-archive.js']) fs.copyFileSync(path.join(__dirname,'..',file),path.join(temp,file));
+        for (const file of ['tools/sync-article-archive.js','lib/substack-utils.js','lib/article-archive.js','lib/asset-url.js']) fs.copyFileSync(path.join(__dirname,'..',file),path.join(temp,file));
         fs.symlinkSync(path.join(__dirname,'../node_modules'),path.join(temp,'node_modules'));
         const old = {slug:'old-essay',title:'Old essay',content:'<p>Keep this forever.</p>',link:'https://charleswilke.substack.com/p/old-essay'};
         fs.writeFileSync(path.join(temp,'articles/archive.json'),JSON.stringify({'old-essay':old}));

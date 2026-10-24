@@ -102,5 +102,7 @@ articles/related.json
 articles/search.json
 writing-archive.html
 vendor/sanitize-html.cjs
+reader-base.css
+lib/asset-versions.json
 output/linkedin/charles-wilke-featured-v1-prompt.txt
 output/linkedin/charles-wilke-featured-v1.png

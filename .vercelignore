@@ -44,12 +44,11 @@ games/ChessBlaster/vite.config.ts
 images/before-times/absurd-alchemy-clean-v4.webp
 
 # PNG is the working/source format for this site's generated art; WebP is what
-# ships. Only the three PNGs below are actually served, so a new source PNG dropped
+# normally ships. Only explicitly re-included PNGs are served; a new source PNG dropped
 # into images/ is kept out of the deploy automatically — no list to maintain.
 # If you ever add a PNG that must be public, add a !re-include line for it here,
 # or it will 404. (~132MB of source art, still in git and still syncing.)
 images/**/*.png
-!images/textures/gwor-back-sharpie-v1.png
 !images/aiw/aiw1.png
 !images/before-times/knowledge-maze/knowledge-answer-arrives-v1.png
 !images/before-times/knowledge-maze/knowledge-answer-exists-v1.png
@@ -80,12 +79,13 @@ bt-assets/The Sisters Hayes - short/nicks-notes-on-the-sisters-hayes.rtf
 
 # Screening-room Trial Easter egg.
 !bt-assets/trial.mp4
-!images/before-times/layers/alchemy-ivory-dice-v1.png
 
 # Security build preparation and local-only regression tests
 !tools/prepare-security-assets.js
 !tools/build-article-archive.js
 !tools/build-share-pages.js
+!tools/stamp-assets.js
+!tools/build-reader-css.js
 tests/
 
 # Public, reviewed downloads linked from the God shuffled his feet transcript.

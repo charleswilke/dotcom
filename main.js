@@ -1378,6 +1378,10 @@ function ensureReaderOverlay() {
                 <div class="article-reader-rail" aria-hidden="true"></div>
                 <div class="article-reader-thumb" aria-hidden="true"></div>
             </div>
+            <div class="article-reader-bottom-bar">
+                <span class="reader-article-title"></span>
+                <time class="reader-publication-date"></time>
+            </div>
         </article>
     `;
     document.body.appendChild(overlay);
@@ -1393,24 +1397,7 @@ function ensureReaderOverlay() {
         }
     });
 
-    // Swap the "exploring l.ai.bor" topbar text for the article title once the
-    // header scrolls behind the topbar. The inner scroll-area is the scroll root.
-    const titleEl = overlay.querySelector('.article-reader-title');
     const scrollArea = overlay.querySelector('.article-reader-scroll-area');
-    if (titleEl && scrollArea && typeof IntersectionObserver !== 'undefined') {
-        const titleObserver = new IntersectionObserver((entries) => {
-            if (!overlay.classList.contains('is-open')) return;
-            for (const entry of entries) {
-                const rootTop = entry.rootBounds ? entry.rootBounds.top : 0;
-                const aboveTopbar = !entry.isIntersecting && entry.boundingClientRect.bottom < rootTop;
-                setReaderHeaderMode(overlay, aboveTopbar ? 'title' : 'brand');
-            }
-        }, {
-            root: scrollArea,
-            threshold: 0,
-        });
-        titleObserver.observe(titleEl);
-    }
 
     // Custom scroll thumb with tick rail behind: native scrollbar is hidden so
     // the article header and featured image render full-bleed. Header z-index
@@ -1423,29 +1410,6 @@ function ensureReaderOverlay() {
 
 
     return overlay;
-}
-
-function setReaderHeaderMode(overlay, mode) {
-    const topbar = overlay.querySelector('.article-reader-topbar');
-    const sourceEl = overlay.querySelector('.reader-source');
-    if (!topbar || !sourceEl) return;
-    if (topbar.dataset.headerMode === mode) return;
-    topbar.dataset.headerMode = mode;
-    topbar.classList.toggle('is-title-mode', mode === 'title');
-
-    sourceEl.classList.add('is-fading');
-    setTimeout(() => {
-        if (topbar.dataset.headerMode !== mode) return;
-        if (mode === 'title') {
-            const titleEl = overlay.querySelector('.article-reader-title');
-            sourceEl.textContent = titleEl ? titleEl.textContent : '';
-        } else {
-            sourceEl.innerHTML = 'exploring <span class="reader-break">l.ai.bor</span>';
-        }
-        requestAnimationFrame(() => {
-            sourceEl.classList.remove('is-fading');
-        });
-    }, 180);
 }
 
 let _readerPrevUrl = '';
@@ -1523,6 +1487,14 @@ function openArticleReader(item, options = {}) {
         ? pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase()
         : '';
     bylineDateEl.textContent = dateStr;
+    const bottomTitleEl = overlay.querySelector('.reader-article-title');
+    bottomTitleEl.textContent = titleEl.textContent;
+    bottomTitleEl.title = titleEl.textContent;
+    const publicationDateEl = overlay.querySelector('.reader-publication-date');
+    publicationDateEl.textContent = dateStr;
+    publicationDateEl.hidden = !dateStr;
+    if (dateStr) publicationDateEl.dateTime = pubDate.toISOString();
+    else publicationDateEl.removeAttribute('datetime');
     tagsEl.innerHTML = '';
 
     bodyEl.innerHTML = sanitizeArticleHtml(item.content || item.description || '');
@@ -1577,17 +1549,6 @@ function openArticleReader(item, options = {}) {
     if (scrollArea) scrollArea.scrollTop = 0;
     if (typeof overlay._updateReaderThumb === 'function') {
         requestAnimationFrame(overlay._updateReaderThumb);
-    }
-    // Force brand state on (re)open so the prior article's title doesn't briefly linger.
-    const topbar = overlay.querySelector('.article-reader-topbar');
-    if (topbar) {
-        delete topbar.dataset.headerMode;
-        topbar.classList.remove('is-title-mode');
-        const sourceEl = overlay.querySelector('.reader-source');
-        if (sourceEl) {
-            sourceEl.classList.remove('is-fading');
-            sourceEl.innerHTML = 'exploring <span class="reader-break">l.ai.bor</span>';
-        }
     }
     setTimeout(() => shell.focus(), 50);
     return true;

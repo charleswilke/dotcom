@@ -204,5 +204,27 @@
   "notebook": {
     "style": "Junkyard barroom blues, crooked vaudeville shuffle with a siren-sweet, memorable melody. Weathered low female alto, intimate and warmly melodic; amused at first, then quietly implicated. Never sneering or theatrical. A battered, slightly detuned upright piano plays a pretty repeating figure over a rattling walking bass, brushed snare, hollow oil-drum thump, tin-can rim taps, chain jingle and spring squeak. Scratchy electric guitar and a fraying muted trumpet trade crooked replies. Great musicians on salvaged instruments: loose swing, late clanks, buzzing notes, tiny stumbles and clever recoveries. Dry room, mic bleed, pedal creak, tape saturation, no studio sheen. The song stays inviting as instruments quietly drop out for good, leaving their absence audible. Keep the hook tuneful, never shouted. Last piano figure catches on a missing note; unaccompanied final lines, then room tone. No circus comedy, sinister drones, arena drums or grand finale.",
     "idea": "The song stays inviting as instruments quietly drop out for good, leaving their absence audible."
-  }
+  },
+  "previousTakes": [
+    {
+      "title": "March 6, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mornings-flood-2026-03-06.mp3"
+    },
+    {
+      "title": "July 3, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mornings-flood-2026-07-03.mp3"
+    },
+    {
+      "title": "July 4, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mornings-flood-2026-07-04.mp3"
+    },
+    {
+      "title": "July 5, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mornings-flood-2026-07-05.mp3"
+    },
+    {
+      "title": "October 16, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mornings-flood-2026-10-16.mp3"
+    }
+  ]
 }

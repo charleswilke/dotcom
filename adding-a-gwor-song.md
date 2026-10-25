@@ -105,6 +105,35 @@ playing audio while reading; only **Listen** selects the song. Production cues
 can be toggled, studio notes expand below the lyrics, and the inspiration link
 uses the track’s existing `article` URL.
 
+### Previous takes (GWOR and Junkyard Cabaret)
+
+Add a `previousTakes` array to a song's `songbook.json` to show a second collapsible
+section below the studio notebook. Omit it (or use an empty array) until recordings
+are ready to share. Each take has a short `title` (a date or take number), an audio
+`file` URL, and optional `notes` only when they add useful context:
+
+```json
+"previousTakes": [
+  {
+    "title": "July 3, 2026",
+    "file": "/audio/grief-without-ritual/previous-takes/song-slug-2026-07-03.mp3"
+  }
+]
+```
+
+Preserve older audio under distinct filenames instead of replacing the current
+album recording. Add entries in the order you want them displayed, and bump the
+songbook URL's `?v=` value in `main.js` after changing the JSON. Only add recordings
+that are ready to be public. Each entry includes playback controls and a
+direct recording link (↗) visitors can copy or share. Opening the section does not
+start playback or preload audio. Playing a take pauses other site audio; closing
+the section, leaving the songbook, or closing the album pauses the take.
+
+Keep labels simple: `March 2026` for a single earlier version, or `July 3, 2026`
+when several dates need to be distinguished. Use `September 27, 2026 · 1`, `· 2`,
+and so on for versions saved on the same day. List takes oldest first and omit
+notes unless they add context beyond the date.
+
 ## Quick checklist
 
 - [ ] `audio/grief-without-ritual/[slug].mp3` present

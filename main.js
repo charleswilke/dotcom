@@ -5887,10 +5887,10 @@ function initGWORLightbox() {
         { title: 'Love at Machine Speed', songbook: '/songs/gwor/love-at-machine-speed/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
         { title: 'Permission to Ache', songbook: '/songs/gwor/permission-to-ache/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
         { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
-        { title: 'Slow the Clock', songbook: '/songs/gwor/slow-the-clock/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-v2.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'Slow the Clock', songbook: '/songs/gwor/slow-the-clock/songbook.json?v=20261024-previous-takes-all-1', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-v2.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'Dearly Beloved', songbook: '/songs/gwor/dearly-beloved/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'As We Speak It', songbook: '/songs/gwor/as-we-speak-it/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
-        { title: 'When Doctrine Slips', songbook: '/songs/gwor/when-doctrine-slips/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        { title: 'When Doctrine Slips', songbook: '/songs/gwor/when-doctrine-slips/songbook.json?v=20261024-previous-takes-all-1', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
         { title: 'From This Side of the Door', songbook: '/songs/gwor/from-this-side-of-the-door/songbook.json?v=20261024-1', file: '/audio/grief-without-ritual/from-this-side-of-the-door.mp3', cover: '/audio/grief-without-ritual/from-this-side-of-the-door-title.webp', articleType: 'songwriting conversation', article: '/read/from-this-side-of-the-door-transcript' },
         { title: "Haven't Heard From You Yet", songbook: '/songs/gwor/havent-heard-from-you-yet/songbook.json?v=20261024-track-12', file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title.webp?v=20261024-track-12', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
     ];
@@ -6012,9 +6012,29 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
     const title = document.getElementById(`${prefix}SongbookTitle`);
     const toolbar = document.getElementById(`${prefix}SongbookToolbar`);
     const cache = new Map();
+    const takePlayers = new Set();
     let opener = null;
     let requestId = 0;
     let showCues = true;
+
+    function pauseTakes() {
+        takePlayers.forEach(audio => audio.pause());
+    }
+
+    function releaseTakes() {
+        pauseTakes();
+        takePlayers.forEach(audio => {
+            managedAudioPlayers.delete(audio);
+            audio.removeAttribute('src');
+            audio.load();
+        });
+        takePlayers.clear();
+    }
+
+    // Older recordings belong to the open book; stop them when its album closes.
+    new MutationObserver(() => {
+        if (!lightbox.classList.contains('active')) pauseTakes();
+    }).observe(lightbox, { attributes: true, attributeFilter: ['class'] });
 
     function element(tag, className, text) {
         const node = document.createElement(tag);
@@ -6124,12 +6144,76 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
             notebook.append(notes);
             book.append(notebook);
         }
+        const takes = Array.isArray(song.previousTakes) ? song.previousTakes.filter(take => {
+            if (!take || typeof take.file !== 'string' || !take.file.trim()) return false;
+            try {
+                return ['http:', 'https:'].includes(new URL(take.file, window.location.href).protocol);
+            } catch { return false; }
+        }) : [];
+        if (takes.length) {
+            const previous = element('details', 'jc-book-notebook jc-book-previous-takes');
+            previous.append(element('summary', '', 'Previous takes'));
+            const list = element('ol', 'jc-book-takes');
+            takes.forEach((take, position) => {
+                const item = element('li', 'jc-book-take');
+                const label = take.title || `Take ${position + 1}`;
+                const heading = element('div', 'jc-book-take-heading');
+                const link = element('a', 'jc-book-take-link', '↗');
+                link.href = take.file;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.title = `Open recording: ${song.title} — ${label}`;
+                link.setAttribute('aria-label', link.title);
+                heading.append(element('h4', 'jc-book-take-title', label), link);
+                item.append(heading);
+                if (take.notes) item.append(element('p', 'jc-book-take-notes', take.notes));
+                const audio = registerManagedAudio(element('audio', 'jc-book-take-audio'));
+                audio.preload = 'none';
+                audio.src = take.file;
+                audio.setAttribute('aria-label', `${song.title} — ${label}`);
+                takePlayers.add(audio);
+                const controls = element('div', 'jc-book-take-controls');
+                const play = element('button', 'jc-book-take-play', '▶');
+                play.type = 'button';
+                const progress = element('div', 'jc-book-take-progress');
+                const fill = element('span', 'jc-book-take-fill');
+                progress.append(fill);
+                setupProgressScrubbing(progress, audio);
+                progress.setAttribute('aria-label', `Playback position: ${label}`);
+                const time = element('span', 'jc-book-take-time', '0:00');
+                function syncTake() {
+                    play.textContent = audio.paused ? '▶' : 'Ⅱ';
+                    play.setAttribute('aria-label', `${audio.paused ? 'Play' : 'Pause'} ${label}`);
+                    play.setAttribute('aria-pressed', String(!audio.paused));
+                    const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+                    fill.style.width = `${duration ? audio.currentTime / duration * 100 : 0}%`;
+                    time.textContent = formatAudioTime(audio.currentTime || 0) + (duration ? ` / ${formatAudioTime(duration)}` : '');
+                }
+                play.addEventListener('click', () => {
+                    if (audio.paused) {
+                        pauseManagedAudioExcept(audio);
+                        requestAudioPlayback(audio);
+                    } else audio.pause();
+                });
+                audio.addEventListener('play', () => { pauseManagedAudioExcept(audio); syncTake(); });
+                ['pause', 'ended', 'timeupdate', 'loadedmetadata', 'emptied'].forEach(event => audio.addEventListener(event, syncTake));
+                syncTake();
+                controls.append(play, progress, time);
+                item.append(audio, controls);
+                getAudioPlaybackFeedback(audio).mount(item);
+                list.append(item);
+            });
+            previous.append(list);
+            previous.addEventListener('toggle', () => { if (!previous.open) pauseTakes(); });
+            book.append(previous);
+        }
         renderFooter(song, index);
         content.replaceChildren(book);
     }
 
     async function loadBook(index) {
         const request = ++requestId;
+        releaseTakes();
         const track = tracks[index];
         const metadata = entryMetadata(index);
         title.textContent = track.title;
@@ -6176,6 +6260,7 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
             tracksPanel.inert = true;
         } else {
             ++requestId; // A pending fetch must not replace a subsequently opened card.
+            pauseTakes();
             tracksPanel.inert = false;
             tracksPanel.setAttribute('aria-hidden', 'false');
             if (opener) opener.focus({ preventScroll: true });
@@ -6220,8 +6305,8 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
 
 function initJCLightbox() {
     const tracks = [
-        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=e1da9d061b62', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path', songbook: '/songs/junkyard-cabaret/why-this-way/songbook.json?v=20261019-intro-1' },
-        { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand', songbook: '/songs/junkyard-cabaret/cathedral-of-junk/songbook.json?v=20261018-revision-1' },
+        { title: 'Why This Way', act: 'Act I', file: '/audio/junkyard-cabaret/why-this-way.mp3?v=e1da9d061b62', cover: '/audio/junkyard-cabaret/why-this-way-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-narrower-path', songbook: '/songs/junkyard-cabaret/why-this-way/songbook.json?v=20261024-april-take-only-1' },
+        { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand', songbook: '/songs/junkyard-cabaret/cathedral-of-junk/songbook.json?v=20261024-previous-takes-2' },
         { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/staccato-again', songbook: '/songs/junkyard-cabaret/pauses-gone/songbook.json?v=20261018-revision-1' },
         { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity', songbook: '/songs/junkyard-cabaret/three-fifteen/songbook.json?v=20261018-revision-1' },
         { title: 'The New Survivalism', file: '/audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: '/audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism', songbook: '/songs/junkyard-cabaret/the-new-survivalism/songbook.json?v=20261018-revision-1' },
@@ -6230,13 +6315,13 @@ function initJCLightbox() {
         { title: 'How Dare It Rise', file: '/audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: '/audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right', songbook: '/songs/junkyard-cabaret/how-dare-it-rise/songbook.json?v=20261018-revision-1' },
         { title: 'Take Your Time', act: 'Intermission', actInline: true, file: '/audio/junkyard-cabaret/take-your-time.mp3?v=202606261700', cover: '/audio/junkyard-cabaret/junkyard-cabaret-cover-card.webp?v=202608132052', noShare: true, noNumber: true },
         { title: 'Everything Must Go', act: 'Act II', songbook: '/songs/junkyard-cabaret/everything-must-go/songbook.json?v=20261018-revision-1', file: '/audio/junkyard-cabaret/everything-must-go.mp3?v=202606141010', cover: '/audio/junkyard-cabaret/everything-must-go-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/singular-intention' },
-        { title: "Morning's Flood", songbook: '/songs/junkyard-cabaret/mornings-flood/songbook.json?v=20261018-notebook-cleanup-1', file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=54ef812658ac', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
+        { title: "Morning's Flood", songbook: '/songs/junkyard-cabaret/mornings-flood/songbook.json?v=20261024-previous-takes-all-1', file: '/audio/junkyard-cabaret/mornings-flood.mp3?v=54ef812658ac', cover: '/audio/junkyard-cabaret/mornings-flood-title.webp?v=20261016-tense-grip', article: 'https://charleswilke.substack.com/p/cherish-your-confident-ire' },
         { title: 'What You Get', file: '/audio/junkyard-cabaret/what-you-get.mp3?v=202608081613', cover: '/audio/junkyard-cabaret/what-you-get-title.webp', article: 'https://charleswilke.substack.com/p/the-stuff-of-fairy-tales', songbook: '/songs/junkyard-cabaret/what-you-get/songbook.json?v=20261018-revision-1' },
-        { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3?v=8a1a1c5e5be6', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash', songbook: '/songs/junkyard-cabaret/refuse-the-call/songbook.json?v=20261018-revision-1' },
+        { title: 'Refuse the Call', file: '/audio/junkyard-cabaret/refuse-the-call.mp3?v=8a1a1c5e5be6', cover: '/audio/junkyard-cabaret/refuse-the-call-title.webp?v=20261017abstract', article: 'https://charleswilke.substack.com/p/salve-for-the-algorithmic-rash', songbook: '/songs/junkyard-cabaret/refuse-the-call/songbook.json?v=20261024-previous-takes-all-1' },
         { title: 'Mind the Drop', file: '/audio/junkyard-cabaret/mind-the-drop.mp3?v=202606261404', cover: '/audio/junkyard-cabaret/mind-the-drop-title.webp?v=202607041720', article: 'https://charleswilke.substack.com/p/creative-spirits', songbook: '/songs/junkyard-cabaret/mind-the-drop/songbook.json?v=20261018-revision-1' },
-        { title: 'Mostly Yours', slug: 'mostly-yours', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=20261017', cover: '/audio/junkyard-cabaret/mostly-yours-title.webp?v=20261018', article: 'https://charleswilke.substack.com/p/fits-and-starts', songbook: '/songs/junkyard-cabaret/mostly-yours/songbook.json?v=20261018-revision-1' },
-        { title: 'Misdirected.', songbook: '/songs/junkyard-cabaret/misdirected/songbook.json?v=20261018-notebook-cleanup-1', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202610172140', cover: '/audio/junkyard-cabaret/misdirected-title-v2.webp?v=20261017redperiod', article: 'https://charleswilke.substack.com/p/misdirected' },
-        { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce', songbook: '/songs/junkyard-cabaret/scarce/songbook.json?v=20261018-revision-1' }
+        { title: 'Mostly Yours', slug: 'mostly-yours', file: '/audio/junkyard-cabaret/fits-and-starts.mp3?v=20261017', cover: '/audio/junkyard-cabaret/mostly-yours-title.webp?v=20261018', article: 'https://charleswilke.substack.com/p/fits-and-starts', songbook: '/songs/junkyard-cabaret/mostly-yours/songbook.json?v=20261024-previous-takes-all-1' },
+        { title: 'Misdirected.', songbook: '/songs/junkyard-cabaret/misdirected/songbook.json?v=20261024-previous-takes-all-1', file: '/audio/junkyard-cabaret/misdirected.mp3?v=202610172140', cover: '/audio/junkyard-cabaret/misdirected-title-v2.webp?v=20261017redperiod', article: 'https://charleswilke.substack.com/p/misdirected' },
+        { title: 'Scarce', act: 'Encore', actInline: true, file: '/audio/junkyard-cabaret/scarce.mp3?v=202607121551', cover: '/audio/junkyard-cabaret/scarce-title.webp', article: 'https://charleswilke.substack.com/p/scarce', songbook: '/songs/junkyard-cabaret/scarce/songbook.json?v=20261024-scarce-433-only-1' }
     ];
 
     const lightbox = document.getElementById('jcLightbox');

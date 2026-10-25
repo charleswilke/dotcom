@@ -132,5 +132,27 @@
   "notebook": {
     "style": "Crooked vaudeville shuffle, 94 BPM, easy swing, disreputable bounce. The returning carnival barker from the opening number: gravelly, whiskey-worn male baritone, warm and mischievous, effortlessly charming, conversational spoken-sung patter slipping into natural melody. Same seasoned showman’s swagger, now performing for a nearly empty tent. Never sinister or melodramatic. Detuned upright piano drives a jaunty repeating vamp; upright bass walks slightly behind; brushed snare, tin taps and scrap-metal clinks make a loose junkyard rhythm. Muted trumpet heckles the singer with short comic replies; occasional wheezy accordion recalls the larger cabaret ensemble. Catchy, almost cheerful refrain, unchanged melody. At the bridge, his confidence briefly falters, but the band plays on, oblivious. No dramatic silence, swelling strings or grand revelation. Dry live-room acoustics, analog grit, imperfect timing. Final refrain stays small. Voice stops; band finishes two bars later.",
     "idea": "At the bridge, his confidence briefly falters, but the band plays on, oblivious."
-  }
+  },
+  "previousTakes": [
+    {
+      "title": "July 5, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/misdirected-2026-07-05.mp3"
+    },
+    {
+      "title": "August 28, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/misdirected-2026-08-28.mp3"
+    },
+    {
+      "title": "August 29, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/misdirected-2026-08-29.mp3"
+    },
+    {
+      "title": "September 27, 2026 · 1",
+      "file": "/audio/junkyard-cabaret/previous-takes/misdirected-2026-09-27-1.mp3"
+    },
+    {
+      "title": "September 27, 2026 · 2",
+      "file": "/audio/junkyard-cabaret/previous-takes/misdirected-2026-09-27-2.mp3"
+    }
+  ]
 }

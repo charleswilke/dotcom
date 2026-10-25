@@ -207,5 +207,23 @@
   ],
   "notebook": {
     "style": "Dark folk-noir cabaret, crooked small-band swing, ~96 BPM; urgent feet, unhurried voice, Low, weathered female contralto, chesty and close, dry talk-sung phrasing, wry and resolute; never belting, Mono opening: fingerpicked acoustic guitar and stubborn upright bass ostinato, Brushed snare and muted kick slip into a loping pocket, Accordion plays a nagging two-note “call” motif, returning between phrases and growing pushier without getting louder, Guitar answers in scratchy little “itch” figures; junk percussion, boot stomps and ragged handclaps mimic carnival machinery, Each “Refuse the call” lands on two hard stresses, followed by a razor-cut band silence before the groove resumes, Bass stays steady while everything else fusses, Dry room mics, tape grit, narrow-to-wide mix; no gloss, choirs or vocal runs, Bridge: almost just voice and bass, Final chorus rougher and rhythmically insistent, not triumphant, Instruments peel away; unanswered accordion figure, then true silence"
-  }
+  },
+  "previousTakes": [
+    {
+      "title": "June 19, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/refuse-the-call-2026-06-19.mp3"
+    },
+    {
+      "title": "September 27, 2026 · 1",
+      "file": "/audio/junkyard-cabaret/previous-takes/refuse-the-call-2026-09-27-1.mp3"
+    },
+    {
+      "title": "September 27, 2026 · 2",
+      "file": "/audio/junkyard-cabaret/previous-takes/refuse-the-call-2026-09-27-2.mp3"
+    },
+    {
+      "title": "October 17, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/refuse-the-call-2026-10-17.mp3"
+    }
+  ]
 }

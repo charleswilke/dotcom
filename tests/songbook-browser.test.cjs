@@ -74,3 +74,131 @@ for (const width of [390, 1440]) {
         });
     }
 }
+
+// Use real media events with a quiet local fixture to verify playback handoffs.
+const silentWav = Buffer.alloc(44 + 30 * 8000, 128);
+silentWav.write('RIFF', 0); silentWav.writeUInt32LE(silentWav.length - 8, 4); silentWav.write('WAVEfmt ', 8);
+silentWav.writeUInt32LE(16, 16); silentWav.writeUInt16LE(1, 20); silentWav.writeUInt16LE(1, 22);
+silentWav.writeUInt32LE(8000, 24); silentWav.writeUInt32LE(8000, 28);
+silentWav.writeUInt16LE(1, 32); silentWav.writeUInt16LE(8, 34);
+silentWav.write('data', 36); silentWav.writeUInt32LE(silentWav.length - 44, 40);
+
+for (const width of [390, 1440]) {
+    for (const [prefix, hash, firstSong] of [
+        ['jc', 'junkyard-cabaret', 'why-this-way'], ['gwor', 'gwor', 'clear-as-day']
+    ]) {
+        test(`${prefix} previous takes expand, share, and hand off playback at ${width}px`, async () => {
+            const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+            page.setDefaultTimeout(8000);
+            const errors = [];
+            page.on('pageerror', error => errors.push(error.message));
+            let takeRequests = 0;
+            try {
+                await page.route('**/*', async route => {
+                    const url = new URL(route.request().url());
+                    if (url.origin !== origin) return route.abort();
+                    if (route.request().resourceType() === 'media') {
+                        if (url.pathname.includes('/previous-takes/')) takeRequests++;
+                        const range = /bytes=(\d+)-(\d*)/.exec(route.request().headers().range || '');
+                        const start = range ? Number(range[1]) : 0;
+                        const end = range && range[2] ? Math.min(Number(range[2]), silentWav.length - 1) : silentWav.length - 1;
+                        return route.fulfill({
+                            status: range ? 206 : 200, body: silentWav.subarray(start, end + 1), contentType: 'audio/wav',
+                            headers: { 'Accept-Ranges': 'bytes', 'Content-Length': String(end - start + 1),
+                                ...(range ? { 'Content-Range': `bytes ${start}-${end}/${silentWav.length}` } : {}) }
+                        });
+                    }
+                    const file = path.resolve(root, `.${url.pathname === '/' ? '/index.html' : url.pathname}`);
+                    if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+                        return route.fulfill({ status: 404, body: '' });
+                    }
+                    if (url.pathname.endsWith(`/${firstSong}/songbook.json`)) {
+                        const song = JSON.parse(fs.readFileSync(file, 'utf8'));
+                        song.previousTakes = [
+                            { title: 'First arrangement', file: '/audio/previous-takes/first.wav', notes: 'An earlier chorus.' },
+                            { title: 'Second arrangement', file: '/audio/previous-takes/second.wav' },
+                            { title: 'Missing file' }, { title: 'Invalid link', file: 'javascript:alert(1)' }
+                        ];
+                        return route.fulfill({ json: song });
+                    }
+                    const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.woff2': 'font/woff2' };
+                    return route.fulfill({ path: file, contentType: types[path.extname(file)] || 'application/octet-stream' });
+                });
+                await page.goto(`${origin}/#${hash}`);
+                const open = page.locator(`#${prefix}TrackList .track-songbook-button`).first();
+                await open.waitFor();
+                const managedCount = await page.evaluate(() => managedAudioPlayers.size);
+                await page.evaluate(prefix => document.getElementById(`${prefix}Audio`).play(), prefix);
+                await open.click();
+                const previous = page.locator(`#${prefix}SongbookContent .jc-book-previous-takes`);
+                await previous.waitFor();
+                assert.equal(await previous.getAttribute('open'), null);
+                assert.equal(await page.evaluate(prefix => document.getElementById(`${prefix}Audio`).paused, prefix), false, 'Opening lyrics preserves current playback');
+                await previous.locator('summary').focus();
+                await previous.locator('summary').press('Enter');
+                await page.waitForFunction(prefix => document.querySelector(`#${prefix}SongbookContent .jc-book-previous-takes`).open, prefix);
+                assert.equal(takeRequests, 0, 'Opening previous takes does not fetch recordings');
+                assert.equal(await previous.locator('audio').count(), 2);
+                assert.equal(await previous.locator('a').first().getAttribute('href'), '/audio/previous-takes/first.wav');
+                assert.equal(await previous.locator('a').first().getAttribute('target'), '_blank');
+                await previous.scrollIntoViewIfNeeded();
+                assert.ok(await previous.evaluate(el => el.scrollWidth <= el.clientWidth), 'Takes fit the reading column');
+                if (process.env.SONGBOOK_SCREENSHOTS) {
+                    await page.screenshot({ path: `/tmp/songbook-${prefix}-${width}.png` });
+                }
+                const audios = previous.locator('audio');
+                const playButtons = previous.locator('.jc-book-take-play');
+                await playButtons.nth(0).click();
+                await page.waitForFunction(prefix => Number.isFinite(document.querySelector(`#${prefix}SongbookContent audio`).duration), prefix);
+                assert.equal(await playButtons.nth(0).getAttribute('aria-label'), 'Pause First arrangement');
+                await playButtons.nth(0).click();
+                const seek = previous.locator('[role="slider"]').first();
+                await page.waitForFunction(prefix => {
+                    const audio = document.querySelector(`#${prefix}SongbookContent audio`);
+                    return audio.seekable.length && audio.seekable.end(0) >= 5;
+                }, prefix);
+                await seek.focus();
+                await seek.press('Home');
+                await seek.press('ArrowRight');
+                assert.equal(await seek.getAttribute('aria-valuenow'), '5');
+                assert.equal(await audios.nth(0).evaluate(audio => audio.paused), true, 'Seeking preserves pause');
+                await playButtons.nth(0).click();
+                assert.equal(await page.evaluate(prefix => document.getElementById(`${prefix}Audio`).paused, prefix), true);
+                await playButtons.nth(1).click();
+                assert.equal(await audios.nth(0).evaluate(audio => audio.paused), true, 'Only one take plays');
+                await page.locator(`#${prefix}SongbookToolbar .jc-book-listen`).click();
+                assert.equal(await audios.nth(1).evaluate(audio => audio.paused), true, 'Album Listen pauses the take');
+                await playButtons.nth(0).click();
+                await previous.locator('summary').click();
+                await page.waitForFunction(prefix => document.querySelector(`#${prefix}SongbookContent audio`).paused, prefix);
+                await previous.locator('summary').click();
+                await playButtons.nth(0).click();
+                await page.locator(`#${prefix}SongbookBack`).click();
+                assert.equal(await audios.nth(0).evaluate(audio => audio.paused), true, 'Leaving the book pauses the take');
+                await open.click();
+                await previous.waitFor();
+                assert.equal(await page.evaluate(() => managedAudioPlayers.size), managedCount + 2, 'Cached reopening releases old audio players');
+                await page.locator(`#${prefix}SongbookBack`).click();
+                await page.locator(`#${prefix}TrackList .track-songbook-button`).nth(2).click();
+                await page.waitForFunction(prefix => document.getElementById(`${prefix}SongbookContent`).getAttribute('aria-busy') === 'false', prefix);
+                assert.equal(await previous.count(), 0, 'Songs without takes have no empty section');
+                assert.equal(await page.evaluate(() => managedAudioPlayers.size), managedCount);
+                await page.locator(`#${prefix}SongbookBack`).click();
+                await open.click();
+                await previous.locator('summary').click();
+                await playButtons.nth(0).click();
+                await page.locator(`#${prefix}Close`).click();
+                await page.waitForFunction(prefix => document.querySelector(`#${prefix}SongbookContent audio`).paused, prefix);
+                assert.deepEqual(errors, []);
+            } finally { await page.close(); }
+        });
+    }
+}
+
+test('Cathedral of Junk preserves the March recording as a distinct playable file', () => {
+    const song = JSON.parse(fs.readFileSync(path.join(root, 'songs/junkyard-cabaret/cathedral-of-junk/songbook.json'), 'utf8'));
+    const take = song.previousTakes[0];
+    const audio = fs.readFileSync(path.join(root, take.file));
+    assert.equal(audio.subarray(0, 3).toString(), 'ID3');
+    assert.notDeepEqual(audio, fs.readFileSync(path.join(root, 'audio/junkyard-cabaret/cathedral-of-junk.mp3')));
+});

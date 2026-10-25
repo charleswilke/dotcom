@@ -167,5 +167,31 @@
   ],
   "notebook": {
     "style": "Crooked after-hours parlor chanson, 92 BPM, loose lopsided two-step sway, lightly vaudevillian, intimate and wry, Weathered female low-mezzo, close-miked, dry, conversational half-singing, faint smile, understated fatigue, natural breaths and little self-corrections, No belting, sobbing, dramatic vibrato or torch-song anguish, Slightly detuned upright piano leads with a recurring four-note figure, playful wrong turns, exposed plunks, stops and restarts, Pizzicato upright bass wanders around the pulse, soft brushed snare, occasional muted scrap-metal ticks, Small imperfect ensemble, warm analog room, tape hiss, human timing, Refrain uses the same modest sing-song melody each time, Bridge briefly threatens a sweeping sentimental climax, then collapses into a mundane piano figure, Keep the energy gently moving, never grand, Outro sheds instruments without slowing, Final vocal cut off mid-thought into absolute silence, No fade, reverb tail or resolving chord"
-  }
+  },
+  "previousTakes": [
+    {
+      "title": "July 3, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mostly-yours-2026-07-03.mp3"
+    },
+    {
+      "title": "July 4, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mostly-yours-2026-07-04.mp3"
+    },
+    {
+      "title": "July 5, 2026",
+      "file": "/audio/junkyard-cabaret/previous-takes/mostly-yours-2026-07-05.mp3"
+    },
+    {
+      "title": "September 27, 2026 · 1",
+      "file": "/audio/junkyard-cabaret/previous-takes/mostly-yours-2026-09-27-1.mp3"
+    },
+    {
+      "title": "September 27, 2026 · 2",
+      "file": "/audio/junkyard-cabaret/previous-takes/mostly-yours-2026-09-27-2.mp3"
+    },
+    {
+      "title": "September 27, 2026 · 3",
+      "file": "/audio/junkyard-cabaret/previous-takes/mostly-yours-2026-09-27-3.mp3"
+    }
+  ]
 }

@@ -1,0 +1,32 @@
+Generated with the built-in image_gen tool, 2026-10-25.
+Final asset: from-this-side-of-the-door-title-v2.webp (1024 x 1024, WebP quality 92).
+Approved by the user for integration. The previous title art is preserved.
+
+Art direction: flat industrial drafting-manual plate, warm cream stock, black technical linework, brick-red accents. THIS is red; all other title words are black. Coffee soaks through the notebook page. A growing red signal trace labeled A LITTLE LOUDER replaces the orange broadcast arcs and VOICE: AUDIBLE, drawing on the outro lyric.
+
+Initial concept prompt:
+Use case: infographic-diagram.
+Asset type: NEW square song title cover concept for the album Grief without Ritual, 1024x1024.
+Primary request: An industrial drafting-manual plate about a doorway and the sound of familiar footsteps. The emotional subject is someone remaining inside, recognizing a departed loved one's footsteps, then finding the courage to sing audibly. Make the illustration radically spare, flat and diagrammatic.
+Style: mid-century engineering service manual / architectural working drawing reproduced in three spot inks on lightly aged warm cream paper. Crisp ruled drafting lines, deliberate hierarchy of line weights, dashed movement lines, sparse section hatching ONLY in cut walls. Black ink, brick red and tiny ochre accents. A flat printed page. NO modeled surfaces, realistic illustration, perspective, engraving shading or three-dimensional rendering.
+Layout: thin rectangular black perimeter border. Top 38% is enormous condensed bold uppercase letterpress type tightly filling width within margins. Exact title on two lines: "FROM THIS SIDE" / "OF THE DOOR". All black except brick red "DOOR". Horizontal divider below. Modest ink wear; paper texture subordinate to legibility.
+Lower 62%: one clean, coherent architectural PLAN VIEW of a wall and single hinged door, seen exactly vertically from above. No perspective at all. A thick horizontal sectioned wall crosses the drawing, with a doorway opening near center-right. The door leaf is a simple double ruled line shown partly open, with a fine dashed quarter-circle swing arc. Standard drafting symbols, no decorative scene. The upper side of wall represents hallway; lower side represents interior. A short trail of four simplified sole-outline symbols in the hallway approaches the threshold; no shoe tread or realism. Small measured ochre sound-wave arcs pass through the opening into the interior. Give these elements generous empty cream space. Three restrained leader-line callouts: "FAMILIAR STEPS" points to the sole symbols, "THIS SIDE" points inside the threshold, "VOICE: AUDIBLE" points to one tiny interior sound-wave symbol. One small flat open-notebook schematic icon in the lower-left interior, constructed from just a few ruled lines; no furniture or kitchen.
+Upper left of diagram panel "FIG. 11". A small brick-red circular detail inset near lower left shows a magnified hinge pivot and door-jamb section, using only flat lines and hatching, linked with a thin red leader to the main hinge. Engineering precision, visual restraint, page breathes.
+Bottom left footer "GWOR / 011". Bottom-right small outlined instruction box, exactly three neatly stacked lines: "1. STAY." / "2. LISTEN." / "3. LET IT BE HEARD."
+Constraints: All text correct and legible. This is album artwork in a technical drawing vocabulary, not a polished infographic. No extra labels or arbitrary numbers. No dog, plants, kitchen appliances, flooring, furniture, realistic objects, gradients, cast shadows, 3D depth, isometric view, painterly textures, blue background, modern UI, photorealism or watermark. Keep genuine warmth through typography and warm stock, not through a rendered domestic scene.
+
+Typography edit:
+Change only THIS to brick red and DOOR to black; preserve all other artwork.
+
+Final edit prompt:
+Use case: precise-object-edit.
+Edit the supplied song title cover with just these localized changes. Keep the flat industrial drafting-manual aesthetic.
+
+1. NOTEBOOK: In the little open notebook at bottom left, add a modest irregular brown coffee spill soaking through part of the left page and across the lower fold. It should be a flat translucent sepia ink stain with a softly feathered edge and slight uneven pooling, visibly on the notebook paper. The existing fine black writing lines remain visible through the stain. No cup, no new objects, no 3D rendering.
+
+2. SOUND GRAPHICS: Remove ALL of the ochre/orange curved sound-wave arcs from the artwork, including those above the doorway, directly below the threshold, below the door leaf, and near the lower-right label. Restore clean matching cream paper at those positions. Preserve the BLACK dashed door-swing arc, which is a drafting feature.
+
+3. LOWER-RIGHT CALLOUT: Replace the exact label "VOICE: AUDIBLE" with "A LITTLE LOUDER", drawn in the same small black condensed technical-label typography. This wording comes from the song's final line "I sang a little louder / From this side of the door." In the lower-right interior space where the old lower sound arcs and label were, draw ONE small horizontal industrial signal trace: a fine black baseline with a brick-red oscillating waveform that starts with very small amplitude at the left and gently grows to a moderate amplitude at the right, about five oscillations. This is a schematic amplitude diagram, not broadcast arcs, not a speaker icon or digital interface. Place it entirely below the door leaf and above the instruction box, without touching any existing element. A fine black leader from the label points precisely to the growing part of the trace. Keep this detail restrained with generous negative space. No extra text or axis numbers.
+
+Invariants: Preserve the exact giant title "FROM THIS SIDE / OF THE DOOR", with THIS red and every other title word black. Preserve its shapes, scale and position. Preserve the entire wall and doorway plan, door leaf, hinge, black dashed swing arc, red circular hinge-detail inset and red connecting leader, footprints and dashed path, "FAMILIAR STEPS", "THIS SIDE", "FIG. 11", notebook placement, "GWOR / 011", all three lines in the instruction box, borders, typography, paper color, ink wear, and overall layout. Change only the coffee stain and the orange arc / VOICE: AUDIBLE areas specified above. No realistic rendering, shaded objects or perspective.
+

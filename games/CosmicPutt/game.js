@@ -7,6 +7,14 @@
   const canvas = document.getElementById('course'), ctx = canvas.getContext('2d');
   const cupCanvas = document.getElementById('cup-camera'), cupCtx = cupCanvas.getContext('2d');
   const $ = id => document.getElementById(id);
+  function setArrowLabel(button, label, returning = false) {
+    const direction = returning ? 'return' : 'forward';
+    if (button.dataset.arrowLabel === label && button.dataset.arrowDirection === direction) return;
+    button.textContent = label + ' ';
+    button.insertAdjacentHTML('beforeend', returning ? '<svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4 4 12M4 4v8h8"/></svg>' : '<svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg>');
+    button.dataset.arrowLabel = label;
+    button.dataset.arrowDirection = direction;
+  }
   const ui = { strokes: $('strokes'), status: $('well-status'), description: $('well-description'),
     output: $('power-output'), fill: $('power-fill'),
     message: $('message'), result: $('result') };
@@ -164,7 +172,7 @@
     $('result-description').textContent = `${strokes} ${strokes === 1 ? 'putt. Hole in one!' : 'putts.'} ${stars} of 3 stars earned.`;
     $('round-summary').textContent = complete ? `Round complete · ${S.totalStars(scores)} of ${P.levels.length * 3} stars. Replay any hole to improve your score.` :
       `${scores.filter(score => score !== null).length} of ${P.levels.length} holes complete · ${S.totalStars(scores)} stars collected.`;
-    $('next-hole').textContent = complete ? 'Play a new round ↗' : 'Next hole ↗';
+    setArrowLabel($('next-hole'), complete ? 'Play a new round' : 'Next hole');
     updateUI(complete ? 'Round complete. Every star earned its orbit.' : 'Hole complete. Your stars are on the scorecard.');
     $('next-hole').focus();
   }
@@ -197,9 +205,10 @@
     }
   }
   function updateViewControl() {
-    const button = $('overview'), label = overview || manualPan ? 'Return to ball ↙' : 'Course overview ↗';
+    const button = $('overview'), returning = overview || manualPan;
+    const label = returning ? 'Return to ball' : 'Course overview';
     if (button.getAttribute('aria-pressed') !== String(overview)) button.setAttribute('aria-pressed', String(overview));
-    if (button.textContent !== label) button.textContent = label;
+    setArrowLabel(button, label, returning);
     button.disabled = Boolean(drag) || panGesture || phase !== 'ready';
     canvas.dataset.view = overview ? 'overview' : manualPan ? 'panned' : 'local';
     canvas.dataset.gesture = panGesture ? 'pan' : drag ? 'aim' : 'idle';

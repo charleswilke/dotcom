@@ -54,7 +54,7 @@
                     'Tom Sibley'
                 ]
             },
-            action: { label: 'Visit the Absurd Alchemy Vimeo ↗', href: 'https://vimeo.com/absurdalchemy', external: true },
+            action: { label: 'Visit the Absurd Alchemy Vimeo', href: 'https://vimeo.com/absurdalchemy', external: true },
             secondaryLabel: 'Back to the room'
         },
         games: {
@@ -5831,6 +5831,8 @@
             infoAction.href = panel.action.href;
             infoAction.hidden = false;
             if (panel.action.external) {
+                infoAction.append(' ');
+                infoAction.insertAdjacentHTML('beforeend', '<svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg>');
                 infoAction.target = '_blank';
                 infoAction.rel = 'noopener noreferrer';
             }

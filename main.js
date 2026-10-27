@@ -6057,7 +6057,8 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
     function renderFooter(song, index) {
         footer.replaceChildren();
         if (tracks[index].article) {
-            const inspiration = element('a', 'jc-book-inspiration', `Read the ${tracks[index].articleType || 'essay'} that inspired this song ↗`);
+            const inspiration = element('a', 'jc-book-inspiration', `Read the ${tracks[index].articleType || 'essay'} that inspired this song `);
+            inspiration.insertAdjacentHTML('beforeend', '<svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg>');
             inspiration.href = tracks[index].article;
             inspiration.target = '_blank';
             inspiration.rel = 'noopener noreferrer';
@@ -6158,7 +6159,8 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
                 const item = element('li', 'jc-book-take');
                 const label = take.title || `Take ${position + 1}`;
                 const heading = element('div', 'jc-book-take-heading');
-                const link = element('a', 'jc-book-take-link', '↗');
+                const link = element('a', 'jc-book-take-link', '');
+                link.insertAdjacentHTML('beforeend', '<svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg>');
                 link.href = take.file;
                 link.target = '_blank';
                 link.rel = 'noopener noreferrer';

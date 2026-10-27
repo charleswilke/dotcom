@@ -12,7 +12,7 @@
   <script defer src="scoring.js?v=1"></script>
   <script defer src="view.js?v=6"></script>
   <script defer src="motion.js?v=6"></script>
-  <script defer src="game.js?v=37"></script>
+  <script defer src="game.js?v=38"></script>
 </head>
 <body>
   <main class="observatory">
@@ -25,7 +25,7 @@
     <section class="viewport" aria-label="Miniature golf course">
       <div class="corner-label"><span class="live-dot"></span> <span id="blueprint-number">BLUEPRINT 01</span> <span id="study-label" class="sub-label">1 GRAVITY WELL · COURSE STUDY</span></div>
       <canvas id="course" width="1100" height="650" tabindex="0" aria-label="Golf course. Drag backward from the ball and release to putt. Or use arrow keys to aim and set power, then Space to shoot." aria-describedby="instructions">Your browser needs Canvas support to play Cosmic Putt.</canvas>
-      <button id="overview" class="view-button" aria-pressed="false" aria-controls="course">Course overview ↗</button>
+      <button id="overview" class="view-button" aria-pressed="false" aria-controls="course">Course overview <svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></button>
       <div id="cup-inset" class="cup-inset" hidden>
         <div class="cup-camera-label"><span>CUP CAM</span><span id="cup-camera-mode">APPROACH PREVIEW</span></div>
         <canvas id="cup-camera" width="360" height="240" role="img" aria-label="Close-up of the approach to the cup"></canvas>
@@ -35,7 +35,7 @@
         <span id="result-course" class="eyebrow">BLUEPRINT COURSE / 01</span><h2 id="result-title">Beautiful orbit.</h2>
         <div id="result-stars" class="result-stars" role="img" aria-label="0 of 3 stars"></div>
         <p id="result-description"></p><p id="round-summary"></p>
-        <button id="next-hole" class="primary">Next hole ↗</button>
+        <button id="next-hole" class="primary">Next hole <svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></button>
         <button id="play-again" class="secondary">Replay this hole ↺</button>
       </div>
     </section>

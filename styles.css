@@ -568,7 +568,7 @@ header {
     perspective: 1000px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
     html.homepage body > header {
         /* Fit the wordmark and subtitle without clipping, with room below the nav. */
         height: auto;
@@ -3713,7 +3713,7 @@ footer p {
     header {
         height: auto;
         min-height: 0;
-        padding-block: 24px 36px;
+        padding-block: 36px;
     }
 
     .header-content {

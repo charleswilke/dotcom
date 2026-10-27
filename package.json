@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "node tools/build-article-archive.js && node tools/build-reader-css.js && node tools/build-share-pages.js && node tools/prepare-security-assets.js && node tools/minify-css.js styles.css subpages.css before-times.css reader-base.css && node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js && node tools/stamp-assets.js"
+    "build": "node tools/build-article-archive.js && node tools/build-reader-css.js && node tools/build-share-pages.js && node tools/prepare-security-assets.js && node tools/minify-css.js styles.css subpages.css before-times.css reader-base.css recently-posters.css && node tools/minify-js.js main.js common.js nav.js before-times.js before-times-archive.js karaoke.js recently-edition.js recently-posters.js && node tools/stamp-assets.js"
   },
   "devDependencies": {
     "esbuild": "0.28.2",

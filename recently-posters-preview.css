@@ -1,0 +1,92 @@
+@font-face {
+  font-family: 'Space Mono';
+  src: url('/fonts/space-mono-v17-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+.poster-study * { box-sizing: border-box; }
+.poster-study { margin: 0; background: #16121d; color: #f8e9d2; font-family: Arial, sans-serif; }
+.poster-study .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+.proof-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 24px;
+  border-bottom: 1px solid #f8e9d21a;
+  background: #110e18;
+  font: 11px/1.5 'Space Mono', monospace;
+}
+.proof-bar p { margin: 0; }
+.proof-bar p > span { color: #c0b6cb; }
+.proof-bar p > span:first-child { margin: 0 8px; }
+.proof-bar a { color: inherit; text-underline-offset: 4px; white-space: nowrap; }
+.proof-bar a:focus-visible { outline: 2px solid #00f7c2; outline-offset: 5px; }
+
+.site-context {
+  position: relative;
+  overflow: hidden;
+  padding: 55px 24px 35px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 105%, #dd653d24, transparent 60%),
+    linear-gradient(#211735, #17121f);
+}
+.site-context::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: .2;
+  background-image: linear-gradient(#f8e9d208 1px, transparent 1px), linear-gradient(90deg, #f8e9d208 1px, transparent 1px);
+  background-size: 36px 36px;
+  pointer-events: none;
+}
+.site-context h1 { position: relative; margin: 0 auto; max-width: 840px; }
+.site-context img { display: block; width: 100%; height: auto; }
+.site-context p { position: relative; margin: 22px 0 0; font: 13px/1.8 'Space Mono', monospace; letter-spacing: .04em; }
+.site-context p > span { color: #d5c7d6; font-size: 12px; }
+.site-context em { color: #00f7c2; font-style: normal; }
+.poster-wall:not(.poster-wall-native) {
+  padding: 54px 24px 76px;
+  background:
+    radial-gradient(ellipse at 23% 10%, #a8967520, transparent 38%),
+    radial-gradient(ellipse at 87% 58%, #7e536120, transparent 43%),
+    radial-gradient(ellipse at 48% 35%, #37303c, transparent 75%),
+    #211c29;
+  box-shadow: inset 0 5px 12px #0005;
+}
+.poster-wall:not(.poster-wall-native)::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: url('/images/recently-screenprint/plaster-grain.svg') repeat;
+  opacity: .28;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+.poster-wall:not(.poster-wall-native)::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #0002, transparent 18%, transparent 82%, #0002),
+    radial-gradient(ellipse at 50% 100%, #09060d8c, transparent 55%);
+}
+.proof-footer { padding: 18px 24px; color: #ad9eaf; text-align: center; font: 10px/1.6 'Space Mono', monospace; }
+@media (max-width: 767px) {
+  .proof-bar { padding: 11px 16px; font-size: 10px; }
+  .proof-bar p > span:last-child { display: none; }
+  .proof-bar p > span:first-child { display: none; }
+  .site-context { padding: 38px 24px 29px; }
+  .site-context h1 { max-width: 560px; }
+  .site-context p { font-size: 11px; letter-spacing: 0; margin-top: 18px; }
+  .site-context p > span { font-size: 10px; }
+  .poster-wall:not(.poster-wall-native) { padding: 35px 22px 47px; }
+}

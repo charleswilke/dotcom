@@ -6145,12 +6145,25 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
             notebook.append(notes);
             book.append(notebook);
         }
-        const takes = Array.isArray(song.previousTakes) ? song.previousTakes.filter(take => {
+        const validTakes = Array.isArray(song.previousTakes) ? song.previousTakes.filter(take => {
             if (!take || typeof take.file !== 'string' || !take.file.trim()) return false;
             try {
                 return ['http:', 'https:'].includes(new URL(take.file, window.location.href).protocol);
             } catch { return false; }
         }) : [];
+        // Dated takes are chronological; numbered efforts identify the last of a day.
+        // Keep the full archive in songbook.json and collapse only the displayed list.
+        const dailyTakes = new Map();
+        validTakes.forEach((take, index) => {
+            const dated = /^([A-Z][a-z]+ \d{1,2}, \d{4})(?:\s*·\s*(\d+))?$/.exec(take.title || '');
+            const key = dated ? dated[1] : index;
+            const effort = Number(dated?.[2] || 0);
+            const previous = dailyTakes.get(key);
+            if (!previous || effort >= previous.effort) {
+                dailyTakes.set(key, { effort, take: dated ? { ...take, title: dated[1] } : take });
+            }
+        });
+        const takes = Array.from(dailyTakes.values(), entry => entry.take);
         if (takes.length) {
             const previous = element('details', 'jc-book-notebook jc-book-previous-takes');
             previous.append(element('summary', '', 'Previous takes'));

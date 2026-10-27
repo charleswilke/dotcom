@@ -195,6 +195,41 @@ for (const width of [390, 1440]) {
     }
 }
 
+test('songbooks display only the last numbered effort per day and retain the archive', async () => {
+    const page = await browser.newPage({ viewport: { width: 390, height: 900 }, reducedMotion: 'reduce' });
+    try {
+        await page.route('**/*', route => {
+            const url = new URL(route.request().url());
+            if (url.origin !== origin) return route.abort();
+            const file = path.resolve(root, `.${url.pathname === '/' ? '/index.html' : url.pathname}`);
+            if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+                return route.fulfill({ status: 404, body: '' });
+            }
+            const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webp': 'image/webp', '.woff2': 'font/woff2' };
+            return route.fulfill({ path: file, contentType: types[path.extname(file)] || 'application/octet-stream' });
+        });
+        await page.goto(`${origin}/#junkyard-cabaret`);
+        for (const slug of ['mostly-yours', 'refuse-the-call', 'misdirected']) {
+            const song = JSON.parse(fs.readFileSync(path.join(root, `songs/junkyard-cabaret/${slug}/songbook.json`), 'utf8'));
+            const button = page.locator('#jcTrackList .mixtape-track-item').filter({ has: page.getByText(song.title, { exact: true }) }).locator('.track-songbook-button');
+            await button.click();
+            const previous = page.locator('#jcSongbookContent .jc-book-previous-takes');
+            await previous.waitFor();
+            await previous.locator('summary').click();
+            const titles = await previous.locator('.jc-book-take-title').allTextContents();
+            assert.equal(titles.filter(title => title === 'September 27, 2026').length, 1);
+            assert.ok(titles.every(title => !title.includes(' · ')));
+            const last = song.previousTakes.filter(take => take.title.startsWith('September 27, 2026')).at(-1);
+            const row = previous.locator('li').filter({ hasText: 'September 27, 2026' });
+            assert.equal(await row.locator('a').getAttribute('href'), last.file);
+            const days = new Set(song.previousTakes.map(take => take.title.split(' · ')[0]));
+            assert.equal(await previous.locator('audio').count(), days.size);
+            assert.ok(song.previousTakes.length > days.size, 'Earlier efforts remain archived');
+            await page.locator('#jcSongbookBack').click();
+        }
+    } finally { await page.close(); }
+});
+
 test('Cathedral of Junk preserves the March recording as a distinct playable file', () => {
     const song = JSON.parse(fs.readFileSync(path.join(root, 'songs/junkyard-cabaret/cathedral-of-junk/songbook.json'), 'utf8'));
     const take = song.previousTakes[0];

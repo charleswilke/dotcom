@@ -568,6 +568,17 @@ header {
     perspective: 1000px;
 }
 
+@media (min-width: 768px) {
+    html.homepage body > header {
+        /* Fit the wordmark and subtitle without clipping, with room below the nav. */
+        height: auto;
+        min-height: max(260px, 26vh);
+        align-items: flex-start;
+        /* The wordmark's 20px top margin completes the 24px gap. */
+        padding-top: 4px;
+    }
+}
+
 .header-bg {
     position: absolute;
     top: 0;
@@ -3702,7 +3713,7 @@ footer p {
     header {
         height: auto;
         min-height: 0;
-        padding-block: 36px;
+        padding-block: 24px 36px;
     }
 
     .header-content {

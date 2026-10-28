@@ -9,14 +9,21 @@
 
   // The original cards' image URLs remain inert until their edition is chosen.
   // Only the selected Toast IQ artwork competes for first-paint bandwidth.
-  const preload = document.createElement('link');
-  preload.rel = 'preload';
-  preload.as = 'image';
-  preload.href = edition === 'posters'
-    ? '/images/recently-screenprint/toast-iq.webp'
-    : '/images/toast-iq-cloche-card.webp?v=20260909101748';
-  preload.fetchPriority = 'high';
-  document.head.append(preload);
+  function preloadImage(href, media) {
+    const preload = document.createElement('link');
+    preload.rel = 'preload';
+    preload.as = 'image';
+    preload.href = href;
+    if (media) preload.media = media;
+    preload.fetchPriority = 'high';
+    document.head.append(preload);
+  }
+  if (edition === 'posters') {
+    preloadImage('/images/recently-stickers/toast-iq.webp', '(max-width: 767px)');
+    preloadImage('/images/recently-screenprint/toast-iq.webp', '(min-width: 768px)');
+  } else {
+    preloadImage('/images/toast-iq-cloche-card.webp?v=20260909101748');
+  }
 
   window.renderRecentlyEdition = () => {
     const section = document.getElementById('portfolio');
@@ -29,7 +36,7 @@
       section.setAttribute('aria-labelledby', 'recently-heading');
       section.dataset.recentlyEdition = 'posters';
       const spotlight = document.createElement('script');
-      spotlight.src = '/recently-posters.js?v=20261026-editions-1';
+      spotlight.src = '/recently-posters.js?v=20261027-mobile-1';
       document.head.append(spotlight);
     } else {
       section.querySelectorAll('img[data-recently-src]').forEach(image => {

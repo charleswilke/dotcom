@@ -8,6 +8,7 @@
 
   const finePointer = matchMedia('(any-hover: hover) and (any-pointer: fine)');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileLayout = matchMedia('(max-width: 767px)');
   const dust = document.createElement('div');
   dust.className = 'spotlight-dust';
   dust.setAttribute('aria-hidden', 'true');
@@ -32,7 +33,7 @@
 
   let dustInView = true;
   function syncDust() {
-    wall.classList.toggle('is-dust-visible', dustInView && !document.hidden);
+    wall.classList.toggle('is-dust-visible', dustInView && !document.hidden && !mobileLayout.matches);
   }
   const dustObserver = new IntersectionObserver(([entry]) => {
     dustInView = entry.isIntersecting;
@@ -131,6 +132,7 @@
   }
 
   function choose(card) {
+    if (mobileLayout.matches) card = null;
     if (active === card) return;
     active?.classList.remove('is-spotlit');
     active = card;
@@ -150,7 +152,7 @@
   }
 
   wall.addEventListener('pointerover', event => {
-    if (!finePointer.matches || event.pointerType === 'touch') return;
+    if (mobileLayout.matches || !finePointer.matches || event.pointerType === 'touch') return;
     hovered = cardFrom(event.target);
     if (hovered) choose(hovered);
   });
@@ -178,6 +180,13 @@
     }
   });
   reducedMotion.addEventListener('change', () => { if (active) aim(active); });
+  mobileLayout.addEventListener('change', () => {
+    syncDust();
+    if (mobileLayout.matches) {
+      hovered = focused = null;
+      choose(null);
+    }
+  });
   addEventListener('resize', () => { if (active) aim(active); }, { passive: true });
   document.addEventListener('visibilitychange', () => {
     syncDust();

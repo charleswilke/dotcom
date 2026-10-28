@@ -1,0 +1,91 @@
+/* Physical sticker treatment: the artwork stays intact beneath a cut rim. */
+.sticker-sample,
+.pasted-poster {
+  --sticker-angle: -.7deg;
+  --sticker-cut: polygon(.2% .6%, 18% .3%, 38% .7%, 60% .2%, 82% .6%, 99.7% .4%, 99.9% 32%, 99.7% 67%, 99.9% 99.4%, 78% 99.7%, 55% 99.3%, 32% 99.8%, .2% 99.4%, .4% 68%, 0% 37%);
+}
+.sticker-sample {
+  display: block;
+  position: relative;
+  padding: 8px 0;
+  transform: rotate(var(--sticker-angle));
+  filter: drop-shadow(0 1px .5px #000a) drop-shadow(0 3px 2px #0006);
+}
+.sticker-cutout {
+  position: relative;
+  display: block;
+  aspect-ratio: 3.55;
+  background: #f6efd9;
+  clip-path: var(--sticker-cut);
+}
+.sticker-art {
+  position: absolute;
+  inset: 3px;
+  display: block;
+  overflow: hidden;
+}
+.sticker-art img {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  /* Remove the transparent canvas margin, without stretching the image. */
+  transform: translateY(-50%);
+}
+.sticker-cutout::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, #fffef0b3, transparent 5%, transparent 94%, #80663e3b);
+}
+.sticker-sample:focus-visible { outline: 2px solid #00f7c2; outline-offset: 5px; }
+.sticker-before, .poster-before {
+  --sticker-angle: .5deg;
+  --sticker-cut: polygon(.3% .4%, 24% .7%, 48% .2%, 74% .6%, 99.7% .3%, 99.9% 53%, 99.7% 99.5%, 71% 99.2%, 44% 99.8%, .2% 99.4%, 0% 64%, .4% 31%);
+}
+.sticker-cabaret, .poster-cabaret {
+  --sticker-angle: -.3deg;
+  --sticker-cut: polygon(.2% .5%, 27% .2%, 55% .7%, 80% .3%, 99.8% .5%, 99.6% 36%, 100% 72%, 99.7% 99.4%, 67% 99.8%, 36% 99.3%, .3% 99.6%, 0% 52%);
+}
+.sticker-grief, .poster-grief {
+  --sticker-angle: .35deg;
+  --sticker-cut: polygon(.3% .3%, 31% .6%, 61% .2%, 99.8% .5%, 99.5% 43%, 99.9% 99.6%, 72% 99.2%, 41% 99.7%, .2% 99.5%, .4% 68%, 0% 32%);
+}
+.sticker-spectator, .poster-spectator {
+  --sticker-angle: -.5deg;
+  --sticker-cut: polygon(.2% .4%, 22% .7%, 47% .2%, 73% .5%, 99.7% .3%, 99.9% 62%, 99.7% 99.6%, 75% 99.3%, 46% 99.8%, .3% 99.4%, 0% 48%);
+}
+.sticker-space, .poster-space {
+  --sticker-angle: .6deg;
+  --sticker-cut: polygon(.3% .5%, 28% .2%, 59% .6%, 83% .3%, 99.8% .5%, 99.5% 31%, 100% 68%, 99.7% 99.4%, 69% 99.7%, 38% 99.2%, .2% 99.6%, .4% 71%, 0% 41%);
+}
+
+/* The poster edition keeps one set of links and responsive <picture> sources.
+   Only the phone presentation changes; desktop posters retain their layout. */
+@media (max-width: 767px) {
+  .poster-wall-native .poster-grid { max-width: 340px; gap: 14px; }
+  .poster-wall-native .pasted-poster {
+    padding: 8px 0;
+    transform: rotate(var(--sticker-angle));
+    filter: drop-shadow(0 1px .5px #000a) drop-shadow(0 3px 2px #0006);
+    transition: none;
+  }
+  .poster-wall-native .poster-paper {
+    aspect-ratio: 3.55;
+    background: #f6efd9;
+    clip-path: var(--sticker-cut);
+  }
+  .poster-wall-native .poster-topline,
+  .poster-wall-native .poster-caption,
+  .poster-wall-native .wall-lighting,
+  .poster-wall-native .poster-dimmer { display: none; }
+  .poster-wall-native .poster-paper::before {
+    background: linear-gradient(180deg, #fffef0b3, transparent 5%, transparent 94%, #80663e3b);
+    box-shadow: none;
+  }
+  .poster-wall-native .poster-art { position: absolute; inset: 3px; height: auto; padding: 0; }
+  .poster-wall-native .poster-art img { top: 50%; transform: translateY(-50%); }
+}

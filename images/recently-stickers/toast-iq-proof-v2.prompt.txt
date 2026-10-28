@@ -1,0 +1,9 @@
+Built-in ImageGen edit of toast-iq-proof.webp.
+Generated PNG: /Users/cwilke/.codex/generated_images/01a17b1d-c80c-7c10-9538-d43fc71175d2/exec-791c23af-a07f-464d-a5b9-1582f701ec88.png
+Workspace asset: toast-iq-proof-v2.webp (cwebp -q 90 -m 6, alpha preserved).
+Preview: /recently-stickers-preview.html. CSS: /recently-stickers.css.
+Removed the printed blue perimeter, squared the outer cut contour and removed the extra rim strokes. Original proof retained. The live homepage is unchanged.
+
+Prompt:
+Use case: precise-object-edit. Edit the supplied Toast IQ bumper-sticker proof. Make ONLY these changes: remove the cobalt blue perimeter outline/keyline surrounding the design completely, replacing that line with the same warm cream paper; and change the physical sticker's four rounded outer corners to square right-angle corners. Keep its wide horizontal 3:1 canvas and the sticker's current position and scale within that canvas. Keep all existing title lettering, exact typography, placement, orange cloche/speech-bubble illustration, blue tray, halftone textures, palette and spacing unchanged. Preserve exact text 'RECENTLY 01', 'Toast IQ', 'AI PRODUCT' and the right arrow. Do not add any new outlines, frames, borders, stripes, rules, folds, tears, peeled corners, shadows or extra text. The cream paper should simply run to the squared-off edge, with a little plain cream margin around the artwork. Keep the cobalt blue in the lettering, handle, tray and arrow; only remove the perimeter blue line. Full flat front-facing sticker, no perspective. True transparency outside the cream rectangular sticker, with clean empty transparent space and no stray specks beyond the sticker. Keep the same overall artwork balance so it remains readable at phone width.
+

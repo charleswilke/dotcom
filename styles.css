@@ -14059,9 +14059,18 @@ section.production-header.alice p {
         visibility: hidden;
     }
 }
-/* Keep pause visible on touch screens so a single tap toggles playback. */
+/* Briefly confirm playback on touch screens, then clear the waveform.
+   Opacity leaves the button's tap target available for pausing. Override
+   sticky touch hover while preserving the visible keyboard focus control. */
 @media (hover: none) {
     .modal-oscilloscope-frame .osc-play-btn { opacity: 1; }
+    .modal-oscilloscope-frame .osc-play-btn[data-playback="playing"]:not(:focus-visible) {
+        animation: osc-pause-fade 0.35s ease 1.5s both;
+    }
+}
+@keyframes osc-pause-fade {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 /* Warm-tube pulse brightens the upright glyph without moving its center. */

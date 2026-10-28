@@ -431,6 +431,93 @@ impressions. No new site fix is indicated tonight. No indexing requests,
 sitemap resubmissions, validation restarts, deployments, or schedule changes
 were made.
 
+### October 27, 2026 Check
+
+Live browser review of all three verified properties. Performance reports cover
+October 11–25, compared with October 11–21 at the October 23 check. These are
+expanding cumulative windows; the differences add October 22–25 rather than
+compare equal-length periods. Charles Wilke and Fellow Vector reports were last
+updated 3.5 hours before review; Haus was updated 4 hours before review. Fellow
+Vector was explicitly filtered to October 11–25.
+
+| Site | Clicks (prior → current) | Impressions (prior → current) | Average position (prior → current) |
+|---|---:|---:|---:|
+| Charles Wilke | 0 → 0 | 32 → 41 | 22.7 → 19.1 |
+| Haus of Toots | 97 → 131 | 357 → 483 | 6.9 → 7.6 |
+| Fellow Vector | 0 → 0 | 3 → 6 | 3.7 → 5.5 |
+
+- Charles Wilke gained 9 impressions in the newly included four days. The
+  `charles wilke` query has 4 impressions, 0 clicks, position 13.5 (previously
+  3 impressions at 13.7); the additional impression occurred October 22 at
+  position 13. This remains too small a sample to establish a stable ranking.
+  Leading landing pages: homepage 14 impressions/position 9.0, `/faq.html`
+  13/18.5, `/read/the-social-siege-of-atomization` 6/31.5, and
+  `/before-times.html` 5/6.2. Queries also include `generative ai facts` and
+  `generative ai hype or truly transformative`, each with one impression.
+- Charles Wilke coverage advanced from October 15 to **October 22**:
+  **76 indexed** (previously 72), 53 excluded (previously 55). Exclusions:
+  37 discovered/currently not indexed, 11 redirects (previously 14), 1
+  intentional 404, 2 redirect errors, 1 duplicate where Google selected a
+  different canonical, and 1 crawled/currently not indexed. Changes in counts
+  do not establish one-for-one movement of the same URLs.
+- The original "Duplicate without user-selected canonical" validation now
+  shows **Passed**, with 0 affected URLs (previously 1 pending). Space Toots
+  appears in a different exclusion: URL Inspection of `/spacetoots/` shows
+  successful fetch, crawling/indexing allowed, and the correct user-declared
+  slash canonical, but Google selected `https://charleswilke.com/spacetoots`
+  without the trailing slash. Last crawl: October 18, 11:22:39 PM as displayed
+  by Search Console. Live HTTP checks confirm the non-slash URL returns 308
+  to `/spacetoots/`, the destination returns 200, and its canonical tag points
+  to itself. No contradictory live configuration was found; monitor Google's
+  canonical selection after another crawl rather than changing the URL again.
+- The crawled/currently not indexed example is
+  `/read/scattered-thunderstorms`. URL Inspection confirms that status, last
+  crawled October 20, 3:07:28 PM as displayed, with successful fetch, crawling
+  and indexing allowed, and the inspected URL as Google's selected canonical.
+  Its sitemap field says "Temporary processing error"; this is separate from
+  the successful property sitemap report and does not establish a live fetch
+  failure. No indexing request was submitted.
+- Charles Wilke redirect validation remains started October 15, with 2
+  pending and 0 failed. `/junkyard-cabaret` and `/l.ai.bor` retain October 11
+  last crawls. Sitemap: success, **116 discovered** (previously 113), last read
+  October 26. HTTPS: 9 URLs, 0 non-HTTPS, no critical issues, dated October 26.
+- Haus gained **34 clicks and 126 impressions** in October 22–25; cumulative
+  CTR is 27.1%. `haus of toots` has 34 clicks/39 impressions, `house of toots`
+  13/15, and `hausoftoots` 7/7, all at position 1. `joann needlepoint canvas`
+  has 8/11 (position 1.8), `sephora needlepoint canvas` 3/13 (1.6), and
+  `ndlpt` 0/67 (9.0). Landing pages: homepage 90 clicks/325 impressions,
+  `/village` 20/207, `/just-landed` 18/165, `/about` 3/108, and the www
+  `/just-landed` variant 1/12. Page rows use different aggregation from
+  property totals and should not be summed to reproduce them.
+- Haus coverage advanced to October 22 with counts unchanged: 6 indexed,
+  19 excluded (12 redirects, 5 proper canonical alternates, 2 discovered/
+  currently not indexed). Inspection of `/just-landed` still reports indexed
+  with itself as canonical, but the last crawl was **October 12**, before the
+  October 21 redirect change. A live HTTP check confirms a 307 redirect to
+  the homepage, followed by 200. The older inspection record does not show
+  Google has recrawled that redirect yet. Sitemap: success, 7 discovered,
+  last read October 27. HTTPS: 6 URLs, 0 non-HTTPS, no critical issues, dated
+  October 26.
+- Fellow Vector has 6 recent impressions: homepage 4 and `/about/` 2; no
+  clicks and no query-table data. The default July 26–October 25 report has
+  1 click, 75 impressions, CTR 1.3%, position 9.2; these rolling historical
+  totals are separate from the comparable recent window above. Coverage
+  advanced to October 22: 4 indexed (unchanged), 3 excluded (previously 2):
+  1 404, 1 proper canonical alternate, and 1 newly discovered/currently not
+  indexed URL. The new example is `/book/`, first detected October 19, with
+  no recorded crawl. Live HTTP check: 200, self-referencing canonical, no
+  robots meta tag found. Crawled/currently not indexed remains 0.
+- Fellow Vector sitemap index: success, 5 discovered, last read October 25
+  (previously October 20). The older `/sitemap.website.xml` remains successful
+  with 11 discovered and April 26, 2025 last read. HTTPS: 3 URLs, 0 non-HTTPS,
+  no critical issues, dated October 26.
+
+Next check: watch Space Toots' Google-selected canonical, the two pending
+redirect validations, `/read/scattered-thunderstorms`, Fellow Vector's `/book/`,
+and a post-change crawl of Haus `/just-landed`. The current evidence does not
+indicate a new site code fix. No indexing requests, sitemap resubmissions,
+validation restarts, deployments, or schedule changes were made.
+
 ## Pre-existing Optimizations Worth Maintaining
 
 These were already in place on charleswilke.com and should be standard practice:

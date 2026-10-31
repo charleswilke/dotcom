@@ -1,0 +1,195 @@
+.matchbook-grid {
+  max-width: 1192px;
+  margin: auto;
+  padding: 24px 36px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 34px 40px;
+}
+.matchbook-item { position: relative; min-width: 0; margin: 0; }
+.matchbook {
+  display: block;
+  position: relative;
+  aspect-ratio: 1158 / 936;
+  perspective: 1600px;
+  perspective-origin: 50% 0;
+  isolation: isolate;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  filter: drop-shadow(0 9px 9px #0005);
+}
+/* Crop the identical transparent margins in the six exported proofs in CSS.
+   No artwork is resampled or altered. All three image layers align at rest. */
+.matchbook-image {
+  position: absolute;
+  display: block;
+  width: 130.5%;
+  max-width: none;
+  height: auto;
+  left: -15.45%;
+  top: -6.73%;
+  pointer-events: none;
+  user-select: none;
+}
+.matchbook-base, .matchbook-cover, .matchbook-flap {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+.matchbook-base { overflow: hidden; border-radius: 5px; }
+.matchbook-inside {
+  display: block;
+  position: absolute;
+  inset: .5% .6% 17.5%;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+  background: #c1a37b;
+  box-shadow: inset 0 4px 12px #33240d55;
+  /* The closed cover hides this layer; keep it painted for the first reveal. */
+}
+.matchbook-interior-image {
+  display: block;
+  position: absolute;
+  /* Keep the matches finer; lower the plate to tuck its base behind the flap. */
+  width: 100%;
+  max-width: none;
+  height: auto;
+  left: 0;
+  top: 20%;
+  pointer-events: none;
+  user-select: none;
+}
+.matchbook-inside::after {
+  content: '';
+  position: absolute;
+  left: -3%;
+  right: -3%;
+  top: 96%;
+  height: 24%;
+  background: linear-gradient(180deg, #211713a6, #2117138a 22%, #2117134d 48%, #21171314 74%, transparent);
+  transform: translateY(0);
+  will-change: transform;
+  pointer-events: none;
+  transition: transform 620ms cubic-bezier(.2,.75,.25,1);
+}
+.matchbook-cover {
+  z-index: 2;
+  overflow: hidden;
+  clip-path: inset(0 0 18.5% 0 round 5px);
+  transform-origin: 50% .7%;
+  transform: rotateX(0deg);
+  transition: transform 620ms cubic-bezier(.2,.75,.25,1);
+  backface-visibility: hidden;
+}
+.matchbook-flap {
+  z-index: 3;
+  overflow: hidden;
+  clip-path: inset(81.5% 0 0 0);
+  pointer-events: none;
+}
+.matchbook-sparks {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+.matchbook-strike-glint {
+  position: absolute;
+  z-index: 5;
+  left: 14%;
+  right: 14%;
+  top: 94%;
+  height: 2px;
+  background: #ffdaa0;
+  box-shadow: 0 0 5px #ffb75a70;
+  pointer-events: none;
+}
+.matchbook-item.is-striking .matchbook-cover,
+.matchbook-link:focus-visible .matchbook-cover {
+  transform: translateY(-1%) rotateX(34deg);
+}
+.matchbook-item.is-striking .matchbook-inside::after,
+.matchbook-link:focus-visible .matchbook-inside::after {
+  /* Restore the original subtle travel from 96% to 84% of the interior. */
+  transform: translateY(-50%);
+}
+@media (hover: hover) and (pointer: fine) {
+  .matchbook-item:hover .matchbook-cover {
+    transform: translateY(-1%) rotateX(34deg);
+  }
+  .matchbook-item:hover .matchbook-inside::after { transform: translateY(-50%); }
+}
+
+@media (max-width: 920px) {
+  .matchbook-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 540px) {
+  .matchbook-grid { padding: 24px 28px 36px; grid-template-columns: minmax(0, 1fr); gap: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .matchbook-cover, .matchbook-inside::after { transition: none; }
+}
+/* Homepage edition: the native section supplies the backdrop. */
+html[data-recently-edition="matchbooks"] #portfolio:not(.matchbook-wall) > .container { display: none; }
+.matchbook-wall { padding-bottom: .15rem; }
+.matchbook-wall > .container { position: relative; z-index: 1; padding-bottom: 0; }
+.matchbook-wall .matchbook-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 768px; padding: 1.2rem 0 0; gap: 2rem; }
+.matchbook-link { display: block; color: inherit; text-decoration: none; border-radius: 5px; }
+.matchbook-link:focus-visible { outline: 2px solid #e8b64e; outline-offset: 8px; }
+.matchbook-wall .matchbook { z-index: 2; }
+.matchbook-toast-iq { --ticket-ink: #173f83; --ticket-angle: -.8deg; }
+.matchbook-before-times { --ticket-ink: #164d4a; --ticket-angle: .65deg; }
+.matchbook-junkyard-cabaret { --ticket-ink: #781d2c; --ticket-angle: -.6deg; }
+.matchbook-grief-without-ritual { --ticket-ink: #843c32; --ticket-angle: .75deg; }
+.matchbook-spectator-to-initiator { --ticket-ink: #28513b; --ticket-angle: -.65deg; }
+.matchbook-space-toots { --ticket-ink: #44205d; --ticket-angle: .7deg; }
+.matchbook-ticket-slot {
+  position: relative;
+  z-index: 1;
+  margin-top: -7px;
+  padding: 0 14px 13px;
+  overflow: hidden;
+}
+.matchbook-copy {
+  margin: 0;
+  padding: 20px 18px 0;
+  border: 1px solid #b49b6a70;
+  border-radius: 2px;
+  color: var(--ticket-ink, #4a3429);
+  background: url('/images/recently-screenprint/paper-grain.svg') repeat, linear-gradient(105deg, #f6ead1, #ecddba);
+  box-shadow: 0 4px 6px #0005, inset 0 1px #fff8;
+  transform-origin: 50% 0;
+  transform: translateY(0) rotate(var(--ticket-angle, -.7deg));
+  transition: transform 600ms cubic-bezier(.2,.75,.25,1);
+}
+.matchbook-ticket-tail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font: 9px/1.5 'Space Mono', monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.matchbook-copy p { font: 12px/1.55 'Space Mono', monospace; color: #473d33; margin: 0 0 12px; }
+.matchbook-cta { display: block; font: 11px/1.5 'Space Mono', monospace; color: inherit; letter-spacing: 0; text-transform: none; }
+.matchbook-ticket-tail { min-height: 42px; padding: 10px 0 8px; border-top: 1px dashed #86705080; }
+.matchbook-ticket-number { display: inline-grid; flex-shrink: 0; place-items: center; width: 23px; height: 23px; border: 1px solid currentColor; border-radius: 50%; transform: rotate(8deg); font-size: 10px; letter-spacing: 0; }
+@media (hover: hover) and (pointer: fine) and (min-width: 768px) {
+  .matchbook-copy { transform: translateY(calc(-100% + 30px)) rotate(var(--ticket-angle, -.7deg)); }
+  .matchbook-item:hover .matchbook-copy,
+  .matchbook-item:focus-within .matchbook-copy,
+  .matchbook-item.is-striking .matchbook-copy { transform: translateY(0) rotate(var(--ticket-angle, -.7deg)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .matchbook-copy { transition: none; }
+}
+@media (min-width: 1200px) {
+  .matchbook-wall .matchbook-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1168px; }
+}
+@media (max-width: 767px) {
+  .matchbook-wall .matchbook-grid { grid-template-columns: minmax(0, 1fr); max-width: 368px; }
+}

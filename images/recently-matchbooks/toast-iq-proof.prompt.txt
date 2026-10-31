@@ -1,0 +1,18 @@
+Built-in ImageGen. First matchbook concept proof, not an approved collection master.
+Reference: /images/toast-iq-cloche-card.webp (subject and palette).
+Generated PNG: /Users/cwilke/.codex/generated_images/01a18fa6-5c6e-7a83-9741-8835924ce9ee/exec-ea90df14-5294-4a78-81fd-6ef8a9af17d6.png
+Workspace source: toast-iq-proof.png
+The current homepage editions are unchanged.
+
+Prompt:
+Use case: product-mockup.
+Asset type: first concept proof for a collectible matchbook edition of the Recently project cards on Charles Wilke's portfolio.
+Primary request: Create ONE beautiful physical vintage restaurant matchbook for the project "Toast IQ", viewed straight from above, isolated on genuine transparency. This is a wide closed cardboard MATCHBOOK with a folding paper cover and a stapled lower retaining flap, NOT a drawer-style matchbox, poster, business card, or cigarette pack. Use an authentic wide souvenir matchbook silhouette, approximately 1.45:1 width to total height. Full object visible, large in canvas, small transparent margin. Keep its top, sides and bottom parallel to the canvas; show thickness through close edge shading only.
+Input image 1 is a SUBJECT AND PALETTE reference for the recognizable speech-bubble serving cloche; it is not an edit target and its composition should not be copied.
+Style/medium: refined midcentury restaurant ephemera with bold graphic print design on a convincingly tangible small cardboard object. Thoughtful typography and restrained two-ink printing, not novelty distressed clipart.
+Materials: warm cream uncoated card, visible fine fibers, subtle fold compression across the top hinge, tiny exposed cream cut edges, a slight natural bow at the cover's lower edge where it tucks behind a shallow orange retaining flap. A single small silver horizontal staple is centered on that bottom flap. The flap has a narrow deep cocoa gritty striker band running horizontally below the staple. Material depth is subtle and realistic; printed art stays flat.
+Composition: the main cover occupies about 82 percent of object height; folded lower flap and striker finish the bottom. A fine cobalt inset keyline frames only the cover face, with small intentional breaks for the type. Small cobalt top line exact "RECENTLY 01". Large confident slightly condensed cobalt lettering exact "Toast IQ" across the upper cover, title prominent and legible when object is displayed at 340px wide. Below it a large simple vivid orange serving cloche whose dome becomes a pointed speech-bubble tail, with a cobalt handle and cobalt serving tray, one cream highlight and two small orange emphasis rays. Keep this emblem strong enough to read at small size. The small cobalt text exact "AI PRODUCT" sits beneath the emblem above the cover tuck. Generous margins and tasteful balance of title and emblem. The retaining flap is vivid orange with the metal staple and dark textured striker band. No additional copy.
+Lighting: soft neutral studio light from upper left reveals paper fibers, fold lip and staple, with a very small close contact shadow only. No scenic background or long cast shadow.
+Color palette: warm cream, rich cobalt blue and vivid orange for printed ink; dark cocoa for striker material; silver staple.
+Text (verbatim, only these words): "RECENTLY 01", "Toast IQ", "AI PRODUCT".
+Constraints: one closed matchbook only; no visible matches, flames, hand, tabletop, ashtray, other props, extra logos, invented slogans, website mockup, extra typography, arrows, numbered annotations or collage. No heavy fake aging, stains, torn corners, gloss lamination, neon, gradient printed graphics or excessive wear. True transparent background outside the entire matchbook. High quality crisp print design with tactile physical construction.

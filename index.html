@@ -53,6 +53,7 @@
     <link rel="stylesheet" href="/styles.css?v=20261028-mobile-pause-fade-1">
     <link rel="stylesheet" href="/recently-posters.css?v=20261026-editions-3">
     <link rel="stylesheet" href="/recently-stickers.css?v=20261027-mobile-1">
+    <link rel="stylesheet" href="/recently-matchbooks.css?v=20261030-release-1">
     <!-- Favicons / Pinned color -->
     <link rel="icon" href="/favicon.ico?v=202607032147" sizes="any">
     <meta name="theme-color" content="#1a1550" />
@@ -65,7 +66,7 @@
          preloads even same-origin, or the browser fetches twice. -->
     <link rel="preload" href="/fonts/audiowide-v22.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/space-mono-v17-400.woff2" as="font" type="font/woff2" crossorigin>
-    <script src="/recently-edition.js?v=20261027-mobile-1"></script>
+    <script src="/recently-edition.js?v=20261030-release-1"></script>
     
     <!-- RSS Feed Performance Optimization -->
     <link rel="dns-prefetch" href="https://charleswilke.substack.com">
@@ -301,6 +302,115 @@
         </div>
 
     </template>
+    <template id="recently-matchbooks-template">
+        <h2 id="recently-heading" class="sr-only">Recently</h2>
+        <div class="container">
+            <div class="matchbook-grid">
+                <article class="matchbook-item">
+                    <a class="matchbook-link matchbook-toast-iq" href="https://pos.toasttab.com/blog/data/restaurant-ai-report" target="_blank" rel="noopener noreferrer" aria-labelledby="toast-title toast-link" aria-describedby="toast-description">
+                        <span class="matchbook" aria-hidden="true">
+                            <span class="matchbook-base"><img class="matchbook-image" src="/images/recently-matchbooks/toast-iq.webp" width="1511" height="1041" alt="" fetchpriority="high" decoding="async" draggable="false"></span>
+                        </span>
+                        <div class="matchbook-ticket-slot">
+                            <div class="matchbook-copy">
+                                <h3 id="toast-title" class="sr-only">Toast IQ</h3>
+                                <p id="toast-description">Designing the system instructions that shape how Toast IQ responds and acts.</p>
+                                <div class="matchbook-ticket-tail">
+                                    <span class="matchbook-cta" id="toast-link">See the Q2 2026 Restaurant AI Report <span aria-hidden="true"><svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span></span>
+                                    <span class="matchbook-ticket-number" aria-hidden="true">01</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="matchbook-item">
+                    <a class="matchbook-link matchbook-before-times" href="/before-times.html" aria-labelledby="before-title before-link" aria-describedby="before-description">
+                        <span class="matchbook" aria-hidden="true">
+                            <span class="matchbook-base"><img class="matchbook-image" src="/images/recently-matchbooks/before-times.webp" width="1511" height="1041" alt="" decoding="async" draggable="false"></span>
+                        </span>
+                        <div class="matchbook-ticket-slot">
+                            <div class="matchbook-copy">
+                                <h3 id="before-title" class="sr-only">The Before Times</h3>
+                                <p id="before-description">Explore the writing, games, and experiments that shaped my work before the AI era.</p>
+                                <div class="matchbook-ticket-tail">
+                                    <span class="matchbook-cta" id="before-link">Enter the lobby <span aria-hidden="true"><svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8h12M9 3l5 5-5 5"/></svg></span></span>
+                                    <span class="matchbook-ticket-number" aria-hidden="true">02</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="matchbook-item">
+                    <a id="jcTile" class="matchbook-link matchbook-junkyard-cabaret" href="/junkyard-cabaret" aria-labelledby="cabaret-title cabaret-link" aria-describedby="cabaret-description">
+                        <span class="matchbook" aria-hidden="true">
+                            <span class="matchbook-base"><img class="matchbook-image" src="/images/recently-matchbooks/junkyard-cabaret.webp" width="1511" height="1041" alt="" decoding="async" draggable="false"></span>
+                        </span>
+                        <div class="matchbook-ticket-slot">
+                            <div class="matchbook-copy">
+                                <h3 id="cabaret-title" class="sr-only">Junkyard Cabaret</h3>
+                                <p id="cabaret-description">Celebrating the painful beauty of putting ourselves back together again.</p>
+                                <div class="matchbook-ticket-tail">
+                                    <span class="matchbook-cta" id="cabaret-link">Open the album <span aria-hidden="true"><svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8h12M9 3l5 5-5 5"/></svg></span></span>
+                                    <span class="matchbook-ticket-number" aria-hidden="true">03</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="matchbook-item">
+                    <a id="gworTile" class="matchbook-link matchbook-grief-without-ritual" href="/gwor" aria-labelledby="grief-title grief-link" aria-describedby="grief-description">
+                        <span class="matchbook" aria-hidden="true">
+                            <span class="matchbook-base"><img class="matchbook-image" src="/images/recently-matchbooks/grief-without-ritual.webp" width="1511" height="1041" alt="" loading="lazy" decoding="async" draggable="false"></span>
+                        </span>
+                        <div class="matchbook-ticket-slot">
+                            <div class="matchbook-copy">
+                                <h3 id="grief-title" class="sr-only">Grief Without Ritual</h3>
+                                <p id="grief-description">Songs metabolizing the pain of this period.</p>
+                                <div class="matchbook-ticket-tail">
+                                    <span class="matchbook-cta" id="grief-link">Open the album <span aria-hidden="true"><svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8h12M9 3l5 5-5 5"/></svg></span></span>
+                                    <span class="matchbook-ticket-number" aria-hidden="true">04</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="matchbook-item">
+                    <a id="s2iTile" class="matchbook-link matchbook-spectator-to-initiator" href="/s2i" aria-labelledby="spectator-title spectator-link" aria-describedby="spectator-description">
+                        <span class="matchbook" aria-hidden="true">
+                            <span class="matchbook-base"><img class="matchbook-image" src="/images/recently-matchbooks/spectator-to-initiator.webp" width="1511" height="1041" alt="" loading="lazy" decoding="async" draggable="false"></span>
+                        </span>
+                        <div class="matchbook-ticket-slot">
+                            <div class="matchbook-copy">
+                                <h3 id="spectator-title" class="sr-only">Spectator to Initiator</h3>
+                                <p id="spectator-description">A talk on human agency and taking the first steps beyond consuming into creating.</p>
+                                <div class="matchbook-ticket-tail">
+                                    <span class="matchbook-cta" id="spectator-link">Display the deck <span aria-hidden="true"><svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8h12M9 3l5 5-5 5"/></svg></span></span>
+                                    <span class="matchbook-ticket-number" aria-hidden="true">05</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="matchbook-item">
+                    <a class="matchbook-link matchbook-space-toots" href="/spacetoots/" aria-labelledby="space-title space-link" aria-describedby="space-description">
+                        <span class="matchbook" aria-hidden="true">
+                            <span class="matchbook-base"><img class="matchbook-image" src="/images/recently-matchbooks/space-toots.webp" width="1511" height="1041" alt="" loading="lazy" decoding="async" draggable="false"></span>
+                        </span>
+                        <div class="matchbook-ticket-slot">
+                            <div class="matchbook-copy">
+                                <h3 id="space-title" class="sr-only">Space Toots</h3>
+                                <p id="space-description">Blast through a synthwave asteroid belt with pure browser-game nerve.</p>
+                                <div class="matchbook-ticket-tail">
+                                    <span class="matchbook-cta" id="space-link">Launch the arcade <span aria-hidden="true"><svg width="0.85em" height="0.85em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 8h12M9 3l5 5-5 5"/></svg></span></span>
+                                    <span class="matchbook-ticket-number" aria-hidden="true">06</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </template>
     <script>
         if (window.renderRecentlyEdition) {
             window.renderRecentlyEdition();
@@ -311,7 +421,8 @@
                 image.src = image.dataset.recentlySrc;
                 image.removeAttribute("data-recently-src");
             });
-            document.getElementById("recently-posters-template").remove();
+            document.getElementById("recently-posters-template")?.remove();
+            document.getElementById("recently-matchbooks-template")?.remove();
         }
     </script>
 
@@ -1199,6 +1310,6 @@
 <script src="/vendor/dompurify.min.js?v=3.4.17" defer></script>
 <script src="/laibor-rails.js?v=1" defer></script>
 <script src="/article-reader-ui.js?v=1" defer></script>
-    <script src="/main.js?v=20261027-daily-takes-1" defer></script>
+    <script src="/main.js?v=20261030-matchbooks-1" defer></script>
 </body>
 </html>

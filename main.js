@@ -6568,7 +6568,7 @@ function initGameLightbox() {
             title: 'Space Toots',
             page: '/spacetoots/',
             src: isLocal ? '/games/SpaceToots/index.html' : '/spacetoots/',
-            tiles: document.querySelectorAll('.game-cartridge-spacetoots, .pasted-poster.poster-space')
+            tiles: document.querySelectorAll('.game-cartridge-spacetoots, .pasted-poster.poster-space, .matchbook-space-toots')
         }
     };
 

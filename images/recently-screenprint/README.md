@@ -1,18 +1,19 @@
 # Recently: screenprinted edition
 
-The homepage chooses between the original six cards and this screenprinted
-edition with equal probability on each full page load. `/recently-edition.js`
+The homepage chooses between the original six cards, this screenprinted
+edition, and the matchbook edition with equal probability on each full page load. `/recently-edition.js`
 chooses in the head and mounts the selected markup synchronously before the
 homepage's DOM-ready initializers bind the album, slide and game lightboxes.
 The original card content and artwork are retained. The classic cards retain
-Toots Jam; the poster edition uses Space Toots.
+Toots Jam; the poster and matchbook editions use Space Toots.
 
 Below 768px the poster edition uses compact bumper-sticker artwork from
 `/images/recently-stickers/`. Responsive pictures preserve the same links and
 lightbox triggers. Larger screens retain the full posters and spotlight.
 
 Direct review links: `/index.html?recently=classic#portfolio` and
-`/index.html?recently=posters#portfolio`. Overrides are URL-only and do not store
+`/index.html?recently=posters#portfolio`, and
+`/index.html?recently=matchbooks#portfolio`. Overrides are URL-only and do not store
 a visitor preference. Normal URLs make a fresh random choice. Original image
 URLs are activated only for the classic edition, with per-image `noscript`
 fallbacks. The poster template is inert until selected. Only the selected Toast

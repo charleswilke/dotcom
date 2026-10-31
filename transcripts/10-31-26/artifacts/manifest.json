@@ -1,0 +1,59 @@
+{
+  "title": "Artifacts: The Conversation",
+  "date": "2026-10-31",
+  "url": "https://charleswilke.com/read/artifacts-transcript",
+  "conversation_messages": 30,
+  "exchanges": 15,
+  "generated_artworks": 7,
+  "images": [
+    {
+      "name": "01-celestial-needlepoint-first-pass",
+      "caption": "First header exploration: a photographic unfinished celestial canvas, with stitching Charles identified as closer to cross-stitch.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "a1c13914b454e393641af2a50eaf0e2488927711887e03716f6c6f20a0c06b46"
+    },
+    {
+      "name": "02-celestial-tent-stitch-revision",
+      "caption": "Second header: revised to emphasize parallel diagonal needlepoint tent stitches.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "2cdc09b7053ca657b07f53f03aa66dbaa56a288d99b189c581a766eb149650f2"
+    },
+    {
+      "name": "03-celestial-canvas-cleanup",
+      "caption": "Third header: isolated stray stitches removed from the bare canvas.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "5f20f80cfd2a5800aff4295e01f43f7f56a3285013302bf832ceb46b0bd7669c"
+    },
+    {
+      "name": "04-estate-sale-sunday-comics",
+      "caption": "First estate-sale illustration: a delighted browser discovers a brass celestial curiosity amid other shoppers.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "41fe232852bbf226d78074364e2c7106aebeb813ef6bbd1c57d53e5f676291f5"
+    },
+    {
+      "name": "05-estate-sale-rough-ink",
+      "caption": "Second estate-sale illustration: rougher contours, distressed ink, and flatter printed colors after reviewing the site’s house style.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "3c8586690e5a5ac297bd6207974dc6dec43ad5f5201818f83174e5a57867a061"
+    },
+    {
+      "name": "06-estate-sale-pulp-noir-selected",
+      "caption": "Selected header: a raised eyebrow and a glint of discovery, with the estate-sale crowd receding into silhouettes.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "63fc51fc2e02bfa21e455f8f5f83850af10a37e51f8ee38f990f36288373d9c5"
+    },
+    {
+      "name": "07-cw-pulp-noir-wordmark",
+      "caption": "Selected square CW wordmark in cream, ochre, and petrol teal with worn pulp-noir printing.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "b93a2a82c5c4bfc48b596799603218ebd5645bb908132e1a8df84c86c50e6d18"
+    }
+  ]
+}

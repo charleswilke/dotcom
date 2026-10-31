@@ -1100,6 +1100,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "artifacts-transcript",
+        "title": "Artifacts: The Conversation",
+        "cleanDescription": "The working session behind “Artifacts” — shared intention, unfinished needlepoint, estate-sale discoveries, draft revisions, and pulp-noir artwork with Codex.",
+        "pubDate": "2026-10-31T15:41:34.764Z",
+        "contentUrl": "/transcripts/artifacts-transcript.html",
+        "link": ""
+    },
+    {
         "slug": "from-this-side-of-the-door-transcript",
         "title": "From This Side of the Door: The Conversation",
         "cleanDescription": "The songwriting session behind “From This Side of the Door” — Communion, Vulnerable, lyric drafts, singability, and the shift from heartland rock to dark chamber folk with Codex.",

@@ -2,8 +2,8 @@
   "title": "Artifacts: The Conversation",
   "date": "2026-10-31",
   "url": "https://charleswilke.com/read/artifacts-transcript",
-  "conversation_messages": 30,
-  "exchanges": 15,
+  "conversation_messages": 34,
+  "exchanges": 17,
   "generated_artworks": 7,
   "images": [
     {
@@ -54,6 +54,14 @@
       "width": 1254,
       "height": 1254,
       "sha256": "b93a2a82c5c4bfc48b596799603218ebd5645bb908132e1a8df84c86c50e6d18"
+    }
+  ],
+  "preflight_drafts": 1,
+  "attachments": [
+    {
+      "name": "preflight-draft.txt",
+      "caption": "User-supplied preflight draft, preserved as received.",
+      "sha256": "0d17fb82f6f79f58e601dac1a14e95a78206382fb9abb4ce7113107a917007f8"
     }
   ]
 }

@@ -1100,6 +1100,14 @@ const ARTICLE_READER_PATH_PREFIX = '/read/';
 // `link: ''` hides the "Read on Substack" topbar link and footer.
 const LOCAL_ARTICLES = [
     {
+        "slug": "help-yourself-transcript",
+        "title": "Help Yourself: The Conversation",
+        "cleanDescription": "From Artifacts to a merry ghost hosting its own estate sale: the songwriting conversation, lyric drafts, and the search for a scruffier sound.",
+        "pubDate": "2026-10-31T20:00:00.000Z",
+        "contentUrl": "/transcripts/help-yourself-transcript.html",
+        "link": ""
+},
+    {
         "slug": "artifacts-transcript",
         "title": "Artifacts: The Conversation",
         "cleanDescription": "The working session behind “Artifacts” — shared intention, unfinished needlepoint, estate-sale discoveries, draft revisions, and pulp-noir artwork with Codex.",
@@ -5894,13 +5902,14 @@ function initGWORLightbox() {
         { title: 'Letter to the Editor', songbook: '/songs/gwor/letter-to-the-editor/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/letter-to-the-editor.mp3', cover: '/audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
         { title: 'Love at Machine Speed', songbook: '/songs/gwor/love-at-machine-speed/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
         { title: 'Permission to Ache', songbook: '/songs/gwor/permission-to-ache/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
-        { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
-        { title: 'Slow the Clock', songbook: '/songs/gwor/slow-the-clock/songbook.json?v=20261024-previous-takes-all-1', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-v2.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
-        { title: 'Dearly Beloved', songbook: '/songs/gwor/dearly-beloved/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
-        { title: 'As We Speak It', songbook: '/songs/gwor/as-we-speak-it/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
-        { title: 'When Doctrine Slips', songbook: '/songs/gwor/when-doctrine-slips/songbook.json?v=20261024-previous-takes-all-1', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
-        { title: 'From This Side of the Door', songbook: '/songs/gwor/from-this-side-of-the-door/songbook.json?v=20261024-1', file: '/audio/grief-without-ritual/from-this-side-of-the-door.mp3', cover: '/audio/grief-without-ritual/from-this-side-of-the-door-title-v2.webp', articleType: 'songwriting conversation', article: '/read/from-this-side-of-the-door-transcript' },
-        { title: "Haven't Heard From You Yet", songbook: '/songs/gwor/havent-heard-from-you-yet/songbook.json?v=20261024-track-12', file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title.webp?v=20261024-track-12', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
+        { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261031-recording-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3?v=6b52c58422dd', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        { title: 'Help Yourself', songbook: '/songs/gwor/help-yourself/songbook.json?v=20261031-1', file: '/audio/grief-without-ritual/help-yourself.mp3', cover: '/audio/grief-without-ritual/help-yourself-title.webp', articleType: 'songwriting conversation', article: '/read/help-yourself-transcript' },
+        { title: 'Slow the Clock', songbook: '/songs/gwor/slow-the-clock/songbook.json?v=20261031-track-8', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-track-8.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
+        { title: 'Dearly Beloved', songbook: '/songs/gwor/dearly-beloved/songbook.json?v=20261031-track-9', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title-track-9.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
+        { title: 'As We Speak It', songbook: '/songs/gwor/as-we-speak-it/songbook.json?v=20261031-track-10', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title-track-10.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
+        { title: 'When Doctrine Slips', songbook: '/songs/gwor/when-doctrine-slips/songbook.json?v=20261031-track-11', file: '/audio/grief-without-ritual/when-doctrine-slips.mp3?v=51f2bc3414a3', cover: '/audio/grief-without-ritual/when-doctrine-slips-title-track-11.webp', article: 'https://charleswilke.substack.com/p/when-doctrine-slips' },
+        { title: 'From This Side of the Door', songbook: '/songs/gwor/from-this-side-of-the-door/songbook.json?v=20261031-track-12', file: '/audio/grief-without-ritual/from-this-side-of-the-door.mp3', cover: '/audio/grief-without-ritual/from-this-side-of-the-door-title-track-12.webp', articleType: 'songwriting conversation', article: '/read/from-this-side-of-the-door-transcript' },
+        { title: "Haven't Heard From You Yet", songbook: '/songs/gwor/havent-heard-from-you-yet/songbook.json?v=20261031-track-13', file: '/audio/grief-without-ritual/havent-heard-from-you-yet.mp3', cover: '/audio/grief-without-ritual/havent-heard-from-you-yet-title-track-13.webp', article: 'https://charleswilke.com/read/what-hope-do-we-have' }
     ];
 
     const lightbox = document.getElementById('gworLightbox');

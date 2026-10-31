@@ -1,0 +1,100 @@
+{
+  "title": "Help Yourself",
+  "act": "Track",
+  "number": 7,
+  "credit": "Words & production by Charles Wilke",
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "Intro — detuned upright hammers out a crooked figure; overdriven bass joins; piano strings rattle, amp hum in the room"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 1 — rough low baritone, dry amused asides, clear words; boxy drums enter at 'You turn a book', dragging slightly behind the bass"
+    },
+    {
+      "kind": "lyrics",
+      "text": "My old shoe holds the front door open.\nThey've put prices on the chairs.\nI give my usual introduction.\nNobody knows I'm there."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You turn a book to read the back.\nThat one kept me up all night.\nYou tuck it underneath your arm.\nYes. That one. That's all right."
+    },
+    {
+      "kind": "heading",
+      "text": "Chorus — cracked sung refrain, a little more insistent; loose snare buzz and bass clank; guitar spits short dissonant answers"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Help yourself\nIf it catches your eye\nI had a good time with it\nWhile it was mine"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's a little thread left\nIf you see what I saw\nI got carried away\nYou can carry it on"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 2 — drums and bass drop out; rattling piano and close voice, guitar amp still humming; fond curiosity, no sentimental swell"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's some yellow in the needle.\nThere's some blue beside the chair.\nYou lift the canvas to the window.\nI can't help following you there."
+    },
+    {
+      "kind": "lyrics",
+      "text": "I lean across to show you\nWhere I thought the green would go.\nYou're smiling at the unfinished flower.\nOh. You see it, though."
+    },
+    {
+      "kind": "heading",
+      "text": "Short refrain — bass returns with a dirty two-note throb; half-spoken, quietly delighted"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Help yourself\nIf it catches your eye\nI had a good time with it\nWhile it was mine"
+    },
+    {
+      "kind": "heading",
+      "text": "Verse 3 — drums stumble back into the lurch; guitar scratches between phrases; a dry chuckle in 'I always liked the underline'"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Now someone's going through the records.\nThat sleeve was old when it was mine.\nA stranger wrote their name inside it.\nI always liked the underline."
+    },
+    {
+      "kind": "lyrics",
+      "text": "You turn it over, read the titles.\nA finger taps against your knee.\nYou're smiling at a song I loved.\nThat's what it used to do to me."
+    },
+    {
+      "kind": "heading",
+      "text": "Instrumental — four bars; electric guitar takes the piano figure with dirty tremolo and a frayed feedback tail; drums and bass keep worrying the same pulse"
+    },
+    {
+      "kind": "heading",
+      "text": "Bridge — scuffed piano and buzzing bass only; voice fond, direct, matter-of-fact; leave a breath after the last line"
+    },
+    {
+      "kind": "lyrics",
+      "text": "You pass the pictures on the landing.\nYou don't know anybody there.\nThe garden's tucked beneath your arm.\nI'd have pulled you up a chair."
+    },
+    {
+      "kind": "heading",
+      "text": "Final chorus — whole ragged band, more rhythmic pressure; vocal catches and cracks without getting grand; last two lines delivered with a grin"
+    },
+    {
+      "kind": "lyrics",
+      "text": "Help yourself\nIf it catches your eye\nI had a good time with it\nWhile it was mine"
+    },
+    {
+      "kind": "lyrics",
+      "text": "There's a little thread left\nIf you see what I saw\nI got carried away\nYou can carry it on"
+    },
+    {
+      "kind": "heading",
+      "text": "Outro — guitar picks up the piano figure once; drums cut out with a loose final hit; one blunt piano chord, amp buzz left hanging"
+    }
+  ],
+  "notebook": {
+    "style": "Raw piano-led art rock, lurching post-punk pulse, 86 BPM. Detuned upright piano hammered into a crooked repeating figure; rattling strings, uneven hammers, hard low notes. Overdriven electric bass with pick clank and a stubborn two-note throb. Boxy kick, loose snare wires, floor-tom thumps, scrappy hi-hat; drums drag against the bass. Electric guitar spits dissonant stabs, dirty tremolo and brief feedback tails. Small band recorded live in one cramped room: mic bleed, overloaded preamps, tape compression, amp hum. Solo low male baritone, rough and intelligible, half-spoken with bitten consonants, dry chuckles and cracked sung phrases. A merry ghost enjoys its own estate sale, offering unheard asides. Wry, affectionate delivery. Refrains get more insistent; band remains unruly. Needlepoint verse drops to rattling piano and voice. No country twang, folk-pop, crooning, growling, choir, lush strings or glossy crescendo. End on a blunt piano chord with amp buzz hanging.",
+    "idea": "A merry spirit follows strangers through its own estate sale, offering fond asides they cannot hear. Artifacts become invitations: I got carried away / You can carry it on."
+  }
+}

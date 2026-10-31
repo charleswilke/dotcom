@@ -1,0 +1,7 @@
+Use case: precise-object-edit.
+Edit target: the supplied pulp-noir estate-sale illustration with the corrected five-digit hand.
+Make a small, localized correction to BOTH EYES ONLY so the woman's gaze clearly lands on the bright four-point glint at about x=21.7%, y=63.2% of the full image, on the metal object's curved edge in the lower-left foreground.
+
+Her current pupils are aimed too high. Move BOTH irises and pupils slightly DOWNWARD and toward the VIEWER'S LEFT within their existing eye openings, directing a natural coordinated downward-left gaze at that precise glint. The larger eye on the viewer's right should visibly look toward its lower-left corner, with a little more sclera above and to the right of its iris. Give the more distant eye the corresponding downward-left direction in perspective. Keep the eyes open and attentive with natural, coordinated alignment, not cross-eyed or squinting. Preserve the tiny eye highlights and her intrigued expression.
+
+Preserve her raised eyebrow exactly, all other facial features and head position, the mouth and knowing smile, hair, all five digits of the corrected hand, the hand pose, glint and object positions, background silhouettes and sign, foreground objects, composition, crop, colors, and worn angular ink-print style. The only change is a subtle, unmistakable adjustment of the irises/pupils and the immediately adjacent eye ink needed to communicate fixation on the glint. Do not redraw the scene or alter the lighting.

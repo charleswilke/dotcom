@@ -2,9 +2,9 @@
   "title": "Artifacts: The Conversation",
   "date": "2026-10-31",
   "url": "https://charleswilke.com/read/artifacts-transcript",
-  "conversation_messages": 34,
-  "exchanges": 17,
-  "generated_artworks": 7,
+  "conversation_messages": 46,
+  "exchanges": 23,
+  "generated_artworks": 13,
   "images": [
     {
       "name": "01-celestial-needlepoint-first-pass",
@@ -54,6 +54,48 @@
       "width": 1254,
       "height": 1254,
       "sha256": "b93a2a82c5c4bfc48b596799603218ebd5645bb908132e1a8df84c86c50e6d18"
+    },
+    {
+      "name": "08-exploring-laibor-noir-wordmark",
+      "caption": "Extra-wide Exploring L.ai.bor wordmark in the essay’s pulp-noir style.",
+      "width": 2172,
+      "height": 724,
+      "sha256": "0257ccc047b62b4c5bd1c1e47db839c87723670edf57cd2c6934215c9a685513"
+    },
+    {
+      "name": "09-header-pinky-correction",
+      "caption": "Hand correction: a little finger is added to the original pulp-noir header.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "dfd65976abfe0a43f7141ec2b8c34257610f51cdd06a64fdab3dbf64734193d5"
+    },
+    {
+      "name": "10-header-eyeline-first-pass",
+      "caption": "First eyeline adjustment: a subtle attempt to bring the gaze down toward the glint.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "15405c2eab4fafd21fed74fcaf3335d76c266479ce44867de2c10da32a79b857"
+    },
+    {
+      "name": "11-header-eyeline-revision",
+      "caption": "Second eyeline adjustment, emphasizing the downward-left gaze while preserving the corrected hand.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "229bc23af128a3e472d679637fe84dc243c4c60745fc7f0ee5dd37dd5b888a07"
+    },
+    {
+      "name": "12-header-fresh-composition",
+      "caption": "Fresh composition using the revised hand and eyeline instructions, with a more active reaching gesture.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "396b0914851b45991d5bded768ada1ab9612802b0a664d9d6f4f8971b3f2e2ae"
+    },
+    {
+      "name": "13-header-before-the-gesture",
+      "caption": "Latest selected header: her expression registers the discovery while her hand rests beside an unrelated book.",
+      "width": 1774,
+      "height": 887,
+      "sha256": "91dee8986bc650ed1406d3c40d997528a0a2e593c032f88fd092f7dcd53791f4"
     }
   ],
   "preflight_drafts": 1,
@@ -62,6 +104,13 @@
       "name": "preflight-draft.txt",
       "caption": "User-supplied preflight draft, preserved as received.",
       "sha256": "0d17fb82f6f79f58e601dac1a14e95a78206382fb9abb4ce7113107a917007f8"
+    }
+  ],
+  "supporting_references": [
+    {
+      "name": "reference-previous-laibor-banner.png",
+      "caption": "Earlier 3:1 Exploring L.ai.bor banner from a previous session; format reference only.",
+      "sha256": "816de6a913aa64688b5c5ac1c36724bac5e8a54d178684637e9b6542ff0a09f0"
     }
   ]
 }

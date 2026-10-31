@@ -1,0 +1,8 @@
+Use case: precise-object-edit.
+Edit the supplied estate-sale illustration. Change ONLY the woman's eye direction. Her gaze must unmistakably fix on the bright four-point glint on the metal object at lower left, at approximately 22% of image width and 63% of image height.
+
+IMPORTANT: her existing irises hug the UPPER-left portion of the eyes, which reads as a sideways glance above the object. Redraw both irises and pupils LOWER within the same eye openings. In the larger eye on the VIEWER'S RIGHT, put the dark pupil and iris at the LOWER-LEFT edge, visibly meeting the lower eyelid, and expose a clear crescent of cream sclera ABOVE the iris and to its RIGHT. The iris must no longer touch the upper eyelid. Do the matching downward-and-left eye rotation in the smaller eye on the viewer's left. This should be an obvious attentive DOWNWARD glance toward a small object on the table in front of her, not merely another sideways glance. Keep the gaze coordinated and naturally convergent on that one glint.
+
+Maintain the existing raised eyebrow and clever, pleased expression. Keep her head position, outer eyelid outlines, face, smile and all other features as close to the source as possible. Do not add huge eyes or change the facial proportions. The new eye marks should match the angular black ink and ochre/cream print texture.
+
+Preserve the corrected five-digit hand and all fingers exactly, every object, the glint, silhouettes, sign, clothing, hair, composition, crop and color palette. No changes outside the eyes.

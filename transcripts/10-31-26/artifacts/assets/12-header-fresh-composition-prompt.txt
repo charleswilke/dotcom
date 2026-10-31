@@ -1,0 +1,27 @@
+Use case: illustration-story.
+Asset type: wide horizontal editorial header for a personal essay titled Artifacts, about the singular moment an estate-sale browser discovers something uniquely fascinating to them.
+
+Create a NEW original image from scratch, not an edit of an existing image.
+
+Scene and emotional focus:
+A busy estate sale in a lived-in house. One adult woman has just noticed a small unusual object on a table and leans toward it with a raised eyebrow, a subtle delighted crooked smile, and unmistakable curiosity. The image is about the private spark of discovery amid a roomful of other people's interests.
+
+Composition:
+Wide landscape, approximately 2:1. Cinematic close framing at table height, looking across loosely suggested foreground curios toward the woman's three-quarter-view face in the middle-right. Her face is large enough for the eye direction and raised eyebrow to read at header size. A small mysterious rounded metal curiosity is partially cropped into the lower-left foreground. Its exact identity is intriguingly ambiguous. ONE crisp small cream-and-ochre four-point glint rests on its upper metal edge. Place the glint below and to the viewer's left of her face, close enough for the relationship between face and object to be immediately clear.
+
+CRITICAL — gaze and expression:
+Both eyes are visibly fixed on that EXACT glint on the object, not on the viewer, not on her hand, and not on empty space above it. Her pupils and irises sit in the LOWER-LEFT portions of their eye openings, meeting the lower eyelids with small crescents of light sclera above and to the right. Show a coordinated natural downward-left gaze, appropriate to looking at a nearby object on the table. The more distant eye must track the same point in perspective. Keep small adult eyes, natural alignment, and one distinctly raised eyebrow. Expression is intrigued and privately pleased, not suspicious or sinister.
+
+CRITICAL — hand anatomy:
+Her one visible hand hovers naturally beside the object, paused just before reaching for it. Draw a readable, anatomically coherent hand with EXACTLY four fingers and one thumb, five digits total, including a distinct shorter little finger beside the ring finger. All digits attach naturally to a single palm. A relaxed slightly curled reaching gesture with sensible proportions and foreshortening. Keep the hand simple enough that all five digits remain intelligible. No duplicate or fused fingers.
+
+Estate-sale background:
+Other adult browsers become loosely drawn overlapping charcoal silhouettes against a muted window or doorway. Different profiles and postures suggest people inspecting books, shelves, pottery, or records, each absorbed in their own search. Sparse domestic architecture and a modest ESTATE SALE card establish the setting. Foreground clutter is nonspecific: cropped dark book-stack shapes, a vessel, a lamp silhouette. Preserve open space and strong visual hierarchy. The only crisp little light accents are the object's glint and the woman's eye highlights.
+
+Style and materials:
+Rough midcentury pulp-noir editorial printmaking. Bold angular masses of charcoal ink, expressive dry-brush contours, broken scratchy hatching, irregular hand-cut shapes, patchy ink coverage, modest imperfect color registration, distressed aged paper. The texture belongs to the marks themselves. Confident graphic shadows and a strong, readable silhouette. Adult features with personality, slightly tousled short hair, a simple collared shirt or jacket. Large expanses of quiet dark and warm cream. No polished digital storybook finish.
+Palette: near-black charcoal, aged cream, deep petrol teal, ochre gold, restrained rusty-orange accents. Dramatic hard-edged chiaroscuro, with warm light across her eye and cheek; no smooth gradients.
+Mood: human, curious, warm, a little mysterious, with affectionate observational humor.
+
+Constraints:
+One complete continuous illustration, no panel borders or speech balloons. Only text is the small ESTATE SALE card. No title or watermark. No giant glossy cartoon eyes, glossy 3D rendering, meticulous inventory of antiques, elaborate armillary sphere, literal detective costumes, fedoras, crime imagery, magic beams, or exaggerated theatrical spotlight. An ordinary estate sale given the graphic drama of pulp noir. Prioritize the believable five-digit hand, the raised eyebrow, and a precise eyeline connecting her eyes to the glint.

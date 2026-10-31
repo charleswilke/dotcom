@@ -1,0 +1,14 @@
+Use case: logo-brand.
+Asset type: EXTRA-WIDE 3:1 horizontal publication wordmark for Exploring L.ai.bor, to upload to Substack.
+Input image 1: STYLE REFERENCE ONLY — use the selected Artifacts essay illustration's worn pulp-noir printing, angular dry-ink shapes and aged cream, petrol teal, charcoal and ochre palette. Do not reproduce its people, estate-sale scene, objects or sign.
+Input image 2: FORMAT REFERENCE ONLY — the earlier extra-wide Exploring L.ai.bor banner shows the required 3:1 shape and single-line arrangement. Do not borrow its bright comic-book colors, extruded lettering or star-network background.
+
+Create a fresh wordmark in an exact 3:1 wide horizontal canvas, approximately 2400 by 800 pixels, opaque background. The only text is exactly:
+"Exploring L.ai.bor"
+Preserve capitalization and the two separator periods: L dot ai dot bor. Keep the dot over the lowercase i distinct from those separator periods.
+
+One continuous horizontal line of large, confidently drawn lettering, optically centered, filling most of the width with comfortable safe margins on every side. No stacked words. Visibly hand-cut, irregular angular chunky letterforms with a restrained forward lean, like the lettering of an original midcentury pulp paperback or rough woodblock print. Warm cream letters, small ochre-gold offset print accents and restrained rusty-orange details on a very deep petrol-teal and charcoal ink field. Strong clear letter silhouettes remain easy to read at small size. Give "L.ai.bor" slightly more visual weight, but keep the full publication name coherent and readable.
+
+Flat graphic printing: broken dry-brush edges, ink skips, rough patchy coverage, modest uneven color registration, and aged cream paper subtly showing through the ink. The marks themselves carry the texture. Tactile, expressive, a little scruffy, witty pulp noir, matching image 1 and the Artifacts essay's selected CW mark. The ground is quiet and mostly dark so the letters dominate. One tiny sharp ochre/cream glint may accent a separator dot as a quiet echo of the essay artwork.
+
+Constraints: one finished extra-wide wordmark image. No other words, slogans, captions, date, CW initials, border, badge, people, antiques, scene, or elaborate ornament. No glossy or extruded 3D lettering, smooth gradients, digital shine, cartoon faces or busy cosmic scenery. Do not crop any letters or punctuation. Do not add a final period after bor.

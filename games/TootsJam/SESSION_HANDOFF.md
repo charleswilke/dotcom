@@ -8,10 +8,18 @@
 
 ## Core Gameplay (Current)
 - Side-view free throw game with hold-to-charge, release-to-shoot.
+- Rendering follows the display’s native refresh rate (no artificial FPS cap); physics/charge updates use a fixed 60 Hz step for consistent shot timing on all displays. Background catch-up is bounded, while the level timer follows wall time. Ball positions interpolate between physics ticks, HUD text updates only when its value changes, and static asphalt/CRT details are cached rather than rebuilt every frame.
 - Trajectory preview shown while charging (level-aware contrast).
+  - Levels 2–4 and 6 predict moving-obstacle ricochets, mark contacts with rings, and show the rebound path in amber (dark rust on the afternoon sky).
+  - Uses the live collision responses on copies, with obstacle positions projected at the fixed physics step.
+  - Random collision kicks use their mean; future random laser spawns are not predicted. Level 5 keeps its current-phase gravity guide.
+  - All levels preview banks off the solid backboard, rear edge, support arm, post, and base using shared geometry and collision response.
+  - Ends at rim/floor/sidewall contact or a settled structure landing; rim and floor rebounds are not included in the guide.
+- Ball flight runs at 60% speed (40% slower), preserving the original free-flight arc and shooting range. The ricochet guide uses the same flight update and a longer lookahead. Charge timing, obstacle motion, effects, and the level timer use their existing clocks.
 - Ball uses physics with:
   - gravity + air drag
-  - rim/backboard/floor collisions
+  - rim/backboard/support/floor collisions
+  - Circle/polygon contact handles the correct face or corner, including drawn outlines; separating contacts do not bounce twice. Board/support banks are non-swish makes and non-airball misses. A ball resting on the structure still auto-resets.
   - bounce + settle + auto-reset flow
 - Scoring supports robust "rattle still counts" logic.
 - Combo scoring is exponential:
@@ -37,7 +45,7 @@
 
 ## Obstacles by Level
 - Level 2:
-  - Gulls move in elliptical motion.
+  - Gulls move in slow elliptical motion (roughly 8–10 seconds per circuit).
   - Ball-gull collision deflects shot.
   - Squawk SFX on hit.
 - Level 3:

@@ -35,6 +35,9 @@ const H = canvas.height;
 const floorY = H - 88;
 const gravity = 0.29;
 const airDrag = 0.998;
+const ballFlightSpeed = 0.6;
+const flightDrag = Math.pow(airDrag, ballFlightSpeed);
+const flightTravel = airDrag * (1 - flightDrag) / (1 - airDrag);
 const player = { x: 100, y: floorY - 56 };
 const handBall = { x: player.x + 38, y: player.y + 2 };
 const dribbleX = player.x + 28;
@@ -53,6 +56,33 @@ const backboard = {
   h: 120
 };
 
+// Shared drawing/collision geometry, including the visible outline thickness.
+const hoopStructure = {
+  board: { x: backboard.x - 2, y: backboard.y, w: backboard.w + 4, h: backboard.h },
+  boardShadow: { x: backboard.x + 1, y: backboard.y + 4, w: backboard.w + 4, h: backboard.h },
+  arm: [
+    { x: backboard.x + 74, y: hoop.y - 16 },
+    { x: backboard.x + 4, y: hoop.y - 14 },
+    { x: backboard.x + 4, y: hoop.y - 2 },
+    { x: backboard.x + 74, y: hoop.y - 4 }
+  ],
+  post: { x: backboard.x + 69, y: hoop.y - 26, w: 14, h: floorY - (hoop.y - 26) },
+  base: { x: backboard.x + 34, y: floorY - 52, w: 84, h: 52 }
+};
+const hoopStructureColliders = Object.entries(hoopStructure).map(([name, shape]) => {
+  const points = Array.isArray(shape) ? shape : [
+    { x: shape.x, y: shape.y }, { x: shape.x + shape.w, y: shape.y },
+    { x: shape.x + shape.w, y: shape.y + shape.h }, { x: shape.x, y: shape.y + shape.h }
+  ];
+  return {
+    name, points,
+    padding: name === "boardShadow" ? 0 : 1.5,
+    restitution: name.startsWith("board") ? 0.78 : 0.68,
+    minX: Math.min(...points.map(p => p.x)), maxX: Math.max(...points.map(p => p.x)),
+    minY: Math.min(...points.map(p => p.y)), maxY: Math.max(...points.map(p => p.y))
+  };
+});
+
 const ball = {
   x: handBall.x,
   y: handBall.y,
@@ -65,6 +95,8 @@ const ball = {
   scoredOnThisShot: false
 };
 
+const previousBallPosition = { x: ball.x, y: ball.y };
+
 let score = 0;
 let comboStreak = 0;
 let lastComboShown = 0;
@@ -75,6 +107,8 @@ let lastMadeShot = false;
 let lastShotWasSwish = false;
 let touchedRim = false;
 let touchedBackboard = false;
+let touchedHoopSupport = false;
+let structureRestFrames = 0;
 let resetCountdown = -1;
 let spaceHeld = false;
 let dribbleHeld = false;
@@ -125,6 +159,8 @@ const comboLadder = [
 ];
 let levelTimeRemainingMs = levelDurationMs;
 let lastTimerTickAt = performance.now();
+// Keep shot timing independent of display refresh rate; render on every display refresh.
+const trajectoryFrameMs = 1000 / 60;
 let level = 1;
 const skyPlane = {
   active: false,
@@ -134,14 +170,15 @@ const skyPlane = {
   dir: 1
 };
 const gulls = [
+  // Slow, readable orbits: roughly 8–10 seconds per circuit for bank-shot timing.
   // Upper arc gulls — staggered heights across the court
-  { x: W * 0.24, y: 238, baseX: W * 0.24, baseY: 238, orbitX: 44, orbitY: 22, speed: 0.0019, phase: 0.2, r: 11, cooldown: 0 },
-  { x: W * 0.46, y: 186, baseX: W * 0.46, baseY: 186, orbitX: 40, orbitY: 20, speed: 0.0022, phase: 2.0, r: 11, cooldown: 0 },
-  { x: W * 0.66, y: 220, baseX: W * 0.66, baseY: 220, orbitX: 38, orbitY: 22, speed: 0.002, phase: 4.1, r: 11, cooldown: 0 },
+  { x: W * 0.24, y: 238, baseX: W * 0.24, baseY: 238, orbitX: 44, orbitY: 22, speed: 0.000665, phase: 0.2, r: 11, cooldown: 0 },
+  { x: W * 0.46, y: 186, baseX: W * 0.46, baseY: 186, orbitX: 40, orbitY: 20, speed: 0.00077, phase: 2.0, r: 11, cooldown: 0 },
+  { x: W * 0.66, y: 220, baseX: W * 0.66, baseY: 220, orbitX: 38, orbitY: 22, speed: 0.0007, phase: 4.1, r: 11, cooldown: 0 },
   // Mid-descent plinko gulls — staggered 50-110px above hoop so deflections can still arc in
-  { x: W * 0.37, y: 338, baseX: W * 0.37, baseY: 338, orbitX: 32, orbitY: 18, speed: 0.0021, phase: 1.3, r: 12, cooldown: 0 },
-  { x: W * 0.55, y: 302, baseX: W * 0.55, baseY: 302, orbitX: 28, orbitY: 16, speed: 0.00195, phase: 2.6, r: 12, cooldown: 0 },
-  { x: W * 0.71, y: 358, baseX: W * 0.71, baseY: 358, orbitX: 26, orbitY: 14, speed: 0.0018, phase: 3.8, r: 12, cooldown: 0 }
+  { x: W * 0.37, y: 338, baseX: W * 0.37, baseY: 338, orbitX: 32, orbitY: 18, speed: 0.000735, phase: 1.3, r: 12, cooldown: 0 },
+  { x: W * 0.55, y: 302, baseX: W * 0.55, baseY: 302, orbitX: 28, orbitY: 16, speed: 0.0006825, phase: 2.6, r: 12, cooldown: 0 },
+  { x: W * 0.71, y: 358, baseX: W * 0.71, baseY: 358, orbitX: 26, orbitY: 14, speed: 0.00063, phase: 3.8, r: 12, cooldown: 0 }
 ];
 const helicopter = {
   x: W * 0.60,
@@ -425,19 +462,23 @@ function applyLevelProgression() {
   return true;
 }
 
+function setHudText(element, text) {
+  if (element && element.textContent !== text) element.textContent = text;
+}
+
 function updateHud() {
   if (freeThrowMode) {
-    scoreEl.textContent = `Score: ${score}`;
+    setHudText(scoreEl, `Score: ${score}`);
   } else {
     const nextTarget = getNextLevelTarget(level);
     const displayTarget = nextTarget == null ? level6ScoreThreshold : nextTarget;
-    scoreEl.textContent = `Score: ${score}/${displayTarget}`;
+    setHudText(scoreEl, `Score: ${score}/${displayTarget}`);
   }
   const comboLabel = `Combo: x${getComboMultiplier(comboStreak)}`;
   if (comboTextEl) {
-    comboTextEl.textContent = comboLabel;
+    setHudText(comboTextEl, comboLabel);
   } else {
-    comboEl.textContent = comboLabel;
+    setHudText(comboEl, comboLabel);
   }
   if (comboStepEls.length > 0) {
     const litSteps = Math.min(tootsFeverModeStreak, Math.max(0, comboStreak));
@@ -446,8 +487,8 @@ function updateHud() {
     }
     comboEl.classList.toggle("is-fever", comboStreak >= tootsFeverModeStreak);
   }
-  if (timerEl) timerEl.textContent = freeThrowMode ? "Free throw mode" : `Time: ${formatLevelTime(levelTimeRemainingMs)}`;
-  if (nextLevelEl) nextLevelEl.textContent = "";
+  setHudText(timerEl, freeThrowMode ? "Free throw mode" : `Time: ${formatLevelTime(levelTimeRemainingMs)}`);
+  setHudText(nextLevelEl, "");
   if (comboStreak > lastComboShown) {
     comboEl.classList.remove("combo-up");
     void comboEl.offsetWidth;
@@ -459,6 +500,8 @@ function updateHud() {
 function resetBall() {
   ball.x = handBall.x;
   ball.y = handBall.y;
+  previousBallPosition.x = ball.x;
+  previousBallPosition.y = ball.y;
   ball.vx = 0;
   ball.vy = 0;
   ball.spin = 0;
@@ -475,6 +518,8 @@ function resetBall() {
   dribbleBouncePlayed = false;
   touchedRim = false;
   touchedBackboard = false;
+  touchedHoopSupport = false;
+  structureRestFrames = 0;
   touchedGullThisShot = false;
   touchedHeliThisShot = false;
   touchedBalloonThisShot = false;
@@ -1005,10 +1050,14 @@ function releaseShot() {
   charging = false;
   stopChargeSfx();
   ball.inFlight = true;
+  previousBallPosition.x = ball.x;
+  previousBallPosition.y = ball.y;
   ball.resting = false;
   ball.scoredOnThisShot = false;
   touchedRim = false;
   touchedBackboard = false;
+  touchedHoopSupport = false;
+  structureRestFrames = 0;
   touchedGullThisShot = false;
   touchedHeliThisShot = false;
   touchedBalloonThisShot = false;
@@ -1210,10 +1259,10 @@ function updateSkyPlane(now) {
   }
 }
 
-function updateGulls(now) {
+function updateGulls(now, birds = gulls) {
   if (level !== 2) return;
-  for (let i = 0; i < gulls.length; i++) {
-    const g = gulls[i];
+  for (let i = 0; i < birds.length; i++) {
+    const g = birds[i];
     const theta = now * g.speed + g.phase;
     g.x = g.baseX + Math.cos(theta) * g.orbitX;
     g.y = g.baseY + Math.sin(theta) * g.orbitY;
@@ -1221,18 +1270,18 @@ function updateGulls(now) {
   }
 }
 
-function updateHelicopter(now) {
+function updateHelicopter(now, h = helicopter) {
   if (level !== 3) return;
-  const theta = now * helicopter.speed + helicopter.phase;
-  helicopter.x = helicopter.baseX + Math.cos(theta) * helicopter.orbitX;
-  helicopter.y = helicopter.baseY + Math.sin(theta) * helicopter.orbitY;
-  if (helicopter.cooldown > 0) helicopter.cooldown -= 1;
+  const theta = now * h.speed + h.phase;
+  h.x = h.baseX + Math.cos(theta) * h.orbitX;
+  h.y = h.baseY + Math.sin(theta) * h.orbitY;
+  if (h.cooldown > 0) h.cooldown -= 1;
 }
 
-function updateBalloons(now) {
+function updateBalloons(now, obstacles = balloons) {
   if (level !== 4) return;
-  for (let i = 0; i < balloons.length; i++) {
-    const b = balloons[i];
+  for (let i = 0; i < obstacles.length; i++) {
+    const b = obstacles[i];
     b.x = b.baseX + Math.sin(now * b.swaySpeed + b.phase) * b.swayAmp;
     b.y = b.baseY + Math.sin(now * b.bobSpeed + b.phase * 1.7) * b.bobAmp;
     if (b.cooldown > 0) b.cooldown -= 1;
@@ -1253,8 +1302,8 @@ function getSpaceUfoPose(now, ufoName) {
   };
 }
 
-function getAlienBaseUfoPose(now, index) {
-  const ufo = alienBaseUfos[index];
+function getAlienBaseUfoPose(now, index, ufos = alienBaseUfos) {
+  const ufo = ufos[index];
   if (!ufo) return { x: 0, y: 0, scale: 0.8 };
   return {
     x: ufo.x + Math.sin(now * 0.0018 + ufo.wobblePhase) * 9,
@@ -1327,58 +1376,60 @@ function updateAlienLasers(now) {
   }
 }
 
-function resolveAlienLaserCollision() {
+function resolveAlienLaserCollision(target = ball, lasers = alienLasers, preview = false) {
   if (level !== 6) return false;
-  for (let i = 0; i < alienLasers.length; i++) {
-    const laser = alienLasers[i];
+  for (let i = 0; i < lasers.length; i++) {
+    const laser = lasers[i];
     if (laser.cooldown > 0) continue;
     const left = laser.x;
     const right = laser.x + laser.length;
-    const hitY = Math.abs(ball.y - laser.y) <= ball.r + laser.thickness;
-    const hitX = ball.x + ball.r > left && ball.x - ball.r < right;
+    const hitY = Math.abs(target.y - laser.y) <= target.r + laser.thickness;
+    const hitX = target.x + target.r > left && target.x - target.r < right;
     if (!hitX || !hitY) continue;
 
-    const above = ball.y < laser.y;
-    ball.y = above
-      ? (laser.y - ball.r - laser.thickness - 0.2)
-      : (laser.y + ball.r + laser.thickness + 0.2);
-    ball.vy = above
-      ? -Math.max(1.7, Math.abs(ball.vy) * 0.78)
-      : Math.max(1.1, Math.abs(ball.vy) * 0.6);
-    ball.vx -= 0.65 + Math.random() * 0.35;
-    ball.spin += (above ? -1 : 1) * 0.05;
-    playSfx("laser", 0.54);
-    touchedLaserThisShot = true;
+    const above = target.y < laser.y;
+    target.y = above
+      ? (laser.y - target.r - laser.thickness - 0.2)
+      : (laser.y + target.r + laser.thickness + 0.2);
+    target.vy = above
+      ? -Math.max(1.7, Math.abs(target.vy) * 0.78)
+      : Math.max(1.1, Math.abs(target.vy) * 0.6);
+    target.vx -= 0.65 + (preview ? 0.5 : Math.random()) * 0.35;
+    target.spin += (above ? -1 : 1) * 0.05;
+    if (!preview) {
+      playSfx("laser", 0.54);
+      touchedLaserThisShot = true;
+    }
     laser.cooldown = 8;
     return true;
   }
   return false;
 }
 
-function resolveAlienUfoCollisions(now) {
+function resolveAlienUfoCollisions(now, target = ball, ufos = alienBaseUfos, preview = false) {
   if (level !== 6) return false;
-  for (let i = 0; i < alienBaseUfos.length; i++) {
-    const ufo = alienBaseUfos[i];
+  for (let i = 0; i < ufos.length; i++) {
+    const ufo = ufos[i];
     if (ufo.cooldown > 0) {
       ufo.cooldown -= 1;
       continue;
     }
 
-    const pose = getAlienBaseUfoPose(now, i);
-    const rx = 30 * pose.scale + ball.r;
-    const ry = 12 * pose.scale + ball.r;
-    const dx = ball.x - pose.x;
-    const dy = ball.y - pose.y;
+    const pose = getAlienBaseUfoPose(now, i, ufos);
+    const rx = 30 * pose.scale + target.r;
+    const ry = 12 * pose.scale + target.r;
+    const dx = target.x - pose.x;
+    const dy = target.y - pose.y;
     const ellipseN = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry);
     if (ellipseN > 1) continue;
 
     const safeN = Math.max(0.0001, ellipseN);
     const t = 1 / Math.sqrt(safeN);
-    ball.x = pose.x + dx * t;
-    ball.y = pose.y + dy * t;
+    target.x = pose.x + dx * t;
+    target.y = pose.y + dy * t;
 
-    let nx = (ball.x - pose.x) / (rx * rx);
-    let ny = (ball.y - pose.y) / (ry * ry);
+    let nx = (target.x - pose.x) / (rx * rx);
+    let ny = (target.y - pose.y) / (ry * ry);
     const nLen = Math.hypot(nx, ny);
     if (nLen > 0.0001) {
       nx /= nLen;
@@ -1388,14 +1439,16 @@ function resolveAlienUfoCollisions(now) {
       ny = 0;
     }
 
-    const dot = ball.vx * nx + ball.vy * ny;
+    const dot = target.vx * nx + target.vy * ny;
     const bounce = 0.84;
-    ball.vx -= (1 + bounce) * dot * nx;
-    ball.vy -= (1 + bounce) * dot * ny;
-    ball.vx -= 0.15;
-    ball.vy -= 0.12;
-    touchedAlienUfoThisShot = true;
-    playSfx("laser", 0.46);
+    target.vx -= (1 + bounce) * dot * nx;
+    target.vy -= (1 + bounce) * dot * ny;
+    target.vx -= 0.15;
+    target.vy -= 0.12;
+    if (!preview) {
+      touchedAlienUfoThisShot = true;
+      playSfx("laser", 0.46);
+    }
     ufo.cooldown = 8;
     return true;
   }
@@ -1443,9 +1496,9 @@ function getSpaceBeamGravityMultiplierAt(x, y, now) {
   return 1.5 + 0.5 * state.wave;
 }
 
-function getBallBeamGlow(now) {
+function getBallBeamGlow(now, renderedBall = ball) {
   if (level !== 5) return null;
-  if (!isPointInSpaceBeam(ball.x, ball.y, now)) return null;
+  if (!isPointInSpaceBeam(renderedBall.x, renderedBall.y, now)) return null;
   const state = getSpaceBeamState(now);
   const intensity = Math.max(0.12, state.intensity);
   const isPress = state.mode === "press";
@@ -1489,69 +1542,73 @@ function closestPointOnSegment(px, py, ax, ay, bx, by) {
   return { x: ax + abx * t, y: ay + aby * t };
 }
 
-function resolveGullCollision(g) {
-  const dx = ball.x - g.x;
-  const dy = ball.y - g.y;
-  const hitDist = ball.r + g.r;
+function resolveGullCollision(g, target = ball, preview = false) {
+  const dx = target.x - g.x;
+  const dy = target.y - g.y;
+  const hitDist = target.r + g.r;
   const dist2 = dx * dx + dy * dy;
   if (dist2 > hitDist * hitDist || g.cooldown > 0) return false;
 
   const dist = Math.max(0.0001, Math.sqrt(dist2));
   const nx = dx / dist;
   const ny = dy / dist;
-  ball.x = g.x + nx * hitDist;
-  ball.y = g.y + ny * hitDist;
-  const dot = ball.vx * nx + ball.vy * ny;
+  target.x = g.x + nx * hitDist;
+  target.y = g.y + ny * hitDist;
+  const dot = target.vx * nx + target.vy * ny;
   const bounce = 0.88;
-  ball.vx -= (1 + bounce) * dot * nx;
-  ball.vy -= (1 + bounce) * dot * ny;
-  ball.vx += (Math.random() - 0.5) * 0.55;
-  ball.vy -= 0.15;
-  touchedGullThisShot = true;
-  playSfx("squawk", 0.62);
+  target.vx -= (1 + bounce) * dot * nx;
+  target.vy -= (1 + bounce) * dot * ny;
+  target.vx += (preview ? 0 : (Math.random() - 0.5) * 0.55);
+  target.vy -= 0.15;
+  if (!preview) {
+    touchedGullThisShot = true;
+    playSfx("squawk", 0.62);
+  }
   g.cooldown = 10;
   return true;
 }
 
-function resolveHelicopterCollision() {
-  if (level !== 3 || helicopter.cooldown > 0) return false;
+function resolveHelicopterCollision(h = helicopter, target = ball, preview = false) {
+  if (level !== 3 || h.cooldown > 0) return false;
 
-  const rx = helicopter.bodyRx + ball.r;
-  const ry = helicopter.bodyRy + ball.r;
-  const dx = ball.x - helicopter.x;
-  const dy = ball.y - helicopter.y;
+  const rx = h.bodyRx + target.r;
+  const ry = h.bodyRy + target.r;
+  const dx = target.x - h.x;
+  const dy = target.y - h.y;
   const inside = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry) <= 1;
   if (!inside) return false;
 
-  const wasAbove = ball.y < helicopter.y - helicopter.bodyRy * 0.25;
-  if (wasAbove && ball.vy > 0) {
-    ball.y = helicopter.y - helicopter.bodyRy - ball.r - 1;
-    ball.vy = -Math.abs(ball.vy) * 0.86;
-    ball.vx += (ball.x - helicopter.x) * 0.02;
+  const wasAbove = target.y < h.y - h.bodyRy * 0.25;
+  if (wasAbove && target.vy > 0) {
+    target.y = h.y - h.bodyRy - target.r - 1;
+    target.vy = -Math.abs(target.vy) * 0.86;
+    target.vx += (target.x - h.x) * 0.02;
   } else {
-    ball.vx *= -0.74;
-    ball.vy *= 0.9;
+    target.vx *= -0.74;
+    target.vy *= 0.9;
   }
-  touchedHeliThisShot = true;
-  playSfx("heli", 0.68);
-  helicopter.cooldown = 10;
+  if (!preview) {
+    touchedHeliThisShot = true;
+    playSfx("heli", 0.68);
+  }
+  h.cooldown = 10;
   return true;
 }
 
-function resolveBalloonCollision(b) {
+function resolveBalloonCollision(b, target = ball, preview = false) {
   if (level !== 4 || b.cooldown > 0) return false;
 
   const hull = getBalloonHullPoints(b);
-  const inside = pointInPolygon(ball.x, ball.y, hull);
+  const inside = pointInPolygon(target.x, target.y, hull);
 
   let nearest = null;
   let minDist2 = Infinity;
   for (let i = 0; i < hull.length; i++) {
     const a = hull[i];
     const c = hull[(i + 1) % hull.length];
-    const p = closestPointOnSegment(ball.x, ball.y, a.x, a.y, c.x, c.y);
-    const dx = ball.x - p.x;
-    const dy = ball.y - p.y;
+    const p = closestPointOnSegment(target.x, target.y, a.x, a.y, c.x, c.y);
+    const dx = target.x - p.x;
+    const dy = target.y - p.y;
     const d2 = dx * dx + dy * dy;
     if (d2 < minDist2) {
       minDist2 = d2;
@@ -1559,26 +1616,26 @@ function resolveBalloonCollision(b) {
     }
   }
 
-  if (!inside && minDist2 > ball.r * ball.r) return false;
+  if (!inside && minDist2 > target.r * target.r) return false;
 
-  let nx = ball.x - nearest.x;
-  let ny = ball.y - nearest.y;
+  let nx = target.x - nearest.x;
+  let ny = target.y - nearest.y;
   let dist = Math.hypot(nx, ny);
   if (dist < 0.001) {
-    nx = ball.x - b.x;
-    ny = ball.y - b.y;
+    nx = target.x - b.x;
+    ny = target.y - b.y;
     dist = Math.max(0.001, Math.hypot(nx, ny));
   }
   nx /= dist;
   ny /= dist;
-  ball.x = nearest.x + nx * ball.r;
-  ball.y = nearest.y + ny * ball.r;
-  const dot = ball.vx * nx + ball.vy * ny;
+  target.x = nearest.x + nx * target.r;
+  target.y = nearest.y + ny * target.r;
+  const dot = target.vx * nx + target.vy * ny;
   const bounce = 0.84;
-  ball.vx -= (1 + bounce) * dot * nx;
-  ball.vy -= (1 + bounce) * dot * ny;
+  target.vx -= (1 + bounce) * dot * nx;
+  target.vy -= (1 + bounce) * dot * ny;
 
-  touchedBalloonThisShot = true;
+  if (!preview) touchedBalloonThisShot = true;
   b.cooldown = 10;
   return true;
 }
@@ -1920,6 +1977,89 @@ function triggerBrickStamp() {
   brickStampedThisShot = true;
 }
 
+// Circle against the actual polygon, with round corner contact instead of
+// treating the ball's bounding box as a hit. Only reflect approaching motion.
+function resolveHoopPartCollision(target, part) {
+  const radius = target.r + part.padding;
+  if (target.x + radius < part.minX || target.x - radius > part.maxX ||
+      target.y + radius < part.minY || target.y - radius > part.maxY) return false;
+  let nearest = null;
+  let nearestEdge = null;
+  let minDist2 = Infinity;
+  const points = part.points;
+  for (let i = 0; i < points.length; i++) {
+    const a = points[i];
+    const b = points[(i + 1) % points.length];
+    const point = closestPointOnSegment(target.x, target.y, a.x, a.y, b.x, b.y);
+    const dist2 = (target.x - point.x) ** 2 + (target.y - point.y) ** 2;
+    if (dist2 < minDist2) {
+      minDist2 = dist2;
+      nearest = point;
+      nearestEdge = { a, b };
+    }
+  }
+  const inside = pointInPolygon(target.x, target.y, points);
+  if (!inside && minDist2 >= radius * radius) return false;
+  const distance = Math.sqrt(minDist2);
+  let nx;
+  let ny;
+  if (distance > 0.0001) {
+    const direction = inside ? -1 : 1;
+    nx = (target.x - nearest.x) / distance * direction;
+    ny = (target.y - nearest.y) / distance * direction;
+  } else {
+    // Handle centers exactly on an edge, for either polygon winding.
+    const area = points.reduce((sum, a, i) => {
+      const b = points[(i + 1) % points.length];
+      return sum + a.x * b.y - b.x * a.y;
+    }, 0);
+    const direction = area >= 0 ? 1 : -1;
+    const dx = nearestEdge.b.x - nearestEdge.a.x;
+    const dy = nearestEdge.b.y - nearestEdge.a.y;
+    const length = Math.max(0.0001, Math.hypot(dx, dy));
+    nx = dy / length * direction;
+    ny = -dx / length * direction;
+  }
+  target.x = nearest.x + nx * (radius + 0.02);
+  target.y = nearest.y + ny * (radius + 0.02);
+  const normalSpeed = target.vx * nx + target.vy * ny;
+  if (normalSpeed < 0) {
+    target.vx -= (1 + part.restitution) * normalSpeed * nx;
+    target.vy -= (1 + part.restitution) * normalSpeed * ny;
+    const tangentSpeed = target.vx * -ny + target.vy * nx;
+    target.vx -= tangentSpeed * -ny * 0.08;
+    target.vy -= tangentSpeed * nx * 0.08;
+  }
+  return Math.max(0, -normalSpeed);
+}
+
+function resolveHoopStructureCollision(target = ball, preview = false, contacts = null) {
+  let hit = false;
+  let impactSpeed = 0;
+  // Resolve connected pieces together, so seams do not leave the ball embedded.
+  for (let pass = 0; pass < 3; pass++) {
+    let corrected = false;
+    for (const part of hoopStructureColliders) {
+      const impact = resolveHoopPartCollision(target, part);
+      if (impact === false) continue;
+      corrected = true;
+      hit = true;
+      if (contacts && !contacts.includes(part.name)) contacts.push(part.name);
+      impactSpeed = Math.max(impactSpeed, impact);
+      if (!preview) {
+        if (part.name.startsWith("board")) touchedBackboard = true;
+        else touchedHoopSupport = true;
+      }
+    }
+    if (!corrected) break;
+  }
+  if (!preview && impactSpeed > 1.2 && rimSoundCooldown <= 0) {
+    playSfx("rim", 0.6);
+    rimSoundCooldown = 6;
+  }
+  return hit;
+}
+
 function resolveRimCollision(rimX, rimY) {
   const dx = ball.x - rimX;
   const dy = ball.y - rimY;
@@ -1944,9 +2084,42 @@ function resolveRimCollision(rimX, rimY) {
   }
 }
 
-function physicsStep() {
+// Advance a fraction of the original flight step. This is the closed-form
+// gravity/drag update, so slowing time preserves the original free-flight arc
+// and shooting range instead of weakening the throw.
+function advanceBallFlight(target, gravityMultiplier) {
+  const terminalVy = gravity * gravityMultiplier * airDrag / (1 - airDrag);
+  target.x += target.vx * flightTravel;
+  target.y += (target.vy - terminalVy) * flightTravel + terminalVy * ballFlightSpeed;
+  target.vx *= flightDrag;
+  target.vy = terminalVy + (target.vy - terminalVy) * flightDrag;
+}
+
+function finishSettledShot() {
+  if (!ball.scoredOnThisShot) {
+    const touchedObstacleThisShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot || touchedLaserThisShot || touchedAlienUfoThisShot;
+    const isAirball = !touchedRim && !touchedBackboard && !touchedHoopSupport && !touchedObstacleThisShot;
+    if (isAirball) {
+      playSfx("airball", 0.82);
+      airballStampTimer = 52;
+    } else if (touchedRim && !brickStampedThisShot) {
+      triggerBrickStamp();
+    }
+    comboStreak = 0;
+    comboCalloutTimer = 0;
+    comboCalloutKey = "";
+    tootsFeverFlashTimer = 0;
+    stopTootsFeverSfx();
+    lastMadeShot = false;
+    lastShotWasSwish = false;
+    queueReset(isAirball ? "Airball" : "Brick");
+    return;
+  }
+  queueReset(comboStreak > 1 ? `Combo x${getComboMultiplier(comboStreak)}` : "Made Shot");
+}
+
+function physicsStep(now = performance.now()) {
   if (!gameStarted) return;
-  const now = performance.now();
   const elapsed = Math.max(0, now - lastTimerTickAt);
   lastTimerTickAt = now;
   if (!freeThrowMode) {
@@ -2028,11 +2201,7 @@ function physicsStep() {
   const prevY = ball.y;
 
   const gravityMultiplier = getSpaceBeamGravityMultiplierAt(ball.x, ball.y, now);
-  ball.vy += gravity * gravityMultiplier;
-  ball.vx *= airDrag;
-  ball.vy *= airDrag;
-  ball.x += ball.vx;
-  ball.y += ball.vy;
+  advanceBallFlight(ball, gravityMultiplier);
 
   if (level === 2) {
     for (let i = 0; i < gulls.length; i++) {
@@ -2056,16 +2225,12 @@ function physicsStep() {
   resolveRimCollision(leftRimX, rimY);
   resolveRimCollision(rightRimX, rimY);
 
-  if (
-    ball.x + ball.r > backboard.x &&
-    ball.x - ball.r < backboard.x + backboard.w &&
-    ball.y + ball.r > backboard.y &&
-    ball.y - ball.r < backboard.y + backboard.h
-  ) {
-    touchedBackboard = true;
-    ball.x = backboard.x - ball.r;
-    ball.vx = -Math.abs(ball.vx) * 0.78;
-    ball.vy *= 0.92;
+  const structureHit = resolveHoopStructureCollision();
+  structureRestFrames = structureHit && Math.abs(ball.vx) < 0.35 && Math.abs(ball.vy) < 0.35
+    ? structureRestFrames + 1 : 0;
+  if (structureRestFrames >= 18) {
+    finishSettledShot();
+    return;
   }
 
   if (ball.x - ball.r < 0) {
@@ -2093,26 +2258,7 @@ function physicsStep() {
     }
 
     if (Math.abs(ball.vx) < 0.2 && Math.abs(ball.vy) < 0.2) {
-      if (!ball.scoredOnThisShot) {
-        const touchedObstacleThisShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot || touchedLaserThisShot || touchedAlienUfoThisShot;
-        const isAirball = !touchedRim && !touchedBackboard && !touchedObstacleThisShot;
-        if (isAirball) {
-          playSfx("airball", 0.82);
-          airballStampTimer = 52;
-        } else if (touchedRim && !brickStampedThisShot) {
-          triggerBrickStamp();
-        }
-        comboStreak = 0;
-        comboCalloutTimer = 0;
-        comboCalloutKey = "";
-        tootsFeverFlashTimer = 0;
-        stopTootsFeverSfx();
-        lastMadeShot = false;
-        lastShotWasSwish = false;
-        queueReset(isAirball ? "Airball" : "Brick");
-        return;
-      }
-      queueReset(comboStreak > 1 ? `Combo x${getComboMultiplier(comboStreak)}` : "Made Shot");
+      finishSettledShot();
       return;
     }
   }
@@ -2135,7 +2281,7 @@ function physicsStep() {
   const madeOnEntry = crossedRimPlane && withinRimGap && throughCylinder;
   const madeOnDrop = crossedScorePlane && withinScoreWindow;
   if (!ball.scoredOnThisShot && ball.vy > 0 && (madeOnEntry || madeOnDrop)) {
-    const swish = !touchedRim && !touchedBackboard;
+    const swish = !touchedRim && !touchedBackboard && !touchedHoopSupport;
     const trickShot = touchedGullThisShot || touchedHeliThisShot || touchedBalloonThisShot || touchedLaserThisShot || touchedAlienUfoThisShot;
     ball.scoredOnThisShot = true;
     lastMadeShot = true;
@@ -2222,6 +2368,29 @@ function physicsStep() {
     }
   }
 }
+
+// Static detail is baked once so higher refresh rates do not multiply its work.
+const courtTexture = (() => {
+  const texture = document.createElement("canvas");
+  texture.width = W;
+  texture.height = H - floorY;
+  const textureCtx = texture.getContext("2d");
+  // Deterministic speckle noise so asphalt reads textured without frame flicker.
+  for (let y = floorY + 2; y < H; y += 5) {
+    for (let x = 0; x < W; x += 7) {
+      const n = Math.sin(x * 0.13 + y * 0.21) * 0.5 + 0.5;
+      if (n > 0.78) {
+        textureCtx.fillStyle = "rgba(210, 216, 228, 0.08)";
+        textureCtx.fillRect(x, y - floorY, 2, 2);
+      } else if (n < 0.18) {
+        textureCtx.fillStyle = "rgba(6, 9, 14, 0.14)";
+        textureCtx.fillRect(x, y - floorY, 2, 2);
+      }
+    }
+  }
+
+  return texture;
+})();
 
 function drawCourt() {
   const isSunrise = level === 2;
@@ -2404,19 +2573,7 @@ function drawCourt() {
   ctx.fillStyle = courtGrad;
   ctx.fillRect(0, floorY, W, H - floorY);
 
-  // Deterministic speckle noise so asphalt reads textured without frame flicker.
-  for (let y = floorY + 2; y < H; y += 5) {
-    for (let x = 0; x < W; x += 7) {
-      const n = Math.sin(x * 0.13 + y * 0.21) * 0.5 + 0.5;
-      if (n > 0.78) {
-        ctx.fillStyle = "rgba(210, 216, 228, 0.08)";
-        ctx.fillRect(x, y, 2, 2);
-      } else if (n < 0.18) {
-        ctx.fillStyle = "rgba(6, 9, 14, 0.14)";
-        ctx.fillRect(x, y, 2, 2);
-      }
-    }
-  }
+  ctx.drawImage(courtTexture, 0, floorY);
 
   ctx.strokeStyle = isSunrise ? "#ffe6b3" : (isAfternoon ? "#f3fbff" : (isGolden ? "#ffe1a7" : (isSpace ? "#94e4ff" : (isAlienBase ? "#f2baff" : "#93f0ff"))));
   ctx.lineWidth = 3;
@@ -2481,41 +2638,36 @@ function drawCourt() {
 }
 
 function drawHoop() {
-  const supportPoleX = backboard.x + 76;
-  const supportTopY = hoop.y - 26;
-  const baseY = floorY - 52;
-
+  const { board, boardShadow, arm, post, base } = hoopStructure;
   ctx.fillStyle = "#4f5ca0";
-  ctx.fillRect(supportPoleX - 7, supportTopY, 14, floorY - supportTopY);
+  ctx.fillRect(post.x, post.y, post.w, post.h);
   ctx.strokeStyle = "#0d122f";
   ctx.lineWidth = 3;
-  ctx.strokeRect(supportPoleX - 7, supportTopY, 14, floorY - supportTopY);
+  ctx.strokeRect(post.x, post.y, post.w, post.h);
 
   ctx.fillStyle = "#6f80c6";
   ctx.beginPath();
-  ctx.moveTo(supportPoleX - 2, supportTopY + 10);
-  ctx.lineTo(backboard.x + 4, hoop.y - 14);
-  ctx.lineTo(backboard.x + 4, hoop.y - 2);
-  ctx.lineTo(supportPoleX - 2, supportTopY + 22);
+  ctx.moveTo(arm[0].x, arm[0].y);
+  for (let i = 1; i < arm.length; i++) ctx.lineTo(arm[i].x, arm[i].y);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = "#3a3f66";
-  ctx.fillRect(supportPoleX - 42, baseY, 84, 52);
-  ctx.strokeRect(supportPoleX - 42, baseY, 84, 52);
+  ctx.fillRect(base.x, base.y, base.w, base.h);
+  ctx.strokeRect(base.x, base.y, base.w, base.h);
   ctx.fillStyle = "#2a2e4d";
-  ctx.fillRect(supportPoleX - 42, baseY + 34, 84, 18);
+  ctx.fillRect(base.x, base.y + 34, base.w, 18);
 
-  const boardFrontX = backboard.x - 2;
-  const boardFrontW = backboard.w + 4;
+  const boardFrontX = board.x;
+  const boardFrontW = board.w;
   ctx.fillStyle = "#5d74cb";
-  ctx.fillRect(boardFrontX + 3, backboard.y + 4, boardFrontW, backboard.h);
+  ctx.fillRect(boardShadow.x, boardShadow.y, boardShadow.w, boardShadow.h);
   ctx.fillStyle = "#8bc9ff";
-  ctx.fillRect(boardFrontX, backboard.y, boardFrontW, backboard.h);
+  ctx.fillRect(board.x, board.y, board.w, board.h);
   ctx.strokeStyle = "#0d122f";
   ctx.lineWidth = 3;
-  ctx.strokeRect(boardFrontX, backboard.y, boardFrontW, backboard.h);
+  ctx.strokeRect(board.x, board.y, board.w, board.h);
   ctx.strokeStyle = "rgba(11, 22, 58, 0.45)";
   ctx.lineWidth = 2;
   ctx.strokeRect(boardFrontX + 3, backboard.y + 8, boardFrontW - 6, backboard.h - 16);
@@ -2833,68 +2985,127 @@ function drawTootsFeverBorder() {
   ctx.restore();
 }
 
+// A shot released now, with moving obstacles advanced at the fixed physics step.
+// Future random laser spawns and the small random collision kicks are not knowable.
+function getTrajectoryPreview(now, frameMs = trajectoryFrameMs) {
+  const { angle, speed } = getShotParams(charge);
+  const projected = {
+    x: ball.x, y: ball.y, r: ball.r, spin: ball.spin,
+    vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed
+  };
+  const birds = level === 2 ? gulls.map(g => ({ ...g })) : [];
+  const h = level === 3 ? { ...helicopter } : null;
+  const floating = level === 4 ? balloons.map(b => ({ ...b })) : [];
+  const ufos = level === 6 ? alienBaseUfos.map(ufo => ({ ...ufo })) : [];
+  const lasers = level === 6 ? alienLasers.map(laser => ({ ...laser })) : [];
+  const hasRicochets = level === 2 || level === 3 || level === 4 || level === 6;
+  const points = [{ x: projected.x, y: projected.y }];
+  const impacts = [];
+  const structureContacts = [];
+  const maxSteps = Math.ceil(120 / ballFlightSpeed);
+  for (let i = 0; i < maxSteps; i++) {
+    const futureNow = now + (i + 1) * frameMs;
+    if (level === 2) updateGulls(futureNow, birds);
+    if (level === 3) updateHelicopter(futureNow, h);
+    if (level === 4) updateBalloons(futureNow, floating);
+    for (const laser of lasers) {
+      laser.x -= laser.speed;
+      if (laser.cooldown > 0) laser.cooldown -= 1;
+    }
+    // Keep the existing beam preview based on its current phase. Looking ahead
+    // must not advance the live beam's randomly timed phase transitions.
+    const gravityMultiplier = getSpaceBeamGravityMultiplierAt(projected.x, projected.y, now);
+    advanceBallFlight(projected, gravityMultiplier);
+
+    let hit = false;
+    if (level === 2) {
+      for (const g of birds) hit = resolveGullCollision(g, projected, true) || hit;
+    } else if (level === 3) {
+      hit = resolveHelicopterCollision(h, projected, true);
+    } else if (level === 4) {
+      for (const b of floating) hit = resolveBalloonCollision(b, projected, true) || hit;
+    } else if (level === 6) {
+      hit = resolveAlienUfoCollisions(futureNow, projected, ufos, true);
+      hit = resolveAlienLaserCollision(projected, lasers, true) || hit;
+    }
+    // Rim contacts end the guide; structure contacts use the live bank response.
+    const atRim = [hoop.x, hoop.x + hoop.rimGap].some(x =>
+      Math.hypot(projected.x - x, projected.y - hoop.y) < projected.r + hoop.rimRadius);
+    if (atRim) {
+      points.push({ x: projected.x, y: projected.y });
+      break;
+    }
+    structureContacts.length = 0;
+    const structureHit = resolveHoopStructureCollision(projected, true, structureContacts);
+    const point = { x: projected.x, y: projected.y };
+    points.push(point);
+    if (hit || structureHit) impacts.push({
+      ...point, index: points.length - 1, obstacle: hit, parts: [...structureContacts]
+    });
+    const settledOnStructure = structureHit && Math.abs(projected.vx) < 0.35 && Math.abs(projected.vy) < 0.35;
+    if (settledOnStructure || projected.y + projected.r >= floorY ||
+        projected.x <= projected.r || projected.x >= W - projected.r) break;
+  }
+  const visibleCount = hasRicochets || impacts.length ? points.length :
+    Math.max(2, Math.floor(Math.min(points.length, Math.ceil(90 / ballFlightSpeed) + 1) * 0.74));
+  return { points: points.slice(0, visibleCount), impacts };
+}
+
 function drawTrajectory() {
   if (!charging || ball.inFlight) return;
   const now = performance.now();
-  const { angle, speed } = getShotParams(charge);
-  let tx = ball.x;
-  let ty = ball.y;
-  let tvx = Math.cos(angle) * speed;
-  let tvy = Math.sin(angle) * speed;
-
-  ctx.strokeStyle = "#1a1a1a";
-  ctx.lineWidth = 2;
-  ctx.setLineDash([5, 6]);
-  const points = [{ x: tx, y: ty }];
-  for (let i = 0; i < 90; i++) {
-    const gravityMultiplier = getSpaceBeamGravityMultiplierAt(tx, ty, now);
-    tvy += gravity * gravityMultiplier;
-    tvx *= airDrag;
-    tvy *= airDrag;
-    tx += tvx;
-    ty += tvy;
-    points.push({ x: tx, y: ty });
-    if (ty > floorY) break;
-  }
-
-  const visibleCount = Math.max(2, Math.floor(points.length * 0.74));
-  const endpoint = points[visibleCount - 1];
-  const pulse = 0.65 + Math.sin(performance.now() * 0.012) * 0.35;
+  const { points, impacts } = getTrajectoryPreview(now);
+  const endpoint = points[points.length - 1];
+  const pulse = 0.65 + Math.sin(now * 0.012) * 0.35;
   const lightSky = level === 3;
   const arcGlow = lightSky ? "rgba(21, 56, 86, 0.34)" : "rgba(25, 224, 210, 0.26)";
   const arcCore = lightSky ? "rgba(12, 32, 56, 0.9)" : "rgba(255, 255, 255, 0.85)";
+  const bounceCore = lightSky ? "rgba(131, 49, 14, 0.95)" : "rgba(255, 209, 116, 0.95)";
+  const bounceGlow = lightSky ? "rgba(131, 49, 14, 0.2)" : "rgba(255, 167, 66, 0.25)";
   const arcTip = lightSky ? `rgba(32, 72, 111, ${0.5 + pulse * 0.3})` : `rgba(255, 245, 170, ${0.45 + pulse * 0.35})`;
 
-  ctx.strokeStyle = arcGlow;
-  ctx.lineWidth = 8;
+  ctx.save();
+  ctx.lineJoin = "round";
+  const boundaries = [0, ...impacts.map(impact => impact.index), points.length - 1];
+  for (let segment = 0; segment < boundaries.length - 1; segment++) {
+    const start = boundaries[segment];
+    const end = boundaries[segment + 1];
+    if (end <= start) continue;
+    for (const glow of [true, false]) {
+      ctx.strokeStyle = segment > 0 ? (glow ? bounceGlow : bounceCore) : (glow ? arcGlow : arcCore);
+      ctx.lineWidth = glow ? 8 : 2.5;
+      ctx.setLineDash(glow ? [] : [7, 5]);
+      ctx.beginPath();
+      ctx.moveTo(points[start].x, points[start].y);
+      for (let i = start + 1; i <= end; i++) ctx.lineTo(points[i].x, points[i].y);
+      ctx.stroke();
+    }
+  }
+
   ctx.setLineDash([]);
-  ctx.beginPath();
-  ctx.moveTo(points[0].x, points[0].y);
-  for (let i = 1; i < visibleCount; i++) {
-    ctx.lineTo(points[i].x, points[i].y);
+  for (const impact of impacts) {
+    ctx.fillStyle = lightSky ? "rgba(255, 245, 220, 0.85)" : "rgba(37, 27, 54, 0.85)";
+    ctx.strokeStyle = bounceCore;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(impact.x, impact.y, 6 + pulse, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = bounceCore;
+    ctx.beginPath();
+    ctx.arc(impact.x, impact.y, 2, 0, Math.PI * 2);
+    ctx.fill();
   }
-  ctx.stroke();
 
-  ctx.strokeStyle = arcCore;
-  ctx.lineWidth = 2.5;
-  ctx.setLineDash([7, 5]);
-  ctx.beginPath();
-  ctx.moveTo(points[0].x, points[0].y);
-  for (let i = 1; i < visibleCount; i++) {
-    ctx.lineTo(points[i].x, points[i].y);
-  }
-  ctx.stroke();
-
-  ctx.fillStyle = arcTip;
+  ctx.fillStyle = impacts.length ? bounceCore : arcTip;
   ctx.beginPath();
   ctx.arc(endpoint.x, endpoint.y, 4 + pulse * 2, 0, Math.PI * 2);
   ctx.fill();
-
   ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
   ctx.beginPath();
   ctx.arc(endpoint.x, endpoint.y, 1.6, 0, Math.PI * 2);
   ctx.fill();
-  ctx.setLineDash([]);
+  ctx.restore();
 }
 
 function drawPlayer() {
@@ -2974,24 +3185,24 @@ function drawPlayer() {
   ctx.stroke();
 }
 
-function drawBall() {
+function drawBall(renderedBall = ball) {
   const now = performance.now();
-  const beamGlow = getBallBeamGlow(now);
+  const beamGlow = getBallBeamGlow(now, renderedBall);
   if (beamGlow) {
     const spill = ctx.createRadialGradient(
-      ball.x,
-      ball.y,
-      ball.r * 0.84,
-      ball.x,
-      ball.y,
-      ball.r * (1.45 + beamGlow.intensity * 0.28)
+      renderedBall.x,
+      renderedBall.y,
+      renderedBall.r * 0.84,
+      renderedBall.x,
+      renderedBall.y,
+      renderedBall.r * (1.45 + beamGlow.intensity * 0.28)
     );
     spill.addColorStop(0, `rgba(${beamGlow.color}, ${(0.12 + beamGlow.intensity * 0.16) * beamGlow.boost})`);
     spill.addColorStop(0.62, `rgba(${beamGlow.color}, ${(0.05 + beamGlow.intensity * 0.1) * beamGlow.boost})`);
     spill.addColorStop(1, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = spill;
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r * (1.95 + beamGlow.intensity * 0.35), 0, Math.PI * 2);
+    ctx.arc(renderedBall.x, renderedBall.y, renderedBall.r * (1.95 + beamGlow.intensity * 0.35), 0, Math.PI * 2);
     ctx.fill();
 
     ctx.save();
@@ -3000,25 +3211,25 @@ function drawBall() {
     ctx.strokeStyle = `rgba(${beamGlow.color}, ${(0.58 + beamGlow.intensity * 0.24) * beamGlow.boost})`;
     ctx.lineWidth = 1.8 + beamGlow.intensity * 1.2;
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r + 0.8, 0, Math.PI * 2);
+    ctx.arc(renderedBall.x, renderedBall.y, renderedBall.r + 0.8, 0, Math.PI * 2);
     ctx.stroke();
     ctx.restore();
   }
 
   const ballGrad = ctx.createRadialGradient(
-    ball.x - ball.r * 0.35,
-    ball.y - ball.r * 0.35,
-    ball.r * 0.3,
-    ball.x,
-    ball.y,
-    ball.r * 1.05
+    renderedBall.x - renderedBall.r * 0.35,
+    renderedBall.y - renderedBall.r * 0.35,
+    renderedBall.r * 0.3,
+    renderedBall.x,
+    renderedBall.y,
+    renderedBall.r * 1.05
   );
   ballGrad.addColorStop(0, "#ffcf6d");
   ballGrad.addColorStop(0.45, "#ff8d37");
   ballGrad.addColorStop(1, "#c7471f");
   ctx.fillStyle = ballGrad;
   ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+  ctx.arc(renderedBall.x, renderedBall.y, renderedBall.r, 0, Math.PI * 2);
   ctx.fill();
   ctx.strokeStyle = "#37130d";
   ctx.lineWidth = 2;
@@ -3026,58 +3237,93 @@ function drawBall() {
 
   ctx.fillStyle = "rgba(255, 235, 180, 0.42)";
   ctx.beginPath();
-  ctx.arc(ball.x - 4, ball.y - 5, 4, 0, Math.PI * 2);
+  ctx.arc(renderedBall.x - 4, renderedBall.y - 5, 4, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.save();
-  ctx.translate(ball.x, ball.y);
-  ctx.rotate((performance.now() * 0.003 + ball.x * 0.04) % (Math.PI * 2));
+  ctx.translate(renderedBall.x, renderedBall.y);
+  ctx.rotate((performance.now() * 0.003 + renderedBall.x * 0.04) % (Math.PI * 2));
   ctx.beginPath();
-  ctx.arc(0, 0, ball.r - 0.8, 0, Math.PI * 2);
+  ctx.arc(0, 0, renderedBall.r - 0.8, 0, Math.PI * 2);
   ctx.clip();
 
   ctx.strokeStyle = "#35120b";
   ctx.lineWidth = 2.2;
   ctx.beginPath();
-  ctx.arc(0, 0, ball.r * 0.62, -Math.PI * 0.85, Math.PI * 0.85);
+  ctx.arc(0, 0, renderedBall.r * 0.62, -Math.PI * 0.85, Math.PI * 0.85);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.ellipse(-ball.r * 0.62, 0, ball.r * 0.42, ball.r * 0.92, 0, -Math.PI * 0.5, Math.PI * 0.5);
+  ctx.ellipse(-renderedBall.r * 0.62, 0, renderedBall.r * 0.42, renderedBall.r * 0.92, 0, -Math.PI * 0.5, Math.PI * 0.5);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.ellipse(ball.r * 0.62, 0, ball.r * 0.42, ball.r * 0.92, 0, Math.PI * 0.5, Math.PI * 1.5);
+  ctx.ellipse(renderedBall.r * 0.62, 0, renderedBall.r * 0.42, renderedBall.r * 0.92, 0, Math.PI * 0.5, Math.PI * 1.5);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(-ball.r + 2.2, 0);
-  ctx.lineTo(ball.r - 2.2, 0);
+  ctx.moveTo(-renderedBall.r + 2.2, 0);
+  ctx.lineTo(renderedBall.r - 2.2, 0);
   ctx.stroke();
   ctx.restore();
 }
 
-function drawCrtOverlay() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+const crtOverlay = (() => {
+  const overlay = document.createElement("canvas");
+  overlay.width = W;
+  overlay.height = H;
+  const overlayCtx = overlay.getContext("2d");
+  overlayCtx.fillStyle = "rgba(0, 0, 0, 0.1)";
   for (let y = 0; y < H; y += 4) {
-    ctx.fillRect(0, y, W, 1);
+    overlayCtx.fillRect(0, y, W, 1);
   }
 
-  const vignette = ctx.createRadialGradient(W / 2, H / 2, H * 0.2, W / 2, H / 2, H * 0.72);
+  const vignette = overlayCtx.createRadialGradient(W / 2, H / 2, H * 0.2, W / 2, H / 2, H * 0.72);
   vignette.addColorStop(0, "rgba(0,0,0,0)");
   vignette.addColorStop(1, "rgba(0,0,0,0.3)");
-  ctx.fillStyle = vignette;
-  ctx.fillRect(0, 0, W, H);
+  overlayCtx.fillStyle = vignette;
+  overlayCtx.fillRect(0, 0, W, H);
+  return overlay;
+})();
+
+function drawCrtOverlay() {
+  ctx.drawImage(crtOverlay, 0, 0);
 }
 
-function frame() {
-  updateSkyPlane(performance.now());
-  physicsStep();
+let lastFrameAt = performance.now();
+let simulationAccumulator = 0;
+
+// Render between completed physics ticks without changing collision state.
+function getRenderedBall() {
+  if (!ball.inFlight && !dribbleActive) return ball;
+  const alpha = clamp(simulationAccumulator / trajectoryFrameMs, 0, 1);
+  return {
+    ...ball,
+    x: previousBallPosition.x + (ball.x - previousBallPosition.x) * alpha,
+    y: previousBallPosition.y + (ball.y - previousBallPosition.y) * alpha
+  };
+}
+
+function frame(now = performance.now()) {
+  requestAnimationFrame(frame);
+  const elapsed = Math.max(0, now - lastFrameAt);
+  lastFrameAt = now;
+  // Limit catch-up after a background tab or stall. Step timestamps still use
+  // wall time so the level timer and moving obstacles stay on schedule.
+  simulationAccumulator = Math.min(simulationAccumulator + elapsed, trajectoryFrameMs * 6);
+  while (simulationAccumulator + 0.000001 >= trajectoryFrameMs) {
+    previousBallPosition.x = ball.x;
+    previousBallPosition.y = ball.y;
+    physicsStep(now - simulationAccumulator + trajectoryFrameMs);
+    simulationAccumulator -= trajectoryFrameMs;
+  }
+
+  updateSkyPlane(now);
   drawCourt();
   drawHoop();
   drawPlayer();
   drawTrajectory();
-  drawBall();
+  drawBall(getRenderedBall());
   drawParticles();
   drawFloatingPoints();
   drawBrickStamp();
@@ -3087,7 +3333,6 @@ function frame() {
   drawComboCallout();
   drawCrtOverlay();
   drawTootsFeverBorder();
-  requestAnimationFrame(frame);
 }
 
 window.addEventListener("keydown", (e) => {

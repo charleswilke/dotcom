@@ -12653,6 +12653,7 @@ section.production-header.alice p {
 }
 
 #mixtapeLightbox .mixtape-act-group--side-a {
+    --mixtape-row-neon: 0, 247, 194;
     border-color: rgba(0, 247, 194, 0.28);
     background: rgba(0, 247, 194, 0.045);
 }
@@ -12667,6 +12668,7 @@ section.production-header.alice p {
 }
 
 #mixtapeLightbox .mixtape-act-group--side-b {
+    --mixtape-row-neon: 185, 127, 224;
     border-color: rgba(155, 89, 182, 0.32);
     background: rgba(155, 89, 182, 0.05);
 }
@@ -12687,15 +12689,61 @@ section.production-header.alice p {
     color: #c08fde;
 }
 
-#mixtapeLightbox .mixtape-act-group--side-b .mixtape-track-item.active {
-    background: linear-gradient(90deg, rgba(155, 89, 182, 0.18) 0%, transparent 100%);
-    border-left: 3px solid #9b59b6;
-    color: #c08fde;
-    text-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
+/* Keep a small cue gutter on every row so selection never moves the title. */
+#mixtapeLightbox .mixtape-act-group .mixtape-track-item {
+    padding-left: 1.1rem;
+    transform: none;
 }
 
-#mixtapeLightbox .mixtape-act-group--side-b .mixtape-track-item.active .track-number {
-    color: #c08fde;
+#mixtapeLightbox .mixtape-act-group .mixtape-track-item.active {
+    position: relative;
+    background: linear-gradient(90deg, rgba(var(--mixtape-row-neon), 0.085), rgba(var(--mixtape-row-neon), 0.025));
+    border-color: transparent;
+    border-left-width: 1px;
+    color: #fff1d6;
+    text-shadow: 0 0 8px rgba(var(--mixtape-row-neon), 0.16);
+}
+
+/* A fine neon tube frames the song, colored by its side of the cassette. */
+#mixtapeLightbox .mixtape-track-item.active::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    inset: 2px;
+    border: 1px solid rgba(var(--mixtape-row-neon), 0.55);
+    border-radius: 3px;
+    box-shadow: 0 0 6px rgba(var(--mixtape-row-neon), 0.16), inset 0 0 7px rgba(var(--mixtape-row-neon), 0.07);
+}
+
+#mixtapeLightbox .mixtape-act-group .mixtape-track-item.active .track-number {
+    position: relative;
+    color: rgb(var(--mixtape-row-neon));
+}
+
+/* A still cue triangle: outlined at rest, filled during playback. */
+#mixtapeLightbox .mixtape-track-item.active .track-number::before {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    left: -12px;
+    top: calc(50% - 5px);
+    width: 9px;
+    height: 10px;
+    background: currentColor;
+    clip-path: polygon(evenodd, 0 0, 100% 50%, 0 100%, 0 0,
+        1px 2px, 1px 8px, 7px 5px, 1px 2px, 0 0);
+}
+
+#mixtapeLightbox[data-playback="playing"] .mixtape-track-item.active .track-number::before {
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+@media (max-width: 768px) {
+    /* Icon-only utilities leave room for the title beside the cue and number. */
+    #mixtapeLightbox .mixtape-track-item .track-action-group--paired {
+        --jc-action-width: 44px;
+        margin-left: 0.35rem;
+    }
 }
 
 /* ===== GWOR THEME (Grief without Ritual) ===== */

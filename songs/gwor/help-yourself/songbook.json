@@ -6,11 +6,19 @@
   "blocks": [
     {
       "kind": "heading",
-      "text": "Intro — detuned upright hammers out a crooked figure; overdriven bass joins; piano strings rattle, amp hum in the room"
+      "text": "Intro"
+    },
+    {
+      "kind": "cue",
+      "text": "detuned upright hammers out a crooked figure; overdriven bass joins; piano strings rattle, amp hum in the room"
     },
     {
       "kind": "heading",
-      "text": "Verse 1 — rough low baritone, dry amused asides, clear words; boxy drums enter at 'You turn a book', dragging slightly behind the bass"
+      "text": "Verse 1"
+    },
+    {
+      "kind": "cue",
+      "text": "rough low baritone, dry amused asides, clear words; boxy drums enter at 'You turn a book', dragging slightly behind the bass"
     },
     {
       "kind": "lyrics",
@@ -22,7 +30,11 @@
     },
     {
       "kind": "heading",
-      "text": "Chorus — cracked sung refrain, a little more insistent; loose snare buzz and bass clank; guitar spits short dissonant answers"
+      "text": "Chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "cracked sung refrain, a little more insistent; loose snare buzz and bass clank; guitar spits short dissonant answers"
     },
     {
       "kind": "lyrics",
@@ -34,7 +46,11 @@
     },
     {
       "kind": "heading",
-      "text": "Verse 2 — drums and bass drop out; rattling piano and close voice, guitar amp still humming; fond curiosity, no sentimental swell"
+      "text": "Verse 2"
+    },
+    {
+      "kind": "cue",
+      "text": "drums and bass drop out; rattling piano and close voice, guitar amp still humming; fond curiosity, no sentimental swell"
     },
     {
       "kind": "lyrics",
@@ -46,7 +62,11 @@
     },
     {
       "kind": "heading",
-      "text": "Short refrain — bass returns with a dirty two-note throb; half-spoken, quietly delighted"
+      "text": "Short refrain"
+    },
+    {
+      "kind": "cue",
+      "text": "bass returns with a dirty two-note throb; half-spoken, quietly delighted"
     },
     {
       "kind": "lyrics",
@@ -54,7 +74,11 @@
     },
     {
       "kind": "heading",
-      "text": "Verse 3 — drums stumble back into the lurch; guitar scratches between phrases; a dry chuckle in 'I always liked the underline'"
+      "text": "Verse 3"
+    },
+    {
+      "kind": "cue",
+      "text": "drums stumble back into the lurch; guitar scratches between phrases; a dry chuckle in 'I always liked the underline'"
     },
     {
       "kind": "lyrics",
@@ -66,11 +90,19 @@
     },
     {
       "kind": "heading",
-      "text": "Instrumental — four bars; electric guitar takes the piano figure with dirty tremolo and a frayed feedback tail; drums and bass keep worrying the same pulse"
+      "text": "Instrumental"
+    },
+    {
+      "kind": "cue",
+      "text": "four bars; electric guitar takes the piano figure with dirty tremolo and a frayed feedback tail; drums and bass keep worrying the same pulse"
     },
     {
       "kind": "heading",
-      "text": "Bridge — scuffed piano and buzzing bass only; voice fond, direct, matter-of-fact; leave a breath after the last line"
+      "text": "Bridge"
+    },
+    {
+      "kind": "cue",
+      "text": "scuffed piano and buzzing bass only; voice fond, direct, matter-of-fact; leave a breath after the last line"
     },
     {
       "kind": "lyrics",
@@ -78,7 +110,11 @@
     },
     {
       "kind": "heading",
-      "text": "Final chorus — whole ragged band, more rhythmic pressure; vocal catches and cracks without getting grand; last two lines delivered with a grin"
+      "text": "Final chorus"
+    },
+    {
+      "kind": "cue",
+      "text": "whole ragged band, more rhythmic pressure; vocal catches and cracks without getting grand; last two lines delivered with a grin"
     },
     {
       "kind": "lyrics",
@@ -90,7 +126,11 @@
     },
     {
       "kind": "heading",
-      "text": "Outro — guitar picks up the piano figure once; drums cut out with a loose final hit; one blunt piano chord, amp buzz left hanging"
+      "text": "Outro"
+    },
+    {
+      "kind": "cue",
+      "text": "guitar picks up the piano figure once; drums cut out with a loose final hit; one blunt piano chord, amp buzz left hanging"
     }
   ],
   "notebook": {

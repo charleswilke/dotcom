@@ -15828,7 +15828,7 @@ section.production-header.alice p {
     margin: 0 0 12px;
 }
 :is(#jcLightbox, #gworLightbox) :is(#jcSongbookLyrics, #gworSongbookLyrics) > .jc-book-heading:first-child { margin-top: 0; }
-:is(#jcLightbox, #gworLightbox) .jc-cues-hidden :is(.jc-book-cue-group, .jc-book-cue-only) { display: none; }
+:is(#jcLightbox, #gworLightbox) .jc-cues-hidden :is(.jc-book-cue-group, .jc-book-cue-only, .jc-book-inline-cue) { display: none; }
 :is(#jcLightbox, #gworLightbox) .jc-book-notebook {
     font-family: Baskerville, 'Baskerville Old Face', 'Palatino Linotype', Palatino, serif;
     margin: 24px 0;
@@ -16214,15 +16214,6 @@ section.production-header.alice p {
     line-height: var(--notebook-line);
     margin: 0 0 26px;
 }
-/* Keep cue borders near the paper margin with a modest text indent. */
-#gworLightbox .jc-book-cue-group {
-    border-left-color: #c88e96;
-    gap: 0;
-    margin: 0 0 26px calc((-1px - var(--notebook-text-inset)) / 2);
-    padding-left: calc((var(--notebook-text-inset) + 11px) / 2);
-}
-#gworLightbox .jc-book-cue-group:has(+ p.jc-book-lyrics) { margin-bottom: 0; }
-#gworLightbox .jc-book-cue { color: #83535e; line-height: var(--notebook-line); }
 #gworLightbox .jc-book-notebook {
     margin: 26px 0;
     border-color: #adbbc3;

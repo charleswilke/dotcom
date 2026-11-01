@@ -5902,8 +5902,8 @@ function initGWORLightbox() {
         { title: 'Letter to the Editor', songbook: '/songs/gwor/letter-to-the-editor/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/letter-to-the-editor.mp3', cover: '/audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
         { title: 'Love at Machine Speed', songbook: '/songs/gwor/love-at-machine-speed/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
         { title: 'Permission to Ache', songbook: '/songs/gwor/permission-to-ache/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
-        { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261031-recording-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3?v=6b52c58422dd', cover: '/audio/grief-without-ritual/respect-the-exhale-title.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
-        { title: 'Help Yourself', songbook: '/songs/gwor/help-yourself/songbook.json?v=20261031-1', file: '/audio/grief-without-ritual/help-yourself.mp3', cover: '/audio/grief-without-ritual/help-yourself-title.webp', articleType: 'songwriting conversation', article: '/read/help-yourself-transcript' },
+        { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261031-recording-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3?v=6b52c58422dd', cover: '/audio/grief-without-ritual/respect-the-exhale-title-v3.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        { title: 'Help Yourself', songbook: '/songs/gwor/help-yourself/songbook.json?v=20261031-cues-2', file: '/audio/grief-without-ritual/help-yourself.mp3', cover: '/audio/grief-without-ritual/help-yourself-title.webp', articleType: 'songwriting conversation', article: '/read/help-yourself-transcript' },
         { title: 'Slow the Clock', songbook: '/songs/gwor/slow-the-clock/songbook.json?v=20261031-track-8', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-track-8.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'Dearly Beloved', songbook: '/songs/gwor/dearly-beloved/songbook.json?v=20261031-track-9', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title-track-9.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },
         { title: 'As We Speak It', songbook: '/songs/gwor/as-we-speak-it/songbook.json?v=20261031-track-10', file: '/audio/grief-without-ritual/as-we-speak-it.mp3', cover: '/audio/grief-without-ritual/as-we-speak-it-title-track-10.webp', article: 'https://charleswilke.substack.com/p/are-we-ready-for-the-mirror' },
@@ -5967,7 +5967,7 @@ function initGWORLightbox() {
     });
     initAlbumSongbook({
         lightbox, trackList, tracks, player, prefix: 'gwor',
-        collectionTitle: 'Grief without Ritual', defaultAct: 'Track', showBlankPage: true
+        collectionTitle: 'Grief without Ritual', defaultAct: 'Track', showBlankPage: true, inlineCues: true
     });
     initSongbookInkMotion(document.getElementById('gworSongbookContent'));
     return player;
@@ -6019,7 +6019,7 @@ function initSongbookInkMotion(content) {
 
 // Opening a song's book never changes playback. Only Listen selects its audio.
 function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
-    collectionTitle = 'Junkyard Cabaret', defaultAct = 'Act I', showBlankPage = false }) {
+    collectionTitle = 'Junkyard Cabaret', defaultAct = 'Act I', showBlankPage = false, inlineCues = false }) {
     const back = document.getElementById(`${prefix}SongbookBack`);
     const tracksPanel = document.getElementById(`${prefix}TracksPanel`);
     const bookPanel = document.getElementById(`${prefix}SongbookPanel`);
@@ -6105,8 +6105,20 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
             // Keep cues in the same order as the lyric passages they accompany.
             const tags = { heading: 'h4', cue: 'p', lyrics: 'p' };
             let cueGroup = null;
+            let cueHeading = null;
             song.blocks.forEach((block, position) => {
+                // GWOR directions share the section heading's typography and flow.
+                // Keep the separator inside the span so Cues: off leaves a clean label.
+                if (inlineCues && block.kind === 'cue') {
+                    if (!cueHeading) {
+                        cueHeading = element('p', 'jc-book-heading jc-book-cue-only');
+                        lyrics.append(cueHeading);
+                    }
+                    cueHeading.append(element('span', 'jc-book-inline-cue', `${cueHeading.hasChildNodes() ? ' — ' : ''}${block.text}`));
+                    return;
+                }
                 if (block.kind !== 'cue') cueGroup = null;
+                cueHeading = null;
                 if (!tags[block.kind]) return;
                 const node = element(tags[block.kind], `jc-book-${block.kind}`, block.text);
                 if (block.kind === 'heading') {
@@ -6114,6 +6126,7 @@ function initAlbumSongbook({ lightbox, trackList, tracks, player, prefix = 'jc',
                     const nextHeading = remaining.findIndex(next => next.kind === 'heading');
                     const section = nextHeading < 0 ? remaining : remaining.slice(0, nextHeading);
                     if (!section.some(next => next.kind === 'lyrics')) node.classList.add('jc-book-cue-only');
+                    cueHeading = node;
                 }
                 if (block.kind === 'cue') {
                     if (!cueGroup) {

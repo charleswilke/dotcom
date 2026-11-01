@@ -105,6 +105,14 @@ playing audio while reading; only **Listen** selects the song. Production cues
 can be toggled, studio notes expand below the lyrics, and the inspiration link
 uses the track’s existing `article` URL.
 
+Keep section names in `heading` blocks and production directions in separate
+`cue` blocks. GWOR displays cues inline with the preceding heading in the same
+small uppercase style (`Verse 1 — production direction`). Cues between lyric
+passages use that style on their own line. The Cues toggle hides directions and
+instrumental-only sections while keeping sung section labels and lyrics visible.
+Do not embed production directions directly in a heading, or the toggle cannot
+hide them.
+
 ### Previous takes (GWOR and Junkyard Cabaret)
 
 Add a `previousTakes` array to a song's `songbook.json` to show a second collapsible

@@ -12990,15 +12990,59 @@ section.production-header.alice p {
     background: rgba(194, 112, 56, 0.12);
     border-color: rgba(194, 112, 56, 0.28);
     color: rgba(255, 240, 220, 0.95);
+    transform: none;
 }
 
 #jcLightbox .mixtape-track-item.active {
-    background: linear-gradient(90deg,
-        rgba(194, 112, 56, 0.26) 0%,
-        transparent 100%);
-    border-left-color: #c27038;
-    color: rgba(255, 240, 220, 0.96);
-    text-shadow: 0 0 8px rgba(194, 112, 56, 0.28);
+    position: relative;
+    background: radial-gradient(ellipse at 24% 115%,
+        rgba(211, 136, 65, 0.19), transparent 72%);
+    border-color: transparent;
+    border-left-width: 1px;
+    color: #fff0dc;
+    text-shadow: 0 0 10px rgba(224, 159, 87, 0.18);
+}
+
+/* A low footlight illuminates the selected song without moving its contents. */
+#jcLightbox .mixtape-track-item.active::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    left: 0.3rem;
+    right: 0.9rem;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e5ae68 8%, #ba7439 62%, transparent);
+    box-shadow: 0 -2px 8px rgba(228, 157, 77, 0.35);
+}
+
+#jcLightbox .mixtape-track-item.active .track-number {
+    position: relative;
+}
+
+#jcLightbox .mixtape-track-item.active .track-number:not(:empty)::before {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    left: -8px;
+    top: calc(50% - 2px);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #f3c17e;
+    box-shadow: 0 0 4px #d9944d, 0 0 9px rgba(217, 148, 77, 0.55);
+}
+
+@keyframes jc-footlight-breathe {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    #jcLightbox.active[data-playback="playing"] .mixtape-track-item.active::after,
+    #jcLightbox.active[data-playback="playing"] .mixtape-track-item.active .track-number::before {
+        animation: jc-footlight-breathe 3.6s ease-in-out infinite;
+    }
 }
 
 #jcLightbox .track-act-marker {
@@ -13007,10 +13051,10 @@ section.production-header.alice p {
     text-shadow: 0 0 10px rgba(194, 112, 56, 0.3);
 }
 
-/* Indent the inline Intermission row so its number/title line up with the tracks
-   inside the Act I / Act II containers (which are offset by the vertical label). */
+/* Inline Intermission/Encore rows share the regular track padding. Reserve the
+   act frame's border, label margin/width, and gap to align their number/title. */
 #jcLightbox .mixtape-track-item--act-start {
-    padding-left: 1.75rem;
+    margin-left: calc(1px + 0.45rem + 0.78rem + 0.15rem);
 }
 
 #jcLightbox .mixtape-act-group {

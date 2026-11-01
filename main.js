@@ -5425,6 +5425,7 @@ function createAlbumPlayer(config) {
     // centered play glyph + orbiting "tap to play" hint. No hover JS needed.
     function refreshPlayGlyph() {
         const paused = !audio || audio.paused;
+        if (lightbox) lightbox.dataset.playback = paused ? 'paused' : 'playing';
         if (playPauseIcon && !playPauseIcon.classList.contains('album-transport-icon')) {
             playPauseIcon.textContent = paused ? PLAY_ICON : PAUSE_ICON;
         }

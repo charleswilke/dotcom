@@ -83,6 +83,8 @@ const hoopStructureColliders = Object.entries(hoopStructure).map(([name, shape])
   };
 });
 
+const posterArt = window.TootsJamPosterArt?.create({ W, H, floorY, hoop, hoopStructure, player });
+
 const ball = {
   x: handBall.x,
   y: handBall.y,
@@ -2393,6 +2395,17 @@ const courtTexture = (() => {
 })();
 
 function drawCourt() {
+  if (posterArt?.ready) {
+    posterArt.drawCourt(ctx, level);
+    const now = performance.now();
+    if (level === 2) drawGulls(now);
+    else if (level === 3) drawHelicopter(now);
+    else if (level === 4) drawBalloons(now);
+    else if (level === 5) drawSpaceUfos(now);
+    else if (level === 6) drawAlienBaseUfos(now);
+    else drawSkyPlane(now);
+    return;
+  }
   const isSunrise = level === 2;
   const isAfternoon = level === 3;
   const isGolden = level === 4;
@@ -2638,6 +2651,10 @@ function drawCourt() {
 }
 
 function drawHoop() {
+  if (posterArt?.ready) {
+    posterArt.drawHoop(ctx, { hoop, netJiggle, netJigglePhase });
+    return;
+  }
   const { board, boardShadow, arm, post, base } = hoopStructure;
   ctx.fillStyle = "#4f5ca0";
   ctx.fillRect(post.x, post.y, post.w, post.h);
@@ -3109,6 +3126,10 @@ function drawTrajectory() {
 }
 
 function drawPlayer() {
+  if (posterArt?.ready) {
+    posterArt.drawPlayer(ctx, { player, charging, charge, dribbleHeld, dribblePhase, handBall, ball });
+    return;
+  }
   const px = player.x;
   const py = player.y;
   const bob = dribbleHeld ? Math.sin(dribblePhase) * 1.6 : 0;
@@ -3273,14 +3294,14 @@ const crtOverlay = (() => {
   overlay.width = W;
   overlay.height = H;
   const overlayCtx = overlay.getContext("2d");
-  overlayCtx.fillStyle = "rgba(0, 0, 0, 0.1)";
+  overlayCtx.fillStyle = "rgba(0, 0, 0, 0.025)";
   for (let y = 0; y < H; y += 4) {
     overlayCtx.fillRect(0, y, W, 1);
   }
 
   const vignette = overlayCtx.createRadialGradient(W / 2, H / 2, H * 0.2, W / 2, H / 2, H * 0.72);
   vignette.addColorStop(0, "rgba(0,0,0,0)");
-  vignette.addColorStop(1, "rgba(0,0,0,0.3)");
+  vignette.addColorStop(1, "rgba(0,0,0,0.12)");
   overlayCtx.fillStyle = vignette;
   overlayCtx.fillRect(0, 0, W, H);
   return overlay;

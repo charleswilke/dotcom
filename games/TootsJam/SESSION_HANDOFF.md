@@ -90,6 +90,12 @@
 - Floating `+points` popups near hoop on makes.
 - BRICK stamped overlay on likely/confirmed missed rim shots.
 
+## Screen-print Artwork
+- Court, player, and hoop use a screen-print poster art pass; obstacles and arcade HUD retain their current designs.
+- `art/poster-court.svg` provides the layered city/court art, recolored for all six levels. `art/poster-player.svg` provides the character torso/head; limbs retain charge/dribble motion.
+- `poster-art.js` loads and caches the SVG art, and generates hoop SVG directly from the shared collision geometry. The net retains its basket jiggle.
+- SVGs are rasterized once for native-refresh drawing. Existing Canvas art remains the fallback if artwork fails to load. Strong scanlines/vignette are reduced so print colors stay readable.
+
 ## Visual Direction Notes
 - Night sky includes moon/cloud mood and periodic plane banner event (level 1 only).
 - Morning/sunrise and afternoon palettes are separated.

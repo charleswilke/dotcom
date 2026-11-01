@@ -37,6 +37,12 @@ Run this quick pass before/after feature changes.
 5. Levels 1–6 include hoop-structure banks; level 5 retains its current-phase beam gravity approximation.
 6. Automated browser coverage: `node --test tests/tootsjam-trajectory-browser.test.cjs`.
 
+## Poster Art
+1. Verify SVG artwork finishes loading in all six levels, with appropriate day/night colors and readable obstacles/guide lines.
+2. Check the player at rest, charging, and dribbling; hands/feet should track their poses without altering ball positions.
+3. Check board/arm/post/base artwork against collisions, and confirm net jiggle still responds to baskets.
+4. Review the court at desktop and mobile sizes; texture should stay subtle and the ball remain easy to follow.
+
 ## Audio Triggers
 1. Confirm net/rim/floor collision sounds are not spammy.
 2. Confirm bank-shot make uses `sounds/bank/*` instead of swish/made clips.

@@ -509,3 +509,31 @@ test('high refresh flight moves smoothly between physics ticks without speeding 
         }
     } finally { await page.close(); }
 });
+
+test('poster SVG art loads for every level and renders idle, charge and dribble poses', async () => {
+    const {page, errors} = await openGame();
+    try {
+        const result = await page.evaluate(async () => {
+            const loaded = await posterArt.readyPromise;
+            if (!loaded) return {loaded, error: posterArt.error};
+            const courts = [];
+            for (let l = 1; l <= 6; l++) {
+                level = l;
+                for (const pose of ['idle', 'charge', 'dribble']) {
+                    charging = pose === 'charge';
+                    charge = charging ? 0.8 : 0;
+                    dribbleHeld = pose === 'dribble';
+                    dribblePhase = 0.7;
+                    drawCourt();drawPlayer();drawHoop();
+                }
+                courts.push({width: posterArt.courts[l].width, height: posterArt.courts[l].height});
+            }
+            return {loaded, courts, body: Boolean(posterArt.body), hoop: Boolean(posterArt.hoop)};
+        });
+        assert.equal(result.loaded, true, JSON.stringify(result));
+        assert.equal(result.courts.length, 6);
+        assert.ok(result.courts.every(court => court.width === 960 && court.height === 720));
+        assert.equal(result.body, true);assert.equal(result.hoop, true);
+        assert.deepEqual(errors, []);
+    } finally { await page.close(); }
+});

@@ -126,6 +126,14 @@ onReady(() => {
         const dialog = stack[stack.length - 1];
         if (!dialog) return;
         if (event.key === 'Escape') {
+            const footnote = dialog.querySelector('.about-footnote-dialog:popover-open');
+            if (footnote) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                footnote.hidePopover();
+                dialog.querySelector(`[aria-controls="${footnote.id}"]`)?.focus({ preventScroll: true });
+                return;
+            }
             const close = dialog.querySelector('.lightbox-close, .article-reader-close, .cover-zoom-close, .game-lightbox-close');
             if (close) {
                 event.preventDefault();
@@ -7501,38 +7509,45 @@ onReady(() => {
 
 // ===== STICKY NAV handled by common.js =====
 
-// Keep the footnote bubble near its marker without interrupting the page.
+// Keep each footnote near its own marker, including notes inside album players.
 onReady(() => {
-    const trigger = document.querySelector('.about-footnote');
-    const bubble = document.getElementById('aboutFootnoteDialog');
-    if (!trigger || !bubble) return;
+    document.querySelectorAll('.about-footnote[aria-controls]').forEach(trigger => {
+        const bubble = document.getElementById(trigger.getAttribute('aria-controls'));
+        if (!bubble) return;
 
-    const positionBubble = () => {
-        if (!bubble.matches(':popover-open')) return;
-        const anchor = trigger.getBoundingClientRect();
-        const bounds = bubble.getBoundingClientRect();
-        const left = Math.max(16, Math.min(anchor.left - 24, window.innerWidth - bounds.width - 16));
-        const above = anchor.bottom + bounds.height + 40 > window.innerHeight && anchor.top > bounds.height + 40;
-        const top = above ? anchor.top - bounds.height - 12 : anchor.bottom + 12;
-        bubble.style.left = `${left}px`;
-        bubble.style.top = `${Math.max(16, Math.min(top, window.innerHeight - bounds.height - 16))}px`;
-        bubble.style.setProperty('--speech-tail', `${Math.max(16, Math.min(anchor.left + anchor.width / 2 - left, bounds.width - 24))}px`);
-        bubble.toggleAttribute('data-above', above);
-    };
-    trigger.addEventListener('click', () => {
-        bubble.togglePopover();
-        positionBubble();
+        const positionBubble = () => {
+            if (!bubble.matches(':popover-open')) return;
+            const anchor = trigger.getBoundingClientRect();
+            const bounds = bubble.getBoundingClientRect();
+            const left = Math.max(16, Math.min(anchor.left - 24, window.innerWidth - bounds.width - 16));
+            const above = anchor.bottom + bounds.height + 40 > window.innerHeight && anchor.top > bounds.height + 40;
+            const top = above ? anchor.top - bounds.height - 12 : anchor.bottom + 12;
+            bubble.style.left = `${left}px`;
+            bubble.style.top = `${Math.max(16, Math.min(top, window.innerHeight - bounds.height - 16))}px`;
+            bubble.style.setProperty('--speech-tail', `${Math.max(16, Math.min(anchor.left + anchor.width / 2 - left, bounds.width - 24))}px`);
+            bubble.toggleAttribute('data-above', above);
+        };
+        trigger.addEventListener('click', () => {
+            bubble.togglePopover();
+            positionBubble();
+        });
+        bubble.addEventListener('toggle', () => {
+            trigger.setAttribute('aria-expanded', String(bubble.matches(':popover-open')));
+            positionBubble();
+        });
+        bubble.querySelector('.about-footnote-close').addEventListener('click', () => {
+            bubble.hidePopover();
+            trigger.focus({ preventScroll: true });
+        });
+        const lightbox = trigger.closest('.lightbox');
+        if (lightbox) {
+            new MutationObserver(() => {
+                if (!lightbox.classList.contains('active') && bubble.matches(':popover-open')) bubble.hidePopover();
+            }).observe(lightbox, { attributes: true, attributeFilter: ['class'] });
+        }
+        window.addEventListener('resize', positionBubble);
+        window.addEventListener('scroll', positionBubble, { passive: true, capture: true });
     });
-    bubble.addEventListener('toggle', () => {
-        trigger.setAttribute('aria-expanded', String(bubble.matches(':popover-open')));
-        positionBubble();
-    });
-    bubble.querySelector('.about-footnote-close').addEventListener('click', () => {
-        bubble.hidePopover();
-        trigger.focus({ preventScroll: true });
-    });
-    window.addEventListener('resize', positionBubble);
-    window.addEventListener('scroll', positionBubble, { passive: true });
 });
 
 // A footer transmission. The original text remains readable without JS.

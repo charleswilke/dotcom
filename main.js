@@ -3688,7 +3688,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '26';
+const SCOPE_DATA_VERSION = '27';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -5911,7 +5911,7 @@ function initGWORLightbox() {
         { title: 'Letter to the Editor', songbook: '/songs/gwor/letter-to-the-editor/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/letter-to-the-editor.mp3', cover: '/audio/grief-without-ritual/letter-to-the-editor-title.webp', article: 'https://charleswilke.substack.com/p/letter-to-the-editor' },
         { title: 'Love at Machine Speed', songbook: '/songs/gwor/love-at-machine-speed/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/love-at-machine-speed.mp3', cover: '/audio/grief-without-ritual/love-at-machine-speed-title.webp', article: 'https://charleswilke.substack.com/p/love-at-the-speed-of-inference' },
         { title: 'Permission to Ache', songbook: '/songs/gwor/permission-to-ache/songbook.json?v=20261019-lyrics-1', file: '/audio/grief-without-ritual/permission-to-ache.mp3', cover: '/audio/grief-without-ritual/permission-to-ache-title.webp', article: 'https://charleswilke.substack.com/p/whats-next' },
-        { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261031-recording-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3?v=6b52c58422dd', cover: '/audio/grief-without-ritual/respect-the-exhale-title-v3.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
+        { title: 'Respect the Exhale', songbook: '/songs/gwor/respect-the-exhale/songbook.json?v=20261101-recording-1', file: '/audio/grief-without-ritual/respect-the-exhale.mp3?v=61ff26eac880', cover: '/audio/grief-without-ritual/respect-the-exhale-title-v3.webp', article: 'https://charleswilke.substack.com/p/respect-the-exhale' },
         { title: 'Help Yourself', songbook: '/songs/gwor/help-yourself/songbook.json?v=20261031-cues-2', file: '/audio/grief-without-ritual/help-yourself.mp3', cover: '/audio/grief-without-ritual/help-yourself-title-v2.webp', articleType: 'songwriting conversation', article: '/read/help-yourself-transcript' },
         { title: 'Slow the Clock', songbook: '/songs/gwor/slow-the-clock/songbook.json?v=20261031-track-8', file: '/audio/grief-without-ritual/slow-the-clock.mp3?v=7bb70f27b44e', cover: '/audio/grief-without-ritual/slow-the-clock-title-track-8.webp', article: 'https://charleswilke.substack.com/p/the-future-starves-without-wonder' },
         { title: 'Dearly Beloved', songbook: '/songs/gwor/dearly-beloved/songbook.json?v=20261031-track-9', file: '/audio/grief-without-ritual/dearly-beloved.mp3', cover: '/audio/grief-without-ritual/dearly-beloved-title-track-9.webp', article: 'https://charleswilke.substack.com/p/dearly-beloved' },

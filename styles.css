@@ -16245,6 +16245,10 @@ section.production-header.alice p {
 }
 
 /* GWOR: a college ruled writing notebook, with blue ink and a red margin. */
+#gworLightbox .mixtape-credits .about-footnote { color: #984954; }
+#gworLightbox .mixtape-credits .about-footnote:hover { color: #c88e96; }
+#gworLightbox .mixtape-credits .about-footnote:focus-visible { outline-color: #984954; }
+
 #gworProcessNote {
     border: 1px solid #746e60;
     border-radius: 2px;

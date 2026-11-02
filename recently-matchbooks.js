@@ -215,6 +215,11 @@
   }
 
   function bindStrikerGestures(card, book) {
+    // Give fingers a full touch target around the printed strip. Keeping this
+    // element in the book also applies its pan-y policy just below the artwork.
+    const target = document.createElement('span');
+    target.className = 'matchbook-striker-target';
+    book.append(target);
     let previous = null;
     let press = null;
     let suppressClick = false;
@@ -222,8 +227,12 @@
       const rect = book.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
+      const pad = event.pointerType === 'touch' ? target.getBoundingClientRect() : {
+        left: rect.left + rect.width * .03, right: rect.left + rect.width * .97,
+        top: rect.top + rect.height * .9, bottom: rect.top + rect.height * .995,
+      };
       return { x, y, t: event.timeStamp, vx: 0, vy: 0,
-        onPad: x >= rect.width * .03 && x <= rect.width * .97 && y >= rect.height * .9 && y <= rect.height * .995 };
+        onPad: event.clientX >= pad.left && event.clientX <= pad.right && event.clientY >= pad.top && event.clientY <= pad.bottom };
     }
     function release(cancelled = false) {
       const ended = press;
@@ -240,14 +249,14 @@
       suppressClick = false;
       previous = point(event);
       press = { id: event.pointerId, startX: event.clientX, startY: event.clientY,
-        onPad: previous.onPad, intent: false, vertical: false };
+        origin: previous, onPad: previous.onPad, intent: false, vertical: false };
     }, { passive: true });
     card.addEventListener('pointermove', event => {
       if (event.isPrimary === false) return;
       if (press && event.pointerId !== press.id) return;
       if (!press && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
       const current = point(event);
-      const last = previous;
+      let last = previous;
       previous = current;
       if (press) {
         if (!press.onPad || press.vertical) return;
@@ -257,14 +266,17 @@
           press.vertical = true;
           return;
         }
-        if (!press.intent && dx > 8 && dx > dy * 1.3) {
+        const touch = event.pointerType === 'touch';
+        if (!press.intent && dx > (touch ? 5 : 8) && dx > dy * (touch ? 1.1 : 1.3)) {
           press.intent = true;
+          last = press.origin;
           card.classList.add('is-striking');
           card.setPointerCapture(event.pointerId);
         }
         if (!press.intent) return;
       }
-      if (!last || current.t - last.t > 120 || current.t <= last.t) return;
+      // A finger can rest before striking; only idle hover samples expire.
+      if (!last || (!press && current.t - last.t > 120) || current.t <= last.t) return;
       if (!current.onPad) {
         activeSparks.get(book)?.finish?.();
         return;
@@ -281,7 +293,11 @@
     }, { passive: true });
     card.addEventListener('pointerup', event => { if (press?.id === event.pointerId) release(); });
     card.addEventListener('pointercancel', () => release(true));
-    card.addEventListener('lostpointercapture', () => { if (press) release(true); });
+    // Touch starts with implicit capture on the artwork/target. Transferring it
+    // to the card fires a bubbling loss on that child; the strike is still live.
+    card.addEventListener('lostpointercapture', event => {
+      if (event.target === card && press?.id === event.pointerId) release(true);
+    });
     card.addEventListener('pointerleave', () => {
       if (!press?.intent) release();
     });

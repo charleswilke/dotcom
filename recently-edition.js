@@ -39,7 +39,7 @@
       section.setAttribute('aria-labelledby', 'recently-heading');
       section.dataset.recentlyEdition = 'matchbooks';
       const effects = document.createElement('script');
-      effects.src = '/recently-matchbooks.js?v=20261030-release-1';
+      effects.src = '/recently-matchbooks.js?v=20261101-touch-1';
       document.head.append(effects);
     } else if (edition === 'posters' && template) {
       section.replaceChildren(template.content.cloneNode(true));

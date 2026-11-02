@@ -87,6 +87,16 @@
   clip-path: inset(81.5% 0 0 0);
   pointer-events: none;
 }
+.matchbook-striker-target {
+  position: absolute;
+  z-index: 4;
+  left: 3%;
+  right: 3%;
+  top: 94.1%;
+  height: max(44px, 15%);
+  transform: translateY(-50%);
+  touch-action: pan-y pinch-zoom;
+}
 .matchbook-sparks {
   display: block;
   position: absolute;

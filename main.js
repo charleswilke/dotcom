@@ -2710,7 +2710,7 @@ function initTimeDial() {
                     title: 'Substack Recap: ' + station.date,
                     artist: 'Charles Wilke',
                     album: 'The Time Dial',
-                    artwork: [{ src: new URL('/images/og-image.jpg', window.location.href).href }]
+                    artwork: [{ src: new URL('/images/og-image-v2.jpg', window.location.href).href }]
                 });
             } catch (e) { /* no MediaMetadata → controls still bind */ }
         };

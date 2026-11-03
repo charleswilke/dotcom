@@ -14637,6 +14637,15 @@ section.production-header.alice p {
 .mixtape-lightbox .lightbox-close:hover {
     color: #ff6b35;
     text-shadow: 0 0 10px #ff6b35;
+}
+
+/* Rotate only the glyph so the padded button cannot expand scrollable overflow. */
+.mixtape-lightbox .lightbox-close > span {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.mixtape-lightbox .lightbox-close:hover > span {
     transform: rotate(90deg);
 }
 

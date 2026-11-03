@@ -604,6 +604,182 @@ indicate a new site code fix. No indexing requests, sitemap resubmissions,
 validation restarts, deployments, or schedule changes were made during this
 check; the pre-existing Haus indexing request is recorded above.
 
+### November 1, 2026 Check
+
+Live browser review of all three verified properties. Performance reports were
+last updated 3 hours before review and cover October 11–30, compared with
+October 11–28 at the October 30 check. These are expanding cumulative windows;
+the differences add October 29–30 rather than compare equal-length periods.
+Fellow Vector was explicitly filtered to October 11–30.
+
+| Site | Clicks (prior → current) | Impressions (prior → current) | Average position (prior → current) |
+|---|---:|---:|---:|
+| Charles Wilke | 1 → 2 | 52 → 61 | 16.4 → 15.2 |
+| Haus of Toots | 177 → 209 | 597 → 689 | 7.3 → 7.1 |
+| Fellow Vector | 0 → 0 | 10 → 12 | 4.0 → 3.9 |
+
+- Charles Wilke gained 1 click and 9 impressions in October 29–30. The new
+  click belongs to `/read/the-treat-is-the-trick` (1 click/1 impression,
+  position 2.0), the first essay click recorded in this tracking window.
+  The daily table shows 0 clicks/6 impressions on October 29 and 1/3 on
+  October 30. Query rows still show no clicks, so the click's query is
+  unavailable. Overall CTR is 3.3%. `charles wilke` remains at 4 impressions,
+  0 clicks, position 13.5; this remains too small a sample to establish a
+  stable ranking.
+- Charles Wilke landing pages: homepage 1 click/19 impressions (position 7.2),
+  `/faq.html` 0/21 (13.5), `/before-times.html` 0/8 (6.9), `/about` 0/7 (7.1),
+  and `/read/the-social-siege-of-atomization` 0/6 (31.5). Other essays include
+  `/read/what-hope-do-we-have` 0/5 (7.6) and `/read/communion` 0/4 (4.5).
+- Charles Wilke coverage remains dated October 22: 76 indexed, 53 excluded
+  (37 discovered/currently not indexed, 11 redirects, 1 intentional 404,
+  2 redirect errors, 1 duplicate with a different Google-selected canonical,
+  1 crawled/currently not indexed). The original duplicate without
+  user-selected canonical validation remains Passed with 0 affected.
+  Redirect validation remains started October 15, with 2 pending and 0
+  failed; `/junkyard-cabaret` and `/l.ai.bor` retain October 11 last crawls.
+- Inspection of `/spacetoots/` still shows Google selecting the non-slash
+  URL, with the same October 18, 11:22:39 PM last crawl. Fetch succeeded,
+  crawling/indexing are allowed, and the user-declared canonical retains
+  the slash. `/read/scattered-thunderstorms` remains crawled/currently not
+  indexed, last crawled October 20, 3:07:28 PM, with successful fetch,
+  crawling/indexing allowed, and the inspected URL selected as canonical.
+  Both inspections display "Temporary processing error" in their sitemap
+  fields today. The property sitemap report remains successful; these
+  inspection fields alone do not establish a live sitemap fetch failure.
+  Crawl times are recorded as displayed by Search Console.
+- Charles Wilke sitemap: success, 116 discovered, last read October 31
+  (previously October 28). HTTPS: 9 URLs, 0 non-HTTPS, no critical issues,
+  report dated October 31.
+- Haus gained 32 clicks and 92 impressions in October 29–30; cumulative CTR
+  is 30.3%. `haus of toots` has 50 clicks/59 impressions, `house of toots`
+  29/32, and `hausoftoots` 12/13, all at position 1. `joann needlepoint canvas`
+  has 8/11 (position 1.8), `sephora needlepoint canvas` 4/18 (1.4), and
+  `ndlpt` 0/98 (9.1). Landing pages: homepage 155 clicks/479 impressions,
+  `/village` 26/276, `/just-landed` 26/256, `/about` 3/178, and the www
+  `/just-landed` variant 1/12. `/gallery` has 0/199 at position 1.8.
+- Haus coverage remains dated October 22: 6 indexed, 19 excluded (12
+  redirects, 5 proper canonical alternates, 2 discovered/currently not
+  indexed). `/just-landed` still reports indexed with itself as canonical,
+  last crawled October 12, 6:38:48 PM, before the October 21 redirect change.
+  This remains an old record, not evidence of a post-change crawl.
+- Haus `/hot-at-lns` now reports "URL is on Google" and "Page is indexed".
+  Last crawl: October 30, 8:39:52 PM as displayed, after the previously
+  recorded indexing request. Fetch succeeded, crawling/indexing are allowed,
+  and both the user-declared and Google-selected canonical are the inspected
+  clean URL. Its sitemap field lists the property sitemap. This confirms
+  indexing today; it does not establish that the request caused indexing.
+- Haus sitemap: success, 7 discovered, last read October 27 (unchanged).
+  HTTPS: 7 URLs (previously 6), 0 non-HTTPS, no critical issues, dated
+  October 31. Overview also flags one unused ownership verification token;
+  ownership settings were not changed during the sweep.
+- Fellow Vector's recent page table shows homepage 0 clicks/10 impressions
+  (position 2.7), `/about/` 0/5 (5.2), `/services/` 0/3 (3.0), and `/writing/`
+  0/3 (4.0). The recent query table still has no data. Page rows use different
+  aggregation from property totals and should not be summed to reproduce
+  them; this applies to all three properties. The default July 31–October
+  30 report has 0 clicks, 72 impressions, CTR 0%, position 8.7. This is a
+  different rolling window from the prior historical report with 1 click
+  and is separate from the comparable recent totals above.
+- Fellow Vector coverage remains dated October 22: 4 indexed, 3 excluded
+  (1 404, 1 proper canonical alternate, 1 discovered/currently not indexed),
+  with crawled/currently not indexed at 0. Inspection of `/book/` still shows
+  discovered/currently not indexed with no recorded crawl; its sitemap field
+  lists `https://fellowvector.com/sitemap-index.xml`.
+- Fellow Vector sitemap index: success, 5 discovered, last read October 25
+  (unchanged). The older `/sitemap.website.xml` remains successful with
+  11 discovered and April 26, 2025 last read. HTTPS: 3 URLs, 0 non-HTTPS,
+  no critical issues, dated October 31.
+
+Continue watching fresh coverage dates, the two pending redirect validations,
+Space Toots' canonical selection, the excluded essay, Fellow Vector `/book/`,
+and a post-change crawl of Haus `/just-landed`. Current evidence does not
+indicate a new site code fix. No indexing requests, sitemap resubmissions,
+validation restarts, deployments, or schedule changes were made.
+
+### November 2, 2026 Check
+
+Live browser review of all three verified properties. Performance reports were
+last updated 5.5 hours before review and cover October 11–31, compared with
+October 11–30 at the November 1 check. These are expanding cumulative windows;
+the differences add October 31 rather than compare equal-length periods.
+Fellow Vector was explicitly filtered to October 11–31.
+
+| Site | Clicks (prior → current) | Impressions (prior → current) | Average position (prior → current) |
+|---|---:|---:|---:|
+| Charles Wilke | 2 → 2 | 61 → 61 | 15.2 → 15.2 |
+| Haus of Toots | 209 → 221 | 689 → 722 | 7.1 → 7.0 |
+| Fellow Vector | 0 → 0 | 12 → 15 | 3.9 → 3.3 |
+
+- Charles Wilke performance totals are unchanged; overall CTR remains 3.3%.
+  The homepage and `/read/the-treat-is-the-trick` retain one click each.
+  `charles wilke` still has 4 impressions and no clicks; all displayed query
+  rows have no clicks. Landing pages remain homepage 1 click/19 impressions
+  (position 7.2), `/faq.html` 0/21 (13.5), `/before-times.html` 0/8 (6.9),
+  `/about` 0/7 (7.1), `/read/the-social-siege-of-atomization` 0/6 (31.5),
+  `/read/what-hope-do-we-have` 0/5 (7.6), and `/read/communion` 0/4 (4.5).
+- Charles Wilke coverage remains dated October 22: 76 indexed, 53 excluded
+  (37 discovered/currently not indexed, 11 redirects, 1 intentional 404,
+  2 redirect errors, 1 duplicate with a different Google-selected canonical,
+  1 crawled/currently not indexed). The original duplicate without
+  user-selected canonical validation remains Passed with 0 affected.
+  Redirect validation remains started October 15, with 2 pending and 0
+  failed; `/junkyard-cabaret` and `/l.ai.bor` retain October 11 last crawls.
+- Inspection of `/spacetoots/` still shows Google selecting the non-slash
+  URL, last crawled October 18, 11:22:39 PM. Fetch succeeded, crawling and
+  indexing are allowed, and the user-declared canonical retains the slash.
+  `/read/scattered-thunderstorms` remains crawled/currently not indexed,
+  last crawled October 20, 3:07:28 PM, with successful fetch, crawling and
+  indexing allowed, and the inspected URL selected as canonical. Both
+  inspections now list the property sitemap instead of yesterday's temporary
+  processing errors. Crawl times are recorded as displayed by Search Console.
+- Charles Wilke sitemap: success, 116 discovered, last read October 31
+  (unchanged). HTTPS: 9 URLs, 0 non-HTTPS, no critical issues, report dated
+  November 1 (previously October 31).
+- Haus gained 12 clicks and 33 impressions in the newly included October 31
+  data; cumulative CTR is 30.6%. `haus of toots` has 54 clicks/63 impressions,
+  `house of toots` 30/33, and `hausoftoots` 12/13, all at position 1.
+  `joann needlepoint canvas` remains 8/11 (position 1.8),
+  `sephora needlepoint canvas` rises from 4/18 to 6/21 (1.4), and `ndlpt`
+  remains 0/98 (9.1). Landing pages: homepage 163 clicks/496 impressions,
+  `/village` 29/296, `/just-landed` 27/272, `/about` 3/189, and the www
+  `/just-landed` variant 1/12. `/gallery` has 0/213 (position 1.9), and
+  `/hot-at-lns` has 0/9 (3.6).
+- Haus coverage remains dated October 22: 6 indexed, 19 excluded (12
+  redirects, 5 proper canonical alternates, 2 discovered/currently not
+  indexed). `/just-landed` still reports indexed with itself as canonical,
+  last crawled October 12, 6:38:48 PM, before the October 21 redirect change.
+  Its inspection sitemap field shows a temporary processing error; the
+  property sitemap report remains successful. This old inspection record
+  does not establish a post-change crawl or a live sitemap fetch failure.
+- Haus `/hot-at-lns` remains indexed, last crawled October 30, 8:39:52 PM,
+  with successful fetch, crawling and indexing allowed, and both canonicals
+  pointing to the inspected clean URL. Its sitemap field lists the property
+  sitemap. Haus sitemap: success, 7 discovered, last read October 27
+  (unchanged). HTTPS: 7 URLs, 0 non-HTTPS, no critical issues, dated November 1.
+- Fellow Vector gained 3 impressions; its recent query table still has no
+  data. Landing pages: homepage 0 clicks/13 impressions (position 2.3),
+  `/services/` 0/6 (2.5), `/writing/` 0/6 (3.5), and `/about/` 0/5 (5.2).
+  Page rows use different aggregation from property totals and should not be
+  summed to reproduce them; this applies to all three properties. The default
+  August 1–October 31 report has 0 clicks, 73 impressions, CTR 0%, position
+  8.5; this rolling historical window is separate from the comparable recent
+  window above. The recent sample remains too small for stable ranking claims.
+- Fellow Vector coverage remains dated October 22: 4 indexed, 3 excluded
+  (1 404, 1 proper canonical alternate, 1 discovered/currently not indexed),
+  with crawled/currently not indexed at 0. Inspection of `/book/` still shows
+  discovered/currently not indexed with no recorded crawl; its sitemap field
+  lists `https://fellowvector.com/sitemap-index.xml`.
+- Fellow Vector sitemap index: success, 5 discovered, last read October 25
+  (unchanged). The older `/sitemap.website.xml` remains successful with
+  11 discovered and April 26, 2025 last read. HTTPS: 3 URLs, 0 non-HTTPS,
+  no critical issues, dated November 1.
+
+Continue watching fresh coverage dates, the two pending redirect validations,
+Space Toots' canonical selection, the excluded essay, Fellow Vector `/book/`,
+and a post-change crawl of Haus `/just-landed`. Current evidence does not
+indicate a new site code fix. No indexing requests, sitemap resubmissions,
+validation restarts, deployments, or schedule changes were made.
+
 ## Pre-existing Optimizations Worth Maintaining
 
 These were already in place on charleswilke.com and should be standard practice:

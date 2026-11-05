@@ -3688,7 +3688,7 @@ function initPetLightboxLinks() {
 // ---------------------------------------------------------------------------
 const PREFER_NATIVE_AUDIO = !!(window.matchMedia &&
     window.matchMedia('(hover: none), (pointer: coarse)').matches);
-const SCOPE_DATA_VERSION = '28';
+const SCOPE_DATA_VERSION = '29';
 
 function scopeDataUrl(trackFile) {
     const bare = String(trackFile || '').split('?')[0];
@@ -6363,7 +6363,7 @@ function initJCLightbox() {
         { title: 'Cathedral of Junk', file: '/audio/junkyard-cabaret/cathedral-of-junk.mp3?v=202609141649', cover: '/audio/junkyard-cabaret/cathedral-of-junk-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/theaters-last-stand', songbook: '/songs/junkyard-cabaret/cathedral-of-junk/songbook.json?v=20261024-previous-takes-2' },
         { title: 'Pauses Gone', file: '/audio/junkyard-cabaret/pauses-gone.mp3', cover: '/audio/junkyard-cabaret/pauses-gone-title-v2.webp?v=20261017', article: 'https://charleswilke.substack.com/p/staccato-again', songbook: '/songs/junkyard-cabaret/pauses-gone/songbook.json?v=20261018-revision-1' },
         { title: 'Three Fifteen', file: '/audio/junkyard-cabaret/three-fifteen.mp3', cover: '/audio/junkyard-cabaret/three-fifteen-title.webp?v=202607041707', article: 'https://charleswilke.substack.com/p/accumulated-velocity', songbook: '/songs/junkyard-cabaret/three-fifteen/songbook.json?v=20261018-revision-1' },
-        { title: 'The New Survivalism', file: '/audio/junkyard-cabaret/the-new-survivalism.mp3?v=202605251410', cover: '/audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism', songbook: '/songs/junkyard-cabaret/the-new-survivalism/songbook.json?v=20261018-revision-1' },
+        { title: 'The New Survivalism', file: '/audio/junkyard-cabaret/the-new-survivalism.mp3?v=202611051647', cover: '/audio/junkyard-cabaret/the-new-survivalism-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/the-new-survivalism', songbook: '/songs/junkyard-cabaret/the-new-survivalism/songbook.json?v=20261105-revision-9' },
         { title: 'House Lights', file: '/audio/junkyard-cabaret/house-lights.mp3', cover: '/audio/junkyard-cabaret/house-lights-title.webp?v=202608081643', article: 'https://claude.ai/share/55400033-7fb7-4d4f-bb85-ddadd5fdc57f', songbook: '/songs/junkyard-cabaret/house-lights/songbook.json?v=20261018-revision-2' },
         { title: 'Hip Height', file: '/audio/junkyard-cabaret/hip-height.mp3', cover: '/audio/junkyard-cabaret/hip-height-title.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/know-thyself', songbook: '/songs/junkyard-cabaret/hip-height/songbook.json?v=20261018-revision-1' },
         { title: 'How Dare It Rise', file: '/audio/junkyard-cabaret/how-dare-it-rise.mp3', cover: '/audio/junkyard-cabaret/how-dare-it-rise.webp?v=202606071656', article: 'https://charleswilke.substack.com/p/your-right', songbook: '/songs/junkyard-cabaret/how-dare-it-rise/songbook.json?v=20261018-revision-1' },
